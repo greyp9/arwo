@@ -1,0 +1,63 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project name='arwo-app-junit' default='main' basedir='.'>
+
+    <!--fixed-->
+    <property name='m2.dir' value='${user.home}/.m2/repository' description='maven repository (for libs)'/>
+    <property name='project.dir' location='${basedir}/../../../../../..' description='(suggested) ~/arwo'/>
+    <property name='test.src.core.dir' location='${project.dir}/src/test/core/java'/>
+    <property name='test.src.lib.dir' location='${project.dir}/src/test/lib/java'/>
+    <!--transient-->
+    <property name='target.dir' value='${project.dir}/target'/>
+    <property name='classes.core.dir' value='${target.dir}/app/classes-core'/>
+    <property name='classes.lib.dir' value='${target.dir}/app/classes-lib'/>
+    <property name='test.classes.core.dir' value='${target.dir}/app/test-classes-core'/>
+    <property name='test.classes.lib.dir' value='${target.dir}/app/test-classes-lib'/>
+
+    <path id='classpath-test'>
+        <pathelement path='${classes.core.dir}'/>
+        <pathelement path='${classes.lib.dir}'/>
+        <fileset file='${m2.dir}/junit/junit/4.11/junit-4.11.jar' id='libs-ganymed'/>
+        <fileset file='${m2.dir}/ch/ethz/ganymed/ganymed-ssh2/262/ganymed-ssh2-262.jar' id='libs-ganymed'/>
+        <pathelement path='${test.classes.core.dir}'/>
+        <pathelement path='${test.classes.lib.dir}'/>
+    </path>
+
+    <target name='compile-main' description='compile project source'>
+        <property name='ant.app.dir' value='${project.dir}/src/main/app/resources/ant/app'/>
+        <ant antfile='${ant.app.dir}/build.app.xml' dir='${ant.app.dir}'/>
+    </target>
+
+    <target name='compile-test' description='compile project source'>
+        <mkdir dir='${test.classes.core.dir}'/>
+        <mkdir dir='${test.classes.lib.dir}'/>
+
+        <depend destdir='${test.classes.core.dir}' srcdir='${test.src.core.dir}'/>
+        <depend destdir='${test.classes.lib.dir}' srcdir='${test.src.lib.dir}'/>
+
+        <javac destdir='${test.classes.core.dir}' classpathref='classpath-test' includeantruntime='false' debug='on'>
+            <compilerarg value='-Xlint:all'/>
+            <src path='${test.src.core.dir}'/>
+        </javac>
+        <javac destdir='${test.classes.core.dir}' classpathref='classpath-test' includeantruntime='false' debug='on'>
+            <compilerarg value='-Xlint:all'/>
+            <src path='${test.src.lib.dir}'/>
+        </javac>
+    </target>
+
+    <target name='test' depends='compile-main, compile-test'>
+        <junit fork='true' printsummary='on' showoutput='true' haltonfailure='true' haltonerror='true' timeout='15000'>
+            <classpath refid='classpath-test'/>
+            <formatter type='plain' usefile='false'/>
+            <batchtest>
+                <fileset dir="${project.dir}/src/test/lib/java">
+                    <include name="**/test/*Test.java"/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <target name='main' depends='test' description='Use -p to view help information.'>
+        <echo message='project.dir: ${project.dir}'/>
+    </target>
+
+</project>

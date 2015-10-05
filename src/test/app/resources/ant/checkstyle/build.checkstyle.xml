@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project name='arwo-app-checkstyle' default='main' basedir='.'>
+
+    <!--fixed-->
+    <property name='checkstyle.dir' value='${user.home}/Downloads/checkstyle-6.1.1'/>
+    <!--fixed-->
+    <property name='project.dir' location='${basedir}/../../../../../..' description='(suggested) ~/arwo'/>
+    <property name='src.core.dir' location='${project.dir}/src/main/core/java'/>
+
+    <path id='classpath-checkstyle'>
+        <fileset dir='${checkstyle.dir}'>
+            <include name='checkstyle-6.1.1-all.jar'/>
+        </fileset>
+    </path>
+
+    <taskdef name='checkstyle' classname='com.puppycrawl.tools.checkstyle.CheckStyleTask'
+             classpathref='classpath-checkstyle'/>
+
+    <target name='checkstyle-core'>
+        <checkstyle config='${basedir}/sun_checks_project.xml'>
+            <property key='checkstyle.suppressions.file' value='${basedir}/checkstyle.suppressions.xml'/>
+            <fileset dir='${src.core.dir}'>
+                <include name='**/*.java'/>
+            </fileset>
+        </checkstyle>
+    </target>
+
+    <target name='main' depends='checkstyle-core' description='Use -p to view help information.'>
+        <echo message='project.dir: ${project.dir}'/>
+    </target>
+
+</project>

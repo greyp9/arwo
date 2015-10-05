@@ -1,0 +1,1 @@
+Copy "test.properties.xml" to "~/.arwo" and populate.

@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project name='arwo-app-findbugs' default='main' basedir='.'>
+
+    <!--fixed-->
+    <property name='m2.dir' value='${user.home}/.m2/repository' description='maven repository (for libs)'/>
+    <property name='findbugs.dir' value='${user.home}/Downloads/findbugs-2.0.3'/>
+    <!--fixed-->
+    <property name='project.dir' location='${basedir}/../../../../../..' description='(suggested) ~/arwo'/>
+    <property name='src.core.dir' location='${project.dir}/src/main/core/java'/>
+    <!--transient-->
+    <property name='target.dir' value='${project.dir}/target'/>
+    <property name='classes.core.dir' value='${target.dir}/app/classes-core'/>
+
+    <path id='classpath-findbugs'>
+        <fileset dir='${findbugs.dir}'>
+            <include name='lib/findbugs.jar'/>
+        </fileset>
+    </path>
+
+    <taskdef name='findbugs' classname='edu.umd.cs.findbugs.anttask.FindBugsTask' classpathref='classpath-findbugs'/>
+
+    <target name='findbugs-core'>
+        <findbugs home='${findbugs.dir}' excludeFilter='${basedir}/findbugs-filter.xml' reportlevel='low' output='text'>
+            <!--as classes-->
+            <fileset dir='${classes.core.dir}'>
+                <include name='**/*.class'/>
+            </fileset>
+
+            <sourcepath path='${src.core.dir}'/>
+        </findbugs>
+    </target>
+
+    <target name='main' depends='findbugs-core' description='Use -p to view help information.'>
+        <echo message='project.dir: ${project.dir}'/>
+    </target>
+
+</project>

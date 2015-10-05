@@ -1,0 +1,39 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project name='arwo-app-pmd' default='main' basedir='.'>
+
+    <!--fixed-->
+    <property name='pmd.dir' value='${user.home}/Downloads/pmd-bin-5.3.4'/>
+    <!--fixed-->
+    <property name='project.dir' location='${basedir}/../../../../../..' description='(suggested) ~/arwo'/>
+    <property name='src.core.dir' location='${project.dir}/src/main/core/java'/>
+    <!--transient-->
+    <property name='target.dir' value='${project.dir}/target'/>
+
+    <path id='classpath-pmd'>
+        <fileset dir='${pmd.dir}'>
+            <include name='lib/asm-5.0.3.jar'/>
+            <include name='lib/commons-io-2.4.jar'/>
+            <include name='lib/commons-lang3-3.3.2.jar'/>
+            <include name='lib/jaxen-1.1.4.jar'/>
+            <include name='lib/pmd-core-5.3.4.jar'/>
+            <include name='lib/pmd-java-5.3.4.jar'/>
+            <include name='lib/saxon-9.1.0.8.jar'/>
+        </fileset>
+    </path>
+
+    <taskdef name='pmd' classname='net.sourceforge.pmd.ant.PMDTask' classpathref='classpath-pmd'/>
+
+    <target name='pmd-core'>
+        <pmd rulesetfiles='${basedir}/pmd.ruleset.xml' failonerror='true' failonruleviolation='true'>
+            <formatter type='text' toConsole='true'/>
+            <fileset dir='${src.core.dir}'>
+                <include name='**/*.java'/>
+            </fileset>
+        </pmd>
+    </target>
+
+    <target name='main' depends='pmd-core' description='Use -p to view help information.'>
+        <echo message='project.dir: ${project.dir}'/>
+    </target>
+
+</project>

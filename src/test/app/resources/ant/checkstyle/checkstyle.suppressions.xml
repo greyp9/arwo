@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+        "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+        "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+<suppressions>
+        <suppress checks='JavadocMethodCheck' files='[A-Za-z0-9]+.java'/>
+        <suppress checks='JavadocPackageCheck' files='[A-Za-z0-9]+.java'/>
+        <suppress checks='JavadocTypeCheck' files='[A-Za-z0-9]+.java'/>
+        <suppress checks='JavadocVariableCheck' files='[A-Za-z0-9]+.java'/>
+</suppressions>

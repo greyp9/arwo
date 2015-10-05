@@ -1,0 +1,29 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project name='arwo-app-test' default='main' basedir='.'>
+
+    <!--fixed-->
+    <property name='project.dir' location='${basedir}/../../../../../..' description='(suggested) ~/arwo'/>
+
+    <target name='junit'>
+        <property name='ant.junit.dir' value='${project.dir}/src/test/app/resources/ant/junit'/>
+        <ant antfile='${ant.junit.dir}/build.junit.xml' dir='${ant.junit.dir}'/>
+    </target>
+
+    <target name='findbugs'>
+        <property name='ant.findbugs.dir' value='${project.dir}/src/test/app/resources/ant/findbugs'/>
+        <ant antfile='${ant.findbugs.dir}/build.findbugs.xml' dir='${ant.findbugs.dir}'/>
+    </target>
+
+    <target name='pmd'>
+        <property name='ant.pmd.dir' value='${project.dir}/src/test/app/resources/ant/pmd'/>
+        <ant antfile='${ant.pmd.dir}/build.pmd.xml' dir='${ant.pmd.dir}'/>
+    </target>
+
+    <target name='checkstyle'>
+        <property name='ant.checkstyle.dir' value='${project.dir}/src/test/app/resources/ant/checkstyle'/>
+        <ant antfile='${ant.checkstyle.dir}/build.checkstyle.xml' dir='${ant.checkstyle.dir}'/>
+    </target>
+
+    <target name='main' depends='junit, findbugs, pmd, checkstyle' description='Use -p to view help information.'/>
+
+</project>

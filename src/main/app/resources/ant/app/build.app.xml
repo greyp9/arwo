@@ -1,0 +1,32 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project name='arwo-app' default='main' basedir='.'>
+
+    <!--fixed-->
+    <property name='project.dir' location='${basedir}/../../../../../..'/>
+    <property name='src.core.dir' location='${project.dir}/src/main/core/java'/>
+    <!--transient-->
+    <property name='target.dir' value='${project.dir}/target'/>
+    <property name='classes.core.dir' value='${target.dir}/app/classes-core'/>
+
+    <path id='classpath-app'>
+    </path>
+
+    <target name='clean' description='clean up generated resources'>
+        <delete dir='${classes.core.dir}'/>
+    </target>
+
+    <target name='compile-core' description='compile project source'>
+        <echo message='compile app core classes'/>
+        <mkdir dir='${classes.core.dir}'/>
+        <depend destdir='${classes.core.dir}' srcdir='${src.core.dir}'/>
+        <javac destdir='${classes.core.dir}' classpathref='classpath-app' includeantruntime='false' debug='on'>
+            <compilerarg value='-Xlint:all'/>
+            <src path='${src.core.dir}'/>
+        </javac>
+    </target>
+
+    <target name='main'>
+        <echo message='project.dir: ${project.dir}'/>
+    </target>
+
+</project>
