@@ -1,0 +1,73 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project name='tomcat6-image' default='main' basedir='.'>
+
+    <!-- filesystem location for downloaded images -->
+    <property name='image.dir' value='${user.home}/Downloads'/>
+    <!-- filesystem location for executable -->
+    <property name='tomcat.dir' value='${user.home}/apache-tomcat-6.0.44'/>
+    <!-- filesystem location for project -->
+    <property name='arwo.dir' value='${basedir}/../../../../../../../arwo'/>
+
+    <target name='verify-tomcat' description='Check Tomcat6 binary against expected checksum.'>
+        <checksum file='${image.dir}/apache-tomcat-6.0.44.tar.gz'
+                  algorithm='SHA-1' property='a9b20a4f1392e11bb04d9691e3e84a988e73d910'
+                  verifyproperty='sha1-ok-tomcat6'/>
+        <fail message='binary checksum does not match'>
+            <condition>
+                <not>
+                    <istrue value='${sha1-ok-tomcat6}'/>
+                </not>
+            </condition>
+        </fail>
+    </target>
+
+    <target name='pristine-tomcat' description='Replace Tomcat6 instance in home dir with fresh image from download.'>
+        <delete dir='${tomcat.dir}'/>
+        <untar compression='gzip' src='${image.dir}/apache-tomcat-6.0.44.tar.gz' dest='${tomcat.dir}'>
+            <mapper type='glob' from='apache-tomcat-6.0.44/*' to='*'/>
+        </untar>
+    </target>
+
+    <target name='fixup-tomcat' description='Modify pristine Tomcat6 image for this environment.'>
+        <move tofile='${tomcat.dir}/conf/server.original.xml' file='${tomcat.dir}/conf/server.xml'/>
+        <xslt in='${tomcat.dir}/conf/server.original.xml' out='${tomcat.dir}/conf/server.ssl.xml'
+              style='${ant.file.tomcat6-image}/../xslt/server.ssl.xslt'/>
+        <xslt in='${tomcat.dir}/conf/server.ssl.xml' out='${tomcat.dir}/conf/server.xml'
+              style='${ant.file.tomcat6-image}/../xslt/server.ports.xslt'/>
+        <move tofile='${tomcat.dir}/conf/tomcat-users.original.xml' file='${tomcat.dir}/conf/tomcat-users.xml'/>
+        <xslt in='${tomcat.dir}/conf/tomcat-users.original.xml' out='${tomcat.dir}/conf/tomcat-users.xml'
+              style='${ant.file.tomcat6-image}/../xslt/tomcat-users.xslt'/>
+
+        <copy tofile='${tomcat.dir}/conf/Catalina/localhost/css-static.xml'
+              file='${arwo.dir}/src/test/app/resources/ant/tomcat6/webapp/css-static/css-static.xml'/>
+        <copy tofile='${tomcat.dir}/conf/Catalina/localhost/html-static.xml'
+              file='${arwo.dir}/src/test/app/resources/ant/tomcat6/webapp/html-static/html-static.xml'/>
+        <copy tofile='${tomcat.dir}/conf/logging.properties'
+              file='${arwo.dir}/src/test/app/resources/ant/tomcat6/logging/logging.properties'/>
+    </target>
+
+    <target name='tomcat' description='Spawn a Tomcat6 instance.'>
+        <property name='ssl.dir' value='${user.home}/.arwo/ssl'/>
+
+        <path id='classpath-tomcat'>
+            <fileset dir='${tomcat.dir}'>
+                <include name='bin/*.jar'/>
+                <include name='lib/*.jar'/>
+            </fileset>
+        </path>
+        <java classname='org.apache.catalina.startup.Bootstrap' classpathref='classpath-tomcat' fork='true'
+              dir='${tomcat.dir}'>
+            <jvmarg value='-Djava.util.logging.config.file=${tomcat.dir}/conf/logging.properties'/>
+            <jvmarg value='-Dssl.dir=${ssl.dir}'/>
+            <jvmarg value='-Xdebug'/>
+            <jvmarg value='-Xrunjdwp:transport=dt_socket,server=y,suspend=n,address=8620'/>
+        </java>
+    </target>
+
+    <target name='restart' description='*Spawn clean Tomcat6 image.' depends='pristine-tomcat, fixup-tomcat, start'/>
+
+    <target name='start' description='*Spawn Tomcat6 image.' depends='tomcat'/>
+
+    <target name='main' description='Use -p to view help information.'/>
+
+</project>

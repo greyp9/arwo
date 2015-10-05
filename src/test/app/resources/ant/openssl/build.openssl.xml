@@ -1,0 +1,101 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project name='arwo-ssl' default='main' basedir='.'>
+
+    <property name='ssl.dir' value='${user.home}/.arwo/ssl'/>
+
+    <target name='clean-ssl'>
+        <delete dir='${ssl.dir}'/>
+        <mkdir dir='${ssl.dir}'/>
+    </target>
+
+    <target name='ssl-server-keystore'>
+        <!-- generate ssl server key -->
+        <exec executable='openssl'>
+            <arg value='genrsa'/>
+            <arg value='-out'/>
+            <arg value='${ssl.dir}/server.key'/>
+            <arg value='2048'/>
+        </exec>
+        <!-- generate ssl server certificate -->
+        <exec executable='openssl'>
+            <arg value='req'/>
+            <arg value='-new'/>
+            <arg value='-x509'/>
+            <arg value='-days'/>
+            <arg value='365'/>
+            <arg value='-key'/>
+            <arg value='${ssl.dir}/server.key'/>
+            <arg value='-out'/>
+            <arg value='${ssl.dir}/server.cer'/>
+            <arg value='-subj'/>
+            <arg value='/CN=localhost/OU=arwo/'/>
+        </exec>
+        <!-- generate keystore -->
+        <exec executable='openssl'>
+            <arg value='pkcs12'/>
+            <arg value='-export'/>
+            <arg value='-out'/>
+            <arg value='${ssl.dir}/server.pkcs12'/>
+            <arg value='-password'/>
+            <arg value='pass:arwo'/>
+            <arg value='-inkey'/>
+            <arg value='${ssl.dir}/server.key'/>
+            <arg value='-in'/>
+            <arg value='${ssl.dir}/server.cer'/>
+        </exec>
+    </target>
+
+    <target name='ssl-server-truststore'>
+        <!-- generate ssl server key -->
+        <exec executable='openssl'>
+            <arg value='genrsa'/>
+            <arg value='-out'/>
+            <arg value='${ssl.dir}/client.key'/>
+            <arg value='2048'/>
+        </exec>
+        <!-- generate ssl server certificate -->
+        <exec executable='openssl'>
+            <arg value='req'/>
+            <arg value='-new'/>
+            <arg value='-x509'/>
+            <arg value='-days'/>
+            <arg value='365'/>
+            <arg value='-key'/>
+            <arg value='${ssl.dir}/client.key'/>
+            <arg value='-out'/>
+            <arg value='${ssl.dir}/client.cer'/>
+            <arg value='-subj'/>
+            <arg value='/CN=arwo-user/OU=arwo/'/>
+        </exec>
+        <!-- generate keystore -->
+        <exec executable='openssl'>
+            <arg value='pkcs12'/>
+            <arg value='-export'/>
+            <arg value='-out'/>
+            <arg value='${ssl.dir}/client.pkcs12'/>
+            <arg value='-password'/>
+            <arg value='pass:arwo'/>
+            <arg value='-inkey'/>
+            <arg value='${ssl.dir}/client.key'/>
+            <arg value='-in'/>
+            <arg value='${ssl.dir}/client.cer'/>
+        </exec>
+        <!-- generate truststore -->
+        <exec executable='openssl'>
+            <arg value='pkcs12'/>
+            <arg value='-export'/>
+            <arg value='-out'/>
+            <arg value='${ssl.dir}/trust.pkcs12'/>
+            <arg value='-password'/>
+            <arg value='pass:arwo'/>
+            <arg value='-nokeys'/>
+            <arg value='-in'/>
+            <arg value='${ssl.dir}/client.cer'/>
+        </exec>
+    </target>
+
+    <target name='ssl' depends='clean-ssl, ssl-server-keystore, ssl-server-truststore'/>
+
+    <target name='main'/>
+
+</project>

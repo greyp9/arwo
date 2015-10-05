@@ -1,0 +1,321 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
+<html>
+
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+<title>app styles</title>
+<!-- palette: Background, ThreeDShadow, ButtonFace, Highlight, HighlightText, InactiveCaption, InactiveCaptionText -->
+<style type='text/css'>
+body
+{
+background-color: Background;
+}
+
+div.dialog, div.table
+{
+border: thin solid ThreeDShadow;
+margin: 0 0 1em 0;
+}
+
+div.dialog
+{
+background-color: ButtonFace;
+}
+
+div.table
+{
+background-color: Window;
+}
+
+div.dialog table, div.table table
+{
+padding: 0.5em;
+width: 100%;
+}
+
+div.dialog table caption, div.table table caption
+{
+padding: 0.5em;
+caption-side: top;
+font: Menu;
+text-align: left;
+font-weight: bold;
+border-bottom: thin solid ThreeDShadow;
+}
+
+div.dialog td, div.dialog input, div.table th, div.table td
+{
+font: Menu;
+}
+
+div.dialog div.submit
+{
+padding: 0.5em;
+padding-top: 0;
+}
+
+div.table table
+{
+border: thin solid ThreeDShadow;
+border-collapse: collapse;
+}
+
+div.table table tr.active, div.table table tr.active td
+{
+background-color: Highlight;
+color: HighlightText;
+}
+
+div.table table th, div.table table td
+{
+border: thin solid ThreeDShadow;
+padding: 1px 3px;
+}
+
+div.table table.active th
+{
+background-color: InfoBackground; font-weight: bold;
+}
+
+div.table table.inactive th
+{
+background-color: ButtonFace; font-weight: normal;
+}
+
+table.active caption
+{
+background-color: Highlight;
+color: HighlightText;
+}
+
+table.inactive caption
+{
+background-color: InactiveCaption;
+color: InactiveCaptionText;
+}
+
+tfoot span.left
+{
+float: left;
+width: 25%;
+text-align: left;
+}
+
+tfoot span.center
+{
+float: left;
+width: 50%;
+text-align: center;
+}
+
+tfoot span.right
+{
+float: right;
+width: 25%;
+text-align: right;
+}
+
+div.notifications
+{
+border: thin solid ThreeDShadow;
+background-color: InfoBackground;
+padding: 0.25em 0.5em;
+margin: 0 0 1em 0;
+font: Menu;
+}
+
+div.notification
+{
+margin: 0.25em 0;
+}
+
+span.level
+{
+font-family: monospace;
+font-size: larger;
+font-weight: bold;
+border: thin solid ThreeDShadow;
+}
+
+span.info
+{
+background-color: blue;
+color: white;
+}
+
+span.warn
+{
+background-color: yellow;
+color: black;
+}
+
+span.err
+{
+background-color: red;
+color: white;
+}
+
+span.timestamp
+{
+padding: 0 0.5em;
+}
+
+div.menus
+{
+margin: 0 0 1em 0;
+}
+
+div.menu
+{
+background-color: ButtonFace;
+border: thin solid ThreeDShadow;
+padding: 0 2px 4px 2px;
+margin: 0 0 1px 0;
+}
+
+div.menu a
+{
+color: ButtonText;
+font: Menu;
+padding: 0 2px;
+text-decoration: none;
+}
+
+div.menu span
+{
+color: ButtonText;
+font: Menu;
+padding: 0 2px;
+}
+
+div.list
+{
+border: thin solid ThreeDShadow;
+background-color: ButtonFace;
+margin: 0 0 1em 0;
+padding: 0.25em 0.5em;
+font: Menu;
+}
+
+div.list ul
+{
+margin: 0;
+padding: 0 0 0 2em;
+}
+</style>
+</head>
+
+<body>
+
+<div class='notifications'>
+<div class='notification'>
+<span class='level info' title='Information'>[i]</span>
+<span class='timestamp'>2015-10-01T00:00:00Z</span>
+<span class='text'>Information</span>
+</div>
+<div class='notification'>
+<span class='level warn' title='Warning'>[!]</span>
+<span class='timestamp'>2015-10-01T00:00:00Z</span>
+<span class='text'>Warning</span>
+</div>
+<div class='notification'>
+<span class='level err' title='Error'>[X]</span>
+<span class='timestamp'>2015-10-01T00:00:00Z</span>
+<span class='text'>Error</span>
+</div>
+</div>
+
+<div class='menus'>
+<div class='menu'>
+<a href='.'>Do1a</a>
+<a href='.'>Do1b</a>
+<a href='.'>Do1c</a>
+<a href='.'>Do1d</a>
+</div>
+<div class='menu'>
+<a href='.'>Do2a</a>
+<a href='.'>Do2b</a>
+<a href='.'>Do2c</a>
+<a href='.'>Do2d</a>
+</div>
+</div>
+
+<div class='list'>
+<div>parent</div>
+<ul>
+<li>child 1</li>
+<li>child 2</li>
+<li>child 3</li>
+</ul>
+</div>
+
+<div class='dialog'>
+<form action='' method='post'>
+<table summary='active' class='active' title='tooltip for table'>
+<caption title='tooltip for caption'>caption</caption>
+<tr title='tooltip for row1'><td>name1</td><td><input name='name1' size='64' type='text' value='value1'/></td></tr>
+<tr title='tooltip for row2'><td>name2</td><td><input name='name2' size='64' type='text' value='value2'/></td></tr>
+<tr title='tooltip for row3'><td>name3</td><td><input name='name3' size='64' type='text' value='value3'/></td></tr>
+<tr title='tooltip for row4'><td>name4</td><td><input name='name4' type='checkbox' checked='checked'/></td></tr>
+<tr title='tooltip for row5'><td>name5</td><td><input name='name5' type='checkbox'/></td></tr>
+</table>
+<div class='submit'>
+<input type='submit' value='SubmitA' name='Submit' title='tooltip for SubmitA'/>
+<input type='submit' value='SubmitB' name='Submit' title='tooltip for SubmitB'/>
+<input type='submit' value='SubmitC' name='Submit' title='tooltip for SubmitC'/>
+</div>
+</form>
+</div>
+
+<div class='dialog'>
+<form action='' method='post'>
+<table summary='inactive' class='inactive' title='tooltip for table'>
+<caption title='tooltip for caption'>caption</caption>
+<tr title='tooltip for row1'><td>name1</td><td><input name='name1' size='64' type='text' value='value1' disabled='disabled'/></td></tr>
+<tr title='tooltip for row2'><td>name2</td><td><input name='name2' size='64' type='text' value='value2' disabled='disabled'/></td></tr>
+<tr title='tooltip for row3'><td>name3</td><td><input name='name3' size='64' type='text' value='value3' disabled='disabled'/></td></tr>
+<tr title='tooltip for row4'><td>name4</td><td><input name='name4' type='checkbox' disabled='disabled' checked='checked'/></td></tr>
+<tr title='tooltip for row5'><td>name5</td><td><input name='name5' type='checkbox' disabled='disabled' /></td></tr>
+</table>
+<div class='submit'>
+<input type='submit' value='SubmitA' name='Submit' title='tooltip for SubmitA' disabled='disabled'/>
+<input type='submit' value='SubmitB' name='Submit' title='tooltip for SubmitB' disabled='disabled'/>
+<input type='submit' value='SubmitC' name='Submit' title='tooltip for SubmitC' disabled='disabled'/>
+</div>
+</form>
+</div>
+
+<div class='table'>
+<table summary='active' class='active'>
+<caption title='tooltip for caption'>caption</caption>
+<thead>
+<tr><th>columnA</th><th>columnB</th><th>columnC</th><th>columnD</th><th>columnE</th></tr>
+</thead>
+<tfoot>
+<tr>
+<th colspan='5'>
+<span class='left'>left</span>
+<span class='center'>center</span>
+<span class='right'>right</span>
+</th>
+</tr>
+</tfoot>
+<tbody>
+<tr class='active'><td>valueA1</td><td>valueB1</td><td>valueC1</td><td>valueD1</td><td>valueE1</td></tr>
+<tr><td>valueA2</td><td>valueB2</td><td>valueC2</td><td>valueD2</td><td>valueE2</td></tr>
+</tbody>
+</table>
+</div>
+
+<div class='table'>
+<table summary='inactive' class='inactive'>
+<caption title='tooltip for caption'>caption</caption>
+<tr><th>columnA</th><th>columnB</th><th>columnC</th><th>columnD</th><th>columnE</th></tr>
+<tr><td>valueA1</td><td>valueB1</td><td>valueC1</td><td>valueD1</td><td>valueE1</td></tr>
+<tr><td>valueA2</td><td>valueB2</td><td>valueC2</td><td>valueD2</td><td>valueE2</td></tr>
+</table>
+</div>
+
+</body>
+
+</html>
