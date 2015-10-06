@@ -6,4 +6,9 @@
     <entry key='ssh.server.localhost.port'>22</entry>
     <entry key='ssh.server.localhost.user'>root</entry>
     <entry key='ssh.server.localhost.pass'>root</entry>
+
+    <entry key='cifs.server'>localhost</entry>
+    <entry key='cifs.server.localhost.url'>smb://localhost/C$/</entry>
+    <entry key='cifs.server.localhost.user'>Administrator</entry>
+    <entry key='cifs.server.localhost.pass'>Administrator</entry>
 </properties>

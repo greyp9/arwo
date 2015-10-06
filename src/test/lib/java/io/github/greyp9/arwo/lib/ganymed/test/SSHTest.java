@@ -4,6 +4,7 @@ import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.InteractiveCallback;
 import ch.ethz.ssh2.SFTPv3Client;
 import ch.ethz.ssh2.SFTPv3DirectoryEntry;
+import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.util.PropertiesU;
 import junit.framework.TestCase;
@@ -27,7 +28,7 @@ public class SSHTest extends TestCase {
         Properties properties = PropertiesU.loadFromXml(fileProperties.toURI().toURL());
         logger.info("" + properties.size());
         Assert.assertTrue(properties.size() > 0);
-        String sshServerList = properties.getProperty(SSH_SERVER);
+        String sshServerList = properties.getProperty(Const.SSH_SERVER);
         Assert.assertNotNull(sshServerList);
         String[] servers = sshServerList.split(",");
         for (String server : servers) {
@@ -36,10 +37,10 @@ public class SSHTest extends TestCase {
     }
 
     private void doTestConnectivityServer(String server, Properties properties) throws IOException {
-        String host = properties.getProperty(String.format("%s.%s.host", SSH_SERVER, server));
-        String port = properties.getProperty(String.format("%s.%s.port", SSH_SERVER, server));
-        String user = properties.getProperty(String.format("%s.%s.user", SSH_SERVER, server));
-        String pass = properties.getProperty(String.format("%s.%s.pass", SSH_SERVER, server));
+        String host = properties.getProperty(String.format("%s.%s.host", Const.SSH_SERVER, server));
+        String port = properties.getProperty(String.format("%s.%s.port", Const.SSH_SERVER, server));
+        String user = properties.getProperty(String.format("%s.%s.user", Const.SSH_SERVER, server));
+        String pass = properties.getProperty(String.format("%s.%s.pass", Const.SSH_SERVER, server));
         logger.info(String.format("Authenticate: HOST=[%s] PORT=[%s]", host, port));
         doTestConnectivityServer(host, port, user, pass);
     }
@@ -77,13 +78,13 @@ public class SSHTest extends TestCase {
 
     private void ls(String directory, Connection connection) throws IOException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        PrintStream ps = new PrintStream(os);
+        PrintStream ps = new PrintStream(os, true, UTF8Codec.Const.UTF8);
         SFTPv3Client client = new SFTPv3Client(connection);
         List<SFTPv3DirectoryEntry> list = client.ls(directory);
         for (SFTPv3DirectoryEntry entry : list) {
             ps.println(entry.filename);
         }
-        logger.info(new String(os.toByteArray()));
+        logger.info(UTF8Codec.toString(os.toByteArray()));
     }
 
     public static class InteractiveCallbackImpl implements InteractiveCallback {
@@ -109,5 +110,7 @@ public class SSHTest extends TestCase {
         }
     }
 
-    private static final String SSH_SERVER = "ssh.server";
+    private static class Const {
+        private static final String SSH_SERVER = "ssh.server";
+    }
 }

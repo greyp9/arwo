@@ -9,7 +9,9 @@
     <rule ref='rulesets/java/comments.xml'>
         <exclude name='CommentRequired'/>
     </rule>
-    <rule ref='rulesets/java/controversial.xml'/>
+    <rule ref='rulesets/java/controversial.xml'>
+        <exclude name='NullAssignment'/>
+    </rule>
     <rule ref='rulesets/java/coupling.xml'>
         <exclude name='LoosePackageCoupling'/>
     </rule>

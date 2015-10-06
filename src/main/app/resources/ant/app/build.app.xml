@@ -25,7 +25,7 @@
         </javac>
     </target>
 
-    <target name='main'>
+    <target name='main' depends='clean, compile-core'>
         <echo message='project.dir: ${project.dir}'/>
     </target>
 

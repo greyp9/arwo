@@ -7,9 +7,15 @@
     <!--fixed-->
     <property name='project.dir' location='${basedir}/../../../../../..' description='(suggested) ~/arwo'/>
     <property name='src.core.dir' location='${project.dir}/src/main/core/java'/>
+    <property name='src.lib.dir' location='${project.dir}/src/main/lib/java'/>
+    <property name='test.src.core.dir' location='${project.dir}/src/test/core/java'/>
+    <property name='test.src.lib.dir' location='${project.dir}/src/test/lib/java'/>
     <!--transient-->
     <property name='target.dir' value='${project.dir}/target'/>
     <property name='classes.core.dir' value='${target.dir}/app/classes-core'/>
+    <property name='classes.lib.dir' value='${target.dir}/app/classes-lib'/>
+    <property name='test.classes.core.dir' value='${target.dir}/app/test-classes-core'/>
+    <property name='test.classes.lib.dir' value='${target.dir}/app/test-classes-lib'/>
 
     <path id='classpath-findbugs'>
         <fileset dir='${findbugs.dir}'>
@@ -21,12 +27,28 @@
 
     <target name='findbugs-core'>
         <findbugs home='${findbugs.dir}' excludeFilter='${basedir}/findbugs-filter.xml' reportlevel='low' output='text'>
+            <auxclasspath location='${m2.dir}/junit/junit/4.11/junit-4.11.jar'/>
+            <auxclasspath location='${m2.dir}/ch/ethz/ganymed/ganymed-ssh2/262/ganymed-ssh2-262.jar'/>
+            <auxclasspath location='${m2.dir}/jcifs/jcifs/1.3.17/jcifs-1.3.17.jar'/>
+
             <!--as classes-->
             <fileset dir='${classes.core.dir}'>
                 <include name='**/*.class'/>
             </fileset>
+            <fileset dir='${classes.lib.dir}'>
+                <include name='**/*.class'/>
+            </fileset>
+            <fileset dir='${test.classes.core.dir}'>
+                <include name='**/*.class'/>
+            </fileset>
+            <fileset dir='${test.classes.lib.dir}'>
+                <include name='**/*.class'/>
+            </fileset>
 
             <sourcepath path='${src.core.dir}'/>
+            <sourcepath path='${src.lib.dir}'/>
+            <sourcepath path='${test.src.core.dir}'/>
+            <sourcepath path='${test.src.lib.dir}'/>
         </findbugs>
     </target>
 
