@@ -19,6 +19,8 @@
         <fileset file='${m2.dir}/junit/junit/4.11/junit-4.11.jar' id='libs-ganymed'/>
         <fileset file='${m2.dir}/ch/ethz/ganymed/ganymed-ssh2/262/ganymed-ssh2-262.jar' id='libs-ganymed'/>
         <fileset file='${m2.dir}/jcifs/jcifs/1.3.17/jcifs-1.3.17.jar' id='libs-jcifs'/>
+        <fileset file='${m2.dir}/org/glassfish/main/external/j-interop-repackaged/4.1/j-interop-repackaged-4.1.jar'
+                 id='libs-jinterop'/>
         <fileset file='${m2.dir}/com/sun/mail/javax.mail/1.5.4/javax.mail-1.5.4.jar' id='libs-javamail'/>
         <pathelement path='${test.classes.core.dir}'/>
         <pathelement path='${test.classes.lib.dir}'/>

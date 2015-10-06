@@ -36,7 +36,9 @@ public class CIFSTest extends TestCase {
         Assert.assertNotNull(sshServerList);
         String[] servers = sshServerList.split(",");
         for (String server : servers) {
-            doTestConnectivityServer(server, properties);
+            if (server.length() > 0) {
+                doTestConnectivityServer(server, properties);
+            }
         }
     }
 
