@@ -1,2 +1,7 @@
 <?xml version='1.0' encoding='UTF-8'?>
-<FindBugsFilter/>
+<FindBugsFilter>
+    <Match>
+        <Class name="io.github.greyp9.arwo.lib.jdbc.test.JdbcTest"/>
+        <Bug code="SQL"/>
+    </Match>
+</FindBugsFilter>

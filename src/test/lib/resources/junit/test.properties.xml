@@ -11,4 +11,50 @@
     <entry key='cifs.server.localhost.url'>smb://localhost/C$/</entry>
     <entry key='cifs.server.localhost.user'>Administrator</entry>
     <entry key='cifs.server.localhost.pass'>Administrator</entry>
+
+    <entry key='interop.server'>localhost</entry>
+    <entry key='interop.server.localhost.host'>localhost</entry>
+    <entry key='interop.server.localhost.user'>Administrator</entry>
+    <entry key='interop.server.localhost.pass'>Administrator</entry>
+
+    <entry key='jdbc.server'>localhost,localhost2</entry>
+    <entry key='jdbc.server.localhost.driver'>net.sourceforge.jtds.jdbc.Driver</entry>
+    <entry key='jdbc.server.localhost.url'>jdbc:jtds:sqlserver://localhost:1433/master;</entry>
+    <entry key='jdbc.server.localhost.user'>sa</entry>
+    <entry key='jdbc.server.localhost.pass'>sa</entry>
+    <entry key='jdbc.server.localhost.sql.1'>SELECT @@version</entry>
+    <entry key='jdbc.server.localhost.sql.2'>SELECT * FROM master..sysdatabases;</entry>
+    <entry key='jdbc.server.localhost.sql.3'>SELECT * FROM sysobjects WHERE xtype='U'</entry>
+
+    <entry key='jdbc.server.localhost2.driver'>org.apache.derby.jdbc.ClientDriver</entry>
+    <entry key='jdbc.server.localhost2.url'>jdbc:derby://localhost:1527/arwodb;</entry>
+    <entry key='jdbc.server.localhost2.user'>arwo</entry>
+    <entry key='jdbc.server.localhost2.pass'>arwo</entry>
+    <entry key='jdbc.server.localhost2.sql.1'>VALUES 1, 2, 3</entry>
+    <entry key='jdbc.server.localhost2.sql.2'>SELECT 1 FROM SYSIBM.SYSDUMMY1</entry>
+    <entry key='jdbc.server.localhost2.sql.3'>SELECT * FROM FIRSTTABLE</entry>
+
+    <entry key='pop3.server'/>
+    <entry key='pop3.server.localhost.protocol'>pop3s</entry>
+    <entry key='pop3.server.localhost.host'>localhost</entry>
+    <entry key='pop3.server.localhost.port'>995</entry>
+    <entry key='pop3.server.localhost.user'>arwo@localhost</entry>
+    <entry key='pop3.server.localhost.pass'>arwo</entry>
+
+    <entry key='imap.server'/>
+    <entry key='imap.server.localhost.protocol'>imaps</entry>
+    <entry key='imap.server.localhost.host'>localhost</entry>
+    <entry key='imap.server.localhost.port'>993</entry>
+    <entry key='imap.server.localhost.user'>arwo@localhost</entry>
+    <entry key='imap.server.localhost.pass'>arwo</entry>
+
+    <entry key='smtp.server'>localhost</entry>
+    <entry key='smtp.server.localhost.protocol'>smtps</entry>
+    <entry key='smtp.server.localhost.host'>localhost</entry>
+    <entry key='smtp.server.localhost.port'>465</entry>
+    <entry key='smtp.server.localhost.user'>arwo@localhost</entry>
+    <entry key='smtp.server.localhost.pass'>arwo</entry>
+    <entry key='smtp.server.localhost.from'>arwo@localhost</entry>
+    <entry key='smtp.server.localhost.to'>arwo@localhost</entry>
+    <entry key='smtp.server.localhost.subject'>test</entry>
 </properties>

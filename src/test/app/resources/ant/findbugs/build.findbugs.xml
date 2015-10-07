@@ -25,34 +25,50 @@
 
     <taskdef name='findbugs' classname='edu.umd.cs.findbugs.anttask.FindBugsTask' classpathref='classpath-findbugs'/>
 
-    <target name='findbugs-core'>
-        <findbugs home='${findbugs.dir}' excludeFilter='${basedir}/findbugs-filter.xml' reportlevel='low' output='text'>
-            <auxclasspath location='${m2.dir}/junit/junit/4.11/junit-4.11.jar'/>
-            <auxclasspath location='${m2.dir}/ch/ethz/ganymed/ganymed-ssh2/262/ganymed-ssh2-262.jar'/>
-            <auxclasspath location='${m2.dir}/jcifs/jcifs/1.3.17/jcifs-1.3.17.jar'/>
+    <property name='filter' value='${basedir}/findbugs-filter.xml'/>
 
-            <!--as classes-->
+    <target name='findbugs-core'>
+        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failonerror='true'>
             <fileset dir='${classes.core.dir}'>
                 <include name='**/*.class'/>
             </fileset>
-            <fileset dir='${classes.lib.dir}'>
-                <include name='**/*.class'/>
-            </fileset>
+            <sourcepath path='${src.core.dir}'/>
+        </findbugs>
+        <!--
+        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failonerror='true'>
             <fileset dir='${test.classes.core.dir}'>
                 <include name='**/*.class'/>
             </fileset>
+            <sourcepath path='${test.src.core.dir}'/>
+        </findbugs>
+        -->
+    </target>
+
+    <target name='findbugs-lib'>
+        <!--
+        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failonerror='true'>
+            <fileset dir='${classes.lib.dir}'>
+                <include name='**/*.class'/>
+            </fileset>
+            <sourcepath path='${src.lib.dir}'/>
+        </findbugs>
+        -->
+        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failonerror='true'>
+            <auxclasspath location='${m2.dir}/junit/junit/4.11/junit-4.11.jar'/>
+            <auxclasspath location='${m2.dir}/ch/ethz/ganymed/ganymed-ssh2/262/ganymed-ssh2-262.jar'/>
+            <auxclasspath location='${m2.dir}/jcifs/jcifs/1.3.17/jcifs-1.3.17.jar'/>
+            <auxclasspath
+                    location='${m2.dir}/org/glassfish/main/external/j-interop-repackaged/4.1/j-interop-repackaged-4.1.jar'/>
+            <auxclasspath location='${m2.dir}/com/sun/mail/javax.mail/1.5.4/javax.mail-1.5.4.jar'/>
+            <auxclasspath location='${classes.core.dir}'/>
             <fileset dir='${test.classes.lib.dir}'>
                 <include name='**/*.class'/>
             </fileset>
-
-            <sourcepath path='${src.core.dir}'/>
-            <sourcepath path='${src.lib.dir}'/>
-            <sourcepath path='${test.src.core.dir}'/>
             <sourcepath path='${test.src.lib.dir}'/>
         </findbugs>
     </target>
 
-    <target name='main' depends='findbugs-core' description='Use -p to view help information.'>
+    <target name='main' depends='findbugs-core, findbugs-lib' description='Use -p to view help information.'>
         <echo message='project.dir: ${project.dir}'/>
     </target>
 

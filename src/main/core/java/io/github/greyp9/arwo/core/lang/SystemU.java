@@ -1,12 +1,20 @@
 package io.github.greyp9.arwo.core.lang;
 
 public final class SystemU {
-    private static final String USER_HOME = System.getProperty("user.home");
 
     private SystemU() {
     }
 
+    public static String eol() {
+        return Const.LINE_SEPARATOR;
+    }
+
     public static String userHome() {
-        return USER_HOME;
+        return Const.USER_HOME;
+    }
+
+    private static class Const {
+        private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+        private static final String USER_HOME = System.getProperty("user.home");
     }
 }

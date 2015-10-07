@@ -21,4 +21,12 @@ public final class PropertiesU {
         properties.loadFromXML(new ByteArrayInputStream(xml));
         return properties;
     }
+
+    public static void setProperty(final Properties properties, final Object key, final Object value) {
+        if (value == null) {
+            properties.remove(key);
+        } else {
+            properties.put(key, value);
+        }
+    }
 }

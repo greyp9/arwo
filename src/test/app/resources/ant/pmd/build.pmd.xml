@@ -6,6 +6,9 @@
     <!--fixed-->
     <property name='project.dir' location='${basedir}/../../../../../..' description='(suggested) ~/arwo'/>
     <property name='src.core.dir' location='${project.dir}/src/main/core/java'/>
+    <property name='src.lib.dir' location='${project.dir}/src/main/lib/java'/>
+    <property name='test.src.core.dir' location='${project.dir}/src/test/core/java'/>
+    <property name='test.src.lib.dir' location='${project.dir}/src/test/lib/java'/>
     <!--transient-->
     <property name='target.dir' value='${project.dir}/target'/>
 
@@ -32,7 +35,9 @@
         </pmd>
     </target>
 
-    <target name='main' depends='pmd-core' description='Use -p to view help information.'>
+    <target name='pmd-lib'/>
+
+    <target name='main' depends='pmd-core, pmd-lib' description='Use -p to view help information.'>
         <echo message='project.dir: ${project.dir}'/>
     </target>
 

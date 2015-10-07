@@ -4,15 +4,18 @@
     <!--fixed-->
     <property name='project.dir' location='${basedir}/../../../../../..'/>
     <property name='src.core.dir' location='${project.dir}/src/main/core/java'/>
+    <property name='src.lib.dir' location='${project.dir}/src/main/lib/java'/>
     <!--transient-->
     <property name='target.dir' value='${project.dir}/target'/>
     <property name='classes.core.dir' value='${target.dir}/app/classes-core'/>
+    <property name='classes.lib.dir' value='${target.dir}/app/classes-lib'/>
 
     <path id='classpath-app'>
     </path>
 
     <target name='clean' description='clean up generated resources'>
         <delete dir='${classes.core.dir}'/>
+        <delete dir='${classes.lib.dir}'/>
     </target>
 
     <target name='compile-core' description='compile project source'>
@@ -25,7 +28,17 @@
         </javac>
     </target>
 
-    <target name='main' depends='clean, compile-core'>
+    <target name='compile-lib' description='compile project source'>
+        <echo message='compile app lib classes'/>
+        <mkdir dir='${classes.lib.dir}'/>
+        <depend destdir='${classes.lib.dir}' srcdir='${src.lib.dir}'/>
+        <javac destdir='${classes.lib.dir}' classpathref='classpath-app' includeantruntime='false' debug='on'>
+            <compilerarg value='-Xlint:all'/>
+            <src path='${src.lib.dir}'/>
+        </javac>
+    </target>
+
+    <target name='main' depends='clean, compile-core, compile-lib'>
         <echo message='project.dir: ${project.dir}'/>
     </target>
 

@@ -6,6 +6,9 @@
     <!--fixed-->
     <property name='project.dir' location='${basedir}/../../../../../..' description='(suggested) ~/arwo'/>
     <property name='src.core.dir' location='${project.dir}/src/main/core/java'/>
+    <property name='src.lib.dir' location='${project.dir}/src/main/lib/java'/>
+    <property name='test.src.core.dir' location='${project.dir}/src/test/core/java'/>
+    <property name='test.src.lib.dir' location='${project.dir}/src/test/lib/java'/>
 
     <path id='classpath-checkstyle'>
         <fileset dir='${checkstyle.dir}'>
@@ -25,7 +28,9 @@
         </checkstyle>
     </target>
 
-    <target name='main' depends='checkstyle-core' description='Use -p to view help information.'>
+    <target name='checkstyle-lib'/>
+
+    <target name='main' depends='checkstyle-core, checkstyle-lib' description='Use -p to view help information.'>
         <echo message='project.dir: ${project.dir}'/>
     </target>
 

@@ -1,27 +1,23 @@
 package io.github.greyp9.arwo.lib.jinterop.test;
 
+import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.command.Command;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.util.PropertiesU;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
+import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Properties;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class InteropTest extends TestCase {
     private final Logger logger = Logger.getLogger(getClass().getName());
-
-    @Override
-    public void setUp() throws Exception {
-        super.setUp();
-        Logger.getLogger("org.jinterop").setLevel(Level.SEVERE);
-    }
 
     public void testServerConnectivity() throws Exception {
         File fileProperties = new File(SystemU.userHome(), ".arwo/test.properties.xml");
@@ -48,18 +44,21 @@ public class InteropTest extends TestCase {
     }
 
     private void doTestConnectivityServer(String host, String user, String pass) throws IOException {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(os, true, UTF8Codec.Const.UTF8);
         InteropShell shell = new InteropShell(host, user, pass);
         Collection<String> stdins = Arrays.asList("dir C:\\", "dir D:\\", "dir E:\\");
         Collection<Command> commands = shell.runCommands(stdins);
         for (Command command : commands) {
-            logger.info("---------=---------=---------=---------=---------=---------=");
-            logger.info(String.format("> %s", command.getStdin()));
-            logger.info(String.format("[%s] [%d] [%d]",
+            ps.println("---------=---------=---------=---------=---------=---------=");
+            ps.println(String.format("> %s", command.getStdin()));
+            ps.println(String.format("[%s] [%d] [%d]",
                     command.getDateStart(), command.getElapsed(), command.getExitValue()));
-            logger.info(String.format("<STDERR>%s</STDERR>", command.getStderr()));
-            logger.info(command.getStdout());
-            logger.info("---------=---------=---------=---------=---------=---------=");
+            ps.println(String.format("<STDERR>%s</STDERR>", command.getStderr()));
+            ps.println(command.getStdout());
+            ps.println("---------=---------=---------=---------=---------=---------=");
         }
+        logger.info(UTF8Codec.toString(os.toByteArray()));
     }
 
     private static class Const {
