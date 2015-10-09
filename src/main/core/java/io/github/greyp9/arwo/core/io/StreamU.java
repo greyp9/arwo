@@ -19,7 +19,7 @@ public final class StreamU {
         }
     }
 
-    @SuppressWarnings("PMD")
+    @SuppressWarnings("PMD.AssignmentInOperand")
     public static byte[] read(final BufferedInputStream is) throws IOException {
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
         int b;
@@ -27,5 +27,14 @@ public final class StreamU {
             os.write(b);
         }
         return os.toByteArray();
+    }
+
+    @SuppressWarnings("PMD.OnlyOneReturn")
+    public static byte[] readSafe(final URL url) {
+        try {
+            return read(url);
+        } catch (IOException e) {
+            return null;
+        }
     }
 }

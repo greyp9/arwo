@@ -9,7 +9,6 @@ public final class LoggerU {
     private LoggerU() {
     }
 
-    @SuppressWarnings("PMD")
     public static void setFormatter(final Logger logger, final Formatter formatter) {
         Logger logger1 = logger;
         while (logger1 != null) {

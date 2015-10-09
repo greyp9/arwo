@@ -8,8 +8,11 @@
     <rule ref='rulesets/java/codesize.xml'/>
     <rule ref='rulesets/java/comments.xml'>
         <exclude name='CommentRequired'/>
+        <exclude name='CommentSize'/>
     </rule>
     <rule ref='rulesets/java/controversial.xml'>
+        <exclude name='AtLeastOneConstructor'/>
+        <exclude name='DataflowAnomalyAnalysis'/>
         <exclude name='NullAssignment'/>
     </rule>
     <rule ref='rulesets/java/coupling.xml'>
@@ -17,7 +20,7 @@
     </rule>
     <rule ref="rulesets/java/coupling.xml/LawOfDemeter">
         <properties>
-            <property name="violationSuppressRegex" value=".*Potential.*object not created locally.*"/>
+            <property name="violationSuppressRegex" value=".*Potential.*(object not created locally|static property access).*"/>
         </properties>
     </rule>
     <rule ref='rulesets/java/design.xml'/>
@@ -25,7 +28,9 @@
     <rule ref='rulesets/java/finalizers.xml'/>
     <rule ref='rulesets/java/imports.xml'/>
     <rule ref='rulesets/java/j2ee.xml'/>
-    <rule ref='rulesets/java/javabeans.xml'/>
+    <rule ref='rulesets/java/javabeans.xml'>
+        <exclude name='BeanMembersShouldSerialize'/>
+    </rule>
     <rule ref='rulesets/java/junit.xml'/>
     <rule ref='rulesets/java/logging-jakarta-commons.xml'/>
     <rule ref='rulesets/java/logging-java.xml'/>
@@ -35,6 +40,7 @@
     <rule ref='rulesets/java/migrating_to_15.xml'/>
     <rule ref='rulesets/java/migrating_to_junit4.xml'/>
     <rule ref='rulesets/java/naming.xml'>
+        <exclude name='ShortClassName'/>
         <exclude name='ShortVariable'/>
     </rule>
     <rule ref='rulesets/java/optimizations.xml'/>

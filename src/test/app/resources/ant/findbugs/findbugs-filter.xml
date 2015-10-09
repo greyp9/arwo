@@ -1,6 +1,10 @@
 <?xml version='1.0' encoding='UTF-8'?>
 <FindBugsFilter>
     <Match>
+        <Class name="io.github.greyp9.arwo.core.io.StreamU"/>
+        <Bug code="PZLA"/>
+    </Match>
+    <Match>
         <Class name="io.github.greyp9.arwo.lib.jdbc.test.JdbcTest"/>
         <Bug code="SQL"/>
     </Match>

@@ -13,6 +13,11 @@ public final class SystemU {
         return Const.USER_HOME;
     }
 
+    public static void arraycopy(final Object source, final int sourceOffset,
+                                 final Object target, final int targetOffset, final int length) {
+        System.arraycopy(source, sourceOffset, target, targetOffset, length);
+    }
+
     private static class Const {
         private static final String LINE_SEPARATOR = System.getProperty("line.separator");
         private static final String USER_HOME = System.getProperty("user.home");

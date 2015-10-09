@@ -1,0 +1,36 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<xsd:schema targetNamespace='urn:arwo:realm'
+            xmlns:realm='urn:arwo:realm'
+            xmlns:xsd='http://www.w3.org/2001/XMLSchema'
+            elementFormDefault='qualified'>
+
+    <xsd:element name='realm' type='realm:realmType'/>
+
+    <xsd:complexType name='realmType'>
+        <xsd:sequence>
+            <xsd:element name='principals' type='realm:principalsType'/>
+        </xsd:sequence>
+        <xsd:attribute name='name' default='Arwo'/>
+    </xsd:complexType>
+
+    <xsd:complexType name='principalsType'>
+        <xsd:sequence>
+            <xsd:element name='principal' type='realm:principalType' minOccurs='0' maxOccurs='unbounded'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name='principalType'>
+        <xsd:sequence>
+            <xsd:element name='user' type='realm:nonEmptyString'/>
+            <xsd:element name='credential' type='xsd:string'/>
+            <xsd:element name='roles' type='xsd:string'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:simpleType name='nonEmptyString'>
+        <xsd:restriction base='xsd:string'>
+            <xsd:minLength value='1'/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+</xsd:schema>
