@@ -4,10 +4,15 @@ import javax.xml.XMLConstants;
 
 public final class XsdU {
 
+    // namespace prefix
+    // XMLConstants.NULL_NS_URI
+    //public static final String NS_PREFIX_XML = XMLConstants.XML_NS_PREFIX;  // "xml";
+    public static final String NS_PREFIX_XSD = "xsd";
+    //public static final String NS_PREFIX_XMLNS = XMLConstants.XMLNS_ATTRIBUTE;  // "xmlns";
+
     // namespace uri
     public static final String NS_URI_XML = XMLConstants.XMLNS_ATTRIBUTE_NS_URI;  // "http://www.w3.org/2000/xmlns/";
     public static final String NS_URI_XSD = XMLConstants.W3C_XML_SCHEMA_NS_URI;  // "http://www.w3.org/2001/XMLSchema";
-    public static final String NS_URI_XED = "urn:xed:xed";
     // element names
     public static final String ANNOTATION = "annotation";
     public static final String ANY = "any";
@@ -43,9 +48,7 @@ public final class XsdU {
     public static final String MIN_OCCURS = "minOccurs";
     public static final String NAME = "name";
     public static final String NAMESPACE = "namespace";
-    public static final String PROCESS_CONTENTS = "processContents";
     public static final String REF = "ref";
-    public static final String REQUIRED = "required";
     public static final String SCHEMA_LOCATION = "schemaLocation";
     public static final String SUBSTITUTION_GROUP = "substitutionGroup";  // NOPMD
     public static final String TARGET_NAMESPACE = "targetNamespace";
@@ -55,10 +58,27 @@ public final class XsdU {
     public static final String VERSION = "version";
 
     // value names
+    public static final String REQUIRED = "required";
     public static final String UNBOUNDED = "unbounded";
 
     // syntax
     public static final String COLON = ":";
+    public static final String DOT = ".";
+
+    public static class Xed {
+        // namespace prefix
+        public static final String NS_PREFIX_XED = "xed";
+
+        // namespace uri
+        public static final String NS_URI_XED = "urn:xed:xed";
+
+        // element names
+
+        // attribute names
+        public static final String IDENTITY = "identity";
+
+        // value names
+    }
 
     private XsdU() {
     }

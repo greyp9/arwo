@@ -15,12 +15,7 @@ public class XsdAtom {
     private final NameTypeValues attributes;
     private final NameTypeValues namespaces;
     private final NameTypeValues directives;
-
-/*
-    public XsdAtom(Element element) throws IOException {
-        this(element, null);
-    }
-*/
+    private final NameTypeValues ignored;
 
     public XsdAtom(final Element element, final XsdAtom parent) throws IOException {
         this.parent = parent;
@@ -29,6 +24,7 @@ public class XsdAtom {
         this.attributes = new NameTypeValues();
         this.namespaces = new NameTypeValues();
         this.directives = new NameTypeValues();
+        this.ignored = new NameTypeValues();
     }
 
     public final Element getElement() {
@@ -43,6 +39,16 @@ public class XsdAtom {
         return children;
     }
 
+    public final Collection<XsdAtom> getChildren(final String name) {
+        final Collection<XsdAtom> atoms = new ArrayList<XsdAtom>();
+        for (final XsdAtom child : children) {
+            if (child.getElement().getLocalName().equals(name)) {
+                atoms.add(child);
+            }
+        }
+        return atoms;
+    }
+
     public final NameTypeValues getAttributes() {
         return attributes;
     }
@@ -53,6 +59,10 @@ public class XsdAtom {
 
     public final NameTypeValues getDirectives() {
         return directives;
+    }
+
+    public final NameTypeValues getIgnored() {
+        return ignored;
     }
 
     public final void addChild(final XsdAtom atom) {
@@ -69,5 +79,9 @@ public class XsdAtom {
 
     public final void addDirective(final NameTypeValue value) {
         directives.add(value);
+    }
+
+    public final void addIgnored(final NameTypeValue value) {
+        ignored.add(value);
     }
 }

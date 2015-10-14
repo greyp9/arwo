@@ -5,6 +5,8 @@ import io.github.greyp9.arwo.core.url.URLCodec;
 import io.github.greyp9.arwo.core.xsd.atom.SchemaAtom;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollection;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollectionFactory;
+import io.github.greyp9.arwo.core.xsd.type.TypeComponents;
+import io.github.greyp9.arwo.core.xsd.type.TypeComponentsFactory;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
@@ -12,13 +14,13 @@ import java.net.URL;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class SchemaCollectionAppTest extends TestCase {
+public class SchemaSourceAppTest extends TestCase {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
     @Override
     public void setUp() throws Exception {
         super.setUp();
-        //LoggerU.adjustShort(Logger.getLogger(""));
+        //io.github.greyp9.arwo.core.logging.LoggerU.adjustShort(Logger.getLogger(""));
     }
 
     public void testAssembleSchemaCollection() throws Exception {
@@ -28,16 +30,16 @@ public class SchemaCollectionAppTest extends TestCase {
             logger.info("UrlInitial/" + URLCodec.toExternalForm(urlInitial));
             URL urlCatalog = URLCodec.resolve(urlInitial, ".");
             Assert.assertNotNull(urlInitial);
-            logger.info("UrlCatalog/" + URLCodec.toExternalForm(urlCatalog));
+            logger.finest("UrlCatalog/" + URLCodec.toExternalForm(urlCatalog));
             // resolve schema collection for this initial schema
             SchemaCollectionFactory schemaCollectionFactory = new SchemaCollectionFactory(urlCatalog);
             SchemaCollection schemaCollection = schemaCollectionFactory.create(urlInitial);
             Assert.assertNotNull(schemaCollection);
             //logger.info(urlInitial.toExternalForm().replace(urlCatalog.toExternalForm(), ""));
-            logger.info("TargetNamespace/" + schemaCollection.getTargetNamespace());
+            logger.finest("TargetNamespace/" + schemaCollection.getTargetNamespace());
             for (Map.Entry<String, SchemaAtom> entry : schemaCollection.getSchemas().entrySet()) {
-                logger.info("Key/" + entry.getKey());
-                logger.info("Value/" + entry.getValue().getAtom().getElement().getTagName());
+                logger.finest("Key/" + entry.getKey());
+                logger.finest("Value/" + entry.getValue().getAtom().getElement().getTagName());
             }
         }
     }

@@ -6,6 +6,7 @@
     <property name='project.dir' location='${basedir}/../../../../../..' description='(suggested) ~/arwo'/>
     <property name='test.src.core.dir' location='${project.dir}/src/test/core/java'/>
     <property name='test.src.lib.dir' location='${project.dir}/src/test/lib/java'/>
+    <property name='test.res.lib.dir' location='${project.dir}/src/test/lib/resources'/>
     <!--transient-->
     <property name='target.dir' value='${project.dir}/target'/>
     <property name='classes.core.dir' value='${target.dir}/app/classes-core'/>
@@ -14,6 +15,7 @@
     <property name='test.classes.lib.dir' value='${target.dir}/app/test-classes-lib'/>
 
     <path id='classpath-test'>
+        <pathelement path='${project.dir}/src/main/app/resources/arwo-jar'/>
         <pathelement path='${classes.core.dir}'/>
         <pathelement path='${classes.lib.dir}'/>
         <fileset file='${m2.dir}/junit/junit/4.11/junit-4.11.jar' id='libs-ganymed'/>
@@ -56,9 +58,9 @@
     </target>
 
     <target name='test' depends='compile-main, clean-test, compile-test'>
-        <junit fork='true' printsummary='on' showoutput='false' outputtoformatters='true' haltonfailure='true' haltonerror='true' timeout='15000'
-               dir='${project.dir}/target'>
-            <jvmarg value='-Djava.util.logging.config.file=${project.dir}/src/test/lib/resources/junit/logging.properties'/>
+        <junit fork='true' printsummary='off' showoutput='true' outputtoformatters='false' haltonfailure='true'
+               haltonerror='true' timeout='15000' dir='${project.dir}/target'>
+            <jvmarg value='-Djava.util.logging.config.file=${test.res.lib.dir}/junit/logging.properties'/>
             <classpath refid='classpath-test'/>
             <formatter type='plain' usefile='false'/>
             <batchtest>
@@ -69,7 +71,35 @@
         </junit>
     </target>
 
-    <target name='main' depends='test' description='Use -p to view help information.'>
+    <target name='test-xsd' depends='compile-main, clean-test, compile-test'>
+        <junit fork='true' printsummary='off' showoutput='true' outputtoformatters='false' haltonfailure='true'
+               haltonerror='true' timeout='10000' dir='${project.dir}/target'>
+            <jvmarg value='-Djava.util.logging.config.file=${test.res.lib.dir}/junit/logging.properties'/>
+            <classpath refid='classpath-test'/>
+            <formatter type='plain' usefile='false'/>
+            <batchtest>
+                <fileset dir='${project.dir}/src/test/core/java'>
+                    <include name='io/github/greyp9/arwo/core/xsd/**/test/*AppTest.java'/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <target name='test-xsd-cat' depends='compile-main, clean-test, compile-test'>
+        <junit fork='true' printsummary='off' showoutput='true' outputtoformatters='false' haltonfailure='true'
+               haltonerror='true' timeout='300000' dir='${project.dir}/target'>
+            <jvmarg value='-Djava.util.logging.config.file=${test.res.lib.dir}/junit/logging.properties'/>
+            <classpath refid='classpath-test'/>
+            <formatter type='plain' usefile='false'/>
+            <batchtest>
+                <fileset dir='${project.dir}/src/test/core/java'>
+                    <include name='io/github/greyp9/arwo/core/xsd/document/test/*CatalogTest.java'/>
+                </fileset>
+            </batchtest>
+        </junit>
+    </target>
+
+    <target name='main' depends='test, test-xsd' description='Use -p to view help information.'>
         <echo message='project.dir: ${project.dir}'/>
     </target>
 

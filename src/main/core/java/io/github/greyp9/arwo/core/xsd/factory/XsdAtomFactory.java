@@ -59,7 +59,7 @@ public final class XsdAtomFactory {
             atom.addNamespace(new NameTypeValue(nameTypeValue.getName(), null, nameTypeValue.getValueS()));
         } else if ((XsdU.NS_URI_XSD.equals(nameTypeValue.getType())) && (names.contains(nameTypeValue.getName()))) {
             atom.addAttribute(nameTypeValue);
-        } else if (XsdU.NS_URI_XED.equals(nameTypeValue.getType())) {
+        } else if (XsdU.Xed.NS_URI_XED.equals(nameTypeValue.getType())) {
             atom.addDirective(nameTypeValue);
         } else {
             throw new IOException(String.format("[%s]/@[%s]", QNameU.getQName(element), QNameU.getQName(attr)));

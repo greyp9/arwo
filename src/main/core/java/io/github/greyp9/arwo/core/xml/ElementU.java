@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.xml;
 
 import org.w3c.dom.Attr;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
@@ -21,6 +22,14 @@ public final class ElementU {
     public static String getAttribute(final Element element, final String name, final String defaultValue) {
         final boolean isAttribute = ((element != null) && (name != null) && (element.hasAttribute(name)));
         return isAttribute ? element.getAttribute(name) : defaultValue;
+    }
+
+    public static String getAttributeNS(final Element element, final String name, final String uri) {
+        String value = null;
+        if ((element != null) && (name != null) && (element.hasAttributeNS(uri, name))) {
+            value = element.getAttributeNS(uri, name);
+        }
+        return value;
     }
 
     public static Collection<Element> getChildren(final Element element) {
@@ -68,5 +77,52 @@ public final class ElementU {
             }
         }
         return attrs;
+    }
+
+    public static void setAttribute(final Element element, final String name, final Object value) {
+        if ((element != null) && (name != null)) {
+            if (value == null) {
+                element.removeAttribute(name);
+            } else {
+                element.setAttributeNS(null, name, value.toString());
+            }
+        }
+    }
+
+    public static Element addElementNS(final Element parent, final String name, final String uri) {
+        return addElementBeforeNS(parent, name, uri, null);
+    }
+
+    public static Element addElementBeforeNS(
+            final Element parent, final String name, final String uri, final Node before) {
+        final boolean isNull = (parent == null) || (name == null);
+        return (isNull ? null : addElementBeforeNSNN(parent, name, uri, before));
+    }
+
+    private static Element addElementBeforeNSNN(
+            final Element parent, final String name, final String uri, final Node before) {
+        final Document document = parent.getOwnerDocument();
+        return addElement(parent, createElement(document, name, uri), before);
+    }
+
+    private static Element createElement(final Document document, final String name, final String namespace) {
+        return document.createElementNS(namespace, name);
+    }
+
+    public static Element addElement(final Element parent, final Element child, final Node before) {
+        if ((parent != null) && (child != null)) {
+            if (before == null) {
+                parent.appendChild(child);
+            } else {
+                parent.insertBefore(child, before);
+            }
+        }
+        return child;
+    }
+
+    public static void setTextContent(final Element element, final Object text) {
+        if ((element != null) && (text != null)) {
+            element.setTextContent(text.toString());
+        }
     }
 }

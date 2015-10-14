@@ -41,5 +41,9 @@ public final class XsdDateU {
     public static class Const {
         private static final String XSD_Z = "yyyy-MM-dd'T'HH:mm:ss'Z'";
         private static final String XSD_MILLI_Z = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+
+        public static final String DATE = "yyyy-MM-dd";
+        public static final String TIME = "HH:mm:ss'Z'";
+        public static final String DATETIME = XSD_Z;
     }
 }

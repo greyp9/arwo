@@ -20,7 +20,7 @@
     </rule>
     <rule ref="rulesets/java/coupling.xml/LawOfDemeter">
         <properties>
-            <property name="violationSuppressRegex" value=".*Potential.*(object not created locally|static property access).*"/>
+            <property name="violationSuppressRegex" value=".*Potential.*(method chain calls|object not created locally|static property access).*"/>
         </properties>
     </rule>
     <rule ref='rulesets/java/design.xml'/>
@@ -33,7 +33,9 @@
     </rule>
     <rule ref='rulesets/java/junit.xml'/>
     <rule ref='rulesets/java/logging-jakarta-commons.xml'/>
-    <rule ref='rulesets/java/logging-java.xml'/>
+    <rule ref='rulesets/java/logging-java.xml'>
+        <exclude name='LoggerIsNotStaticFinal'/>
+    </rule>
     <rule ref='rulesets/java/migrating.xml'/>
     <rule ref='rulesets/java/migrating_to_13.xml'/>
     <rule ref='rulesets/java/migrating_to_14.xml'/>
