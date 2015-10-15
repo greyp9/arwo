@@ -57,4 +57,19 @@
     <entry key='smtp.server.localhost.from'>arwo@localhost</entry>
     <entry key='smtp.server.localhost.to'>arwo@localhost</entry>
     <entry key='smtp.server.localhost.subject'>test</entry>
+
+    <!--XSD catalogs-->
+    <entry key='xsd.catalog'>JavaEE</entry>
+    <entry key='xsd.catalog.JavaEE.url'>file://~/Downloads/xsd</entry>
+    <entry key='xsd.catalog.JavaEE.include.1'>/JavaEE5/application_5.xsd</entry>
+    <entry key='xsd.catalog.JavaEE.include.2'>/JavaEE5/application-client_5.xsd</entry>
+    <entry key='xsd.catalog.JavaEE.include.3'>/JavaEE5/ejb-jar_3_0.xsd</entry>
+    <entry key='xsd.catalog.JavaEE.include.4'>/JavaEE5/javaee_5.xsd</entry>
+    <entry key='xsd.catalog.JavaEE.include.5'>/JavaEE5/javaee_web_services_1_2.xsd</entry>
+    <entry key='xsd.catalog.JavaEE.exclude.6'>/JavaEE5/javaee_web_services_client_1_2.xsd</entry>
+    <entry key='xsd.catalog.JavaEE.include.7'>/JavaEE5/javaee_web_services_metadata_handler_2_0.xsd</entry>
+    <entry key='xsd.catalog.JavaEE.include.8'>/JavaEE5/jsp_2_1.xsd</entry>
+    <entry key='xsd.catalog.JavaEE.include.9'>/JavaEE5/web-app_2_5.xsd</entry>
+    <entry key='xsd.catalog.JavaEE.include.a'>/JavaEE5/web-facesconfig_1_2.xsd</entry>
+    <entry key='xsd.catalog.JavaEE.include.b'>/JavaEE5/web-jsptaglibrary_2_1.xsd</entry>
 </properties>

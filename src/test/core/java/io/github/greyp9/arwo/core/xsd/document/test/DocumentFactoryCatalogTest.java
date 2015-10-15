@@ -64,8 +64,8 @@ public class DocumentFactoryCatalogTest extends TestCase {
         Properties excludes = PropertiesU.filter(properties, String.format("xsd.catalog.%s.exclude.*", catalog));
         StringFilter stringFilter = new StringFilter(PropertiesU.values(includes), PropertiesU.values(excludes));
         // setup
-        URL urlCatalog = new URL(catalogURL);
-        URL urlXslt = URLCodec.toURL(xsltURL);
+        URL urlCatalog = URLCodec.toURL(SystemU.resolve(catalogURL));
+        URL urlXslt = URLCodec.toURL(SystemU.resolve(xsltURL));
         File folder = URLCodec.toFile(urlCatalog);
         Collection<File> files = new FindInFolderQuery(folder, "*.xsd", true).getFound();
         for (File file : files) {
