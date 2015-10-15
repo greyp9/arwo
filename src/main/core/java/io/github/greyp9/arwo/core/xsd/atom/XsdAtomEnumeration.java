@@ -33,8 +33,9 @@ public class XsdAtomEnumeration {
         return atomsIgnore.contains(toNameAttr(parent, child));
     }
 
-    @SuppressWarnings("PMD.ExcessiveMethodLength")
+    @SuppressWarnings({ "PMD.ExcessiveMethodLength", "PMD.NcssMethodCount" })
     private void load() {
+        atomsIgnore.add(toNameAttr(XsdU.COMPLEX_TYPE, XsdU.ABSTRACT));
         atomsIgnore.add(toNameAttr(XsdU.ELEMENT, XsdU.ABSTRACT));
         atomsIgnore.add(toNameAttr(XsdU.GROUP, XsdU.MAX_OCCURS));
         atomsIgnore.add(toNameAttr(XsdU.GROUP, XsdU.MIN_OCCURS));
@@ -43,9 +44,19 @@ public class XsdAtomEnumeration {
         atomsIgnore.add(toNameAttr(XsdU.SCHEMA, XsdU.VERSION));
         atomsIgnore.add(toNameAttr(XsdU.SEQUENCE, XsdU.MAX_OCCURS));
         atomsIgnore.add(toNameAttr(XsdU.SEQUENCE, XsdU.MIN_OCCURS));
+        atomsIgnore.add(toNameElement(XsdU.ATTRIBUTE, XsdU.ANNOTATION));
+        atomsIgnore.add(toNameElement(XsdU.COMPLEX_TYPE, XsdU.ANNOTATION));
         atomsIgnore.add(toNameElement(XsdU.ELEMENT, XsdU.ANNOTATION));
+        atomsIgnore.add(toNameElement(XsdU.ELEMENT, XsdU.KEY));
+        atomsIgnore.add(toNameElement(XsdU.ELEMENT, XsdU.KEYREF));
+        atomsIgnore.add(toNameElement(XsdU.ELEMENT, XsdU.UNIQUE));
+        atomsIgnore.add(toNameElement(XsdU.GROUP, XsdU.ANNOTATION));
+        atomsIgnore.add(toNameElement(XsdU.RESTRICTION, XsdU.ATTRIBUTE));
         atomsIgnore.add(toNameElement(XsdU.SCHEMA, XsdU.ANNOTATION));
+        atomsIgnore.add(toNameElement(XsdU.SCHEMA, XsdU.ATTRIBUTE));
+        atomsIgnore.add(toNameElement(XsdU.SEQUENCE, XsdU.ANNOTATION));
         atomsIgnore.add(toNameElement(XsdU.SEQUENCE, XsdU.ANY));
+        atomsIgnore.add(toNameElement(XsdU.SIMPLE_TYPE, XsdU.ANNOTATION));
         // SchemaCollectionFactory
         atoms.add(toNameAttr(XsdU.SCHEMA, XsdU.TARGET_NAMESPACE));  // add()
         atoms.add(toNameElement(XsdU.SCHEMA, XsdU.IMPORT));  // doImport()
@@ -66,7 +77,11 @@ public class XsdAtomEnumeration {
         atoms.add(toNameAttr(XsdU.ELEMENT, XsdU.NAME));
         // SimpleTypeFactory
         atoms.add(toNameElement(XsdU.SIMPLE_TYPE, XsdU.RESTRICTION));
+        atoms.add(toNameElement(XsdU.SIMPLE_TYPE, XsdU.UNION));
+        atoms.add(toNameElement(XsdU.SIMPLE_TYPE, XsdU.LIST));
         atoms.add(toNameAttr(XsdU.RESTRICTION, XsdU.BASE));
+        atoms.add(toNameAttr(XsdU.UNION, XsdU.MEMBER_TYPES));
+        atoms.add(toNameAttr(XsdU.LIST, XsdU.ITEM_TYPE));
         // DataTypeRestrictionsFactory
         atoms.add(toNameElement(XsdU.RESTRICTION, XsdU.ENUMERATION));
         atoms.add(toNameElement(XsdU.RESTRICTION, XsdU.PATTERN));
@@ -95,6 +110,7 @@ public class XsdAtomEnumeration {
         atoms.add(toNameElement(XsdU.COMPLEX_TYPE, XsdU.ATTRIBUTE));
         atoms.add(toNameElement(XsdU.COMPLEX_CONTENT, XsdU.EXTENSION));
         atoms.add(toNameElement(XsdU.SIMPLE_CONTENT, XsdU.EXTENSION));
+        atoms.add(toNameElement(XsdU.SIMPLE_CONTENT, XsdU.RESTRICTION));
         atoms.add(toNameElement(XsdU.EXTENSION, XsdU.CHOICE));
         atoms.add(toNameElement(XsdU.EXTENSION, XsdU.GROUP));
         atoms.add(toNameElement(XsdU.EXTENSION, XsdU.SEQUENCE));
@@ -104,11 +120,14 @@ public class XsdAtomEnumeration {
         atoms.add(toNameElement(XsdU.GROUP, XsdU.CHOICE));
         atoms.add(toNameElement(XsdU.GROUP, XsdU.SEQUENCE));
         atoms.add(toNameElement(XsdU.CHOICE, XsdU.ELEMENT));
+        atoms.add(toNameElement(XsdU.CHOICE, XsdU.GROUP));
+        atoms.add(toNameElement(XsdU.CHOICE, XsdU.SEQUENCE));
         atoms.add(toNameAttr(XsdU.CHOICE, XsdU.MIN_OCCURS));
         atoms.add(toNameAttr(XsdU.CHOICE, XsdU.MAX_OCCURS));
         atoms.add(toNameElement(XsdU.SEQUENCE, XsdU.CHOICE));
         atoms.add(toNameElement(XsdU.SEQUENCE, XsdU.GROUP));
         atoms.add(toNameElement(XsdU.SEQUENCE, XsdU.ELEMENT));
+        atoms.add(toNameElement(XsdU.SEQUENCE, XsdU.SEQUENCE));
         atoms.add(toNameAttr(XsdU.ELEMENT, XsdU.REF));
         atoms.add(toNameAttr(XsdU.ELEMENT, XsdU.TYPE));
         atoms.add(toNameAttr(XsdU.ELEMENT, XsdU.NAME));
@@ -117,6 +136,7 @@ public class XsdAtomEnumeration {
         atoms.add(toNameElement(XsdU.ATTRIBUTE_GROUP, XsdU.ATTRIBUTE));
         // addAttribute
         atoms.add(toNameAttr(XsdU.ATTRIBUTE, XsdU.NAME));
+        atoms.add(toNameAttr(XsdU.ATTRIBUTE, XsdU.REF));
         atoms.add(toNameAttr(XsdU.ATTRIBUTE, XsdU.TYPE));
         // addRefInstance / addTypeInstance
         atoms.add(toNameAttr(XsdU.ELEMENT, XsdU.MIN_OCCURS));
@@ -127,6 +147,7 @@ public class XsdAtomEnumeration {
         atoms.add(toNameAttr(XsdU.ATTRIBUTE, XsdU.MAX_OCCURS));
         atoms.add(toNameAttr(XsdU.ATTRIBUTE, XsdU.USE));
         atoms.add(toNameAttr(XsdU.ATTRIBUTE, XsdU.DEFAULT));
+        atoms.add(toNameAttr(XsdU.ATTRIBUTE, XsdU.FIXED));
         // addTypeInstanceAnonymous
         atoms.add(toNameElement(XsdU.ATTRIBUTE, XsdU.SIMPLE_TYPE));
         atoms.add(toNameElement(XsdU.ELEMENT, XsdU.SIMPLE_TYPE));

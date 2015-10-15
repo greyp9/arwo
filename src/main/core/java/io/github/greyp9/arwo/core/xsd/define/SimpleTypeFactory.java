@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xsd.define;
 
+import io.github.greyp9.arwo.core.lang.StringU;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.atom.XsdAtom;
@@ -11,6 +12,7 @@ import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitions;
 import io.github.greyp9.arwo.core.xsd.type.TypeComponents;
 
 import javax.xml.namespace.QName;
+import java.util.Iterator;
 import java.util.Map;
 
 public class SimpleTypeFactory {
@@ -34,10 +36,14 @@ public class SimpleTypeFactory {
         DataType dataType = typeDefinitions.getSimpleTypes().get(nameString);
         if (dataType == null) {
             final QName name = QNameU.getQName(nameString);
-            final XsdAtom restriction = simpleType.getChildren(XsdU.RESTRICTION).iterator().next();
-            final DataTypeRestrictionsFactory factory = new DataTypeRestrictionsFactory(restriction);
-            final DataTypeRestrictions restrictions = factory.create();
-            dataType = new DataType(name, dataTypeBase, restrictions, null);
+            if (simpleType.getChildren(XsdU.RESTRICTION).isEmpty()) {
+                dataType = new DataType(name, dataTypeBase, null, null);
+            } else {
+                final XsdAtom restriction = simpleType.getChildren(XsdU.RESTRICTION).iterator().next();
+                final DataTypeRestrictionsFactory factory = new DataTypeRestrictionsFactory(restriction);
+                final DataTypeRestrictions restrictions = factory.create();
+                dataType = new DataType(name, dataTypeBase, restrictions, null);
+            }
             typeDefinitions.getSimpleTypes().put(nameString, dataType);
         }
     }
@@ -54,8 +60,26 @@ public class SimpleTypeFactory {
     }
 
     private QName getQNameBase(final XsdAtom simpleType) {
-        final XsdAtom restriction = simpleType.getChildren(XsdU.RESTRICTION).iterator().next();
-        final String baseType = ElementU.getAttribute(restriction.getElement(), XsdU.BASE);
-        return XsdAtomU.getQName(baseType, simpleType);
+        QName qname = null;
+        final Iterator<XsdAtom> iteratorR = simpleType.getChildren(XsdU.RESTRICTION).iterator();
+        final Iterator<XsdAtom> iteratorU = simpleType.getChildren(XsdU.UNION).iterator();
+        final Iterator<XsdAtom> iteratorL = simpleType.getChildren(XsdU.LIST).iterator();
+        if (iteratorR.hasNext()) {
+            final XsdAtom restriction = iteratorR.next();
+            final String baseType = ElementU.getAttribute(restriction.getElement(), XsdU.BASE);
+            qname = XsdAtomU.getQName(baseType, simpleType);
+        } else if (iteratorU.hasNext()) {
+            final XsdAtom union = iteratorU.next();
+            final String memberTypes = ElementU.getAttribute(union.getElement(), XsdU.MEMBER_TYPES);
+            final String[] tokens = StringU.tokenize(memberTypes, StringU.Const.WHITESPACE);
+            qname = XsdAtomU.getQName(tokens[0], simpleType);
+        } else if (iteratorL.hasNext()) {
+            final XsdAtom list = iteratorL.next();
+            final String itemType = ElementU.getAttribute(list.getElement(), XsdU.ITEM_TYPE);
+            qname = XsdAtomU.getQName(itemType, simpleType);
+        } else {
+            throw new IllegalStateException(simpleType.toString());
+        }
+        return qname;
     }
 }

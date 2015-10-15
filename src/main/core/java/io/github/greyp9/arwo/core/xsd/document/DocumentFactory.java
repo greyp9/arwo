@@ -13,11 +13,17 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.namespace.QName;
+import java.util.ArrayList;
+import java.util.Collection;
 
 public class DocumentFactory {
     private final TypeDefinitions typeDefinitions;
     private final TypeInstanceFactory instanceFactory;
     private final boolean includeOptional;
+
+    public final TypeInstanceFactory getInstanceFactory() {
+        return instanceFactory;
+    }
 
     public DocumentFactory(final TypeDefinitions typeDefinitions) {
         this(typeDefinitions, false);
@@ -47,8 +53,9 @@ public class DocumentFactory {
         return document;
     }
 
-    private void addContent(final Element element, final DataType type) {
-        for (final TypeInstance typeInstance : type.getInstances()) {
+    private void addContent(final Element element, final DataType dataType) {
+        ElementU.setTextContent(element, instanceFactory.getDefaultValue(dataType));
+        for (final TypeInstance typeInstance : dataType.getInstances()) {
             final NodeType nodeType = typeInstance.getNodeType();
             if (NodeType.attribute.equals(nodeType)) {
                 addAttribute(element, typeInstance);
@@ -57,7 +64,7 @@ public class DocumentFactory {
             } else if (NodeType.choice.equals(nodeType) && (typeInstance instanceof ChoiceTypeInstance)) {
                 addChoice(element, (ChoiceTypeInstance) typeInstance);
             } else {
-                throw new IllegalStateException(type.getQName().toString());
+                throw new IllegalStateException(dataType.getQName().toString());
             }
         }
     }
@@ -88,25 +95,41 @@ public class DocumentFactory {
         }
     }
 
+    @SuppressWarnings("PMD.AssignmentInOperand")
     private void addChoice(final Element element, final ChoiceTypeInstance choiceInstance) {
         int minOccurs = NumberU.toInt(choiceInstance.getMinOccurs(), 1);
+        final int maxOccurs = NumberU.toInt(choiceInstance.getMaxOccurs(), 1);
         if (includeOptional) {
             minOccurs = Math.max(minOccurs, 1);
         }
-        // first choice
-        final TypeInstance typeInstance = choiceInstance.getTypeInstances().getTypeInstances().iterator().next();
-        for (int i = 0; (i < minOccurs); ++i) {
-            // recurse
-            final NodeType nodeType = typeInstance.getNodeType();
-            if (NodeType.attribute.equals(nodeType)) {
-                addAttribute(element, typeInstance);
-            } else if (NodeType.element.equals(nodeType)) {
-                addElement(element, typeInstance);
-            } else if (NodeType.choice.equals(nodeType) && (typeInstance instanceof ChoiceTypeInstance)) {
-                addChoice(element, (ChoiceTypeInstance) typeInstance);
-            } else {
-                throw new IllegalStateException(typeInstance.getDataType().getQName().toString());
+        final Collection<TypeInstance> typeInstances = new ArrayList<TypeInstance>();
+        if (maxOccurs == Integer.MAX_VALUE) {
+            typeInstances.addAll(choiceInstance.getInstancesC());
+        } else {
+            typeInstances.add(choiceInstance.getInstancesC().iterator().next());
+        }
+        int count = 0;
+        while (count < minOccurs) {
+            for (final TypeInstance typeInstance : typeInstances) {
+                addAChoice(element, typeInstance);
+                if (++count >= maxOccurs) {
+                    break;
+                }
             }
+        }
+    }
+
+    private void addAChoice(final Element element, final TypeInstance typeInstance) {
+        // recurse
+        final NodeType nodeType = typeInstance.getNodeType();
+        if (NodeType.attribute.equals(nodeType)) {
+            addAttribute(element, typeInstance);
+        } else if (NodeType.element.equals(nodeType)) {
+            addElement(element, typeInstance);
+        } else if (NodeType.choice.equals(nodeType) && (typeInstance instanceof ChoiceTypeInstance)) {
+            addChoice(element, (ChoiceTypeInstance) typeInstance);
+        } else {
+            throw new IllegalStateException(typeInstance.getDataType().getQName().toString());
         }
     }
 }

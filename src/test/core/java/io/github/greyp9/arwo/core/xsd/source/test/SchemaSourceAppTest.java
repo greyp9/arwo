@@ -5,8 +5,6 @@ import io.github.greyp9.arwo.core.url.URLCodec;
 import io.github.greyp9.arwo.core.xsd.atom.SchemaAtom;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollection;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollectionFactory;
-import io.github.greyp9.arwo.core.xsd.type.TypeComponents;
-import io.github.greyp9.arwo.core.xsd.type.TypeComponentsFactory;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
@@ -35,8 +33,8 @@ public class SchemaSourceAppTest extends TestCase {
             SchemaCollectionFactory schemaCollectionFactory = new SchemaCollectionFactory(urlCatalog);
             SchemaCollection schemaCollection = schemaCollectionFactory.create(urlInitial);
             Assert.assertNotNull(schemaCollection);
-            //logger.info(urlInitial.toExternalForm().replace(urlCatalog.toExternalForm(), ""));
-            logger.finest("TargetNamespace/" + schemaCollection.getTargetNamespace());
+            logger.finest(urlInitial.toExternalForm().replace(urlCatalog.toExternalForm(), ""));
+            logger.finest("TargetNamespace/" + schemaCollection.getSchemaInitial().getQName().getNamespaceURI());
             for (Map.Entry<String, SchemaAtom> entry : schemaCollection.getSchemas().entrySet()) {
                 logger.finest("Key/" + entry.getKey());
                 logger.finest("Value/" + entry.getValue().getAtom().getElement().getTagName());

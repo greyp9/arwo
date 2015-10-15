@@ -46,7 +46,7 @@ public class DataType {
         TypeInstance instance = null;
         for (final TypeInstance instanceIt : instances) {
             if (instanceIt instanceof ChoiceTypeInstance) {
-                instance = instanceIt.getInstance(nameIn);
+                instance = ((ChoiceTypeInstance) instanceIt).getInstanceC(nameIn);
             } else if (nameIn.equals(instanceIt.getName())) {
                 instance = instanceIt;
             }

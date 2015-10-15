@@ -55,9 +55,11 @@ public class TypeDefinitionsFactory {
         public static final QName INT = new QName(XsdU.NS_URI_XSD, "int");
         public static final QName INTEGER = new QName(XsdU.NS_URI_XSD, "integer");
         public static final QName LONG = new QName(XsdU.NS_URI_XSD, "long");
+        public static final QName NMTOKEN = new QName(XsdU.NS_URI_XSD, "NMTOKEN");
         public static final QName NON_NEG_INTEGER = new QName(XsdU.NS_URI_XSD, "nonNegativeInteger");
         public static final QName NORMALIZED_STRING = new QName(XsdU.NS_URI_XSD, "normalizedString");
         public static final QName POSITIVE_INTEGER = new QName(XsdU.NS_URI_XSD, "positiveInteger");
+        public static final QName QNAME = new QName(XsdU.NS_URI_XSD, "QName");
         public static final QName STRING = new QName(XsdU.NS_URI_XSD, "string");
         public static final QName TIME = new QName(XsdU.NS_URI_XSD, "time");
         public static final QName TOKEN = new QName(XsdU.NS_URI_XSD, "token");
@@ -68,8 +70,8 @@ public class TypeDefinitionsFactory {
 
         private static final QName[] BUILTIN = {
                 ANY_SIMPLE_TYPE, ANY_TYPE, ANY_URI, BASE_64_BINARY, BOOLEAN, DATE,
-                DATE_TIME, DECIMAL, DURATION, ID, INT, INTEGER, LONG,
-                NON_NEG_INTEGER, NORMALIZED_STRING, POSITIVE_INTEGER, STRING, TIME,
+                DATE_TIME, DECIMAL, DURATION, ID, INT, INTEGER, LONG, NMTOKEN,
+                NON_NEG_INTEGER, NORMALIZED_STRING, POSITIVE_INTEGER, QNAME, STRING, TIME,
                 TOKEN, UNSIGNED_BYTE, UNSIGNED_INT, UNSIGNED_LONG, UNSIGNED_SHORT,
         };
     }

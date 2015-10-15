@@ -74,27 +74,28 @@ public class DocumentFactoryCatalogTest extends TestCase {
             String resource = urlInitial.toExternalForm().replace(urlCatalog.toExternalForm(), "");
             if (stringFilter.matches(resource)) {
                 logger.info(file.getPath().replace(folder.getPath(), ""));
-                errors += doTestSchema(errors, urlCatalog, urlXslt, urlInitial);
+                errors += doTestSchema(urlCatalog, urlXslt, urlInitial);
             }
         }
         logger.info(String.format("ERRORS/%d", errors));
     }
 
-    private int doTestSchema(int errors, URL urlCatalog, URL urlXslt, URL urlInitial) throws IOException {
+    private int doTestSchema(URL urlCatalog, URL urlXslt, URL urlInitial) throws IOException {
+        int errors = 0;
         // resolve schema collection for this initial schema
         SchemaCollectionFactory schemaCollectionFactory = new SchemaCollectionFactory(urlCatalog, urlXslt);
         SchemaCollection schemaCollection = schemaCollectionFactory.create(urlInitial);
-        String targetNamespace = schemaCollection.getTargetNamespace();
+        String targetNamespace = schemaCollection.getSchemaInitial().getQName().getNamespaceURI();
         for (Map.Entry<String, SchemaAtom> entry : schemaCollection.getSchemas().entrySet()) {
-            logger.finest(entry.getKey() + "/" + entry.getValue());
+            logger.finest(entry.getKey() + "/" + entry.getValue().getQName());
         }
         // pre-parse of schema collection
-        TypeComponentsFactory tcFactory = new TypeComponentsFactory(schemaCollection);
-        TypeComponents typeComponents = tcFactory.create();
+        TypeComponentsFactory typeComponentsFactory = new TypeComponentsFactory(schemaCollection);
+        TypeComponents typeComponents = typeComponentsFactory.create();
         SchemaTypeAppTest.trace(typeComponents, logger, Level.FINEST);
         // create type definitions for schema set
-        TypeDefinitionsFactory tdFactory = new TypeDefinitionsFactory(typeComponents);
-        TypeDefinitions typeDefinitions = tdFactory.create();
+        TypeDefinitionsFactory typeDefinitionsFactory = new TypeDefinitionsFactory(typeComponents);
+        TypeDefinitions typeDefinitions = typeDefinitionsFactory.create();
         SchemaStructureAppTest.trace(typeDefinitions, logger, Level.FINEST);
         boolean[] includeOptionals = { false, true };
         for (boolean includeOptional : includeOptionals) {
@@ -104,7 +105,7 @@ public class DocumentFactoryCatalogTest extends TestCase {
                     Document document = documentFactory.generateEmpty(typeInstance.getQName());
                     logger.log(Level.FINEST, DocumentU.toString(document));
                     // validation
-                    SchemaAtom schemaAtom = schemaCollection.getSchemas().get(targetNamespace);
+                    SchemaAtom schemaAtom = schemaCollection.getSchemaInitial();
                     byte[] xsdInitial = DocumentU.toXml(schemaAtom.getAtom().getElement());
                     errors += DocumentFactoryAppTest.validate(urlInitial, xsdInitial, document, logger);
                 }

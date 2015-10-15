@@ -43,17 +43,19 @@ public class SchemaCollectionFactory {
 
     public final SchemaCollection create(final URL urlInitial) throws IOException {
         final XsltX xsltX = createTransform();
-        final String targetNamespace = add(null, urlInitial, xsltX);
-        return new SchemaCollection(targetNamespace, schemaAtoms);
+        final SchemaAtom schemaAtom = add(null, urlInitial, xsltX);
+        return new SchemaCollection(schemaAtom, schemaAtoms);
     }
 
-    private String add(final String targetNamespaceIn, final URL url, final XsltX xsltX) throws IOException {
-        String targetNamespace = targetNamespaceIn;
+    private SchemaAtom add(final String targetNamespaceIn, final URL url, final XsltX xsltX) throws IOException {
+        SchemaAtom schemaAtom = null;
         logger.finest(url.toExternalForm());
         final String catalogURL = URLCodec.toExternalForm(urlCatalog);
         final String initialURL = URLCodec.toExternalForm(url);
         final String uri = initialURL.replace(catalogURL, "");
-        if (!schemaAtoms.containsKey(uri)) {
+        final boolean isLocal = url.getProtocol().equals("file");
+        final boolean isLoaded = schemaAtoms.containsKey(uri);
+        if (isLocal && (!isLoaded)) {
             // get schema content
             byte[] bytesXsd = StreamU.read(url);
             // optional transform
@@ -71,18 +73,21 @@ public class SchemaCollectionFactory {
             // load into DOM
             final Document document = DocumentU.toDocument(bytesXsd);
             final Element element = document.getDocumentElement();
+            final String targetNamespace = ElementU.getAttribute(element, XsdU.TARGET_NAMESPACE);
+            if ((targetNamespaceIn != null) && (!targetNamespaceIn.equals(targetNamespace))) {
+                logger.warning(String.format("%s != %s", targetNamespaceIn, targetNamespace));
+            }
             // register content
             final XsdAtom xsdAtom = atomFactory.create(element, null);
-            targetNamespace = ElementU.getAttribute(xsdAtom.getElement(), XsdU.TARGET_NAMESPACE);
             final QName name = QNameU.getQName(targetNamespace, element.getLocalName(), null);
-            final SchemaAtom schemaAtom = new SchemaAtom(url, name, xsdAtom);
+            schemaAtom = new SchemaAtom(url, name, xsdAtom);
             schemaAtoms.put(uri, schemaAtom);
             schemaAtoms.put(targetNamespace, schemaAtom);
             // import dependencies
             doImport(url, xsdAtom, xsltX);
             doInclude(url, xsdAtom, xsltX);
         }
-        return targetNamespace;
+        return schemaAtom;
     }
 
     private void doImport(final URL url, final XsdAtom xsdAtom, final XsltX xsltX) throws IOException {

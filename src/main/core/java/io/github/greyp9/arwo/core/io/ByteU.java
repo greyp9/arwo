@@ -16,4 +16,12 @@ public final class ByteU {
         SystemU.arraycopy(bytes, offset, bytesExtract, 0, length);
         return bytesExtract;
     }
+
+    public static byte[] fold(final byte[] bytes, final int newLength) {
+        final byte[] bytesFolded = new byte[newLength];
+        for (int i = 0; (i < bytes.length); ++i) {
+            bytesFolded[i % newLength] ^= bytes[i];
+        }
+        return bytesFolded;
+    }
 }

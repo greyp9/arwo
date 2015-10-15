@@ -27,6 +27,9 @@ public final class XsdU {
     public static final String GROUP = "group";
     public static final String IMPORT = "import";
     public static final String INCLUDE = "include";
+    public static final String KEY = "key";
+    public static final String KEYREF = "keyref";
+    public static final String LIST = "list";
     public static final String MAX_INCLUSIVE = "maxInclusive";
     public static final String MAX_LENGTH = "maxLength";
     public static final String MIN_INCLUSIVE = "minInclusive";
@@ -37,6 +40,8 @@ public final class XsdU {
     public static final String SEQUENCE = "sequence";
     public static final String SIMPLE_CONTENT = "simpleContent";
     public static final String SIMPLE_TYPE = "simpleType";
+    public static final String UNION = "union";
+    public static final String UNIQUE = "unique";
 
     // attribute names
     public static final String ABSTRACT = "abstract";
@@ -44,7 +49,10 @@ public final class XsdU {
     public static final String BASE = "base";
     public static final String DEFAULT = "default";
     public static final String ELEMENT_FORM_DEFAULT = "elementFormDefault";  // NOPMD
+    public static final String FIXED = "fixed";
+    public static final String ITEM_TYPE = "itemType";
     public static final String MAX_OCCURS = "maxOccurs";
+    public static final String MEMBER_TYPES = "memberTypes";
     public static final String MIN_OCCURS = "minOccurs";
     public static final String NAME = "name";
     public static final String NAMESPACE = "namespace";
@@ -63,7 +71,9 @@ public final class XsdU {
 
     // syntax
     public static final String COLON = ":";
+    public static final String DASH = "-";
     public static final String DOT = ".";
+    public static final String UNDERSCORE = "_";
 
     public static class Xed {
         // namespace prefix

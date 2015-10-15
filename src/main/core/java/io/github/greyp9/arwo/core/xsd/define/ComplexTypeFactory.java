@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.core.xsd.atom.XsdAtom;
 import io.github.greyp9.arwo.core.xsd.core.XsdAtomU;
 import io.github.greyp9.arwo.core.xsd.core.XsdU;
 import io.github.greyp9.arwo.core.xsd.data.DataType;
+import io.github.greyp9.arwo.core.xsd.data.DataTypeRestrictions;
 import io.github.greyp9.arwo.core.xsd.data.NodeType;
 import io.github.greyp9.arwo.core.xsd.instance.ChoiceTypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
@@ -46,10 +47,26 @@ public class ComplexTypeFactory {
             if (dataTypeBase != null) {
                 typeInstances.getTypeInstances().addAll(dataTypeBase.getInstances());
             }
-            dataType = new DataType(name, dataTypeBase, null, typeInstances.getTypeInstances());
+            final DataTypeRestrictions restrictions = getRestrictions(complexType);
+            dataType = new DataType(name, dataTypeBase, restrictions, typeInstances.getTypeInstances());
             typeDefinitions.getComplexTypes().put(nameString, dataType);
         }
         return dataType;
+    }
+
+    private DataTypeRestrictions getRestrictions(final XsdAtom complexType) {
+        DataTypeRestrictions typeRestrictions = null;
+        final Collection<XsdAtom> simpleContents = complexType.getChildren(XsdU.SIMPLE_CONTENT);
+        final XsdAtom simpleContent = (simpleContents.isEmpty()) ? null : simpleContents.iterator().next();
+        if (simpleContent != null) {
+            final Collection<XsdAtom> restrictions = simpleContent.getChildren(XsdU.RESTRICTION);
+            final XsdAtom restriction = (restrictions.isEmpty()) ? null : restrictions.iterator().next();
+            if (restriction != null) {
+                final DataTypeRestrictionsFactory factory = new DataTypeRestrictionsFactory(restriction);
+                typeRestrictions = factory.create();
+            }
+        }
+        return typeRestrictions;
     }
 
     private DataType processBaseType(final XsdAtom complexType) {
@@ -75,6 +92,9 @@ public class ComplexTypeFactory {
         final Collection<XsdAtom> complexContent = complexType.getChildren(XsdU.COMPLEX_CONTENT);
         if (!simpleContent.isEmpty()) {
             name = getQNameBaseExtension(simpleContent.iterator().next().getChildren(XsdU.EXTENSION));
+            if (name == null) {
+                name = getQNameBaseExtension(simpleContent.iterator().next().getChildren(XsdU.RESTRICTION));
+            }
         } else if (!complexContent.isEmpty()) {
             name = getQNameBaseExtension(complexContent.iterator().next().getChildren(XsdU.EXTENSION));
         }
@@ -128,6 +148,8 @@ public class ComplexTypeFactory {
             final String name = atom.getElement().getLocalName();
             if (XsdU.EXTENSION.equals(name)) {
                 addExtension(atom, typeInstances);
+            } else if (XsdU.RESTRICTION.equals(name)) {
+                name.getClass();  // ignore
             } else {
                 throw new IllegalStateException(atom.toString());
             }
@@ -191,6 +213,10 @@ public class ComplexTypeFactory {
             final String name = atom.getElement().getLocalName();
             if (XsdU.ELEMENT.equals(name)) {
                 addElement(atom, instancesChoice);
+            } else if (XsdU.GROUP.equals(name)) {
+                addGroup(atom, instancesChoice);
+            } else if (XsdU.SEQUENCE.equals(name)) {
+                addSequence(atom, instancesChoice);
             } else {
                 throw new IllegalStateException(atom.toString());
             }
@@ -207,6 +233,8 @@ public class ComplexTypeFactory {
                 addGroup(atom, typeInstances);
             } else if (XsdU.ELEMENT.equals(name)) {
                 addElement(atom, typeInstances);
+            } else if (XsdU.SEQUENCE.equals(name)) {
+                addSequence(atom, typeInstances);
             } else {
                 throw new IllegalStateException(atom.toString());
             }
@@ -252,15 +280,19 @@ public class ComplexTypeFactory {
         }
     }
 
+    @SuppressWarnings("PMD.ConfusingTernary")
     private void addAttribute(final XsdAtom atom, final TypeInstances typeInstances) {
+        final String ref = ElementU.getAttribute(atom.getElement(), XsdU.REF);
         final String name = ElementU.getAttribute(atom.getElement(), XsdU.NAME);
         final String type = ElementU.getAttribute(atom.getElement(), XsdU.TYPE,
                 TypeDefinitionsFactory.Const.ANY_SIMPLE_TYPE.getLocalPart());
         final String identity = ElementU.getAttributeNS(atom.getElement(), XsdU.Xed.IDENTITY, XsdU.Xed.NS_URI_XED);
-        if (type == null) {
-            addTypeInstanceAnonymous(NodeType.attribute, name, atom, typeInstances);
-        } else {
+        if (ref != null) {
+            ref.getClass();
+        } else if (type != null) {
             addTypeInstance(atom, typeInstances, identity);
+        } else {
+            addTypeInstanceAnonymous(NodeType.attribute, name, atom, typeInstances);
         }
     }
 
@@ -315,11 +347,12 @@ public class ComplexTypeFactory {
         final String use = ElementU.getAttribute(atom.getElement(), XsdU.USE);
         final String defaultValueApp = ElementU.getAttributeNS(atom.getElement(), XsdU.DEFAULT, XsdU.Xed.NS_URI_XED);
         final String defaultValue = ElementU.getAttribute(atom.getElement(), XsdU.DEFAULT, defaultValueApp);
+        final String fixedValue = ElementU.getAttribute(atom.getElement(), XsdU.FIXED, defaultValue);
         // add child type
         final NodeType nodeType = NodeType.valueOf(atom.getElement().getLocalName());
         final QName qname1 = QNameU.getQName(XsdAtomU.getTargetNamespace(atom), name);
         final TypeInstance typeInstance = new TypeInstance(
-                atom, nodeType, qname1, dataType, null, minOccurs, maxOccurs, use, defaultValue, identity);
+                atom, nodeType, qname1, dataType, null, minOccurs, maxOccurs, use, fixedValue, identity);
         typeInstances.getTypeInstances().add(typeInstance);
     }
 

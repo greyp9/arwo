@@ -5,19 +5,19 @@ import io.github.greyp9.arwo.core.xsd.atom.SchemaAtom;
 import java.util.Map;
 
 public class SchemaCollection {
-    private final String targetNamespace;
+    private final SchemaAtom schemaInitial;
     private final Map<String, SchemaAtom> schemas;
 
-    public final String getTargetNamespace() {
-        return targetNamespace;
+    public final SchemaAtom getSchemaInitial() {
+        return schemaInitial;
     }
 
     public final Map<String, SchemaAtom> getSchemas() {
         return schemas;
     }
 
-    public SchemaCollection(final String targetNamespace, final Map<String, SchemaAtom> schemas) {
-        this.targetNamespace = targetNamespace;
+    public SchemaCollection(final SchemaAtom schemaInitial, final Map<String, SchemaAtom> schemas) {
+        this.schemaInitial = schemaInitial;
         this.schemas = schemas;
     }
 }
