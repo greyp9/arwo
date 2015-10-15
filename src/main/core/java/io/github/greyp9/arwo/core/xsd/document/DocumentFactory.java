@@ -48,21 +48,22 @@ public class DocumentFactory {
     public final Document generateEmpty(final QName name, final TypeInstance typeInstance) {
         final Document document = DocumentU.createDocumentSafe(name.getLocalPart(), name.getNamespaceURI());
         if (document != null) {
-            addContent(document.getDocumentElement(), typeInstance.getDataType());
+            addContent(document.getDocumentElement(), typeInstance);
         }
         return document;
     }
 
-    private void addContent(final Element element, final DataType dataType) {
-        ElementU.setTextContent(element, instanceFactory.getDefaultValue(dataType));
-        for (final TypeInstance typeInstance : dataType.getInstances()) {
-            final NodeType nodeType = typeInstance.getNodeType();
+    private void addContent(final Element element, final TypeInstance typeInstance) {
+        ElementU.setTextContent(element, instanceFactory.getDefaultValue(typeInstance));
+        final DataType dataType = typeInstance.getDataType();
+        for (final TypeInstance typeInstanceIt : dataType.getInstances()) {
+            final NodeType nodeType = typeInstanceIt.getNodeType();
             if (NodeType.attribute.equals(nodeType)) {
-                addAttribute(element, typeInstance);
+                addAttribute(element, typeInstanceIt);
             } else if (NodeType.element.equals(nodeType)) {
-                addElement(element, typeInstance);
-            } else if (NodeType.choice.equals(nodeType) && (typeInstance instanceof ChoiceTypeInstance)) {
-                addChoice(element, (ChoiceTypeInstance) typeInstance);
+                addElement(element, typeInstanceIt);
+            } else if (NodeType.choice.equals(nodeType) && (typeInstanceIt instanceof ChoiceTypeInstance)) {
+                addChoice(element, (ChoiceTypeInstance) typeInstanceIt);
             } else {
                 throw new IllegalStateException(dataType.getQName().toString());
             }
@@ -86,12 +87,11 @@ public class DocumentFactory {
         for (int i = 0; (i < minOccurs); ++i) {
             final Element child = ElementU.addElementNS(element, name.getLocalPart(), name.getNamespaceURI());
             final DataType dataType = typeInstance.getDataType();
-            ElementU.setTextContent(child, instanceFactory.getDefaultValue(dataType));
             final String defaultEnumValue = dataType.getDefaultEnumValue();
             if (defaultEnumValue != null) {
                 ElementU.setTextContent(child, defaultEnumValue);
             }
-            addContent(child, typeInstance.getDataType());
+            addContent(child, typeInstance);
         }
     }
 
