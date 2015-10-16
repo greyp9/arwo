@@ -1,6 +1,10 @@
 package io.github.greyp9.arwo.core.value;
 
+/**
+ * @deprecated
+ */
 public class NameValue {
+/*
     private final String name;
     private final String value;
 
@@ -24,4 +28,5 @@ public class NameValue {
     public final String toString() {
         return name + "/" + value;
     }
+*/
 }

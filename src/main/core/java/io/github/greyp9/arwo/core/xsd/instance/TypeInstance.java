@@ -1,7 +1,5 @@
 package io.github.greyp9.arwo.core.xsd.instance;
 
-import io.github.greyp9.arwo.core.value.NameValue;
-import io.github.greyp9.arwo.core.value.NameValues;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xsd.atom.XsdAtom;
 import io.github.greyp9.arwo.core.xsd.core.XsdU;
@@ -44,6 +42,7 @@ public class TypeInstance {  // xsd:complexType, xsd:simpleType @ xsd:element, x
         this.identity = identity;
     }
 
+/*
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public final NameValues getNameValues(final NameValues nameValuesIn) {
         final NameValues nameValuesOut = new NameValues();
@@ -54,6 +53,7 @@ public class TypeInstance {  // xsd:complexType, xsd:simpleType @ xsd:element, x
         }
         return nameValuesOut;
     }
+*/
 
     public final NodeType getNodeType() {
         return nodeType;
@@ -121,6 +121,7 @@ public class TypeInstance {  // xsd:complexType, xsd:simpleType @ xsd:element, x
         return ((dataType != null) && (TypeDefinitionsFactory.Const.BOOLEAN.equals(dataType.getQName())));
     }
 
+    @SuppressWarnings("unused")
     public final String getDirective(final String nameIn) {
         return ((atom == null) ? null : atom.getDirectives().getValue(nameIn));
     }

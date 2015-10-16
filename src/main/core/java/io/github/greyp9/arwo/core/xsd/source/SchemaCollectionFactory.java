@@ -52,7 +52,7 @@ public class SchemaCollectionFactory {
         logger.finest(url.toExternalForm());
         final String catalogURL = URLCodec.toExternalForm(urlCatalog);
         final String initialURL = URLCodec.toExternalForm(url);
-        final String uri = initialURL.replace(catalogURL, "");
+        final String uri = ((catalogURL == null) ? initialURL : initialURL.replace(catalogURL, ""));
         final boolean isLocal = url.getProtocol().equals("file");
         final boolean isLoaded = schemaAtoms.containsKey(uri);
         if (isLocal && (!isLoaded)) {

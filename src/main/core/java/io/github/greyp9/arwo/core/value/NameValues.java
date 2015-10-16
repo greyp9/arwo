@@ -1,9 +1,10 @@
 package io.github.greyp9.arwo.core.value;
 
-import java.util.ArrayList;
-import java.util.Properties;
-
-public class NameValues extends ArrayList<NameValue> {
+/**
+ * @deprecated
+ */
+public class NameValues /*extends ArrayList<NameValue>*/ {
+/*
     private static final long serialVersionUID = 7966450333858445337L;
 
     public NameValues() {
@@ -67,4 +68,5 @@ public class NameValues extends ArrayList<NameValue> {
         }
         return nameValue;
     }
+*/
 }

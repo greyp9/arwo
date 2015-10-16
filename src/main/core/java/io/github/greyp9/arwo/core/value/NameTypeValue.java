@@ -27,7 +27,7 @@ public class NameTypeValue {
         return ((value == null) ? null : value.toString());
     }
 
-    public final Object getValueO() {
+    public final Object getValue() {
         return value;
     }
 

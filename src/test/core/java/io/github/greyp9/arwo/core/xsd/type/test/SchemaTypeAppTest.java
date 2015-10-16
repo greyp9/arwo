@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.core.url.URLCodec;
 import io.github.greyp9.arwo.core.xsd.atom.XsdAtom;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollection;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollectionFactory;
+import io.github.greyp9.arwo.core.xsd.source.test.SchemaSourceAppTest;
 import io.github.greyp9.arwo.core.xsd.type.TypeComponents;
 import io.github.greyp9.arwo.core.xsd.type.TypeComponentsFactory;
 import junit.framework.TestCase;
@@ -25,7 +26,7 @@ public class SchemaTypeAppTest extends TestCase {
     }
 
     public void testAssembleTypeComponents() throws Exception {
-        for (String xsd : Const.XSD_ARRAY) {
+        for (String xsd : SchemaSourceAppTest.Const.XSD_ARRAY) {
             URL urlInitial = ResourceU.resolve(xsd);
             Assert.assertNotNull(urlInitial);
             logger.info("UrlInitial/" + URLCodec.toExternalForm(urlInitial));
@@ -60,10 +61,5 @@ public class SchemaTypeAppTest extends TestCase {
         for (Map.Entry<String, XsdAtom> entry : typeComponents.getAttributeGroups().entrySet()) {
             logger.log(level, "ATTRIBUTE_GROUP/" + entry.getKey());
         }
-    }
-
-    private static class Const {
-        private static final String XSD_REALM = "io/github/greyp9/arwo/xsd/realm/realm.xsd";
-        private static final String[] XSD_ARRAY = { XSD_REALM };
     }
 }

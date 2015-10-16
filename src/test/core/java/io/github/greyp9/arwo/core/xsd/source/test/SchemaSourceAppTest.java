@@ -42,8 +42,21 @@ public class SchemaSourceAppTest extends TestCase {
         }
     }
 
-    private static class Const {
-        private static final String XSD_REALM = "io/github/greyp9/arwo/xsd/realm/realm.xsd";
-        private static final String[] XSD_ARRAY = { XSD_REALM };
+    public void testNoCatalog() throws Exception {
+        for (final String xsd : Const.XSD_ARRAY) {
+            final URL urlInitial = ResourceU.resolve(xsd);
+            Assert.assertNotNull(urlInitial);
+            logger.info("UrlInitial/" + URLCodec.toExternalForm(urlInitial));
+            // resolve schema collection for this initial schema
+            final SchemaCollectionFactory schemaCollectionFactory = new SchemaCollectionFactory(null);
+            final SchemaCollection schemaCollection = schemaCollectionFactory.create(urlInitial);
+            Assert.assertNotNull(schemaCollection);
+            Assert.assertNotNull(schemaCollection.getSchemas().get(URLCodec.toExternalForm(urlInitial)));
+        }
+    }
+
+    public static class Const {
+        public static final String XSD_REALM = "io/github/greyp9/arwo/xsd/realm/realm.xsd";
+        public static final String[] XSD_ARRAY = { XSD_REALM };
     }
 }

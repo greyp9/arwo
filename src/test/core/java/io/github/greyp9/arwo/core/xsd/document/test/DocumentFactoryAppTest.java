@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollection;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollectionFactory;
+import io.github.greyp9.arwo.core.xsd.source.test.SchemaSourceAppTest;
 import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitions;
 import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitionsFactory;
 import io.github.greyp9.arwo.core.xsd.type.TypeComponents;
@@ -32,7 +33,7 @@ public class DocumentFactoryAppTest extends TestCase {
     }
 
     public void testGenerateDocuments() throws Exception {
-        for (String xsd : Const.XSD_ARRAY) {
+        for (String xsd : SchemaSourceAppTest.Const.XSD_ARRAY) {
             URL urlInitial = ResourceU.resolve(xsd);
             Assert.assertNotNull(urlInitial);
             logger.info("UrlInitial/" + URLCodec.toExternalForm(urlInitial));
@@ -74,10 +75,5 @@ public class DocumentFactoryAppTest extends TestCase {
             logger.warning(message);
         }
         return messages.size();
-    }
-
-    private static class Const {
-        private static final String XSD_REALM = "io/github/greyp9/arwo/xsd/realm/realm.xsd";
-        private static final String[] XSD_ARRAY = { XSD_REALM };
     }
 }

@@ -12,6 +12,9 @@ import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
 
+/**
+ * @deprecated
+ */
 public final class XsdAtomFactory {
 
     private XsdAtomFactory() {
