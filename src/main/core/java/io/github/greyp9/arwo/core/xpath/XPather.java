@@ -36,11 +36,11 @@ public class XPather {
         this.context = context;
     }
 
-    public NamespaceContext getContext() {
+    public final NamespaceContext getContext() {
         return context;
     }
 
-    public String getText(final String xpath) throws IOException {
+    public final String getText(final String xpath) throws IOException {
         try {
             final XPathExpression expression = getExpression(xpath, context);
             final Object o = (element == null) ? null : expression.evaluate(element, XPathConstants.STRING);
@@ -50,7 +50,7 @@ public class XPather {
         }
     }
 
-    public Element getElement(final String xpath) throws IOException {
+    public final Element getElement(final String xpath) throws IOException {
         try {
             final XPathExpression expression = getExpression(xpath, context);
             final Object o = (element == null) ? null : expression.evaluate(element, XPathConstants.NODE);
@@ -60,7 +60,7 @@ public class XPather {
         }
     }
 
-    public List<Element> getElements(final String xpath) throws IOException {
+    public final List<Element> getElements(final String xpath) throws IOException {
         try {
             final XPathExpression expression = getExpression(xpath, context);
             final List<Element> elements = new ArrayList<Element>();
@@ -78,7 +78,7 @@ public class XPather {
         }
     }
 
-    public List<Attr> getAttributes(final String xpath) throws IOException {
+    public final List<Attr> getAttributes(final String xpath) throws IOException {
         try {
             final XPathExpression expression = getExpression(xpath, context);
             final List<Attr> attributes = new ArrayList<Attr>();

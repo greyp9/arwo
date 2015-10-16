@@ -8,20 +8,20 @@ public class ValueInstance {
     private final TypeInstance typeInstance;
     private final NameTypeValues nameTypeValues;
 
-    public TypeInstance getTypeInstance() {
+    public final TypeInstance getTypeInstance() {
         return typeInstance;
     }
 
-    public NameTypeValues getNameTypeValues() {
+    public final NameTypeValues getNameTypeValues() {
         return nameTypeValues;
     }
 
-    public ValueInstance(TypeInstance typeInstance) {
+    public ValueInstance(final TypeInstance typeInstance) {
         this.typeInstance = typeInstance;
         this.nameTypeValues = new NameTypeValues();
     }
 
-    public void add(NameTypeValue nameTypeValue) {
+    public final void add(final NameTypeValue nameTypeValue) {
         nameTypeValues.add(nameTypeValue);
     }
 }

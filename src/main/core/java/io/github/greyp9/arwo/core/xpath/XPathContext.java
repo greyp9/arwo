@@ -9,7 +9,7 @@ public class XPathContext implements javax.xml.namespace.NamespaceContext {
     private final Map<String, String> prefixToURI;
     private final Map<String, String> uriToPrefix;
 
-    public Map<String, String> getPrefixToURI() {
+    public final Map<String, String> getPrefixToURI() {
         return prefixToURI;
     }
 
@@ -18,25 +18,25 @@ public class XPathContext implements javax.xml.namespace.NamespaceContext {
         this.uriToPrefix = new TreeMap<String, String>();
     }
 
-    public int size() {
+    public final int size() {
         return prefixToURI.size();
     }
 
-    public String getNamespaceURI(final String prefix) {
+    public final String getNamespaceURI(final String prefix) {
         final String uri = prefixToURI.get(prefix);
         return (uri == null) ? XMLConstants.NULL_NS_URI : uri;
     }
 
-    public String getPrefix(final String uri) {
+    public final String getPrefix(final String uri) {
         final String prefix = uriToPrefix.get(uri);
         return (prefix == null) ? XMLConstants.DEFAULT_NS_PREFIX : prefix;
     }
 
-    public Iterator getPrefixes(final String namespaceURI) {
+    public final Iterator getPrefixes(final String namespaceURI) {
         throw new UnsupportedOperationException(getClass().getName());
     }
 
-    public void addMapping(final String prefix, final String uri) {
+    public final void addMapping(final String prefix, final String uri) {
         prefixToURI.put(prefix, uri);
         uriToPrefix.put(uri, prefix);
     }

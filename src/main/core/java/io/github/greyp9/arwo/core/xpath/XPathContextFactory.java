@@ -7,26 +7,29 @@ import org.w3c.dom.NamedNodeMap;
 
 import javax.xml.XMLConstants;
 
-public class XPathContextFactory {
+public final class XPathContextFactory {
 
-    public static XPathContext create(Document document) {
+    private XPathContextFactory() {
+    }
+
+    public static XPathContext create(final Document document) {
         return ((document == null) ? null : create(document.getDocumentElement()));
     }
 
-    public static XPathContext create(Element element) {
-        XPathContext context = new XPathContext();
+    public static XPathContext create(final Element element) {
+        final XPathContext context = new XPathContext();
         if (element != null) {
             update(context, element);
         }
         return context;
     }
 
-    public static XPathContext update(XPathContext context, Element element) {
-        NamedNodeMap attributes = element.getAttributes();
-        int length = attributes.getLength();
+    public static XPathContext update(final XPathContext context, final Element element) {
+        final NamedNodeMap attributes = element.getAttributes();
+        final int length = attributes.getLength();
         for (int i = 0; (i < length); i++) {
-            Attr attr = (Attr) attributes.item(i);
-            String uri = attr.getNamespaceURI();
+            final Attr attr = (Attr) attributes.item(i);
+            final String uri = attr.getNamespaceURI();
             if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(uri)) {
                 context.addMapping(attr.getLocalName(), attr.getValue());
             }

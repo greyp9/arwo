@@ -20,19 +20,19 @@ public class XsdTypes {
     private final TypeDefinitions typeDefinitions;
     private final XPathContext context;
 
-    public URL getUrlInitial() {
+    public final URL getUrlInitial() {
         return urlInitial;
     }
 
-    public URL getUrlCatalog() {
+    public final URL getUrlCatalog() {
         return urlCatalog;
     }
 
-    public TypeDefinitions getTypeDefinitions() {
+    public final TypeDefinitions getTypeDefinitions() {
         return typeDefinitions;
     }
 
-    public XPathContext getContext() {
+    public final XPathContext getContext() {
         return context;
     }
 
@@ -59,7 +59,7 @@ public class XsdTypes {
         return tdFactory.create();
     }
 
-    private static XPathContext createContext(TypeDefinitions typeDefinitions) throws IOException {
+    private static XPathContext createContext(final TypeDefinitions typeDefinitions) throws IOException {
         final XPathContext context = new XPathContext();
         final SchemaCollection schemaCollection = typeDefinitions.getTypeComponents().getSchemaCollection();
         final Collection<SchemaAtom> schemaElements = schemaCollection.getSchemas().values();

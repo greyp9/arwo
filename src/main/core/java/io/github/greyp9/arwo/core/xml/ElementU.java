@@ -109,6 +109,10 @@ public final class ElementU {
         return document.createElementNS(namespace, name);
     }
 
+    public static Element addElement(final Element parent, final String name) {
+        return addElementNS(parent, name, parent.getNamespaceURI());
+    }
+
     public static Element addElement(final Element parent, final Element child, final Node before) {
         if ((parent != null) && (child != null)) {
             if (before == null) {
@@ -124,5 +128,25 @@ public final class ElementU {
         if ((element != null) && (text != null)) {
             element.setTextContent(text.toString());
         }
+    }
+
+    public static Element addElement(final Element parent, final String name, final Object text) {
+        final Element child = addElement(parent, name);
+        setTextContent(child, text);
+        //setAttributes(child, attrs);
+        return child;
+    }
+
+    public static Element addElement(final Element parent, final String name, final Object text, final Node before) {
+        final Element child = addElementBeforeNS(parent, name, parent.getNamespaceURI(), before);
+        setTextContent(child, text);
+        return child;
+    }
+
+    public static Element detach(final Element element) {
+        if ((element != null) && (element.getParentNode() != null)) {
+            element.getParentNode().removeChild(element);
+        }
+        return element;
     }
 }
