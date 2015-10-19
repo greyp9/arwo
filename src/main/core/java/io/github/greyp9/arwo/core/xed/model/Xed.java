@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xed.model;
 
+import io.github.greyp9.arwo.core.xed.bundle.XsdBundles;
 import io.github.greyp9.arwo.core.xed.op.OpCreate;
 import io.github.greyp9.arwo.core.xed.op.OpDelete;
 import io.github.greyp9.arwo.core.xed.op.OpUpdate;
@@ -13,10 +14,13 @@ import org.w3c.dom.Element;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Locale;
+import java.util.ResourceBundle;
 
 public class Xed {
     private final Document document;
     private final XsdTypes xsdTypes;
+    private final XsdBundles xsdBundles;
 
     public final Document getDocument() {
         return document;
@@ -26,9 +30,30 @@ public class Xed {
         return xsdTypes;
     }
 
+    public final XsdBundles getXsdBundles() {
+        return xsdBundles;
+    }
+
     public Xed(final Document document, final XsdTypes xsdTypes) {
+        this(document, xsdTypes, Locale.getDefault());
+    }
+
+    public Xed(final Document document, final XsdTypes xsdTypes, final Locale locale) {
         this.document = document;
         this.xsdTypes = xsdTypes;
+        this.xsdBundles = new XsdBundles(xsdTypes, locale);
+    }
+
+    public final Locale getLocale() {
+        return xsdBundles.getLocale();
+    }
+
+    public final ResourceBundle getRootBundle() {
+        return getBundle(document.getDocumentElement().getNamespaceURI());
+    }
+
+    public final ResourceBundle getBundle(final String uri) {
+        return xsdBundles.getBundle(uri);
     }
 
     public final XPather getXPather() {
