@@ -1,0 +1,37 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project name='arwo-app-pseudo-i18n' default='main' basedir='.'>
+
+    <!--fixed-->
+    <property name='project.dir' location='${basedir}/../../../../../..' description='(suggested) ~/arwo'/>
+    <!--transient-->
+    <property name='target.dir' value='${project.dir}/target'/>
+    <property name='classes.core.dir' value='${target.dir}/app/classes-core'/>
+    <property name='test.classes.core.dir' value='${target.dir}/app/test-classes-core'/>
+
+    <path id='classpath-i18n'>
+        <pathelement path='${classes.core.dir}'/>
+        <pathelement path='${test.classes.core.dir}'/>
+    </path>
+
+    <target name='compile'>
+        <ant antfile='../junit/build.junit.xml' target='compile-main'/>
+        <ant antfile='../junit/build.junit.xml' target='compile-test'/>
+    </target>
+
+    <target name='i18n-clean' depends='compile'>
+        <java classname='io.github.greyp9.arwo.core.i18n.PseudoI18n' classpathref='classpath-i18n' fork='true'>
+            <arg value='-'/>
+            <arg value='${project.dir}/src/main/app/resources/arwo-jar/io/github/greyp9/arwo/xsd/realm/realm.properties'/>
+        </java>
+    </target>
+
+    <target name='i18n' depends='compile'>
+        <java classname='io.github.greyp9.arwo.core.i18n.PseudoI18n' classpathref='classpath-i18n' fork='true'>
+            <arg value='+'/>
+            <arg value='${project.dir}/src/main/app/resources/arwo-jar/io/github/greyp9/arwo/xsd/realm/realm.properties'/>
+        </java>
+    </target>
+
+    <target name='main' depends='i18n' description='Use -p to view help information.'/>
+
+</project>

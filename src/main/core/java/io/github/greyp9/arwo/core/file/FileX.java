@@ -1,0 +1,43 @@
+package io.github.greyp9.arwo.core.file;
+
+public class FileX {
+    private final String path;
+    private final int lastSlash;
+    private final int lastDot;
+
+    public FileX(String path) {
+        this.path = path.replace(Const.WIN32_PATH_SEPARATOR, Const.SLASH);
+        this.lastSlash = path.lastIndexOf(Const.SLASH);
+        this.lastDot = path.lastIndexOf(Const.DOT);
+    }
+
+    public String getPath() {
+        return path;
+    }
+
+    public String getFolder() {
+        return (lastSlash < 0) ? null : path.substring(0, lastSlash);
+    }
+
+    public String getFolderSlash() {
+        return (lastSlash < 0) ? null : path.substring(0, lastSlash + Const.SLASH.length());
+    }
+
+    public String getFilename() {
+        return (lastSlash < 0) ? path : path.substring(lastSlash + Const.SLASH.length());
+    }
+
+    public String getExtensionDot() {
+        return (lastDot <= lastSlash) ? null : path.substring(lastDot);
+    }
+
+    public String getExtension() {
+        return (lastDot <= lastSlash) ? null : path.substring(lastDot + Const.DOT.length());
+    }
+
+    private static class Const {
+        private static final String DOT = ".";
+        private static final String SLASH = "/";
+        private static final String WIN32_PATH_SEPARATOR = "\\";
+    }
+}

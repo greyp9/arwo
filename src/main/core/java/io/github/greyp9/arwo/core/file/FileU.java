@@ -12,4 +12,8 @@ public final class FileU {
         final File[] files = folder.listFiles(filter);
         return ((files == null) ? new File[0] : files);
     }
+
+    public static boolean delete(final File file) {
+        return file.delete();
+    }
 }
