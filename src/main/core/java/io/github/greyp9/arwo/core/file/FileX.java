@@ -5,36 +5,37 @@ public class FileX {
     private final int lastSlash;
     private final int lastDot;
 
-    public FileX(String path) {
+    public FileX(final String path) {
         this.path = path.replace(Const.WIN32_PATH_SEPARATOR, Const.SLASH);
         this.lastSlash = path.lastIndexOf(Const.SLASH);
         this.lastDot = path.lastIndexOf(Const.DOT);
     }
 
-    public String getPath() {
+    public final String getPath() {
         return path;
     }
 
-    public String getFolder() {
+    public final String getFolder() {
         return (lastSlash < 0) ? null : path.substring(0, lastSlash);
     }
 
-    public String getFolderSlash() {
+    public final String getFolderSlash() {
         return (lastSlash < 0) ? null : path.substring(0, lastSlash + Const.SLASH.length());
     }
 
-    public String getFilename() {
+    public final String getFilename() {
         return (lastSlash < 0) ? path : path.substring(lastSlash + Const.SLASH.length());
     }
 
-    public String getExtensionDot() {
+    public final String getExtensionDot() {
         return (lastDot <= lastSlash) ? null : path.substring(lastDot);
     }
 
-    public String getExtension() {
+    public final String getExtension() {
         return (lastDot <= lastSlash) ? null : path.substring(lastDot + Const.DOT.length());
     }
 
+    @SuppressWarnings("PMD.LongVariable")
     private static class Const {
         private static final String DOT = ".";
         private static final String SLASH = "/";

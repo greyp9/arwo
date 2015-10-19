@@ -4,23 +4,24 @@ import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class Bundle {
-    private final ResourceBundle bundle;
+    private final ResourceBundle resourceBundle;
 
-    public Bundle(ResourceBundle bundle) {
-        this.bundle = bundle;
+    public Bundle(final ResourceBundle resourceBundle) {
+        this.resourceBundle = resourceBundle;
     }
 
-    public String getString(String key) {
+    @SuppressWarnings("PMD.OnlyOneReturn")
+    public final String getString(final String key) {
         try {
-            String label = (bundle == null) ? null : bundle.getString(key);
+            final String label = (resourceBundle == null) ? null : resourceBundle.getString(key);
             return ((label == null) ? key : label);
         } catch (MissingResourceException e) {
             return key;
         }
     }
 
-    public String getString(String key, String defaultValue) {
-        String value = getString(key);
+    public final String getString(final String key, final String defaultValue) {
+        final String value = getString(key);
         return (key.equals(value) ? defaultValue : value);
     }
 }

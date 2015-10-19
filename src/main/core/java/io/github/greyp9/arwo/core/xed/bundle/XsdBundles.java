@@ -19,15 +19,15 @@ public class XsdBundles {
     private final Locale locale;
     private final Map<String, ResourceBundle> bundles;
 
-    public Locale getLocale() {
+    public final Locale getLocale() {
         return locale;
     }
 
-    public ResourceBundle getBundle(String uri) {
+    public final ResourceBundle getBundle(final String uri) {
         return bundles.get(uri);
     }
 
-    public XsdBundles(XsdTypes xsdTypes, Locale locale) {
+    public XsdBundles(final XsdTypes xsdTypes, final Locale locale) {
         this.locale = locale;
         this.bundles = new TreeMap<String, ResourceBundle>();
         if (locale != null) {
@@ -35,32 +35,32 @@ public class XsdBundles {
         }
     }
 
-    public void update(XsdTypes xsdTypes, Locale locale) {
-        SchemaCollection schemaCollection = xsdTypes.getTypeDefinitions().getTypeComponents().getSchemaCollection();
-        Collection<SchemaAtom> schemaAtoms = schemaCollection.getSchemas().values();
-        for (SchemaAtom schemaAtom : schemaAtoms) {
-            update(schemaAtom, locale);
+    public final void update(final XsdTypes xsdTypes, final Locale localeUpdate) {
+        final SchemaCollection schemaCollection =
+                xsdTypes.getTypeDefinitions().getTypeComponents().getSchemaCollection();
+        final Collection<SchemaAtom> schemaAtoms = schemaCollection.getSchemas().values();
+        for (final SchemaAtom schemaAtom : schemaAtoms) {
+            update(schemaAtom, localeUpdate);
         }
     }
 
-    private void update(SchemaAtom schemaAtom, Locale locale) {
-        String namespaceURI = schemaAtom.getQName().getNamespaceURI();
-        URL url = schemaAtom.getUrl();
-        String urlExternalForm = url.toExternalForm();
-        FileX fileX = new FileX(urlExternalForm);
-        String urlExternalFormParent = fileX.getFolderSlash();
-        String resourceName = fileX.getFilename();
-        String resourceNameBare = resourceName.replace(fileX.getExtensionDot(), "");
+    private void update(final SchemaAtom schemaAtom, final Locale localeUpdate) {
+        final String namespaceURI = schemaAtom.getQName().getNamespaceURI();
+        final URL url = schemaAtom.getUrl();
+        final String urlExternalForm = url.toExternalForm();
+        final FileX fileX = new FileX(urlExternalForm);
+        final String urlExternalFormP = fileX.getFolderSlash();
+        final String resourceName = fileX.getFilename();
+        final String resourceNameBare = resourceName.replace(fileX.getExtensionDot(), "");
         try {
-            URL[] urls = new URL[] { new URL(urlExternalFormParent) };
-            ClassLoader classLoader = new URLClassLoader(urls);
-            ResourceBundle rb = ResourceBundle.getBundle(resourceNameBare, locale, classLoader);
+            final URL[] urls = new URL[] { new URL(urlExternalFormP) };
+            final ClassLoader classLoader = new URLClassLoader(urls);
+            final ResourceBundle rb = ResourceBundle.getBundle(resourceNameBare, localeUpdate, classLoader);
             bundles.put(namespaceURI, rb);
         } catch (IOException e) {
             getClass();  // ignore, type labels won't be localized
         } catch (MissingResourceException e) {
             getClass();  // ignore, type labels won't be localized
         }
-
     }
 }
