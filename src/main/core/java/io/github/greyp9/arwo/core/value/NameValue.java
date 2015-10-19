@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.value;
 /**
  * @deprecated
  */
+@Deprecated
 public class NameValue {
 /*
     private final String name;

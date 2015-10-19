@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.value;
 /**
  * @deprecated
  */
+@Deprecated
 public class NameValues /*extends ArrayList<NameValue>*/ {
 /*
     private static final long serialVersionUID = 7966450333858445337L;

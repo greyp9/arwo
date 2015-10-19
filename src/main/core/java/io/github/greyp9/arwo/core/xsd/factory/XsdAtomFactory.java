@@ -15,6 +15,7 @@ import java.util.Collection;
 /**
  * @deprecated
  */
+@Deprecated
 public final class XsdAtomFactory {
 
     private XsdAtomFactory() {
