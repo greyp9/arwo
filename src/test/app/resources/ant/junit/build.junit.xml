@@ -64,6 +64,12 @@
             <classpath refid='classpath-test'/>
             <formatter type='plain' usefile='false'/>
             <batchtest>
+                <fileset dir='${project.dir}/src/test/core/java'>
+                    <include name='**/test/*Test.java'/>
+                    <exclude name='**/arwo/core/xsd/**/test/*Test.java'/>
+                </fileset>
+            </batchtest>
+            <batchtest>
                 <fileset dir='${project.dir}/src/test/lib/java'>
                     <include name='**/test/*Test.java'/>
                 </fileset>
@@ -79,7 +85,7 @@
             <formatter type='plain' usefile='false'/>
             <batchtest>
                 <fileset dir='${project.dir}/src/test/core/java'>
-                    <include name='io/github/greyp9/arwo/core/xsd/**/test/*AppTest.java'/>
+                    <include name='**/arwo/core/xsd/**/test/*AppTest.java'/>
                 </fileset>
             </batchtest>
         </junit>

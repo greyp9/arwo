@@ -1,7 +1,7 @@
 package io.github.greyp9.arwo.core.xed.test;
 
+import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.res.ResourceU;
-import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xml.QNameU;
@@ -44,10 +44,12 @@ public class RealmTest extends TestCase {
         final XPather xpather = new XPather(document, xsdTypes.getContext());
         final Element principals = xpather.getElement("/realm:realm/realm:principals");
         Assert.assertEquals(0, principals.getChildNodes().getLength());
-        final Element principal1 = xed.create(principals, getValueInstancePrincipal1(typeInstancePrincipal));
+        final Element principal1 = xed.create(principals, ValueInstance.create(typeInstancePrincipal,
+                HttpArguments.toArguments("user=arwo&credential=arwo&roles=*")));
         Assert.assertNotNull(principal1);
         Assert.assertEquals(1, principals.getChildNodes().getLength());
-        final Element principal2 = xed.create(principals, getValueInstancePrincipal2(typeInstancePrincipal));
+        final Element principal2 = xed.create(principals, ValueInstance.create(typeInstancePrincipal,
+                HttpArguments.toArguments("user=arwo2&credential=arwo2&roles=**")));
         Assert.assertNotNull(principal2);
         Assert.assertEquals(2, principals.getChildNodes().getLength());
         logger.finest(DocumentU.toString(document));
@@ -69,15 +71,18 @@ public class RealmTest extends TestCase {
         final XPather xpather = new XPather(document, xsdTypes.getContext());
         final Element principals = xpather.getElement("/realm:realm/realm:principals");
         Assert.assertEquals(0, principals.getChildNodes().getLength());
-        final Element principal1 = xed.create(principals, getValueInstancePrincipal1(typeInstancePrincipal));
+        final Element principal1 = xed.create(principals, ValueInstance.create(typeInstancePrincipal,
+                HttpArguments.toArguments("user=arwo&credential=arwo&roles=*")));
         Assert.assertNotNull(principal1);
         Assert.assertEquals(1, principals.getChildNodes().getLength());
-        final Element principal2 = xed.update(principal1, getValueInstancePrincipal2(typeInstancePrincipal));
+        final Element principal2 = xed.update(principal1, ValueInstance.create(typeInstancePrincipal,
+                HttpArguments.toArguments("user=arwo2&credential=arwo2&roles=**")));
         Assert.assertNotNull(principal2);
         Assert.assertEquals(1, principals.getChildNodes().getLength());
         Assert.assertEquals("arwo2", xpather.getText("/realm:realm/realm:principals/realm:principal[1]/realm:user"));
         Assert.assertEquals("**", xpather.getText("/realm:realm/realm:principals/realm:principal[1]/realm:roles"));
-        final Element principal3 = xed.update(principal2, getValueInstancePrincipal3(typeInstancePrincipal));
+        final Element principal3 = xed.update(principal2, ValueInstance.create(typeInstancePrincipal,
+                HttpArguments.toArguments("roles=***")));
         Assert.assertNotNull(principal3);
         Assert.assertEquals(1, principals.getChildNodes().getLength());
         logger.finest(DocumentU.toString(document));
@@ -99,34 +104,13 @@ public class RealmTest extends TestCase {
         final XPather xpather = new XPather(document, xsdTypes.getContext());
         final Element principals = xpather.getElement("/realm:realm/realm:principals");
         Assert.assertEquals(0, principals.getChildNodes().getLength());
-        final Element principal1 = xed.create(principals, getValueInstancePrincipal1(typeInstancePrincipal));
+        final Element principal1 = xed.create(principals, ValueInstance.create(typeInstancePrincipal,
+                HttpArguments.toArguments("user=arwo&credential=arwo&roles=*")));
         Assert.assertNotNull(principal1);
         Assert.assertEquals(1, principals.getChildNodes().getLength());
         final Element principalD = xed.delete(principal1);
         Assert.assertNotNull(principalD);
         Assert.assertEquals(0, principals.getChildNodes().getLength());
         logger.finest(DocumentU.toString(document));
-    }
-
-    private static ValueInstance getValueInstancePrincipal1(TypeInstance typeInstance) {
-        final ValueInstance valueInstance = new ValueInstance(typeInstance);
-        valueInstance.add(new NameTypeValue("user", null, "arwo"));
-        valueInstance.add(new NameTypeValue("credential", null, "arwo"));
-        valueInstance.add(new NameTypeValue("roles", null, "*"));
-        return valueInstance;
-    }
-
-    private static ValueInstance getValueInstancePrincipal2(TypeInstance typeInstance) {
-        final ValueInstance valueInstance = new ValueInstance(typeInstance);
-        valueInstance.add(new NameTypeValue("user", null, "arwo2"));
-        valueInstance.add(new NameTypeValue("credential", null, "arwo2"));
-        valueInstance.add(new NameTypeValue("roles", null, "**"));
-        return valueInstance;
-    }
-
-    private static ValueInstance getValueInstancePrincipal3(TypeInstance typeInstance) {
-        final ValueInstance valueInstance = new ValueInstance(typeInstance);
-        valueInstance.add(new NameTypeValue("roles", null, "***"));
-        return valueInstance;
     }
 }

@@ -35,4 +35,8 @@ public class TypeDefinitions {
         this.complexTypes = new TreeMap<String, DataType>();
         this.elementTypes = new TreeMap<String, TypeInstance>();
     }
+
+    public final TypeInstance getElementType(final String qname) {
+        return elementTypes.get(qname);
+    }
 }

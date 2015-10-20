@@ -1,4 +1,4 @@
-package io.github.greyp9.arwo.core.xed.i18n;
+package io.github.greyp9.arwo.core.xed.i18n.test;
 
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.xed.model.Xed;

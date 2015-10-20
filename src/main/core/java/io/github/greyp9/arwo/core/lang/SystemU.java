@@ -13,6 +13,10 @@ public final class SystemU {
         return Const.USER_HOME;
     }
 
+    public static boolean isTrue() {
+        return (!System.getProperties().isEmpty());
+    }
+
     public static String resolve(final String path) {
         return ((path == null) ? null : path.replace("~", userHome()));
     }

@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.xsd.model;
 import io.github.greyp9.arwo.core.xpath.XPathContext;
 import io.github.greyp9.arwo.core.xpath.XPathContextFactory;
 import io.github.greyp9.arwo.core.xsd.atom.SchemaAtom;
+import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollection;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollectionFactory;
 import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitions;
@@ -34,6 +35,10 @@ public class XsdTypes {
 
     public final XPathContext getContext() {
         return context;
+    }
+
+    public final TypeInstance getElementType(final String qname) {
+        return typeDefinitions.getElementType(qname);
     }
 
     public XsdTypes(final URL urlInitial) throws IOException {

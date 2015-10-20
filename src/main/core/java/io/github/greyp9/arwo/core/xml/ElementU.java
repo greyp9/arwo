@@ -10,9 +10,15 @@ import org.w3c.dom.NodeList;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@SuppressWarnings("PMD.GodClass")
 public final class ElementU {
 
     private ElementU() {
+    }
+
+    public static Attr getAttributeNode(final Element element, final String name) {
+        final boolean isAttribute = ((element != null) && (name != null) && (element.hasAttribute(name)));
+        return isAttribute ? element.getAttributeNode(name) : null;
     }
 
     public static String getAttribute(final Element element, final String name) {
@@ -30,6 +36,14 @@ public final class ElementU {
             value = element.getAttributeNS(uri, name);
         }
         return value;
+    }
+
+    public static Collection<Element> getChildren(final Node node) {
+        return ((node instanceof Element) ? getChildren((Element) node) : Const.EMPTY_LIST_E);
+    }
+
+    public static Collection<Attr> getAttributes(final Node node) {
+        return ((node instanceof Element) ? getAttributes((Element) node) : Const.EMPTY_LIST_A);
     }
 
     public static Collection<Element> getChildren(final Element element) {
@@ -148,5 +162,10 @@ public final class ElementU {
             element.getParentNode().removeChild(element);
         }
         return element;
+    }
+
+    private static class Const {
+        private static final Collection<Element> EMPTY_LIST_E = new ArrayList<Element>();
+        private static final Collection<Attr> EMPTY_LIST_A = new ArrayList<Attr>();
     }
 }

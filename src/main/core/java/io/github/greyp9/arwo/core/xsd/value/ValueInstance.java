@@ -24,4 +24,12 @@ public class ValueInstance {
     public final void add(final NameTypeValue nameTypeValue) {
         nameTypeValues.add(nameTypeValue);
     }
+
+    public static ValueInstance create(final TypeInstance typeInstance, final NameTypeValues nameTypeValues) {
+        final ValueInstance valueInstance = new ValueInstance(typeInstance);
+        for (final NameTypeValue nameTypeValue : nameTypeValues) {
+            valueInstance.add(nameTypeValue);
+        }
+        return valueInstance;
+    }
 }

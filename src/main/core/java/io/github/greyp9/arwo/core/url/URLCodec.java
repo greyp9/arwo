@@ -1,15 +1,38 @@
 package io.github.greyp9.arwo.core.url;
 
+import io.github.greyp9.arwo.core.charset.UTF8Codec;
+
 import java.io.File;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
 import java.net.MalformedURLException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.net.URL;
+import java.net.URLDecoder;
+import java.net.URLEncoder;
 
 public final class URLCodec {
 
     private URLCodec() {
+    }
+
+    public static String encode(final String value) throws UnsupportedEncodingException {
+        final String encode = URLEncoder.encode(value, UTF8Codec.Const.UTF8);
+        return encode.replace("+", "%20");  // is this a bug in JRE?
+    }
+
+    public static String decode(final String value) throws UnsupportedEncodingException {
+        return URLDecoder.decode(value, UTF8Codec.Const.UTF8);
+    }
+
+    @SuppressWarnings("PMD.OnlyOneReturn")
+    public static String decodeSafe(final String value) {
+        try {
+            return decode(value);
+        } catch (UnsupportedEncodingException e) {
+            return value;
+        }
     }
 
     public static URL resolve(final URL url, final String relativeResource) throws IOException {
