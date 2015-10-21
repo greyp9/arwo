@@ -10,7 +10,8 @@ import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitionsFactory;
 import javax.xml.namespace.QName;
 import java.util.Collection;
 
-public class TypeInstance {  // xsd:complexType, xsd:simpleType @ xsd:element, xsd:attribute
+@SuppressWarnings("PMD.AbstractNaming")
+public abstract class TypeInstance {  // xsd:complexType, xsd:simpleType @ xsd:element, xsd:attribute
     private final XsdAtom atom;
     private final NodeType nodeType;
     private final QName name;
@@ -42,30 +43,13 @@ public class TypeInstance {  // xsd:complexType, xsd:simpleType @ xsd:element, x
         this.identity = identity;
     }
 
-/*
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public final NameValues getNameValues(final NameValues nameValuesIn) {
-        final NameValues nameValuesOut = new NameValues();
-        for (final TypeInstance typeInstanceIt : getInstances()) {
-            final String nameIt = typeInstanceIt.getID(this);
-            final String valueIt = nameValuesIn.getValue(typeInstanceIt.getName());
-            nameValuesOut.add(new NameValue(nameIt, valueIt));
-        }
-        return nameValuesOut;
-    }
-*/
-
     public final NodeType getNodeType() {
         return nodeType;
     }
 
-    public final String getURI() {
-        return name.getNamespaceURI();
-    }
+    public abstract String getURI();
 
-    public final String getName() {
-        return name.getLocalPart();
-    }
+    public abstract String getName();
 
     public final QName getQName() {
         return name;
@@ -75,13 +59,9 @@ public class TypeInstance {  // xsd:complexType, xsd:simpleType @ xsd:element, x
         return dataType;
     }
 
-    public final Collection<TypeInstance> getInstances() {
-        return dataType.getInstances();
-    }
+    public abstract Collection<TypeInstance> getInstances();
 
-    public final TypeInstance getInstance(final String nameIn) {
-        return dataType.getInstance(nameIn);
-    }
+    public abstract TypeInstance getInstance(final String nameIn);
 
     @SuppressWarnings("unused")
     public final DataType getExtensionType() {

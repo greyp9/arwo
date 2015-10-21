@@ -55,11 +55,11 @@ public class TypeInstanceValueTest extends TestCase {
             Assert.assertTrue(typeInstanceChoice instanceof ChoiceTypeInstance);
             ChoiceTypeInstance choiceTypeInstance = (ChoiceTypeInstance) typeInstanceChoice;
             // filter
-            final TypeInstance typeInstanceFilter = choiceTypeInstance.getInstanceC("filter");
+            final TypeInstance typeInstanceFilter = choiceTypeInstance.getInstance("filter");
             Assert.assertNotNull(typeInstanceFilter);
             doTestFilter(typeInstanceFilter, typeDefinitions);
             // filter-mapping
-            final TypeInstance typeInstanceFilterMapping = choiceTypeInstance.getInstanceC("filter-mapping");
+            final TypeInstance typeInstanceFilterMapping = choiceTypeInstance.getInstance("filter-mapping");
             Assert.assertNotNull(typeInstanceFilterMapping);
             doTestFilterMapping(typeInstanceFilterMapping, typeDefinitions);
         }

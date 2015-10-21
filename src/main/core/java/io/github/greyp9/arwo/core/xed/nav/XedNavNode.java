@@ -31,7 +31,7 @@ public class XedNavNode {
     }
 
     private XedCursor findChild(final Node node, final XedCursor cursor) {
-        final XedCursor cursorTI = findTypeInstance(node, cursor);
+        final XedCursor cursorTI = findTypeInstance(node.getLocalName(), cursor);
         XedCursor cursorChild = null;
         if (node instanceof Attr) {
             cursorChild = findChildAttr((Attr) node, cursor, cursorTI);
@@ -41,9 +41,9 @@ public class XedNavNode {
         return cursorChild;
     }
 
-    private XedCursor findTypeInstance(final Node node, final XedCursor cursor) {
+    public final XedCursor findTypeInstance(final String name, final XedCursor cursor) {
         final TypeInstance typeInstance = cursor.getTypeInstance();
-        final TypeInstance typeInstanceChild = typeInstance.getInstance(node.getLocalName());
+        final TypeInstance typeInstanceChild = typeInstance.getInstance(name);
         return new XedCursor(cursor.getXed(), cursor, null, null, typeInstanceChild);
     }
 

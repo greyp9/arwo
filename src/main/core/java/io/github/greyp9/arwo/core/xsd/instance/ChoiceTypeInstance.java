@@ -8,23 +8,40 @@ import java.util.Collection;
 public class ChoiceTypeInstance extends TypeInstance {
     private final TypeInstances typeInstances;
 
+    public final TypeInstances getTypeInstances() {
+        return typeInstances;
+    }
+
     public ChoiceTypeInstance(final QName nameParent, final String minOccurs, final String maxOccurs) {
         super(null, NodeType.choice, null, null, null, minOccurs, maxOccurs, null, null, null);
         this.typeInstances = new TypeInstances(nameParent);
     }
 
-    public final TypeInstances getTypeInstances() {
-        return typeInstances;
+    @Override
+    public final String getURI() {
+        return null;
     }
 
-    public final Collection<TypeInstance> getInstancesC() {
+    @Override
+    public final String getName() {
+        final StringBuilder buffer = new StringBuilder();
+        for (final TypeInstance instanceIt : typeInstances.getTypeInstances()) {
+            buffer.append((buffer.length() == 0) ? "" : "/");
+            buffer.append(instanceIt.getName());
+        }
+        return buffer.toString();
+    }
+
+    @Override
+    public final Collection<TypeInstance> getInstances() {
         return typeInstances.getTypeInstances();
     }
 
-    public final TypeInstance getInstanceC(final String nameIn) {
+    @Override
+    public final TypeInstance getInstance(final String name) {
         TypeInstance instance = null;
         for (final TypeInstance instanceIt : typeInstances.getTypeInstances()) {
-            if (nameIn.equals(instanceIt.getName())) {
+            if (name.equals(instanceIt.getName())) {
                 instance = instanceIt;
                 break;
             }

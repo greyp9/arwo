@@ -10,7 +10,7 @@ import org.w3c.dom.NodeList;
 import java.util.ArrayList;
 import java.util.Collection;
 
-@SuppressWarnings("PMD.GodClass")
+@SuppressWarnings({ "PMD.GodClass", "PMD.TooManyMethods" })
 public final class ElementU {
 
     private ElementU() {
@@ -162,6 +162,19 @@ public final class ElementU {
             element.getParentNode().removeChild(element);
         }
         return element;
+    }
+
+    public static void insertBefore(final Node toInsert, final Element insertBefore) {
+        if ((toInsert != null) && (insertBefore != null)) {
+            final Node toInsertNew = insertBefore.getOwnerDocument().importNode(toInsert, true);
+            final Node parentNode = insertBefore.getParentNode();
+            parentNode.insertBefore(toInsertNew, insertBefore);
+        }
+    }
+
+    public static void importNode(final Node child, final Node parentNode) {
+        final Node toInsertNew = parentNode.getOwnerDocument().importNode(child, true);
+        parentNode.appendChild(toInsertNew);
     }
 
     private static class Const {

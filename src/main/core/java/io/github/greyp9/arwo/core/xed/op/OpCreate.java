@@ -4,16 +4,21 @@ import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xsd.data.NodeType;
+import io.github.greyp9.arwo.core.xsd.document.DocumentFactoryU;
 import io.github.greyp9.arwo.core.xsd.instance.ChoiceTypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
+import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 public class OpCreate {
     private final Element element;
+    private final XsdTypes xsdTypes;
 
-    public OpCreate(final Element element) {
+    public OpCreate(final Element element, final XsdTypes xsdTypes) {
         this.element = element;
+        this.xsdTypes = xsdTypes;
     }
 
     public final Element apply(final ValueInstance valueInstance) {
@@ -40,7 +45,7 @@ public class OpCreate {
         } else if (NodeType.element.equals(nodeType)) {
             applyElement(create, nameTypeValue);
         } else if (NodeType.choice.equals(nodeType) && (typeInstance instanceof ChoiceTypeInstance)) {
-            applyChoice();
+            applyChoice(create, nameTypeValue, (ChoiceTypeInstance) typeInstance);
         }
 
     }
@@ -57,7 +62,11 @@ public class OpCreate {
         ElementU.addElement(create, nameTypeValue.getName(), nameTypeValue.getValue());
     }
 
-    private void applyChoice() {
-        getClass();
+    private void applyChoice(
+            final Element create, final NameTypeValue nameTypeValue, final ChoiceTypeInstance choiceInstance) {
+        final String value = nameTypeValue.getValueS();
+        final TypeInstance typeInstance = choiceInstance.getInstance(value);
+        final Document document = DocumentFactoryU.generateDocument(xsdTypes, typeInstance, true);
+        ElementU.importNode(document.getDocumentElement(), create);
     }
 }

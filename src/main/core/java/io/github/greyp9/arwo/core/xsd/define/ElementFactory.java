@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.xsd.core.XsdAtomU;
 import io.github.greyp9.arwo.core.xsd.core.XsdU;
 import io.github.greyp9.arwo.core.xsd.data.DataType;
 import io.github.greyp9.arwo.core.xsd.data.NodeType;
+import io.github.greyp9.arwo.core.xsd.instance.ConcreteTypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitions;
 import io.github.greyp9.arwo.core.xsd.type.TypeComponents;
@@ -60,7 +61,7 @@ public class ElementFactory {
             throw new IllegalStateException(nameString);
         } else {
             final QName qname1 = QNameU.getQName(XsdAtomU.getTargetNamespace(element), name);
-            final TypeInstance typeInstance = new TypeInstance(element, NodeType.element, qname1, dataType);
+            final TypeInstance typeInstance = new ConcreteTypeInstance(element, NodeType.element, qname1, dataType);
             typeDefinitions.getElementTypes().put(nameString, typeInstance);
         }
     }

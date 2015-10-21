@@ -9,6 +9,7 @@ import io.github.greyp9.arwo.core.xsd.data.DataType;
 import io.github.greyp9.arwo.core.xsd.data.DataTypeRestrictions;
 import io.github.greyp9.arwo.core.xsd.data.NodeType;
 import io.github.greyp9.arwo.core.xsd.instance.ChoiceTypeInstance;
+import io.github.greyp9.arwo.core.xsd.instance.ConcreteTypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstances;
 import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitions;
@@ -321,7 +322,7 @@ public class ComplexTypeFactory {
         // register type
         final NodeType nodeType = NodeType.valueOf(atom.getElement().getLocalName());
         final QName qnameRef = QNameU.getQName(XsdAtomU.getTargetNamespace(atomRef), name);
-        final TypeInstance typeInstance = new TypeInstance(
+        final TypeInstance typeInstance = new ConcreteTypeInstance(
                 atomRef, nodeType, qnameRef, dataTypeComplex, null, minOccurs, maxOccurs, use, defaultValue, identity);
         typeInstances.getTypeInstances().add(typeInstance);
     }
@@ -351,7 +352,7 @@ public class ComplexTypeFactory {
         // add child type
         final NodeType nodeType = NodeType.valueOf(atom.getElement().getLocalName());
         final QName qname1 = QNameU.getQName(XsdAtomU.getTargetNamespace(atom), name);
-        final TypeInstance typeInstance = new TypeInstance(
+        final TypeInstance typeInstance = new ConcreteTypeInstance(
                 atom, nodeType, qname1, dataType, null, minOccurs, maxOccurs, use, fixedValue, identity);
         typeInstances.getTypeInstances().add(typeInstance);
     }
@@ -365,11 +366,11 @@ public class ComplexTypeFactory {
         if (!simpleType.isEmpty()) {
             final XsdAtom atomSimpleType = simpleType.iterator().next();
             final DataType dataType = toDataTypeAnonymousSimpleType(atomSimpleType, typeInstances.getQNameParent());
-            typeInstances.getTypeInstances().add(new TypeInstance(null, nodeType, qname, dataType));
+            typeInstances.getTypeInstances().add(new ConcreteTypeInstance(null, nodeType, qname, dataType));
         } else if (!complexType.isEmpty()) {
             final XsdAtom atomComplexType = complexType.iterator().next();
             final DataType dataType = toDataTypeAnonymousComplexType(atomComplexType, typeInstances.getQNameParent());
-            typeInstances.getTypeInstances().add(new TypeInstance(null, nodeType, qname, dataType));
+            typeInstances.getTypeInstances().add(new ConcreteTypeInstance(null, nodeType, qname, dataType));
         } else {
             throw new IllegalStateException(atom.toString());
         }

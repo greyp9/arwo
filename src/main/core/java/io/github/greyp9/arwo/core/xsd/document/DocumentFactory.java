@@ -104,9 +104,9 @@ public class DocumentFactory {
         }
         final Collection<TypeInstance> typeInstances = new ArrayList<TypeInstance>();
         if (maxOccurs == Integer.MAX_VALUE) {
-            typeInstances.addAll(choiceInstance.getInstancesC());
+            typeInstances.addAll(choiceInstance.getInstances());
         } else {
-            typeInstances.add(choiceInstance.getInstancesC().iterator().next());
+            typeInstances.add(choiceInstance.getInstances().iterator().next());
         }
         int count = 0;
         while (count < minOccurs) {
