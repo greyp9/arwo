@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.core.url.URLCodec;
 import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xpath.XPathContext;
 import io.github.greyp9.arwo.core.xpath.XPather;
+import io.github.greyp9.arwo.core.xsd.core.XsdU;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.source.test.SchemaSourceAppTest;
@@ -13,7 +14,6 @@ import junit.framework.TestCase;
 import org.junit.Assert;
 import org.w3c.dom.Document;
 
-import javax.xml.XMLConstants;
 import javax.xml.namespace.QName;
 import java.io.File;
 import java.net.URL;
@@ -38,8 +38,8 @@ public class XsdTypesTest extends TestCase {
             final XPathContext context = xsdTypes.getContext();
             Assert.assertNotNull(context);
             logger.info(context.getPrefixToURI().toString());
-            Assert.assertEquals(XMLConstants.W3C_XML_SCHEMA_NS_URI, context.getNamespaceURI("xsd"));
-            Assert.assertEquals(XMLConstants.W3C_XML_SCHEMA_NS_URI, context.getNamespaceURI("xs"));
+            Assert.assertEquals(XsdU.NS_URI_XSD, context.getNamespaceURI("xsd"));
+            Assert.assertEquals(XsdU.NS_URI_XSD, context.getNamespaceURI("xs"));
             Assert.assertEquals("http://java.sun.com/xml/ns/javaee", context.getNamespaceURI("javaee"));
         }
     }
@@ -53,7 +53,7 @@ public class XsdTypesTest extends TestCase {
         final XPathContext context = xsdTypes.getContext();
         Assert.assertNotNull(context);
         logger.info(context.getPrefixToURI().toString());
-        Assert.assertEquals(XMLConstants.W3C_XML_SCHEMA_NS_URI, context.getNamespaceURI("xsd"));
+        Assert.assertEquals(XsdU.NS_URI_XSD, context.getNamespaceURI("xsd"));
         Assert.assertEquals("urn:arwo:realm", context.getNamespaceURI("realm"));
         // generate document
         final QName name = QNameU.getQName("{urn:arwo:realm}realm");

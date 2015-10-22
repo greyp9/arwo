@@ -5,11 +5,11 @@ import io.github.greyp9.arwo.core.date.XsdDateU;
 import io.github.greyp9.arwo.core.lang.NumberU;
 import io.github.greyp9.arwo.core.lang.StringU;
 import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.core.xsd.core.XsdTypeU;
 import io.github.greyp9.arwo.core.xsd.core.XsdU;
 import io.github.greyp9.arwo.core.xsd.data.DataType;
 import io.github.greyp9.arwo.core.xsd.data.DataTypeRestrictions;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
-import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitionsFactory;
 
 import javax.xml.namespace.QName;
 import java.util.Date;
@@ -26,51 +26,51 @@ public class TypeInstanceFactory {  // NOPMD
         final DataType baseType = dataType.getBaseType();
         String value = ((baseType == null) ? null : getDefaultValue(baseType));
         final QName qname = dataType.getQName();
-        if (TypeDefinitionsFactory.Const.ANY_URI.equals(qname)) {
+        if (XsdTypeU.Const.ANY_URI.equals(qname)) {
             value = Const.STRING_DEFAULT;
-        } else if (TypeDefinitionsFactory.Const.BASE_64_BINARY.equals(qname)) {
+        } else if (XsdTypeU.Const.BASE_64_BINARY.equals(qname)) {
             value = Const.STRING_DEFAULT;
-        } else if (TypeDefinitionsFactory.Const.BOOLEAN.equals(qname)) {
+        } else if (XsdTypeU.Const.BOOLEAN.equals(qname)) {
             value = Const.BOOLEAN_DEFAULT;
-        } else if (TypeDefinitionsFactory.Const.DATE.equals(qname)) {
+        } else if (XsdTypeU.Const.DATE.equals(qname)) {
             value = DateU.toString(Const.DATE_DEFAULT, DateU.Const.TZ_GMT.getID(), XsdDateU.Const.DATE);
-        } else if (TypeDefinitionsFactory.Const.DATE_TIME.equals(qname)) {
+        } else if (XsdTypeU.Const.DATE_TIME.equals(qname)) {
             value = DateU.toString(Const.DATE_DEFAULT, DateU.Const.TZ_GMT.getID(), XsdDateU.Const.DATETIME);
-        } else if (TypeDefinitionsFactory.Const.DECIMAL.equals(qname)) {
+        } else if (XsdTypeU.Const.DECIMAL.equals(qname)) {
             value = Const.LONG_DEFAULT;
-        } else if (TypeDefinitionsFactory.Const.DURATION.equals(qname)) {
+        } else if (XsdTypeU.Const.DURATION.equals(qname)) {
             value = Const.DURATION_DEFAULT;
-        } else if (TypeDefinitionsFactory.Const.ID.equals(qname)) {
+        } else if (XsdTypeU.Const.ID.equals(qname)) {
             final String id = NumberU.toHex((int) UUID.randomUUID().getLeastSignificantBits());
-            value = Value.join(XsdU.DASH, TypeDefinitionsFactory.Const.ID.getLocalPart(), id);
-        } else if (TypeDefinitionsFactory.Const.INT.equals(qname)) {
+            value = Value.join(XsdU.DASH, XsdTypeU.Const.ID.getLocalPart(), id);
+        } else if (XsdTypeU.Const.INT.equals(qname)) {
             value = Const.LONG_DEFAULT;
-        } else if (TypeDefinitionsFactory.Const.LONG.equals(qname)) {
+        } else if (XsdTypeU.Const.LONG.equals(qname)) {
             value = Const.LONG_DEFAULT;
-        } else if (TypeDefinitionsFactory.Const.INT.equals(qname)) {
+        } else if (XsdTypeU.Const.INT.equals(qname)) {
             value = Const.LONG_DEFAULT;
-        } else if (TypeDefinitionsFactory.Const.INTEGER.equals(qname)) {
+        } else if (XsdTypeU.Const.INTEGER.equals(qname)) {
             value = Const.LONG_DEFAULT;
-        } else if (TypeDefinitionsFactory.Const.NMTOKEN.equals(qname)) {
+        } else if (XsdTypeU.Const.NMTOKEN.equals(qname)) {
             final String id = NumberU.toHex((int) UUID.randomUUID().getLeastSignificantBits());
-            value = Value.join(XsdU.DASH, TypeDefinitionsFactory.Const.NMTOKEN.getLocalPart(), id);
-        } else if (TypeDefinitionsFactory.Const.NORMALIZED_STRING.equals(qname)) {
+            value = Value.join(XsdU.DASH, XsdTypeU.Const.NMTOKEN.getLocalPart(), id);
+        } else if (XsdTypeU.Const.NORMALIZED_STRING.equals(qname)) {
             value = Const.STRING_DEFAULT;
-        } else if (TypeDefinitionsFactory.Const.QNAME.equals(qname)) {
+        } else if (XsdTypeU.Const.QNAME.equals(qname)) {
             value = Const.QNAME_DEFAULT;
-        } else if (TypeDefinitionsFactory.Const.STRING.equals(qname)) {
+        } else if (XsdTypeU.Const.STRING.equals(qname)) {
             value = Const.STRING_DEFAULT;
-        } else if (TypeDefinitionsFactory.Const.TIME.equals(qname)) {
+        } else if (XsdTypeU.Const.TIME.equals(qname)) {
             value = DateU.toString(Const.DATE_DEFAULT, DateU.Const.TZ_GMT.getID(), XsdDateU.Const.TIME);
-        } else if (TypeDefinitionsFactory.Const.TOKEN.equals(qname)) {
+        } else if (XsdTypeU.Const.TOKEN.equals(qname)) {
             value = Const.STRING_DEFAULT;
-        } else if (TypeDefinitionsFactory.Const.UNSIGNED_BYTE.equals(qname)) {
+        } else if (XsdTypeU.Const.UNSIGNED_BYTE.equals(qname)) {
             value = Const.LONG_DEFAULT;
-        } else if (TypeDefinitionsFactory.Const.UNSIGNED_INT.equals(qname)) {
+        } else if (XsdTypeU.Const.UNSIGNED_INT.equals(qname)) {
             value = Const.LONG_DEFAULT;
-        } else if (TypeDefinitionsFactory.Const.UNSIGNED_LONG.equals(qname)) {
+        } else if (XsdTypeU.Const.UNSIGNED_LONG.equals(qname)) {
             value = Const.LONG_DEFAULT;
-        } else if (TypeDefinitionsFactory.Const.UNSIGNED_SHORT.equals(qname)) {
+        } else if (XsdTypeU.Const.UNSIGNED_SHORT.equals(qname)) {
             value = Const.LONG_DEFAULT;
         }
         return ((baseType == null) ? value : getDefaultValueRestricted(value, dataType));

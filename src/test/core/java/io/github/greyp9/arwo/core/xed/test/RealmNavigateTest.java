@@ -37,14 +37,14 @@ public class RealmNavigateTest extends TestCase {
         // load model
         final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
-        final QName nameRealm = QNameU.getQName("{urn:arwo:realm}realm");
-        final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(nameRealm);
+        final QName qname = QNameU.getQName("{urn:arwo:realm}realm");
+        final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
         final Xed xed = new Xed(document, xsdTypes);
         final XPather xpather = xed.getXPather();
         final Element realm = document.getDocumentElement();
         final Element principals = xpather.getElement("/realm:realm/realm:principals");
         // load model
-        final TypeInstance typeInstanceRealm = xsdTypes.getElementType(nameRealm.toString());
+        final TypeInstance typeInstanceRealm = xsdTypes.getElementType(qname.toString());
         final TypeInstance typeInstancePrincipals = typeInstanceRealm.getInstance("principals");
         final TypeInstance typeInstancePrincipal = typeInstancePrincipals.getInstance("principal");
         if (SystemU.isTrue()) {

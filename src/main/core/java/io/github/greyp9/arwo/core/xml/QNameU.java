@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xml;
 
+import io.github.greyp9.arwo.core.xsd.core.XsdU;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 
@@ -15,7 +16,9 @@ public final class QNameU {
     public static QName getQName(final String qNameToString) {
         final Pattern pattern = Pattern.compile("\\{(.*)\\}(.+)");
         final Matcher matcher = pattern.matcher(qNameToString);
-        return ((matcher.matches()) ? new QName(matcher.group(1), matcher.group(2)) : null);
+        return ((matcher.matches()) ?
+                new QName(matcher.group(1), matcher.group(2)) :
+                new QName(XsdU.NS_URI_NULL, qNameToString));
     }
 
     public static QName getQName(final Element element) {

@@ -1,0 +1,61 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<xsd:schema xmlns:xsd='http://www.w3.org/2001/XMLSchema'
+            elementFormDefault='qualified'>
+
+    <xsd:element name='jobs' type='jobsType'/>
+
+    <xsd:complexType name='jobsType'>
+        <xsd:sequence>
+            <xsd:element name='job' type='jobType' minOccurs='0' maxOccurs='unbounded'/>
+            <xsd:element name='enhancedJob' type='enhancedJobType' minOccurs='0' maxOccurs='unbounded'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="jobType">
+        <xsd:choice>
+            <xsd:element name='taskA' type='taskAType'/>
+            <xsd:element name='taskB' type='taskBType'/>
+            <xsd:element name='taskC' type='taskCType'/>
+        </xsd:choice>
+        <xsd:attributeGroup ref="jobAttributes"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="enhancedJobType">
+        <xsd:sequence>
+            <xsd:element name='before' type='xsd:string'/>
+            <xsd:choice>
+                <xsd:element name='taskA' type='taskAType'/>
+                <xsd:element name='taskB' type='taskBType'/>
+                <xsd:element name='taskC' type='taskCType'/>
+            </xsd:choice>
+            <xsd:element name='after' type='xsd:string'/>
+        </xsd:sequence>
+        <xsd:attributeGroup ref="jobAttributes"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="taskAType">
+        <xsd:attribute name='attributeA' type='xsd:string'/>
+        <xsd:attributeGroup ref="taskAttributes"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="taskBType">
+        <xsd:attribute name='attributeB' type='xsd:string'/>
+        <xsd:attributeGroup ref="taskAttributes"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="taskCType">
+        <xsd:attribute name='attributeC' type='xsd:string'/>
+        <xsd:attributeGroup ref="taskAttributes"/>
+    </xsd:complexType>
+
+    <xsd:attributeGroup name="jobAttributes">
+        <xsd:attribute name='jobName' type='xsd:string'/>
+        <xsd:attribute name='jobEnabled' type='xsd:boolean'/>
+    </xsd:attributeGroup>
+
+    <xsd:attributeGroup name="taskAttributes">
+        <xsd:attribute name='taskName' type='xsd:string'/>
+        <xsd:attribute name='taskEnabled' type='xsd:boolean'/>
+    </xsd:attributeGroup>
+
+</xsd:schema>

@@ -66,14 +66,14 @@ public class Xed {
     }
 
     public final Element create(final Element parent, final ValueInstance valueInstance) {
-        return new OpCreate(parent, xsdTypes).apply(valueInstance);
+        return new OpCreate(xsdTypes).apply(parent, valueInstance);
     }
 
     public final Element update(final Element element, final ValueInstance valueInstance) {
-        return new OpUpdate(element, xsdTypes).apply(valueInstance);
+        return new OpUpdate(xsdTypes).apply(element, valueInstance);
     }
 
     public final Element delete(final Element element) {
-        return new OpDelete(element).apply();
+        return new OpDelete().apply(element);
     }
 }

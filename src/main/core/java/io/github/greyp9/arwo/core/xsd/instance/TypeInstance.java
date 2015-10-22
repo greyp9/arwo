@@ -2,10 +2,10 @@ package io.github.greyp9.arwo.core.xsd.instance;
 
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xsd.atom.XsdAtom;
+import io.github.greyp9.arwo.core.xsd.core.XsdTypeU;
 import io.github.greyp9.arwo.core.xsd.core.XsdU;
 import io.github.greyp9.arwo.core.xsd.data.DataType;
 import io.github.greyp9.arwo.core.xsd.data.NodeType;
-import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitionsFactory;
 
 import javax.xml.namespace.QName;
 import java.util.Collection;
@@ -98,7 +98,7 @@ public abstract class TypeInstance {  // xsd:complexType, xsd:simpleType @ xsd:e
     }
 
     public final boolean isBoolean() {
-        return ((dataType != null) && (TypeDefinitionsFactory.Const.BOOLEAN.equals(dataType.getQName())));
+        return ((dataType != null) && (XsdTypeU.Const.BOOLEAN.equals(dataType.getQName())));
     }
 
     @SuppressWarnings("unused")

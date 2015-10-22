@@ -5,14 +5,16 @@ import javax.xml.XMLConstants;
 public final class XsdU {
 
     // namespace prefix
-    // XMLConstants.NULL_NS_URI
     //public static final String NS_PREFIX_XML = XMLConstants.XML_NS_PREFIX;  // "xml";
     public static final String NS_PREFIX_XSD = "xsd";
     //public static final String NS_PREFIX_XMLNS = XMLConstants.XMLNS_ATTRIBUTE;  // "xmlns";
+    public static final String NS_PREFIX_NULL = XMLConstants.DEFAULT_NS_PREFIX;
 
     // namespace uri
     public static final String NS_URI_XML = XMLConstants.XMLNS_ATTRIBUTE_NS_URI;  // "http://www.w3.org/2000/xmlns/";
     public static final String NS_URI_XSD = XMLConstants.W3C_XML_SCHEMA_NS_URI;  // "http://www.w3.org/2001/XMLSchema";
+    public static final String NS_URI_NULL = XMLConstants.NULL_NS_URI;
+
     // element names
     public static final String ANNOTATION = "annotation";
     public static final String ANY = "any";
@@ -73,11 +75,11 @@ public final class XsdU {
     public static final String COLON = ":";
     public static final String DASH = "-";
     public static final String DOT = ".";
-    public static final String UNDERSCORE = "_";
+    //public static final String UNDERSCORE = "_";
 
     public static class Xed {
         // namespace prefix
-        public static final String NS_PREFIX_XED = "xed";
+        //public static final String NS_PREFIX_XED = "xed";
 
         // namespace uri
         public static final String NS_URI_XED = "urn:xed:xed";

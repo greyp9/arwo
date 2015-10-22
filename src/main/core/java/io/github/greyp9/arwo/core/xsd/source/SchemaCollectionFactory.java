@@ -73,7 +73,8 @@ public class SchemaCollectionFactory {
             // load into DOM
             final Document document = DocumentU.toDocument(bytesXsd);
             final Element element = document.getDocumentElement();
-            final String targetNamespace = ElementU.getAttribute(element, XsdU.TARGET_NAMESPACE);
+            final String targetNamespace = ElementU.getAttribute(
+                    element, XsdU.TARGET_NAMESPACE, XsdU.NS_URI_NULL);
             if ((targetNamespaceIn != null) && (!targetNamespaceIn.equals(targetNamespace))) {
                 logger.warning(String.format("%s != %s", targetNamespaceIn, targetNamespace));
             }

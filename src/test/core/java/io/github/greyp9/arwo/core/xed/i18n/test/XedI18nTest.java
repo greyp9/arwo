@@ -25,11 +25,11 @@ public class XedI18nTest extends TestCase {
         final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final TypeDefinitions typeDefinitions = xsdTypes.getTypeDefinitions();
-        final QName nameRealm = QNameU.getQName("{urn:arwo:realm}realm");
-        final Document document = new DocumentFactory(typeDefinitions, false).generateEmpty(nameRealm);
+        final QName qname = QNameU.getQName("{urn:arwo:realm}realm");
+        final Document document = new DocumentFactory(typeDefinitions, false).generateEmpty(qname);
         Xed xed = new Xed(document, xsdTypes, null);
         // check top-level type
-        final TypeInstance typeInstance = typeDefinitions.getElementTypes().get(nameRealm.toString());
+        final TypeInstance typeInstance = typeDefinitions.getElementTypes().get(qname.toString());
         Assert.assertNotNull(typeInstance);
         // i18n test values
         String key = "realm.realmType";

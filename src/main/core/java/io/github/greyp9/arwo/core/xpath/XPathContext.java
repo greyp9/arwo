@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.xpath;
 
-import javax.xml.XMLConstants;
+import io.github.greyp9.arwo.core.xsd.core.XsdU;
+
 import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
@@ -24,12 +25,12 @@ public class XPathContext implements javax.xml.namespace.NamespaceContext {
 
     public final String getNamespaceURI(final String prefix) {
         final String uri = prefixToURI.get(prefix);
-        return (uri == null) ? XMLConstants.NULL_NS_URI : uri;
+        return (uri == null) ? XsdU.NS_URI_NULL : uri;
     }
 
     public final String getPrefix(final String uri) {
         final String prefix = uriToPrefix.get(uri);
-        return (prefix == null) ? XMLConstants.DEFAULT_NS_PREFIX : prefix;
+        return (prefix == null) ? XsdU.NS_PREFIX_NULL : prefix;
     }
 
     public final Iterator getPrefixes(final String namespaceURI) {

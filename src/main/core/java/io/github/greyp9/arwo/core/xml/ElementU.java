@@ -144,6 +144,16 @@ public final class ElementU {
         }
     }
 
+    public static void setTextContentNullable(final Element element, final Object text) {
+        if (element != null) {
+            if (text == null) {
+                detach(element);
+            } else {
+                element.setTextContent(text.toString());
+            }
+        }
+    }
+
     public static Element addElement(final Element parent, final String name, final Object text) {
         final Element child = addElement(parent, name);
         setTextContent(child, text);

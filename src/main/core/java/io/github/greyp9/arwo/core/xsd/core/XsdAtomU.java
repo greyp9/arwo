@@ -11,9 +11,16 @@ public final class XsdAtomU {
     }
 
     public static QName getQName(final String name, final XsdAtom atom) {
+        QName qname;
         final int colon = name.indexOf(XsdU.COLON);
-        return (colon >= 0) ? getQNameColon(name, colon, atom) :
-                new QName(XsdU.NS_URI_XSD, name, XsdU.NS_PREFIX_XSD);
+        if (colon >= 0) {
+            qname = getQNameColon(name, colon, atom);
+        } else if (XsdTypeU.isBuiltIn(name)) {
+            qname = new QName(XsdU.NS_URI_XSD, name, XsdU.NS_PREFIX_XSD);
+        } else {
+            qname = new QName(XsdU.NS_URI_NULL, name, XsdU.NS_PREFIX_NULL);
+        }
+        return qname;
     }
 
     private static QName getQNameColon(final String name, final int colon, final XsdAtom atom) {

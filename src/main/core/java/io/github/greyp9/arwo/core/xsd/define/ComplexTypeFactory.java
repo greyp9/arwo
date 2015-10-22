@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.atom.XsdAtom;
 import io.github.greyp9.arwo.core.xsd.core.XsdAtomU;
+import io.github.greyp9.arwo.core.xsd.core.XsdTypeU;
 import io.github.greyp9.arwo.core.xsd.core.XsdU;
 import io.github.greyp9.arwo.core.xsd.data.DataType;
 import io.github.greyp9.arwo.core.xsd.data.DataTypeRestrictions;
@@ -13,7 +14,6 @@ import io.github.greyp9.arwo.core.xsd.instance.ConcreteTypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstances;
 import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitions;
-import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitionsFactory;
 import io.github.greyp9.arwo.core.xsd.type.TypeComponents;
 
 import javax.xml.namespace.QName;
@@ -286,7 +286,7 @@ public class ComplexTypeFactory {
         final String ref = ElementU.getAttribute(atom.getElement(), XsdU.REF);
         final String name = ElementU.getAttribute(atom.getElement(), XsdU.NAME);
         final String type = ElementU.getAttribute(atom.getElement(), XsdU.TYPE,
-                TypeDefinitionsFactory.Const.ANY_SIMPLE_TYPE.getLocalPart());
+                XsdTypeU.Const.ANY_SIMPLE_TYPE.getLocalPart());
         final String identity = ElementU.getAttributeNS(atom.getElement(), XsdU.Xed.IDENTITY, XsdU.Xed.NS_URI_XED);
         if (ref != null) {
             ref.getClass();
@@ -329,7 +329,7 @@ public class ComplexTypeFactory {
 
     private void addTypeInstance(final XsdAtom atom, final TypeInstances typeInstances, final String identity) {
         final String type = ElementU.getAttribute(atom.getElement(), XsdU.TYPE,
-                TypeDefinitionsFactory.Const.ANY_SIMPLE_TYPE.getLocalPart());
+                XsdTypeU.Const.ANY_SIMPLE_TYPE.getLocalPart());
         final QName qname = XsdAtomU.getQName(type, atom);
         final DataType dataTypeSimple = typeDefinitions.getSimpleTypes().get(qname.toString());
         DataType dataTypeComplex = typeDefinitions.getComplexTypes().get(qname.toString());

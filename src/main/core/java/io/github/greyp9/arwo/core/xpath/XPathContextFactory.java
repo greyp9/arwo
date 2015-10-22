@@ -1,11 +1,10 @@
 package io.github.greyp9.arwo.core.xpath;
 
+import io.github.greyp9.arwo.core.xsd.core.XsdU;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.NamedNodeMap;
-
-import javax.xml.XMLConstants;
 
 public final class XPathContextFactory {
 
@@ -30,7 +29,7 @@ public final class XPathContextFactory {
         for (int i = 0; (i < length); i++) {
             final Attr attr = (Attr) attributes.item(i);
             final String uri = attr.getNamespaceURI();
-            if (XMLConstants.XMLNS_ATTRIBUTE_NS_URI.equals(uri)) {
+            if (XsdU.NS_URI_XML.equals(uri)) {
                 context.addMapping(attr.getLocalName(), attr.getValue());
             }
         }

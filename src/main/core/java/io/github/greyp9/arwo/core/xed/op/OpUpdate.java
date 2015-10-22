@@ -3,10 +3,14 @@ package io.github.greyp9.arwo.core.xed.op;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.xml.ElementU;
+import io.github.greyp9.arwo.core.xsd.core.XsdU;
+import io.github.greyp9.arwo.core.xsd.data.DataType;
+import io.github.greyp9.arwo.core.xsd.data.DataTypeU;
 import io.github.greyp9.arwo.core.xsd.data.NodeType;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactoryU;
 import io.github.greyp9.arwo.core.xsd.instance.ChoiceTypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
+import io.github.greyp9.arwo.core.xsd.instance.TypeInstanceX;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
 import org.w3c.dom.Document;
@@ -14,33 +18,40 @@ import org.w3c.dom.Element;
 
 import java.util.Collection;
 
+@SuppressWarnings("PMD.TooManyMethods")
 public class OpUpdate {
-    private final Element element;
     private final XsdTypes xsdTypes;
 
-    public OpUpdate(final Element element, final XsdTypes xsdTypes) {
-        this.element = element;
+    public OpUpdate(final XsdTypes xsdTypes) {
         this.xsdTypes = xsdTypes;
     }
 
-    public final Element apply(final ValueInstance valueInstance) {
+    public final Element apply(final Element element, final ValueInstance valueInstance) {
         final TypeInstance typeInstance = valueInstance.getTypeInstance();
-        final Element update = element;
         final NameTypeValues nameTypeValues = valueInstance.getNameTypeValues();
-        for (final TypeInstance typeInstanceIt : typeInstance.getInstances()) {
-            for (final NameTypeValue nameTypeValue : nameTypeValues) {
-                if (typeInstanceIt.getName().equals(nameTypeValue.getName())) {
-                    apply(update, typeInstanceIt, nameTypeValue);
-                }
-            }
+        final Collection<TypeInstance> typeInstances = new TypeInstanceX(typeInstance).getPageInstances();
+        for (final TypeInstance typeInstanceIt : typeInstances) {
+            apply(element, typeInstanceIt, nameTypeValues);
         }
-        return update;
+        return element;
+    }
+
+    private void apply(final Element update, final TypeInstance typeInstance, final NameTypeValues nameTypeValues) {
+        for (final NameTypeValue nameTypeValue : nameTypeValues) {
+            apply(update, typeInstance, nameTypeValue);
+        }
     }
 
     private void apply(final Element update, final TypeInstance typeInstance, final NameTypeValue nameTypeValue) {
+        if (typeInstance.getName().equals(nameTypeValue.getName())) {
+            applyValue(update, typeInstance, nameTypeValue);
+        }
+    }
+
+    private void applyValue(final Element update, final TypeInstance typeInstance, final NameTypeValue nameTypeValue) {
         final NodeType nodeType = typeInstance.getNodeType();
         if (NodeType.baseType.equals(nodeType)) {
-            applyBaseType();
+            applyBaseType(update, nameTypeValue, typeInstance);
         } else if (NodeType.attribute.equals(nodeType)) {
             applyAttribute(update, nameTypeValue);
         } else if (NodeType.element.equals(nodeType)) {
@@ -48,11 +59,14 @@ public class OpUpdate {
         } else if (NodeType.choice.equals(nodeType) && (typeInstance instanceof ChoiceTypeInstance)) {
             applyChoice(update, nameTypeValue, (ChoiceTypeInstance) typeInstance);
         }
-
     }
 
-    private void applyBaseType() {
-        getClass();
+    private void applyBaseType(
+            final Element create, final NameTypeValue nameTypeValue, final TypeInstance typeInstance) {
+        final DataType baseTypeRoot = DataTypeU.getRootBaseType(typeInstance.getDataType());
+        if (XsdU.NS_URI_XSD.equals(baseTypeRoot.getQName().getNamespaceURI())) {
+            ElementU.setTextContentNullable(create, nameTypeValue.getValue());
+        }
     }
 
     private void applyAttribute(final Element update, final NameTypeValue nameTypeValue) {

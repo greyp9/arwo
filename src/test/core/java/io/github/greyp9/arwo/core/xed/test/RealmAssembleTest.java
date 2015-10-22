@@ -35,8 +35,8 @@ public class RealmAssembleTest extends TestCase {
         // load model
         final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
-        final QName nameRealm = QNameU.getQName("{urn:arwo:realm}realm");
-        final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(nameRealm);
+        final QName qname = QNameU.getQName("{urn:arwo:realm}realm");
+        final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
         final Xed xed = new Xed(document, xsdTypes);
         // navigate
         final XedCursor cursorPrincipalType = new XedNav(xed).find("/ecd28/7256d/8dc37/");
@@ -61,8 +61,8 @@ public class RealmAssembleTest extends TestCase {
         // load model
         final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
-        final QName nameRealm = QNameU.getQName("{urn:arwo:realm}realm");
-        final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(nameRealm);
+        final QName qname = QNameU.getQName("{urn:arwo:realm}realm");
+        final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
         final Xed xed = new Xed(document, xsdTypes);
         // navigate
         final XedCursor cursorPrincipalType = new XedNav(xed).find("/ecd28/7256d/8dc37/");
@@ -88,8 +88,8 @@ public class RealmAssembleTest extends TestCase {
         // load model
         final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
-        final QName nameRealm = QNameU.getQName("{urn:arwo:realm}realm");
-        final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(nameRealm);
+        final QName qname = QNameU.getQName("{urn:arwo:realm}realm");
+        final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
         final Xed xed = new Xed(document, xsdTypes);
         // navigate
         final XedCursor cursorPrincipalType = new XedNav(xed).find("/ecd28/7256d/8dc37/");

@@ -1,4 +1,4 @@
-package io.github.greyp9.arwo.core.xed.xsd.choice1.test;
+package io.github.greyp9.arwo.core.xed.xsd.choiceNoNs.test;
 
 import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.http.HttpArguments;
@@ -22,7 +22,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.logging.Logger;
 
-public class Choice1OpTest extends TestCase {
+public class ChoiceNoNsOpTest extends TestCase {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
     @Override
@@ -35,33 +35,33 @@ public class Choice1OpTest extends TestCase {
         // load model
         final URL urlInitial = ResourceU.resolve(Const.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
-        final QName qname = QNameU.getQName("{urn:arwo:choice1}jobs");
+        final QName qname = QNameU.getQName("jobs");
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
         final Xed xed = new Xed(document, xsdTypes);
         logger.finest(DocumentU.toString(xed.getDocument()));
         // navigate
-        final Element jobs = xed.getXPather().getElement("/ch1:jobs");
+        final Element jobs = xed.getXPather().getElement("/jobs");
         final XedCursor cursorJobsByNode = new XedNav(xed).find(jobs);
         Assert.assertEquals("/", cursorJobsByNode.getURI());
         final XedCursor cursorJobsByPath = new XedNav(xed).find("/");
         Assert.assertEquals(cursorJobsByNode.getElement(), cursorJobsByPath.getElement());
         // navigate
         XedCursor cursorJobTIByNode = new XedNav(xed).find("job", cursorJobsByNode);
-        Assert.assertEquals("/2d467/", cursorJobTIByNode.getURI());
+        Assert.assertEquals("/36a9a/", cursorJobTIByNode.getURI());
         XedCursor cursorEJobTIByNode = new XedNav(xed).find("enhancedJob", cursorJobsByNode);
-        Assert.assertEquals("/d1be5/", cursorEJobTIByNode.getURI());
+        Assert.assertEquals("/92da2/", cursorEJobTIByNode.getURI());
     }
 
     public void testCreateJob() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(Const.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
-        final QName qname = QNameU.getQName("{urn:arwo:choice1}jobs");
+        final QName qname = QNameU.getQName("jobs");
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
         final Xed xed = new Xed(document, xsdTypes);
         logger.finest(DocumentU.toString(xed.getDocument()));
         // navigate
-        final Element jobs = xed.getXPather().getElement("/ch1:jobs");
+        final Element jobs = xed.getXPather().getElement("/jobs");
         final XedCursor cursorJobsByNode = new XedNav(xed).find(jobs);
         XedCursor cursorJobType = new XedNav(xed).find("job", cursorJobsByNode);
         // insert
@@ -83,20 +83,20 @@ public class Choice1OpTest extends TestCase {
         // validate
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
-        Assert.assertEquals(297, xml.length);
-        Assert.assertEquals("f71d78bc", CRCU.crc32String(xml));
+        Assert.assertEquals(272, xml.length);
+        Assert.assertEquals("cdf94a8b", CRCU.crc32String(xml));
     }
 
     public void testCreateUpdateJob() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(Const.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
-        final QName qname = QNameU.getQName("{urn:arwo:choice1}jobs");
+        final QName qname = QNameU.getQName("jobs");
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
         final Xed xed = new Xed(document, xsdTypes);
         logger.finest(DocumentU.toString(xed.getDocument()));
         // navigate
-        final Element jobs = xed.getXPather().getElement("/ch1:jobs");
+        final Element jobs = xed.getXPather().getElement("/jobs");
         final XedCursor cursorJobsByNode = new XedNav(xed).find(jobs);
         XedCursor cursorJobType = new XedNav(xed).find("job", cursorJobsByNode);
         // insert
@@ -117,20 +117,20 @@ public class Choice1OpTest extends TestCase {
         // validate
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
-        Assert.assertEquals(196, xml.length);
-        Assert.assertEquals("a44539b7", CRCU.crc32String(xml));
+        Assert.assertEquals(171, xml.length);
+        Assert.assertEquals("d306a4dd", CRCU.crc32String(xml));
     }
 
     public void testCreateEnhancedJob() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(Const.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
-        final QName qname = QNameU.getQName("{urn:arwo:choice1}jobs");
+        final QName qname = QNameU.getQName("jobs");
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
         final Xed xed = new Xed(document, xsdTypes);
         logger.finest(DocumentU.toString(xed.getDocument()));
         // navigate
-        final Element jobs = xed.getXPather().getElement("/ch1:jobs");
+        final Element jobs = xed.getXPather().getElement("/jobs");
         final XedCursor cursorJobsByNode = new XedNav(xed).find(jobs);
         XedCursor cursorJobType = new XedNav(xed).find("enhancedJob", cursorJobsByNode);
         // insert
@@ -152,20 +152,20 @@ public class Choice1OpTest extends TestCase {
         // validate
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
-        Assert.assertEquals(423, xml.length);
-        Assert.assertEquals("59d3c6b1", CRCU.crc32String(xml));
+        Assert.assertEquals(398, xml.length);
+        Assert.assertEquals("19d4e9f8", CRCU.crc32String(xml));
     }
 
     public void testCreateUpdateEnhancedJob() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(Const.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
-        final QName qname = QNameU.getQName("{urn:arwo:choice1}jobs");
+        final QName qname = QNameU.getQName("jobs");
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
         final Xed xed = new Xed(document, xsdTypes);
         logger.finest(DocumentU.toString(xed.getDocument()));
         // navigate
-        final Element jobs = xed.getXPather().getElement("/ch1:jobs");
+        final Element jobs = xed.getXPather().getElement("/jobs");
         final XedCursor cursorJobsByNode = new XedNav(xed).find(jobs);
         XedCursor cursorJobType = new XedNav(xed).find("enhancedJob", cursorJobsByNode);
         // insert
@@ -188,11 +188,11 @@ public class Choice1OpTest extends TestCase {
         // validate
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
-        Assert.assertEquals(259, xml.length);
-        Assert.assertEquals("5720f73f", CRCU.crc32String(xml));
+        Assert.assertEquals(234, xml.length);
+        Assert.assertEquals("889ee76f", CRCU.crc32String(xml));
     }
 
     public static class Const {
-        public static final String XSD = "io/github/greyp9/arwo/xsd/choice1/choice1.xsd";
+        public static final String XSD = "io/github/greyp9/arwo/xsd/choiceNoNs/choiceNoNs.xsd";
     }
 }
