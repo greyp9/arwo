@@ -10,7 +10,7 @@
         <xsd:sequence>
             <xsd:element name='principals' type='realm:principalsType'/>
         </xsd:sequence>
-        <xsd:attribute name='name' default='Arwo'/>
+        <xsd:attribute name='name' type='xsd:string' default='Arwo'/>
     </xsd:complexType>
 
     <xsd:complexType name='principalsType'>

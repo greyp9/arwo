@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.xed.nav;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xml.ElementU;
+import io.github.greyp9.arwo.core.xsd.data.NodeType;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
@@ -30,13 +31,27 @@ public class XedNavNode {
         return cursorIt;
     }
 
-    private XedCursor findChild(final Node node, final XedCursor cursor) {
+    public final XedCursor findChild(final Node node, final XedCursor cursor) {
         final XedCursor cursorTI = findTypeInstance(node.getLocalName(), cursor);
         XedCursor cursorChild = null;
         if (node instanceof Attr) {
             cursorChild = findChildAttr((Attr) node, cursor, cursorTI);
         } else if (node instanceof Element) {
             cursorChild = findChildElement((Element) node, cursor, cursorTI);
+        }
+        return cursorChild;
+    }
+
+    public final XedCursor findTypeInstanceChild(final String name, final XedCursor cursor) {
+        final Element element = cursor.getElement();
+        final XedCursor cursorTI = findTypeInstance(name, cursor);
+        XedCursor cursorChild = null;
+        final TypeInstance typeInstance = cursorTI.getTypeInstance();
+        final NodeType nodeType = (typeInstance == null) ? null : typeInstance.getNodeType();
+        if (NodeType.attribute.equals(nodeType)) {
+            cursorChild = findChildAttr(ElementU.getAttributeNode(element, name), cursor, cursorTI);
+        } else if (NodeType.element.equals(nodeType)) {
+            cursorChild = findChildElement(ElementU.getChild(element, typeInstance.getQName()), cursor, cursorTI);
         }
         return cursorChild;
     }
@@ -60,7 +75,7 @@ public class XedNavNode {
         final Xed xed = cursorParent.getXed();
         final Element elementParent = cursorParent.getElement();
         final TypeInstance typeInstance = cursorTI.getTypeInstance();
-        XedCursor cursor = null;
+        XedCursor cursor = new XedCursor(xed, cursorTI, null, null, typeInstance);
         final Collection<Element> children = ElementU.getChildren(elementParent);
         int ordinal = -1;
         for (final Element childIt : children) {

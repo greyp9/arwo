@@ -3,7 +3,9 @@ package io.github.greyp9.arwo.core.xed.cursor;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.xed.model.Xed;
+import io.github.greyp9.arwo.core.xsd.data.NodeType;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -20,6 +22,14 @@ public class XedCursor {
 
     public final XedCursor getParent() {
         return parent;
+    }
+
+    public final XedCursor getParentConcrete() {
+        XedCursor parentConcrete = parent;
+        while (parentConcrete.getNode() == null) {
+            parentConcrete = parentConcrete.getParent();
+        }
+        return parentConcrete;
     }
 
     public final Node getNode() {
@@ -45,6 +55,19 @@ public class XedCursor {
 
     public final Element getElement() {
         return ((node instanceof Element) ? ((Element) node) : null);
+    }
+
+    public final String getValue() {
+        String value = null;
+        final NodeType nodeType = typeInstance.getNodeType();
+        if ((NodeType.attribute.equals(nodeType)) && (node instanceof Attr)) {
+            value = node.getTextContent();
+        } else if ((NodeType.element.equals(nodeType)) && (node instanceof Element)) {
+            value = node.getTextContent();
+        } else if (NodeType.baseType.equals(nodeType)) {
+            value = node.getTextContent();
+        }
+        return value;
     }
 
     public static String getID(final TypeInstance typeInstance, final Integer ordinal) {

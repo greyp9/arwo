@@ -7,6 +7,7 @@ import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -36,6 +37,19 @@ public final class ElementU {
             value = element.getAttributeNS(uri, name);
         }
         return value;
+    }
+
+    public static Element getChild(final Element element, final QName qname) {
+        return getChild(element, qname.getLocalPart(), qname.getNamespaceURI());
+    }
+
+    public static Element getChild(final Element element, final String name, final String uri) {
+        return (element == null) ? null : getChildNN(element, name, uri);
+    }
+
+    private static Element getChildNN(final Element element, final String name, final String uri) {
+        final NodeList elements = element.getElementsByTagNameNS(uri, name);
+        return (Element) ((elements.getLength() == 0) ? null : elements.item(0));
     }
 
     public static Collection<Element> getChildren(final Node node) {
