@@ -1,8 +1,8 @@
 package io.github.greyp9.arwo.core.xed.view.type;
 
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
-import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xsd.data.DataType;
+import io.github.greyp9.arwo.core.xsd.instance.ChoiceTypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstanceX;
 
@@ -41,22 +41,21 @@ public class ViewInstanceFactory {
         ViewInstance viewInstance = null;
         final DataType dataType = typeInstance.getDataType();
         final boolean isMulti = (typeInstance.getMaxOccurs() > 1);
+        if (typeInstance instanceof ChoiceTypeInstance) {
+            viewInstance = new ViewInstanceChoice(cursor, (ChoiceTypeInstance) typeInstance);
+        }
         if (dataType != null) {
             if (!dataType.getInstances().isEmpty()) {  // is drill down
-                final XedCursor cursorType = new XedNav(cursor.getXed()).find(typeInstance.getName(), cursor);
-                viewInstance = new ViewInstanceDrillDown(cursorType);
+                viewInstance = new ViewInstanceDrillDown(cursor, typeInstance);
             } else if (!dataType.getRestrictions().getEnumValues().isEmpty()) {
-                final XedCursor cursorChild = new XedNav(cursor.getXed()).findChild(typeInstance.getName(), cursor);
-                viewInstance = new ViewInstanceEnum(cursorChild);
+                viewInstance = new ViewInstanceEnum(cursor, typeInstance);
             }
         }
         if (isMulti) {
-            final XedCursor cursorType = new XedNav(cursor.getXed()).find(typeInstance.getName(), cursor);
-            viewInstance = new ViewInstanceDrillDown(cursorType);
+            viewInstance = new ViewInstanceDrillDown(cursor, typeInstance);
         }
         if (viewInstance == null) {
-            final XedCursor cursorChild = new XedNav(cursor.getXed()).findChild(typeInstance.getName(), cursor);
-            viewInstance = new ViewInstanceText(cursorChild);
+            viewInstance = new ViewInstanceText(cursor, typeInstance);
         }
         return viewInstance;
     }

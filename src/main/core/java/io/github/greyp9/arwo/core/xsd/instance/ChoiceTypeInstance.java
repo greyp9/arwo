@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xsd.instance;
 
+import io.github.greyp9.arwo.core.xsd.core.XsdU;
 import io.github.greyp9.arwo.core.xsd.data.NodeType;
 
 import javax.xml.namespace.QName;
@@ -19,7 +20,7 @@ public class ChoiceTypeInstance extends TypeInstance {
 
     @Override
     public final String getURI() {
-        return null;
+        return XsdU.NS_URI_XSD;
     }
 
     @Override
@@ -30,6 +31,11 @@ public class ChoiceTypeInstance extends TypeInstance {
             buffer.append(instanceIt.getName());
         }
         return buffer.toString();
+    }
+
+    @Override
+    public final QName getQName() {
+        return new QName(getURI(), getName(), XsdU.NS_PREFIX_XSD);
     }
 
     @Override
@@ -47,5 +53,10 @@ public class ChoiceTypeInstance extends TypeInstance {
             }
         }
         return instance;
+    }
+
+    @Override
+    public final boolean isSimpleType() {
+        return false;
     }
 }

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<jobs xmlns="urn:arwo:choice1">
+    <job jobEnabled="true" jobName="job1">
+        <taskA attributeA="" taskEnabled="false" taskName=""/>
+    </job>
+    <job jobEnabled="false" jobName="job2">
+        <taskB attributeB="" taskEnabled="false" taskName=""/>
+    </job>
+    <job jobEnabled="true" jobName="job3">
+        <taskC attributeC="" taskEnabled="false" taskName=""/>
+    </job>
+</jobs>

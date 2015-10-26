@@ -17,6 +17,10 @@ public final class ElementU {
     private ElementU() {
     }
 
+    public static String getTextContent(final Element element) {
+        return ((element == null) ? null : element.getTextContent());
+    }
+
     public static Attr getAttributeNode(final Element element, final String name) {
         final boolean isAttribute = ((element != null) && (name != null) && (element.hasAttribute(name)));
         return isAttribute ? element.getAttributeNode(name) : null;

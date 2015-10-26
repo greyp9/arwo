@@ -51,7 +51,9 @@ public abstract class TypeInstance {  // xsd:complexType, xsd:simpleType @ xsd:e
 
     public abstract String getName();
 
-    public final QName getQName() {
+    public abstract QName getQName();
+
+    protected final QName getQNameBase() {
         return name;
     }
 
@@ -89,9 +91,7 @@ public abstract class TypeInstance {  // xsd:complexType, xsd:simpleType @ xsd:e
         return Boolean.parseBoolean(identity);
     }
 
-    public final boolean isSimpleType() {
-        return dataType.getInstances().isEmpty();
-    }
+    public abstract boolean isSimpleType();
 
     public final boolean isSingleton() {
         return ((getMinOccurs() == 1) && (getMaxOccurs() == 1));

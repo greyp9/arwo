@@ -53,6 +53,6 @@ public class XedTableView {
                 typeInstance.getDataType().getQName().getLocalPart();
         final String pageInstanceName = (pageInstance == null) ? null : pageInstance.getName();
         final String key = Value.join(".", typeInstanceName, dataTypeName, pageInstanceName);
-        return bundle.getString(key, pageInstanceName);
+        return bundle.getString(key, key);
     }
 }

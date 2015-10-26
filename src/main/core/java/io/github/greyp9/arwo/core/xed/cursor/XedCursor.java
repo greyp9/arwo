@@ -3,11 +3,14 @@ package io.github.greyp9.arwo.core.xed.cursor;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.xed.model.Xed;
+import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xsd.data.NodeType;
+import io.github.greyp9.arwo.core.xsd.instance.ChoiceTypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
-import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
+
+import java.util.Collection;
 
 public class XedCursor {
     private final Xed xed;
@@ -57,15 +60,31 @@ public class XedCursor {
         return ((node instanceof Element) ? ((Element) node) : null);
     }
 
-    public final String getValue() {
+    public final String getValue(final TypeInstance childInstance) {
         String value = null;
-        final NodeType nodeType = typeInstance.getNodeType();
-        if ((NodeType.attribute.equals(nodeType)) && (node instanceof Attr)) {
-            value = node.getTextContent();
-        } else if ((NodeType.element.equals(nodeType)) && (node instanceof Element)) {
-            value = node.getTextContent();
+        final Element element = getElement();
+        final NodeType nodeType = (childInstance == null) ? null : childInstance.getNodeType();
+        if (NodeType.attribute.equals(nodeType)) {
+            value = ElementU.getAttribute(element, childInstance.getName());
+        } else if (NodeType.element.equals(nodeType)) {
+            value = ElementU.getTextContent(ElementU.getChild(element, childInstance.getQName()));
         } else if (NodeType.baseType.equals(nodeType)) {
-            value = node.getTextContent();
+            value = ElementU.getTextContent(element);
+        } else if (NodeType.choice.equals(nodeType) && (childInstance instanceof ChoiceTypeInstance)) {
+            value = getValue(element, (ChoiceTypeInstance) childInstance);
+        }
+        return value;
+    }
+
+    private String getValue(final Element element, final ChoiceTypeInstance choiceInstance) {
+        String value = null;
+        final Collection<TypeInstance> typeInstances = choiceInstance.getTypeInstances().getTypeInstances();
+        for (final TypeInstance typeInstanceIt : typeInstances) {
+            final Element child = ((element == null) ? null : ElementU.getChild(element, typeInstanceIt.getQName()));
+            if (child != null) {
+                value = typeInstanceIt.getName();
+                break;
+            }
         }
         return value;
     }

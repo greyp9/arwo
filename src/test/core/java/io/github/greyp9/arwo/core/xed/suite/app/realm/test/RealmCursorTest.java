@@ -15,7 +15,6 @@ import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.source.test.SchemaSourceAppTest;
-import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitions;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
 import junit.framework.TestCase;
 import org.junit.Assert;
@@ -40,10 +39,9 @@ public class RealmCursorTest extends TestCase {
         // load model
         final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
-        final TypeDefinitions typeDefinitions = xsdTypes.getTypeDefinitions();
         final QName qname = QNameU.getQName("{urn:arwo:realm}realm");
         // generate document
-        final Document document = new DocumentFactory(typeDefinitions, false).generateEmpty(qname);
+        final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
         logger.finest(DocumentU.toString(document));
         final Xed xed = new Xed(document, xsdTypes, Locale.getDefault());
         // insert
@@ -72,18 +70,18 @@ public class RealmCursorTest extends TestCase {
         Assert.assertEquals("/", cursorRealm.getURI());
         final String renderRealm = new CursorTextView(new XedCursorView(cursorRealm)).render();
         logger.finest("Realm\n" + renderRealm);
-        Assert.assertEquals("58a98e0f", CRCU.crc32String(UTF8Codec.toBytes(renderRealm)));
+        Assert.assertEquals("1ceb05ff", CRCU.crc32String(UTF8Codec.toBytes(renderRealm)));
         // view at principals type
         final XedCursor cursorPrincipalsType = new XedNav(xed).find("principals", cursorRealm);
         Assert.assertEquals("/ecd28/", cursorPrincipalsType.getURI());
         final String renderPrincipalsType = new CursorTextView(new XedCursorView(cursorPrincipalsType)).render();
         logger.finest("PrincipalsType\n" + renderPrincipalsType);
-        Assert.assertEquals("fd4b59c8", CRCU.crc32String(UTF8Codec.toBytes(renderPrincipalsType)));
+        Assert.assertEquals("8f0f0893", CRCU.crc32String(UTF8Codec.toBytes(renderPrincipalsType)));
         // view at principals
         Assert.assertEquals("/ecd28/7256d/", cursorPrincipals.getURI());
         final String renderPrincipals = new CursorTextView(new XedCursorView(cursorPrincipals)).render();
         logger.finest("Principals\n" + renderPrincipals);
-        Assert.assertEquals("6a1de44c", CRCU.crc32String(UTF8Codec.toBytes(renderPrincipals)));
+        Assert.assertEquals("5542dd80", CRCU.crc32String(UTF8Codec.toBytes(renderPrincipals)));
         // view at principal type
         Assert.assertEquals("/ecd28/7256d/8dc37/", cursorPrincipalType.getURI());
         final String renderPrincipalType = new CursorTextView(new XedCursorView(cursorPrincipalType)).render();

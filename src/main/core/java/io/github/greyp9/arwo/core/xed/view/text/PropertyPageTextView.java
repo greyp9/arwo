@@ -23,7 +23,8 @@ public class PropertyPageTextView {
         final Matrix matrix = new Matrix(pageInstances.size(), 2);
         int row = 0;
         for (final ViewInstance viewInstance : pageInstances) {
-            matrix.set(row, 0, view.getItemNameI18n(typeInstance, viewInstance.getTypeInstance()));
+            final TypeInstance typeInstanceIt = viewInstance.getTypeInstance();
+            matrix.set(row, 0, view.getItemNameI18n(typeInstance, typeInstanceIt));
             matrix.set(row, 1, viewInstance.getValue());
             ++row;
         }

@@ -6,17 +6,19 @@ import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 @SuppressWarnings("PMD.AbstractNaming")
 public abstract class ViewInstance {
     private final XedCursor cursor;
+    private final TypeInstance typeInstance;
 
     public final XedCursor getCursor() {
         return cursor;
     }
 
-    public ViewInstance(final XedCursor cursor) {
-        this.cursor = cursor;
+    public final TypeInstance getTypeInstance() {
+        return typeInstance;
     }
 
-    public final TypeInstance getTypeInstance() {
-        return cursor.getTypeInstance();
+    public ViewInstance(final XedCursor cursor, final TypeInstance typeInstance) {
+        this.cursor = cursor;
+        this.typeInstance = typeInstance;
     }
 
     public abstract String getValue();

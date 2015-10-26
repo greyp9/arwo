@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<xsd:schema targetNamespace='urn:arwo:enum1'
+            xmlns:e1='urn:arwo:enum1'
+            xmlns:xsd='http://www.w3.org/2001/XMLSchema'
+            elementFormDefault='qualified'>
+
+    <xsd:element name='folder' type='e1:folderType'/>
+
+    <xsd:complexType name='folderType'>
+        <xsd:sequence>
+            <!--<xsd:element name='folder' type='e1:folderType' minOccurs='0' maxOccurs='unbounded'/>-->
+            <xsd:element name='file' type='e1:fileType' minOccurs='0' maxOccurs='unbounded'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="fileType">
+        <xsd:attribute name='name' type='xsd:string'/>
+        <xsd:attribute name='type' type='e1:fileClassType'/>
+    </xsd:complexType>
+
+    <xsd:simpleType name='fileClassType'>
+        <xsd:restriction base='xsd:string'>
+            <xsd:enumeration value='binary'/>
+            <xsd:enumeration value='text'/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+</xsd:schema>

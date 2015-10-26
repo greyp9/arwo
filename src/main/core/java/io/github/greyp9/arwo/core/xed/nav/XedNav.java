@@ -39,8 +39,16 @@ public class XedNav {
         return new XedNavNode().findChild(node, cursor);
     }
 
+    public final XedCursor find(final TypeInstance typeInstance, final XedCursor cursor) {
+        return new XedNavNode().findTypeInstance(typeInstance, cursor);
+    }
+
     public final XedCursor find(final String typeInstanceName, final XedCursor cursor) {
         return new XedNavNode().findTypeInstance(typeInstanceName, cursor);
+    }
+
+    public final XedCursor findChild(final TypeInstance typeInstance, final XedCursor cursor) {
+        return new XedNavNode().findTypeInstanceChild(typeInstance.getName(), cursor);
     }
 
     public final XedCursor findChild(final String typeInstanceName, final XedCursor cursor) {

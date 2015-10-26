@@ -5,12 +5,14 @@ import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xsd.data.NodeType;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
+import io.github.greyp9.arwo.core.xsd.instance.TypeInstanceTraversal;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class XedNavNode {
 
@@ -56,17 +58,33 @@ public class XedNavNode {
         return cursorChild;
     }
 
+    public final XedCursor findTypeInstance(final TypeInstance typeInstance, final XedCursor cursor) {
+        return new XedCursor(cursor.getXed(), cursor, null, null, typeInstance);
+    }
+
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public final XedCursor findTypeInstance(final String name, final XedCursor cursor) {
+        XedCursor cursorTI;
         final TypeInstance typeInstance = cursor.getTypeInstance();
         final TypeInstance typeInstanceChild = typeInstance.getInstance(name);
-        return new XedCursor(cursor.getXed(), cursor, null, null, typeInstanceChild);
+        if (typeInstance.getInstances().contains(typeInstanceChild)) {
+            cursorTI = new XedCursor(cursor.getXed(), cursor, null, null, typeInstanceChild);
+        } else {
+            cursorTI = cursor;
+            final TypeInstanceTraversal traversal = new TypeInstanceTraversal(typeInstance);
+            final List<TypeInstance> typeInstances = traversal.getForName(typeInstanceChild.getName());
+            for (final TypeInstance typeInstanceIt : typeInstances) {
+                cursorTI = new XedCursor(cursor.getXed(), cursorTI, null, null, typeInstanceIt);
+            }
+        }
+        return cursorTI;
     }
 
     private XedCursor findChildAttr(final Attr attr, final XedCursor cursorParent, final XedCursor cursorTI) {
         final Xed xed = cursorParent.getXed();
         final Element elementParent = cursorParent.getElement();
         final TypeInstance typeInstance = cursorTI.getTypeInstance();
-        final Attr attrIt = ElementU.getAttributeNode(elementParent, attr.getName());
+        final Attr attrIt = (elementParent == null) ? null : ElementU.getAttributeNode(elementParent, attr.getName());
         return ((attrIt == null) ? null : new XedCursor(xed, cursorTI, attrIt, 0, typeInstance));
     }
 

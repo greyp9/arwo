@@ -23,14 +23,19 @@ public class ConcreteTypeInstance extends TypeInstance {
 
     @Override
     public final String getURI() {
-        final QName qname = super.getQName();
+        final QName qname = super.getQNameBase();
         return ((qname == null) ? null : qname.getNamespaceURI());
     }
 
     @Override
     public final String getName() {
-        final QName qname = super.getQName();
+        final QName qname = super.getQNameBase();
         return ((qname == null) ? null : qname.getLocalPart());
+    }
+
+    @Override
+    public final QName getQName() {
+        return super.getQNameBase();
     }
 
     @Override
@@ -41,5 +46,10 @@ public class ConcreteTypeInstance extends TypeInstance {
     @Override
     public final TypeInstance getInstance(final String name) {
         return super.getDataType().getInstance(name);
+    }
+
+    @Override
+    public final boolean isSimpleType() {
+        return getDataType().getInstances().isEmpty();
     }
 }
