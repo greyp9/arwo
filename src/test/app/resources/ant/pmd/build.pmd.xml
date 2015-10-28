@@ -7,10 +7,10 @@
     <property name='project.dir' location='${basedir}/../../../../../..' description='(suggested) ~/arwo'/>
     <property name='src.core.dir' location='${project.dir}/src/main/core/java'/>
     <property name='src.lib.dir' location='${project.dir}/src/main/lib/java'/>
+    <property name='src.app.dir' location='${project.dir}/src/main/app/java'/>
     <property name='test.src.core.dir' location='${project.dir}/src/test/core/java'/>
     <property name='test.src.lib.dir' location='${project.dir}/src/test/lib/java'/>
-    <!--transient-->
-    <property name='target.dir' value='${project.dir}/target'/>
+    <property name='test.src.app.dir' location='${project.dir}/src/test/app/java'/>
 
     <path id='classpath-pmd'>
         <fileset dir='${pmd.dir}'>
@@ -35,9 +35,25 @@
         </pmd>
     </target>
 
-    <target name='pmd-lib'/>
+    <target name='pmd-lib'>
+        <pmd rulesetfiles='${basedir}/pmd.ruleset.xml' failonerror='true' failonruleviolation='true'>
+            <formatter type='text' toConsole='true'/>
+            <fileset dir='${src.lib.dir}'>
+                <include name='**/*.java'/>
+            </fileset>
+        </pmd>
+    </target>
 
-    <target name='main' depends='pmd-core, pmd-lib' description='Use -p to view help information.'>
+    <target name='pmd-app'>
+        <pmd rulesetfiles='${basedir}/pmd.ruleset.xml' failonerror='true' failonruleviolation='true'>
+            <formatter type='text' toConsole='true'/>
+            <fileset dir='${src.app.dir}'>
+                <include name='**/*.java'/>
+            </fileset>
+        </pmd>
+    </target>
+
+    <target name='main' depends='pmd-core, pmd-lib, pmd-app' description='Use -p to view help information.'>
         <echo message='project.dir: ${project.dir}'/>
     </target>
 

@@ -12,4 +12,9 @@
         <Class name="io.github.greyp9.arwo.lib.jdbc.test.JdbcTest"/>
         <Bug code="SQL"/>
     </Match>
+
+    <Match>
+        <Class name="io.github.greyp9.arwo.app.exec.servlet.ExecutorServlet"/>
+        <Bug code="MTIA"/>
+    </Match>
 </FindBugsFilter>

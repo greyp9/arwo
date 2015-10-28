@@ -1,0 +1,156 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project name='arwo-app-tomcat7' default='main' basedir='.'>
+
+    <!-- application version -->
+    <propertyfile file='${user.home}/.arwo/version.properties' comment='version.properties'>
+        <entry key='arwo.build' type='int' operation='+' value='1' pattern='0'/>
+    </propertyfile>
+    <property file='${user.home}/.arwo/version.properties'/>
+    <fail unless='arwo.version'/>
+    <fail unless='arwo.build'/>
+    <property name='Implementation-Version' value='${arwo.version}.${arwo.build}'/>
+    <echo message='Implementation-Version = ${Implementation-Version}'/>
+
+    <!--fixed-->
+    <property name='project.dir' location='${basedir}/../../../../../..'/>
+    <property name='src.core.dir' location='${project.dir}/src/main/core/java'/>
+    <property name='src.lib.dir' location='${project.dir}/src/main/lib/java'/>
+    <property name='src.app.dir' location='${project.dir}/src/main/app/java'/>
+    <!--transient-->
+    <property name='target.dir' value='${project.dir}/target'/>
+    <property name='classes.realm.dir' value='${target.dir}/app-tomcat7/classes-realm'/>
+    <property name='classes.app.dir' value='${target.dir}/app-tomcat7/classes-app'/>
+    <property name='war.app.dir' value='${target.dir}/app-tomcat7/war-app'/>
+    <property name='artifact.dir' value='${target.dir}/app-tomcat7/artifact'/>
+    <!-- tomcat image -->
+    <import file='${project.dir}/src/test/app/resources/ant/tomcat7/build.tomcat7.xml'/>
+
+    <tstamp>
+        <format property='timestamp' pattern='yyyy-MM-dd&apos;T&apos;HH:mm:ss&apos;Z&apos;' timezone='UTC'/>
+    </tstamp>
+
+    <fail message='&quot;${project.dir}&quot; does not exist'>
+        <condition>
+            <not>
+                <available file='${project.dir}'/>
+            </not>
+        </condition>
+    </fail>
+
+    <fileset dir='${tomcat.dir}' id='libs-servlet-api'>
+        <include name='lib/servlet-api.jar'/>
+    </fileset>
+
+    <fileset dir='${tomcat.dir}' id='libs-tomcat7'>
+        <include name='lib/catalina.jar'/>
+        <include name='lib/servlet-api.jar'/>
+    </fileset>
+
+    <path id='classpath-app'>
+        <fileset refid='libs-servlet-api'/>
+    </path>
+
+    <path id='classpath-tomcat7'>
+        <fileset refid='libs-tomcat7'/>
+    </path>
+
+    <target name='clean' description='clean up generated resources'>
+        <delete dir='${classes.realm.dir}'/>
+        <delete dir='${classes.app.dir}'/>
+    </target>
+
+    <target name='compile-realm' description='compile project source'>
+        <mkdir dir='${classes.realm.dir}'/>
+        <depend destdir='${classes.realm.dir}' srcdir='${src.core.dir}'/>
+        <depend destdir='${classes.realm.dir}' srcdir='${src.lib.dir}'/>
+        <javac destdir='${classes.realm.dir}' classpathref='classpath-app' includeantruntime='false' debug='on'>
+            <compilerarg value='-Xlint:all'/>
+            <src path='${src.core.dir}'/>
+            <include name='io/github/greyp9/arwo/core/codec/b64/**/*.java'/>
+            <include name='io/github/greyp9/arwo/core/codec/hash/secure/**/*.java'/>
+            <include name='io/github/greyp9/arwo/core/naming/**/*.java'/>
+            <include name='io/github/greyp9/arwo/core/security/realm/**/*.java'/>
+        </javac>
+        <javac destdir='${classes.realm.dir}' classpathref='classpath-tomcat7' includeantruntime='false' debug='on'>
+            <compilerarg value='-Xlint:all'/>
+            <src path='${src.lib.dir}'/>
+            <include name='io/github/greyp9/arwo/lib/tomcat7/realm/**/*.java'/>
+        </javac>
+        <exec executable='tree' failifexecutionfails='false'>
+            <arg value='${classes.realm.dir}'/>
+        </exec>
+    </target>
+
+    <target name='jar-realm' depends='compile-realm'>
+        <mkdir dir='${artifact.dir}'/>
+        <jar destfile='${artifact.dir}/arwo-realm.jar'>
+            <fileset dir='${classes.realm.dir}'>
+                <include name='**/*.class'/>
+            </fileset>
+            <manifest>
+                <attribute name='Implementation-Build' value='${timestamp}'/>
+                <attribute name='Implementation-Version' value='${Implementation-Version}'/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name='compile-app' description='compile project source'>
+        <mkdir dir='${classes.app.dir}'/>
+        <depend destdir='${classes.app.dir}' srcdir='${src.core.dir}'/>
+        <depend destdir='${classes.app.dir}' srcdir='${src.app.dir}'/>
+        <javac destdir='${classes.app.dir}' classpathref='classpath-app' includeantruntime='false' debug='on'>
+            <compilerarg value='-Xlint:all'/>
+            <src path='${src.core.dir}'/>
+            <src path='${src.lib.dir}'/>
+            <src path='${src.app.dir}'/>
+            <!--webapp initialization-->
+            <include name='io/github/greyp9/arwo/app/exec/servlet/ExecutorServlet.java'/>
+            <include name='io/github/greyp9/arwo/app/naming/servlet/NamingServlet.java'/>
+            <include name='io/github/greyp9/arwo/app/realm/servlet/RealmServlet.java'/>
+            <!--included in realm jar (process scope)-->
+            <exclude name='io/github/greyp9/arwo/core/codec/b64/**/*.java'/>
+            <exclude name='io/github/greyp9/arwo/core/codec/hash/secure/**/*.java'/>
+            <exclude name='io/github/greyp9/arwo/core/naming/**/*.java'/>
+            <exclude name='io/github/greyp9/arwo/core/security/realm/**/*.java'/>
+        </javac>
+        <exec executable='tree' failifexecutionfails='false'>
+            <arg value='${classes.app.dir}'/>
+        </exec>
+    </target>
+
+    <target name='jar-app' depends='compile-app'>
+        <mkdir dir='${artifact.dir}'/>
+        <jar destfile='${artifact.dir}/arwo.jar'>
+            <fileset dir='${classes.app.dir}'>
+                <include name='**/*.class'/>
+            </fileset>
+            <fileset dir='${project.dir}/src/main/app/resources/arwo-jar'/>
+            <manifest>
+                <attribute name='Implementation-Build' value='${timestamp}'/>
+                <attribute name='Implementation-Version' value='${Implementation-Version}'/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name='war-app'>
+        <mkdir dir='${war.app.dir}'/>
+        <copy todir='${war.app.dir}'>
+            <fileset dir='${project.dir}/src/main/app/resources/webapp/arwo-war'/>
+            <fileset dir='${project.dir}/src/main/app/resources/webapp/arwo-war-tomcat7'/>
+        </copy>
+        <copy todir='${war.app.dir}/WEB-INF/lib' file='${artifact.dir}/arwo.jar'/>
+        <exec executable='tree' failifexecutionfails='false'>
+            <arg value='${war.app.dir}'/>
+        </exec>
+        <war destfile='${artifact.dir}/arwo.war'>
+            <fileset dir='${war.app.dir}'>
+                <include name='**/*.*'/>
+            </fileset>
+        </war>
+    </target>
+
+    <target name='main' depends='clean, jar-realm, jar-app, war-app'>
+        <echo message='project.dir: ${project.dir}'/>
+    </target>
+
+</project>

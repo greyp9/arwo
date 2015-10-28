@@ -8,9 +8,10 @@ public final class ResourceU {
     private ResourceU() {
     }
 
-    @SuppressWarnings("PMD.LawOfDemeter")
+    @SuppressWarnings("PMD.DoNotUseThreads")
     public static URL resolve(final String resourceName) throws IOException {
-        final ClassLoader cl = Thread.currentThread().getContextClassLoader();
-        return cl.getResource(resourceName);
+        final Thread thread = Thread.currentThread();
+        final ClassLoader classLoader = thread.getContextClassLoader();
+        return classLoader.getResource(resourceName);
     }
 }

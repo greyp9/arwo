@@ -5,12 +5,39 @@
     <property name='project.dir' location='${basedir}/../../../../../..'/>
     <property name='src.core.dir' location='${project.dir}/src/main/core/java'/>
     <property name='src.lib.dir' location='${project.dir}/src/main/lib/java'/>
+    <property name='src.app.dir' location='${project.dir}/src/main/app/java'/>
     <!--transient-->
     <property name='target.dir' value='${project.dir}/target'/>
     <property name='classes.core.dir' value='${target.dir}/app/classes-core'/>
     <property name='classes.lib.dir' value='${target.dir}/app/classes-lib'/>
+    <property name='classes.app.dir' value='${target.dir}/app/classes-app'/>
+    <!--libs-->
+    <property name='tomcat6.dir' value='${user.home}/apache-tomcat-6.0.44'/>
+    <property name='tomcat7.dir' value='${user.home}/apache-tomcat-7.0.64'/>
+
+    <path id='classpath-core'/>
+
+    <fileset dir='${tomcat6.dir}' id='libs-servlet-api'>
+        <include name='lib/servlet-api.jar'/>
+    </fileset>
+
+    <path id='classpath-libs-tomcat6'>
+        <fileset dir='${tomcat6.dir}'>
+            <include name='bin/*.jar'/>
+            <include name='lib/*.jar'/>
+        </fileset>
+    </path>
+
+    <path id='classpath-libs-tomcat7'>
+        <fileset dir='${tomcat7.dir}'>
+            <include name='bin/*.jar'/>
+            <include name='lib/*.jar'/>
+        </fileset>
+    </path>
 
     <path id='classpath-app'>
+        <pathelement path='${classes.core.dir}'/>
+        <fileset refid='libs-servlet-api'/>
     </path>
 
     <target name='clean' description='clean up generated resources'>
@@ -22,9 +49,25 @@
         <echo message='compile app core classes'/>
         <mkdir dir='${classes.core.dir}'/>
         <depend destdir='${classes.core.dir}' srcdir='${src.core.dir}'/>
-        <javac destdir='${classes.core.dir}' classpathref='classpath-app' includeantruntime='false' debug='on'>
+        <javac destdir='${classes.core.dir}' classpathref='classpath-core' includeantruntime='false' debug='on'>
             <compilerarg value='-Xlint:all'/>
             <src path='${src.core.dir}'/>
+        </javac>
+    </target>
+
+    <target name='compile-lib-tomcat6' description='compile project source'>
+        <javac destdir='${classes.lib.dir}' classpathref='classpath-libs-tomcat6' includeantruntime='false' debug='on'>
+            <compilerarg value='-Xlint:all'/>
+            <src path='${src.lib.dir}'/>
+            <include name='io/github/greyp9/arwo/lib/tomcat6/**/*.java'/>
+        </javac>
+    </target>
+
+    <target name='compile-lib-tomcat7' description='compile project source'>
+        <javac destdir='${classes.lib.dir}' classpathref='classpath-libs-tomcat7' includeantruntime='false' debug='on'>
+            <compilerarg value='-Xlint:all'/>
+            <src path='${src.lib.dir}'/>
+            <include name='io/github/greyp9/arwo/lib/tomcat7/**/*.java'/>
         </javac>
     </target>
 
@@ -32,13 +75,21 @@
         <echo message='compile app lib classes'/>
         <mkdir dir='${classes.lib.dir}'/>
         <depend destdir='${classes.lib.dir}' srcdir='${src.lib.dir}'/>
-        <javac destdir='${classes.lib.dir}' classpathref='classpath-app' includeantruntime='false' debug='on'>
+        <antcall target='compile-lib-tomcat6'/>
+        <antcall target='compile-lib-tomcat7'/>
+    </target>
+
+    <target name='compile-app' description='compile project source'>
+        <echo message='compile app classes'/>
+        <mkdir dir='${classes.app.dir}'/>
+        <depend destdir='${classes.app.dir}' srcdir='${src.app.dir}'/>
+        <javac destdir='${classes.app.dir}' classpathref='classpath-app' includeantruntime='false' debug='on'>
             <compilerarg value='-Xlint:all'/>
-            <src path='${src.lib.dir}'/>
+            <src path='${src.app.dir}'/>
         </javac>
     </target>
 
-    <target name='main' depends='clean, compile-core, compile-lib'>
+    <target name='main' depends='clean, compile-core, compile-lib, compile-app'>
         <echo message='project.dir: ${project.dir}'/>
     </target>
 

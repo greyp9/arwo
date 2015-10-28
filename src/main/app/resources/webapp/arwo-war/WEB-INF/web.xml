@@ -1,0 +1,44 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<web-app xmlns='http://java.sun.com/xml/ns/j2ee'
+         xmlns:xsi='http://www.w3.org/2001/XMLSchema-instance'
+         xsi:schemaLocation='http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd'
+         version='2.4'>
+
+    <display-name>Arwo</display-name>
+    <description>Arwo Web Application</description>
+
+    <!--webapp initialization-->
+    <servlet>
+        <description>manages existence of webapp state during webapp lifetime</description>
+        <servlet-name>NamingServlet</servlet-name>
+        <servlet-class>io.github.greyp9.arwo.app.naming.servlet.NamingServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet>
+        <description>depends(NamingServlet), java.util.concurrent.ExecutorService for webapp tasks</description>
+        <servlet-name>ExecutorServlet</servlet-name>
+        <servlet-class>io.github.greyp9.arwo.app.exec.servlet.ExecutorServlet</servlet-class>
+        <load-on-startup>2</load-on-startup>
+    </servlet>
+    <servlet>
+        <description>depends(ExecutorServlet), initialize webapp realm at webapp startup</description>
+        <servlet-name>RealmServlet</servlet-name>
+        <servlet-class>io.github.greyp9.arwo.app.realm.servlet.RealmServlet</servlet-class>
+        <load-on-startup>3</load-on-startup>
+    </servlet>
+
+    <security-constraint>
+        <web-resource-collection>
+            <web-resource-name>arwo</web-resource-name>
+            <url-pattern>/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>*</role-name>
+        </auth-constraint>
+    </security-constraint>
+
+    <login-config>
+        <auth-method>BASIC</auth-method>
+    </login-config>
+
+</web-app>

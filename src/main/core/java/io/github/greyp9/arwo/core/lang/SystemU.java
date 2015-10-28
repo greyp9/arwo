@@ -1,5 +1,7 @@
 package io.github.greyp9.arwo.core.lang;
 
+import io.github.greyp9.arwo.core.value.Value;
+
 public final class SystemU {
 
     private SystemU() {
@@ -7,6 +9,10 @@ public final class SystemU {
 
     public static String eol() {
         return Const.LINE_SEPARATOR;
+    }
+
+    public static String arwoHome() {
+        return Value.defaultOnNull(Const.ARWO_HOME, Const.USER_HOME);
     }
 
     public static String userHome() {
@@ -25,6 +31,7 @@ public final class SystemU {
         return ((path == null) ? null : path.replace(userHome(), "~"));
     }
 
+    @SuppressWarnings("SuspiciousSystemArraycopy")
     public static void arraycopy(final Object source, final int sourceOffset,
                                  final Object target, final int targetOffset, final int length) {
         System.arraycopy(source, sourceOffset, target, targetOffset, length);
@@ -32,6 +39,7 @@ public final class SystemU {
 
     private static class Const {
         private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+        private static final String ARWO_HOME = System.getProperty("arwo.home");
         private static final String USER_HOME = System.getProperty("user.home");
     }
 }

@@ -7,11 +7,13 @@
     <property name='project.dir' location='${basedir}/../../../../../..' description='(suggested) ~/arwo'/>
     <property name='src.core.dir' location='${project.dir}/src/main/core/java'/>
     <property name='src.lib.dir' location='${project.dir}/src/main/lib/java'/>
+    <property name='src.app.dir' location='${project.dir}/src/main/app/java'/>
     <property name='test.src.core.dir' location='${project.dir}/src/test/core/java'/>
     <property name='test.src.lib.dir' location='${project.dir}/src/test/lib/java'/>
+    <property name='test.src.app.dir' location='${project.dir}/src/test/app/java'/>
 
     <path id='classpath-checkstyle'>
-        <fileset dir='${checkstyle.dir}'>
+        <fileset dir='${checkstyle.dir}' id='libs-checkstyle'>
             <include name='checkstyle-6.1.1-all.jar'/>
         </fileset>
     </path>
@@ -19,7 +21,7 @@
     <taskdef name='checkstyle' classname='com.puppycrawl.tools.checkstyle.CheckStyleTask'
              classpathref='classpath-checkstyle'/>
 
-    <target name='checkstyle-core'>
+    <target name='cs-core'>
         <checkstyle config='${basedir}/sun_checks_project.xml'>
             <property key='checkstyle.suppressions.file' value='${basedir}/checkstyle.suppressions.xml'/>
             <fileset dir='${src.core.dir}'>
@@ -28,9 +30,25 @@
         </checkstyle>
     </target>
 
-    <target name='checkstyle-lib'/>
+    <target name='cs-lib'>
+        <checkstyle config='${basedir}/sun_checks_project.xml'>
+            <property key='checkstyle.suppressions.file' value='${basedir}/checkstyle.suppressions.xml'/>
+            <fileset dir='${src.lib.dir}'>
+                <include name='**/*.java'/>
+            </fileset>
+        </checkstyle>
+    </target>
 
-    <target name='main' depends='checkstyle-core, checkstyle-lib' description='Use -p to view help information.'>
+    <target name='cs-app'>
+        <checkstyle config='${basedir}/sun_checks_project.xml'>
+            <property key='checkstyle.suppressions.file' value='${basedir}/checkstyle.suppressions.xml'/>
+            <fileset dir='${src.app.dir}'>
+                <include name='**/*.java'/>
+            </fileset>
+        </checkstyle>
+    </target>
+
+    <target name='main' depends='cs-core, cs-lib, cs-app' description='Use -p to view help information.'>
         <echo message='project.dir: ${project.dir}'/>
     </target>
 

@@ -8,14 +8,21 @@
     <property name='project.dir' location='${basedir}/../../../../../..' description='(suggested) ~/arwo'/>
     <property name='src.core.dir' location='${project.dir}/src/main/core/java'/>
     <property name='src.lib.dir' location='${project.dir}/src/main/lib/java'/>
+    <property name='src.app.dir' location='${project.dir}/src/main/app/java'/>
     <property name='test.src.core.dir' location='${project.dir}/src/test/core/java'/>
     <property name='test.src.lib.dir' location='${project.dir}/src/test/lib/java'/>
+    <property name='test.src.app.dir' location='${project.dir}/src/test/app/java'/>
     <!--transient-->
     <property name='target.dir' value='${project.dir}/target'/>
     <property name='classes.core.dir' value='${target.dir}/app/classes-core'/>
     <property name='classes.lib.dir' value='${target.dir}/app/classes-lib'/>
+    <property name='classes.app.dir' value='${target.dir}/app/classes-app'/>
     <property name='test.classes.core.dir' value='${target.dir}/app/test-classes-core'/>
     <property name='test.classes.lib.dir' value='${target.dir}/app/test-classes-lib'/>
+    <property name='test.classes.app.dir' value='${target.dir}/app/test-classes-app'/>
+    <!--transient-->
+    <property name='tomcat6.dir' value='${user.home}/apache-tomcat-6.0.44'/>
+    <property name='tomcat7.dir' value='${user.home}/apache-tomcat-7.0.64'/>
 
     <path id='classpath-findbugs'>
         <fileset dir='${findbugs.dir}'>
@@ -27,32 +34,54 @@
 
     <property name='filter' value='${basedir}/findbugs-filter.xml'/>
 
-    <target name='findbugs-core'>
+    <target name='fb-core'>
         <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failonerror='true'>
             <fileset dir='${classes.core.dir}'>
                 <include name='**/*.class'/>
             </fileset>
             <sourcepath path='${src.core.dir}'/>
         </findbugs>
-        <!--
-        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failonerror='true'>
-            <fileset dir='${test.classes.core.dir}'>
-                <include name='**/*.class'/>
-            </fileset>
-            <sourcepath path='${test.src.core.dir}'/>
-        </findbugs>
-        -->
     </target>
 
-    <target name='findbugs-lib'>
-        <!--
+    <target name='fb-lib-tomcat6'>
         <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failonerror='true'>
+            <auxclasspath location='${classes.core.dir}'/>
+            <auxclasspath location='${tomcat6.dir}/lib/catalina.jar'/>
             <fileset dir='${classes.lib.dir}'>
-                <include name='**/*.class'/>
+                <include name='**/lib/tomcat6/**/*.class'/>
             </fileset>
             <sourcepath path='${src.lib.dir}'/>
         </findbugs>
-        -->
+    </target>
+
+    <target name='fb-lib-tomcat7'>
+        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failonerror='true'>
+            <auxclasspath location='${classes.core.dir}'/>
+            <auxclasspath location='${tomcat7.dir}/lib/catalina.jar'/>
+            <fileset dir='${classes.lib.dir}'>
+                <include name='**/lib/tomcat7/**/*.class'/>
+            </fileset>
+            <sourcepath path='${src.lib.dir}'/>
+        </findbugs>
+    </target>
+
+    <target name='fb-lib'>
+        <antcall target='fb-lib-tomcat6'/>
+        <antcall target='fb-lib-tomcat7'/>
+    </target>
+
+    <target name='fb-app'>
+        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failonerror='true'>
+            <auxclasspath location='${classes.core.dir}'/>
+            <auxclasspath location='${tomcat6.dir}/lib/servlet-api.jar'/>
+            <fileset dir='${classes.app.dir}'>
+                <include name='**/*.class'/>
+            </fileset>
+            <sourcepath path='${src.app.dir}'/>
+        </findbugs>
+    </target>
+
+    <target name='findbugs-test-lib'>
         <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failonerror='true'>
             <auxclasspath location='${m2.dir}/junit/junit/4.11/junit-4.11.jar'/>
             <auxclasspath location='${m2.dir}/ch/ethz/ganymed/ganymed-ssh2/262/ganymed-ssh2-262.jar'/>
@@ -68,7 +97,7 @@
         </findbugs>
     </target>
 
-    <target name='main' depends='findbugs-core, findbugs-lib' description='Use -p to view help information.'>
+    <target name='main' depends='fb-core, fb-lib, fb-app' description='Use -p to view help information.'>
         <echo message='project.dir: ${project.dir}'/>
     </target>
 

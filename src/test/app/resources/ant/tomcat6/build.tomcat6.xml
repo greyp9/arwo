@@ -46,7 +46,17 @@
               file='${arwo.dir}/src/test/app/resources/ant/tomcat6/logging/logging.properties'/>
     </target>
 
-    <target name='tomcat' description='Spawn a Tomcat6 instance.'>
+    <target name='deploy-arwo' description='add arwo application to Tomcat6 instance' if='arwo'>
+        <echo message='deploy arwo application'/>
+        <ant antfile='${arwo.dir}/src/main/app/resources/ant/app-tomcat6/build.app-tomcat6.xml'
+             description='assemble app artifacts'/>
+        <!--webapp realm implementation-->
+        <copy file='${arwo.dir}/target/app-tomcat6/artifact/arwo-realm.jar' todir='${tomcat.dir}/lib'/>
+        <!--webapp instance(s)-->
+        <copy file='${arwo.dir}/target/app-tomcat6/artifact/arwo.war' tofile='${tomcat.dir}/webapps/arwo.war'/>
+    </target>
+
+    <target name='tomcat' description='Spawn a Tomcat6 instance.' depends='deploy-arwo'>
         <property name='ssl.dir' value='${user.home}/.arwo/ssl'/>
 
         <path id='classpath-tomcat'>
@@ -64,7 +74,8 @@
         </java>
     </target>
 
-    <target name='restart' description='*Spawn clean Tomcat6 image.' depends='pristine-tomcat, fixup-tomcat, start'/>
+    <target name='restart' description='*Spawn clean Tomcat6 image.'
+            depends='verify-tomcat, pristine-tomcat, fixup-tomcat, start'/>
 
     <target name='start' description='*Spawn Tomcat6 image.' depends='tomcat'/>
 
