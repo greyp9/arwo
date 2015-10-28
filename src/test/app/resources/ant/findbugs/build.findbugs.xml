@@ -23,6 +23,7 @@
     <!--transient-->
     <property name='tomcat6.dir' value='${user.home}/apache-tomcat-6.0.44'/>
     <property name='tomcat7.dir' value='${user.home}/apache-tomcat-7.0.64'/>
+    <property name='tomcat8.dir' value='${user.home}/apache-tomcat-8.0.28'/>
 
     <path id='classpath-findbugs'>
         <fileset dir='${findbugs.dir}'>
@@ -65,9 +66,22 @@
         </findbugs>
     </target>
 
+    <target name='fb-lib-tomcat8'>
+        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failonerror='true'>
+            <auxclasspath location='${classes.core.dir}'/>
+            <auxclasspath location='${tomcat8.dir}/lib/catalina.jar'/>
+            <auxclasspath location='${tomcat8.dir}/lib/tomcat-util-scan.jar'/>
+            <fileset dir='${classes.lib.dir}'>
+                <include name='**/lib/tomcat8/**/*.class'/>
+            </fileset>
+            <sourcepath path='${src.lib.dir}'/>
+        </findbugs>
+    </target>
+
     <target name='fb-lib'>
         <antcall target='fb-lib-tomcat6'/>
         <antcall target='fb-lib-tomcat7'/>
+        <antcall target='fb-lib-tomcat8'/>
     </target>
 
     <target name='fb-app'>

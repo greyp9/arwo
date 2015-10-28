@@ -14,6 +14,7 @@
     <!--libs-->
     <property name='tomcat6.dir' value='${user.home}/apache-tomcat-6.0.44'/>
     <property name='tomcat7.dir' value='${user.home}/apache-tomcat-7.0.64'/>
+    <property name='tomcat8.dir' value='${user.home}/apache-tomcat-8.0.28'/>
 
     <path id='classpath-core'/>
 
@@ -30,6 +31,13 @@
 
     <path id='classpath-libs-tomcat7'>
         <fileset dir='${tomcat7.dir}'>
+            <include name='bin/*.jar'/>
+            <include name='lib/*.jar'/>
+        </fileset>
+    </path>
+
+    <path id='classpath-libs-tomcat8'>
+        <fileset dir='${tomcat8.dir}'>
             <include name='bin/*.jar'/>
             <include name='lib/*.jar'/>
         </fileset>
@@ -71,12 +79,21 @@
         </javac>
     </target>
 
+    <target name='compile-lib-tomcat8' description='compile project source'>
+        <javac destdir='${classes.lib.dir}' classpathref='classpath-libs-tomcat8' includeantruntime='false' debug='on'>
+            <compilerarg value='-Xlint:all'/>
+            <src path='${src.lib.dir}'/>
+            <include name='io/github/greyp9/arwo/lib/tomcat8/**/*.java'/>
+        </javac>
+    </target>
+
     <target name='compile-lib' description='compile project source'>
         <echo message='compile app lib classes'/>
         <mkdir dir='${classes.lib.dir}'/>
         <depend destdir='${classes.lib.dir}' srcdir='${src.lib.dir}'/>
         <antcall target='compile-lib-tomcat6'/>
         <antcall target='compile-lib-tomcat7'/>
+        <antcall target='compile-lib-tomcat8'/>
     </target>
 
     <target name='compile-app' description='compile project source'>
