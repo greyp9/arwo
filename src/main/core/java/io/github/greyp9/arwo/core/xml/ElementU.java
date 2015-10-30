@@ -1,5 +1,7 @@
 package io.github.greyp9.arwo.core.xml;
 
+import io.github.greyp9.arwo.core.value.NameTypeValue;
+import io.github.greyp9.arwo.core.value.NameTypeValues;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -111,6 +113,12 @@ public final class ElementU {
         return attrs;
     }
 
+    public static void setAttributes(final Element element, final NameTypeValues attrs) {
+        for (final NameTypeValue attr : attrs) {
+            setAttribute(element, attr.getName(), attr.getValue());
+        }
+    }
+
     public static void setAttribute(final Element element, final String name, final Object value) {
         if ((element != null) && (name != null)) {
             if (value == null) {
@@ -172,10 +180,11 @@ public final class ElementU {
         }
     }
 
-    public static Element addElement(final Element parent, final String name, final Object text) {
+    public static Element addElement(
+            final Element parent, final String name, final Object text, final NameTypeValues attrs) {
         final Element child = addElement(parent, name);
         setTextContent(child, text);
-        //setAttributes(child, attrs);
+        setAttributes(child, attrs);
         return child;
     }
 

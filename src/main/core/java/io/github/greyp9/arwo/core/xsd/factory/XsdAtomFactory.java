@@ -1,23 +1,12 @@
 package io.github.greyp9.arwo.core.xsd.factory;
 
-import io.github.greyp9.arwo.core.value.NameTypeValue;
-import io.github.greyp9.arwo.core.xml.ElementU;
-import io.github.greyp9.arwo.core.xml.QNameU;
-import io.github.greyp9.arwo.core.xsd.atom.XsdAtom;
-import io.github.greyp9.arwo.core.xsd.core.XsdU;
-import org.w3c.dom.Attr;
-import org.w3c.dom.Element;
-
-import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
-
 /**
  * @deprecated
  */
 @Deprecated
 public final class XsdAtomFactory {
 
+/*
     private XsdAtomFactory() {
     }
 
@@ -197,4 +186,5 @@ public final class XsdAtomFactory {
                 EXTENSION, GROUP, IMPORT, INCLUDE, MAX_INCLUSIVE, MAX_LENGTH, MIN_INCLUSIVE, MIN_LENGTH, PATTERN,
                 RESTRICTION, SCHEMA, SEQUENCE, SIMPLE_CONTENT, SIMPLE_TYPE };
     }
+*/
 }

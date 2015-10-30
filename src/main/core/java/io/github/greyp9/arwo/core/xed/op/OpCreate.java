@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.core.xed.op;
 
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xsd.core.XsdU;
 import io.github.greyp9.arwo.core.xsd.data.DataType;
@@ -75,7 +76,7 @@ public class OpCreate {
     }
 
     private void applyElement(final Element create, final NameTypeValue nameTypeValue) {
-        ElementU.addElement(create, nameTypeValue.getName(), nameTypeValue.getValue());
+        ElementU.addElement(create, nameTypeValue.getName(), nameTypeValue.getValue(), NameTypeValuesU.create());
     }
 
     private void applyChoice(

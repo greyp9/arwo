@@ -50,7 +50,7 @@ public class XsdAtomFactory {
         final String uri = ((attr.getNamespaceURI() == null) ? parent.getNamespaceURI() : attr.getNamespaceURI());
         final NameTypeValue nameTypeValue = new NameTypeValue(attr.getLocalName(), uri, attr.getValue());
         if (XsdU.NS_URI_XML.equals(nameTypeValue.getType())) {
-            parentAtom.addNamespace(new NameTypeValue(nameTypeValue.getName(), null, nameTypeValue.getValueS()));
+            parentAtom.addNamespace(new NameTypeValue(nameTypeValue.getName(), nameTypeValue.getValueS()));
         } else if ((XsdU.NS_URI_XSD.equals(nameTypeValue.getType())) && (atoms.isAttr(parent, attr))) {
             parentAtom.addAttribute(nameTypeValue);
         } else if ((XsdU.NS_URI_XSD.equals(nameTypeValue.getType())) && (atoms.isAttrIgnore(parent, attr))) {

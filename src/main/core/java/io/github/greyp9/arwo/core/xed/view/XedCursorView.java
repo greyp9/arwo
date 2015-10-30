@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class XedCursorView {
+    private final String baseURI;
     private final XedCursor cursor;
 
     public final XedCursor getCursor() {
@@ -19,15 +20,20 @@ public class XedCursorView {
     }
 
     public XedCursorView(final XedCursor cursor) {
+        this("", cursor);
+    }
+
+    public XedCursorView(final String baseURI, final XedCursor cursor) {
+        this.baseURI = baseURI;
         this.cursor = cursor;
     }
 
     public final XedPropertyPageView getPageView() {
-        return new XedPropertyPageView(cursor);
+        return new XedPropertyPageView(baseURI, cursor);
     }
 
     public final XedTableView getTableView() {
-        return new XedTableView(cursor);
+        return new XedTableView(baseURI, cursor);
     }
 
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
@@ -36,7 +42,7 @@ public class XedCursorView {
         final TypeInstance typeInstance = cursor.getTypeInstance();
         final Collection<TypeInstance> pageInstances = new TypeInstanceX(typeInstance).getPageInstances();
         if (!pageInstances.isEmpty()) {
-            views.add(new XedPropertyPageView(cursor));
+            views.add(new XedPropertyPageView(baseURI, cursor));
         }
         final XedNav nav = new XedNav(cursor.getXed());
         for (final TypeInstance typeInstanceIt : cursor.getTypeInstance().getInstances()) {
@@ -45,11 +51,11 @@ public class XedCursorView {
                 final TypeInstance choiceInstance = typeInstanceIt.getInstance(value);
                 final Element element = ElementU.getChild(cursor.getElement(), choiceInstance.getQName());
                 final XedCursor choiceCursor = nav.find(element, cursor);
-                views.add(new XedPropertyPageView(choiceCursor));
+                views.add(new XedPropertyPageView(baseURI, choiceCursor));
             }
         }
         if (!typeInstance.isSingleton()) {
-            views.add(new XedTableView(cursor));
+            views.add(new XedTableView(baseURI, cursor));
         }
         return views.toArray(new Object[views.size()]);
     }

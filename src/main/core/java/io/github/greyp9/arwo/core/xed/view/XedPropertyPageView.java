@@ -22,9 +22,9 @@ public class XedPropertyPageView {
         return viewInstances;
     }
 
-    public XedPropertyPageView(final XedCursor cursor) {
+    public XedPropertyPageView(final String baseURI, final XedCursor cursor) {
         this.cursor = cursor;
-        this.viewInstances = new ViewInstanceFactory(cursor).getPageInstances();
+        this.viewInstances = new ViewInstanceFactory(baseURI, cursor).getPageInstances();
     }
 
     public final Collection<String> getItemNames() {

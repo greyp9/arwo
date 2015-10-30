@@ -13,6 +13,10 @@ public final class FileU {
         return ((files == null) ? new File[0] : files);
     }
 
+    public static File toFile(final String path) {
+        return ((path == null) ? null : new File(path));
+    }
+
     public static boolean delete(final File file) {
         return file.delete();
     }

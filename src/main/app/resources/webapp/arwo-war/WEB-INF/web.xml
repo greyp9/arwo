@@ -27,6 +27,17 @@
         <load-on-startup>3</load-on-startup>
     </servlet>
 
+    <!--users document-->
+    <servlet>
+        <description>specify valid users for webapp</description>
+        <servlet-name>Xed1ServletRealm</servlet-name>
+        <servlet-class>io.github.greyp9.arwo.app.xed.servlet.Xed1Servlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>Xed1ServletRealm</servlet-name>
+        <url-pattern>/users/*</url-pattern>
+    </servlet-mapping>
+
     <security-constraint>
         <web-resource-collection>
             <web-resource-name>arwo</web-resource-name>

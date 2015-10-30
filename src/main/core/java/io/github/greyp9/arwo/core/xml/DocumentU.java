@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.xml;
 
 import org.w3c.dom.Document;
+import org.w3c.dom.DocumentType;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
@@ -45,6 +46,31 @@ public final class DocumentU {
             transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             //transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
             //transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+            transformer.transform(source, result);
+            return bos.toByteArray();
+        } catch (TransformerException e) {
+            throw new IOException(e);
+        }
+    }
+
+    public static byte[] toXHtml(final Document document) throws IOException {
+        return (document == null) ? null : toXHtmlNN(document);
+    }
+
+    private static byte[] toXHtmlNN(final Document document) throws IOException {
+        final DocumentType documentType = document.getDoctype();
+        final Source source = new DOMSource(document);
+        final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        final Result result = new StreamResult(bos);
+        final TransformerFactory factory = TransformerFactory.newInstance();
+        try {
+            final Transformer transformer = factory.newTransformer();
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, documentType.getPublicId());
+            transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, documentType.getSystemId());
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
             transformer.transform(source, result);
             return bos.toByteArray();
         } catch (TransformerException e) {

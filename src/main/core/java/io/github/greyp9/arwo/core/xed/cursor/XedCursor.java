@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xsd.data.NodeType;
 import io.github.greyp9.arwo.core.xsd.instance.ChoiceTypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
+import org.w3c.dom.Attr;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
@@ -25,14 +26,6 @@ public class XedCursor {
 
     public final XedCursor getParent() {
         return parent;
-    }
-
-    public final XedCursor getParentConcrete() {
-        XedCursor parentConcrete = parent;
-        while (parentConcrete.getNode() == null) {
-            parentConcrete = parentConcrete.getParent();
-        }
-        return parentConcrete;
     }
 
     public final Node getNode() {
@@ -56,8 +49,44 @@ public class XedCursor {
         this.typeInstance = typeInstance;
     }
 
+    public final XedCursor getConcrete() {
+        XedCursor cursor = this;
+        while (cursor.getNode() == null) {
+            cursor = cursor.getParent();
+        }
+        return cursor;
+    }
+
+    public final XedCursor getParentConcrete() {
+        XedCursor parentConcrete = parent;
+        while (parentConcrete.getNode() == null) {
+            parentConcrete = parentConcrete.getParent();
+        }
+        return parentConcrete;
+    }
+
     public final Element getElement() {
         return ((node instanceof Element) ? ((Element) node) : null);
+    }
+
+    public final int getTypeCount(final TypeInstance childInstance) {
+        int value = 0;
+        final Element element = getElement();
+        final NodeType nodeType = (childInstance == null) ? null : childInstance.getNodeType();
+        if (element == null) {
+            value = 0;
+        } else if (NodeType.attribute.equals(nodeType)) {
+            final Attr attr = ElementU.getAttributeNode(element, childInstance.getName());
+            value = (attr == null) ? 0 : 1;
+        } else if (NodeType.element.equals(nodeType)) {
+            final Collection<Element> children = ElementU.getChildren(element, childInstance.getName());
+            value = children.size();
+        } else if (NodeType.baseType.equals(nodeType)) {
+            value = 1;
+        } else if (NodeType.choice.equals(nodeType) && (childInstance instanceof ChoiceTypeInstance)) {
+            value = 0;
+        }
+        return value;
     }
 
     public final String getValue(final TypeInstance childInstance) {

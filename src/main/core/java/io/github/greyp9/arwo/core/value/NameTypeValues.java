@@ -5,15 +5,46 @@ import java.util.ArrayList;
 public final class NameTypeValues extends ArrayList<NameTypeValue> {
     private static final long serialVersionUID = -1996418375827653958L;
 
+    public NameTypeValues() {
+        super();
+    }
+
+    public NameTypeValues(final NameTypeValue... nameTypeValues) {
+        this();
+        for (final NameTypeValue nameTypeValue : nameTypeValues) {
+            add(nameTypeValue);
+        }
+    }
+
     public String getValue(final String name) {
-        String value = null;
-        for (final NameTypeValue nameTypeValue : this) {
-            final String nameNTV = nameTypeValue.getName();
-            if (nameNTV.equals(name)) {
-                value = nameTypeValue.getValueS();
+        final NameTypeValue nameTypeValue = getNameValue(name);
+        return ((nameTypeValue == null) ? null : nameTypeValue.getValueS());
+    }
+
+    public String getValueIC(final String name) {
+        final NameTypeValue nameTypeValue = getNameValueIC(name);
+        return ((nameTypeValue == null) ? null : nameTypeValue.getValueS());
+    }
+
+    public NameTypeValue getNameValue(final String name) {
+        NameTypeValue nameTypeValue = null;
+        for (final NameTypeValue nameTypeValueIt : this) {
+            if (nameTypeValueIt.getName().equals(name)) {
+                nameTypeValue = nameTypeValueIt;
                 break;
             }
         }
-        return value;
+        return nameTypeValue;
+    }
+
+    public NameTypeValue getNameValueIC(final String name) {
+        NameTypeValue nameTypeValue = null;
+        for (final NameTypeValue nameTypeValueIt : this) {
+            if (nameTypeValueIt.getName().equalsIgnoreCase(name)) {
+                nameTypeValue = nameTypeValueIt;
+                break;
+            }
+        }
+        return nameTypeValue;
     }
 }

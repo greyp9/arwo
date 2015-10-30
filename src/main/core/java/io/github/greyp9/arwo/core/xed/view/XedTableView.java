@@ -22,9 +22,9 @@ public class XedTableView {
         return viewInstances;
     }
 
-    public XedTableView(final XedCursor cursor) {
+    public XedTableView(final String baseURI, final XedCursor cursor) {
         this.cursor = cursor;
-        this.viewInstances = new ViewInstanceFactory(cursor).getTableInstances();
+        this.viewInstances = new ViewInstanceFactory(baseURI, cursor).getTableInstances();
     }
 
 /*

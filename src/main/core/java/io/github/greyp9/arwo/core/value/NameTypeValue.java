@@ -5,6 +5,10 @@ public class NameTypeValue {
     private final String type;
     private final Object value;
 
+    public NameTypeValue(final String name, final Object value) {
+        this(name, null, value);
+    }
+
     public NameTypeValue(final String name, final String type, final Object value) {
         this.name = name;
         this.type = type;

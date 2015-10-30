@@ -18,17 +18,17 @@ public final class HttpArguments {
     public static NameTypeValues toArguments(final String queryString) {
         final NameTypeValues nameTypeValues = new NameTypeValues();
         final String[] queryTokens = ((queryString == null) ?
-                new String[0] : queryString.split(Http.BACKSLASH + Http.AMP));
+                new String[0] : queryString.split(Http.Token.BACKSLASH + Http.Token.AMP));
         for (final String queryToken : queryTokens) {
             if (queryToken.length() > 0) {
                 final String queryTokenDecoded = URLCodec.decodeSafe(queryToken);
-                final int indexOf = queryTokenDecoded.indexOf(Http.EQUALS);
+                final int indexOf = queryTokenDecoded.indexOf(Http.Token.EQUALS);
                 if (indexOf >= 0) {
                     final String name = queryTokenDecoded.substring(0, indexOf);
-                    final String value = queryTokenDecoded.substring(indexOf + Http.EQUALS.length());
-                    nameTypeValues.add(new NameTypeValue(name, null, value));
+                    final String value = queryTokenDecoded.substring(indexOf + Http.Token.EQUALS.length());
+                    nameTypeValues.add(new NameTypeValue(name, value));
                 } else {
-                    nameTypeValues.add(new NameTypeValue(queryTokenDecoded, null, ""));
+                    nameTypeValues.add(new NameTypeValue(queryTokenDecoded, ""));
                 }
             }
         }

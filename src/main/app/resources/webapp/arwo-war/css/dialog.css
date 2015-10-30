@@ -1,0 +1,103 @@
+/* START DIALOG */
+
+div.dialog
+{
+border: thin solid ThreeDShadow;
+background-color: window;
+margin: 0 0 1em 0;
+}
+
+table.dialog
+{
+border-collapse: collapse;
+width: 100%;
+}
+
+/* DIALOG THEAD */
+
+thead.dialog tr.header
+{
+background-color: Highlight;
+color: HighlightText;
+text-align: left;
+}
+
+thead.dialog tr.header th
+{
+padding: 0.5em;
+}
+
+thead.dialog tr.header span.header
+{
+font-size: larger;
+font-weight: bold;
+margin: 0.2em;
+padding: 0.2em;
+background-color: inherit;
+color: inherit;
+border: 0;
+font-family: sans-serif;
+}
+
+tbody.dialog tr.footer
+{
+text-align: left;
+}
+
+tbody.dialog tr.footer td
+{
+padding: 0.5em;
+}
+
+tbody.dialog tr.footer button
+{
+margin: 0.2em;
+}
+
+/* DIALOG TBODY */
+
+tbody.dialog tr
+{
+border: solid thin ThreeDShadow;
+}
+
+tbody.dialog td
+{
+font: menu;
+padding: 0.2em 1.0em;
+}
+
+tbody.dialog td.attr-name
+{
+white-space: nowrap;
+}
+
+tbody.dialog td.attr-value
+{
+width: 100%;
+}
+
+tbody.dialog td a, tbody.table td a  /* TABLE CELL SHOULD BE ALL HYPERLINK */
+{
+display: block;
+width: 100%;
+}
+
+tbody.dialog td.empty
+{
+display: none;
+}
+
+/* SUBMIT BUTTONS */
+
+div.dialog-submit
+{
+padding: 0.5em;
+}
+
+div.dialog-submit button
+{
+padding: 0 0.5em;
+}
+
+/* END DIALOG */

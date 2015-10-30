@@ -107,6 +107,8 @@
             <include name='io/github/greyp9/arwo/app/exec/servlet/ExecutorServlet.java'/>
             <include name='io/github/greyp9/arwo/app/naming/servlet/NamingServlet.java'/>
             <include name='io/github/greyp9/arwo/app/realm/servlet/RealmServlet.java'/>
+            <!--webapp settings-->
+            <include name='io/github/greyp9/arwo/app/xed/servlet/Xed1Servlet.java'/>
             <!--included in realm jar (process scope)-->
             <exclude name='io/github/greyp9/arwo/core/codec/b64/**/*.java'/>
             <exclude name='io/github/greyp9/arwo/core/codec/hash/secure/**/*.java'/>
@@ -124,6 +126,7 @@
             <fileset dir='${classes.app.dir}'>
                 <include name='**/*.class'/>
             </fileset>
+            <fileset dir='${project.dir}/src/main/core/resources/arwo-jar'/>
             <fileset dir='${project.dir}/src/main/app/resources/arwo-jar'/>
             <manifest>
                 <attribute name='Implementation-Build' value='${timestamp}'/>
@@ -135,7 +138,9 @@
     <target name='war-app'>
         <mkdir dir='${war.app.dir}'/>
         <copy todir='${war.app.dir}'>
-            <fileset dir='${project.dir}/src/main/app/resources/webapp/arwo-war'/>
+            <fileset dir='${project.dir}/src/main/app/resources/webapp/arwo-war'>
+                <exclude name='**/*.xcf'/>
+            </fileset>
             <fileset dir='${project.dir}/src/main/app/resources/webapp/arwo-war-tomcat6'/>
         </copy>
         <copy todir='${war.app.dir}/WEB-INF/lib' file='${artifact.dir}/arwo.jar'/>

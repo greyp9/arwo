@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 
 public final class StreamU {
@@ -31,6 +32,15 @@ public final class StreamU {
             os.write(b);
         }
         return os.toByteArray();
+    }
+
+    public static byte[] read(final InputStream is) throws IOException {
+        final BufferedInputStream bis = new BufferedInputStream(is);
+        try {
+            return read(bis);
+        } finally {
+            bis.close();
+        }
     }
 
     public static byte[] read(final File file) throws IOException {

@@ -10,9 +10,11 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class ViewInstanceFactory {
+    private final String baseURI;
     private final XedCursor cursor;
 
-    public ViewInstanceFactory(final XedCursor cursor) {
+    public ViewInstanceFactory(final String baseURI, final XedCursor cursor) {
+        this.baseURI = baseURI;
         this.cursor = cursor;
     }
 
@@ -46,13 +48,13 @@ public class ViewInstanceFactory {
         }
         if (dataType != null) {
             if (!dataType.getInstances().isEmpty()) {  // is drill down
-                viewInstance = new ViewInstanceDrillDown(cursor, typeInstance);
+                viewInstance = new ViewInstanceDrillDown(baseURI, cursor, typeInstance);
             } else if (!dataType.getRestrictions().getEnumValues().isEmpty()) {
                 viewInstance = new ViewInstanceEnum(cursor, typeInstance);
             }
         }
         if (isMulti) {
-            viewInstance = new ViewInstanceDrillDown(cursor, typeInstance);
+            viewInstance = new ViewInstanceDrillDown(baseURI, cursor, typeInstance);
         }
         if (viewInstance == null) {
             viewInstance = new ViewInstanceText(cursor, typeInstance);

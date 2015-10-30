@@ -1,0 +1,61 @@
+/* START MENU */
+
+div.menus
+{
+margin: 0 0 1em 0;
+}
+
+div.menu
+{
+background-color: ButtonFace;
+border: thin solid ThreeDShadow;
+margin: 0 0 1px 0;
+padding: 1px;
+}
+
+span.menu
+{
+color: ButtonText;
+font: menu;
+margin: 2px;
+padding: 2px;
+}
+
+a.menu, button.menu
+{
+margin: 0;
+border: 0;
+padding: 2px;
+display: inline-block;
+color: ButtonText;
+font: menu;
+text-decoration: none;
+}
+
+a.active, button.active
+{
+background-color: Highlight;
+color: HighlightText;
+font-weight: bold;
+vertical-align: middle;
+}
+
+a.active
+{
+padding: 3px 5px;
+}
+
+button.min
+{
+min-width: 4em;
+}
+
+span.textFilter
+{
+background-color: InfoBackground;
+font: Menu;
+font-weight: bold;
+padding: 3px 5px;
+}
+
+/* END MENU */
