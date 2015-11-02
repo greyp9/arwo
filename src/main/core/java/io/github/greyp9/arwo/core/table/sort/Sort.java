@@ -1,6 +1,10 @@
 package io.github.greyp9.arwo.core.table.sort;
 
-public class Sort {
+import java.io.Serializable;
+
+public class Sort implements Serializable {
+    private static final long serialVersionUID = 6164794888735621372L;
+
     private final String name;
     private final boolean ascending;
 
