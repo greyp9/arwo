@@ -7,12 +7,16 @@ import io.github.greyp9.arwo.core.xed.view.type.ViewInstance;
 import io.github.greyp9.arwo.core.xed.view.type.ViewInstanceFactory;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class XedTableView {
+    private final String baseURI;
     private final XedCursor cursor;
     private final Collection<ViewInstance> viewInstances;
+
+    public final String getBaseURI() {
+        return baseURI;
+    }
 
     public final XedCursor getCursor() {
         return cursor;
@@ -23,26 +27,9 @@ public class XedTableView {
     }
 
     public XedTableView(final String baseURI, final XedCursor cursor) {
+        this.baseURI = baseURI;
         this.cursor = cursor;
         this.viewInstances = new ViewInstanceFactory(baseURI, cursor).getTableInstances();
-    }
-
-/*
-    public Collection<String> getItemNames() {
-        Collection<String> names = new ArrayList<String>();
-        for (ViewInstance viewInstance : viewInstances) {
-            names.add(viewInstance.getTypeInstance().getName());
-        }
-        return names;
-    }
-*/
-
-    public final Collection<String> getItemNamesI18n() {
-        final Collection<String> names = new ArrayList<String>();
-        for (final ViewInstance viewInstance : viewInstances) {
-            names.add(getItemNameI18n(cursor.getTypeInstance(), viewInstance.getTypeInstance()));
-        }
-        return names;
     }
 
     public final String getItemNameI18n(final TypeInstance typeInstance, final TypeInstance pageInstance) {

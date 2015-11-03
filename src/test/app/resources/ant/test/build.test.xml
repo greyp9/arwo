@@ -4,6 +4,11 @@
     <!--fixed-->
     <property name='project.dir' location='${basedir}/../../../../../..' description='(suggested) ~/arwo'/>
 
+    <target name='app'>
+        <property name='ant.app.dir' value='${project.dir}/src/main/app/resources/ant/app'/>
+        <ant antfile='${ant.app.dir}/build.app.xml' dir='${ant.app.dir}'/>
+    </target>
+
     <target name='junit'>
         <property name='ant.junit.dir' value='${project.dir}/src/test/app/resources/ant/junit'/>
         <ant antfile='${ant.junit.dir}/build.junit.xml' dir='${ant.junit.dir}'/>
@@ -23,6 +28,8 @@
         <property name='ant.checkstyle.dir' value='${project.dir}/src/test/app/resources/ant/checkstyle'/>
         <ant antfile='${ant.checkstyle.dir}/build.checkstyle.xml' dir='${ant.checkstyle.dir}'/>
     </target>
+
+    <target name='code' depends='app, findbugs, pmd, checkstyle'/>
 
     <target name='main' depends='junit, findbugs, pmd, checkstyle' description='Use -p to view help information.'/>
 

@@ -4,11 +4,11 @@ import io.github.greyp9.arwo.core.app.AppHtml;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
-import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.view.XedCursorView;
 import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
 import io.github.greyp9.arwo.core.xed.view.XedTableView;
@@ -22,12 +22,12 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 
 public class CursorHtmlView {
-    private final ServletHttpRequest httpRequest;
     private final XedCursorView cursorView;
+    private final XedRequest request;
 
-    public CursorHtmlView(final ServletHttpRequest httpRequest, final XedCursorView cursorView) {
-        this.httpRequest = httpRequest;
+    public CursorHtmlView(final XedCursorView cursorView, final XedRequest request) {
         this.cursorView = cursorView;
+        this.request = request;
     }
 
     public final HttpResponse doGetHtml() throws IOException {
@@ -37,7 +37,7 @@ public class CursorHtmlView {
         // cursor content
         addContentTo(body);
         // touch ups
-        new AppHtml(httpRequest).fixup(html);
+        new AppHtml(request.getHttpRequest()).fixup(html);
         // package into response
         final byte[] entity = DocumentU.toXHtml(html);
         final NameTypeValue contentType = new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_HTML_UTF8);
@@ -46,18 +46,25 @@ public class CursorHtmlView {
         return new HttpResponse(HttpURLConnection.HTTP_OK, headers, new ByteArrayInputStream(entity));
     }
 
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private void addContentTo(final Element html) throws IOException {
         final Object[] views = cursorView.getViews();
         for (final Object view : views) {
             if (view instanceof XedPropertyPageView) {
-                final PropertyPageHtmlView htmlView = new PropertyPageHtmlView((XedPropertyPageView) view);
-                htmlView.addContentTo(html);
+                addPropertyPage(html, (XedPropertyPageView) view);
             } else if (view instanceof XedTableView) {
-                final TableHtmlView htmlView = new TableHtmlView((XedTableView) view);
-                htmlView.addContentTo(html);
+                addTable(html, (XedTableView) view);
             }
         }
+    }
+
+    private void addPropertyPage(final Element html, final XedPropertyPageView view) throws IOException {
+        final PropertyPageHtmlView htmlView = new PropertyPageHtmlView(view, request);
+        htmlView.addContentTo(html);
+    }
+
+    private void addTable(final Element html, final XedTableView view) throws IOException {
+        final TableHtmlView htmlView = new TableHtmlView(view, request);
+        htmlView.addContentTo(html);
     }
 
     private static class Const {

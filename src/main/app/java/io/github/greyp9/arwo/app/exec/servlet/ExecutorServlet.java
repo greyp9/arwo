@@ -27,7 +27,7 @@ public class ExecutorServlet extends javax.servlet.http.HttpServlet {
         final String contextPath = config.getServletContext().getContextPath();
         context = AppNaming.lookupSubcontext(contextPath);
         executorService = ExecutorServiceFactory.create(Const.START_NUM_THREAD, getClass().getSimpleName());
-        AppNaming.bind(context, App.EXECUTOR_SERVICE, executorService);
+        AppNaming.bind(context, App.Naming.EXECUTOR_SERVICE, executorService);
     }
 
     @SuppressWarnings("PMD.DoNotUseThreads")
@@ -47,7 +47,7 @@ public class ExecutorServlet extends javax.servlet.http.HttpServlet {
             for (final Runnable runnable : runnables) {
                 logger.warning(runnable.getClass().getName());
             }
-            AppNaming.unbind(context, App.EXECUTOR_SERVICE);
+            AppNaming.unbind(context, App.Naming.EXECUTOR_SERVICE);
             executorService = null;
             context = null;
         }

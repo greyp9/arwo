@@ -23,7 +23,8 @@ public class RealmServlet extends javax.servlet.http.HttpServlet {
         final String contextPath = config.getServletContext().getContextPath();
         context = AppNaming.lookupSubcontext(contextPath);
         final AppRealm appRealm = AppRealmFactory.toAppRealm(contextPath);
-        final ExecutorService executor = (ExecutorService) AppNaming.lookup(contextPath, App.EXECUTOR_SERVICE);
+        final ExecutorService executor = (ExecutorService)
+                AppNaming.lookup(contextPath, App.Naming.EXECUTOR_SERVICE);
         updateRunnable = new RealmUpdateRunnable(context, appRealm);
         executor.execute(updateRunnable);
     }

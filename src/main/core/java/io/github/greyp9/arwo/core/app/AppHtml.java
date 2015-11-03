@@ -19,11 +19,11 @@ public class AppHtml {
         fixupContext(xhtml);
     }
 
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private void fixupContext(final Document xhtml) throws IOException {
+        final XPather xpather = new XPather(xhtml);
         final String[] xpaths = { "//@href", "//@src" };
         for (final String xpath : xpaths) {
-            final List<Attr> attrs = new XPather(xhtml).getAttributes(xpath);
+            final List<Attr> attrs = xpather.getAttributes(xpath);
             for (final Attr attr : attrs) {
                 attr.setValue(attr.getValue().replace("${CONTEXT}", httpRequest.getContextPath()));
             }

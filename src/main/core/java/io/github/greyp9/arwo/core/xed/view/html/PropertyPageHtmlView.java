@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.xed.view.html;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
+import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
 import io.github.greyp9.arwo.core.xed.view.html.type.DrillDownHtmlView;
 import io.github.greyp9.arwo.core.xed.view.html.type.TextHtmlView;
@@ -17,12 +18,16 @@ import java.util.Collection;
 
 public class PropertyPageHtmlView {
     private final XedPropertyPageView view;
+    private final XedRequest request;
 
-    public PropertyPageHtmlView(final XedPropertyPageView view) {
+    public PropertyPageHtmlView(final XedPropertyPageView view, final XedRequest request) {
         this.view = view;
+        this.request = request;
     }
 
     public final void addContentTo(final Element html) {
+        request.getClass();
+
         final XedCursor cursor = view.getCursor();
         final TypeInstance typeInstance = cursor.getTypeInstance();
         final String cursorType = typeInstance.getName();

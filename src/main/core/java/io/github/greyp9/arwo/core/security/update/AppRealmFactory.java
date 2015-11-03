@@ -32,11 +32,11 @@ public final class AppRealmFactory {
 
     public static AppRealm toAppRealm(final String contextPath) {
         try {
-            final byte[] xsd = StreamU.read(ResourceU.resolve(App.XSD_REALM));
+            final byte[] xsd = StreamU.read(ResourceU.resolve(App.Realm.XSD));
             final File webappRoot = AppFolder.getWebappRoot(contextPath);
             final File realmFile = new File(webappRoot, "root/realm.xml");
             final byte[] xml = (realmFile.exists()) ? StreamU.read(realmFile) :
-                    StreamU.read(ResourceU.resolve(App.XML_REALM_EMPTY));
+                    StreamU.read(ResourceU.resolve(App.Realm.XML_EMPTY));
             Logger.getLogger(AppRealmFactory.class.getName()).log(Level.OFF, realmFile.getPath());
             return AppRealmFactory.toAppRealm(xsd, xml);
         } catch (IOException e) {
@@ -54,7 +54,7 @@ public final class AppRealmFactory {
     }
 
     private static AppRealm toAppRealmValidated(final Document document) throws IOException {
-        final URL url = ResourceU.resolve(App.XSD_REALM);
+        final URL url = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(url);
         final XPathContext context = xsdTypes.getContext();
         final XPather xpather = new XPather(document, context);

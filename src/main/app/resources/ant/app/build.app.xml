@@ -106,7 +106,7 @@
         </javac>
     </target>
 
-    <target name='main' depends='clean, compile-core, compile-lib, compile-app'>
+    <target name='main' depends='compile-core, compile-lib, compile-app'>
         <echo message='project.dir: ${project.dir}'/>
     </target>
 

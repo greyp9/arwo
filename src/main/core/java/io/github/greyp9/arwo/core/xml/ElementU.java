@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.core.xml;
 
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -129,6 +130,42 @@ public final class ElementU {
         }
     }
 
+    @SuppressWarnings("PMD.OnlyOneReturn")
+    public static Node detach(final Node node) {
+        if (node instanceof Element) {
+            return detach((Element) node);
+        } else if (node instanceof Attr) {
+            return detach((Attr) node);
+        } else {
+            return node;
+        }
+    }
+
+    public static Element detach(final Element element) {
+        if ((element != null) && (element.getParentNode() != null)) {
+            element.getParentNode().removeChild(element);
+        }
+        return element;
+    }
+
+    public static Attr detach(final Attr attr) {
+        if ((attr != null) && (attr.getOwnerElement() != null)) {
+            attr.getOwnerElement().removeAttributeNode(attr);
+        }
+        return attr;
+    }
+
+    public static boolean isEmpty(final Node node) {
+        return ((node != null) && (node.getChildNodes().getLength() == 0));
+    }
+
+    public static Node detachOnEmpty(final Node node) {
+        if (isEmpty(node)) {
+            detach(node);
+        }
+        return node;
+    }
+
     public static Element addElementNS(final Element parent, final String name, final String uri) {
         return addElementBeforeNS(parent, name, uri, null);
     }
@@ -180,6 +217,10 @@ public final class ElementU {
         }
     }
 
+    public static Element addElement(final Element parent, final String name, final Object text) {
+        return addElement(parent, name, text, NameTypeValuesU.create());
+    }
+
     public static Element addElement(
             final Element parent, final String name, final Object text, final NameTypeValues attrs) {
         final Element child = addElement(parent, name);
@@ -192,13 +233,6 @@ public final class ElementU {
         final Element child = addElementBeforeNS(parent, name, parent.getNamespaceURI(), before);
         setTextContent(child, text);
         return child;
-    }
-
-    public static Element detach(final Element element) {
-        if ((element != null) && (element.getParentNode() != null)) {
-            element.getParentNode().removeChild(element);
-        }
-        return element;
     }
 
     public static void insertBefore(final Node toInsert, final Element insertBefore) {

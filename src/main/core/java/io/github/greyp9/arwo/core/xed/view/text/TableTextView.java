@@ -20,6 +20,7 @@ public class TableTextView {
 
     public final String render() {
         final XedCursor cursor = view.getCursor();
+        final TypeInstance instanceTable = cursor.getTypeInstance();
         final XedCursor cursorTable = cursor.getParentConcrete();
         final Element elementTable = cursorTable.getElement();
         final String tableHeader = view.getItemNameI18n(cursor.getTypeInstance(), null);
@@ -27,11 +28,11 @@ public class TableTextView {
         final Collection<Element> childrenRows = ElementU.getChildren(
                 elementTable, cursor.getTypeInstance().getName());
         final Matrix matrix = new Matrix(1 + childrenRows.size(), viewInstances.size());
-        final Collection<String> itemNamesI18n = view.getItemNamesI18n();
         int row = 0;
         int column = -1;
-        for (final String itemName : itemNamesI18n) {
-            matrix.set(row, ++column, itemName);
+        for (final ViewInstance viewInstance : viewInstances) {
+            final String columnName = view.getItemNameI18n(instanceTable, viewInstance.getTypeInstance());
+            matrix.set(row, ++column, columnName);
         }
         final XedNav nav = new XedNav(cursor.getXed());
         for (final Element elementRow : childrenRows) {

@@ -1,23 +1,23 @@
 package io.github.greyp9.arwo.core.bundle;
 
-import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
 public class Bundle {
-    private final ResourceBundle resourceBundle;
+    private final ResourceBundle[] resourceBundles;
 
-    public Bundle(final ResourceBundle resourceBundle) {
-        this.resourceBundle = resourceBundle;
+    public Bundle(final ResourceBundle... resourceBundles) {
+        this.resourceBundles = resourceBundles;
     }
 
-    @SuppressWarnings("PMD.OnlyOneReturn")
     public final String getString(final String key) {
-        try {
-            final String label = (resourceBundle == null) ? null : resourceBundle.getString(key);
-            return ((label == null) ? key : label);
-        } catch (MissingResourceException e) {
-            return key;
+        String value = key;
+        for (final ResourceBundle resourceBundle : resourceBundles) {
+            if (resourceBundle.containsKey(key)) {
+                value = resourceBundle.getString(key);
+                break;
+            }
         }
+        return value;
     }
 
     public final String getString(final String key, final String defaultValue) {

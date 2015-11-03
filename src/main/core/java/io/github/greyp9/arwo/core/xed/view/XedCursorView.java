@@ -15,6 +15,10 @@ public class XedCursorView {
     private final String baseURI;
     private final XedCursor cursor;
 
+    public final String getBaseURI() {
+        return baseURI;
+    }
+
     public final XedCursor getCursor() {
         return cursor;
     }

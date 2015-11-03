@@ -1,5 +1,7 @@
 package io.github.greyp9.arwo.core.xed.model;
 
+import io.github.greyp9.arwo.core.app.AppText;
+import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.xed.bundle.XsdBundles;
 import io.github.greyp9.arwo.core.xed.op.OpCreate;
 import io.github.greyp9.arwo.core.xed.op.OpDelete;
@@ -42,6 +44,12 @@ public class Xed {
         this.document = document;
         this.xsdTypes = xsdTypes;
         this.xsdBundles = new XsdBundles(xsdTypes, locale);
+    }
+
+    public final Bundle getBundle() {
+        final ResourceBundle bundleCore = new AppText(xsdBundles.getLocale()).getBundleCore();
+        final ResourceBundle bundleRoot = getRootBundle();
+        return new Bundle(bundleRoot, bundleCore);
     }
 
     public final Locale getLocale() {

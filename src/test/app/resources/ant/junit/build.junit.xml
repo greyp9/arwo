@@ -16,6 +16,7 @@
 
     <path id='classpath-test'>
         <pathelement path='${project.dir}/src/main/app/resources/arwo-jar'/>
+        <pathelement path='${project.dir}/src/main/core/resources/arwo-jar'/>
         <pathelement path='${project.dir}/src/test/core/resources'/>
         <pathelement path='${classes.core.dir}'/>
         <pathelement path='${classes.lib.dir}'/>

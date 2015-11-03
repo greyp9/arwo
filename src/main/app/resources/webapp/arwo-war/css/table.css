@@ -1,0 +1,204 @@
+/* START TABLE */
+
+div.table
+{
+border: thin solid ThreeDShadow;  /* table-100-percent-width */
+background-color: window;
+margin: 0 0 1em 0;
+}
+
+table.table
+{
+border-collapse: collapse;
+width: 100%;  /* table-100-percent-width */
+}
+
+thead.table th.ribbon button.active,
+tbody.table tr.active
+{
+background-color: Highlight;
+color: HighlightText;
+}
+
+thead.table tr.header th button  /* TABLE TITLE BAR */
+{
+text-align: left;
+display: block;
+width: 100%;
+}
+
+thead.table tr.label th.label button  /* TABLE COLUMN SORT */
+{
+display: block;
+width: 100%;
+}
+
+tbody.table tr.active button
+{
+color: inherit;
+}
+
+tr.alt
+{
+background-color: #dddddd;
+}
+
+tbody.table a
+{
+text-decoration: none;
+padding: 0 6px;
+}
+
+tbody.table button
+{
+background-color: inherit;
+font-family: inherit;
+border: 0;
+display: block;
+width: 100%;
+}
+
+table.table th,
+table.table td
+{
+border: thin solid ThreeDShadow;
+}
+
+/* TABLE TBODY */
+
+tbody.table td
+{
+font-family: Monospace;
+padding: 0 0.5em
+}
+
+td.enhance
+{
+font-size: medium;
+font-weight: bold;
+}
+
+td.number
+{
+text-align: right;
+}
+
+td.difference span
+{
+background-color: Highlight;
+color: HighlightText;
+font-family: monospace;
+padding: 0 0.2em;
+}
+
+td.difference span.new
+{
+font-weight: bold;
+}
+
+/* TABLE THEAD */
+
+thead.table tr.header
+{
+background-color: Highlight;
+color: HighlightText;
+text-align: left;
+}
+
+thead.table tr.header button.header,
+thead.table tr.header span.header
+{
+font-size: larger;
+font-weight: bold;
+margin: 0.2em;
+padding: 0.2em;
+background-color: inherit;
+color: inherit;
+border: 0;
+font-family: sans-serif;
+}
+
+thead.table tr,
+tfoot.table tr,
+tfoot.table tr a
+tfoot.table tr button
+{
+background-color: InfoBackground;
+color: ButtonText;
+font: Menu;
+font-size: inherit;
+font-weight: bold;
+}
+
+tfoot.table tr th a,
+tfoot.table tr th button
+{
+background-color: inherit;
+color: inherit;
+font-size: inherit;
+font-weight: bold;
+text-decoration: none;
+}
+
+th.columns, th.label, th.ribbon, th.state, th.status
+{
+padding: 0 0.5em;
+white-space: nowrap;
+}
+
+th.columns button, th.label button, th.ribbon button
+{
+background-color: inherit;
+color: inherit;
+border: 0;
+font: inherit;
+padding: 0;
+}
+
+th.columns button.columns
+{
+font-size: smaller;
+padding: 0;
+}
+
+th.ribbon button.ribbon
+{
+padding: 0 0.5em;
+}
+
+/* TABLE TFOOT */
+
+tfoot th.status a,
+tfoot th.status button
+{
+background-color: inherit;
+color: inherit;
+text-decoration; none;
+border: 0;
+}
+
+tfoot span.left
+{
+float: left;
+width: 25%;
+text-align: left;
+display: block;
+}
+
+tfoot span.center
+{
+float: left;
+width: 50%;
+text-align: center;
+display: block;
+}
+
+tfoot span.right
+{
+float: left;
+width: 25%;
+text-align: right;
+display: block;
+}
+
+/* END TABLE */
