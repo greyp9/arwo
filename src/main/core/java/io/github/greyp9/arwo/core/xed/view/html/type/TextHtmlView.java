@@ -18,8 +18,9 @@ public class TextHtmlView {
 
     public final void addContentTo(final Element td) {
         final XedCursor cursor = viewInstance.getCursor();
+        final TypeInstance parentInstance = viewInstance.getCursor().getTypeInstance();
         final TypeInstance typeInstance = viewInstance.getTypeInstance();
-        final String name = typeInstance.getName();
+        final String name = typeInstance.getID(parentInstance);
         final String value = cursor.getValue(typeInstance);
         final NameTypeValues attrs = NameTypeValuesU.create(Html.NAME, name, Html.TYPE, Html.TEXT,
                 Html.VALUE, value, Html.SIZE, Integer.toString(Const.WIDTH_INPUT_TEXT));

@@ -16,6 +16,13 @@ public final class NameTypeValues extends ArrayList<NameTypeValue> {
         }
     }
 
+    public NameTypeValues(final NameTypeValues nameTypeValues) {
+        this();
+        for (final NameTypeValue nameTypeValue : nameTypeValues) {
+            add(nameTypeValue);
+        }
+    }
+
     public String getValue(final String name) {
         final NameTypeValue nameTypeValue = getNameValue(name);
         return ((nameTypeValue == null) ? null : nameTypeValue.getValueS());

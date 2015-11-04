@@ -1,5 +1,7 @@
 package io.github.greyp9.arwo.core.app;
 
+import io.github.greyp9.arwo.core.glyph.UTF16;
+
 import javax.xml.namespace.QName;
 
 public final class App {
@@ -22,9 +24,16 @@ public final class App {
     }
 
     public static class Action {
+        public static final String CREATE = "create";
+        public static final String UPDATE = "update";
+        public static final String DELETE = "delete";
+        public static final String CLONE = "clone";
+        public static final String UP = UTF16.ARROW_UP;
+        public static final String DOWN = UTF16.ARROW_DOWN;
     }
 
     public static class Target {
+        public static final String DOCUMENT = "document";
         public static final String VIEW_STATE = "viewState";
     }
 }

@@ -3,8 +3,10 @@ package io.github.greyp9.arwo.core.xed.model;
 import io.github.greyp9.arwo.core.app.AppText;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.xed.bundle.XsdBundles;
+import io.github.greyp9.arwo.core.xed.op.OpClone;
 import io.github.greyp9.arwo.core.xed.op.OpCreate;
 import io.github.greyp9.arwo.core.xed.op.OpDelete;
+import io.github.greyp9.arwo.core.xed.op.OpMove;
 import io.github.greyp9.arwo.core.xed.op.OpUpdate;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
@@ -83,5 +85,17 @@ public class Xed {
 
     public final Element delete(final Element element) {
         return new OpDelete().apply(element);
+    }
+
+    public final Element clone(final Element element) throws IOException {
+        return new OpClone().apply(element);
+    }
+
+    public final Element moveUp(final Element element) {
+        return new OpMove(xsdTypes).moveUp(element);
+    }
+
+    public final Element moveDown(final Element element) {
+        return new OpMove(xsdTypes).moveDown(element);
     }
 }

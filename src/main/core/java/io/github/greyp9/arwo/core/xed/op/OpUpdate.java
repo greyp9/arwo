@@ -31,20 +31,24 @@ public class OpUpdate {
         final NameTypeValues nameTypeValues = valueInstance.getNameTypeValues();
         final Collection<TypeInstance> typeInstances = new TypeInstanceX(typeInstance).getPageInstances();
         for (final TypeInstance typeInstanceIt : typeInstances) {
-            apply(element, typeInstanceIt, nameTypeValues);
+            apply(element, typeInstance, typeInstanceIt, nameTypeValues);
         }
         return element;
     }
 
-    private void apply(final Element update, final TypeInstance typeInstance, final NameTypeValues nameTypeValues) {
+    private void apply(final Element update, final TypeInstance parentInstance,
+                       final TypeInstance typeInstance, final NameTypeValues nameTypeValues) {
         for (final NameTypeValue nameTypeValue : nameTypeValues) {
-            apply(update, typeInstance, nameTypeValue);
+            apply(update, parentInstance, typeInstance, nameTypeValue);
         }
     }
 
-    private void apply(final Element update, final TypeInstance typeInstance, final NameTypeValue nameTypeValue) {
-        if (typeInstance.getName().equals(nameTypeValue.getName())) {
-            applyValue(update, typeInstance, nameTypeValue);
+    private void apply(final Element update, final TypeInstance parentInstance,
+                       final TypeInstance typeInstance, final NameTypeValue nameTypeValue) {
+        final String idInstance = typeInstance.getID(parentInstance);
+        if (idInstance.equals(nameTypeValue.getName())) {
+            final NameTypeValue nameTypeValueIt = new NameTypeValue(typeInstance.getName(), nameTypeValue.getValue());
+            applyValue(update, typeInstance, nameTypeValueIt);
         }
     }
 

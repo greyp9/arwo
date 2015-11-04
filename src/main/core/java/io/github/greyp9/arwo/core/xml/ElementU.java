@@ -248,6 +248,22 @@ public final class ElementU {
         parentNode.appendChild(toInsertNew);
     }
 
+    public static Element getPreviousElement(final Element element) {
+        Node previous = element.getPreviousSibling();
+        while ((previous != null) && (!(previous instanceof Element))) {
+            previous = previous.getPreviousSibling();
+        }
+        return (Element) previous;
+    }
+
+    public static Element getNextElement(final Element element) {
+        Node next = element.getNextSibling();
+        while ((next != null) && (!(next instanceof Element))) {
+            next = next.getNextSibling();
+        }
+        return (Element) next;
+    }
+
     private static class Const {
         private static final Collection<Element> EMPTY_LIST_E = new ArrayList<Element>();
         private static final Collection<Attr> EMPTY_LIST_A = new ArrayList<Attr>();

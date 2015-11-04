@@ -33,20 +33,24 @@ public class OpCreate {
                 element, typeInstance.getName(), typeInstance.getURI(), null);
         final Collection<TypeInstance> typeInstances = new TypeInstanceX(typeInstance).getPageInstances();
         for (final TypeInstance typeInstanceIt : typeInstances) {
-            apply(create, typeInstanceIt, nameTypeValues);
+            apply(create, typeInstance, typeInstanceIt, nameTypeValues);
         }
         return create;
     }
 
-    private void apply(final Element create, final TypeInstance typeInstance, final NameTypeValues nameTypeValues) {
+    private void apply(final Element create, final TypeInstance parentInstance,
+                       final TypeInstance typeInstance, final NameTypeValues nameTypeValues) {
         for (final NameTypeValue nameTypeValue : nameTypeValues) {
-            apply(create, typeInstance, nameTypeValue);
+            apply(create, parentInstance, typeInstance, nameTypeValue);
         }
     }
 
-    private void apply(final Element create, final TypeInstance typeInstance, final NameTypeValue nameTypeValue) {
-        if (typeInstance.getName().equals(nameTypeValue.getName())) {
-            applyValue(create, typeInstance, nameTypeValue);
+    private void apply(final Element create, final TypeInstance parentInstance,
+                       final TypeInstance typeInstance, final NameTypeValue nameTypeValue) {
+        String idInstance = typeInstance.getID(parentInstance);
+        if (idInstance.equals(nameTypeValue.getName())) {
+            final NameTypeValue nameTypeValueIt = new NameTypeValue(typeInstance.getName(), nameTypeValue.getValue());
+            applyValue(create, typeInstance, nameTypeValueIt);
         }
     }
 
