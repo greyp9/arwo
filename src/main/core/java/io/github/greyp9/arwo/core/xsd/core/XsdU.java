@@ -7,7 +7,7 @@ public final class XsdU {
     // namespace prefix
     //public static final String NS_PREFIX_XML = XMLConstants.XML_NS_PREFIX;  // "xml";
     public static final String NS_PREFIX_XSD = "xsd";
-    //public static final String NS_PREFIX_XMLNS = XMLConstants.XMLNS_ATTRIBUTE;  // "xmlns";
+    public static final String NS_PREFIX_XMLNS = XMLConstants.XMLNS_ATTRIBUTE;  // "xmlns";
     public static final String NS_PREFIX_NULL = XMLConstants.DEFAULT_NS_PREFIX;
 
     // namespace uri

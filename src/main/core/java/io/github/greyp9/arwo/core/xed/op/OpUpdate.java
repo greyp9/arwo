@@ -45,8 +45,9 @@ public class OpUpdate {
 
     private void apply(final Element update, final TypeInstance parentInstance,
                        final TypeInstance typeInstance, final NameTypeValue nameTypeValue) {
-        final String idInstance = typeInstance.getID(parentInstance);
-        if (idInstance.equals(nameTypeValue.getName())) {
+        final boolean fromHtmlForm = typeInstance.getID(parentInstance).equals(nameTypeValue.getName());
+        final boolean fromTest = typeInstance.getName().equals(nameTypeValue.getName());
+        if (fromHtmlForm || fromTest) {
             final NameTypeValue nameTypeValueIt = new NameTypeValue(typeInstance.getName(), nameTypeValue.getValue());
             applyValue(update, typeInstance, nameTypeValueIt);
         }

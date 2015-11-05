@@ -6,6 +6,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
+import javax.xml.namespace.QName;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -93,9 +94,9 @@ public final class DocumentU {
     }
 
     @SuppressWarnings("PMD.OnlyOneReturn")
-    public static Document createDocumentSafe(final String name, final String namespace) {
+    public static Document createDocumentSafe(final QName qname) {
         try {
-            return createDocument(name, namespace);
+            return createDocument(qname.getLocalPart(), qname.getNamespaceURI());
         } catch (IOException e) {
             return null;
         }

@@ -28,7 +28,7 @@ public class TypeInstanceTraversal {
     }
 
     public final List<TypeInstance> getForName(final String name) {
-        List<TypeInstance> forNameInstances = null;
+        List<TypeInstance> forNameInstances = new ArrayList<TypeInstance>();
         for (final List<TypeInstance> typeInstances : traversal) {
             // find endpoint
             String nameIt = null;

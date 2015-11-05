@@ -36,9 +36,9 @@ public class XedNavNode {
     public final XedCursor findChild(final Node node, final XedCursor cursor) {
         final XedCursor cursorTI = findTypeInstance(node.getLocalName(), cursor);
         XedCursor cursorChild = null;
-        if (node instanceof Attr) {
+        if ((node instanceof Attr) && (cursorTI != null)) {
             cursorChild = findChildAttr((Attr) node, cursor, cursorTI);
-        } else if (node instanceof Element) {
+        } else if ((node instanceof Element) && (cursorTI != null)) {
             cursorChild = findChildElement((Element) node, cursor, cursorTI);
         }
         return cursorChild;
@@ -64,17 +64,19 @@ public class XedNavNode {
 
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public final XedCursor findTypeInstance(final String name, final XedCursor cursor) {
-        XedCursor cursorTI;
+        XedCursor cursorTI = null;
         final TypeInstance typeInstance = cursor.getTypeInstance();
         final TypeInstance typeInstanceChild = typeInstance.getInstance(name);
         if (typeInstance.getInstances().contains(typeInstanceChild)) {
             cursorTI = new XedCursor(cursor.getXed(), cursor, null, null, typeInstanceChild);
         } else {
-            cursorTI = cursor;
             final TypeInstanceTraversal traversal = new TypeInstanceTraversal(typeInstance);
-            final List<TypeInstance> typeInstances = traversal.getForName(typeInstanceChild.getName());
-            for (final TypeInstance typeInstanceIt : typeInstances) {
-                cursorTI = new XedCursor(cursor.getXed(), cursorTI, null, null, typeInstanceIt);
+            final List<TypeInstance> typeInstances = traversal.getForName(name);
+            if (!typeInstances.isEmpty()) {
+                cursorTI = cursor;
+                for (final TypeInstance typeInstanceIt : typeInstances) {
+                    cursorTI = new XedCursor(cursor.getXed(), cursorTI, null, null, typeInstanceIt);
+                }
             }
         }
         return cursorTI;

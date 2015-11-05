@@ -45,8 +45,8 @@ public class DocumentFactory {
         return generateEmpty(typeInstance.getQName(), typeInstance);
     }
 
-    public final Document generateEmpty(final QName name, final TypeInstance typeInstance) {
-        final Document document = DocumentU.createDocumentSafe(name.getLocalPart(), name.getNamespaceURI());
+    public final Document generateEmpty(final QName qname, final TypeInstance typeInstance) {
+        final Document document = DocumentU.createDocumentSafe(qname);
         if (document != null) {
             addContent(document.getDocumentElement(), typeInstance);
         }
