@@ -30,6 +30,14 @@ public final class App {
         public static final String CLONE = "clone";
         public static final String UP = UTF16.ARROW_UP;
         public static final String DOWN = UTF16.ARROW_DOWN;
+
+        public static final String FILL = "fill";
+        public static final String PRUNE = "prune";
+
+        public static final String CLIP_CLEAR = "clear";
+        public static final String CLIP_CUT = "cut";
+        public static final String CLIP_COPY = "copy";
+        public static final String CLIP_PASTE = "paste";
     }
 
     public static class Target {

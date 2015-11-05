@@ -8,7 +8,6 @@ import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
 
-@SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity", "PMD.ModifiedCyclomaticComplexity" })
 public class ViewStates {
 
     private final Map<String, ViewState> mapViewState;
@@ -36,6 +35,7 @@ public class ViewStates {
         return viewState;
     }
 
+    @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity", "PMD.ModifiedCyclomaticComplexity" })
     public final void apply(final SubmitToken token, final NameTypeValues nameTypeValues) throws IOException {
         final ViewState viewState = getViewState(token.getObject());
         final String action = token.getAction();

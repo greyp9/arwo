@@ -249,7 +249,7 @@ public final class ElementU {
     }
 
     public static Element getPreviousElement(final Element element) {
-        Node previous = element.getPreviousSibling();
+        Node previous = ((element == null) ? null : element.getPreviousSibling());
         while ((previous != null) && (!(previous instanceof Element))) {
             previous = previous.getPreviousSibling();
         }
@@ -257,7 +257,7 @@ public final class ElementU {
     }
 
     public static Element getNextElement(final Element element) {
-        Node next = element.getNextSibling();
+        Node next = ((element == null) ? null : element.getNextSibling());
         while ((next != null) && (!(next instanceof Element))) {
             next = next.getNextSibling();
         }

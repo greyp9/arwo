@@ -79,6 +79,10 @@ public final class DocumentU {
         }
     }
 
+    public static Document toDocument(final String xml) throws IOException {
+        return toDocument(io.github.greyp9.arwo.core.charset.UTF8Codec.toBytes(xml));
+    }
+
     public static Document toDocument(final byte[] xml) throws IOException {
         final DocumentBuilderFactory builderFactory = DocumentBuilderFactory.newInstance();
         try {

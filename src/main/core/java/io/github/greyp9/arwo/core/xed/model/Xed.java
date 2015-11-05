@@ -34,9 +34,11 @@ public class Xed {
         return xsdTypes;
     }
 
+/*
     public final XsdBundles getXsdBundles() {
         return xsdBundles;
     }
+*/
 
     public Xed(final Document document, final XsdTypes xsdTypes) {
         this(document, xsdTypes, Locale.getDefault());

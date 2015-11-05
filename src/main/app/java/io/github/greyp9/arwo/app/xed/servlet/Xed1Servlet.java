@@ -9,6 +9,7 @@ import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.table.state.ViewStates;
 import io.github.greyp9.arwo.core.url.URLCodec;
+import io.github.greyp9.arwo.core.xed.clip.XedClipboard;
 import io.github.greyp9.arwo.core.xed.handler.XedHandlerGet;
 import io.github.greyp9.arwo.core.xed.handler.XedHandlerPost;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
@@ -42,7 +43,7 @@ public class Xed1Servlet extends javax.servlet.http.HttpServlet {
             synchronized (this) {
                 final String submitID = Integer.toHexString(hashCode());
                 final XedSession session = new XedSessionFactory(entry).create(App.Realm.QNAME, Locale.getDefault());
-                state = new XedUserState(submitID, new ViewStates(), session);
+                state = new XedUserState(submitID, new ViewStates(), session, new XedClipboard());
             }
         } catch (IOException e) {
             throw new ServletException(e);

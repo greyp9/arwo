@@ -8,6 +8,10 @@ import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
+import io.github.greyp9.arwo.core.xed.op.OpClipClear;
+import io.github.greyp9.arwo.core.xed.op.OpClipCopy;
+import io.github.greyp9.arwo.core.xed.op.OpClipCut;
+import io.github.greyp9.arwo.core.xed.op.OpClipPaste;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
 import org.w3c.dom.Element;
@@ -43,6 +47,7 @@ public class XedWrite {
         return HttpResponseU.toHttpResponse302(location302);
     }
 
+    @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity", "PMD.ModifiedCyclomaticComplexity" })
     private String apply(final String locationIn, final ValueInstance valueInstance,
                          final XedCursor cursor, final SubmitToken token) throws IOException {
         String location = locationIn;
@@ -66,6 +71,14 @@ public class XedWrite {
             final Element moveDown = cursor.getXed().moveDown(cursor.getElement());
             final XedCursor cursorMove = new XedNav(cursor.getXed()).find(moveDown);
             location = request.getHttpRequest().getBaseURI() + cursorMove.getURI();
+        } else if (App.Action.CLIP_CLEAR.equals(value)) {
+            new OpClipClear(request.getState().getClipboard()).clear();
+        } else if (App.Action.CLIP_CUT.equals(value)) {
+            new OpClipCut(request.getState().getClipboard()).cut(cursor);
+        } else if (App.Action.CLIP_COPY.equals(value)) {
+            new OpClipCopy(request.getState().getClipboard()).copy(cursor);
+        } else if (App.Action.CLIP_PASTE.equals(value)) {
+            new OpClipPaste(request.getState().getClipboard()).paste(cursor);
         }
         return location;
     }

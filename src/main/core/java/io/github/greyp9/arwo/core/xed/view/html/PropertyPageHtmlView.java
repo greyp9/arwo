@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.html.HtmlU;
+import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
@@ -116,31 +117,29 @@ public class PropertyPageHtmlView {
 
     private static Collection<String> getCursorActions(final XedPropertyPageView view) {
         final XedCursor cursor = view.getCursor();
+        final XedCursor cursorParentC = cursor.getParentConcrete();
         final Node node = cursor.getNode();
         final Node parentNode = ((node == null) ? null : node.getParentNode());
         final Collection<String> actions = new ArrayList<String>();
-        final boolean actionCreate = (node == null);
-        final boolean actionUpdate = (node != null);
-        final boolean actionDelete = ((node != null) && (parentNode instanceof Element));  // can't delete root
-        final boolean actionClone = ((node != null) && (parentNode instanceof Element));  // can't clone root
-        final boolean actionMove = ((node != null) && (parentNode instanceof Element));
-        if (actionCreate) {
-            actions.add(App.Action.CREATE);
-        }
-        if (actionUpdate) {
-            actions.add(App.Action.UPDATE);
-        }
-        if (actionDelete) {
-            actions.add(App.Action.DELETE);
-        }
-        if (actionClone) {
-            actions.add(App.Action.CLONE);
-        }
-        if (actionMove) {
-            actions.add(App.Action.UP);
-            actions.add(App.Action.DOWN);
-        }
+        add(actions, App.Action.CREATE, (node == null));
+        add(actions, App.Action.UPDATE, (node != null));
+        add(actions, App.Action.DELETE, ((node != null) && (parentNode instanceof Element)));
+        add(actions, App.Action.CLONE, ((node != null) && (parentNode instanceof Element)));
+        add(actions, App.Action.UP, ((node != null) && (parentNode instanceof Element)));
+        add(actions, App.Action.DOWN, ((node != null) && (parentNode instanceof Element)));
+        add(actions, App.Action.FILL, (node != null));
+        add(actions, App.Action.PRUNE, (node != null));
+        add(actions, App.Action.CLIP_CLEAR, SystemU.isTrue());
+        add(actions, App.Action.CLIP_CUT, ((node != null) && (parentNode instanceof Element)));
+        add(actions, App.Action.CLIP_COPY, ((node != null) && (parentNode instanceof Element)));
+        add(actions, App.Action.CLIP_PASTE, (cursorParentC != null));
         return actions;
+    }
+
+    private static void add(final Collection<String> actions, final String name, final boolean condition) {
+        if (condition) {
+            actions.add(name);
+        }
     }
 
     private static class Const {
