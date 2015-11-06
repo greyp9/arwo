@@ -10,13 +10,16 @@ import io.github.greyp9.arwo.core.html.HtmlU;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
+import io.github.greyp9.arwo.core.xed.bundle.XsdBundle;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
 import io.github.greyp9.arwo.core.xed.view.html.type.DrillDownHtmlView;
+import io.github.greyp9.arwo.core.xed.view.html.type.EnumHtmlView;
 import io.github.greyp9.arwo.core.xed.view.html.type.TextHtmlView;
 import io.github.greyp9.arwo.core.xed.view.type.ViewInstance;
 import io.github.greyp9.arwo.core.xed.view.type.ViewInstanceDrillDown;
+import io.github.greyp9.arwo.core.xed.view.type.ViewInstanceEnum;
 import io.github.greyp9.arwo.core.xed.view.type.ViewInstanceText;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import org.w3c.dom.Element;
@@ -27,10 +30,12 @@ import java.util.Collection;
 
 public class PropertyPageHtmlView {
     private final XedPropertyPageView view;
+    private final XsdBundle xsdBundle;
     private final XedRequest request;
 
     public PropertyPageHtmlView(final XedPropertyPageView view, final XedRequest request) {
         this.view = view;
+        this.xsdBundle = view.getCursor().getXed().getXsdBundle();
         this.request = request;
     }
 
@@ -50,7 +55,7 @@ public class PropertyPageHtmlView {
                 Html.CLASS, Const.HEADER));
         final Element th = ElementU.addElement(trHead, Html.TH, null, NameTypeValuesU.create(
                 Html.COLSPAN, Integer.toString(2), Html.CLASS, Const.HEADER));
-        final String nameI18n = view.getItemNameI18n(view.getCursor().getTypeInstance(), null);
+        final String nameI18n = xsdBundle.getLabel(view.getCursor().getTypeInstance());
         ElementU.addElement(th, Html.SPAN, nameI18n, NameTypeValuesU.create(Html.CLASS, Const.HEADER));
         // form table body
         final Element tbody = ElementU.addElement(table, Html.TBODY, null, NameTypeValuesU.create(
@@ -74,8 +79,7 @@ public class PropertyPageHtmlView {
 
     private void addViewInstance(final ViewInstance viewInstance, final Element tbody) {
         final Element tr = ElementU.addElement(tbody, Html.TR);
-        final String nameI18n = view.getItemNameI18n(
-                view.getCursor().getTypeInstance(), viewInstance.getTypeInstance());
+        final String nameI18n = xsdBundle.getLabel(view.getCursor().getTypeInstance(), viewInstance.getTypeInstance());
         ElementU.addElement(tr, Html.TD, nameI18n, NameTypeValuesU.create(Html.CLASS, "attr-name"));
         addViewInstanceValue(viewInstance, tr);
     }
@@ -84,6 +88,8 @@ public class PropertyPageHtmlView {
         final Element td = ElementU.addElement(tr, Html.TD, null, NameTypeValuesU.create(Html.CLASS, "attr-value"));
         if (viewInstance instanceof ViewInstanceDrillDown) {
             addViewInstanceValueDrillDown((ViewInstanceDrillDown) viewInstance, td);
+        } else if (viewInstance instanceof ViewInstanceEnum) {
+            addViewInstanceValueEnum((ViewInstanceEnum) viewInstance, td);
         } else {
             addViewInstanceValueText((ViewInstanceText) viewInstance, td);
         }
@@ -91,6 +97,10 @@ public class PropertyPageHtmlView {
 
     private void addViewInstanceValueDrillDown(final ViewInstanceDrillDown viewInstance, final Element tr) {
         new DrillDownHtmlView(viewInstance).addContentTo(tr);
+    }
+
+    private void addViewInstanceValueEnum(final ViewInstanceEnum viewInstance, final Element tr) {
+        new EnumHtmlView(viewInstance).addContentTo(tr);
     }
 
     private void addViewInstanceValueText(final ViewInstanceText viewInstance, final Element tr) {

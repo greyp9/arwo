@@ -1,0 +1,28 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<xsd:schema targetNamespace='urn:arwo:action'
+            xmlns:action='urn:arwo:action'
+            xmlns:xsd='http://www.w3.org/2001/XMLSchema'
+            elementFormDefault='qualified'>
+
+    <xsd:element name='filter' type='action:filterType'/>
+
+    <xsd:complexType name='filterType'>
+        <xsd:sequence>
+            <xsd:element name='column' type='xsd:string'/>
+            <xsd:element name='operator' type='action:filterOperatorType'/>
+            <xsd:element name='value' type='xsd:string'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:simpleType name='filterOperatorType'>
+        <xsd:restriction base='xsd:string'>
+            <xsd:enumeration value='EQ'/>
+            <xsd:enumeration value='NEQ'/>
+            <xsd:enumeration value='LT'/>
+            <xsd:enumeration value='GT'/>
+            <xsd:enumeration value='LEQ'/>
+            <xsd:enumeration value='GEQ'/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+</xsd:schema>

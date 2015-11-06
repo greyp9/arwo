@@ -9,6 +9,11 @@ public final class App {
     private App() {
     }
 
+    public static class Actions {
+        public static final String XSD = "io/github/greyp9/arwo/xsd/action/action.xsd";
+        public static final QName QNAME_FILTER = new QName("urn:arwo:action", "filter", "action");
+    }
+
     public static class Realm {
         public static final String XSD = "io/github/greyp9/arwo/xsd/realm/realm.xsd";
         public static final String XML_EMPTY = "io/github/greyp9/arwo/xsd/realm/realm.xml";

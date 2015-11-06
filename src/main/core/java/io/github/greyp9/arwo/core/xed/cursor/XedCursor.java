@@ -59,7 +59,7 @@ public class XedCursor {
 
     public final XedCursor getParentConcrete() {
         XedCursor parentConcrete = parent;
-        while (parentConcrete.getNode() == null) {
+        while ((parentConcrete != null) && (parentConcrete.getNode() == null)) {
             parentConcrete = parentConcrete.getParent();
         }
         return parentConcrete;

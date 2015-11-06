@@ -14,6 +14,7 @@ import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
 import io.github.greyp9.arwo.core.xed.view.XedTableView;
 import io.github.greyp9.arwo.core.xed.view.text.PropertyPageTextView;
 import io.github.greyp9.arwo.core.xed.view.text.TableTextView;
+import io.github.greyp9.arwo.core.xed.view.type.ViewInstanceU;
 import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
@@ -59,10 +60,11 @@ public class RealmViewTest extends TestCase {
         // load model
         final XedCursorView view = new XedCursorView(cursorPrincipal);
         final XedPropertyPageView pageView = view.getPageView();
-        final Collection<String> itemNames = pageView.getItemNames();
+        final Collection<String> itemNames = ViewInstanceU.getItemNames(pageView.getViewInstances());
         logger.finest(itemNames.toString());
         Assert.assertEquals("[user, credential, roles]", itemNames.toString());
-        final Collection<String> itemNamesI18n = pageView.getItemNamesI18n();
+        final Collection<String> itemNamesI18n = ViewInstanceU.getItemNamesI18n(
+                pageView.getCursor(), pageView.getViewInstances());
         logger.finest(itemNamesI18n.toString());
         Assert.assertEquals("[Name, Password, Roles]", itemNamesI18n.toString());
         // change locale
@@ -70,7 +72,8 @@ public class RealmViewTest extends TestCase {
         final XedCursor cursorPrincipalDE = new XedNav(xedDE).find(elementPrincipal);
         final XedCursorView viewDE = new XedCursorView(cursorPrincipalDE);
         final XedPropertyPageView pageViewDE = viewDE.getPageView();
-        final Collection<String> itemNamesI18nDE = pageViewDE.getItemNamesI18n();
+        final Collection<String> itemNamesI18nDE = ViewInstanceU.getItemNamesI18n(
+                pageViewDE.getCursor(), pageViewDE.getViewInstances());
         logger.finest(itemNamesI18nDE.toString());
         Assert.assertEquals("[N\u00e4me, P\u00e4ssw\u00f6rd, R\u00f6les]", itemNamesI18nDE.toString());
     }
@@ -93,9 +96,10 @@ public class RealmViewTest extends TestCase {
         // load model
         final XedCursorView view = new XedCursorView(cursorPrincipal);
         final XedPropertyPageView pageView = view.getPageView();
-        final Collection<String> itemNames = pageView.getItemNames();
+        final Collection<String> itemNames = ViewInstanceU.getItemNames(pageView.getViewInstances());
         Assert.assertEquals("[user, credential, roles]", itemNames.toString());
-        final Collection<String> itemNamesI18n = pageView.getItemNamesI18n();
+        final Collection<String> itemNamesI18n = ViewInstanceU.getItemNamesI18n(
+                pageView.getCursor(), pageView.getViewInstances());
         logger.finest(itemNamesI18n.toString());
         Assert.assertEquals("[N\u00e4me, P\u00e4ssw\u00f6rd, R\u00f6les]", itemNamesI18n.toString());
     }

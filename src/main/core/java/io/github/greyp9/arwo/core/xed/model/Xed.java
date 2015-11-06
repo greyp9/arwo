@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.core.xed.model;
 
 import io.github.greyp9.arwo.core.app.AppText;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.xed.bundle.XsdBundle;
 import io.github.greyp9.arwo.core.xed.bundle.XsdBundles;
 import io.github.greyp9.arwo.core.xed.op.OpClone;
 import io.github.greyp9.arwo.core.xed.op.OpCreate;
@@ -24,7 +25,7 @@ import java.util.ResourceBundle;
 public class Xed {
     private final Document document;
     private final XsdTypes xsdTypes;
-    private final XsdBundles xsdBundles;
+    private final XsdBundle xsdBundle;
 
     public final Document getDocument() {
         return document;
@@ -34,11 +35,9 @@ public class Xed {
         return xsdTypes;
     }
 
-/*
-    public final XsdBundles getXsdBundles() {
-        return xsdBundles;
+    public final XsdBundle getXsdBundle() {
+        return xsdBundle;
     }
-*/
 
     public Xed(final Document document, final XsdTypes xsdTypes) {
         this(document, xsdTypes, Locale.getDefault());
@@ -47,17 +46,17 @@ public class Xed {
     public Xed(final Document document, final XsdTypes xsdTypes, final Locale locale) {
         this.document = document;
         this.xsdTypes = xsdTypes;
-        this.xsdBundles = new XsdBundles(xsdTypes, locale);
+        this.xsdBundle = new XsdBundle(new XsdBundles(xsdTypes, locale));
     }
 
     public final Bundle getBundle() {
-        final ResourceBundle bundleCore = new AppText(xsdBundles.getLocale()).getBundleCore();
+        final ResourceBundle bundleCore = new AppText(xsdBundle.getLocale()).getBundleCore();
         final ResourceBundle bundleRoot = getRootBundle();
         return new Bundle(bundleRoot, bundleCore);
     }
 
     public final Locale getLocale() {
-        return xsdBundles.getLocale();
+        return xsdBundle.getLocale();
     }
 
     public final ResourceBundle getRootBundle() {
@@ -65,7 +64,7 @@ public class Xed {
     }
 
     public final ResourceBundle getBundle(final String uri) {
-        return xsdBundles.getBundle(uri);
+        return xsdBundle.getXsdBundles().getBundle(uri);
     }
 
     public final XPather getXPather() {

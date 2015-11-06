@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.xed.view.text;
 
 import io.github.greyp9.arwo.core.value.Matrix;
+import io.github.greyp9.arwo.core.xed.bundle.XsdBundle;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.view.XedTableView;
@@ -13,9 +14,11 @@ import java.util.Collection;
 
 public class TableTextView {
     private final XedTableView view;
+    private final XsdBundle bundle;
 
     public TableTextView(final XedTableView view) {
         this.view = view;
+        this.bundle = view.getCursor().getXed().getXsdBundle();
     }
 
     public final String render() {
@@ -23,7 +26,7 @@ public class TableTextView {
         final TypeInstance instanceTable = cursor.getTypeInstance();
         final XedCursor cursorTable = cursor.getParentConcrete();
         final Element elementTable = cursorTable.getElement();
-        final String tableHeader = view.getItemNameI18n(cursor.getTypeInstance(), null);
+        final String tableHeader = bundle.getLabel(instanceTable);
         final Collection<ViewInstance> viewInstances = view.getViewInstances();
         final Collection<Element> childrenRows = ElementU.getChildren(
                 elementTable, cursor.getTypeInstance().getName());
@@ -31,7 +34,7 @@ public class TableTextView {
         int row = 0;
         int column = -1;
         for (final ViewInstance viewInstance : viewInstances) {
-            final String columnName = view.getItemNameI18n(instanceTable, viewInstance.getTypeInstance());
+            final String columnName = bundle.getLabel(instanceTable, viewInstance.getTypeInstance());
             matrix.set(row, ++column, columnName);
         }
         final XedNav nav = new XedNav(cursor.getXed());
