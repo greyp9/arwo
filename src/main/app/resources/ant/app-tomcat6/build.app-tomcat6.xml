@@ -109,6 +109,12 @@
             <include name='io/github/greyp9/arwo/app/realm/servlet/RealmServlet.java'/>
             <!--webapp settings-->
             <include name='io/github/greyp9/arwo/app/xed/servlet/Xed1Servlet.java'/>
+
+
+            <!--table testing-->
+            <include name='io/github/greyp9/arwo/app/apptest/fs/servlet/FileSystemServlet.java'/>
+
+
             <!--included in realm jar (process scope)-->
             <exclude name='io/github/greyp9/arwo/core/codec/b64/**/*.java'/>
             <exclude name='io/github/greyp9/arwo/core/codec/hash/secure/**/*.java'/>

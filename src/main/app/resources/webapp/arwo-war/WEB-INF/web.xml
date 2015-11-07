@@ -37,6 +37,16 @@
         <servlet-name>Xed1ServletRealm</servlet-name>
         <url-pattern>/users/*</url-pattern>
     </servlet-mapping>
+    <!--filesystem-->
+    <servlet>
+        <description>view ${user.home}</description>
+        <servlet-name>FileSystemServlet</servlet-name>
+        <servlet-class>io.github.greyp9.arwo.app.apptest.fs.servlet.FileSystemServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>FileSystemServlet</servlet-name>
+        <url-pattern>/home/*</url-pattern>
+    </servlet-mapping>
 
     <security-constraint>
         <web-resource-collection>
