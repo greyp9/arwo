@@ -27,6 +27,17 @@ public class TextHtmlView {
         ElementU.addElement(td, Html.INPUT, null, attrs);
     }
 
+    public final void addContentToStrip(final Element td) {
+        final XedCursor cursor = viewInstance.getCursor();
+        final TypeInstance parentInstance = viewInstance.getCursor().getTypeInstance();
+        final TypeInstance typeInstance = viewInstance.getTypeInstance();
+        final String name = typeInstance.getID(parentInstance);
+        final String value = cursor.getValue(typeInstance);
+        final NameTypeValues attrs = NameTypeValuesU.create(Html.NAME, name, Html.TYPE, Html.TEXT,
+                Html.VALUE, value);
+        ElementU.addElement(td, Html.INPUT, null, attrs);
+    }
+
     private static class Const {
         private static final int WIDTH_INPUT_TEXT = 64;
     }

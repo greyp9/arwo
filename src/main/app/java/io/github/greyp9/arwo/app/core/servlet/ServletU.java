@@ -20,7 +20,6 @@ public final class ServletU {
     private ServletU() {
     }
 
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private static NameTypeValues toHeaders(final HttpServletRequest request) {
         final NameTypeValues headers = new NameTypeValues();
         final Enumeration<?> names = request.getHeaderNames();
@@ -29,7 +28,7 @@ public final class ServletU {
             final Enumeration<?> values = request.getHeaders(name);
             while (values.hasMoreElements()) {
                 final String value = (String) values.nextElement();
-                headers.add(new NameTypeValue(name, value));
+                headers.add(NameTypeValue.U.create(name, value));
             }
         }
         return headers;

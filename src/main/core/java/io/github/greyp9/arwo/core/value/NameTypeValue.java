@@ -39,4 +39,13 @@ public class NameTypeValue {
     public final String toString() {
         return String.format("[%s:%s]=[%s]", type, name, value);
     }
+
+    public static final class U {
+        private U() {
+        }
+
+        public static NameTypeValue create(final String name, final Object value) {
+            return new NameTypeValue(name, value);
+        }
+    }
 }

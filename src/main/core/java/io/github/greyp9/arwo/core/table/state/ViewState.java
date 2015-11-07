@@ -1,7 +1,10 @@
 package io.github.greyp9.arwo.core.table.state;
 
+import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.page.Page;
 import io.github.greyp9.arwo.core.table.filter.Filters;
+import io.github.greyp9.arwo.core.table.locus.RowSetMetaDataLocus;
+import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.sort.Sorts;
 
@@ -90,11 +93,11 @@ public class ViewState {
         this.page = page;
     }
 
-/*
     public final String getFilterColumn() {
         return filterColumn;
     }
 
+/*
     public String getFilterColumnLocus(Locus locus) {
         return ((filterColumn == null) ? null :
                 new Bundle(locus.getBundle()).getString(TableU.getKey(name, filterColumn)));
@@ -133,15 +136,14 @@ public class ViewState {
     }
 */
 
-/*
-    public void localize(RowSetMetaData metaData, Locus locus) {
-        boolean toLocalize = filters.toLocalize();
-        if (toLocalize) {
-            RowSetMetaData metaDataLocus = new RowSetMetaDataLocus(locus.getBundle()).localize(metaData);
-            filters.localize(metaDataLocus, locus.getValueX());
+    public final ViewState normalize(final RowSetMetaData metaData, final Bundle bundle) {
+        final boolean toNormalize = filters.toNormalize();
+        if (toNormalize) {
+            final RowSetMetaData metaDataLocus = new RowSetMetaDataLocus(bundle).localize(metaData);
+            filters.normalize(metaDataLocus);
         }
+        return this;
     }
-*/
 
     public static class Action {
         // table actions

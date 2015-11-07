@@ -14,7 +14,6 @@ public final class HttpArguments {
         return toArguments(UTF8Codec.toString(entity));
     }
 
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public static NameTypeValues toArguments(final String queryString) {
         final NameTypeValues nameTypeValues = new NameTypeValues();
         final String[] queryTokens = ((queryString == null) ?
@@ -26,9 +25,9 @@ public final class HttpArguments {
                 if (indexOf >= 0) {
                     final String name = queryTokenDecoded.substring(0, indexOf);
                     final String value = queryTokenDecoded.substring(indexOf + Http.Token.EQUALS.length());
-                    nameTypeValues.add(new NameTypeValue(name, value));
+                    nameTypeValues.add(NameTypeValue.U.create(name, value));
                 } else {
-                    nameTypeValues.add(new NameTypeValue(queryTokenDecoded, ""));
+                    nameTypeValues.add(NameTypeValue.U.create(queryTokenDecoded, ""));
                 }
             }
         }

@@ -20,7 +20,6 @@ public class EnumHtmlView {
         this.viewInstance = viewInstance;
     }
 
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public final void addContentTo(final Element td) {
         final XedCursor cursor = viewInstance.getCursor();
         final XsdBundle xsdBundle = viewInstance.getCursor().getXed().getXsdBundle();
@@ -34,7 +33,27 @@ public class EnumHtmlView {
             final NameTypeValues attrs = NameTypeValuesU.create(
                     Html.TYPE, Html.RADIO, Html.NAME, name, Html.VALUE, enumValue);
             if (enumValue.equals(value)) {
-                attrs.add(new NameTypeValue(Html.CHECKED, Html.CHECKED));
+                attrs.add(NameTypeValue.U.create(Html.CHECKED, Html.CHECKED));
+            }
+            ElementU.addElement(td, Html.INPUT, null, attrs);
+            ElementU.addElement(td, Html.SPAN, labelIt);
+        }
+    }
+
+    public final void addContentToStrip(final Element td) {
+        final XedCursor cursor = viewInstance.getCursor();
+        final XsdBundle xsdBundle = viewInstance.getCursor().getXed().getXsdBundle();
+        final TypeInstance parentInstance = viewInstance.getCursor().getTypeInstance();
+        final TypeInstance typeInstance = viewInstance.getTypeInstance();
+        final String name = typeInstance.getID(parentInstance);
+        final String value = cursor.getValue(typeInstance);
+        final Collection<String> enumValues = typeInstance.getDataType().getRestrictions().getEnumValues();
+        for (final String enumValue : enumValues) {
+            final String labelIt = xsdBundle.getLabelEnumCompact(parentInstance, typeInstance, enumValue);
+            final NameTypeValues attrs = NameTypeValuesU.create(
+                    Html.TYPE, Html.RADIO, Html.NAME, name, Html.VALUE, enumValue);
+            if (enumValue.equals(value)) {
+                attrs.add(NameTypeValue.U.create(Html.CHECKED, Html.CHECKED));
             }
             ElementU.addElement(td, Html.INPUT, null, attrs);
             ElementU.addElement(td, Html.SPAN, labelIt);

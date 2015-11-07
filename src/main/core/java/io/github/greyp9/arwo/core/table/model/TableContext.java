@@ -5,7 +5,7 @@ import io.github.greyp9.arwo.core.table.state.ViewState;
 
 public class TableContext {
     private final ViewState viewState;
-    private final String targetID;
+    private final String submitID;
     private final String tableClass;
     private final Bundle bundle;
 
@@ -13,8 +13,8 @@ public class TableContext {
         return viewState;
     }
 
-    public final String getTargetID() {
-        return targetID;
+    public final String getSubmitID() {
+        return submitID;
     }
 
     public final String getTableClass() {
@@ -25,10 +25,10 @@ public class TableContext {
         return bundle;
     }
 
-    public TableContext(final ViewState viewState, final String targetID,
+    public TableContext(final ViewState viewState, final String submitID,
                         final String tableClass, final Bundle bundle) {
         this.viewState = viewState;
-        this.targetID = targetID;
+        this.submitID = submitID;
         this.tableClass = tableClass;
         this.bundle = bundle;
     }

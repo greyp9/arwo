@@ -42,7 +42,7 @@ public class TableHeaderView {
                 NameTypeValuesU.create(Html.COLSPAN, Integer.toString(table.getMetaData().size())));
         final SubmitToken token = new SubmitToken(App.Target.VIEW_STATE, ViewState.Toggle.RIBBON, table.getID());
         // (for sftp view, "title" is fs path, but viewState.getName() should be used for button)
-        HtmlU.addButton(th, title, context.getTargetID(), token.toString(), "header", null);
+        HtmlU.addButton(th, title, context.getSubmitID(), token.toString(), "header", null);
         // optionally add extra table controls
         final boolean openTH = context.getViewState().isOpenTH();
         if (openTH) {
@@ -61,7 +61,7 @@ public class TableHeaderView {
 
     private void addRibbonTo(final Element tableHtml, final RowSetMetaData metaData) {
         final String tableID = table.getID();
-        final String targetID = context.getTargetID();
+        final String submitID = context.getSubmitID();
         // row container
         final int width = metaData.size();
         final Element tr = ElementU.addElement(tableHtml, Html.TR, null, NameTypeValuesU.create(
@@ -70,18 +70,18 @@ public class TableHeaderView {
                 Html.COLSPAN, Integer.toString(width), Html.CLASS, ViewState.Toggle.RIBBON));
         // reset table UI widget
         final SubmitToken tokenReset = new SubmitToken(App.Target.VIEW_STATE, ViewState.Action.RESET, tableID);
-        HtmlU.addButton(th, UTF16.TABLE_RESET, targetID, tokenReset.toString(), ViewState.Toggle.RIBBON, null);
+        HtmlU.addButton(th, UTF16.TABLE_RESET, submitID, tokenReset.toString(), ViewState.Toggle.RIBBON, null);
         // baseline table UI widget
         final SubmitToken tokenBaseline = new SubmitToken(App.Target.VIEW_STATE, ViewState.Toggle.BASELINE, tableID);
-        HtmlU.addButton(th, UTF16.TABLE_BASELINE, targetID, tokenBaseline.toString(), ViewState.Toggle.RIBBON, null);
+        HtmlU.addButton(th, UTF16.TABLE_BASELINE, submitID, tokenBaseline.toString(), ViewState.Toggle.RIBBON, null);
         // connect table (to table data source) UI widget
         final SubmitToken tokenConnect = new SubmitToken(App.Target.VIEW_STATE, ViewState.Toggle.CONNECT, tableID);
         final boolean isConnected = context.getViewState().isConnected();
         final String textConnect = (isConnected ? UTF16.TABLE_CONNECT : UTF16.TABLE_DISCONNECT);
-        HtmlU.addButton(th, textConnect, targetID, tokenConnect.toString(), ViewState.Toggle.RIBBON, null);
+        HtmlU.addButton(th, textConnect, submitID, tokenConnect.toString(), ViewState.Toggle.RIBBON, null);
         // paging UI widget
         final SubmitToken tokenPage = new SubmitToken(App.Target.VIEW_STATE, ViewState.Toggle.PAGE, table.getID());
-        HtmlU.addButton(th, UTF16.TABLE_PAGE, targetID, tokenPage.toString(), ViewState.Toggle.RIBBON, null);
+        HtmlU.addButton(th, UTF16.TABLE_PAGE, submitID, tokenPage.toString(), ViewState.Toggle.RIBBON, null);
     }
 
     private void addStatusTo(final Element tableHtml, final RowSetMetaData metaData,
@@ -127,8 +127,9 @@ public class TableHeaderView {
         while (iterator.hasNext()) {
             final Filter filter = iterator.next();
             final String label = bundle.getString(TableU.getKey(metaData.getID(), filter.getName()), filter.getName());
-            final String value = filter.getValue().toString();
-            buffer.append(String.format("[%s %s %s]", label, filter.getOperator(), value));
+            final Object value = filter.getValue();
+            final String valueText = (value == null) ? null : value.toString();
+            buffer.append(String.format("[%s %s %s]", label, filter.getOperator(), valueText));
         }
         return buffer.toString();
     }
@@ -155,7 +156,7 @@ public class TableHeaderView {
             final Element th = ElementU.addElement(tr, Html.TH, null, NameTypeValuesU.create(Html.CLASS, "label"));
             // sort
             final SubmitToken token = new SubmitToken(App.Target.VIEW_STATE, ViewState.Action.SORT, tableID, name);
-            HtmlU.addButton(th, text, context.getTargetID(), token.toString(), null, null);
+            HtmlU.addButton(th, text, context.getSubmitID(), token.toString(), null, null);
         } else {
             ElementU.addElement(tr, Html.TH, text, NameTypeValuesU.create(Html.CLASS, ViewState.Const.COLUMNS));
         }
@@ -174,7 +175,7 @@ public class TableHeaderView {
 
     private void addControlsColumnTo(final Element tr, final RowSetMetaData metaData, final int i) {
         final String tableID = table.getID();
-        final String targetID = context.getTargetID();
+        final String submitID = context.getSubmitID();
         // column
         final String name = metaData.getName(i);
         final Element th = ElementU.addElement(tr, Html.TH, null, NameTypeValuesU.create(
@@ -186,10 +187,10 @@ public class TableHeaderView {
 */
         // filter
         final SubmitToken tokenFilter = new SubmitToken(App.Target.VIEW_STATE, ViewState.Toggle.FILTERS, tableID, name);
-        HtmlU.addButton(th, UTF16.COLUMN_FILTER, targetID, tokenFilter.toString(), ViewState.Const.COLUMNS, null);
+        HtmlU.addButton(th, UTF16.COLUMN_FILTER, submitID, tokenFilter.toString(), ViewState.Const.COLUMNS, null);
         // hide
         final SubmitToken tokenHide = new SubmitToken(App.Target.VIEW_STATE, ViewState.Action.HIDE, tableID, name);
-        HtmlU.addButton(th, UTF16.COLUMN_HIDE, targetID, tokenHide.toString(), ViewState.Const.COLUMNS, null);
+        HtmlU.addButton(th, UTF16.COLUMN_HIDE, submitID, tokenHide.toString(), ViewState.Const.COLUMNS, null);
     }
 
     private String toIcon(final Boolean ascending) {

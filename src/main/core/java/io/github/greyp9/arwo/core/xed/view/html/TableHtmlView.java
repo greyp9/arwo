@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.xed.view.html;
 
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.page.Page;
 import io.github.greyp9.arwo.core.table.core.TableU;
 import io.github.greyp9.arwo.core.table.html.TableView;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
@@ -16,6 +17,7 @@ import io.github.greyp9.arwo.core.xed.view.XedTableView;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import org.w3c.dom.Element;
 
+import java.io.IOException;
 import java.util.Collection;
 
 public class TableHtmlView {
@@ -27,7 +29,7 @@ public class TableHtmlView {
         this.request = request;
     }
 
-    public final void addContentTo(final Element html) {
+    public final void addContentTo(final Element html) throws IOException {
         final String baseURI = view.getBaseURI();
         final String submitID = request.getState().getSubmitID();
         final XedCursor cursorSelected = view.getCursor();
@@ -42,9 +44,10 @@ public class TableHtmlView {
         final Collection<Element> children = cursorConcrete.getChildren(typeInstance);
         final RowSet rowSet = rowSetFactory.create(cursorConcrete, children, cursorSelected.getElement());
         // prep for render
-        final ViewState viewState = request.getState().getViewStates().getViewState(rowSet.getID());
-        final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
         final Bundle bundle = cursorSelected.getXed().getBundle();
+        final ViewState viewState = request.getState().getViewStates().getViewState(rowSet.getMetaData(), bundle);
+        viewState.setPage(Page.Factory.fixPage(viewState.getPage(), rowSet.getRows()));
+        final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
         addFooter(table, cursorTableType, bundle);
         final TableContext tableContext = new TableContext(viewState, submitID, "table", bundle);
         // render

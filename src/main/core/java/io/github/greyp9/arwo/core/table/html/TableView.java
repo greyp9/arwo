@@ -9,6 +9,8 @@ import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import org.w3c.dom.Element;
 
+import java.io.IOException;
+
 public class TableView {
     private final Table table;
     private final TableContext context;
@@ -18,9 +20,10 @@ public class TableView {
         this.context = context;
     }
 
-    public final void addContentTo(final Element html) {
+    public final void addContentTo(final Element html) throws IOException {
         final Element div = ElementU.addElement(html, Html.DIV, null, NameTypeValuesU.create(
                 Html.CLASS, Html.TABLE));
+        new TableFilterStripView(context).addContentTo(div);
         final Element form = ElementU.addElement(div, Html.FORM, null, NameTypeValuesU.create(
                 Html.ACTION, "", Html.METHOD, Html.POST));
         final Element tableHtml = ElementU.addElement(form, Html.TABLE, null, NameTypeValuesU.create(

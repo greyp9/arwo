@@ -5,14 +5,13 @@ public final class NameTypeValuesU {
     private NameTypeValuesU() {
     }
 
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public static NameTypeValues create(final String... args) {
         final NameTypeValues nameTypeValues = new NameTypeValues();
         for (int i = 0; (i < args.length); i += 2) {
             final boolean isValue = ((i + 1) < args.length);
             final String name = args[i];
             final String value = (isValue ? args[i + 1] : null);
-            nameTypeValues.add(new NameTypeValue(name, value));
+            nameTypeValues.add(NameTypeValue.U.create(name, value));
         }
         return nameTypeValues;
     }

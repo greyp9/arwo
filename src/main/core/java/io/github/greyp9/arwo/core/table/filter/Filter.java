@@ -59,7 +59,6 @@ public class Filter {
         return matches;
     }
 
-/*
     @SuppressWarnings("PMD.OnlyOneReturn")
     public static Operator toOperator(final String name) {
         try {
@@ -68,7 +67,6 @@ public class Filter {
             return null;
         }
     }
-*/
 
     public enum Operator {
         EQ, LT, GT, NEQ, LEQ, GEQ

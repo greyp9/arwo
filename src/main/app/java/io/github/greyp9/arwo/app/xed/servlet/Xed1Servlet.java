@@ -40,9 +40,17 @@ public class Xed1Servlet extends javax.servlet.http.HttpServlet {
             final String xmlPath = realmFile.getCanonicalPath();
             final String xsdPath = URLCodec.toExternalForm(ResourceU.resolve(App.Realm.XSD));
             final XedEntry entry = new XedEntry("/users", xmlPath, xsdPath, null);
+/*
+            final String xsdPath = URLCodec.toExternalForm(ResourceU.resolve(App.Actions.XSD));
+            final XedEntry entry = new XedEntry("/users", null, xsdPath, null);
+*/
             synchronized (this) {
                 final String submitID = Integer.toHexString(hashCode());
                 final XedSession session = new XedSessionFactory(entry).create(App.Realm.QNAME, Locale.getDefault());
+/*
+                final XedSession session = new XedSessionFactory(entry).create(
+                        App.Actions.QNAME_FILTER, Locale.getDefault());
+*/
                 state = new XedUserState(submitID, new ViewStates(), session, new XedClipboard());
             }
         } catch (IOException e) {

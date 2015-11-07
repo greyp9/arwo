@@ -1,8 +1,13 @@
 package io.github.greyp9.arwo.core.table.state;
 
+import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.page.Page;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
+import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 
 import java.io.IOException;
 import java.util.Map;
@@ -16,18 +21,15 @@ public class ViewStates {
         this.mapViewState = new TreeMap<String, ViewState>();
     }
 
-    public final ViewState getViewState(final String id) {
+    public final ViewState getViewState(final RowSetMetaData metaData, final Bundle bundle) {
+        final ViewState viewState = getViewState(metaData.getID());
+        return viewState.normalize(metaData, bundle);
+    }
+
+    private ViewState getViewState(final String id) {
         final boolean exists = mapViewState.containsKey(id);
         return (exists) ? mapViewState.get(id) : addViewState(mapViewState, id);
     }
-
-/*
-    public ViewState getViewState(RowSetMetaData metaData, Locus locus) {
-        ViewState viewState = getViewState(metaData.getID());
-        viewState.localize(metaData, locus);
-        return viewState;
-    }
-*/
 
     private static ViewState addViewState(final Map<String, ViewState> viewStates, final String id) {
         final ViewState viewState = new ViewState(id);
@@ -47,8 +49,7 @@ public class ViewStates {
         } else if (ViewState.Action.SORT.equals(action)) {
             viewState.getSorts().add(token.getObject2());
         } else if (ViewState.Action.FILTER.equals(action)) {
-            nameTypeValues.getClass();
-            //viewState.getFilters().add(new XedActionFilter(null).getFilter(nameValues));
+            viewState.getFilters().add(new XedActionFilter(null).getFilter(nameTypeValues));
         } else if (ViewState.Action.HIDE.equals(action)) {
             viewState.getHiddenColumns().add(token.getObject2());
 
@@ -59,7 +60,7 @@ public class ViewStates {
         } else if (ViewState.Toggle.BASELINE.equals(action)) {
             viewState.setIsActiveBaseline(!viewState.isActiveBaseline());
         } else if (ViewState.Toggle.FILTERS.equals(action)) {
-            viewState.setFilterColumn(token.getObject2());
+            viewState.setFilterColumn(Value.join(Http.Token.DOT, token.getObject(), token.getObject2()));
         } else if (ViewState.Toggle.PAGE.equals(action)) {
             viewState.setPage(Page.Factory.togglePage(viewState.getPage(), Const.PAGE_SIZE_TABLE));
         } else if (ViewState.Nav.FIRST.equals(action)) {

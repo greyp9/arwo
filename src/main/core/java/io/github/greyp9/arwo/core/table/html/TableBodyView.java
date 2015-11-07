@@ -2,11 +2,13 @@ package io.github.greyp9.arwo.core.table.html;
 
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
+import io.github.greyp9.arwo.core.page.Page;
 import io.github.greyp9.arwo.core.table.cell.Duration;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
 import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.Row;
+import io.github.greyp9.arwo.core.table.state.ViewState;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import org.w3c.dom.Element;
@@ -41,12 +43,20 @@ public class TableBodyView {
     }
 
     private void addRowsTo(final Element tableHtml) {
+        final ViewState viewState = context.getViewState();
+        // default page object when disabled
+        final Page page = ((viewState.getPage() == null) ? new Page(0, Integer.MAX_VALUE) : viewState.getPage());
         int ordinal = -1;
-        //int count = 0;
         final Iterator<Row> iterator = table.iterator();
-        while (iterator.hasNext()) {
+        // skip rows in previous pages
+        for (int i = 0; ((iterator.hasNext()) && (i < page.getPosition())); ++i) {
+            iterator.next();
+        }
+        // add rows in current page
+        int count = 0;
+        while ((iterator.hasNext()) && (count < page.getCount())) {
             addRowTo(tableHtml, iterator.next(), ++ordinal);
-            //++count;
+            ++count;
         }
     }
 
