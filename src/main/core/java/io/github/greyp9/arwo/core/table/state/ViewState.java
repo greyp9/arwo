@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.table.state;
 
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.page.Page;
 import io.github.greyp9.arwo.core.table.filter.Filters;
 import io.github.greyp9.arwo.core.table.locus.RowSetMetaDataLocus;
@@ -136,11 +137,11 @@ public class ViewState {
     }
 */
 
-    public final ViewState normalize(final RowSetMetaData metaData, final Bundle bundle) {
+    public final ViewState normalize(final RowSetMetaData metaData, final Bundle bundle, final Locus locus) {
         final boolean toNormalize = filters.toNormalize();
         if (toNormalize) {
-            final RowSetMetaData metaDataLocus = new RowSetMetaDataLocus(bundle).localize(metaData);
-            filters.normalize(metaDataLocus);
+            final RowSetMetaData metaDataLocal = new RowSetMetaDataLocus(bundle).localize(metaData);
+            filters.normalize(metaDataLocal, locus);
         }
         return this;
     }

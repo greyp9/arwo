@@ -3,9 +3,12 @@ package io.github.greyp9.arwo.app.xed.servlet;
 import io.github.greyp9.arwo.app.core.servlet.ServletU;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppFolder;
+import io.github.greyp9.arwo.core.date.DateX;
+import io.github.greyp9.arwo.core.date.HttpDateU;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.gz.HttpResponseGZipU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
+import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.table.state.ViewStates;
 import io.github.greyp9.arwo.core.url.URLCodec;
@@ -25,6 +28,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.util.Locale;
+import java.util.TimeZone;
 
 public class Xed1Servlet extends javax.servlet.http.HttpServlet {
     private static final long serialVersionUID = 781645253051571036L;
@@ -47,11 +51,13 @@ public class Xed1Servlet extends javax.servlet.http.HttpServlet {
             synchronized (this) {
                 final String submitID = Integer.toHexString(hashCode());
                 final XedSession session = new XedSessionFactory(entry).create(App.Realm.QNAME, Locale.getDefault());
+                final DateX dateX = new DateX(HttpDateU.Const.DEFAULT, TimeZone.getTimeZone("UTC"));
+                final Locus locus = new Locus(Locale.getDefault(), dateX);
 /*
                 final XedSession session = new XedSessionFactory(entry).create(
                         App.Actions.QNAME_FILTER, Locale.getDefault());
 */
-                state = new XedUserState(submitID, new ViewStates(), session, new XedClipboard());
+                state = new XedUserState(submitID, new ViewStates(), session, new XedClipboard(), locus);
             }
         } catch (IOException e) {
             throw new ServletException(e);

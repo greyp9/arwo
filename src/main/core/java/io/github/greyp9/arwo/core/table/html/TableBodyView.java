@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.table.html;
 
+import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.page.Page;
@@ -14,8 +15,10 @@ import io.github.greyp9.arwo.core.xml.ElementU;
 import org.w3c.dom.Element;
 
 import java.sql.Types;
+import java.util.Date;
 import java.util.Iterator;
 
+@SuppressWarnings("PMD.TooManyMethods")
 public class TableBodyView {
     private final Table table;
     private final TableContext context;
@@ -106,6 +109,14 @@ public class TableBodyView {
             text = toCellText((Boolean) value);
         } else if (type == Types.BOOLEAN) {
             text = toCellText(Boolean.valueOf(value.toString()));
+        } else if (value instanceof Date) {
+            text = toCellText((Date) value);
+        } else if (value instanceof Long) {
+            text = toCellText((Long) value);
+        } else if (value instanceof Integer) {
+            text = toCellText((Integer) value);
+        } else if (value instanceof Duration) {
+            text = toCellText((Duration) value);
         } else {
             text = value.toString();
         }
@@ -114,6 +125,22 @@ public class TableBodyView {
 
     private String toCellText(final Boolean value) {
         return ((value ? UTF16.CHECKBOX_TRUE : UTF16.CHECKBOX_FALSE) + " " + value);
+    }
+
+    private String toCellText(final Date value) {
+        return context.getLocus().toString(value);
+    }
+
+    private String toCellText(final Long value) {
+        return context.getLocus().toString(value);
+    }
+
+    private String toCellText(final Integer value) {
+        return context.getLocus().toString(value);
+    }
+
+    private String toCellText(final Duration value) {
+        return DurationU.durationXSD(value.getValue());
     }
 
     private void addStyle(final Element td, final Object value) {

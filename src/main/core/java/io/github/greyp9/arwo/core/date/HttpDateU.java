@@ -47,5 +47,7 @@ public final class HttpDateU {
     public static class Const {
         private static final String HTTP = "EEE, dd MMM yyyy HH:mm:ss zzz";
         private static final String HTTP_Z = "EEE, dd MMM yyyy HH:mm:ss 'GMT'";
+
+        public static final String DEFAULT = HTTP;
     }
 }

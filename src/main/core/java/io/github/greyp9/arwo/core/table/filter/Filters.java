@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.table.filter;
 
+import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
 import io.github.greyp9.arwo.core.value.Value;
 
@@ -39,12 +40,12 @@ public class Filters {
         return (!listFilterNew.isEmpty());
     }
 
-    public final void normalize(final RowSetMetaData metaData) {
+    public final void normalize(final RowSetMetaData metaData, final Locus locus) {
         for (final Filter filterNew : listFilterNew) {
             if (filterNew.getOperator() == null) {
                 listFilter.clear();
             } else {
-                add(listFilter, normalize(metaData, filterNew));
+                add(listFilter, normalize(metaData, locus, filterNew));
             }
         }
         listFilterNew.clear();
@@ -56,15 +57,15 @@ public class Filters {
         }
     }
 
-    private Filter normalize(final RowSetMetaData metaData, final Filter filter) {
+    private Filter normalize(final RowSetMetaData metaData, final Locus locus, final Filter filter) {
         // find native column name for input
         final int columnIndex = metaData.getIndex(filter.getName());
         final String name = metaData.getName(columnIndex);
         // find native column value for input
         final String value = Value.defaultOnEmpty(filter.getValue().toString(), null);
         // convert strings to native column type
-        //Object valueTyped = valueX.toValue(metaData.getType(columnIndex), value);
+        final Object valueTyped = locus.toValue(metaData.getType(columnIndex), value);
         final boolean isFilter = (name != null);
-        return (isFilter ? new Filter(columnIndex, name, filter.getOperator(), value /* valueTyped */) : null);
+        return (isFilter ? new Filter(columnIndex, name, filter.getOperator(), valueTyped) : null);
     }
 }

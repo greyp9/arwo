@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.core.table.state;
 
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.http.Http;
+import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.page.Page;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
@@ -21,9 +22,9 @@ public class ViewStates {
         this.mapViewState = new TreeMap<String, ViewState>();
     }
 
-    public final ViewState getViewState(final RowSetMetaData metaData, final Bundle bundle) {
+    public final ViewState getViewState(final RowSetMetaData metaData, final Bundle bundle, final Locus locus) {
         final ViewState viewState = getViewState(metaData.getID());
-        return viewState.normalize(metaData, bundle);
+        return viewState.normalize(metaData, bundle, locus);
     }
 
     private ViewState getViewState(final String id) {
