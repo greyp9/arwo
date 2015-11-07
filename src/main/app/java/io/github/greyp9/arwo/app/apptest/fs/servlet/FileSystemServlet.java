@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.app.core.servlet.ServletU;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppHtml;
+import io.github.greyp9.arwo.core.app.AppText;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.date.HttpDateU;
@@ -23,6 +24,7 @@ import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.submit.SubmitTokenU;
+import io.github.greyp9.arwo.core.table.core.TableU;
 import io.github.greyp9.arwo.core.table.html.TableView;
 import io.github.greyp9.arwo.core.table.insert.InsertRow;
 import io.github.greyp9.arwo.core.table.metadata.ColumnMetaData;
@@ -152,14 +154,15 @@ public class FileSystemServlet extends javax.servlet.http.HttpServlet {
             final File folder = new File(SystemU.userHome(), pathInfo);
             final RowSetMetaData metaData = createMetaData();
             final RowSet rowSet = loadRowSet(folder, metaData);
-            final Bundle bundle = new Bundle();
+            final Bundle bundle = new Bundle(new AppText(Locale.getDefault()).getBundleCore());
             final Locus locus = userState.getLocus();
             final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
             final String submitID = userState.getSubmitID();
             final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
-            final TableContext tableContext = new TableContext(viewState, submitID, "table", bundle, locus);
+            TableU.addFooterStandard(table, bundle);
+            final TableContext context = new TableContext(viewState, submitID, "table", bundle, locus);
             // render
-            final TableView tableView = new TableView(table, tableContext);
+            final TableView tableView = new TableView(table, context);
             tableView.addContentTo(html);
         }
 

@@ -53,9 +53,9 @@ public class TableHtmlView {
         viewState.setPage(Page.Factory.fixPage(viewState.getPage(), rowSet.getRows()));
         final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
         addFooter(table, cursorTableType, bundle);
-        final TableContext tableContext = new TableContext(viewState, submitID, "table", bundle, locus);
+        final TableContext context = new TableContext(viewState, submitID, "table", bundle, locus);
         // render
-        final TableView tableView = new TableView(table, tableContext);
+        final TableView tableView = new TableView(table, context);
         tableView.addContentTo(html);
     }
 

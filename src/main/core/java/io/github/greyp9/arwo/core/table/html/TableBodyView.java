@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.page.Page;
+import io.github.greyp9.arwo.core.table.baseline.BaselineValue;
 import io.github.greyp9.arwo.core.table.cell.Duration;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
 import io.github.greyp9.arwo.core.table.model.Table;
@@ -11,6 +12,7 @@ import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.Row;
 import io.github.greyp9.arwo.core.table.state.ViewState;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
+import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import org.w3c.dom.Element;
 
@@ -82,7 +84,9 @@ public class TableBodyView {
 
     private void addColumnTo(final Element tr, final Row row, final int i, final int type) {
         final Object value = row.getColumn(i);
-        if (value instanceof TableViewLink) {
+        if (value instanceof BaselineValue) {
+            addCell(tr, (BaselineValue) value, type);
+        } else if (value instanceof TableViewLink) {
             addCell(tr, (TableViewLink) value);
         } else {
             addCell(tr, value, type);
@@ -148,6 +152,20 @@ public class TableBodyView {
             ElementU.setAttribute(td, Html.CLASS, Const.NUMBER);
         } else if (value instanceof Duration) {
             ElementU.setAttribute(td, Html.CLASS, Const.NUMBER);
+        }
+    }
+
+    private void addCell(final Element tr, final BaselineValue baselineValue, final int type) {
+        final Object valueNew = baselineValue.getNew();
+        final Object valueOld = baselineValue.getOld();
+        final String textNew = toCellText(valueNew, type);
+        final String textOld = (valueOld == null) ? null : "[" + toCellText(valueOld, type) + "]";
+        final boolean isNumber = ((valueNew instanceof Number) || (valueOld instanceof Number));
+        final String style = Value.join(" ", "difference", (isNumber ? "number" : null));
+        final Element td = ElementU.addElement(tr, Html.TD, null, NameTypeValuesU.create(Html.CLASS, style));
+        ElementU.addElement(td, Html.SPAN, textNew, NameTypeValuesU.create(Html.CLASS, "new"));
+        if (textOld != null) {
+            ElementU.addElement(td, Html.SPAN, textOld, NameTypeValuesU.create(Html.CLASS, "old"));
         }
     }
 

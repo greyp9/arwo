@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.core.page.Page;
 import io.github.greyp9.arwo.core.table.filter.Filters;
 import io.github.greyp9.arwo.core.table.locus.RowSetMetaDataLocus;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
+import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.sort.Sorts;
 
@@ -124,7 +125,6 @@ public class ViewState {
     }
 
 
-/*
     public final void addBaseline(final String path, final Table table) {
         if (activeBaseline) {
             activeBaseline = false;
@@ -135,7 +135,6 @@ public class ViewState {
             }
         }
     }
-*/
 
     public final ViewState normalize(final RowSetMetaData metaData, final Bundle bundle, final Locus locus) {
         final boolean toNormalize = filters.toNormalize();
