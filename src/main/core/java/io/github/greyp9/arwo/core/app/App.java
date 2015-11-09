@@ -12,6 +12,7 @@ public final class App {
     public static class Actions {
         public static final String XSD = "io/github/greyp9/arwo/xsd/action/action.xsd";
         public static final QName QNAME_FILTER = new QName("urn:arwo:action", "filter", "action");
+        public static final QName QNAME_LOCALE = new QName("urn:arwo:action", "locale", "action");
     }
 
     public static class Realm {
@@ -47,6 +48,7 @@ public final class App {
 
     public static class Target {
         public static final String DOCUMENT = "document";
+        public static final String USER_STATE = "userState";
         public static final String VIEW_STATE = "viewState";
     }
 }

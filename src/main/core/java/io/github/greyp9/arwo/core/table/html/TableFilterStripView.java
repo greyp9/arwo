@@ -29,7 +29,7 @@ public class TableFilterStripView {
         final boolean showFilterStrip = (context.getViewState().getFilterColumn() != null);
         if (showFilterStrip) {
             // filter model
-            final Locale locale = Locale.getDefault();
+            final Locale locale = context.getLocus().getLocale();
             final XedActionFilter actionFilter = new XedActionFilter(locale);
             final XedCursor cursorFilter = actionFilter.getCursor();
             final String filterColumn = context.getViewState().getFilterColumn();

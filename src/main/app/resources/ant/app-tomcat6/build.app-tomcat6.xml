@@ -126,6 +126,16 @@
         </exec>
     </target>
 
+    <target name='i18n'>
+        <property name='ant.i18n.dir' value='${project.dir}/src/test/app/resources/ant/pseudo-i18n'/>
+        <ant antfile='${ant.i18n.dir}/build.i18n.xml' dir='${ant.i18n.dir}'/>
+    </target>
+
+    <target name='i18n-clean'>
+        <property name='ant.i18n.dir' value='${project.dir}/src/test/app/resources/ant/pseudo-i18n'/>
+        <ant antfile='${ant.i18n.dir}/build.i18n.xml' dir='${ant.i18n.dir}' target='i18n-clean'/>
+    </target>
+
     <target name='jar-app' depends='compile-app'>
         <mkdir dir='${artifact.dir}'/>
         <jar destfile='${artifact.dir}/arwo.jar'>
@@ -160,7 +170,7 @@
         </war>
     </target>
 
-    <target name='main' depends='clean, jar-realm, jar-app, war-app'>
+    <target name='main' depends='clean, jar-realm, compile-app, i18n, jar-app, i18n-clean, war-app'>
         <echo message='project.dir: ${project.dir}'/>
     </target>
 

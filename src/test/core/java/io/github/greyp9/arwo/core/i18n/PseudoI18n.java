@@ -11,6 +11,9 @@ import java.io.IOException;
 import java.io.PrintWriter;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -20,35 +23,43 @@ import java.util.regex.Pattern;
 public class PseudoI18n {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    public static void main(String[] args) throws Exception {
+    public static void main(final String[] args) throws Exception {
         if (args.length < 2) {
             throw new IllegalArgumentException("PseudoI18n [+|-] [property-file-URL]");
         } else if (args[0].equals("+")) {
-            new PseudoI18n().generate(args[0], args[1]);
+            new PseudoI18n().generate(args[0], Arrays.asList(args));
         } else if (args[0].equals("-")) {
-            new PseudoI18n().generate(args[0], args[1]);
+            new PseudoI18n().generate(args[0], Arrays.asList(args));
         } else {
             throw new IllegalArgumentException("PseudoI18n [+|-] [property-file-URL]");
         }
     }
 
-    private void generate(String operation, String path) throws IOException {
-        File file = new File(path);
-        Level level = (file.exists() ? Level.INFO : Level.SEVERE);
+    private void generate(final String operation, final Collection<String> paths) throws IOException {
+        final Iterator<String> iterator = paths.iterator();
+        iterator.next();  // skip operation (arg[0])
+        while (iterator.hasNext()) {
+            generate(operation, iterator.next());
+        }
+    }
+
+    private void generate(final String operation, final String path) throws IOException {
+        final File file = new File(path);
+        final Level level = (file.exists() ? Level.INFO : Level.SEVERE);
         logger.log(level, path);
         if (file.exists()) {
             pseudoLocalize(operation, file);
         }
     }
 
-    private void pseudoLocalize(String operation, File fileSource) throws IOException {
+    private void pseudoLocalize(final String operation, final File fileSource) throws IOException {
         // filesystem
-        File folder = fileSource.getParentFile();
-        String nameJA = fileSource.getName().replace(".properties", "_ja.properties");
-        String nameRU = fileSource.getName().replace(".properties", "_ru.properties");
-        String nameDE = fileSource.getName().replace(".properties", "_de.properties");
-        String nameFR = fileSource.getName().replace(".properties", "_fr.properties");
-        String nameES = fileSource.getName().replace(".properties", "_es.properties");
+        final File folder = fileSource.getParentFile();
+        final String nameJA = fileSource.getName().replace(".properties", "_ja.properties");
+        final String nameRU = fileSource.getName().replace(".properties", "_ru.properties");
+        final String nameDE = fileSource.getName().replace(".properties", "_de.properties");
+        final String nameFR = fileSource.getName().replace(".properties", "_fr.properties");
+        final String nameES = fileSource.getName().replace(".properties", "_es.properties");
         if ("+".equals(operation)) {
             pseudoLocalize(fileSource, new File(folder, nameJA), createLookupTableJA());
             pseudoLocalize(fileSource, new File(folder, nameRU), createLookupTableRU());
@@ -64,34 +75,36 @@ public class PseudoI18n {
         }
     }
 
-    private void pseudoLocalize(File fileSource, File fileTarget, Properties properties) throws IOException {
+    private void pseudoLocalize(
+            final File fileSource, final File fileTarget, final Properties properties) throws IOException {
         if (fileSource.exists()) {
-            String message = String.format("FROM:[%s] TO:[%s]", fileSource.getName(), fileTarget.getName());
+            final String message = String.format("FROM:[%s] TO:[%s]", fileSource.getName(), fileTarget.getName());
             logger.info(Value.join("/", message, "[START]"));
-            byte[] bytesSource = StreamU.read(fileSource);
-            String source = UTF8Codec.toString(bytesSource);
-            String target = pseudoLocalize(source, properties);
-            byte[] bytesTarget = UTF8Codec.toBytes(target);
+            final byte[] bytesSource = StreamU.read(fileSource);
+            final String source = UTF8Codec.toString(bytesSource);
+            final String target = pseudoLocalize(source, properties);
+            final byte[] bytesTarget = UTF8Codec.toBytes(target);
             StreamU.write(fileTarget, bytesTarget);
+            //noinspection ConstantConditions
             logger.info(Value.join("/", message, "[FINISH]", bytesSource.length, bytesTarget.length));
         }
     }
 
-    private String pseudoLocalize(String source, Properties properties) throws IOException {
-        Pattern pattern = Pattern.compile("(?m)^(.+)\\s*=\\s*(.+)$");
-        StringWriter stringWriter = new StringWriter();
-        PrintWriter printWriter = new PrintWriter(stringWriter);
-        BufferedReader reader = new BufferedReader(new StringReader(source));
+    private String pseudoLocalize(final String source, final Properties properties) throws IOException {
+        final Pattern pattern = Pattern.compile("(?m)^(.+)\\s*=\\s*(.+)$");
+        final StringWriter stringWriter = new StringWriter();
+        final PrintWriter printWriter = new PrintWriter(stringWriter);
+        final BufferedReader reader = new BufferedReader(new StringReader(source));
         boolean moreData = true;
         while (moreData) {
             String line = reader.readLine();
             if (line == null) {
                 moreData = false;
             } else {
-                Matcher matcher = pattern.matcher(line);
+                final Matcher matcher = pattern.matcher(line);
                 if (matcher.matches()) {
-                    String valueOld = matcher.group(2);
-                    String valueNew = pseudoLocalizeValue(valueOld, properties);
+                    final String valueOld = matcher.group(2);
+                    final String valueNew = pseudoLocalizeValue(valueOld, properties);
                     line = line.substring(0, matcher.start(2)) + valueNew;
                 }
                 printWriter.println(line);
@@ -100,11 +113,11 @@ public class PseudoI18n {
         return stringWriter.toString();
     }
 
-    private String pseudoLocalizeValue(String valueOld, Properties properties) {
-        StringBuilder buffer = new StringBuilder();
+    private String pseudoLocalizeValue(final String valueOld, final Properties properties) {
+        final StringBuilder buffer = new StringBuilder();
         for (char c : valueOld.toCharArray()) {
-            String characterOld = new String(new char[] { c });
-            String characterNew = properties.getProperty(characterOld, characterOld);
+            final String characterOld = new String(new char[] { c });
+            final String characterNew = properties.getProperty(characterOld, characterOld);
             buffer.append(characterNew);
         }
         return buffer.toString();

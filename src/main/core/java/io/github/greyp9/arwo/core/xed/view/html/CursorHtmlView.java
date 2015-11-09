@@ -8,6 +8,7 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.xed.action.XedActionLocale;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.view.XedCursorView;
 import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
@@ -20,6 +21,7 @@ import org.w3c.dom.Element;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.Locale;
 
 public class CursorHtmlView {
     private final XedCursorView cursorView;
@@ -34,6 +36,9 @@ public class CursorHtmlView {
         // template html
         final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(Const.HTML)));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
+        // locale property strip
+        final Locale locale = request.getState().getLocus().getLocale();
+        new XedActionLocale(locale).addContentTo(body, locale.getLanguage(), request.getState().getSubmitID());
         // cursor content
         addContentTo(body);
         // touch ups

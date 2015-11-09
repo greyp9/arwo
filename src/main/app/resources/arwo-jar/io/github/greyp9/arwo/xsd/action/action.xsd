@@ -25,4 +25,17 @@
         </xsd:restriction>
     </xsd:simpleType>
 
+    <xsd:element name='locale' type='action:localeType'/>
+
+    <xsd:simpleType name='localeType'>
+        <xsd:restriction base='xsd:string'>
+            <xsd:enumeration value='en'/>
+            <xsd:enumeration value='es'/>
+            <xsd:enumeration value='fr'/>
+            <xsd:enumeration value='de'/>
+            <xsd:enumeration value='ru'/>
+            <xsd:enumeration value='ja'/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
 </xsd:schema>

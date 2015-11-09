@@ -19,6 +19,11 @@
         <ant antfile='${ant.junit.dir}/build.junit.xml' dir='${ant.junit.dir}'/>
     </target>
 
+    <target name='i18n-clean'>
+        <property name='ant.i18n.dir' value='${project.dir}/src/test/app/resources/ant/pseudo-i18n'/>
+        <ant antfile='${ant.i18n.dir}/build.i18n.xml' dir='${ant.i18n.dir}' target='i18n-clean'/>
+    </target>
+
     <target name='findbugs'>
         <property name='ant.findbugs.dir' value='${project.dir}/src/test/app/resources/ant/findbugs'/>
         <ant antfile='${ant.findbugs.dir}/build.findbugs.xml' dir='${ant.findbugs.dir}'/>
@@ -36,6 +41,7 @@
 
     <target name='code' depends='app, findbugs, pmd, checkstyle'/>
 
-    <target name='main' depends='i18n, junit, findbugs, pmd, checkstyle' description='Use -p to view help information.'/>
+    <target name='main' depends='i18n, junit, i18n-clean, findbugs, pmd, checkstyle'
+            description='Use -p to view help information.'/>
 
 </project>

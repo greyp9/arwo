@@ -45,6 +45,8 @@ public class XedHandlerPost {
         final String subject = token.getSubject();
         if (App.Target.DOCUMENT.equals(subject)) {
             httpResponse = new XedWrite(request).apply(token, nameTypeValues, httpResponse);
+        } else if (App.Target.USER_STATE.equals(subject)) {
+            request.getState().apply(token, nameTypeValues);
         } else if (App.Target.VIEW_STATE.equals(subject)) {
             request.getState().getViewStates().apply(token, nameTypeValues);
         }

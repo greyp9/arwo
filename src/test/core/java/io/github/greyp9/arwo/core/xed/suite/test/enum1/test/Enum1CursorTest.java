@@ -71,11 +71,11 @@ public class Enum1CursorTest extends TestCase {
         // view
         final String renderFileType = new CursorTextView(new XedCursorView(cursorFileType)).render();
         logger.finest("FileType\n" + renderFileType);
-        Assert.assertEquals("72e8acd2", CRCU.crc32String(UTF8Codec.toBytes(renderFileType)));
+        Assert.assertEquals("e87364e1", CRCU.crc32String(UTF8Codec.toBytes(renderFileType)));
         // view
         final String renderFile = new CursorTextView(new XedCursorView(cursorFile1)).render();
         logger.finest("File\n" + renderFile);
-        Assert.assertEquals("f7602179", CRCU.crc32String(UTF8Codec.toBytes(renderFile)));
+        Assert.assertEquals("72d84bbd", CRCU.crc32String(UTF8Codec.toBytes(renderFile)));
     }
 
     public static class Const {
