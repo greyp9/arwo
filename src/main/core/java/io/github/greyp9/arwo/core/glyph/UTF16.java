@@ -43,4 +43,7 @@ public final class UTF16 {
 
     private UTF16() {
     }
+
+    // http://www.fileformat.info/info/unicode/char/1f4a9/index.htm
+    // http://esham.io/2015/04/emoji-flags-redux
 }
