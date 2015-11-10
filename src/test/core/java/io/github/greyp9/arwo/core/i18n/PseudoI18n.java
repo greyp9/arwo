@@ -52,7 +52,7 @@ public class PseudoI18n {
         }
     }
 
-    private void pseudoLocalize(final String operation, final File fileSource) throws IOException {
+    public final void pseudoLocalize(final String operation, final File fileSource) throws IOException {
         // filesystem
         final File folder = fileSource.getParentFile();
         final String nameJA = fileSource.getName().replace(".properties", "_ja.properties");
@@ -91,7 +91,7 @@ public class PseudoI18n {
     }
 
     private String pseudoLocalize(final String source, final Properties properties) throws IOException {
-        final Pattern pattern = Pattern.compile("(?m)^(.+)\\s*=\\s*(.+)$");
+        final Pattern pattern = Pattern.compile("(?m)^(.+?)\\s*=\\s*(.+)$");
         final StringWriter stringWriter = new StringWriter();
         final PrintWriter printWriter = new PrintWriter(stringWriter);
         final BufferedReader reader = new BufferedReader(new StringReader(source));
@@ -115,13 +115,27 @@ public class PseudoI18n {
 
     private String pseudoLocalizeValue(final String valueOld, final Properties properties) {
         final StringBuilder buffer = new StringBuilder();
-        for (char c : valueOld.toCharArray()) {
-            final String characterOld = new String(new char[] { c });
+        final int length = valueOld.length();
+        for (int i = 0; (i < length); ++i) {
+            final int remaining = length - i;
+            if (remaining >= LENGTH_SEQUENCE) {
+                CharSequence charSequence = valueOld.substring(i, i + LENGTH_SEQUENCE);
+                boolean unicodeSequence = UNICODE_SEQUENCE.matcher(charSequence).matches();
+                if (unicodeSequence) {
+                    buffer.append(charSequence);
+                    i += (LENGTH_SEQUENCE - 1);
+                    continue;
+                }
+            }
+            final String characterOld = new String(new char[] { valueOld.charAt(i) });
             final String characterNew = properties.getProperty(characterOld, characterOld);
             buffer.append(characterNew);
         }
         return buffer.toString();
     }
+
+    private static final Pattern UNICODE_SEQUENCE = Pattern.compile("\\\\u\\p{XDigit}{4}");
+    private static final int LENGTH_SEQUENCE = 6;
 
     private static Properties createLookupTableES() {
         Properties properties = new Properties();

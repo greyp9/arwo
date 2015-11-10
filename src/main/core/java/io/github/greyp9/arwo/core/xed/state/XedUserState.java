@@ -1,24 +1,28 @@
 package io.github.greyp9.arwo.core.xed.state;
 
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.app.AppFolder;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.locus.LocusFactory;
+import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.table.state.ViewStates;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.xed.action.XedActionLocale;
 import io.github.greyp9.arwo.core.xed.clip.XedClipboard;
 import io.github.greyp9.arwo.core.xed.model.Xed;
+import io.github.greyp9.arwo.core.xed.session.XedEntries;
+import io.github.greyp9.arwo.core.xed.session.XedEntry;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
+import io.github.greyp9.arwo.core.xed.session.XedSessions;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.Map;
-import java.util.TreeMap;
 
 public class XedUserState {
     private final String submitID;
     private final ViewStates viewStates;
-    private final Map<String, XedSession> sessions;
+    private final XedSessions sessions;
     private final XedClipboard clipboard;
 
     private Locus locus;
@@ -31,8 +35,8 @@ public class XedUserState {
         return viewStates;
     }
 
-    public final XedSession getSession() {
-        return sessions.get(App.Realm.QNAME.toString());
+    public final XedSession getSession(final String contextPath) throws IOException {
+        return sessions.getSession(contextPath, locus.getLocale());
     }
 
     public final XedClipboard getClipboard() {
@@ -43,12 +47,20 @@ public class XedUserState {
         return locus;
     }
 
-    public XedUserState(final String submitID, final ViewStates viewStates,
-                        final XedSession session, final XedClipboard clipboard, final Locus locus) {
+    public XedUserState(final String contextPath, final String submitID, final ViewStates viewStates,
+                        final XedClipboard clipboard, final Locus locus) throws IOException {
         this.submitID = submitID;
         this.viewStates = viewStates;
-        this.sessions = new TreeMap<String, XedSession>();
-        this.sessions.put(App.Realm.QNAME.toString(), session);
+        final File webappRoot = AppFolder.getWebappRoot(contextPath);
+        final File realmFile = new File(webappRoot, "root/realm.xml");
+        final String xmlPath = realmFile.getCanonicalPath();
+        final String xsdPathRealm = ResourceU.resolve(App.Realm.XSD).toExternalForm();
+        final String xsdPathActions = ResourceU.resolve(App.Actions.XSD).toExternalForm();
+        final XedEntry entryRealm = new XedEntry("/users", App.Realm.QNAME, xmlPath, xsdPathRealm, null);
+        final XedEntry entryFilter = new XedEntry("/filter", App.Actions.QNAME_FILTER, null, xsdPathActions, null);
+        final XedEntry entryLocale = new XedEntry("/locale", App.Actions.QNAME_LOCALE, null, xsdPathActions, null);
+        final XedEntries entries = new XedEntries(entryRealm, entryFilter, entryLocale);
+        this.sessions = new XedSessions(entries);
         this.clipboard = clipboard;
         this.locus = locus;
     }
@@ -67,13 +79,6 @@ public class XedUserState {
         final String localeID = actionLocale.getXPather().getText("/action:locale");
         locus = new LocusFactory().create(localeID, locus.getDateX());
         // apply to each xed session
-        for (final Map.Entry<String, XedSession> entry : sessions.entrySet()) {
-            final XedSession session = entry.getValue();
-            final Xed xed = session.getXed();
-            final Xed xedUpdate = new Xed(xed.getDocument(), xed.getXsdTypes(), locus.getLocale());
-            final XedSession sessionUpdate = new XedSession(
-                    session.getEntry(), xedUpdate, session.getFile(), session.getDateLoad());
-            this.sessions.put(entry.getKey(), sessionUpdate);
-        }
+        sessions.applyLocale(locus.getLocale());
     }
 }
