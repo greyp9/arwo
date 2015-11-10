@@ -96,7 +96,7 @@ public class XedNavNode {
         final Element elementParent = cursorParent.getElement();
         final TypeInstance typeInstance = cursorTI.getTypeInstance();
         XedCursor cursor = new XedCursor(xed, cursorTI, null, null, typeInstance);
-        final Collection<Element> children = ElementU.getChildren(elementParent);
+        final Collection<Element> children = ElementU.getChildren(elementParent, typeInstance.getName());
         int ordinal = -1;
         for (final Element childIt : children) {
             ++ordinal;

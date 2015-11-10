@@ -43,7 +43,7 @@ public class XedHandlerGet {
         final ServletHttpRequest httpRequest = request.getHttpRequest();
         final XedCursor cursor = new XedNav(request.getSession().getXed()).find(httpRequest.getPathInfo());
         if (cursor == null) {
-            httpResponse = HttpResponseU.toHttpResponse302(PathU.toDir(httpRequest.getBaseURI()));
+            httpResponse = HttpResponseU.toHttpResponse302(PathU.toParent(httpRequest.getURI()));
         } else {
             final String baseURI = httpRequest.getBaseURI();
             httpResponse = new CursorHtmlView(new XedCursorView(baseURI, cursor), request).doGetHtml();

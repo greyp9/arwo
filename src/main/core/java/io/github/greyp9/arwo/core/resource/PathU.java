@@ -22,4 +22,9 @@ public final class PathU {
     public static String toDir(final String prefix, final String... tokens) {
         return toPath(prefix, tokens) + Http.Token.SLASH;
     }
+
+    public static String toParent(final String path) {
+        boolean endsSlash = path.endsWith(Http.Token.SLASH);
+        return path + (endsSlash ? "" : Http.Token.SLASH) + "..";
+    }
 }
