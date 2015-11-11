@@ -1,9 +1,7 @@
 package io.github.greyp9.arwo.core.xed.session;
 
 import io.github.greyp9.arwo.core.xed.model.Xed;
-import io.github.greyp9.arwo.core.xml.QNameU;
 
-import javax.xml.namespace.QName;
 import java.io.IOException;
 import java.util.Locale;
 import java.util.Map;
@@ -23,8 +21,7 @@ public class XedSessions {
         if (session == null) {
             final XedEntry entry = entries.get(contextPath);
             if (entry != null) {
-                final QName qname = QNameU.getQName(entry.getQName());
-                session = new XedSessionFactory(entry).create(qname, locale);
+                session = new XedSessionFactory(entry).create(entry.getQName(), locale);
                 sessions.put(contextPath, session);
             }
         }

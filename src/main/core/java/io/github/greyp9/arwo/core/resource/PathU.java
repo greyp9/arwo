@@ -24,7 +24,7 @@ public final class PathU {
     }
 
     public static String toParent(final String path) {
-        boolean endsSlash = path.endsWith(Http.Token.SLASH);
+        final boolean endsSlash = path.endsWith(Http.Token.SLASH);
         return path + (endsSlash ? "" : Http.Token.SLASH) + "..";
     }
 }

@@ -6,17 +6,17 @@
 
     <target name='app'>
         <property name='ant.app.dir' value='${project.dir}/src/main/app/resources/ant/app'/>
-        <ant antfile='${ant.app.dir}/build.app.xml' dir='${ant.app.dir}'/>
+        <ant antfile='${ant.app.dir}/build.app.xml' dir='${ant.app.dir}' target='main'/>
     </target>
 
     <target name='i18n'>
         <property name='ant.i18n.dir' value='${project.dir}/src/test/app/resources/ant/pseudo-i18n'/>
-        <ant antfile='${ant.i18n.dir}/build.i18n.xml' dir='${ant.i18n.dir}'/>
+        <ant antfile='${ant.i18n.dir}/build.i18n.xml' dir='${ant.i18n.dir}' target='i18n'/>
     </target>
 
     <target name='junit'>
         <property name='ant.junit.dir' value='${project.dir}/src/test/app/resources/ant/junit'/>
-        <ant antfile='${ant.junit.dir}/build.junit.xml' dir='${ant.junit.dir}'/>
+        <ant antfile='${ant.junit.dir}/build.junit.xml' dir='${ant.junit.dir}' target='main'/>
     </target>
 
     <target name='i18n-clean'>
@@ -26,17 +26,17 @@
 
     <target name='findbugs'>
         <property name='ant.findbugs.dir' value='${project.dir}/src/test/app/resources/ant/findbugs'/>
-        <ant antfile='${ant.findbugs.dir}/build.findbugs.xml' dir='${ant.findbugs.dir}'/>
+        <ant antfile='${ant.findbugs.dir}/build.findbugs.xml' dir='${ant.findbugs.dir}' target='main'/>
     </target>
 
     <target name='pmd'>
         <property name='ant.pmd.dir' value='${project.dir}/src/test/app/resources/ant/pmd'/>
-        <ant antfile='${ant.pmd.dir}/build.pmd.xml' dir='${ant.pmd.dir}'/>
+        <ant antfile='${ant.pmd.dir}/build.pmd.xml' dir='${ant.pmd.dir}' target='main'/>
     </target>
 
     <target name='checkstyle'>
         <property name='ant.checkstyle.dir' value='${project.dir}/src/test/app/resources/ant/checkstyle'/>
-        <ant antfile='${ant.checkstyle.dir}/build.checkstyle.xml' dir='${ant.checkstyle.dir}'/>
+        <ant antfile='${ant.checkstyle.dir}/build.checkstyle.xml' dir='${ant.checkstyle.dir}' target='main'/>
     </target>
 
     <target name='code' depends='app, findbugs, pmd, checkstyle'/>

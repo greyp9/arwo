@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xsd.model;
 
+import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xpath.XPathContext;
 import io.github.greyp9.arwo.core.xpath.XPathContextFactory;
 import io.github.greyp9.arwo.core.xsd.atom.SchemaAtom;
@@ -11,6 +12,7 @@ import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitionsFactory;
 import io.github.greyp9.arwo.core.xsd.type.TypeComponents;
 import io.github.greyp9.arwo.core.xsd.type.TypeComponentsFactory;
 
+import javax.xml.namespace.QName;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
@@ -31,6 +33,12 @@ public class XsdTypes {
 
     public final TypeDefinitions getTypeDefinitions() {
         return typeDefinitions;
+    }
+
+    public final QName getQName(final String qnameColon) {
+        final QName qname = QNameU.getQNameColon(qnameColon);
+        final String uri = context.getNamespaceURI(qname.getPrefix());
+        return new QName(uri, qname.getLocalPart(), qname.getPrefix());
     }
 
     public final XPathContext getContext() {

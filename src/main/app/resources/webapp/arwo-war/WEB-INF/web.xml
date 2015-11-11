@@ -26,17 +26,48 @@
         <servlet-class>io.github.greyp9.arwo.app.realm.servlet.RealmServlet</servlet-class>
         <load-on-startup>3</load-on-startup>
     </servlet>
+    <servlet>
+        <description>depends(NamingServlet), initialize webapp state at webapp startup</description>
+        <servlet-name>AppServlet</servlet-name>
+        <servlet-class>io.github.greyp9.arwo.app.lifecycle.servlet.AppLifecycleServlet</servlet-class>
+        <load-on-startup>4</load-on-startup>
+    </servlet>
 
     <!--users document-->
     <servlet>
         <description>specify valid users for webapp</description>
-        <servlet-name>Xed1ServletRealm</servlet-name>
+        <servlet-name>Xed1Servlet</servlet-name>
         <servlet-class>io.github.greyp9.arwo.app.xed.servlet.Xed1Servlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>Xed1ServletRealm</servlet-name>
+        <servlet-name>Xed1Servlet</servlet-name>
         <url-pattern>/users/*</url-pattern>
     </servlet-mapping>
+
+    <!--filter document-->
+    <servlet-mapping>
+        <servlet-name>Xed1Servlet</servlet-name>
+        <url-pattern>/filter/*</url-pattern>
+    </servlet-mapping>
+
+    <!--locale document-->
+    <servlet-mapping>
+        <servlet-name>Xed1Servlet</servlet-name>
+        <url-pattern>/locale/*</url-pattern>
+    </servlet-mapping>
+
+    <!--custom document-->
+    <servlet-mapping>
+        <servlet-name>Xed1Servlet</servlet-name>
+        <url-pattern>/doc1/*</url-pattern>
+    </servlet-mapping>
+
+    <!--arwo document-->
+    <servlet-mapping>
+        <servlet-name>Xed1Servlet</servlet-name>
+        <url-pattern>/app/*</url-pattern>
+    </servlet-mapping>
+
     <!--filesystem-->
     <servlet>
         <description>view ${user.home}</description>

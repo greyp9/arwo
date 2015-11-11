@@ -22,6 +22,7 @@
         <java classname='io.github.greyp9.arwo.core.i18n.PseudoI18n' classpathref='classpath-i18n' fork='true'>
             <arg value='-'/>
             <arg value='${project.dir}/src/main/app/resources/arwo-jar/io/github/greyp9/arwo/xsd/action/action.properties'/>
+            <arg value='${project.dir}/src/main/app/resources/arwo-jar/io/github/greyp9/arwo/xsd/app/app.properties'/>
             <arg value='${project.dir}/src/main/app/resources/arwo-jar/io/github/greyp9/arwo/xsd/realm/realm.properties'/>
             <arg value='${project.dir}/src/main/core/resources/arwo-jar/io/github/greyp9/arwo/text/core/core.properties'/>
         </java>
@@ -31,6 +32,7 @@
         <java classname='io.github.greyp9.arwo.core.i18n.PseudoI18n' classpathref='classpath-i18n' fork='true'>
             <arg value='+'/>
             <arg value='${project.dir}/src/main/app/resources/arwo-jar/io/github/greyp9/arwo/xsd/action/action.properties'/>
+            <arg value='${project.dir}/src/main/app/resources/arwo-jar/io/github/greyp9/arwo/xsd/app/app.properties'/>
             <arg value='${project.dir}/src/main/app/resources/arwo-jar/io/github/greyp9/arwo/xsd/realm/realm.properties'/>
             <arg value='${project.dir}/src/main/core/resources/arwo-jar/io/github/greyp9/arwo/text/core/core.properties'/>
         </java>

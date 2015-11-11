@@ -15,6 +15,11 @@ public final class App {
         public static final QName QNAME_LOCALE = new QName("urn:arwo:action", "locale", "action");
     }
 
+    public static class Config {
+        public static final String XSD = "io/github/greyp9/arwo/xsd/app/app.xsd";
+        public static final QName QNAME = new QName("urn:arwo:app", "app", "app");
+    }
+
     public static class Realm {
         public static final String XSD = "io/github/greyp9/arwo/xsd/realm/realm.xsd";
         public static final String XML_EMPTY = "io/github/greyp9/arwo/xsd/realm/realm.xml";
@@ -26,6 +31,7 @@ public final class App {
     }
 
     public static class Naming {
+        public static final String APP_STATE = "javax.naming.Name-io.github.greyp9.arwo.app.core.state.AppState";
         public static final String EXECUTOR_SERVICE = "javax.naming.Name-java.util.concurrent.ExecutorService";
     }
 

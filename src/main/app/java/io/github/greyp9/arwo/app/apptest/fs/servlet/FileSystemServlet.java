@@ -1,13 +1,12 @@
 package io.github.greyp9.arwo.app.apptest.fs.servlet;
 
 import io.github.greyp9.arwo.app.core.servlet.ServletU;
+import io.github.greyp9.arwo.app.core.state.AppState;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppHtml;
 import io.github.greyp9.arwo.core.app.AppText;
 import io.github.greyp9.arwo.core.bundle.Bundle;
-import io.github.greyp9.arwo.core.date.DateX;
-import io.github.greyp9.arwo.core.date.HttpDateU;
 import io.github.greyp9.arwo.core.file.FileU;
 import io.github.greyp9.arwo.core.file.FileX;
 import io.github.greyp9.arwo.core.html.Html;
@@ -20,6 +19,7 @@ import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.locus.Locus;
+import io.github.greyp9.arwo.core.naming.AppNaming;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
@@ -33,7 +33,6 @@ import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewState;
-import io.github.greyp9.arwo.core.table.state.ViewStates;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.xml.DocumentU;
@@ -41,6 +40,7 @@ import io.github.greyp9.arwo.core.xpath.XPather;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import javax.naming.Context;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -53,29 +53,26 @@ import java.net.HttpURLConnection;
 import java.sql.Types;
 import java.util.Date;
 import java.util.Locale;
-import java.util.TimeZone;
 
 @SuppressWarnings({ "PMD.ExcessiveImports", "PMD.TooManyMethods" })
 public class FileSystemServlet extends javax.servlet.http.HttpServlet {
     private static final long serialVersionUID = -3409881413109441597L;
 
-    private transient AppUserState state;
+    private transient AppState appState;
 
     @Override
     public final void init(final ServletConfig config) throws ServletException {
         super.init(config);
+        final Context context = AppNaming.lookupSubcontext(getServletContext().getContextPath());
         synchronized (this) {
-            final String submitID = Integer.toHexString(hashCode());
-            final DateX dateX = new DateX(HttpDateU.Const.DEFAULT, TimeZone.getTimeZone("UTC"));
-            final Locus locus = new Locus(Locale.getDefault(), dateX);
-            state = new AppUserState(submitID, new ViewStates(), locus);
+            this.appState = (AppState) AppNaming.lookup(context, App.Naming.APP_STATE);
         }
     }
 
     @Override
     public final void destroy() {
         synchronized (this) {
-            this.state = null;
+            this.appState = null;
         }
     }
 
@@ -85,11 +82,12 @@ public class FileSystemServlet extends javax.servlet.http.HttpServlet {
         // get request context
         final ServletHttpRequest httpRequest = ServletU.read(request);
         // process request
-        AppUserState stateRequest;
+        AppUserState userState;
         synchronized (this) {
-            stateRequest = state;
+            userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
         }
-        final HttpResponse httpResponse = new FileSystemHandlerGet(httpRequest, stateRequest).doGet();
+        final HttpResponse httpResponse = new FileSystemHandlerGet(httpRequest, userState).doGet();
+        // send response
         final HttpResponse httpResponseGZ = HttpResponseGZipU.toHttpResponseGZip(httpRequest, httpResponse);
         ServletU.write(httpResponseGZ, response);
     }
@@ -100,11 +98,11 @@ public class FileSystemServlet extends javax.servlet.http.HttpServlet {
         // get request context
         final ServletHttpRequest httpRequest = ServletU.read(request);
         // process request
-        AppUserState stateRequest;
+        AppUserState userState;
         synchronized (this) {
-            stateRequest = state;
+            userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
         }
-        final HttpResponse httpResponse = new FileSystemHandlerPost(httpRequest, stateRequest).doPost();
+        final HttpResponse httpResponse = new FileSystemHandlerPost(httpRequest, userState).doPost();
         ServletU.write(httpResponse, response);
     }
 

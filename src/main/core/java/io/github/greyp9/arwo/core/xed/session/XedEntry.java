@@ -1,5 +1,7 @@
 package io.github.greyp9.arwo.core.xed.session;
 
+import io.github.greyp9.arwo.core.xml.QNameU;
+
 import javax.xml.namespace.QName;
 
 public class XedEntry {
@@ -31,7 +33,7 @@ public class XedEntry {
 
     public XedEntry(final String contextPath, final QName qname,
                     final String xmlPath, final String xsdPath, final String xsltPath) {
-        this(contextPath, qname.toString(), xmlPath, xsdPath, xsltPath);
+        this(contextPath, QNameU.toStringColon(qname), xmlPath, xsdPath, xsltPath);
     }
 
     public XedEntry(final String contextPath, final String qname,

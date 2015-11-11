@@ -9,6 +9,10 @@ import java.util.Collection;
 public class ViewInstanceChoice extends ViewInstance {
     private final ChoiceTypeInstance choiceInstance;
 
+    public final ChoiceTypeInstance getChoiceInstance() {
+        return choiceInstance;
+    }
+
     public ViewInstanceChoice(final XedCursor cursor, final ChoiceTypeInstance typeInstance) {
         super(cursor, typeInstance);
         this.choiceInstance = typeInstance;

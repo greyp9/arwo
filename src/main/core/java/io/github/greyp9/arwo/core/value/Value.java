@@ -29,6 +29,11 @@ public final class Value {
         return ((t == null) ? defaultValue : t);
     }
 
+    public static String joinList(final String connector, final List<Object> values) {
+        final Object[] valuesArray = values.toArray(new Object[values.size()]);
+        return join(connector, valuesArray);
+    }
+
     public static String join(final String connector, final Object... values) {
         final StringBuilder buffer = new StringBuilder();
         for (final Object value : values) {

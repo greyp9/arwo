@@ -11,6 +11,14 @@ public class XedEntries {
         this.entries = new ArrayList<XedEntry>(Arrays.asList(entries));
     }
 
+    public final void clear() {
+        entries.clear();
+    }
+
+    public final void add(final XedEntry entry) {
+        entries.add(entry);
+    }
+
     public final int size() {
         return entries.size();
     }

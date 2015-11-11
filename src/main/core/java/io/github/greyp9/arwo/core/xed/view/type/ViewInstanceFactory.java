@@ -1,11 +1,14 @@
 package io.github.greyp9.arwo.core.xed.view.type;
 
+import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
+import io.github.greyp9.arwo.core.xsd.core.XsdTypeU;
 import io.github.greyp9.arwo.core.xsd.data.DataType;
 import io.github.greyp9.arwo.core.xsd.instance.ChoiceTypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstanceX;
 
+import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.Collection;
 
@@ -38,11 +41,20 @@ public class ViewInstanceFactory {
         return viewInstances;
     }
 
-    @SuppressWarnings("PMD.ConfusingTernary")
+    @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity",
+            "PMD.ModifiedCyclomaticComplexity", "PMD.NPathComplexity", "PMD.ConfusingTernary" })
     private ViewInstance toViewInstancePage(final TypeInstance typeInstance) {
         ViewInstance viewInstance = null;
         final DataType dataType = typeInstance.getDataType();
+        final QName qname = ((dataType == null) ? null : dataType.getQName());
         final boolean isMulti = (typeInstance.getMaxOccurs() > 1);
+        final boolean isTextArea = (typeInstance.getDirective(Html.ROWS) != null);
+        if (XsdTypeU.Const.BOOLEAN.equals(qname)) {
+            viewInstance = new ViewInstanceBoolean(cursor, typeInstance);
+        }
+        if (isTextArea) {
+            viewInstance = new ViewInstanceTextArea(cursor, typeInstance);
+        }
         if (typeInstance instanceof ChoiceTypeInstance) {
             viewInstance = new ViewInstanceChoice(cursor, (ChoiceTypeInstance) typeInstance);
         }

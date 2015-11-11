@@ -13,6 +13,18 @@ public final class QNameU {
     private QNameU() {
     }
 
+    public static String toStringColon(final QName qname) {
+        return String.format("%s:%s", qname.getPrefix(), qname.getLocalPart());
+    }
+
+    public static QName getQNameColon(final String qname) {
+        final Pattern pattern = Pattern.compile("(.*):(.+)");
+        final Matcher matcher = pattern.matcher(qname);
+        return ((matcher.matches()) ?
+                new QName(XsdU.NS_URI_NULL, matcher.group(2), matcher.group(1)) :
+                new QName(XsdU.NS_URI_NULL, matcher.group(2), XsdU.NS_PREFIX_NULL));
+    }
+
     public static QName getQName(final String qNameToString) {
         final Pattern pattern = Pattern.compile("\\{(.*)\\}(.+)");
         final Matcher matcher = pattern.matcher(qNameToString);

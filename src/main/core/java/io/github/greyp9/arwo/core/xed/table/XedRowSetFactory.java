@@ -11,6 +11,7 @@ import io.github.greyp9.arwo.core.table.row.Row;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.sort.Sorts;
 import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.core.xed.bundle.XsdBundle;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xsd.core.XsdTypeU;
@@ -21,7 +22,9 @@ import io.github.greyp9.arwo.core.xsd.instance.TypeInstanceX;
 import org.w3c.dom.Element;
 
 import javax.xml.namespace.QName;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class XedRowSetFactory {
     private final String baseURI;
@@ -100,18 +103,35 @@ public class XedRowSetFactory {
     }
 
     private String getChoiceText(final String value, final XedCursor cursor, final ChoiceTypeInstance choiceInstance) {
-        final XedNav nav = new XedNav(cursor.getXed());
-        final StringBuilder buffer = new StringBuilder();
-        final Collection<TypeInstance> typeInstances = choiceInstance.getTypeInstances().getTypeInstances();
+        String choiceText = null;
+        final Collection<TypeInstance> typeInstances = choiceInstance.getInstances();
         for (final TypeInstance typeInstanceIt : typeInstances) {
             if (typeInstanceIt.getName().equals(value)) {
-                final Collection<Element> children = cursor.getChildren(typeInstanceIt);
-                for (final Element child : children) {
-                    final XedCursor cursorIt = nav.find(child, cursor);
-                    buffer.append(cursorIt.getValue(typeInstanceIt));
-                }
+                choiceText = getChoiceText(cursor, typeInstanceIt);
             }
         }
-        return buffer.toString();
+        return choiceText;
+    }
+
+    private String getChoiceText(final XedCursor cursor, final TypeInstance childInstance) {
+        final List<Object> tokens = new ArrayList<Object>();
+        // choice instance name
+        final TypeInstance parentInstance = cursor.getTypeInstance();
+        final XsdBundle bundle = cursor.getXed().getXsdBundle();
+        tokens.add(bundle.getLabel(parentInstance, childInstance));
+        // choice instance attributes
+        final XedNav nav = new XedNav(cursor.getXed());
+        final Collection<Element> children = cursor.getChildren(childInstance);
+        for (final Element child : children) {
+            final XedCursor cursorIt = nav.find(child, cursor);
+            final Collection<TypeInstance> typeInstances = cursorIt.getTypeInstance().getInstances();
+            for (final TypeInstance typeInstanceIt : typeInstances) {
+                final String name = bundle.getLabel(childInstance, typeInstanceIt);
+                final String value = cursorIt.getValue(typeInstanceIt);
+                tokens.add(String.format("[%s=\"%s\"]", name, value));
+            }
+        }
+        // render
+        return Value.joinList(" ", tokens);
     }
 }

@@ -14,13 +14,19 @@ import io.github.greyp9.arwo.core.xed.bundle.XsdBundle;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
+import io.github.greyp9.arwo.core.xed.view.html.type.BooleanHtmlView;
+import io.github.greyp9.arwo.core.xed.view.html.type.ChoiceHtmlView;
 import io.github.greyp9.arwo.core.xed.view.html.type.DrillDownHtmlView;
 import io.github.greyp9.arwo.core.xed.view.html.type.EnumHtmlView;
+import io.github.greyp9.arwo.core.xed.view.html.type.TextAreaHtmlView;
 import io.github.greyp9.arwo.core.xed.view.html.type.TextHtmlView;
 import io.github.greyp9.arwo.core.xed.view.type.ViewInstance;
+import io.github.greyp9.arwo.core.xed.view.type.ViewInstanceBoolean;
+import io.github.greyp9.arwo.core.xed.view.type.ViewInstanceChoice;
 import io.github.greyp9.arwo.core.xed.view.type.ViewInstanceDrillDown;
 import io.github.greyp9.arwo.core.xed.view.type.ViewInstanceEnum;
 import io.github.greyp9.arwo.core.xed.view.type.ViewInstanceText;
+import io.github.greyp9.arwo.core.xed.view.type.ViewInstanceTextArea;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -28,6 +34,7 @@ import org.w3c.dom.Node;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@SuppressWarnings({ "PMD.ExcessiveImports", "PMD.TooManyMethods" })
 public class PropertyPageHtmlView {
     private final XedPropertyPageView view;
     private final XsdBundle xsdBundle;
@@ -88,8 +95,14 @@ public class PropertyPageHtmlView {
         final Element td = ElementU.addElement(tr, Html.TD, null, NameTypeValuesU.create(Html.CLASS, "attr-value"));
         if (viewInstance instanceof ViewInstanceDrillDown) {
             addViewInstanceValueDrillDown((ViewInstanceDrillDown) viewInstance, td);
+        } else if (viewInstance instanceof ViewInstanceBoolean) {
+            addViewInstanceValueBoolean((ViewInstanceBoolean) viewInstance, td);
         } else if (viewInstance instanceof ViewInstanceEnum) {
             addViewInstanceValueEnum((ViewInstanceEnum) viewInstance, td);
+        } else if (viewInstance instanceof ViewInstanceChoice) {
+            addViewInstanceValueChoice((ViewInstanceChoice) viewInstance, td);
+        } else if (viewInstance instanceof ViewInstanceTextArea) {
+            addViewInstanceValueTextArea((ViewInstanceTextArea) viewInstance, td);
         } else {
             addViewInstanceValueText((ViewInstanceText) viewInstance, td);
         }
@@ -99,8 +112,20 @@ public class PropertyPageHtmlView {
         new DrillDownHtmlView(viewInstance).addContentTo(tr);
     }
 
+    private void addViewInstanceValueBoolean(final ViewInstanceBoolean viewInstance, final Element tr) {
+        new BooleanHtmlView(viewInstance).addContentTo(tr);
+    }
+
     private void addViewInstanceValueEnum(final ViewInstanceEnum viewInstance, final Element tr) {
         new EnumHtmlView(viewInstance).addContentTo(tr);
+    }
+
+    private void addViewInstanceValueChoice(final ViewInstanceChoice viewInstance, final Element tr) {
+        new ChoiceHtmlView(viewInstance).addContentTo(tr);
+    }
+
+    private void addViewInstanceValueTextArea(final ViewInstanceTextArea viewInstance, final Element tr) {
+        new TextAreaHtmlView(viewInstance).addContentTo(tr);
     }
 
     private void addViewInstanceValueText(final ViewInstanceText viewInstance, final Element tr) {
