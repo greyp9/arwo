@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.xed.handler;
 
 import io.github.greyp9.arwo.core.http.Http;
+import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
@@ -31,6 +32,7 @@ public class XedHandlerGet {
         } else if (!pathInfo.endsWith(Http.Token.SLASH)) {
             httpResponse = HttpResponseU.toHttpResponse302(PathU.toDir(httpRequest.getURI()));
         } else if (query != null) {
+            request.getState().apply(HttpArguments.toArguments(query));
             httpResponse = HttpResponseU.toHttpResponse302(httpRequest.getURI());
         } else {
             httpResponse = doGetDocument();

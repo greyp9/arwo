@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.core.action.ActionButtons;
 import io.github.greyp9.arwo.core.action.ActionFactory;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.html.HtmlU;
 import io.github.greyp9.arwo.core.lang.SystemU;
@@ -33,6 +34,7 @@ import org.w3c.dom.Node;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Properties;
 
 @SuppressWarnings({ "PMD.ExcessiveImports", "PMD.TooManyMethods" })
 public class PropertyPageHtmlView {
@@ -138,8 +140,10 @@ public class PropertyPageHtmlView {
         final String submitID = request.getState().getSubmitID();
         final Bundle bundle = view.getCursor().getXed().getBundle();
         // form submit buttons
+        final Properties properties = request.getState().getProperties();
+        final boolean isExpanded = Boolean.parseBoolean(properties.getProperty("buttons"));
         final ActionFactory factory = new ActionFactory(submitID, bundle, App.Target.DOCUMENT, qname);
-        final ActionButtons buttons = factory.create(null, getCursorActions(view));
+        final ActionButtons buttons = factory.create(null, getCursorActions(isExpanded, view));
         final Element tr = ElementU.addElement(tbody, Html.TR, null, NameTypeValuesU.create(Html.CLASS, Const.FOOTER));
         final Element th = ElementU.addElement(tr, Html.TD, null, NameTypeValuesU.create(
                 Html.COLSPAN, Integer.toString(2), Html.CLASS, Const.DIALOG));
@@ -148,26 +152,34 @@ public class PropertyPageHtmlView {
                     button.getSubject(), button.getAction(), button.getObject());
             HtmlU.addButton(th, button.getLabel(), buttons.getSubmitID(), tokenAction.toString(), null, null);
         }
+        final Element span = ElementU.addElement(th, Html.SPAN);  // so buttons and expand/collapse on one line
+        final String buttonToggle = (isExpanded ? UTF16.LIST_COLLAPSE : UTF16.LIST_EXPAND);
+        ElementU.addElement(span, Html.A, buttonToggle, NameTypeValuesU.create(
+                Html.HREF, "?toggle=buttons", Html.CLASS, "trailing"));
     }
 
-    private static Collection<String> getCursorActions(final XedPropertyPageView view) {
+    private static Collection<String> getCursorActions(final boolean isExpanded, final XedPropertyPageView view) {
         final XedCursor cursor = view.getCursor();
         final XedCursor cursorParentC = cursor.getParentConcrete();
         final Node node = cursor.getNode();
         final Node parentNode = ((node == null) ? null : node.getParentNode());
+        final boolean hasNode = (node != null);
+        final boolean hasElementParent = (parentNode instanceof Element);
         final Collection<String> actions = new ArrayList<String>();
-        add(actions, App.Action.CREATE, (node == null));
-        add(actions, App.Action.UPDATE, (node != null));
-        add(actions, App.Action.DELETE, ((node != null) && (parentNode instanceof Element)));
-        add(actions, App.Action.CLONE, ((node != null) && (parentNode instanceof Element)));
-        add(actions, App.Action.UP, ((node != null) && (parentNode instanceof Element)));
-        add(actions, App.Action.DOWN, ((node != null) && (parentNode instanceof Element)));
-        add(actions, App.Action.FILL, (node != null));
-        add(actions, App.Action.PRUNE, (node != null));
-        add(actions, App.Action.CLIP_CLEAR, SystemU.isTrue());
-        add(actions, App.Action.CLIP_CUT, ((node != null) && (parentNode instanceof Element)));
-        add(actions, App.Action.CLIP_COPY, ((node != null) && (parentNode instanceof Element)));
-        add(actions, App.Action.CLIP_PASTE, (cursorParentC != null));
+        add(actions, App.Action.CREATE, (!hasNode));
+        add(actions, App.Action.UPDATE, hasNode);
+        if (isExpanded) {
+            add(actions, App.Action.DELETE, (hasNode && hasElementParent));
+            add(actions, App.Action.CLONE, (hasNode && hasElementParent));
+            add(actions, App.Action.UP, (hasNode && hasElementParent));
+            add(actions, App.Action.DOWN, (hasNode && hasElementParent));
+            add(actions, App.Action.FILL, hasNode);
+            add(actions, App.Action.PRUNE, hasNode);
+            add(actions, App.Action.CLIP_CLEAR, SystemU.isTrue());
+            add(actions, App.Action.CLIP_CUT, (hasNode && hasElementParent));
+            add(actions, App.Action.CLIP_COPY, (hasNode && hasElementParent));
+            add(actions, App.Action.CLIP_PASTE, (cursorParentC != null));
+        }
         return actions;
     }
 

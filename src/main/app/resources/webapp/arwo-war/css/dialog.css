@@ -83,6 +83,14 @@ display: block;
 width: 100%;
 }
 
+tbody.dialog td a.trailing, tbody.table td a.trailing  /* EXCEPT FOR BUTTON ROW */
+{
+display: inherit;
+width: inherit;
+margin: 0.5em;
+text-decoration: none;
+}
+
 tbody.dialog td.empty
 {
 display: none;

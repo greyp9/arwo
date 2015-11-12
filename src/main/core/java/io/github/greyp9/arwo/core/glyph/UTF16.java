@@ -20,6 +20,8 @@ public final class UTF16 {
     public static final String ICON_FILE = "\u23cd";  // \u25a6\u2637 ▦☷
     public static final String ICON_FOLDER = "\u2339";  // ◳ \u25f3 "\ud83d\udcc1";
     public static final String ICON_SYMLINK = "\u21b7";  // "\u25e5";
+    public static final String LIST_COLLAPSE = "\u226a";
+    public static final String LIST_EXPAND = "\u226b";
     public static final String MENU = "\u2630";  // "\u2261"
     public static final String NBSP = "\u00a0";
     public static final String PAUSE = "\u25ae\u25ae";

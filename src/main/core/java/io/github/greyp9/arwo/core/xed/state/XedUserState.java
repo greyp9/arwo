@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.locus.LocusFactory;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.table.state.ViewStates;
+import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.xed.action.XedActionLocale;
 import io.github.greyp9.arwo.core.xed.clip.XedClipboard;
@@ -15,12 +16,14 @@ import io.github.greyp9.arwo.core.xed.session.XedSessionsFactory;
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Properties;
 
 public class XedUserState {
     private final String submitID;
     private final ViewStates viewStates;
     private final XedSessions sessions;
     private final XedClipboard clipboard;
+    private final Properties properties;
 
     private Locus locus;
 
@@ -44,6 +47,10 @@ public class XedUserState {
         return locus;
     }
 
+    public final Properties getProperties() {
+        return properties;
+    }
+
     public XedUserState(final File webappRoot, final Principal principal, final String submitID, final Locus locus)
             throws IOException {
         this.submitID = submitID;
@@ -51,6 +58,16 @@ public class XedUserState {
         this.sessions = new XedSessionsFactory(webappRoot).getSessions(principal, locus);
         this.clipboard = new XedClipboard();
         this.locus = locus;
+        this.properties = new Properties();
+    }
+
+    public final void apply(final NameTypeValues nameTypeValues) throws IOException {
+        for (final NameTypeValue nameTypeValue : nameTypeValues) {
+            if ("toggle".equals(nameTypeValue.getName())) {
+                final boolean isExpanded = Boolean.parseBoolean(properties.getProperty("buttons"));
+                properties.setProperty("buttons", Boolean.toString(!isExpanded));
+            }
+        }
     }
 
     public final void apply(final SubmitToken token, final NameTypeValues nameTypeValues) throws IOException {
