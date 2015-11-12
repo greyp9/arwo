@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.xed.op;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
+import io.github.greyp9.arwo.core.xed.transform.ValueInstanceTransform;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xsd.core.XsdU;
 import io.github.greyp9.arwo.core.xsd.data.DataType;
@@ -26,7 +27,8 @@ public class OpCreate {
         this.xsdTypes = xsdTypes;
     }
 
-    public final Element apply(final Element element, final ValueInstance valueInstance) {
+    public final Element apply(final Element element, final ValueInstance valueInstanceIn) {
+        final ValueInstance valueInstance = new ValueInstanceTransform().transform(valueInstanceIn);
         final TypeInstance typeInstance = valueInstance.getTypeInstance();
         final NameTypeValues nameTypeValues = valueInstance.getNameTypeValues();
         final Element create = ElementU.addElementBeforeNS(
@@ -47,9 +49,8 @@ public class OpCreate {
 
     private void apply(final Element create, final TypeInstance parentInstance,
                        final TypeInstance typeInstance, final NameTypeValue nameTypeValue) {
-        final boolean fromHtmlForm = typeInstance.getID(parentInstance).equals(nameTypeValue.getName());
-        final boolean fromTest = typeInstance.getName().equals(nameTypeValue.getName());
-        if (fromHtmlForm || fromTest) {
+        final boolean match = typeInstance.getID(parentInstance).equals(nameTypeValue.getName());
+        if (match) {
             final NameTypeValue nameTypeValueIt = new NameTypeValue(typeInstance.getName(), nameTypeValue.getValue());
             applyValue(create, typeInstance, nameTypeValueIt);
         }

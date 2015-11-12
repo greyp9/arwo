@@ -157,7 +157,7 @@ public class Choice1CursorTest extends TestCase {
         // validate
         final XedCursor cursorJob1 = new XedNav(xed).find("/2d467/0ca19/");
         // update job to type B
-        final NameTypeValues ntvA2B = HttpArguments.toArguments("taskA/taskB/taskC=taskB");
+        final NameTypeValues ntvA2B = HttpArguments.toArguments("taskA/taskB/taskC=taskB&jobEnabled=true");
         final ValueInstance valueA2B = ValueInstance.create(cursorJob1.getTypeInstance(), ntvA2B);
         final Element job1A2B = xed.update(cursorJob1.getElement(), valueA2B);
         Assert.assertNotNull(job1A2B);

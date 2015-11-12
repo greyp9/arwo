@@ -6,6 +6,8 @@
 
     <xsd:element name='folder' type='e1:folderType'/>
 
+    <xsd:element name='file' type='e1:fileType'/>
+
     <xsd:complexType name='folderType'>
         <xsd:sequence>
             <!--<xsd:element name='folder' type='e1:folderType' minOccurs='0' maxOccurs='unbounded'/>-->
@@ -14,8 +16,9 @@
     </xsd:complexType>
 
     <xsd:complexType name="fileType">
-        <xsd:attribute name='name' type='xsd:string'/>
-        <xsd:attribute name='type' type='e1:fileClassType'/>
+        <xsd:attribute name='name' type='xsd:string' use='required'/>
+        <xsd:attribute name='type' type='e1:fileClassType' use='required'/>
+        <xsd:attribute name='hidden' type='xsd:boolean' use='required'/>
     </xsd:complexType>
 
     <xsd:simpleType name='fileClassType'>

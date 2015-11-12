@@ -56,7 +56,7 @@ public class Enum1CursorTest extends TestCase {
         final XedCursor cursorFileType = new XedNav(xed).find("file", cursorFolder);
         Assert.assertNotNull(cursorFileType);
         Assert.assertEquals("/058a2/", cursorFileType.getURI());
-        final NameTypeValues ntv1 = HttpArguments.toArguments("name=foo.txt&type=text");
+        final NameTypeValues ntv1 = HttpArguments.toArguments("name=foo.txt&type=text&hidden=false");
         final ValueInstance value1 = ValueInstance.create(cursorFileType.getTypeInstance(), ntv1);
         final Element file1 = xed.create(cursorFileType.getParent().getElement(), value1);
         Assert.assertNotNull(file1);
@@ -71,11 +71,11 @@ public class Enum1CursorTest extends TestCase {
         // view
         final String renderFileType = new CursorTextView(new XedCursorView(cursorFileType)).render();
         logger.finest("FileType\n" + renderFileType);
-        Assert.assertEquals("e87364e1", CRCU.crc32String(UTF8Codec.toBytes(renderFileType)));
+        Assert.assertEquals("dc3bd89f", CRCU.crc32String(UTF8Codec.toBytes(renderFileType)));
         // view
         final String renderFile = new CursorTextView(new XedCursorView(cursorFile1)).render();
         logger.finest("File\n" + renderFile);
-        Assert.assertEquals("72d84bbd", CRCU.crc32String(UTF8Codec.toBytes(renderFile)));
+        Assert.assertEquals("19ceb9d5", CRCU.crc32String(UTF8Codec.toBytes(renderFile)));
     }
 
     public static class Const {
