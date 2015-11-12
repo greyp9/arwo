@@ -137,19 +137,20 @@ public class PropertyPageHtmlView {
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private void addActions(final Element tbody) {
         final String qname = view.getCursor().getTypeInstance().getQName().toString();
+        final String uri = view.getCursor().getURI();
         final String submitID = request.getState().getSubmitID();
         final Bundle bundle = view.getCursor().getXed().getBundle();
         // form submit buttons
         final Properties properties = request.getState().getProperties();
         final boolean isExpanded = Boolean.parseBoolean(properties.getProperty("buttons"));
-        final ActionFactory factory = new ActionFactory(submitID, bundle, App.Target.DOCUMENT, qname);
+        final ActionFactory factory = new ActionFactory(submitID, bundle, App.Target.DOCUMENT, qname, uri);
         final ActionButtons buttons = factory.create(null, getCursorActions(isExpanded, view));
         final Element tr = ElementU.addElement(tbody, Html.TR, null, NameTypeValuesU.create(Html.CLASS, Const.FOOTER));
         final Element th = ElementU.addElement(tr, Html.TD, null, NameTypeValuesU.create(
                 Html.COLSPAN, Integer.toString(2), Html.CLASS, Const.DIALOG));
         for (final ActionButton button : buttons.getButtons()) {
             final SubmitToken tokenAction = new SubmitToken(
-                    button.getSubject(), button.getAction(), button.getObject());
+                    button.getSubject(), button.getAction(), button.getObject(), button.getObject2());
             HtmlU.addButton(th, button.getLabel(), buttons.getSubmitID(), tokenAction.toString(), null, null);
         }
         final Element span = ElementU.addElement(th, Html.SPAN);  // so buttons and expand/collapse on one line

@@ -30,7 +30,8 @@ public class XedActionLocale extends XedAction {
             // view (form submit buttons)
             final XedPropertyPageView pageView = new XedPropertyPageView(null, getCursor());
             final Bundle bundleXed = this.getXed().getBundle();
-            final ActionFactory factory = new ActionFactory(submitID, bundleXed, App.Target.USER_STATE, "locale");
+            final ActionFactory factory = new ActionFactory(
+                    submitID, bundleXed, App.Target.USER_STATE, "locale", null);
             final Collection<String> actions = new ArrayList<String>();
             actions.add(App.Action.UPDATE);
             final ActionButtons buttons = factory.create(null, actions);

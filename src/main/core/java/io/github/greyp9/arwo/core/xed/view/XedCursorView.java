@@ -53,9 +53,11 @@ public class XedCursorView {
             if ((typeInstanceIt instanceof ChoiceTypeInstance) && (cursor.getElement() != null)) {
                 final String value = cursor.getValue(typeInstanceIt);
                 final TypeInstance choiceInstance = typeInstanceIt.getInstance(value);
-                final Element element = ElementU.getChild(cursor.getElement(), choiceInstance.getQName());
-                final XedCursor choiceCursor = nav.find(element, cursor);
-                views.add(new XedPropertyPageView(baseURI, choiceCursor));
+                if (choiceInstance != null) {
+                    final Element element = ElementU.getChild(cursor.getElement(), choiceInstance.getQName());
+                    final XedCursor choiceCursor = nav.find(element, cursor);
+                    views.add(new XedPropertyPageView(baseURI, choiceCursor));
+                }
             }
         }
         if (!typeInstance.isSingleton()) {

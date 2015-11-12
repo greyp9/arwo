@@ -47,7 +47,7 @@ public class ChoiceTypeInstance extends TypeInstance {
     public final TypeInstance getInstance(final String name) {
         TypeInstance instance = null;
         for (final TypeInstance instanceIt : typeInstances.getTypeInstances()) {
-            if (name.equals(instanceIt.getName())) {
+            if (instanceIt.getName().equals(name)) {
                 instance = instanceIt;
                 break;
             }

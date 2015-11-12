@@ -8,8 +8,8 @@ public class ActionButton extends ActionItem {
     }
 
     public ActionButton(final String label, final String name,
-                        final String subject, final String action, final String object) {
-        super(name, subject, action, object);
+                        final String subject, final String action, final String object, final String object2) {
+        super(name, subject, action, object, object2);
         this.label = label;
     }
 }

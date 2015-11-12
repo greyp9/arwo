@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.xsd.core.XsdTypeU;
 import io.github.greyp9.arwo.core.xsd.data.DataType;
+import io.github.greyp9.arwo.core.xsd.instance.ChoiceTypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstanceX;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
@@ -26,6 +27,8 @@ public class FormTransform {
             final QName qname = (dataType == null) ? null : dataType.getQName();
             if (XsdTypeU.Const.BOOLEAN.equals(qname)) {
                 valueInstance.add(transformBoolean(nameFull, nameTypeValue));
+            } else if (childInstance instanceof ChoiceTypeInstance) {
+                valueInstance.add(transformChoice(parentInstance, (ChoiceTypeInstance) childInstance, nameTypeValue));
             } else if (nameTypeValue != null) {
                 valueInstance.add(nameTypeValue);
             }
@@ -43,6 +46,17 @@ public class FormTransform {
             nameTypeValue = new NameTypeValue(nameIn, Boolean.FALSE.toString());
         } else if (Html.ON.equals(nameTypeValueIn.getValue())) {
             nameTypeValue = new NameTypeValue(nameIn, Boolean.TRUE.toString());
+        }
+        return nameTypeValue;
+    }
+
+    private NameTypeValue transformChoice(final TypeInstance parentInstance, final ChoiceTypeInstance choiceInstance,
+                                          final NameTypeValue nameTypeValueIn) {
+        NameTypeValue nameTypeValue = nameTypeValueIn;
+        if (nameTypeValueIn == null) {
+            final String idInstance = choiceInstance.getID(parentInstance);
+            final TypeInstance typeInstanceFirst = choiceInstance.getInstances().iterator().next();
+            nameTypeValue = new NameTypeValue(idInstance, typeInstanceFirst.getName());
         }
         return nameTypeValue;
     }

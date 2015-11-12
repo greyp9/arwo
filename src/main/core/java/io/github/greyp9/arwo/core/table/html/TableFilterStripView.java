@@ -41,7 +41,8 @@ public class TableFilterStripView {
             final String submitID = context.getSubmitID();
             final String cursorType = context.getViewState().getName();
             final Bundle bundleXed = actionFilter.getXed().getBundle();
-            final ActionFactory factory = new ActionFactory(submitID, bundleXed, App.Target.VIEW_STATE, cursorType);
+            final ActionFactory factory = new ActionFactory(
+                    submitID, bundleXed, App.Target.VIEW_STATE, cursorType, null);
             final Collection<String> actions = new ArrayList<String>();
             actions.add(ViewState.Action.FILTER);
             final ActionButtons buttons = factory.create(null, actions);

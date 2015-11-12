@@ -5,6 +5,7 @@ public class ActionItem {
     private final String subject;
     private final String action;
     private final String object;
+    private final String object2;
 
     public final String getName() {
         return name;
@@ -22,10 +23,16 @@ public class ActionItem {
         return object;
     }
 
-    public ActionItem(final String name, final String subject, final String action, final String object) {
+    public final String getObject2() {
+        return object2;
+    }
+
+    public ActionItem(final String name, final String subject, final String action,
+                      final String object, final String object2) {
         this.name = name;
         this.subject = subject;
         this.action = action;
         this.object = object;
+        this.object2 = object2;
     }
 }
