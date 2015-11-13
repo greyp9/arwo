@@ -59,6 +59,8 @@ public final class Html {
     public static final String UL = "ul";
     public static final String VALUE = "value";
 
+    public static final String SPACE = " ";
+
     private Html() {
     }
 

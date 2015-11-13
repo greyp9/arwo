@@ -29,7 +29,7 @@ public class XedWrite {
                                     final HttpResponse httpResponseIn) throws IOException {
         HttpResponse httpResponse = httpResponseIn;
         final XedNav nav = new XedNav(request.getSession().getXed());
-        final Pather pather = new Pather("/ui" + request.getHttpRequest().getPathInfo());
+        final Pather pather = new Pather(request.getHttpRequest().getPathInfo());
         final String uri = ((token.getObject2() == null) ? pather.getRight() : token.getObject2());
         final XedCursor cursor = nav.find(uri);
         if (cursor != null) {

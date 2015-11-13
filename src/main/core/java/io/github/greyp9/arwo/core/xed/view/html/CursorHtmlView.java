@@ -52,6 +52,7 @@ public class CursorHtmlView {
     }
 
     private void addContentTo(final Element html) throws IOException {
+        new BreadcrumbsHtmlView(cursorView.getBaseURI(), cursorView.getCursor()).addContentTo(html);
         final Object[] views = cursorView.getViews();
         for (final Object view : views) {
             if (view instanceof XedPropertyPageView) {

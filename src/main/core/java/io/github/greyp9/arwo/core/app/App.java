@@ -35,6 +35,12 @@ public final class App {
         public static final String EXECUTOR_SERVICE = "javax.naming.Name-java.util.concurrent.ExecutorService";
     }
 
+    public static class CSS {
+        public static final String ACTIVE = "active";
+        public static final String MENU = "menu";
+        public static final String MENUS = "menus";
+    }
+
     public static class Action {
         public static final String CREATE = "create";
         public static final String UPDATE = "update";
