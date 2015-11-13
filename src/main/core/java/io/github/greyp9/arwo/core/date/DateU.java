@@ -15,11 +15,9 @@ public final class DateU {
         return ((date == null) ? null : new Date(date.getTime()));
     }
 
-/*
     public static long since(final Date date) {
         return new Date().getTime() - date.getTime();
     }
-*/
 
     public static Date min(final Date left, final Date right) {
         return (left.before(right) ? left : right);
