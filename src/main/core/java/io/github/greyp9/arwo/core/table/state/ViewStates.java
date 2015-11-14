@@ -1,5 +1,7 @@
 package io.github.greyp9.arwo.core.table.state;
 
+import io.github.greyp9.arwo.core.alert.Alert;
+import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.locus.Locus;
@@ -39,9 +41,11 @@ public class ViewStates {
     }
 
     @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity", "PMD.ModifiedCyclomaticComplexity" })
-    public final void apply(final SubmitToken token, final NameTypeValues nameTypeValues) throws IOException {
+    public final void apply(final SubmitToken token, final NameTypeValues nameTypeValues,
+                            final Bundle bundle, final Alerts alerts) throws IOException {
         final ViewState viewState = getViewState(token.getObject());
         final String action = token.getAction();
+        final String message = bundle.getString("alert.action.not.implemented");
         if (action == null) {
             viewState.getClass();
 
@@ -72,6 +76,8 @@ public class ViewStates {
             viewState.setPage(Page.Factory.nextPage(viewState.getPage()));
         } else if (ViewState.Nav.LAST.equals(action)) {
             viewState.setPage(Page.Factory.lastPage(viewState.getPage()));
+        } else {
+            alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }
     }
 

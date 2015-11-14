@@ -46,7 +46,7 @@ public class XedHandlerGet {
         } else if (isQuery) {
             request.getState().apply(HttpArguments.toArguments(query));
             httpResponse = HttpResponseU.toHttpResponse302(httpRequest.getURI());
-        } else if (Const.CONTEXT_XML.equals(pather.getLeft())) {
+        } else if (Const.CONTEXT_XML.equals(pather.getLeftToken())) {
             httpResponse = doGetXML(httpRequest.getURI(), pather.getRight());
         } else if (Const.CONTEXT_UI.equals(pather.getLeftToken())) {
             httpResponse = doGetUI(httpRequest.getURI(), pather.getRight());

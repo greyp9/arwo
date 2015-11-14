@@ -8,7 +8,6 @@ import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.html.HtmlU;
-import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.xed.bundle.XsdBundle;
@@ -161,7 +160,7 @@ public class PropertyPageHtmlView {
 
     private static Collection<String> getCursorActions(final boolean isExpanded, final XedPropertyPageView view) {
         final XedCursor cursor = view.getCursor();
-        final XedCursor cursorParentC = cursor.getParentConcrete();
+        //final XedCursor cursorParentC = cursor.getParentConcrete();
         final Node node = cursor.getNode();
         final Node parentNode = ((node == null) ? null : node.getParentNode());
         final boolean hasNode = (node != null);
@@ -174,12 +173,12 @@ public class PropertyPageHtmlView {
             add(actions, App.Action.CLONE, (hasNode && hasElementParent));
             add(actions, App.Action.UP, (hasNode && hasElementParent));
             add(actions, App.Action.DOWN, (hasNode && hasElementParent));
-            add(actions, App.Action.FILL, hasNode);
-            add(actions, App.Action.PRUNE, hasNode);
-            add(actions, App.Action.CLIP_CLEAR, SystemU.isTrue());
-            add(actions, App.Action.CLIP_CUT, (hasNode && hasElementParent));
-            add(actions, App.Action.CLIP_COPY, (hasNode && hasElementParent));
-            add(actions, App.Action.CLIP_PASTE, (cursorParentC != null));
+            //add(actions, App.Action.FILL, hasNode);
+            //add(actions, App.Action.PRUNE, hasNode);
+            //add(actions, App.Action.CLIP_CLEAR, SystemU.isTrue());
+            //add(actions, App.Action.CLIP_CUT, (hasNode && hasElementParent));
+            //add(actions, App.Action.CLIP_COPY, (hasNode && hasElementParent));
+            //add(actions, App.Action.CLIP_PASTE, (cursorParentC != null));
         }
         return actions;
     }

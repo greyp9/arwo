@@ -19,13 +19,14 @@ public class OpClipPaste {
     }
 
     public final void paste(final XedCursor cursor) throws IOException {
-        final Collection<XedFragment> fragments = clipboard.getFragments();
-        for (final XedFragment fragment : fragments) {
-            if (fragment.getTypeInstance().equals(cursor.getTypeInstance())) {
-                pasteFragment(fragment, cursor);
+        if (XedClipboard.U.canPaste(cursor)) {
+            final Collection<XedFragment> fragments = clipboard.getFragments();
+            for (final XedFragment fragment : fragments) {
+                if (fragment.getTypeInstance().equals(cursor.getTypeInstance())) {
+                    pasteFragment(fragment, cursor);
+                }
             }
         }
-        cursor.getClass();
     }
 
     private void pasteFragment(final XedFragment fragment, final XedCursor cursor) throws IOException {

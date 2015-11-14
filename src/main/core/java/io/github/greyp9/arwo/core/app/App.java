@@ -42,6 +42,16 @@ public final class App {
     }
 
     public static class Action {
+        public static final String CLOSE = "close";
+        public static final String LOAD_REVISION = "loadRevision";
+        public static final String NAVIGATE = "navigate";
+        public static final String PRETTY = "pretty";
+        public static final String RELOAD = "reload";
+        public static final String RESET = "reset";
+        public static final String SAVE = "save";
+        public static final String TOGGLE = "toggle";
+        public static final String VALIDATE = "validate";
+
         public static final String CREATE = "create";
         public static final String UPDATE = "update";
         public static final String DELETE = "delete";
@@ -60,6 +70,7 @@ public final class App {
 
     public static class Target {
         public static final String DOCUMENT = "document";
+        public static final String SESSION = "session";
         public static final String USER_STATE = "userState";
         public static final String VIEW_STATE = "viewState";
     }

@@ -17,8 +17,8 @@ public class OpClipCut {
     }
 
     public final void cut(final XedCursor cursor) throws IOException {
-        final Element element = cursor.getElement();
-        if (element != null) {
+        if (XedClipboard.U.canCut(cursor)) {
+            final Element element = cursor.getElement();
             final XedFragment fragment = new XedFragment(cursor.getTypeInstance(), DocumentU.toString(element));
             clipboard.getFragments().add(fragment);
             ElementU.detach(element);

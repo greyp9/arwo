@@ -25,6 +25,7 @@ public class AppHtml {
         for (final String xpath : xpaths) {
             final List<Attr> attrs = xpather.getAttributes(xpath);
             for (final Attr attr : attrs) {
+                //attr.setValue(attr.getValue().replace("${CONTEXT}/css", "/css-static"));  // css dev hook
                 attr.setValue(attr.getValue().replace("${CONTEXT}", httpRequest.getContextPath()));
             }
         }

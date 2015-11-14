@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.app.apptest.fs.servlet;
 import io.github.greyp9.arwo.app.core.servlet.ServletU;
 import io.github.greyp9.arwo.app.core.state.AppState;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppHtml;
 import io.github.greyp9.arwo.core.app.AppText;
@@ -231,7 +232,8 @@ public class FileSystemServlet extends javax.servlet.http.HttpServlet {
             //HttpResponse httpResponse = httpResponseIn;
             final String subject = token.getSubject();
             if (App.Target.VIEW_STATE.equals(subject)) {
-                userState.getViewStates().apply(token, nameTypeValues);
+                final Bundle bundle = new Bundle(new AppText(userState.getLocus().getLocale()).getBundleCore());
+                userState.getViewStates().apply(token, nameTypeValues, bundle, new Alerts());
             }
             return httpResponseIn;
         }

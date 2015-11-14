@@ -229,6 +229,14 @@ public final class ElementU {
         return child;
     }
 
+    public static Element addElementFirst(
+            final Element parent, final String name, final Object text, final NameTypeValues attrs) {
+        final Element child = addElementBeforeNS(parent, name, parent.getNamespaceURI(), parent.getFirstChild());
+        setTextContent(child, text);
+        setAttributes(child, attrs);
+        return child;
+    }
+
     public static Element addElement(final Element parent, final String name, final Object text, final Node before) {
         final Element child = addElementBeforeNS(parent, name, parent.getNamespaceURI(), before);
         setTextContent(child, text);

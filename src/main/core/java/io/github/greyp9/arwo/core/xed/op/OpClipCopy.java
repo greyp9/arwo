@@ -16,8 +16,8 @@ public class OpClipCopy {
     }
 
     public final void copy(final XedCursor cursor) throws IOException {
-        final Element element = cursor.getElement();
-        if (element != null) {
+        if (XedClipboard.U.canCopy(cursor)) {
+            final Element element = cursor.getElement();
             final XedFragment fragment = new XedFragment(cursor.getTypeInstance(), DocumentU.toString(element));
             clipboard.getFragments().add(fragment);
         }

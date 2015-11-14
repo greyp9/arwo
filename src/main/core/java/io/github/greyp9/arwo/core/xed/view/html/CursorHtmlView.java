@@ -1,16 +1,23 @@
 package io.github.greyp9.arwo.core.xed.view.html;
 
+import io.github.greyp9.arwo.core.alert.view.AlertsView;
 import io.github.greyp9.arwo.core.app.AppHtml;
+import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
+import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
+import io.github.greyp9.arwo.core.menu.MenuSystem;
+import io.github.greyp9.arwo.core.menu.view.MenuView;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.view.StatusBarView;
 import io.github.greyp9.arwo.core.xed.action.XedActionLocale;
+import io.github.greyp9.arwo.core.xed.menu.XedMenuFactory;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
+import io.github.greyp9.arwo.core.xed.state.XedUserState;
 import io.github.greyp9.arwo.core.xed.view.XedCursorView;
 import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
 import io.github.greyp9.arwo.core.xed.view.XedTableView;
@@ -34,17 +41,20 @@ public class CursorHtmlView {
     }
 
     public final HttpResponse doGetHtml() throws IOException {
+        final ServletHttpRequest httpRequest = request.getHttpRequest();
+        final XedUserState userState = request.getState();
         // template html
         final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(Const.HTML)));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
         // locale property strip
-        final Locale locale = request.getState().getLocus().getLocale();
-        new XedActionLocale(locale).addContentTo(body, locale.getLanguage(), request.getState().getSubmitID());
+        final Locale locale = userState.getLocus().getLocale();
+        new XedActionLocale(locale).addContentTo(body, locale.getLanguage(), userState.getSubmitID());
         // cursor content
         addContentTo(body);
         // touch ups
-        new AppHtml(request.getHttpRequest()).fixup(html);
-        new StatusBarView(request.getHttpRequest(), request.getState().getLocus()).addContentTo(body);
+        new AlertsView(request.getAlerts(), userState.getLocus()).addContentTo(body);
+        new StatusBarView(httpRequest, userState.getLocus()).addContentTo(body);
+        new AppHtml(httpRequest).fixup(html);
         // package into response
         final byte[] entity = DocumentU.toXHtml(html);
         final NameTypeValue contentType = new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_HTML_UTF8);
@@ -54,6 +64,7 @@ public class CursorHtmlView {
     }
 
     private void addContentTo(final Element html) throws IOException {
+        addMenuView(html);
         new BreadcrumbsHtmlView(cursorView.getBaseURI(), cursorView.getCursor()).addContentTo(html);
         final Object[] views = cursorView.getViews();
         for (final Object view : views) {
@@ -63,6 +74,13 @@ public class CursorHtmlView {
                 addTable(html, (XedTableView) view);
             }
         }
+    }
+
+    private void addMenuView(final Element html) throws IOException {
+        final Bundle bundle = request.getSession().getXed().getBundle();
+        final ServletHttpRequest httpRequest = request.getHttpRequest();
+        final MenuSystem menuSystem = request.getState().getMenuSystem();
+        new MenuView(bundle, httpRequest, menuSystem).addContentTo(html, XedMenuFactory.Const.XED, true);
     }
 
     private void addPropertyPage(final Element html, final XedPropertyPageView view) throws IOException {

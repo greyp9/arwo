@@ -1,7 +1,6 @@
 package io.github.greyp9.arwo.core.xed.op;
 
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
-import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xsd.core.XsdU;
@@ -11,13 +10,9 @@ import org.w3c.dom.Element;
 import java.util.Collection;
 
 public class OpPrune {
-    private final XedNav nav;
-
-    public OpPrune(final Xed xed) {
-        this.nav = new XedNav(xed);
-    }
 
     public final void apply(final XedCursor cursor) {
+        final XedNav nav = new XedNav(cursor.getXed());
         // elements (head recursion)
         final Element element = cursor.getElement();
         final Collection<Element> children = ElementU.getChildren(element);

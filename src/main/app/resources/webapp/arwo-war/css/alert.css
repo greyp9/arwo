@@ -1,0 +1,52 @@
+/* BEGIN NOTIFICATION MESSAGE */
+
+div.notifications
+{
+border: thin solid ThreeDShadow;
+background-color: InfoBackground;
+padding: 0.25em 0.5em;
+margin: 0 0 1em 0;
+font: menu;
+}
+
+div.notification
+{
+margin: 0.25em 0;
+}
+
+span.level
+{
+font-family: monospace;
+font-weight: bold;
+border: thin solid ThreeDShadow;
+}
+
+span.info
+{
+background-color: blue;
+color: white;
+}
+
+span.warn
+{
+background-color: yellow;
+color: black;
+}
+
+span.err
+{
+background-color: red;
+color: white;
+}
+
+span.timestamp
+{
+padding: 0 0.5em;
+}
+
+span.text
+{
+font-weight: bold;
+}
+
+/* END NOTIFICATION MESSAGE */

@@ -40,7 +40,7 @@ public class OpPruneTest extends TestCase {
         Assert.assertEquals(1, xpather.getAttributes("/realm:realm/@foo-attr").size());
         Assert.assertEquals(1, xpather.getElements("/realm:realm/realm:foo-element").size());
         // prune content
-        new OpPrune(xed).apply(new XedNav(xed).getRoot());
+        new OpPrune().apply(new XedNav(xed).getRoot());
         logger.finest("\n" + DocumentU.toString(document));
         // content should not be there
         Assert.assertEquals(0, xpather.getAttributes("/realm:realm/@foo-attr").size());
