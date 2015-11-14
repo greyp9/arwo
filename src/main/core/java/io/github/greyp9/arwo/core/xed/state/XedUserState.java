@@ -21,6 +21,8 @@ import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
 import io.github.greyp9.arwo.core.xed.session.XedSessions;
 import io.github.greyp9.arwo.core.xed.session.XedSessionsFactory;
+import io.github.greyp9.arwo.core.xed.session.action.SessionReload;
+import io.github.greyp9.arwo.core.xed.session.action.SessionValidate;
 
 import java.io.File;
 import java.io.IOException;
@@ -55,6 +57,10 @@ public class XedUserState {
 
     public final Alerts getAlerts() {
         return alerts;
+    }
+
+    public final XedSessions getSessions() {
+        return sessions;
     }
 
     public final XedSession getSession(final String contextPath) throws IOException {
@@ -130,11 +136,12 @@ public class XedUserState {
         final String action = token.getAction();
         final String message = request.getBundle().getString("alert.action.not.implemented");
         if (App.Action.VALIDATE.equals(action)) {
-            alerts.add(new Alert(Alert.Severity.WARN, message));
+            new SessionValidate(request.getSession(), request.getBundle(), alerts).validate();
         } else if (App.Action.PRETTY.equals(action)) {
             alerts.add(new Alert(Alert.Severity.WARN, message));
         } else if (App.Action.RELOAD.equals(action)) {
-            alerts.add(new Alert(Alert.Severity.WARN, message));
+            new SessionReload(request.getState().getSessions(),
+                    request.getSession(), request.getBundle(), alerts).reload();
         } else if (App.Action.SAVE.equals(action)) {
             alerts.add(new Alert(Alert.Severity.WARN, message));
         } else {

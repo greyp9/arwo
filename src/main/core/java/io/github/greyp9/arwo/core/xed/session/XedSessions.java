@@ -28,6 +28,10 @@ public class XedSessions {
         return session;
     }
 
+    public final XedSession removeSession(final String contextPath) throws IOException {
+        return sessions.remove(contextPath);
+    }
+
     public final void applyLocale(final Locale locale) {
         for (final Map.Entry<String, XedSession> entry : sessions.entrySet()) {
             applyLocale(locale, entry.getKey(), entry.getValue());
