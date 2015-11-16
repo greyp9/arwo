@@ -8,6 +8,7 @@
     <property name='src.app.dir' location='${project.dir}/src/main/app/java'/>
     <!--transient-->
     <property name='target.dir' value='${project.dir}/target'/>
+    <property name='classes.realm.dir' value='${target.dir}/app-tomcat6/classes-realm'/>
     <property name='classes.core.dir' value='${target.dir}/app/classes-core'/>
     <property name='classes.lib.dir' value='${target.dir}/app/classes-lib'/>
     <property name='classes.app.dir' value='${target.dir}/app/classes-app'/>
@@ -23,24 +24,39 @@
     </fileset>
 
     <path id='classpath-libs-tomcat6'>
-        <fileset dir='${tomcat6.dir}'>
+        <fileset dir='${tomcat6.dir}' id='libs-tomcat6'>
             <include name='bin/*.jar'/>
             <include name='lib/*.jar'/>
         </fileset>
+    </path>
+
+    <path id='classpath-libs-tomcat6-arwo'>
+        <fileset refid='libs-tomcat6'/>
+        <pathelement path='${classes.realm.dir}'/>
     </path>
 
     <path id='classpath-libs-tomcat7'>
-        <fileset dir='${tomcat7.dir}'>
+        <fileset dir='${tomcat7.dir}' id='libs-tomcat7'>
             <include name='bin/*.jar'/>
             <include name='lib/*.jar'/>
         </fileset>
     </path>
 
+    <path id='classpath-libs-tomcat7-arwo'>
+        <fileset refid='libs-tomcat7'/>
+        <pathelement path='${classes.realm.dir}'/>
+    </path>
+
     <path id='classpath-libs-tomcat8'>
-        <fileset dir='${tomcat8.dir}'>
+        <fileset dir='${tomcat8.dir}' id='libs-tomcat8'>
             <include name='bin/*.jar'/>
             <include name='lib/*.jar'/>
         </fileset>
+    </path>
+
+    <path id='classpath-libs-tomcat8-arwo'>
+        <fileset refid='libs-tomcat8'/>
+        <pathelement path='${classes.realm.dir}'/>
     </path>
 
     <path id='classpath-app'>
@@ -64,7 +80,8 @@
     </target>
 
     <target name='compile-lib-tomcat6' description='compile project source'>
-        <javac destdir='${classes.lib.dir}' classpathref='classpath-libs-tomcat6' includeantruntime='false' debug='on'>
+        <javac destdir='${classes.lib.dir}' classpathref='classpath-libs-tomcat6-arwo'
+               includeantruntime='false' debug='on'>
             <compilerarg value='-Xlint:all'/>
             <src path='${src.lib.dir}'/>
             <include name='io/github/greyp9/arwo/lib/tomcat6/**/*.java'/>
@@ -72,7 +89,8 @@
     </target>
 
     <target name='compile-lib-tomcat7' description='compile project source'>
-        <javac destdir='${classes.lib.dir}' classpathref='classpath-libs-tomcat7' includeantruntime='false' debug='on'>
+        <javac destdir='${classes.lib.dir}' classpathref='classpath-libs-tomcat7-arwo'
+               includeantruntime='false' debug='on'>
             <compilerarg value='-Xlint:all'/>
             <src path='${src.lib.dir}'/>
             <include name='io/github/greyp9/arwo/lib/tomcat7/**/*.java'/>
@@ -80,7 +98,8 @@
     </target>
 
     <target name='compile-lib-tomcat8' description='compile project source'>
-        <javac destdir='${classes.lib.dir}' classpathref='classpath-libs-tomcat8' includeantruntime='false' debug='on'>
+        <javac destdir='${classes.lib.dir}' classpathref='classpath-libs-tomcat8-arwo'
+               includeantruntime='false' debug='on'>
             <compilerarg value='-Xlint:all'/>
             <src path='${src.lib.dir}'/>
             <include name='io/github/greyp9/arwo/lib/tomcat8/**/*.java'/>

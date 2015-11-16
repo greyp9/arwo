@@ -49,7 +49,7 @@ public final class ManifestU {
         return getAttribute(manifest, Const.VERSION);
     }
 
-    public static String getVersion(final Class c) {
+    public static String getVersion(final Class<?> c) {
         final Manifest manifest = getManifestSafe(c);
         return String.format("[v%s %s]",
                 getImplementationVersion(manifest),

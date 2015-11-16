@@ -33,7 +33,7 @@ public class XPathContext implements javax.xml.namespace.NamespaceContext {
         return (prefix == null) ? XsdU.NS_PREFIX_NULL : prefix;
     }
 
-    public final Iterator getPrefixes(final String namespaceURI) {
+    public final Iterator<Object> getPrefixes(final String namespaceURI) {
         throw new UnsupportedOperationException(getClass().getName());
     }
 
