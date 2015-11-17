@@ -11,6 +11,7 @@ import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.resource.Pather;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.table.state.ViewStates;
+import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.xed.action.XedActionLocale;
@@ -21,7 +22,9 @@ import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
 import io.github.greyp9.arwo.core.xed.session.XedSessions;
 import io.github.greyp9.arwo.core.xed.session.XedSessionsFactory;
+import io.github.greyp9.arwo.core.xed.session.action.SessionPretty;
 import io.github.greyp9.arwo.core.xed.session.action.SessionReload;
+import io.github.greyp9.arwo.core.xed.session.action.SessionSave;
 import io.github.greyp9.arwo.core.xed.session.action.SessionValidate;
 
 import java.io.File;
@@ -29,6 +32,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.Properties;
 
+@SuppressWarnings("PMD.ExcessiveImports")
 public class XedUserState {
     // user session identity token
     private final String submitID;
@@ -95,25 +99,32 @@ public class XedUserState {
         this.clipboard = new XedClipboard();
     }
 
-    public final void apply(final NameTypeValues nameTypeValues) throws IOException {
+    public final void applyGet(final NameTypeValues nameTypeValues) throws IOException {
+        // from HTTP GET query string...
         for (final NameTypeValue nameTypeValue : nameTypeValues) {
-            if ("toggle".equals(nameTypeValue.getName())) {
-                final boolean isExpanded = Boolean.parseBoolean(properties.getProperty("buttons"));
-                properties.setProperty("buttons", Boolean.toString(!isExpanded));
+            final String name = nameTypeValue.getName();
+            final String value = nameTypeValue.getValueS();
+            if (("toggle".equals(name)) && ("buttons".equals(value))) {
+                PropertiesU.toggleBoolean(properties, value);
             }
         }
     }
 
-    public final String apply(final SubmitToken token, final NameTypeValues nameTypeValues,
-                              final XedRequest request) throws IOException {
+    public final String applyPost(
+            final SubmitToken token, final NameTypeValues nameTypeValues, final XedRequest request) throws IOException {
+        // from HTTP POST form arguments...
         String location = request.getHttpRequest().getURI();
         final String action = token.getAction();
-        final String object = token.getObject();
+        //final String object = token.getObject();
         final String message = request.getBundle().getString("alert.action.not.implemented");
-        if ("locale".equals(object)) {
+        if ("updateLocale".equals(action)) {
             applyLocale(nameTypeValues);
-        } else if ("toggle".equals(action)) {
+        } else if ("menu".equals(action)) {
             menuSystem.toggle(token.getObject());
+        } else if ("locale".equals(action)) {
+            PropertiesU.toggleBoolean(properties, action);
+        } else if (App.Action.SAVE.equals(action)) {
+            PropertiesU.toggleBoolean(properties, action);
         } else if ("xml".equals(action)) {
             location = toView(request.getHttpRequest(), action);
         } else if ("xsd".equals(action)) {
@@ -132,24 +143,25 @@ public class XedUserState {
         return httpRequest.getBaseURI() + PathU.toPath("", view) + new Pather(httpRequest.getPathInfo()).getRight();
     }
 
-    public final void applySession(final SubmitToken token, final XedRequest request) throws IOException {
+    public final void applySession(
+            final SubmitToken token, final NameTypeValues httpArguments, final XedRequest request) throws IOException {
         final String action = token.getAction();
         final String message = request.getBundle().getString("alert.action.not.implemented");
+        final XedSessions sessionsApply = request.getState().getSessions();
         if (App.Action.VALIDATE.equals(action)) {
             new SessionValidate(request.getSession(), request.getBundle(), alerts).validate();
         } else if (App.Action.PRETTY.equals(action)) {
-            alerts.add(new Alert(Alert.Severity.WARN, message));
+            new SessionPretty(sessionsApply, request.getSession(), request.getBundle(), alerts).pretty();
         } else if (App.Action.RELOAD.equals(action)) {
-            new SessionReload(request.getState().getSessions(),
-                    request.getSession(), request.getBundle(), alerts).reload();
+            new SessionReload(sessionsApply, request.getSession(), request.getBundle(), alerts).reload();
         } else if (App.Action.SAVE.equals(action)) {
-            alerts.add(new Alert(Alert.Severity.WARN, message));
+            final Properties propertiesApply = request.getState().getProperties();
+            new SessionSave(request.getSession(), request.getBundle(), alerts).save(httpArguments, propertiesApply);
         } else {
             alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }
     }
 
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private void applyLocale(final NameTypeValues nameTypeValues) throws IOException {
         // apply to user state
         final Xed actionLocale = new XedActionLocale(null).update(nameTypeValues);

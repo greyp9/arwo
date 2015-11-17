@@ -15,15 +15,15 @@ public class XedMenuFactory implements MenuFactory {
         if (Const.XED.equals(type)) {
             menuItem = createMenuBarXed(key);
         } else {
-            menuItem = new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.TOGGLE);
+            menuItem = new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU);
         }
         return menuItem;
     }
 
     private static MenuItem createMenuBarXed(final String key) {
-        final MenuItem[] menuItems = new MenuItem[] {
-                createMenuDocument(key), createMenuClipboard(key), createMenuView(key) };
-        return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.TOGGLE, key, menuItems);
+        final MenuItem[] menuItems = new MenuItem[]{
+                createMenuDocument(key), createMenuClipboard(key), createMenuView(key)};
+        return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
     }
 
     private static MenuItem createMenuClipboard(final String key) {
@@ -31,7 +31,7 @@ public class XedMenuFactory implements MenuFactory {
         final MenuItem itemCopy = new MenuItem(App.Action.CLIP_COPY, App.Target.DOCUMENT, App.Action.CLIP_COPY);
         final MenuItem itemPaste = new MenuItem(App.Action.CLIP_PASTE, App.Target.DOCUMENT, App.Action.CLIP_PASTE);
         final MenuItem itemClear = new MenuItem(App.Action.CLIP_CLEAR, App.Target.DOCUMENT, App.Action.CLIP_CLEAR);
-        return new MenuItem("clipboard", App.Target.USER_STATE, App.Action.TOGGLE,
+        return new MenuItem("clipboard", App.Target.USER_STATE, App.Action.MENU,
                 key + "/clipboard", itemCut, itemCopy, itemPaste, itemClear);
     }
 
@@ -46,8 +46,8 @@ public class XedMenuFactory implements MenuFactory {
         final MenuItem itemPrune = new MenuItem(App.Action.PRUNE, App.Target.DOCUMENT, App.Action.PRUNE);
         final MenuItem itemPretty = new MenuItem(App.Action.PRETTY, App.Target.SESSION, App.Action.PRETTY);
         final MenuItem itemReload = new MenuItem(App.Action.RELOAD, App.Target.SESSION, App.Action.RELOAD);
-        final MenuItem itemSave = new MenuItem(App.Action.SAVE, App.Target.SESSION, App.Action.SAVE);
-        return new MenuItem("document", App.Target.USER_STATE, App.Action.TOGGLE,
+        final MenuItem itemSave = new MenuItem(App.Action.SAVE, App.Target.USER_STATE, App.Action.SAVE);
+        return new MenuItem("document", App.Target.USER_STATE, App.Action.MENU,
                 key + "/document", itemValidate, itemFill, itemPrune, itemPretty, itemReload, itemSave);
     }
 
@@ -60,8 +60,9 @@ public class XedMenuFactory implements MenuFactory {
         final MenuItem itemXsd = new MenuItem("xsd", App.Target.USER_STATE, "xsd");
         final MenuItem itemType = new MenuItem("type", App.Target.USER_STATE, "type");
         final MenuItem itemRev = new MenuItem("rev", App.Target.USER_STATE, "rev");
-        return new MenuItem("view", App.Target.USER_STATE, App.Action.TOGGLE,
-                key + "/view", itemXml, itemXsd, itemType, itemRev);
+        final MenuItem itemLocale = new MenuItem("locale", App.Target.USER_STATE, "locale");
+        return new MenuItem("view", App.Target.USER_STATE, App.Action.MENU,
+                key + "/view", itemXml, itemXsd, itemType, itemRev, itemLocale);
     }
 
     public static class Const {

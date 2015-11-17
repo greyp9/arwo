@@ -62,6 +62,18 @@
         <url-pattern>/doc1/*</url-pattern>
     </servlet-mapping>
 
+    <!--custom document-->
+    <servlet-mapping>
+        <servlet-name>Xed1Servlet</servlet-name>
+        <url-pattern>/doc2/*</url-pattern>
+    </servlet-mapping>
+
+    <!--custom document-->
+    <servlet-mapping>
+        <servlet-name>Xed1Servlet</servlet-name>
+        <url-pattern>/doc3/*</url-pattern>
+    </servlet-mapping>
+
     <!--arwo document-->
     <servlet-mapping>
         <servlet-name>Xed1Servlet</servlet-name>

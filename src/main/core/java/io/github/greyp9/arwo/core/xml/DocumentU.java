@@ -22,6 +22,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
+@SuppressWarnings("PMD.TooManyMethods")
 public final class DocumentU {
 
     private DocumentU() {
@@ -51,6 +52,15 @@ public final class DocumentU {
             return bos.toByteArray();
         } catch (TransformerException e) {
             throw new IOException(e);
+        }
+    }
+
+    @SuppressWarnings({"PMD.OnlyOneReturn", "PMD.AvoidCatchingThrowable"})
+    public static byte[] toXmlPretty(final Document document) throws IOException {
+        try {
+            return io.github.greyp9.arwo.core.xml.priv.XmlPriv.toXmlPretty(document);
+        } catch (Throwable e) {
+            return io.github.greyp9.arwo.core.xml.ls.XmlLS.toXmlPretty(document);
         }
     }
 

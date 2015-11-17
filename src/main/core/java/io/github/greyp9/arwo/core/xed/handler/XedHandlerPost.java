@@ -48,9 +48,9 @@ public class XedHandlerPost {
         if (App.Target.DOCUMENT.equals(subject)) {
             location = new XedWrite(request).apply(token, httpArguments);
         } else if (App.Target.SESSION.equals(subject)) {
-            userState.applySession(token, request);
+            userState.applySession(token, httpArguments, request);
         } else if (App.Target.USER_STATE.equals(subject)) {
-            location = userState.apply(token, httpArguments, request);
+            location = userState.applyPost(token, httpArguments, request);
         } else if (App.Target.VIEW_STATE.equals(subject)) {
             userState.getViewStates().apply(token, httpArguments, request.getBundle(), request.getAlerts());
         }

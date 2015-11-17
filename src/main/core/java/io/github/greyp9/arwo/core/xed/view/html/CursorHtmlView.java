@@ -15,6 +15,7 @@ import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.view.StatusBarView;
 import io.github.greyp9.arwo.core.xed.action.XedActionLocale;
+import io.github.greyp9.arwo.core.xed.action.XedActionSave;
 import io.github.greyp9.arwo.core.xed.menu.XedMenuFactory;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.state.XedUserState;
@@ -30,7 +31,9 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.Locale;
+import java.util.Properties;
 
+@SuppressWarnings("PMD.ExcessiveImports")
 public class CursorHtmlView {
     private final XedCursorView cursorView;
     private final XedRequest request;
@@ -46,11 +49,8 @@ public class CursorHtmlView {
         // template html
         final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(Const.HTML)));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
-        // locale property strip
-        final Locale locale = userState.getLocus().getLocale();
-        new XedActionLocale(locale).addContentTo(body, locale.getLanguage(), userState.getSubmitID());
         // cursor content
-        addContentTo(body);
+        addContentTo(body, userState);
         // touch ups
         new AlertsView(request.getAlerts(), userState.getLocus()).addContentTo(body);
         new StatusBarView(httpRequest, userState.getLocus()).addContentTo(body);
@@ -63,9 +63,16 @@ public class CursorHtmlView {
         return new HttpResponse(HttpURLConnection.HTTP_OK, headers, new ByteArrayInputStream(entity));
     }
 
-    private void addContentTo(final Element html) throws IOException {
+    private void addContentTo(final Element html, final XedUserState userState) throws IOException {
         addMenuView(html);
+        // locale property strip
+        final Locale locale = userState.getLocus().getLocale();
+        final String submitID = userState.getSubmitID();
+        final Properties properties = userState.getProperties();
+        new XedActionLocale(locale).addContentTo(html, submitID, properties);
+        new XedActionSave(locale).addContentTo(html, submitID, properties);
         new BreadcrumbsHtmlView(cursorView.getBaseURI(), cursorView.getCursor()).addContentTo(html);
+
         final Object[] views = cursorView.getViews();
         for (final Object view : views) {
             if (view instanceof XedPropertyPageView) {

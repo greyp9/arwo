@@ -26,6 +26,11 @@ public final class PropertiesU {
         return properties;
     }
 
+    public static void toggleBoolean(final Properties properties, final String key) {
+        final boolean value = Boolean.parseBoolean(properties.getProperty(key));
+        properties.setProperty(key, Boolean.toString(!value));
+    }
+
     public static void setProperty(final Properties properties, final Object key, final Object value) {
         if (value == null) {
             properties.remove(key);

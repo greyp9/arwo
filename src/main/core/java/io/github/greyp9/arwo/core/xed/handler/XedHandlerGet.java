@@ -44,7 +44,7 @@ public class XedHandlerGet {
         } else if (isNoTrailingSlash) {
             httpResponse = HttpResponseU.toHttpResponse302(PathU.toDir(httpRequest.getURI()));
         } else if (isQuery) {
-            request.getState().apply(HttpArguments.toArguments(query));
+            request.getState().applyGet(HttpArguments.toArguments(query));
             httpResponse = HttpResponseU.toHttpResponse302(httpRequest.getURI());
         } else if (Const.CONTEXT_XML.equals(pather.getLeftToken())) {
             httpResponse = doGetXML(httpRequest.getURI(), pather.getRight());

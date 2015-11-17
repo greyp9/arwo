@@ -38,4 +38,12 @@
         </xsd:restriction>
     </xsd:simpleType>
 
+    <xsd:element name='save' type='action:saveType'/>
+
+    <xsd:complexType name='saveType'>
+        <xsd:sequence>
+            <xsd:element name='comment' type='xsd:string'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
 </xsd:schema>
