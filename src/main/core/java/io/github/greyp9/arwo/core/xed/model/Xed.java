@@ -52,7 +52,7 @@ public class Xed {
     public final Bundle getBundle() {
         final ResourceBundle bundleCore = new AppText(xsdBundle.getLocale()).getBundleCore();
         final ResourceBundle bundleRoot = getRootBundle();
-        return new Bundle(bundleRoot, bundleCore);
+        return ((bundleRoot == null) ? new Bundle(bundleCore) : new Bundle(bundleRoot, bundleCore));
     }
 
     public final Locale getLocale() {

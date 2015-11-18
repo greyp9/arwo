@@ -2,21 +2,15 @@ package io.github.greyp9.arwo.core.xed.session.action;
 
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
-import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.file.FileU;
 import io.github.greyp9.arwo.core.io.StreamU;
-import io.github.greyp9.arwo.core.value.NameTypeValues;
-import io.github.greyp9.arwo.core.value.Value;
-import io.github.greyp9.arwo.core.xed.action.XedActionSave;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Locale;
-import java.util.Properties;
 
 public class SessionSave {
     private final XedSession session;
@@ -29,8 +23,7 @@ public class SessionSave {
         this.alerts = alerts;
     }
 
-    public final void save(final NameTypeValues httpArguments, final Properties properties) throws IOException {
-        final String comment = new XedActionSave(Locale.getDefault()).getComment(httpArguments);
+    public final void save() throws IOException {
         final byte[] xmlPretty = DocumentU.toXmlPretty(session.getXed().getDocument());
         final File file = session.getFile();
         final File folder = file.getParentFile();
@@ -41,8 +34,7 @@ public class SessionSave {
             // save new file
             try {
                 StreamU.write(file, xmlPretty);
-                alert(Alert.Severity.INFO, "document.save", Value.defaultOnEmpty(comment, null));
-                properties.setProperty(App.Action.SAVE, Boolean.FALSE.toString());
+                alert(Alert.Severity.INFO, "document.save", null);
             } catch (FileNotFoundException e) {
                 alert(Alert.Severity.ERR, "document.save.error", e.getMessage());
             }

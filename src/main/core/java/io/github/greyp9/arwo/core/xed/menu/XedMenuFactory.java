@@ -46,9 +46,10 @@ public class XedMenuFactory implements MenuFactory {
         final MenuItem itemPrune = new MenuItem(App.Action.PRUNE, App.Target.DOCUMENT, App.Action.PRUNE);
         final MenuItem itemPretty = new MenuItem(App.Action.PRETTY, App.Target.SESSION, App.Action.PRETTY);
         final MenuItem itemReload = new MenuItem(App.Action.RELOAD, App.Target.SESSION, App.Action.RELOAD);
-        final MenuItem itemSave = new MenuItem(App.Action.SAVE, App.Target.USER_STATE, App.Action.SAVE);
+        final MenuItem itemSave = new MenuItem(App.Action.SAVE, App.Target.SESSION, App.Action.SAVE);
+        final MenuItem itemCommit = new MenuItem(App.Action.COMMIT, App.Target.USER_STATE, App.Action.COMMIT);
         return new MenuItem("document", App.Target.USER_STATE, App.Action.MENU,
-                key + "/document", itemValidate, itemFill, itemPrune, itemPretty, itemReload, itemSave);
+                key + "/document", itemValidate, itemFill, itemPrune, itemPretty, itemReload, itemSave, itemCommit);
     }
 
     private static MenuItem createMenuView(final String key) {

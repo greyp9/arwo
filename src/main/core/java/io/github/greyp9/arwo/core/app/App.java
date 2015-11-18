@@ -13,7 +13,7 @@ public final class App {
         public static final String XSD = "io/github/greyp9/arwo/xsd/action/action.xsd";
         public static final QName QNAME_FILTER = new QName("urn:arwo:action", "filter", "action");
         public static final QName QNAME_LOCALE = new QName("urn:arwo:action", "locale", "action");
-        public static final QName QNAME_SAVE = new QName("urn:arwo:action", "save", "action");
+        public static final QName QNAME_COMMIT = new QName("urn:arwo:action", "commit", "action");
     }
 
     public static class Config {
@@ -51,6 +51,7 @@ public final class App {
         public static final String RELOAD = "reload";
         public static final String RESET = "reset";
         public static final String SAVE = "save";
+        public static final String COMMIT = "commit";
         public static final String TOGGLE = "toggle";
         public static final String VALIDATE = "validate";
 

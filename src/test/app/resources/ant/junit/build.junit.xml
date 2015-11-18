@@ -52,6 +52,11 @@
         <depend destdir='${test.classes.lib.dir}' srcdir='${test.src.lib.dir}'/>
 
         <javac destdir='${test.classes.core.dir}' classpathref='classpath-test' includeantruntime='false' debug='on'>
+            <compilerarg value='-XDignore.symbol.file' description='stack-overflow-13855700'/>
+            <src path='${test.src.core.dir}'/>
+            <include name='io/github/greyp9/arwo/core/xml/test/XmlOutputSunTest.java'/>
+        </javac>
+        <javac destdir='${test.classes.core.dir}' classpathref='classpath-test' includeantruntime='false' debug='on'>
             <compilerarg value='-Xlint:all'/>
             <src path='${test.src.core.dir}'/>
         </javac>

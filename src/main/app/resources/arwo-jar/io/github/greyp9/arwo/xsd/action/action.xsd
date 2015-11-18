@@ -38,9 +38,9 @@
         </xsd:restriction>
     </xsd:simpleType>
 
-    <xsd:element name='save' type='action:saveType'/>
+    <xsd:element name='commit' type='action:commitType'/>
 
-    <xsd:complexType name='saveType'>
+    <xsd:complexType name='commitType'>
         <xsd:sequence>
             <xsd:element name='comment' type='xsd:string'/>
         </xsd:sequence>

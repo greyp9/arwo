@@ -34,6 +34,14 @@ public final class StreamU {
         return os.toByteArray();
     }
 
+    public static long skip(final BufferedInputStream is) throws IOException {
+        long count = 0L;
+        while (is.read() >= 0) {
+            ++count;
+        }
+        return count;
+    }
+
     public static byte[] read(final InputStream is) throws IOException {
         final BufferedInputStream bis = new BufferedInputStream(is);
         try {
@@ -50,6 +58,18 @@ public final class StreamU {
         } finally {
             is.close();
         }
+    }
+
+    public static byte[] readPartial(final InputStream is) throws IOException {
+        return read(new BufferedInputStream(is));
+    }
+
+    public static long skip(final InputStream is, final long count) throws IOException {
+        return is.skip(count);
+    }
+
+    public static long skipPartial(final InputStream is) throws IOException {
+        return skip(new BufferedInputStream(is));
     }
 
     @SuppressWarnings("PMD.OnlyOneReturn")

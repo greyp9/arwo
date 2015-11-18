@@ -74,6 +74,11 @@
         <mkdir dir='${classes.core.dir}'/>
         <depend destdir='${classes.core.dir}' srcdir='${src.core.dir}'/>
         <javac destdir='${classes.core.dir}' classpathref='classpath-core' includeantruntime='false' debug='on'>
+            <compilerarg value='-XDignore.symbol.file' description='stack-overflow-13855700'/>
+            <src path='${src.core.dir}'/>
+            <include name='io/github/greyp9/arwo/core/xml/priv/XmlPriv.java'/>
+        </javac>
+        <javac destdir='${classes.core.dir}' classpathref='classpath-core' includeantruntime='false' debug='on'>
             <compilerarg value='-Xlint:all'/>
             <src path='${src.core.dir}'/>
         </javac>

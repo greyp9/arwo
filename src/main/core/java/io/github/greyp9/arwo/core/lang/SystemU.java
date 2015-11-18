@@ -19,6 +19,10 @@ public final class SystemU {
         return Const.USER_HOME;
     }
 
+    public static String tempDir() {
+        return Const.TEMP_DIR;
+    }
+
     public static boolean isTrue() {
         return (!System.getProperties().isEmpty());
     }
@@ -41,5 +45,6 @@ public final class SystemU {
         private static final String LINE_SEPARATOR = System.getProperty("line.separator");
         private static final String ARWO_HOME = System.getProperty("arwo.home");
         private static final String USER_HOME = System.getProperty("user.home");
+        private static final String TEMP_DIR = System.getProperty("java.io.tmpdir");
     }
 }

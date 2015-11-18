@@ -35,8 +35,11 @@ public class SessionPretty {
         final Xed xed = session.getXed();
         final File file = session.getFile();
         final Date dateLoad = session.getDateLoad();
+        // do this step to fix namespaces for new elements (something in JRE?)
+        final byte[] xmlNormal = DocumentU.toXml(xed.getDocument());
+        final Document documentNormal = DocumentU.toDocument(xmlNormal);
         // new session
-        final byte[] xmlPretty = DocumentU.toXmlPretty(xed.getDocument());
+        final byte[] xmlPretty = DocumentU.toXmlPretty(documentNormal);
         final Document document = DocumentU.toDocument(xmlPretty);
         final Xed xedNew = new Xed(document, xed.getXsdTypes(), xed.getLocale());
         final XedSession sessionNew = new XedSession(entry, xedNew, file, dateLoad);

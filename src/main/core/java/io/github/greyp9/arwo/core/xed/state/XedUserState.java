@@ -22,6 +22,7 @@ import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
 import io.github.greyp9.arwo.core.xed.session.XedSessions;
 import io.github.greyp9.arwo.core.xed.session.XedSessionsFactory;
+import io.github.greyp9.arwo.core.xed.session.action.SessionCommit;
 import io.github.greyp9.arwo.core.xed.session.action.SessionPretty;
 import io.github.greyp9.arwo.core.xed.session.action.SessionReload;
 import io.github.greyp9.arwo.core.xed.session.action.SessionSave;
@@ -123,7 +124,7 @@ public class XedUserState {
             menuSystem.toggle(token.getObject());
         } else if ("locale".equals(action)) {
             PropertiesU.toggleBoolean(properties, action);
-        } else if (App.Action.SAVE.equals(action)) {
+        } else if (App.Action.COMMIT.equals(action)) {
             PropertiesU.toggleBoolean(properties, action);
         } else if ("xml".equals(action)) {
             location = toView(request.getHttpRequest(), action);
@@ -155,8 +156,10 @@ public class XedUserState {
         } else if (App.Action.RELOAD.equals(action)) {
             new SessionReload(sessionsApply, request.getSession(), request.getBundle(), alerts).reload();
         } else if (App.Action.SAVE.equals(action)) {
+            new SessionSave(request.getSession(), request.getBundle(), alerts).save();
+        } else if (App.Action.COMMIT.equals(action)) {
             final Properties propertiesApply = request.getState().getProperties();
-            new SessionSave(request.getSession(), request.getBundle(), alerts).save(httpArguments, propertiesApply);
+            new SessionCommit(request.getSession(), request.getBundle(), alerts).commit(httpArguments, propertiesApply);
         } else {
             alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }

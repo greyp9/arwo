@@ -14,8 +14,8 @@ import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.view.StatusBarView;
+import io.github.greyp9.arwo.core.xed.action.XedActionCommit;
 import io.github.greyp9.arwo.core.xed.action.XedActionLocale;
-import io.github.greyp9.arwo.core.xed.action.XedActionSave;
 import io.github.greyp9.arwo.core.xed.menu.XedMenuFactory;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.state.XedUserState;
@@ -70,7 +70,7 @@ public class CursorHtmlView {
         final String submitID = userState.getSubmitID();
         final Properties properties = userState.getProperties();
         new XedActionLocale(locale).addContentTo(html, submitID, properties);
-        new XedActionSave(locale).addContentTo(html, submitID, properties);
+        new XedActionCommit(locale).addContentTo(html, submitID, properties);
         new BreadcrumbsHtmlView(cursorView.getBaseURI(), cursorView.getCursor()).addContentTo(html);
 
         final Object[] views = cursorView.getViews();

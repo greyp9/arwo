@@ -23,6 +23,16 @@ public final class DateU {
         return (left.before(right) ? left : right);
     }
 
+    public static Date floor(final Date date, final String interval) {
+        final Date datePlus = DurationU.add(date, Const.TZ_GMT, interval);
+        final long durationMillis = datePlus.getTime() - date.getTime();
+        return floor(date, durationMillis);
+    }
+
+    public static Date floor(final Date date, final long interval) {
+        return ((interval > 0) ? new Date((date.getTime() / interval) * interval) : date);
+    }
+
     public static Date toDate(final Integer seconds) {
         return ((seconds == null) ? null : toDate((long) seconds));
     }

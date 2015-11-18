@@ -24,7 +24,7 @@ public class XsdBundles {
     }
 
     public final ResourceBundle getBundle(final String uri) {
-        return bundles.get(uri);
+        return ((uri == null) ? null : bundles.get(uri));
     }
 
     public XsdBundles(final XsdTypes xsdTypes, final Locale locale) {
