@@ -3,9 +3,11 @@ package io.github.greyp9.arwo.core.table.html;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
+import io.github.greyp9.arwo.core.html.HtmlU;
 import io.github.greyp9.arwo.core.page.Page;
 import io.github.greyp9.arwo.core.table.baseline.BaselineValue;
 import io.github.greyp9.arwo.core.table.cell.Duration;
+import io.github.greyp9.arwo.core.table.cell.TableViewButton;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
 import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
@@ -88,6 +90,8 @@ public class TableBodyView {
             addCell(tr, (BaselineValue) value, type);
         } else if (value instanceof TableViewLink) {
             addCell(tr, (TableViewLink) value);
+        } else if (value instanceof TableViewButton) {
+            addCell(tr, (TableViewButton) value);
         } else {
             addCell(tr, value, type);
         }
@@ -175,6 +179,11 @@ public class TableBodyView {
         // 'display: block' makes entire cell a hyperlink, not just the inner text
         ElementU.addElement(td, Html.A, tableViewLink.getText(),
                 NameTypeValuesU.create(Html.HREF, tableViewLink.getHref()));
+    }
+
+    private void addCell(final Element tr, final TableViewButton tvb) {
+        final Element td = ElementU.addElement(tr, Html.TD);
+        HtmlU.addButton(td, tvb.getText(), tvb.getName(), tvb.getValue(), null, null);
     }
 
     private static class Const {

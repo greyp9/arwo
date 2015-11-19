@@ -14,6 +14,7 @@ import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.view.XedCursorView;
 import io.github.greyp9.arwo.core.xed.view.html.CursorHtmlView;
+import io.github.greyp9.arwo.core.xed.view.html.RevisionHtmlView;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 
 import java.io.ByteArrayInputStream;
@@ -48,6 +49,8 @@ public class XedHandlerGet {
             httpResponse = HttpResponseU.toHttpResponse302(httpRequest.getURI());
         } else if (Const.CONTEXT_XML.equals(pather.getLeftToken())) {
             httpResponse = doGetXML(httpRequest.getURI(), pather.getRight());
+        } else if (Const.CONTEXT_REVISIONS.equals(pather.getLeftToken())) {
+            httpResponse = doGetRevisions();
         } else if (Const.CONTEXT_UI.equals(pather.getLeftToken())) {
             httpResponse = doGetUI(httpRequest.getURI(), pather.getRight());
         } else {
@@ -70,13 +73,17 @@ public class XedHandlerGet {
         return httpResponse;
     }
 
+    private HttpResponse doGetRevisions() throws IOException {
+        return new RevisionHtmlView(request).doGetHtml();
+    }
+
     private HttpResponse doGetUI(final String requestURI, final String cursorURI) throws IOException {
         HttpResponse httpResponse = HttpResponseU.toHttpResponse302(PathU.toParent(requestURI));
         final XedCursor cursor = new XedNav(request.getSession().getXed()).find(cursorURI);
         if (cursor != null) {
             final ServletHttpRequest httpRequest = request.getHttpRequest();
             final String baseURI = PathU.toPath(httpRequest.getBaseURI(), Const.CONTEXT_UI);
-            httpResponse = new CursorHtmlView(new XedCursorView(baseURI, cursor), request).doGetHtml();
+            httpResponse = new CursorHtmlView(request, new XedCursorView(baseURI, cursor)).doGetHtml();
         }
         return httpResponse;
     }
@@ -84,5 +91,6 @@ public class XedHandlerGet {
     private static class Const {
         private static final String CONTEXT_UI = "ui";
         private static final String CONTEXT_XML = "xml";
+        private static final String CONTEXT_REVISIONS = "rev";
     }
 }

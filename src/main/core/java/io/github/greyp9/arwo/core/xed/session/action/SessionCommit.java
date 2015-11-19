@@ -36,8 +36,6 @@ public class SessionCommit {
     }
 
     public final void commit(final NameTypeValues httpArguments, final Properties properties) throws IOException {
-        final String comment = new XedActionCommit(Locale.getDefault()).getComment(httpArguments);
-        final byte[] xmlPretty = DocumentU.toXmlPretty(session.getXed().getDocument());
         final File file = session.getFile();
         final File folder = file.getParentFile();
         // ensure parent folder for specified file path
@@ -46,13 +44,8 @@ public class SessionCommit {
         if (folder.exists() && (folder.isDirectory())) {
             // commit new revision
             try {
-                final String folderName = DateX.toFilename(new Date(file.lastModified()));
-                final String name = Value.join(Http.Token.SLASH, folderName, file.getName());
-                final FileMetaData metaData = new FileMetaData(name, xmlPretty.length, new Date().getTime(), false);
-                final MetaFile metaFile = new MetaFile(metaData, new ByteArrayInputStream(xmlPretty));
-                final File fileRevisions = new File(folder, file.getName() + ".zip");
-                final ZipAppender zipAppender = new ZipAppender(fileRevisions);
-                zipAppender.append(comment, metaFile);
+                final String comment = new XedActionCommit(Locale.getDefault()).getComment(httpArguments);
+                commit(comment, file);
                 alert(Alert.Severity.INFO, "document.commit", Value.defaultOnEmpty(comment, null));
                 properties.setProperty(App.Action.COMMIT, Boolean.FALSE.toString());
             } catch (FileNotFoundException e) {
@@ -61,6 +54,18 @@ public class SessionCommit {
         } else {
             alert(Alert.Severity.ERR, "document.commit.error", new FileNotFoundException(file.getPath()).getMessage());
         }
+    }
+
+    private void commit(final String comment, final File file) throws IOException {
+        final byte[] xml = DocumentU.toXmlPretty(session.getXed().getDocument());
+        final Date date = new Date();
+        final String folderName = DateX.toFilename(date);
+        final String name = Value.join(Http.Token.SLASH, folderName, file.getName());
+        final FileMetaData metaData = new FileMetaData(name, xml.length, date.getTime(), false);
+        final MetaFile metaFile = new MetaFile(metaData, new ByteArrayInputStream(xml));
+        final File fileRevisions = new File(file.getParentFile(), file.getName() + ".zip");
+        final ZipAppender zipAppender = new ZipAppender(fileRevisions);
+        zipAppender.append(comment, metaFile);
     }
 
     private void alert(final Alert.Severity severity, final String key, final String detail) {

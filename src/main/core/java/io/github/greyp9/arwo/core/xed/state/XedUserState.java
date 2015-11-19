@@ -25,6 +25,7 @@ import io.github.greyp9.arwo.core.xed.session.XedSessionsFactory;
 import io.github.greyp9.arwo.core.xed.session.action.SessionCommit;
 import io.github.greyp9.arwo.core.xed.session.action.SessionPretty;
 import io.github.greyp9.arwo.core.xed.session.action.SessionReload;
+import io.github.greyp9.arwo.core.xed.session.action.SessionRevision;
 import io.github.greyp9.arwo.core.xed.session.action.SessionSave;
 import io.github.greyp9.arwo.core.xed.session.action.SessionValidate;
 
@@ -133,7 +134,7 @@ public class XedUserState {
         } else if ("type".equals(action)) {
             alerts.add(new Alert(Alert.Severity.WARN, message));
         } else if ("rev".equals(action)) {
-            alerts.add(new Alert(Alert.Severity.WARN, message));
+            location = toView(request.getHttpRequest(), action);
         } else {
             alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }
@@ -160,6 +161,8 @@ public class XedUserState {
         } else if (App.Action.COMMIT.equals(action)) {
             final Properties propertiesApply = request.getState().getProperties();
             new SessionCommit(request.getSession(), request.getBundle(), alerts).commit(httpArguments, propertiesApply);
+        } else if (App.Action.LOAD_REVISION.equals(action)) {
+            new SessionRevision(sessionsApply, request.getSession(), request.getBundle(), alerts).loadRevision(token);
         } else {
             alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }

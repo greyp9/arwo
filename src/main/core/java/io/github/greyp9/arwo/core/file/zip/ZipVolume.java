@@ -172,6 +172,6 @@ public class ZipVolume {
         final String comment = zipEntry.getComment();
         final long compressedSize = zipEntry.getCompressedSize();
         final long crc = zipEntry.getCrc();
-        return new ZipMetaData(name, size, lastModified, directory, comment, compressedSize, crc);
+        return new ZipMetaData(name, size, lastModified, directory, comment, crc, compressedSize);
     }
 }

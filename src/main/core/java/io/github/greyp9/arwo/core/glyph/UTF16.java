@@ -26,6 +26,7 @@ public final class UTF16 {
     public static final String NBSP = "\u00a0";
     public static final String PAUSE = "\u25ae\u25ae";
     public static final String PLAY = "\u25b6";
+    public static final String SELECT = "\u261b";
     //public static final String STATUS_FAIL = "\u2718";
     //public static final String STATUS_OK = "\u2713";
     //public static final String SAVE = "\u26c1";
