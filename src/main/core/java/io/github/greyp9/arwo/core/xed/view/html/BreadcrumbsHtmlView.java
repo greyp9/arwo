@@ -27,7 +27,8 @@ public class BreadcrumbsHtmlView {
         this.bundle = cursor.getXed().getXsdBundle();
     }
 
-    public final void addContentTo(final Element html) {
+    public final String addContentTo(final Element html) {
+        String context = null;
         final Element divMenus = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENUS));
         final Element divMenu = ElementU.addElement(divMenus, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENU));
         ElementU.addElement(divMenu, Html.SPAN, UTF16.DOCUMENT_BRACKETS, NTV.create(Html.CLASS, App.CSS.MENU));
@@ -36,12 +37,14 @@ public class BreadcrumbsHtmlView {
             final XedCursor cursorParent = cursorCrumb.getParentConcrete();
             final TypeInstance instanceParent = ((cursorParent == null) ? null : cursorParent.getTypeInstance());
             final String label = bundle.getLabel(instanceParent, cursorCrumb.getTypeInstance());
+            context = label;
             final String resource = baseURI + cursorCrumb.getURI();
             if (cursorParent != null) {
                 ElementU.addElement(divMenu, Html.SPAN, UTF16.LIST_EXPAND, NTV.create(Html.CLASS, App.CSS.MENU));
             }
             addAnchorBreadcrumb(cursorCrumb, divMenu, label, resource);
         }
+        return context;
     }
 
     private void addAnchorBreadcrumb(

@@ -20,6 +20,7 @@
 
     <xsd:complexType name="documentType">
         <xsd:sequence>
+            <xsd:element name='title' type='xsd:string'/>
             <xsd:element name='contextPath' type='xsd:string'/>
             <xsd:element name='qname' type='xsd:string'/>
             <xsd:element name='xmlPath' type='xsd:string'/>

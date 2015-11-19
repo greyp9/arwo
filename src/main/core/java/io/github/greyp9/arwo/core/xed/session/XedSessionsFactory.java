@@ -43,7 +43,7 @@ public class XedSessionsFactory {
         final File realmFile = new File(webappRoot, "root/realm.xml");
         final String xmlPath = realmFile.getCanonicalPath();
         final String xsdPath = ResourceU.resolve(App.Realm.XSD).toExternalForm();
-        entries.add(new XedEntry("/users", App.Realm.QNAME, xmlPath, xsdPath, null));
+        entries.add(new XedEntry(null, "/users", App.Realm.QNAME, xmlPath, xsdPath, null));
     }
 
     private void addEntryConfig(final XedEntries entries, final Principal principal) throws IOException {
@@ -51,7 +51,7 @@ public class XedSessionsFactory {
         final File fileConfig = new File(userHome, "config/app.xml");
         final String xmlPath = fileConfig.getCanonicalPath();
         final String xsdPath = ResourceU.resolve(App.Config.XSD).toExternalForm();
-        entries.add(new XedEntry("/app", App.Config.QNAME, xmlPath, xsdPath, null));
+        entries.add(new XedEntry(null, "/app", App.Config.QNAME, xmlPath, xsdPath, null));
     }
 
     private void addEntriesConfig(
@@ -79,11 +79,12 @@ public class XedSessionsFactory {
     }
 
     private void addEntry(final XedEntries entries, final TypeInstance typeDocument, final XedCursor cursorDocument) {
+        final String title = cursorDocument.getValue(typeDocument.getInstance("title"));
         final String context = cursorDocument.getValue(typeDocument.getInstance("contextPath"));
         final String qname = cursorDocument.getValue(typeDocument.getInstance("qname"));
         final String xmlPath = cursorDocument.getValue(typeDocument.getInstance("xmlPath"));
         final String xsdPath = cursorDocument.getValue(typeDocument.getInstance("xsdPath"));
         final String xsltPath = cursorDocument.getValue(typeDocument.getInstance("xsltPath"));
-        entries.add(new XedEntry(context, qname, xmlPath, xsdPath, xsltPath));
+        entries.add(new XedEntry(title, context, qname, xmlPath, xsdPath, xsltPath));
     }
 }

@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppHtml;
 import io.github.greyp9.arwo.core.app.AppText;
+import io.github.greyp9.arwo.core.app.AppTitle;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.file.FileU;
 import io.github.greyp9.arwo.core.file.FileX;
@@ -55,7 +56,7 @@ import java.sql.Types;
 import java.util.Date;
 import java.util.Locale;
 
-@SuppressWarnings({ "PMD.ExcessiveImports", "PMD.TooManyMethods" })
+@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyMethods"})
 public class FileSystemServlet extends javax.servlet.http.HttpServlet {
     private static final long serialVersionUID = -3409881413109441597L;
 
@@ -140,7 +141,9 @@ public class FileSystemServlet extends javax.servlet.http.HttpServlet {
             // cursor content
             addContentTo(pathInfo, body);
             // touch ups
-            new AppHtml(httpRequest).fixup(html);
+            final Bundle bundle = new Bundle(new AppText(Locale.getDefault()).getBundleCore());
+            final AppTitle title = AppTitle.Factory.getHostLabel(httpRequest, bundle);
+            new AppHtml(httpRequest).fixup(html, title);
             // package into response
             final byte[] entity = DocumentU.toXHtml(html);
             final NameTypeValue contentType = new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_HTML_UTF8);
@@ -166,7 +169,7 @@ public class FileSystemServlet extends javax.servlet.http.HttpServlet {
         }
 
         public static RowSetMetaData createMetaData() {
-            final ColumnMetaData[] columns = new ColumnMetaData[] {
+            final ColumnMetaData[] columns = new ColumnMetaData[]{
                     new ColumnMetaData("type", Types.VARCHAR),
                     new ColumnMetaData("name", Types.VARCHAR, true),
                     new ColumnMetaData("mtime", Types.TIMESTAMP),

@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.core.xed.view.html;
 
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
 import io.github.greyp9.arwo.core.app.AppHtml;
+import io.github.greyp9.arwo.core.app.AppTitle;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.Http;
@@ -51,11 +52,15 @@ public abstract class HtmlView {
         addMenuView(body);
         addTweaksView(body, userState);
         // cursor content
-        addContentTo(body);
+        final String context = addContentTo(body);
         // touch ups
         new AlertsView(request.getAlerts(), userState.getLocus()).addContentTo(body);
         new StatusBarView(httpRequest, userState.getLocus()).addContentTo(body);
-        new AppHtml(httpRequest).fixup(html);
+        final String sessionLabel = request.getSession().getEntry().getTitle();
+        final AppTitle title = (sessionLabel == null) ?
+                AppTitle.Factory.getHostLabel(httpRequest, request.getBundle(), context) :
+                AppTitle.Factory.getHostLabel(httpRequest, sessionLabel, context);
+        new AppHtml(httpRequest).fixup(html, title);
         // package into response
         final byte[] entity = DocumentU.toXHtml(html);
         final NameTypeValue contentType = new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_HTML_UTF8);
@@ -80,7 +85,7 @@ public abstract class HtmlView {
         new XedActionCommit(locale).addContentTo(html, submitID, properties);
     }
 
-    public abstract void addContentTo(final Element html) throws IOException;
+    public abstract String addContentTo(final Element html) throws IOException;
 
     private static class Const {
         private static final String HTML = "io/github/greyp9/arwo/html/xed/xed.html";

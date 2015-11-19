@@ -48,7 +48,7 @@ public class RevisionHtmlView extends HtmlView {
     }
 
     @Override
-    public final void addContentTo(final Element html) throws IOException {
+    public final String addContentTo(final Element html) throws IOException {
         final RowSetMetaData metaData = createMetaData();
         final RowSet rowSet = createRowSet(metaData);
         final Locus locus = userState.getLocus();
@@ -59,6 +59,7 @@ public class RevisionHtmlView extends HtmlView {
         final TableContext tableContext = new TableContext(viewState, submitID, Html.TABLE, bundle, locus);
         final TableView tableView = new TableView(table, tableContext);
         tableView.addContentTo(html);
+        return bundle.getString("xed.revisionsType");
     }
 
     private RowSetMetaData createMetaData() {
@@ -76,14 +77,20 @@ public class RevisionHtmlView extends HtmlView {
         final RowSet rowSet = new RowSet(metaData, null, null);
         final File file = getRequest().getSession().getFile();
         final File fileRevisions = new File(file.getParentFile(), file.getName() + ".zip");
-        final ZipVolume zipVolume = new ZipVolume(fileRevisions);
-        final Collection<ZipMetaData> entries = zipVolume.getEntries();
-        for (final ZipMetaData entry : entries) {
-            createRow(rowSet, entry);
-        }
+        createRowsZip(rowSet, fileRevisions);
         createRowFile(rowSet, file);
         createRowSession(rowSet, getRequest().getSession());
         return rowSet;
+    }
+
+    private void createRowsZip(final RowSet rowSet, final File fileRevisions) throws IOException {
+        if (fileRevisions.exists()) {
+            final ZipVolume zipVolume = new ZipVolume(fileRevisions);
+            final Collection<ZipMetaData> entries = zipVolume.getEntries();
+            for (final ZipMetaData entry : entries) {
+                createRow(rowSet, entry);
+            }
+        }
     }
 
     private void createRow(final RowSet rowSet, final ZipMetaData entry) throws IOException {

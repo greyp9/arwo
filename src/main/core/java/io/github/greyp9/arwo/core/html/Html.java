@@ -21,7 +21,7 @@ public final class Html {
     public static final String FORM = "form";
     public static final String H1 = "h1";
     public static final String HREF = "href";
-    //public static final String HTML = "html";
+    public static final String HTML_TOKEN = "html";
     public static final String HYPHEN = "-";
     public static final String ID = "id";
     public static final String IMG = "img";
