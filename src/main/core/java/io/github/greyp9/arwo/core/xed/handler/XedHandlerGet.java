@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xed.handler;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.http.HttpResponse;
@@ -7,19 +8,16 @@ import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.resource.Pather;
-import io.github.greyp9.arwo.core.value.NameTypeValue;
-import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.view.XedCursorView;
 import io.github.greyp9.arwo.core.xed.view.html.CursorHtmlView;
 import io.github.greyp9.arwo.core.xed.view.html.RevisionHtmlView;
-import io.github.greyp9.arwo.core.xml.DocumentU;
+import io.github.greyp9.arwo.core.xed.view.xml.CursorXmlView;
+import io.github.greyp9.arwo.core.xed.view.xml.SessionXsdView;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.HttpURLConnection;
 
 public class XedHandlerGet {
     private final XedRequest request;
@@ -39,58 +37,42 @@ public class XedHandlerGet {
         final boolean isQuery = (query != null);
         final boolean isNoPathInfo = (!isPathInfo);
         final boolean isNoTrailingSlash = (!isTrailingSlash);
-        final String baseURI = PathU.toDir(httpRequest.getBaseURI(), Const.CONTEXT_UI);
+        final String baseURI = PathU.toDir(httpRequest.getBaseURI(), App.Action.UI);
         if (isNoPathInfo) {
-            httpResponse = HttpResponseU.toHttpResponse302(baseURI);
+            httpResponse = HttpResponseU.to302(baseURI);
         } else if (isNoTrailingSlash) {
-            httpResponse = HttpResponseU.toHttpResponse302(PathU.toDir(httpRequest.getURI()));
+            httpResponse = HttpResponseU.to302(PathU.toDir(httpRequest.getURI()));
         } else if (isQuery) {
             request.getState().applyGet(HttpArguments.toArguments(query));
-            httpResponse = HttpResponseU.toHttpResponse302(httpRequest.getURI());
-        } else if (Const.CONTEXT_XML.equals(pather.getLeftToken())) {
+            httpResponse = HttpResponseU.to302(httpRequest.getURI());
+        } else if (App.Action.XML.equals(pather.getLeftToken())) {
             httpResponse = doGetXML(httpRequest.getURI(), pather.getRight());
-        } else if (Const.CONTEXT_REVISIONS.equals(pather.getLeftToken())) {
-            httpResponse = doGetRevisions();
-        } else if (Const.CONTEXT_UI.equals(pather.getLeftToken())) {
+        } else if (App.Action.XSD.equals(pather.getLeftToken())) {
+            httpResponse = new SessionXsdView(request.getSession()).doGetXSD();
+        } else if (App.Action.REV.equals(pather.getLeftToken())) {
+            httpResponse = new RevisionHtmlView(request).doGetHtml();
+        } else if (App.Action.UI.equals(pather.getLeftToken())) {
             httpResponse = doGetUI(httpRequest.getURI(), pather.getRight());
         } else {
-            httpResponse = HttpResponseU.toHttpResponse302(baseURI);
+            httpResponse = HttpResponseU.to302(baseURI);
         }
         return httpResponse;
     }
 
     private HttpResponse doGetXML(final String requestURI, final String cursorURI) throws IOException {
-        HttpResponse httpResponse = HttpResponseU.toHttpResponse302(PathU.toParent(requestURI));
         final XedCursor cursor = new XedNav(request.getSession().getXed()).find(cursorURI);
-        if (cursor != null) {
-            final XedCursor cursorConcrete = cursor.getConcrete();
-            final byte[] xml = DocumentU.toXml(cursorConcrete.getNode());
-            final NameTypeValues headers = new NameTypeValues(
-                    new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_XML_UTF8),
-                    new NameTypeValue(Http.Header.CONTENT_LENGTH, xml.length));
-            httpResponse = new HttpResponse(HttpURLConnection.HTTP_OK, headers, new ByteArrayInputStream(xml));
-        }
-        return httpResponse;
-    }
-
-    private HttpResponse doGetRevisions() throws IOException {
-        return new RevisionHtmlView(request).doGetHtml();
+        return ((cursor == null) ? HttpResponseU.to302(PathU.toParent(requestURI)) :
+                new CursorXmlView(cursor).doGetXML());
     }
 
     private HttpResponse doGetUI(final String requestURI, final String cursorURI) throws IOException {
-        HttpResponse httpResponse = HttpResponseU.toHttpResponse302(PathU.toParent(requestURI));
         final XedCursor cursor = new XedNav(request.getSession().getXed()).find(cursorURI);
-        if (cursor != null) {
-            final ServletHttpRequest httpRequest = request.getHttpRequest();
-            final String baseURI = PathU.toPath(httpRequest.getBaseURI(), Const.CONTEXT_UI);
-            httpResponse = new CursorHtmlView(request, new XedCursorView(baseURI, cursor)).doGetHtml();
-        }
-        return httpResponse;
+        return ((cursor == null) ? HttpResponseU.to302(PathU.toParent(requestURI)) : doGetUI(cursor));
     }
 
-    private static class Const {
-        private static final String CONTEXT_UI = "ui";
-        private static final String CONTEXT_XML = "xml";
-        private static final String CONTEXT_REVISIONS = "rev";
+    private HttpResponse doGetUI(final XedCursor cursor) throws IOException {
+        final ServletHttpRequest httpRequest = request.getHttpRequest();
+        final String baseURI = PathU.toPath(httpRequest.getBaseURI(), App.Action.UI);
+        return new CursorHtmlView(request, new XedCursorView(baseURI, cursor)).doGetHtml();
     }
 }

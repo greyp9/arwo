@@ -10,7 +10,7 @@ public final class HttpResponseU {
     private HttpResponseU() {
     }
 
-    public static HttpResponse toHttpResponse302(final String location) {
+    public static HttpResponse to302(final String location) {
         final NameTypeValues headers = new NameTypeValues(new NameTypeValue(Http.Header.LOCATION, location));
         return new HttpResponse(HttpURLConnection.HTTP_MOVED_TEMP, headers, null);
     }

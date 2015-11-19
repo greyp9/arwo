@@ -57,13 +57,13 @@ public class XedMenuFactory implements MenuFactory {
         // view document schema
         // view document xsd types
         // view document revisions
+        final MenuItem itemUI = new MenuItem("ui", App.Target.USER_STATE, "ui");
         final MenuItem itemXml = new MenuItem("xml", App.Target.USER_STATE, "xml");
         final MenuItem itemXsd = new MenuItem("xsd", App.Target.USER_STATE, "xsd");
-        final MenuItem itemType = new MenuItem("type", App.Target.USER_STATE, "type");
         final MenuItem itemRev = new MenuItem("rev", App.Target.USER_STATE, "rev");
         final MenuItem itemLocale = new MenuItem("locale", App.Target.USER_STATE, "locale");
         return new MenuItem("view", App.Target.USER_STATE, App.Action.MENU,
-                key + "/view", itemXml, itemXsd, itemType, itemRev, itemLocale);
+                key + "/view", itemUI, itemXml, itemXsd, itemRev, itemLocale);
     }
 
     public static class Const {

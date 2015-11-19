@@ -37,7 +37,7 @@ public class XedHandlerPost {
                 }
             }
         }
-        return HttpResponseU.toHttpResponse302(location);
+        return HttpResponseU.to302(location);
     }
 
     private String apply(final SubmitToken token, final NameTypeValues httpArguments,

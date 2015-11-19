@@ -123,11 +123,11 @@ public class FileSystemServlet extends javax.servlet.http.HttpServlet {
             final String pathInfo = httpRequest.getPathInfo();
             final String query = httpRequest.getQuery();
             if (pathInfo == null) {
-                httpResponse = HttpResponseU.toHttpResponse302(PathU.toDir(httpRequest.getBaseURI()));
+                httpResponse = HttpResponseU.to302(PathU.toDir(httpRequest.getBaseURI()));
             } else if (!pathInfo.endsWith(Http.Token.SLASH)) {
-                httpResponse = HttpResponseU.toHttpResponse302(PathU.toDir(httpRequest.getURI()));
+                httpResponse = HttpResponseU.to302(PathU.toDir(httpRequest.getURI()));
             } else if (query != null) {
-                httpResponse = HttpResponseU.toHttpResponse302(httpRequest.getURI());
+                httpResponse = HttpResponseU.to302(httpRequest.getURI());
             } else {
                 httpResponse = doGetHtml(pathInfo);
             }
@@ -218,7 +218,7 @@ public class FileSystemServlet extends javax.servlet.http.HttpServlet {
             final byte[] entity = StreamU.read(httpRequest.getHttpRequest().getEntity());
             final NameTypeValues nameTypeValues = HttpArguments.toArguments(entity);
             final String submitID = userState.getSubmitID();
-            HttpResponse httpResponse = HttpResponseU.toHttpResponse302(httpRequest.getURI());
+            HttpResponse httpResponse = HttpResponseU.to302(httpRequest.getURI());
             for (final NameTypeValue nameTypeValue : nameTypeValues) {
                 if (submitID.equals(nameTypeValue.getName())) {
                     final SubmitToken token = SubmitTokenU.fromString(nameTypeValue.getValueS());

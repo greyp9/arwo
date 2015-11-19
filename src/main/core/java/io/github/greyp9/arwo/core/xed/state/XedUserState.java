@@ -119,21 +119,21 @@ public class XedUserState {
         final String action = token.getAction();
         //final String object = token.getObject();
         final String message = request.getBundle().getString("alert.action.not.implemented");
-        if ("updateLocale".equals(action)) {
+        if (App.Action.UPDATE_LOCALE.equals(action)) {
             applyLocale(nameTypeValues);
-        } else if ("menu".equals(action)) {
+        } else if (App.Action.MENU.equals(action)) {
             menuSystem.toggle(token.getObject());
-        } else if ("locale".equals(action)) {
+        } else if (App.Action.LOCALE.equals(action)) {
             PropertiesU.toggleBoolean(properties, action);
         } else if (App.Action.COMMIT.equals(action)) {
             PropertiesU.toggleBoolean(properties, action);
-        } else if ("xml".equals(action)) {
+        } else if (App.Action.UI.equals(action)) {
             location = toView(request.getHttpRequest(), action);
-        } else if ("xsd".equals(action)) {
-            alerts.add(new Alert(Alert.Severity.WARN, message));
-        } else if ("type".equals(action)) {
-            alerts.add(new Alert(Alert.Severity.WARN, message));
-        } else if ("rev".equals(action)) {
+        } else if (App.Action.XML.equals(action)) {
+            location = toView(request.getHttpRequest(), action);
+        } else if (App.Action.XSD.equals(action)) {
+            location = toView(request.getHttpRequest(), action);
+        } else if (App.Action.REV.equals(action)) {
             location = toView(request.getHttpRequest(), action);
         } else {
             alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));

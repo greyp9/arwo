@@ -54,6 +54,12 @@ public final class App {
         public static final String COMMIT = "commit";
         public static final String TOGGLE = "toggle";
         public static final String VALIDATE = "validate";
+        public static final String LOCALE = "locale";
+        public static final String UPDATE_LOCALE = "updateLocale";
+        public static final String UI = "ui";
+        public static final String XML = "xml";
+        public static final String XSD = "xsd";
+        public static final String REV = "rev";
 
         public static final String CREATE = "create";
         public static final String UPDATE = "update";
