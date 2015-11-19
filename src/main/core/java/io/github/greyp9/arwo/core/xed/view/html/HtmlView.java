@@ -71,7 +71,7 @@ public abstract class HtmlView {
         new MenuView(bundle, httpRequest, menuSystem).addContentTo(html, XedMenuFactory.Const.XED, true);
     }
 
-    private void addTweaksView(final Element html, XedUserState userState) throws IOException {
+    private void addTweaksView(final Element html, final XedUserState userState) throws IOException {
         // locale property strip
         final Locale locale = userState.getLocus().getLocale();
         final String submitID = userState.getSubmitID();

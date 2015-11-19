@@ -18,15 +18,4 @@ public class MetaFile {
         this.metaData = metaData;
         this.bis = bis;
     }
-
-    public static final class Factory {
-        private Factory() {
-        }
-
-        public static MetaFile create(
-                final String path, final long lastModified, final byte[] bytes) {
-            final FileMetaData metaData = new FileMetaData(path, bytes.length, lastModified, false);
-            return new MetaFile(metaData, new ByteArrayInputStream(bytes));
-        }
-    }
 }

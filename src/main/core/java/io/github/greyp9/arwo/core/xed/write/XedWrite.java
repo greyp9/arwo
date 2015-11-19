@@ -89,6 +89,7 @@ public class XedWrite {
         } else {
             request.getAlerts().add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }
+        request.getSession().setDateModify(request.getHttpRequest().getDate());
         return location;
     }
 }

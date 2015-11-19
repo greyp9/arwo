@@ -13,6 +13,7 @@ public final class Html {
     public static final String CLASS = "class";
     public static final String COLS = "cols";
     public static final String COLSPAN = "colspan";
+    public static final String DISABLED = "disabled";
     public static final String DIV = "div";
     public static final String ENCTYPE = "enctype";
     public static final String EXPAND = "expand";  // use this to keep empty elements from collapsing

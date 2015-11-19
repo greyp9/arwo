@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
+import io.github.greyp9.arwo.core.file.meta.MetaFileFactory;
 import io.github.greyp9.arwo.core.file.zip.ZipAppender;
 import io.github.greyp9.arwo.core.file.zip.ZipMetaData;
 import io.github.greyp9.arwo.core.file.zip.ZipVolume;
@@ -29,7 +30,7 @@ public class ZipAppenderTest extends TestCase {
         final File fileTemp = new File(folderTemp, filename);
         Assert.assertFalse(fileTemp.exists());
         // append one
-        final MetaFile metaFileA = MetaFile.Factory.create("a.txt", date.getTime(), UTF8Codec.toBytes("abc123"));
+        final MetaFile metaFileA = MetaFileFactory.create("a.txt", date.getTime(), UTF8Codec.toBytes("abc123"));
         if (SystemU.isTrue()) {
             final ZipAppender zipAppender = new ZipAppender(fileTemp);
             final boolean success = zipAppender.append("1", metaFileA);
@@ -38,8 +39,8 @@ public class ZipAppenderTest extends TestCase {
         validateFile(fileTemp, 1, metaFileA, null);
         validateBytes(fileTemp, 1, metaFileA, null);
         // append two
-        final MetaFile metaFileB = MetaFile.Factory.create("b.txt", date.getTime(), UTF8Codec.toBytes("bbc123"));
-        final MetaFile metaFileC = MetaFile.Factory.create("c.txt", date.getTime(), UTF8Codec.toBytes("ccc123"));
+        final MetaFile metaFileB = MetaFileFactory.create("b.txt", date.getTime(), UTF8Codec.toBytes("bbc123"));
+        final MetaFile metaFileC = MetaFileFactory.create("c.txt", date.getTime(), UTF8Codec.toBytes("ccc123"));
         if (SystemU.isTrue()) {
             final ZipAppender zipAppender = new ZipAppender(fileTemp);
             final boolean success = zipAppender.append("2", metaFileB, metaFileC);
