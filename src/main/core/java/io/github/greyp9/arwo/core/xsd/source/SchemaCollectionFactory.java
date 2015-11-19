@@ -84,7 +84,7 @@ public class SchemaCollectionFactory {
             final QName name = QNameU.getQName(targetNamespace, element.getLocalName(), null);
             schemaAtom = new SchemaAtom(url, name, xsdAtom);
             schemaAtoms.put(uri, schemaAtom);
-            schemaAtoms.put(targetNamespace, schemaAtom);
+            //schemaAtoms.put(targetNamespace, schemaAtom);  // why this? (duplicate)
             // import dependencies
             doImport(url, xsdAtom, xsltX);
             doInclude(url, xsdAtom, xsltX);
