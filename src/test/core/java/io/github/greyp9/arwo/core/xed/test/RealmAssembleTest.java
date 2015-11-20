@@ -53,8 +53,8 @@ public class RealmAssembleTest extends TestCase {
         // validate
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
-        Assert.assertEquals(305, xml.length);
-        Assert.assertEquals("3f3a2b3b", CRCU.crc32String(xml));
+        Assert.assertEquals(384, xml.length);
+        Assert.assertEquals("592e22ef", CRCU.crc32String(xml));
     }
 
     public void testCreateUpdate() throws Exception {
@@ -80,8 +80,8 @@ public class RealmAssembleTest extends TestCase {
         // validate
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
-        Assert.assertEquals(215, xml.length);
-        Assert.assertEquals("ff619911", CRCU.crc32String(xml));
+        Assert.assertEquals(254, xml.length);
+        Assert.assertEquals("b77aca02", CRCU.crc32String(xml));
     }
 
     public void testCreateDelete() throws Exception {

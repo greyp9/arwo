@@ -1,5 +1,8 @@
 package io.github.greyp9.arwo.core.html;
 
+import io.github.greyp9.arwo.core.glyph.UTF16;
+import io.github.greyp9.arwo.core.lang.StringU;
+
 public final class Html {
 
     public static final String A = "a";
@@ -61,6 +64,7 @@ public final class Html {
     public static final String VALUE = "value";
 
     public static final String SPACE = " ";
+    public static final String MASK = StringU.create(24, UTF16.BULLET);
 
     private Html() {
     }

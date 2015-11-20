@@ -1,11 +1,18 @@
 package io.github.greyp9.arwo.core.xsd.value.test;
 
+import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.charset.UTF8Codec;
+import io.github.greyp9.arwo.core.codec.b64.Base64Codec;
+import io.github.greyp9.arwo.core.hash.secure.HashU;
+import io.github.greyp9.arwo.core.html.Html;
+import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
+import io.github.greyp9.arwo.core.xed.transform.ProtectHashTransform;
 import io.github.greyp9.arwo.core.xed.transform.ValueInstanceTransform;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xml.QNameU;
@@ -25,7 +32,7 @@ import java.util.logging.Logger;
 public class ValueInstanceTest extends TestCase {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    public void testTransform() throws Exception {
+    public void testTransformNameForm() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(Const.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
@@ -54,6 +61,55 @@ public class ValueInstanceTest extends TestCase {
         Assert.assertEquals("foo.txt", nameTypeValuesTransform.getValue("file.fileType.name"));
         Assert.assertEquals("text", nameTypeValuesTransform.getValue("file.fileType.type"));
         Assert.assertEquals("false", nameTypeValuesTransform.getValue("file.fileType.hidden"));
+    }
+
+    public void testTransformProtect() throws Exception {
+        // load model
+        final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
+        final XsdTypes xsdTypes = new XsdTypes(urlInitial);
+        final QName qname = QNameU.getQName("{urn:arwo:realm}realm");
+        // generate document
+        final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
+        logger.finest("\n" + DocumentU.toString(document));
+        final Xed xed = new Xed(document, xsdTypes);
+        // navigate in document
+        final XedCursor cursorRealm = new XedNav(xed).getRoot();
+        final TypeInstance instanceRealm = cursorRealm.getTypeInstance();
+        Assert.assertEquals(qname, instanceRealm.getQName());
+        final TypeInstance instancePrincipals = instanceRealm.getInstance("principals");
+        Assert.assertEquals(QNameU.getQName("{urn:arwo:realm}principals"), instancePrincipals.getQName());
+        final TypeInstance instancePrincipal = instancePrincipals.getInstance("principal");
+        Assert.assertEquals(QNameU.getQName("{urn:arwo:realm}principal"), instancePrincipal.getQName());
+        // check value instance transform
+        if (SystemU.isTrue()) {
+            final NameTypeValues ntv = NameTypeValuesU.create(
+                    "principal.principalType.user", "appUser",
+                    "principal.principalType.credential", "appCredential",
+                    "principal.principalType.roles", "*");
+            final ValueInstance valueInstance = ValueInstance.create(instancePrincipal, ntv);
+            Assert.assertEquals(3, valueInstance.getNameTypeValues().size());
+            ValueInstance valueInstanceX = new ProtectHashTransform(valueInstance).transform();
+            final String hash = Base64Codec.encode(HashU.sha256(UTF8Codec.toBytes("appCredentialappUser")));
+            final NameTypeValues nameTypeValuesX = valueInstanceX.getNameTypeValues();
+            Assert.assertEquals(3, nameTypeValuesX.size());
+            Assert.assertEquals("appUser", nameTypeValuesX.getValue("principal.principalType.user"));
+            Assert.assertEquals(hash, nameTypeValuesX.getValue("principal.principalType.credential"));
+            Assert.assertEquals("*", nameTypeValuesX.getValue("principal.principalType.roles"));
+        }
+        // check value instance transform
+        if (SystemU.isTrue()) {
+            final NameTypeValues ntv = NameTypeValuesU.create(
+                    "principal.principalType.user", "appUser",
+                    "principal.principalType.credential", Html.MASK,
+                    "principal.principalType.roles", "*");
+            final ValueInstance valueInstance = ValueInstance.create(instancePrincipal, ntv);
+            Assert.assertEquals(3, valueInstance.getNameTypeValues().size());
+            ValueInstance valueInstanceX = new ProtectHashTransform(valueInstance).transform();
+            final NameTypeValues nameTypeValuesX = valueInstanceX.getNameTypeValues();
+            Assert.assertEquals(2, nameTypeValuesX.size());
+            Assert.assertEquals("appUser", nameTypeValuesX.getValue("principal.principalType.user"));
+            Assert.assertEquals("*", nameTypeValuesX.getValue("principal.principalType.roles"));
+        }
     }
 
     public static class Const {

@@ -7,7 +7,8 @@ public class ValueInstanceTransform {
     public final ValueInstance transform(final ValueInstance valueInstance) {
         final ValueInstance valueInstanceName = new NameTransform().transform(valueInstance);
         final ValueInstance valueInstanceForm = new FormTransform().transform(valueInstanceName);
-        valueInstanceForm.getClass();
-        return valueInstanceForm;
+        final ValueInstance valueInstancePro = new ProtectHashTransform(valueInstanceForm).transform();
+        valueInstancePro.getClass();  // suppress inspect warning
+        return valueInstancePro;
     }
 }

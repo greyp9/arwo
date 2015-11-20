@@ -1,11 +1,12 @@
 package io.github.greyp9.arwo.core.io;
 
+import io.github.greyp9.arwo.core.lang.SystemU;
+
 public final class ByteU {
 
     private ByteU() {
     }
 
-/*
     public static byte[] copy(final byte[] bytes) {
         return extract(bytes, 0, bytes.length);
     }
@@ -23,5 +24,4 @@ public final class ByteU {
         }
         return bytesFolded;
     }
-*/
 }

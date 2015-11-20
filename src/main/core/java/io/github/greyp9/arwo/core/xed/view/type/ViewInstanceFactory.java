@@ -41,8 +41,8 @@ public class ViewInstanceFactory {
         return viewInstances;
     }
 
-    @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity",
-            "PMD.ModifiedCyclomaticComplexity", "PMD.NPathComplexity", "PMD.ConfusingTernary" })
+    @SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity",
+            "PMD.ModifiedCyclomaticComplexity", "PMD.NPathComplexity", "PMD.ConfusingTernary"})
     private ViewInstance toViewInstancePage(final TypeInstance typeInstance) {
         ViewInstance viewInstance = null;
         final DataType dataType = typeInstance.getDataType();
@@ -69,7 +69,9 @@ public class ViewInstanceFactory {
             viewInstance = new ViewInstanceDrillDown(baseURI, cursor, typeInstance);
         }
         if (viewInstance == null) {
-            viewInstance = new ViewInstanceText(cursor, typeInstance);
+            viewInstance = (typeInstance.isMasked() ?
+                    new ViewInstanceTextMasked(cursor, typeInstance) :
+                    new ViewInstanceText(cursor, typeInstance));
         }
         return viewInstance;
     }

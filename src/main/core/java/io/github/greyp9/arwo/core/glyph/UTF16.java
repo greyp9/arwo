@@ -7,6 +7,7 @@ public final class UTF16 {
     public static final String ARROW_LEFT = "\u25c0";
     public static final String ARROW_RIGHT = "\u25b6";
     public static final String ARROW_UP = "\u25b2";  // ▲
+    public static final String BULLET = "\u2022";
     public static final String CHECKBOX_FALSE = "\u2610";  // ☐
     public static final String CHECKBOX_TRUE = "\u2611";  // ☑
     public static final String CLOSE = "X";

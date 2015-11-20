@@ -126,8 +126,8 @@ public class RealmViewTest extends TestCase {
             final XedPropertyPageView pageView = cursorView.getPageView();
             final String pageText = new PropertyPageTextView(pageView).render();
             logger.finest(SystemU.eol() + pageText);
-            Assert.assertEquals(58, pageText.length());
-            Assert.assertEquals("74e94e73", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
+            Assert.assertEquals(178, pageText.length());
+            Assert.assertEquals("47f01598", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
         }
         // insert
         final NameTypeValues ntv2 = HttpArguments.toArguments("user=arwo2&credential=arwo2&roles=**");
@@ -141,8 +141,8 @@ public class RealmViewTest extends TestCase {
             final XedPropertyPageView pageView = view.getPageView();
             final String pageText = new PropertyPageTextView(pageView).render();
             logger.finest(SystemU.eol() + pageText);
-            Assert.assertEquals(61, pageText.length());
-            Assert.assertEquals("f7dae045", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
+            Assert.assertEquals(178, pageText.length());
+            Assert.assertEquals("3e8f9f48", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
         }
         // verify table
         if (SystemU.isTrue()) {
@@ -150,8 +150,8 @@ public class RealmViewTest extends TestCase {
             final XedTableView tableView = view.getTableView();
             final String tableText = new TableTextView(tableView).render();
             logger.finest(SystemU.eol() + tableText);
-            Assert.assertEquals(85, tableText.length());
-            Assert.assertEquals("62784be3", CRCU.crc32String(UTF8Codec.toBytes(tableText)));
+            Assert.assertEquals(193, tableText.length());
+            Assert.assertEquals("8a2f0b93", CRCU.crc32String(UTF8Codec.toBytes(tableText)));
         }
         // change locale
         final Xed xedDE = new Xed(document, xsdTypes, Locale.GERMAN);
@@ -162,8 +162,8 @@ public class RealmViewTest extends TestCase {
             final XedPropertyPageView pageView = view.getPageView();
             final String pageText = new PropertyPageTextView(pageView).render();
             logger.finest(SystemU.eol() + pageText);
-            Assert.assertEquals(58, pageText.length());
-            Assert.assertEquals("cd48b542", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
+            Assert.assertEquals(178, pageText.length());
+            Assert.assertEquals("8077cbec", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
         }
         // verify table
         if (SystemU.isTrue()) {
@@ -173,8 +173,8 @@ public class RealmViewTest extends TestCase {
             final XedTableView tableView = view.getTableView();
             final String tableText = new TableTextView(tableView).render();
             logger.finest(SystemU.eol() + tableText);
-            Assert.assertEquals(85, tableText.length());
-            Assert.assertEquals("4bdb4168", CRCU.crc32String(UTF8Codec.toBytes(tableText)));
+            Assert.assertEquals(193, tableText.length());
+            Assert.assertEquals("382a1dcd", CRCU.crc32String(UTF8Codec.toBytes(tableText)));
         }
     }
 }

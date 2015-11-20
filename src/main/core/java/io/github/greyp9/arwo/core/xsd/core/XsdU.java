@@ -87,7 +87,9 @@ public final class XsdU {
         // element names
 
         // attribute names
+        public static final String HASH = "hash";
         public static final String IDENTITY = "identity";
+        public static final String SALT = "salt";
 
         // value names
     }

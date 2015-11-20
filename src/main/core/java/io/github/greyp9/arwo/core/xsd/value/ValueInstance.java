@@ -21,6 +21,16 @@ public class ValueInstance {
         this.nameTypeValues = new NameTypeValues();
     }
 
+    public ValueInstance(final ValueInstance valueInstance) {
+        this.typeInstance = valueInstance.getTypeInstance();
+        this.nameTypeValues = new NameTypeValues(valueInstance.getNameTypeValues());
+    }
+
+    public final NameTypeValue getNameTypeValue(final TypeInstance childInstance) {
+        final String name = childInstance.getID(typeInstance);
+        return nameTypeValues.getNameValue(name);
+    }
+
     public final void add(final NameTypeValue nameTypeValue) {
         nameTypeValues.add(nameTypeValue);
     }

@@ -18,7 +18,7 @@ public class XedMetaDataFactory {
     public final RowSetMetaData create(final TypeInstance typeInstance, final boolean rowLinks) {
         final ArrayList<ColumnMetaData> columns = new ArrayList<ColumnMetaData>();
         if (rowLinks) {
-            columns.add(new ColumnMetaData("...", Types.VARCHAR, false));
+            columns.add(new ColumnMetaData("select", Types.VARCHAR, false));
         }
         // populate column data
         final Collection<TypeInstance> typeInstances = new TypeInstanceX(typeInstance).getTableInstances();

@@ -101,6 +101,10 @@ public abstract class TypeInstance {  // xsd:complexType, xsd:simpleType @ xsd:e
         return ((dataType != null) && (XsdTypeU.Const.BOOLEAN.equals(dataType.getQName())));
     }
 
+    public final boolean isMasked() {
+        return (getDirective(XsdU.Xed.HASH) != null);
+    }
+
     @SuppressWarnings("unused")
     public final String getDirective(final String nameIn) {
         return ((atom == null) ? null : atom.getDirectives().getValue(nameIn));

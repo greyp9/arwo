@@ -2,6 +2,8 @@ package io.github.greyp9.arwo.core.xed.table;
 
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.date.XsdDateU;
+import io.github.greyp9.arwo.core.glyph.UTF16;
+import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.lang.TypeU;
 import io.github.greyp9.arwo.core.table.cell.Duration;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
@@ -92,6 +94,8 @@ public class XedRowSetFactory {
             row.setColumn(i, new Duration(DurationU.toMillis(value)));
         } else if (typeInstanceC instanceof ChoiceTypeInstance) {
             row.setColumn(i, getChoiceText(value, cursor, (ChoiceTypeInstance) typeInstanceC));
+        } else if (typeInstanceC.isMasked()) {
+            row.setColumn(i, Html.MASK);
         } else {
             row.setColumn(i, value);
         }
@@ -99,7 +103,7 @@ public class XedRowSetFactory {
 
     private void addRowLink(final Row row, final int i, final XedCursor cursor) {
         final String resource = baseURI + cursor.getURI();
-        row.setColumn(i, new TableViewLink("...", null, resource));
+        row.setColumn(i, new TableViewLink(UTF16.SELECT, null, resource));
     }
 
     private String getChoiceText(final String value, final XedCursor cursor, final ChoiceTypeInstance choiceInstance) {

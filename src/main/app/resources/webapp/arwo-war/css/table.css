@@ -45,7 +45,9 @@ background-color: #dddddd;
 
 tbody.table a
 {
+color: inherit;
 text-decoration: none;
+text-align: center;
 padding: 0 6px;
 }
 
