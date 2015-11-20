@@ -1,6 +1,5 @@
 package io.github.greyp9.arwo.core.xsd.validate;
 
-import io.github.greyp9.arwo.core.io.ByteU;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
@@ -18,7 +17,7 @@ public class Validator {
     private final InputSource inputSource;
 
     public Validator(final byte[] xsd) {
-        inputSource = new InputSource(new ByteArrayInputStream(ByteU.copy(xsd)));
+        inputSource = new InputSource(new ByteArrayInputStream(xsd));
     }
 
     public Validator(final URL url) throws MalformedURLException {
@@ -27,7 +26,7 @@ public class Validator {
 
     public Validator(final URL url, final byte[] xsd) throws MalformedURLException {
         inputSource = new InputSource(url.toExternalForm());
-        inputSource.setByteStream(new ByteArrayInputStream(ByteU.copy(xsd)));
+        inputSource.setByteStream(new ByteArrayInputStream(xsd));
     }
 
     public Validator(final File fileXsd) throws MalformedURLException {
