@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.xsd.atom;
 
 import io.github.greyp9.arwo.core.value.NameTypeValue;
+import io.github.greyp9.arwo.core.xed.core.XedU;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.core.XsdU;
@@ -58,7 +59,7 @@ public class XsdAtomFactory {
         } else if (XsdU.NS_URI_XSD.equals(nameTypeValue.getType())) {
             logger.warning(String.format("[%s]/[@%s]", QNameU.getQName(parent), QNameU.getQName(attr)));
             //throw new IOException(String.format("[%s]/@[%s]", QNameU.getQName(element), QNameU.getQName(attr)));
-        } else if (XsdU.Xed.NS_URI_XED.equals(nameTypeValue.getType())) {
+        } else if (XedU.NS_URI_XED.equals(nameTypeValue.getType())) {
             parentAtom.addDirective(nameTypeValue);
         } else {
             parentAtom.addIgnored(nameTypeValue);

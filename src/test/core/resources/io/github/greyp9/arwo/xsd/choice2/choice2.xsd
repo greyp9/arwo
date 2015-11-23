@@ -1,0 +1,52 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<xsd:schema targetNamespace='urn:arwo:choice2'
+            xmlns:ch2='urn:arwo:choice2'
+            xmlns:xsd='http://www.w3.org/2001/XMLSchema'
+            elementFormDefault='qualified'>
+
+    <xsd:element name='job' type='ch2:jobType'/>
+
+    <xsd:complexType name="jobType">
+        <xsd:sequence>
+            <xsd:choice>
+                <xsd:element name='taskA' type='ch2:taskAType'/>
+                <xsd:element name='taskB' type='ch2:taskBType'/>
+                <xsd:element name='taskC' type='ch2:taskCType'/>
+            </xsd:choice>
+            <xsd:group ref="ch2:jobGroup"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:group name="jobGroup">
+        <xsd:sequence>
+            <xsd:element name='jobName' type='xsd:string'/>
+            <xsd:element name='jobEnabled' type='xsd:boolean'/>
+            <xsd:element name='jobA' type='xsd:string'/>
+            <xsd:element name='jobB' type='xsd:string'/>
+            <xsd:element name='jobC' type='xsd:string'/>
+            <xsd:element name='jobD' type='xsd:string'/>
+            <xsd:element name='jobE' type='xsd:string'/>
+        </xsd:sequence>
+    </xsd:group>
+
+    <xsd:complexType name="taskAType">
+        <xsd:attribute name='attributeA' type='xsd:string'/>
+        <xsd:attributeGroup ref="ch2:taskAttributeGroup"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="taskBType">
+        <xsd:attribute name='attributeB' type='xsd:string'/>
+        <xsd:attributeGroup ref="ch2:taskAttributeGroup"/>
+    </xsd:complexType>
+
+    <xsd:complexType name="taskCType">
+        <xsd:attribute name='attributeC' type='xsd:string'/>
+        <xsd:attributeGroup ref="ch2:taskAttributeGroup"/>
+    </xsd:complexType>
+
+    <xsd:attributeGroup name="taskAttributeGroup">
+        <xsd:attribute name='taskName' type='xsd:string'/>
+        <xsd:attribute name='taskEnabled' type='xsd:boolean'/>
+    </xsd:attributeGroup>
+
+</xsd:schema>

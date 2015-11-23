@@ -1,0 +1,27 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<xsd:schema targetNamespace='urn:arwo:order'
+            xmlns:o='urn:arwo:order'
+            xmlns:xsd='http://www.w3.org/2001/XMLSchema'
+            elementFormDefault='qualified'>
+
+    <xsd:element name='container' type='o:containerType'/>
+
+    <xsd:complexType name='containerType'>
+        <xsd:sequence>
+            <xsd:element name='a' type='xsd:string'/>
+            <xsd:element name='b' type='xsd:string'/>
+            <xsd:element name='c' type='xsd:string'/>
+            <xsd:element name='d' type='xsd:string'/>
+            <xsd:element name='e' type='xsd:string'/>
+            <xsd:element name='f' type='xsd:string'/>
+            <xsd:element name='g' type='xsd:string'/>
+            <xsd:element name='h' type='xsd:string'/>
+            <xsd:element name='i' type='xsd:string'/>
+            <xsd:element name='j' type='xsd:string'/>
+            <xsd:element name='k' type='xsd:string'/>
+            <xsd:element name='l' type='xsd:string'/>
+            <xsd:element name='m' type='xsd:string'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+</xsd:schema>

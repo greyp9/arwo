@@ -67,6 +67,7 @@ public class OpFill {
             for (final Element childFill : childrenFill) {
                 ElementU.importNode(childFill, cursor.getElement());
             }
+            new OpOrder().apply(cursor);
         }
     }
 }
