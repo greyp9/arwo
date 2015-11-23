@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xed.suite.test.enum1.test;
 
+import io.github.greyp9.arwo.core.app.test.TestApp;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.http.HttpArguments;
@@ -36,7 +37,7 @@ public class Enum1CursorTest extends TestCase {
 
     public void testEnum() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(Const.XSD);
+        final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_ENUM1);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final QName qname = QNameU.getQName("{urn:arwo:enum1}folder");
         // generate document
@@ -76,9 +77,5 @@ public class Enum1CursorTest extends TestCase {
         final String renderFile = new CursorTextView(new XedCursorView(cursorFile1)).render();
         logger.finest("File\n" + renderFile);
         Assert.assertEquals("19ceb9d5", CRCU.crc32String(UTF8Codec.toBytes(renderFile)));
-    }
-
-    public static class Const {
-        public static final String XSD = "io/github/greyp9/arwo/xsd/enum1/enum1.xsd";
     }
 }

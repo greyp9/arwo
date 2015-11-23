@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xsd.model.test;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.url.URLCodec;
@@ -9,7 +10,6 @@ import io.github.greyp9.arwo.core.xpath.XPather;
 import io.github.greyp9.arwo.core.xsd.core.XsdU;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import io.github.greyp9.arwo.core.xsd.source.test.SchemaSourceAppTest;
 import junit.framework.TestCase;
 import org.junit.Assert;
 import org.w3c.dom.Document;
@@ -46,7 +46,7 @@ public class XsdTypesTest extends TestCase {
 
     public void testAppRealmContext() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
+        final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         Assert.assertNotNull(xsdTypes);
         // check model

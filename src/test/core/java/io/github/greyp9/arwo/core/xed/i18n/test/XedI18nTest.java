@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xed.i18n.test;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.model.XedFactory;
@@ -7,7 +8,6 @@ import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import io.github.greyp9.arwo.core.xsd.source.test.SchemaSourceAppTest;
 import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitions;
 import junit.framework.TestCase;
 import org.junit.Assert;
@@ -22,7 +22,7 @@ public class XedI18nTest extends TestCase {
 
     public void testRealm() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
+        final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final TypeDefinitions typeDefinitions = xsdTypes.getTypeDefinitions();
         final QName qname = QNameU.getQName("{urn:arwo:realm}realm");

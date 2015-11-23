@@ -4,13 +4,11 @@ import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
-import io.github.greyp9.arwo.core.xed.op.OpFill;
 import io.github.greyp9.arwo.core.xed.op.OpPrune;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import io.github.greyp9.arwo.core.xsd.source.test.SchemaSourceAppTest;
 import junit.framework.TestCase;
 import org.junit.Assert;
 import org.w3c.dom.Document;
@@ -32,7 +30,7 @@ public class OpPruneTest extends TestCase {
         ElementU.addElement(element, "foo-element", "bar");
         logger.finest("\n" + DocumentU.toString(document));
         // generate model
-        final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
+        final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final Xed xed = new Xed(document, xsdTypes);
         final XPather xpather = xed.getXPather();

@@ -1,12 +1,12 @@
 package io.github.greyp9.arwo.core.xsd.structure.test;
 
+import io.github.greyp9.arwo.core.app.test.TestApp;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.url.URLCodec;
 import io.github.greyp9.arwo.core.xsd.data.DataType;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollection;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollectionFactory;
-import io.github.greyp9.arwo.core.xsd.source.test.SchemaSourceAppTest;
 import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitions;
 import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitionsFactory;
 import io.github.greyp9.arwo.core.xsd.type.TypeComponents;
@@ -29,7 +29,7 @@ public class SchemaStructureAppTest extends TestCase {
     }
 
     public void testAssembleTypeDefinitions() throws Exception {
-        for (String xsd : SchemaSourceAppTest.Const.XSD_ARRAY) {
+        for (String xsd : TestApp.Resources.XSD_ARRAY) {
             URL urlInitial = ResourceU.resolve(xsd);
             Assert.assertNotNull(urlInitial);
             logger.info("UrlInitial/" + URLCodec.toExternalForm(urlInitial));

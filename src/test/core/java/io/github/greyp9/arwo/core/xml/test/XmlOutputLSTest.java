@@ -25,13 +25,13 @@ public class XmlOutputLSTest extends TestCase {
     public void testOutputXML() throws Exception {
         // start with known ugly xml
         final byte[] xmlUgly = StreamU.read(ResourceU.resolve(Const.XML));
-        logger.info("\n" + UTF8Codec.toString(xmlUgly));
+        logger.finest("\n" + UTF8Codec.toString(xmlUgly));
         Assert.assertEquals(283, xmlUgly.length);
         Assert.assertEquals("96fe8f4d", CRCU.crc32String(xmlUgly));
         // this transform pretty prints (80 columns max, no normalize of element xmlns attributes)
         final Document document = DocumentU.toDocument(xmlUgly);
         final byte[] xmlNew = toXmlPrettyLS(document);
-        logger.info("\n" + UTF8Codec.toString(xmlNew));
+        logger.finest("\n" + UTF8Codec.toString(xmlNew));
         Assert.assertEquals(270, xmlNew.length);
         Assert.assertEquals("8b6a8189", CRCU.crc32String(xmlNew));
     }
@@ -49,7 +49,7 @@ public class XmlOutputLSTest extends TestCase {
             int length = parameterNames.getLength();
             for (int i = 0; (i < length); ++i) {
                 String parameterName = parameterNames.item(i);
-                logger.info(parameterName + "/" + config.canSetParameter(parameterName, true));
+                logger.finest(parameterName + "/" + config.canSetParameter(parameterName, true));
 /*
 namespaces/true
 split-cdata-sections/true

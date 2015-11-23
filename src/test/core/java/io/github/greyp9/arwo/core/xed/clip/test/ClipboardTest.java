@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xed.clip.test;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.xed.clip.XedClipboard;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
@@ -15,7 +16,6 @@ import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import io.github.greyp9.arwo.core.xsd.source.test.SchemaSourceAppTest;
 import junit.framework.TestCase;
 import org.junit.Assert;
 import org.w3c.dom.Document;
@@ -30,7 +30,7 @@ public class ClipboardTest extends TestCase {
 
     public void testClipboardRealm() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
+        final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         // generate document
         final QName qname = QNameU.getQName("{urn:arwo:realm}realm");

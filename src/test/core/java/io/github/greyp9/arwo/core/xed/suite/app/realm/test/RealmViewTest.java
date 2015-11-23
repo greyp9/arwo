@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xed.suite.app.realm.test;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.http.HttpArguments;
@@ -19,7 +20,6 @@ import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import io.github.greyp9.arwo.core.xsd.source.test.SchemaSourceAppTest;
 import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitions;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
 import junit.framework.TestCase;
@@ -44,7 +44,7 @@ public class RealmViewTest extends TestCase {
 
     public void testViewI18n() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
+        final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final TypeDefinitions typeDefinitions = xsdTypes.getTypeDefinitions();
         final QName qname = QNameU.getQName("{urn:arwo:realm}realm");
@@ -80,7 +80,7 @@ public class RealmViewTest extends TestCase {
 
     public void testViewI18nDE() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
+        final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final TypeDefinitions typeDefinitions = xsdTypes.getTypeDefinitions();
         final QName qname = QNameU.getQName("{urn:arwo:realm}realm");
@@ -106,7 +106,7 @@ public class RealmViewTest extends TestCase {
 
     public void testCreateView2() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
+        final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final QName qname = QNameU.getQName("{urn:arwo:realm}realm");
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);

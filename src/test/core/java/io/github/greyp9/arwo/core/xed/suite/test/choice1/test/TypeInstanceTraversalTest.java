@@ -1,7 +1,7 @@
 package io.github.greyp9.arwo.core.xed.suite.test.choice1.test;
 
+import io.github.greyp9.arwo.core.app.test.TestApp;
 import io.github.greyp9.arwo.core.res.ResourceU;
-import io.github.greyp9.arwo.core.xed.xsd.choice1.test.Choice1OpTest;
 import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstanceTraversal;
@@ -24,7 +24,7 @@ public class TypeInstanceTraversalTest extends TestCase {
     }
 
     public void testChoice1TraversalJobsToJob() throws Exception {
-        final URL urlInitial = ResourceU.resolve(Choice1OpTest.Const.XSD);
+        final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_CHOICE1);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final QName qname = QNameU.getQName("{urn:arwo:choice1}jobs");
         final TypeInstance typeInstanceJobs = xsdTypes.getTypeDefinitions().getElementTypes().get(qname.toString());
@@ -43,7 +43,7 @@ public class TypeInstanceTraversalTest extends TestCase {
     }
 
     public void testChoice1TraversalJobToTaskA() throws Exception {
-        final URL urlInitial = ResourceU.resolve(Choice1OpTest.Const.XSD);
+        final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_CHOICE1);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final QName qname = QNameU.getQName("{urn:arwo:choice1}jobs");
         final TypeInstance typeInstanceJobs = xsdTypes.getTypeDefinitions().getElementTypes().get(qname.toString());
@@ -59,7 +59,7 @@ public class TypeInstanceTraversalTest extends TestCase {
     }
 
     public void testChoice1TraversalJobToTaskC() throws Exception {
-        final URL urlInitial = ResourceU.resolve(Choice1OpTest.Const.XSD);
+        final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_CHOICE1);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final QName qname = QNameU.getQName("{urn:arwo:choice1}jobs");
         final TypeInstance typeInstanceJobs = xsdTypes.getTypeDefinitions().getElementTypes().get(qname.toString());

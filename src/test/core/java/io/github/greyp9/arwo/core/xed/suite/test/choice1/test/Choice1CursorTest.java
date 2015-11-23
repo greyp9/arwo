@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xed.suite.test.choice1.test;
 
+import io.github.greyp9.arwo.core.app.test.TestApp;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.http.HttpArguments;
@@ -11,7 +12,6 @@ import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.view.XedCursorView;
 import io.github.greyp9.arwo.core.xed.view.text.CursorTextView;
-import io.github.greyp9.arwo.core.xed.xsd.choice1.test.Choice1OpTest;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
@@ -38,7 +38,7 @@ public class Choice1CursorTest extends TestCase {
 
     public void testChoice() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(Choice1OpTest.Const.XSD);
+        final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_CHOICE1);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final QName qname = QNameU.getQName("{urn:arwo:choice1}jobs");
         // generate document
@@ -116,7 +116,7 @@ public class Choice1CursorTest extends TestCase {
 
     public void testChoiceExisting() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(Choice1OpTest.Const.XSD);
+        final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_CHOICE1);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final Document document = DocumentU.toDocument(StreamU.read(ResourceU.resolve(Const.XML)));
         logger.finest("\n" + DocumentU.toString(document));
@@ -149,7 +149,7 @@ public class Choice1CursorTest extends TestCase {
 
     public void testChoiceUpdateExisting() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(Choice1OpTest.Const.XSD);
+        final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_CHOICE1);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final Document document = DocumentU.toDocument(StreamU.read(ResourceU.resolve(Const.XML)));
         logger.finest("\n" + DocumentU.toString(document));

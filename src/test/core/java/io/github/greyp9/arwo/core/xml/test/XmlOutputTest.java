@@ -17,13 +17,13 @@ public class XmlOutputTest extends TestCase {
     public void testOutputXML() throws Exception {
         // start with known ugly xml
         final byte[] xmlUgly = StreamU.read(ResourceU.resolve(Const.XML));
-        logger.info("\n" + UTF8Codec.toString(xmlUgly));
+        logger.finest("\n" + UTF8Codec.toString(xmlUgly));
         Assert.assertEquals(283, xmlUgly.length);
         Assert.assertEquals("96fe8f4d", CRCU.crc32String(xmlUgly));
         // this transform reorders attributes and normalizes spacing within element declaration
         final Document document = DocumentU.toDocument(xmlUgly);
         final byte[] xmlNew = DocumentU.toXml(document);
-        logger.info("\n" + UTF8Codec.toString(xmlNew));
+        logger.finest("\n" + UTF8Codec.toString(xmlNew));
         Assert.assertEquals(266, xmlNew.length);
         Assert.assertEquals("2c3ef15e", CRCU.crc32String(xmlNew));
     }

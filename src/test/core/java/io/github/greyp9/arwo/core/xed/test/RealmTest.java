@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xed.test;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.xed.model.Xed;
@@ -32,7 +33,7 @@ public class RealmTest extends TestCase {
 
     public void testCreate() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
+        final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final TypeDefinitions typeDefinitions = xsdTypes.getTypeDefinitions();
         final QName qname = QNameU.getQName("{urn:arwo:realm}realm");
@@ -59,7 +60,7 @@ public class RealmTest extends TestCase {
 
     public void testUpdate() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
+        final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final TypeDefinitions typeDefinitions = xsdTypes.getTypeDefinitions();
         final QName qname = QNameU.getQName("{urn:arwo:realm}realm");
@@ -92,7 +93,7 @@ public class RealmTest extends TestCase {
 
     public void testDelete() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
+        final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final TypeDefinitions typeDefinitions = xsdTypes.getTypeDefinitions();
         final QName qname = QNameU.getQName("{urn:arwo:realm}realm");

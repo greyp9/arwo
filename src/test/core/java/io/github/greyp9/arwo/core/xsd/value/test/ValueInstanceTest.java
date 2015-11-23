@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.xsd.value.test;
 
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.app.test.TestApp;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.codec.b64.Base64Codec;
 import io.github.greyp9.arwo.core.hash.secure.HashU;
@@ -34,7 +35,7 @@ public class ValueInstanceTest extends TestCase {
 
     public void testTransformNameForm() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(Const.XSD_ENUM);
+        final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_ENUM1);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final QName qname = QNameU.getQName("{urn:arwo:enum1}file");
         // generate document
@@ -110,9 +111,5 @@ public class ValueInstanceTest extends TestCase {
             Assert.assertEquals("appUser", nameTypeValuesX.getValue("principal.principalType.user"));
             Assert.assertEquals("*", nameTypeValuesX.getValue("principal.principalType.roles"));
         }
-    }
-
-    public static class Const {
-        public static final String XSD_ENUM = "io/github/greyp9/arwo/xsd/enum1/enum1.xsd";
     }
 }

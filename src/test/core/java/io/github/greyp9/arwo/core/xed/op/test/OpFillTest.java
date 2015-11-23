@@ -7,7 +7,6 @@ import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.op.OpFill;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import io.github.greyp9.arwo.core.xsd.source.test.SchemaSourceAppTest;
 import junit.framework.TestCase;
 import org.junit.Assert;
 import org.w3c.dom.Document;
@@ -23,7 +22,7 @@ public class OpFillTest extends TestCase {
         final Document document = DocumentU.createDocumentSafe(App.Realm.QNAME);
         Assert.assertNotNull(document);
         logger.finest("\n" + DocumentU.toString(document));
-        final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
+        final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final Xed xed = new Xed(document, xsdTypes);
         // content should not be there

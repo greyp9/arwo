@@ -1,11 +1,11 @@
 package io.github.greyp9.arwo.core.xsd.type.test;
 
+import io.github.greyp9.arwo.core.app.test.TestApp;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.url.URLCodec;
 import io.github.greyp9.arwo.core.xsd.atom.XsdAtom;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollection;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollectionFactory;
-import io.github.greyp9.arwo.core.xsd.source.test.SchemaSourceAppTest;
 import io.github.greyp9.arwo.core.xsd.type.TypeComponents;
 import io.github.greyp9.arwo.core.xsd.type.TypeComponentsFactory;
 import junit.framework.TestCase;
@@ -26,7 +26,7 @@ public class SchemaTypeAppTest extends TestCase {
     }
 
     public void testAssembleTypeComponents() throws Exception {
-        for (String xsd : SchemaSourceAppTest.Const.XSD_ARRAY) {
+        for (String xsd : TestApp.Resources.XSD_ARRAY) {
             URL urlInitial = ResourceU.resolve(xsd);
             Assert.assertNotNull(urlInitial);
             logger.info("UrlInitial/" + URLCodec.toExternalForm(urlInitial));

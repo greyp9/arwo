@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xed.xsd.choiceNoNs.test;
 
+import io.github.greyp9.arwo.core.app.test.TestApp;
 import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.res.ResourceU;
@@ -33,7 +34,7 @@ public class ChoiceNoNsOpTest extends TestCase {
 
     public void testNavigate() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(Const.XSD);
+        final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_CHOICE_NO_NS);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final QName qname = QNameU.getQName("jobs");
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
@@ -54,7 +55,7 @@ public class ChoiceNoNsOpTest extends TestCase {
 
     public void testCreateJob() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(Const.XSD);
+        final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_CHOICE_NO_NS);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final QName qname = QNameU.getQName("jobs");
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
@@ -89,7 +90,7 @@ public class ChoiceNoNsOpTest extends TestCase {
 
     public void testCreateUpdateJob() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(Const.XSD);
+        final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_CHOICE_NO_NS);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final QName qname = QNameU.getQName("jobs");
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
@@ -123,7 +124,7 @@ public class ChoiceNoNsOpTest extends TestCase {
 
     public void testCreateEnhancedJob() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(Const.XSD);
+        final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_CHOICE_NO_NS);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final QName qname = QNameU.getQName("jobs");
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
@@ -158,7 +159,7 @@ public class ChoiceNoNsOpTest extends TestCase {
 
     public void testCreateUpdateEnhancedJob() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(Const.XSD);
+        final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_CHOICE_NO_NS);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final QName qname = QNameU.getQName("jobs");
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
@@ -190,9 +191,5 @@ public class ChoiceNoNsOpTest extends TestCase {
         final byte[] xml = DocumentU.toXml(document);
         Assert.assertEquals(234, xml.length);
         Assert.assertEquals("889ee76f", CRCU.crc32String(xml));
-    }
-
-    public static class Const {
-        public static final String XSD = "io/github/greyp9/arwo/xsd/choiceNoNs/choiceNoNs.xsd";
     }
 }

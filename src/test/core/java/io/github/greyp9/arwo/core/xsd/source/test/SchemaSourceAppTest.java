@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xsd.source.test;
 
+import io.github.greyp9.arwo.core.app.test.TestApp;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.url.URLCodec;
 import io.github.greyp9.arwo.core.xsd.atom.SchemaAtom;
@@ -22,7 +23,7 @@ public class SchemaSourceAppTest extends TestCase {
     }
 
     public void testAssembleSchemaCollection() throws Exception {
-        for (String xsd : Const.XSD_ARRAY) {
+        for (String xsd : TestApp.Resources.XSD_ARRAY) {
             URL urlInitial = ResourceU.resolve(xsd);
             Assert.assertNotNull(urlInitial);
             logger.info("UrlInitial/" + URLCodec.toExternalForm(urlInitial));
@@ -43,7 +44,7 @@ public class SchemaSourceAppTest extends TestCase {
     }
 
     public void testNoCatalog() throws Exception {
-        for (final String xsd : Const.XSD_ARRAY) {
+        for (final String xsd : TestApp.Resources.XSD_ARRAY) {
             final URL urlInitial = ResourceU.resolve(xsd);
             Assert.assertNotNull(urlInitial);
             logger.info("UrlInitial/" + URLCodec.toExternalForm(urlInitial));
@@ -53,10 +54,5 @@ public class SchemaSourceAppTest extends TestCase {
             Assert.assertNotNull(schemaCollection);
             Assert.assertNotNull(schemaCollection.getSchemas().get(URLCodec.toExternalForm(urlInitial)));
         }
-    }
-
-    public static class Const {
-        public static final String XSD_REALM = "io/github/greyp9/arwo/xsd/realm/realm.xsd";
-        public static final String[] XSD_ARRAY = { XSD_REALM };
     }
 }

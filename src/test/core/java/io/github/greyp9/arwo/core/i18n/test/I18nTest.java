@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.i18n.test;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppText;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.res.ResourceU;
@@ -8,7 +9,6 @@ import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import io.github.greyp9.arwo.core.xsd.source.test.SchemaSourceAppTest;
 import junit.framework.TestCase;
 import org.junit.Assert;
 import org.w3c.dom.Document;
@@ -29,7 +29,7 @@ public class I18nTest extends TestCase {
     }
 
     public void testXedBundle() throws Exception {
-        final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
+        final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final QName qname = QNameU.getQName("{urn:arwo:realm}realm");
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
@@ -42,7 +42,7 @@ public class I18nTest extends TestCase {
 
     public void testBundleChain() throws Exception {
         final ResourceBundle resourceBundleCore = new AppText(Locale.getDefault()).getBundleCore();
-        final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
+        final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final QName qname = QNameU.getQName("{urn:arwo:realm}realm");
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);

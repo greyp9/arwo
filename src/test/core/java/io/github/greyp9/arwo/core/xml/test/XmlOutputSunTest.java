@@ -21,13 +21,13 @@ public class XmlOutputSunTest extends TestCase {
     public void testOutputXMLProject() throws Exception {
         // start with known ugly xml
         final byte[] xmlUgly = StreamU.read(ResourceU.resolve(Const.XML));
-        logger.info("\n" + UTF8Codec.toString(xmlUgly));
+        logger.finest("\n" + UTF8Codec.toString(xmlUgly));
         Assert.assertEquals(283, xmlUgly.length);
         Assert.assertEquals("96fe8f4d", CRCU.crc32String(xmlUgly));
         // this transform pretty prints
         final Document document = DocumentU.toDocument(xmlUgly);
         final byte[] xmlNew = DocumentU.toXmlPretty(document);
-        logger.info("\n" + UTF8Codec.toString(xmlNew));
+        logger.finest("\n" + UTF8Codec.toString(xmlNew));
         Assert.assertEquals(248, xmlNew.length);
         Assert.assertEquals("c26f702f", CRCU.crc32String(xmlNew));
     }
@@ -35,13 +35,13 @@ public class XmlOutputSunTest extends TestCase {
     public void testOutputXML() throws Exception {
         // start with known ugly xml
         final byte[] xmlUgly = StreamU.read(ResourceU.resolve(Const.XML));
-        logger.info("\n" + UTF8Codec.toString(xmlUgly));
+        logger.finest("\n" + UTF8Codec.toString(xmlUgly));
         Assert.assertEquals(283, xmlUgly.length);
         Assert.assertEquals("96fe8f4d", CRCU.crc32String(xmlUgly));
         // this transform pretty prints
         final Document document = DocumentU.toDocument(xmlUgly);
         final byte[] xmlNew = toXmlPrettyOF(document);
-        logger.info("\n" + UTF8Codec.toString(xmlNew));
+        logger.finest("\n" + UTF8Codec.toString(xmlNew));
         Assert.assertEquals(248, xmlNew.length);
         Assert.assertEquals("c26f702f", CRCU.crc32String(xmlNew));
     }

@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xsd.value.test;
 
+import io.github.greyp9.arwo.core.app.test.TestApp;
 import io.github.greyp9.arwo.core.codec.b64.Base64Codec;
 import io.github.greyp9.arwo.core.jce.KeyU;
 import io.github.greyp9.arwo.core.jce.KeyX;
@@ -31,7 +32,7 @@ public class ValueInstanceProtectTest extends TestCase {
 
     public void testTransformProtect() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(Const.XSD_PROTECT);
+        final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_PROTECT);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final QName qname = QNameU.getQName("{urn:arwo:protect}account");
         // generate document
@@ -77,9 +78,5 @@ public class ValueInstanceProtectTest extends TestCase {
         Assert.assertNotEquals(protect1, protect2);
         Assert.assertEquals("toProtect", keyX.unprotect(protect1));
         Assert.assertEquals("toProtect", keyX.unprotect(protect2));
-    }
-
-    public static class Const {
-        public static final String XSD_PROTECT = "io/github/greyp9/arwo/xsd/protect/protect.xsd";
     }
 }

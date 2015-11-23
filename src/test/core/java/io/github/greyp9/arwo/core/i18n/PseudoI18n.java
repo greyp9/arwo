@@ -45,7 +45,7 @@ public class PseudoI18n {
 
     private void generate(final String operation, final String path) throws IOException {
         final File file = new File(path);
-        final Level level = (file.exists() ? Level.INFO : Level.SEVERE);
+        final Level level = (file.exists() ? Level.FINEST : Level.SEVERE);
         logger.log(level, path);
         if (file.exists()) {
             pseudoLocalize(operation, file);
@@ -79,14 +79,14 @@ public class PseudoI18n {
             final File fileSource, final File fileTarget, final Properties properties) throws IOException {
         if (fileSource.exists()) {
             final String message = String.format("FROM:[%s] TO:[%s]", fileSource.getName(), fileTarget.getName());
-            logger.info(Value.join("/", message, "[START]"));
+            logger.finest(Value.join("/", message, "[START]"));
             final byte[] bytesSource = StreamU.read(fileSource);
             final String source = UTF8Codec.toString(bytesSource);
             final String target = pseudoLocalize(source, properties);
             final byte[] bytesTarget = UTF8Codec.toBytes(target);
             StreamU.write(fileTarget, bytesTarget);
             //noinspection ConstantConditions
-            logger.info(Value.join("/", message, "[FINISH]", bytesSource.length, bytesTarget.length));
+            logger.finest(Value.join("/", message, "[FINISH]", bytesSource.length, bytesTarget.length));
         }
     }
 

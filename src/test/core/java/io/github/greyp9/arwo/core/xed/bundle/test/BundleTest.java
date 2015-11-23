@@ -1,10 +1,10 @@
 package io.github.greyp9.arwo.core.xed.bundle.test;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.xed.bundle.XsdBundles;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import io.github.greyp9.arwo.core.xsd.source.test.SchemaSourceAppTest;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
@@ -16,7 +16,7 @@ public class BundleTest extends TestCase {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
     public void testLoadDefaultLocale() throws Exception {
-        final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
+        final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final XsdBundles xsdBundles = new XsdBundles(xsdTypes, Locale.getDefault());
         Bundle bundle = new Bundle(xsdBundles.getBundle("urn:arwo:realm"));
@@ -28,7 +28,7 @@ public class BundleTest extends TestCase {
     }
 
     public void testLoadDE() throws Exception {
-        final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
+        final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final XsdBundles xsdBundles = new XsdBundles(xsdTypes, Locale.GERMAN);
         Bundle bundle = new Bundle(xsdBundles.getBundle("urn:arwo:realm"));
@@ -40,7 +40,7 @@ public class BundleTest extends TestCase {
     }
 
     public void testLoadJP() throws Exception {
-        final URL urlInitial = ResourceU.resolve(SchemaSourceAppTest.Const.XSD_REALM);
+        final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final XsdBundles xsdBundles = new XsdBundles(xsdTypes, Locale.JAPANESE);
         Bundle bundle = new Bundle(xsdBundles.getBundle("urn:arwo:realm"));

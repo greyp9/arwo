@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xed.op.test;
 
+import io.github.greyp9.arwo.core.app.test.TestApp;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
@@ -30,7 +31,7 @@ public class OpOrderChoiceTest extends TestCase {
 
     public void testOrderConcrete() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(Const.XSD);
+        final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_CHOICE2);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final TypeDefinitions typeDefinitions = xsdTypes.getTypeDefinitions();
         final QName qname = QNameU.getQName("{urn:arwo:choice2}job");
@@ -62,9 +63,5 @@ public class OpOrderChoiceTest extends TestCase {
         logger.finest(DocumentU.toString(document));
         final Collection<String> validate2 = xed.validate();
         Assert.assertEquals("[]", validate2.toString());
-    }
-
-    public static class Const {
-        public static final String XSD = "io/github/greyp9/arwo/xsd/choice2/choice2.xsd";
     }
 }
