@@ -2,13 +2,15 @@ package io.github.greyp9.arwo.core.io;
 
 import io.github.greyp9.arwo.core.lang.SystemU;
 
+import java.io.ByteArrayOutputStream;
+
 public final class ByteU {
 
     private ByteU() {
     }
 
     public static byte[] copy(final byte[] bytes) {
-        return extract(bytes, 0, bytes.length);
+        return ((bytes == null) ? null : extract(bytes, 0, bytes.length));
     }
 
     public static byte[] extract(final byte[] bytes, final int offset, final int length) {
@@ -23,5 +25,12 @@ public final class ByteU {
             bytesFolded[i % newLength] ^= bytes[i];
         }
         return bytesFolded;
+    }
+
+    public static byte[] join(final byte[] left, final byte[] right) {
+        final ByteArrayOutputStream os = new ByteArrayOutputStream(left.length + right.length);
+        os.write(left, 0, left.length);
+        os.write(right, 0, right.length);
+        return os.toByteArray();
     }
 }

@@ -1,0 +1,14 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<xsd:schema targetNamespace='urn:arwo:protect'
+            xmlns:p='urn:arwo:protect'
+            xmlns:xsd='http://www.w3.org/2001/XMLSchema'
+            elementFormDefault='qualified'>
+
+    <xsd:element name='account' type='p:accountType'/>
+
+    <xsd:complexType name="accountType">
+        <xsd:attribute name='user' type='xsd:string' use='required'/>
+        <xsd:attribute name='password' type='xsd:string' use='required'/>
+    </xsd:complexType>
+
+</xsd:schema>

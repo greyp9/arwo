@@ -76,11 +76,11 @@ public class Xed {
         return validator.validate(DocumentU.toXml(document));
     }
 
-    public final Element create(final Element parent, final ValueInstance valueInstance) {
+    public final Element create(final Element parent, final ValueInstance valueInstance) throws IOException {
         return new OpCreate(xsdTypes).apply(parent, valueInstance);
     }
 
-    public final Element update(final Element element, final ValueInstance valueInstance) {
+    public final Element update(final Element element, final ValueInstance valueInstance) throws IOException {
         return new OpUpdate(xsdTypes).apply(element, valueInstance);
     }
 

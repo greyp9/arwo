@@ -34,7 +34,7 @@ public class ValueInstanceTest extends TestCase {
 
     public void testTransformNameForm() throws Exception {
         // load model
-        final URL urlInitial = ResourceU.resolve(Const.XSD);
+        final URL urlInitial = ResourceU.resolve(Const.XSD_ENUM);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final QName qname = QNameU.getQName("{urn:arwo:enum1}file");
         // generate document
@@ -63,7 +63,7 @@ public class ValueInstanceTest extends TestCase {
         Assert.assertEquals("false", nameTypeValuesTransform.getValue("file.fileType.hidden"));
     }
 
-    public void testTransformProtect() throws Exception {
+    public void testTransformProtectHash() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
@@ -113,6 +113,6 @@ public class ValueInstanceTest extends TestCase {
     }
 
     public static class Const {
-        public static final String XSD = "io/github/greyp9/arwo/xsd/enum1/enum1.xsd";
+        public static final String XSD_ENUM = "io/github/greyp9/arwo/xsd/enum1/enum1.xsd";
     }
 }

@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xsd.define;
 
+import io.github.greyp9.arwo.core.xed.core.XedU;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.atom.XsdAtom;
@@ -246,7 +247,7 @@ public class ComplexTypeFactory {
         final boolean refInstance = (ElementU.getAttribute(atom.getElement(), XsdU.REF) != null);
         final boolean typeInstance = (ElementU.getAttribute(atom.getElement(), XsdU.TYPE) != null);
         final boolean anonInstance = (ElementU.getAttribute(atom.getElement(), XsdU.NAME) != null);
-        final String identity = ElementU.getAttributeNS(atom.getElement(), XsdU.Xed.IDENTITY, XsdU.Xed.NS_URI_XED);
+        final String identity = ElementU.getAttributeNS(atom.getElement(), XedU.IDENTITY, XedU.NS_URI_XED);
         if (refInstance) {
             addRefInstance(atom, typeInstances, identity);
         } else if (typeInstance) {
@@ -287,7 +288,7 @@ public class ComplexTypeFactory {
         final String name = ElementU.getAttribute(atom.getElement(), XsdU.NAME);
         final String type = ElementU.getAttribute(atom.getElement(), XsdU.TYPE,
                 XsdTypeU.Const.ANY_SIMPLE_TYPE.getLocalPart());
-        final String identity = ElementU.getAttributeNS(atom.getElement(), XsdU.Xed.IDENTITY, XsdU.Xed.NS_URI_XED);
+        final String identity = ElementU.getAttributeNS(atom.getElement(), XedU.IDENTITY, XedU.NS_URI_XED);
         if (ref != null) {
             ref.getClass();
         } else if (type != null) {
@@ -311,7 +312,7 @@ public class ComplexTypeFactory {
         final String minOccurs = ElementU.getAttribute(atom.getElement(), XsdU.MIN_OCCURS);
         final String maxOccurs = ElementU.getAttribute(atom.getElement(), XsdU.MAX_OCCURS);
         final String use = ElementU.getAttribute(atom.getElement(), XsdU.USE);
-        final String defaultValueApp = ElementU.getAttributeNS(atom.getElement(), XsdU.DEFAULT, XsdU.Xed.NS_URI_XED);
+        final String defaultValueApp = ElementU.getAttributeNS(atom.getElement(), XsdU.DEFAULT, XedU.NS_URI_XED);
         final String defaultValue = ElementU.getAttribute(atom.getElement(), XsdU.DEFAULT, defaultValueApp);
         // resolve reference
         final QName qnameComplexType = XsdAtomU.getQName(type, atom);
@@ -346,7 +347,7 @@ public class ComplexTypeFactory {
         final String minOccurs = ElementU.getAttribute(atom.getElement(), XsdU.MIN_OCCURS);
         final String maxOccurs = ElementU.getAttribute(atom.getElement(), XsdU.MAX_OCCURS);
         final String use = ElementU.getAttribute(atom.getElement(), XsdU.USE);
-        final String defaultValueApp = ElementU.getAttributeNS(atom.getElement(), XsdU.DEFAULT, XsdU.Xed.NS_URI_XED);
+        final String defaultValueApp = ElementU.getAttributeNS(atom.getElement(), XsdU.DEFAULT, XedU.NS_URI_XED);
         final String defaultValue = ElementU.getAttribute(atom.getElement(), XsdU.DEFAULT, defaultValueApp);
         final String fixedValue = ElementU.getAttribute(atom.getElement(), XsdU.FIXED, defaultValue);
         // add child type

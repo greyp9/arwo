@@ -77,23 +77,6 @@ public final class XsdU {
     public static final String DOT = ".";
     //public static final String UNDERSCORE = "_";
 
-    public static class Xed {
-        // namespace prefix
-        //public static final String NS_PREFIX_XED = "xed";
-
-        // namespace uri
-        public static final String NS_URI_XED = "urn:xed:xed";
-
-        // element names
-
-        // attribute names
-        public static final String HASH = "hash";
-        public static final String IDENTITY = "identity";
-        public static final String SALT = "salt";
-
-        // value names
-    }
-
     private XsdU() {
     }
 }

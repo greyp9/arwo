@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.xsd.instance;
 
 import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.core.xed.core.XedU;
 import io.github.greyp9.arwo.core.xsd.atom.XsdAtom;
 import io.github.greyp9.arwo.core.xsd.core.XsdTypeU;
 import io.github.greyp9.arwo.core.xsd.core.XsdU;
@@ -27,7 +28,7 @@ public abstract class TypeInstance {  // xsd:complexType, xsd:simpleType @ xsd:e
         this(atom, nodeType, name, dataType, null, null, null, null, null, null);
     }
 
-    @SuppressWarnings({ "PMD.ExcessiveParameterList", "checkstyle:parameternumber" })
+    @SuppressWarnings({"PMD.ExcessiveParameterList", "checkstyle:parameternumber"})
     public TypeInstance(final XsdAtom atom, final NodeType nodeType, final QName name, final DataType dataType,
                         final DataType extensionType, final String minOccurs, final String maxOccurs,
                         final String use, final String defaultValue, final String identity) {
@@ -102,7 +103,7 @@ public abstract class TypeInstance {  // xsd:complexType, xsd:simpleType @ xsd:e
     }
 
     public final boolean isMasked() {
-        return (getDirective(XsdU.Xed.HASH) != null);
+        return ((getDirective(XedU.HASH) != null) || (getDirective(XedU.PBE) != null));
     }
 
     @SuppressWarnings("unused")

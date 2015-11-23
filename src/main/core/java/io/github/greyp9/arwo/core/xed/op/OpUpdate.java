@@ -17,6 +17,7 @@ import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import java.io.IOException;
 import java.util.Collection;
 
 @SuppressWarnings("PMD.TooManyMethods")
@@ -27,7 +28,7 @@ public class OpUpdate {
         this.xsdTypes = xsdTypes;
     }
 
-    public final Element apply(final Element element, final ValueInstance valueInstanceIn) {
+    public final Element apply(final Element element, final ValueInstance valueInstanceIn) throws IOException {
         final ValueInstance valueInstance = new ValueInstanceTransform().transform(valueInstanceIn);
         final TypeInstance typeInstance = valueInstance.getTypeInstance();
         final NameTypeValues nameTypeValues = valueInstance.getNameTypeValues();
