@@ -157,7 +157,7 @@ public class XedUserState {
         } else if (App.Action.RELOAD.equals(action)) {
             new SessionReload(sessionsApply, request.getSession(), request.getBundle(), alerts).reload();
         } else if (App.Action.SAVE.equals(action)) {
-            new SessionSave(request.getSession(), request.getBundle(), alerts).save();
+            new SessionSave(request, request.getBundle(), alerts).save();
         } else if (App.Action.COMMIT.equals(action)) {
             final Properties propertiesApply = request.getState().getProperties();
             new SessionCommit(request.getSession(), request.getBundle(), alerts).commit(httpArguments, propertiesApply);

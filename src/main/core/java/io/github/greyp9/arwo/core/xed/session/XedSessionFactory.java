@@ -9,6 +9,8 @@ import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.op.OpFill;
+import io.github.greyp9.arwo.core.xed.trigger.XedTrigger;
+import io.github.greyp9.arwo.core.xed.trigger.XedTriggerFactory;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
@@ -29,6 +31,7 @@ public class XedSessionFactory {
     }
 
     public final XedSession create(final String qnameColon, final Locale locale) throws IOException {
+        final XedTrigger trigger = new XedTriggerFactory().createTrigger(entry.getTrigger());
         // normalize paths
         final String xmlPath = SystemU.resolve(entry.getXmlPath());
         final String xsdPath = resolveInternal(SystemU.resolve(entry.getXsdPath()));
@@ -47,7 +50,7 @@ public class XedSessionFactory {
         // populate any missing content
         new OpFill().apply(new XedNav(xed).getRoot());
         // wrap document in editor session
-        return new XedSession(entry, xed, fileXml, new Date());
+        return new XedSession(entry, xed, fileXml, new Date(), trigger);
     }
 
     private String resolveInternal(final String path) throws IOException {

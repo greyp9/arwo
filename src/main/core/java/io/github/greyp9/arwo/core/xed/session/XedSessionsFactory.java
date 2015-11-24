@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.res.ResourceU;
+import io.github.greyp9.arwo.core.security.update.RealmTrigger;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
@@ -43,7 +44,8 @@ public class XedSessionsFactory {
         final File realmFile = new File(webappRoot, "root/realm.xml");
         final String xmlPath = realmFile.getCanonicalPath();
         final String xsdPath = ResourceU.resolve(App.Realm.XSD).toExternalForm();
-        entries.add(new XedEntry(null, "/users", App.Realm.QNAME, xmlPath, xsdPath, null));
+        final String trigger = RealmTrigger.class.getName();
+        entries.add(new XedEntry(null, "/users", App.Realm.QNAME, xmlPath, xsdPath, null, trigger));
     }
 
     private void addEntryConfig(final XedEntries entries, final Principal principal) throws IOException {
@@ -51,7 +53,7 @@ public class XedSessionsFactory {
         final File fileConfig = new File(userHome, "config/app.xml");
         final String xmlPath = fileConfig.getCanonicalPath();
         final String xsdPath = ResourceU.resolve(App.Config.XSD).toExternalForm();
-        entries.add(new XedEntry(null, "/app", App.Config.QNAME, xmlPath, xsdPath, null));
+        entries.add(new XedEntry(null, "/app", App.Config.QNAME, xmlPath, xsdPath, null, null));
     }
 
     private void addEntriesConfig(
@@ -85,6 +87,6 @@ public class XedSessionsFactory {
         final String xmlPath = cursorDocument.getValue(typeDocument.getInstance("xmlPath"));
         final String xsdPath = cursorDocument.getValue(typeDocument.getInstance("xsdPath"));
         final String xsltPath = cursorDocument.getValue(typeDocument.getInstance("xsltPath"));
-        entries.add(new XedEntry(title, context, qname, xmlPath, xsdPath, xsltPath));
+        entries.add(new XedEntry(title, context, qname, xmlPath, xsdPath, xsltPath, null));
     }
 }

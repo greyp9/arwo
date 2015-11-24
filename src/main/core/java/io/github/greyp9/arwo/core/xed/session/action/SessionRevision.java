@@ -11,6 +11,7 @@ import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.session.XedEntry;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
 import io.github.greyp9.arwo.core.xed.session.XedSessions;
+import io.github.greyp9.arwo.core.xed.trigger.XedTrigger;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import org.w3c.dom.Document;
 
@@ -53,11 +54,12 @@ public class SessionRevision {
         final String contextPath = entry.getContextPath();
         final Xed xed = session.getXed();
         final Date dateLoad = session.getDateLoad();
+        final XedTrigger trigger = session.getTrigger();
         // new session
         final byte[] xmlRevision = StreamU.read(metaFile.getBytes());
         final Document document = DocumentU.toDocument(xmlRevision);
         final Xed xedNew = new Xed(document, xed.getXsdTypes(), xed.getLocale());
-        final XedSession sessionNew = new XedSession(entry, xedNew, file, dateLoad);
+        final XedSession sessionNew = new XedSession(entry, xedNew, file, dateLoad, trigger);
         // replace
         sessions.putSession(contextPath, sessionNew);
     }

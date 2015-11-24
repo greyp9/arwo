@@ -23,8 +23,10 @@ public class XedSessionsTest extends TestCase {
     }
 
     public void testEntries() throws Exception {
-        XedEntry entryRealm = new XedEntry(null, "/users", App.Realm.QNAME, null, App.Realm.XSD, null);
-        XedEntry entryLocale = new XedEntry(null, "/locale", App.Actions.QNAME_LOCALE, null, App.Actions.XSD, null);
+        XedEntry entryRealm = new XedEntry(
+                null, "/users", App.Realm.QNAME, null, App.Realm.XSD, null, null);
+        XedEntry entryLocale = new XedEntry(
+                null, "/locale", App.Actions.QNAME_LOCALE, null, App.Actions.XSD, null, null);
         XedEntries entries = new XedEntries(entryRealm, entryLocale);
         logger.finest(entries.toString());
         Assert.assertEquals(2, entries.size());
@@ -35,9 +37,12 @@ public class XedSessionsTest extends TestCase {
     public void testSessions() throws Exception {
         final String xsdPathRealm = ResourceU.resolve(App.Realm.XSD).toExternalForm();
         final String xsdPathActions = ResourceU.resolve(App.Actions.XSD).toExternalForm();
-        final XedEntry entryRealm = new XedEntry(null, "/users", App.Realm.QNAME, null, xsdPathRealm, null);
-        final XedEntry entryFilter = new XedEntry(null, "/filter", App.Actions.QNAME_FILTER, null, xsdPathActions, null);
-        final XedEntry entryLocale = new XedEntry(null, "/locale", App.Actions.QNAME_LOCALE, null, xsdPathActions, null);
+        final XedEntry entryRealm = new XedEntry(
+                null, "/users", App.Realm.QNAME, null, xsdPathRealm, null, null);
+        final XedEntry entryFilter = new XedEntry(
+                null, "/filter", App.Actions.QNAME_FILTER, null, xsdPathActions, null, null);
+        final XedEntry entryLocale = new XedEntry(
+                null, "/locale", App.Actions.QNAME_LOCALE, null, xsdPathActions, null, null);
         final XedEntries entries = new XedEntries(entryRealm, entryFilter, entryLocale);
         final XedSessions sessions = new XedSessions(entries);
         final Locale locale = Locale.getDefault();

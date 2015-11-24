@@ -46,7 +46,7 @@ public class XedSessions {
         final Xed xed = session.getXed();
         final Xed xedUpdate = new Xed(xed.getDocument(), xed.getXsdTypes(), locale);
         final XedSession sessionUpdate = new XedSession(
-                session.getEntry(), xedUpdate, session.getFile(), session.getDateLoad());
+                session.getEntry(), xedUpdate, session.getFile(), session.getDateLoad(), session.getTrigger());
         this.sessions.put(key, sessionUpdate);
     }
 }

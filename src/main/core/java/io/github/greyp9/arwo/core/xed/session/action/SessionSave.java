@@ -5,7 +5,9 @@ import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.file.FileU;
 import io.github.greyp9.arwo.core.io.StreamU;
+import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
+import io.github.greyp9.arwo.core.xed.trigger.XedTrigger;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 
 import java.io.File;
@@ -13,12 +15,14 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 public class SessionSave {
+    private final XedRequest request;
     private final XedSession session;
     private final Bundle bundle;
     private final Alerts alerts;
 
-    public SessionSave(final XedSession session, final Bundle bundle, final Alerts alerts) {
-        this.session = session;
+    public SessionSave(final XedRequest request, final Bundle bundle, final Alerts alerts) {
+        this.request = request;
+        this.session = request.getSession();
         this.bundle = bundle;
         this.alerts = alerts;
     }
@@ -35,6 +39,7 @@ public class SessionSave {
             try {
                 StreamU.write(file, xmlPretty);
                 alert(Alert.Severity.INFO, "document.save", null);
+                trigger();
             } catch (FileNotFoundException e) {
                 alert(Alert.Severity.ERR, "document.save.error", e.getMessage());
             }
@@ -46,5 +51,12 @@ public class SessionSave {
     private void alert(final Alert.Severity severity, final String key, final String detail) {
         final String message = bundle.getString(key);
         alerts.add(new Alert(severity, message, detail));
+    }
+
+    private void trigger() {
+        final XedTrigger trigger = session.getTrigger();
+        if (trigger != null) {
+            trigger.onPersist(request.getHttpRequest().getContextPath(), session.getXed());
+        }
     }
 }
