@@ -53,6 +53,24 @@ public class XsdBundle {
         return ((typeInstance == null) ? getLabel(typeInstanceChild) : getLabelSafe(typeInstance, typeInstanceChild));
     }
 
+    public final String getDetail(final TypeInstance typeInstance) {
+        final String uri = typeInstance.getURI();
+        final String id = typeInstance.getID() + ".detail";
+        final ResourceBundle bundle = xsdBundles.getBundle(uri);
+        return new Bundle(bundle).getString(id);
+    }
+
+    private String getDetailSafe(final TypeInstance typeInstance, final TypeInstance typeInstanceChild) {
+        final String uri = typeInstance.getURI();
+        final String id = typeInstanceChild.getID(typeInstance) + ".detail";
+        final ResourceBundle bundle = xsdBundles.getBundle(uri);
+        return new Bundle(bundle).getString(id);
+    }
+
+    public final String getDetail(final TypeInstance typeInstance, final TypeInstance typeInstanceChild) {
+        return ((typeInstance == null) ? getDetail(typeInstanceChild) : getDetailSafe(typeInstance, typeInstanceChild));
+    }
+
     private String getLabelSafe(final TypeInstance typeInstance, final TypeInstance typeInstanceChild) {
         final String uri = typeInstance.getURI();
         final String id = typeInstanceChild.getID(typeInstance);

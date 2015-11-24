@@ -69,6 +69,10 @@ public class XedCursor {
         return ((node instanceof Element) ? ((Element) node) : null);
     }
 
+    public final Element getChild(final TypeInstance childInstance) {
+        return ElementU.getChild(getElement(), childInstance.getQName());
+    }
+
     public final Collection<Element> getChildren(final TypeInstance childInstance) {
         return ElementU.getChildren(getElement(), childInstance.getName());
     }
