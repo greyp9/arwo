@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xed.op;
 
+import io.github.greyp9.arwo.core.lang.CharU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
@@ -22,14 +23,16 @@ import java.io.IOException;
 import java.util.Collection;
 
 public class OpCreate {
+    private final char[] secret;
     private final XsdTypes xsdTypes;
 
-    public OpCreate(final XsdTypes xsdTypes) {
+    public OpCreate(final char[] secret, final XsdTypes xsdTypes) {
+        this.secret = CharU.copy(secret);
         this.xsdTypes = xsdTypes;
     }
 
     public final Element apply(final Element element, final ValueInstance valueInstanceIn) throws IOException {
-        final ValueInstance valueInstance = new ValueInstanceTransform().transform(valueInstanceIn);
+        final ValueInstance valueInstance = new ValueInstanceTransform().transform(valueInstanceIn, secret);
         final TypeInstance typeInstance = valueInstance.getTypeInstance();
         final NameTypeValues nameTypeValues = valueInstance.getNameTypeValues();
         final Element create = ElementU.addElementBeforeNS(

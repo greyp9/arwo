@@ -9,8 +9,16 @@ public final class Value {
     private Value() {
     }
 
+    public static boolean isEmpty(final byte[] value) {
+        return ((value == null) || (value.length == 0));
+    }
+
     public static boolean isEmpty(final String value) {
         return ((value == null) || (value.length() == 0));
+    }
+
+    public static boolean isData(final String value) {
+        return (!isEmpty(value));
     }
 
     public static String defaultOnEmpty(final String value, final String defaultValue) {

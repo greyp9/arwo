@@ -55,14 +55,14 @@ public class XsdBundle {
 
     public final String getDetail(final TypeInstance typeInstance) {
         final String uri = typeInstance.getURI();
-        final String id = typeInstance.getID() + ".detail";
+        final String id = typeInstance.getID() + ".DETAIL";
         final ResourceBundle bundle = xsdBundles.getBundle(uri);
         return new Bundle(bundle).getString(id);
     }
 
     private String getDetailSafe(final TypeInstance typeInstance, final TypeInstance typeInstanceChild) {
         final String uri = typeInstance.getURI();
-        final String id = typeInstanceChild.getID(typeInstance) + ".detail";
+        final String id = typeInstanceChild.getID(typeInstance) + ".DETAIL";
         final ResourceBundle bundle = xsdBundles.getBundle(uri);
         return new Bundle(bundle).getString(id);
     }

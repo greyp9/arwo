@@ -77,11 +77,11 @@ public class Xed {
     }
 
     public final Element create(final Element parent, final ValueInstance valueInstance) throws IOException {
-        return new OpCreate(xsdTypes).apply(parent, valueInstance);
+        return new OpCreate(null, xsdTypes).apply(parent, valueInstance);
     }
 
     public final Element update(final Element element, final ValueInstance valueInstance) throws IOException {
-        return new OpUpdate(xsdTypes).apply(element, valueInstance);
+        return new OpUpdate(null, xsdTypes).apply(element, valueInstance);
     }
 
     public final Element delete(final Element element) {

@@ -41,7 +41,7 @@
 
     <target name='code' depends='app, findbugs, pmd, checkstyle'/>
 
-    <target name='main' depends='i18n, junit, i18n-clean, pmd, checkstyle, findbugs'
+    <target name='main' depends='app, i18n, junit, i18n-clean, pmd, checkstyle, findbugs'
             description='Use -p to view help information.'/>
 
 </project>

@@ -24,6 +24,10 @@
     <property name='artifact.dir' value='${target.dir}/app-tomcat6/artifact'/>
     <!-- tomcat image -->
     <import file='${project.dir}/src/test/app/resources/ant/tomcat6/build.tomcat6.xml'/>
+    <!-- library paths -->
+    <property name='m2.dir' value='${user.home}/.m2/repository'/>
+    <!-- repo.maven.apache.org - ch.ethz.ganymed/ganymed-ssh2/262 -->
+    <property name='ganymed-jar' value='${m2.dir}/ch/ethz/ganymed/ganymed-ssh2/262/ganymed-ssh2-262.jar'/>
 
     <tstamp>
         <format property='timestamp' pattern='yyyy-MM-dd&apos;T&apos;HH:mm:ss&apos;Z&apos;' timezone='UTC'/>
@@ -46,8 +50,11 @@
         <include name='lib/servlet-api.jar'/>
     </fileset>
 
+    <fileset file='${ganymed-jar}' id='libs-ganymed'/>
+
     <path id='classpath-app'>
         <fileset refid='libs-servlet-api'/>
+        <fileset refid='libs-ganymed'/>
     </path>
 
     <path id='classpath-tomcat6'>
@@ -117,6 +124,8 @@
             <include name='io/github/greyp9/arwo/app/realm/servlet/RealmServlet.java'/>
             <!--webapp settings-->
             <include name='io/github/greyp9/arwo/app/xed/servlet/Xed1Servlet.java'/>
+            <!--sftp-->
+            <include name='io/github/greyp9/arwo/app/ssh/servlet/SFTPServlet.java'/>
 
 
             <!--table testing-->

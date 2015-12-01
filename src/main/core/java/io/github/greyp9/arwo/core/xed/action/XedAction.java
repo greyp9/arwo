@@ -39,7 +39,7 @@ public class XedAction {
     public final Xed update(final NameTypeValues nameTypeValues) throws IOException {
         final XedCursor cursor = getCursor();
         final ValueInstance valueInstance = ValueInstance.create(cursor.getTypeInstance(), nameTypeValues);
-        new OpUpdate(xed.getXsdTypes()).apply(cursor.getElement(), valueInstance);
+        new OpUpdate(null, xed.getXsdTypes()).apply(cursor.getElement(), valueInstance);
         return xed;
     }
 }

@@ -89,11 +89,11 @@ public class XedUserState {
         return locus;
     }
 
-    public XedUserState(final File webappRoot, final Principal principal, final String submitID, final Locus locus)
-            throws IOException {
+    public XedUserState(final File webappRoot, final Principal principal,
+                        final String submitID, final Locus locus, final Alerts alerts) throws IOException {
         this.submitID = submitID;
         this.viewStates = new ViewStates();
-        this.alerts = new Alerts();
+        this.alerts = alerts;
         this.sessions = new XedSessionsFactory(webappRoot).getSessions(principal, locus);
         this.locus = locus;
         this.properties = new Properties();

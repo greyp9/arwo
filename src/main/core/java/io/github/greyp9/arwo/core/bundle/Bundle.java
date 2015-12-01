@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.bundle;
 
+import java.text.MessageFormat;
 import java.util.ResourceBundle;
 
 public class Bundle {
@@ -23,5 +24,10 @@ public class Bundle {
     public final String getString(final String key, final String defaultValue) {
         final String value = getString(key);
         return (key.equals(value) ? defaultValue : value);
+    }
+
+    public final String format(final String key, final Object... arguments) {
+        final String pattern = getString(key);
+        return MessageFormat.format(pattern, arguments);
     }
 }

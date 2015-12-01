@@ -24,6 +24,10 @@
     <property name='tomcat6.dir' value='${user.home}/apache-tomcat-6.0.44'/>
     <property name='tomcat7.dir' value='${user.home}/apache-tomcat-7.0.64'/>
     <property name='tomcat8.dir' value='${user.home}/apache-tomcat-8.0.28'/>
+    <!-- library paths -->
+    <property name='m2.dir' value='${user.home}/.m2/repository'/>
+    <!-- repo.maven.apache.org - ch.ethz.ganymed/ganymed-ssh2/262 -->
+    <property name='ganymed-jar' value='${m2.dir}/ch/ethz/ganymed/ganymed-ssh2/262/ganymed-ssh2-262.jar'/>
 
     <path id='classpath-findbugs'>
         <fileset dir='${findbugs.dir}'>
@@ -78,16 +82,33 @@
         </findbugs>
     </target>
 
+    <target name='fb-lib-other'>
+        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failonerror='true'>
+            <auxclasspath location='${classes.core.dir}'/>
+            <auxclasspath location='${m2.dir}/ch/ethz/ganymed/ganymed-ssh2/262/ganymed-ssh2-262.jar'/>
+            <fileset dir='${classes.lib.dir}'>
+                <include name='**/lib/**/*.class'/>
+                <exclude name='**/lib/tomcat6/**/*.class'/>
+                <exclude name='**/lib/tomcat7/**/*.class'/>
+                <exclude name='**/lib/tomcat8/**/*.class'/>
+            </fileset>
+            <sourcepath path='${src.lib.dir}'/>
+        </findbugs>
+    </target>
+
     <target name='fb-lib'>
         <antcall target='fb-lib-tomcat6'/>
         <antcall target='fb-lib-tomcat7'/>
         <antcall target='fb-lib-tomcat8'/>
+        <antcall target='fb-lib-other'/>
     </target>
 
     <target name='fb-app'>
         <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failonerror='true'>
             <auxclasspath location='${classes.core.dir}'/>
+            <auxclasspath location='${classes.lib.dir}'/>
             <auxclasspath location='${tomcat6.dir}/lib/servlet-api.jar'/>
+            <auxclasspath location='${m2.dir}/ch/ethz/ganymed/ganymed-ssh2/262/ganymed-ssh2-262.jar'/>
             <fileset dir='${classes.app.dir}'>
                 <include name='**/*.class'/>
             </fileset>

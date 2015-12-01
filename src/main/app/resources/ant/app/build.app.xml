@@ -16,8 +16,14 @@
     <property name='tomcat6.dir' value='${user.home}/apache-tomcat-6.0.44'/>
     <property name='tomcat7.dir' value='${user.home}/apache-tomcat-7.0.64'/>
     <property name='tomcat8.dir' value='${user.home}/apache-tomcat-8.0.28'/>
+    <!-- library paths -->
+    <property name='m2.dir' value='${user.home}/.m2/repository'/>
+    <!-- repo.maven.apache.org - ch.ethz.ganymed/ganymed-ssh2/262 -->
+    <property name='ganymed-jar' value='${m2.dir}/ch/ethz/ganymed/ganymed-ssh2/262/ganymed-ssh2-262.jar'/>
 
     <path id='classpath-core'/>
+
+    <fileset file='${ganymed-jar}' id='libs-ganymed'/>
 
     <fileset dir='${tomcat6.dir}' id='libs-servlet-api'>
         <include name='lib/servlet-api.jar'/>
@@ -32,7 +38,7 @@
 
     <path id='classpath-libs-tomcat6-arwo'>
         <fileset refid='libs-tomcat6'/>
-        <pathelement path='${classes.realm.dir}'/>
+        <pathelement path='${classes.core.dir}'/>
     </path>
 
     <path id='classpath-libs-tomcat7'>
@@ -44,7 +50,7 @@
 
     <path id='classpath-libs-tomcat7-arwo'>
         <fileset refid='libs-tomcat7'/>
-        <pathelement path='${classes.realm.dir}'/>
+        <pathelement path='${classes.core.dir}'/>
     </path>
 
     <path id='classpath-libs-tomcat8'>
@@ -56,12 +62,19 @@
 
     <path id='classpath-libs-tomcat8-arwo'>
         <fileset refid='libs-tomcat8'/>
-        <pathelement path='${classes.realm.dir}'/>
+        <pathelement path='${classes.core.dir}'/>
+    </path>
+
+    <path id='classpath-libs'>
+        <pathelement path='${classes.core.dir}'/>
+        <fileset refid='libs-ganymed'/>
     </path>
 
     <path id='classpath-app'>
         <pathelement path='${classes.core.dir}'/>
+        <pathelement path='${classes.lib.dir}'/>
         <fileset refid='libs-servlet-api'/>
+        <fileset refid='libs-ganymed'/>
     </path>
 
     <target name='clean' description='clean up generated resources'>
@@ -111,6 +124,18 @@
         </javac>
     </target>
 
+    <target name='compile-lib-other' description='compile project source'>
+        <javac destdir='${classes.lib.dir}' classpathref='classpath-libs'
+               includeantruntime='false' debug='on'>
+            <compilerarg value='-Xlint:all'/>
+            <src path='${src.lib.dir}'/>
+            <include name='io/github/greyp9/arwo/lib/**/*.java'/>
+            <exclude name='io/github/greyp9/arwo/lib/tomcat6/**/*.java'/>
+            <exclude name='io/github/greyp9/arwo/lib/tomcat7/**/*.java'/>
+            <exclude name='io/github/greyp9/arwo/lib/tomcat8/**/*.java'/>
+        </javac>
+    </target>
+
     <target name='compile-lib' description='compile project source'>
         <echo message='compile app lib classes'/>
         <mkdir dir='${classes.lib.dir}'/>
@@ -118,6 +143,7 @@
         <antcall target='compile-lib-tomcat6'/>
         <antcall target='compile-lib-tomcat7'/>
         <antcall target='compile-lib-tomcat8'/>
+        <antcall target='compile-lib-other'/>
     </target>
 
     <target name='compile-app' description='compile project source'>

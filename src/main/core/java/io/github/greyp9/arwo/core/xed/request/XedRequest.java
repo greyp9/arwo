@@ -3,7 +3,9 @@ package io.github.greyp9.arwo.core.xed.request;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.app.AppText;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
+import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
 import io.github.greyp9.arwo.core.xed.state.XedUserState;
 
@@ -40,5 +42,9 @@ public class XedRequest {
         this.state = state;
         this.bundle = new Bundle(new AppText(state.getLocus().getLocale()).getBundleCore());
         this.alerts = state.getAlerts();
+    }
+
+    public final char[] getSecret() {
+        return Value.toCharArray(request.getHttpRequest().getHeader(Http.Header.AUTHORIZATION));
     }
 }
