@@ -24,4 +24,15 @@ public final class HttpResponseU {
         final NameTypeValues headers = new NameTypeValues(new NameTypeValue(Http.Header.LOCATION, location));
         return new HttpResponse(HttpURLConnection.HTTP_MOVED_TEMP, headers, null);
     }
+
+    public static HttpResponse to501() {
+        return toError(HttpURLConnection.HTTP_NOT_IMPLEMENTED);
+    }
+
+    public static HttpResponse toError(final int statusCode) {
+        final NameTypeValues headers = new NameTypeValues(
+                new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_PLAIN_UTF8));
+        final byte[] entity = UTF8Codec.toBytes(Integer.toString(statusCode));
+        return new HttpResponse(statusCode, headers, new ByteArrayInputStream(entity));
+    }
 }

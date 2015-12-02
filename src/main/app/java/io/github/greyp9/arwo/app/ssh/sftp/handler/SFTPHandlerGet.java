@@ -25,7 +25,7 @@ public class SFTPHandlerGet {
 
     public final HttpResponse doGet() throws IOException {
         HttpResponse httpResponse;
-        final SFTPRequest request = new SFTPRequest(httpRequest);
+        final SFTPRequest request = new SFTPRequest(httpRequest, userState);
         final String baseURI = httpRequest.getBaseURI();
         final String pathInfo = httpRequest.getPathInfo();
         if (pathInfo == null) {
@@ -48,7 +48,7 @@ public class SFTPHandlerGet {
         if (resource == null) {
             httpResponse = HttpResponseU.to302(PathU.toDir(httpRequest.getBaseURI(), Const.MODE_DEFAULT));
         } else {
-            httpResponse = new SFTPResourceView(request, userState, resource).doGetResource();
+            httpResponse = new SFTPResourceView(request, userState, resource).doGetResource(request.getPath());
         }
         return httpResponse;
     }

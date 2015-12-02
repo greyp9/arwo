@@ -8,6 +8,7 @@ import io.github.greyp9.arwo.core.page.Page;
 import io.github.greyp9.arwo.core.table.baseline.BaselineValue;
 import io.github.greyp9.arwo.core.table.cell.Duration;
 import io.github.greyp9.arwo.core.table.cell.TableViewButton;
+import io.github.greyp9.arwo.core.table.cell.TableViewGlyph;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
 import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
@@ -92,6 +93,8 @@ public class TableBodyView {
             addCell(tr, (TableViewLink) value);
         } else if (value instanceof TableViewButton) {
             addCell(tr, (TableViewButton) value);
+        } else if (value instanceof TableViewGlyph) {
+            addCell(tr, (TableViewGlyph) value);
         } else {
             addCell(tr, value, type);
         }
@@ -184,6 +187,10 @@ public class TableBodyView {
     private void addCell(final Element tr, final TableViewButton tvb) {
         final Element td = ElementU.addElement(tr, Html.TD);
         HtmlU.addButton(td, tvb.getText(), tvb.getName(), tvb.getValue(), null, null);
+    }
+
+    private void addCell(final Element tr, final TableViewGlyph tableViewGlyph) {
+        ElementU.addElement(tr, Html.TD, tableViewGlyph.getText(), NameTypeValuesU.create(Html.CLASS, "enhance"));
     }
 
     private static class Const {
