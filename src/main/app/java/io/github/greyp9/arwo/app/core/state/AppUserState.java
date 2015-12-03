@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.core.connect.ConnectionCache;
 import io.github.greyp9.arwo.core.date.Interval;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.table.state.ViewStates;
+import io.github.greyp9.arwo.core.text.TextFilters;
 import io.github.greyp9.arwo.core.xed.state.XedUserState;
 
 import java.io.File;
@@ -19,6 +20,7 @@ public class AppUserState {
     private final File userHome;
     private final String submitID;
     private final ViewStates viewStates;
+    private final TextFilters textFilters;
     private final Locus locus;
     private final Alerts alerts;
     private final XedUserState documentState;
@@ -45,6 +47,10 @@ public class AppUserState {
         return viewStates;
     }
 
+    public final TextFilters getTextFilters() {
+        return textFilters;
+    }
+
     public final Locus getLocus() {
         return locus;
     }
@@ -68,6 +74,7 @@ public class AppUserState {
         this.userHome = AppFolder.getUserHome(webappRoot, principal);
         this.submitID = submitID;
         this.viewStates = new ViewStates();
+        this.textFilters = new TextFilters();
         this.locus = locus;
         this.alerts = new Alerts();
         this.documentState = new XedUserState(webappRoot, principal, submitID, locus, alerts);

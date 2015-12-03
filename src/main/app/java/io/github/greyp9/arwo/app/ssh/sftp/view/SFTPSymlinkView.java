@@ -20,20 +20,21 @@ import org.w3c.dom.Element;
 import java.io.IOException;
 import java.util.Collection;
 
-public class SFTPFolderView extends SFTPView {
+public class SFTPSymlinkView extends SFTPView {
 
-    public SFTPFolderView(
+    public SFTPSymlinkView(
             final SFTPRequest request, final AppUserState userState, final SSHConnectionResource resource) {
         super(request, userState, resource);
     }
 
-    public final HttpResponse addContentTo(final Element html) throws IOException {
+    @Override
+    protected final HttpResponse addContentTo(final Element html) throws IOException {
         final SFTPRequest request = getRequest();
         final AppUserState userState = getUserState();
         final RowSetMetaData metaData = SFTPFolder.createMetaData();
-        final Locus locus = userState.getLocus();
+        final Locus locus = getUserState().getLocus();
         final ViewState viewState = userState.getViewStates().getViewState(metaData, request.getBundle(), locus);
-        final RowSet rowSetRaw = getRowSetRaw(metaData, viewState);
+        final RowSet rowSetRaw = createRowSetRaw(metaData);
         final RowSet rowSetStyled = new SFTPFolderStyled(request, rowSetRaw).getRowSet();
         final Table table = new Table(rowSetStyled, viewState.getSorts(), viewState.getFilters(),
                 request.getTitlePath(), request.getTitlePath());
@@ -44,25 +45,9 @@ public class SFTPFolderView extends SFTPView {
         return null;
     }
 
-    private RowSet getRowSetRaw(final RowSetMetaData metaData, final ViewState viewState) throws IOException {
-        final SFTPRequest request = getRequest();
-        final SSHConnectionResource resource = getResource();
-        RowSet rowSet;
-        //ResourceCache cache = userState.getCache();
-        //String uri = request.getHttpRequest().getURI();
-        // if disconnected, resource will only be fetched if no cached copy is available
-        if (viewState.isConnected()) {
-            final SFTPDataSource source = new SFTPDataSource(request, resource);
-            final Collection<SFTPv3DirectoryEntry> directoryEntries = source.ls(request.getPath());
-            rowSet = new SFTPFolder(directoryEntries, metaData, true).getRowSet();
-            //} else if (cache.containsRowSet(uri)) {
-            //    rowSet = cache.getRowSet(uri);
-        } else {
-            final SFTPDataSource source = new SFTPDataSource(request, resource);
-            final Collection<SFTPv3DirectoryEntry> directoryEntries = source.ls(request.getPath());
-            rowSet = new SFTPFolder(directoryEntries, metaData, true).getRowSet();
-            //cache.putRowSet(uri, rowSet);
-        }
-        return rowSet;
+    private RowSet createRowSetRaw(final RowSetMetaData metaData) throws IOException {
+        final SFTPDataSource source = new SFTPDataSource(getRequest(), getResource());
+        final Collection<SFTPv3DirectoryEntry> directoryEntries = source.lsSymlink(getRequest().getPath());
+        return new SFTPFolder(directoryEntries, metaData, false).getRowSet();
     }
 }

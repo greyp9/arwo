@@ -36,15 +36,13 @@ public class SFTPRequest {
         this.alerts = userState.getAlerts();
     }
 
-/*
-    public String getBaseURIMode() {
+    public final String getBaseURIMode() {
         return httpRequest.getBaseURI() + patherMode.getLeft();
     }
 
-    public String getBaseURIServer() {
+    public final String getBaseURIServer() {
         return getBaseURIMode() + patherServer.getLeft();
     }
-*/
 
     public final String getMode() {
         return patherMode.getLeftToken();

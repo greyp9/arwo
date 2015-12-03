@@ -27,6 +27,7 @@ public class ZipAppender {
             final ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
             addExistingEntries(zipOutputStream, fileZip);
             addNewEntries(zipOutputStream, comment, files);
+            zipOutputStream.finish();
             zipOutputStream.close();
             fileOutputStream.close();
             success = fileZipNew.renameTo(fileZip);

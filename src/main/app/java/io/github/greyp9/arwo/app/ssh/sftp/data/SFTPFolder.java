@@ -27,9 +27,10 @@ public class SFTPFolder {
     /**
      * Store folder information, such that no additional connectivity to data endpoint is needed.
      */
-    public SFTPFolder(final Collection<SFTPv3DirectoryEntry> directoryEntries, final RowSetMetaData metaData) {
+    public SFTPFolder(final Collection<SFTPv3DirectoryEntry> directoryEntries,
+                      final RowSetMetaData metaData, final boolean sort) {
         // "native" sort, in case none supplied by user
-        final Sorts sorts = new Sorts(new Sort("type", true), new Sort("name", true));
+        final Sorts sorts = (sort ? new Sorts(new Sort("type", true), new Sort("name", true)) : null);
         // load from source data
         this.rowSet = new RowSet(metaData, sorts, null);
         for (final SFTPv3DirectoryEntry directoryEntry : directoryEntries) {

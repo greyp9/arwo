@@ -61,8 +61,7 @@ public class SFTPFolderStyled {
     private Object getTypeStyled(
             final Integer type, final String name, final boolean isDirectory) throws UnsupportedEncodingException {
         final String text = toTypeText(type);
-        final String folderURI = request.getHttpRequest().getURI();
-        final String href = toHref(folderURI, name, isDirectory);
+        final String href = toHref(request, name, isDirectory);
         return new TableViewLink(text, null, href);
     }
 
@@ -82,9 +81,11 @@ public class SFTPFolderStyled {
         return text;
     }
 
-    private static String toHref(
-            final String folderURI, final String name, final boolean isDirectory) throws UnsupportedEncodingException {
-        final String filename = URLCodec.encode(name);
+    private static String toHref(final SFTPRequest request, final String name,
+                                 final boolean isDirectory) throws UnsupportedEncodingException {
+        final boolean fullPath = name.contains(Http.Token.SLASH);  // in case of load from symlink context
+        final String folderURI = (fullPath ? request.getBaseURIServer() : request.getHttpRequest().getURI());
+        final String filename = (fullPath ? name : URLCodec.encode(name));
         final String suffix = (isDirectory ? Http.Token.SLASH : "");
         return Value.join("", folderURI, filename, suffix);
     }
