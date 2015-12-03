@@ -73,7 +73,7 @@ public class SFTPFolder {
         final InsertRow insertRow = new InsertRow(rowSet);
         insertRow.setNextColumn(type);
         insertRow.setNextColumn(directoryEntry.filename);
-        insertRow.setNextColumn(DateU.toDate(attributes.mtime));
+        insertRow.setNextColumn(DateU.fromSeconds(attributes.mtime));
         insertRow.setNextColumn(extension);
         insertRow.setNextColumn(attributes.uid);
         insertRow.setNextColumn(attributes.gid);

@@ -102,7 +102,7 @@ public class SFTPDataSource {
         byte[] bytes = new byte[0];
         final Connection connection = resource.getSSHConnection().getConnection();
         try {
-            lastModified = DateU.toDate(lstat(path).mtime).getTime();
+            lastModified = DateU.fromSeconds(lstat(path).mtime).getTime();
             final SCPClient client = connection.createSCPClient();
             bytes = read(client.get(normalize(path)));
         } catch (IOException e) {

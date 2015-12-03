@@ -1,18 +1,17 @@
-package io.github.greyp9.arwo.app.core.view.zip;
+package io.github.greyp9.arwo.app.core.view.gz;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.file.FileX;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
-import io.github.greyp9.arwo.core.file.zip.ZipMetaData;
-import io.github.greyp9.arwo.core.file.zip.ZipVolume;
+import io.github.greyp9.arwo.core.file.tar.TarMetaData;
+import io.github.greyp9.arwo.core.file.tar.TarVolume;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
-import io.github.greyp9.arwo.core.lang.NumberU;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
 import io.github.greyp9.arwo.core.table.core.TableU;
@@ -36,13 +35,12 @@ import java.sql.Types;
 import java.util.Date;
 
 @SuppressWarnings("PMD.ExcessiveImports")
-public class AppZipView {
+public class AppTGZView {
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
     private final String zipEntry;
 
-
-    public AppZipView(final ServletHttpRequest httpRequest, final AppUserState userState) {
+    public AppTGZView(final ServletHttpRequest httpRequest, final AppUserState userState) {
         this.httpRequest = httpRequest;
         this.userState = userState;
         final NameTypeValues query = HttpArguments.toArguments(httpRequest.getHttpRequest().getQuery());
@@ -69,47 +67,40 @@ public class AppZipView {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
                 new ColumnMetaData("type", Types.VARCHAR),
                 new ColumnMetaData("name", Types.VARCHAR, true),
+                new ColumnMetaData("link", Types.VARCHAR),
                 new ColumnMetaData("mtime", Types.TIMESTAMP),
                 new ColumnMetaData("ext", Types.VARCHAR),
-                new ColumnMetaData("comment", Types.VARCHAR),
-                new ColumnMetaData("crc", Types.VARCHAR),
-                new ColumnMetaData("sizeCompress", Types.BIGINT),
                 new ColumnMetaData("size", Types.BIGINT),
         };
-        return new RowSetMetaData("zipFolderType", columns);
+        return new RowSetMetaData("tarFolderType", columns);
     }
 
     private RowSet createRowSet(final RowSetMetaData metaData, final byte[] bytes) throws IOException {
         final RowSet rowSet = new RowSet(metaData, null, null);
-        final ZipVolume zipVolume = new ZipVolume(new ByteArrayInputStream(bytes));
-        final MetaFile metaFile = zipVolume.getEntry(zipEntry);
+        final TarVolume tarVolume = new TarVolume(new ByteArrayInputStream(bytes));
+        final MetaFile metaFile = tarVolume.getEntry(zipEntry);
         if (metaFile == null) {
-            createRows(rowSet, zipVolume);
+            createRows(rowSet, tarVolume);
         } else {
             createResponse(rowSet, metaFile);
         }
         return rowSet;
     }
 
-    private void createRows(final RowSet rowSet, final ZipVolume zipVolume) throws IOException {
-        for (final ZipMetaData zipMetaData : zipVolume.getEntries()) {
-            createRow(zipMetaData, rowSet);
+    private void createRows(final RowSet rowSet, final TarVolume tarVolume) throws IOException {
+        for (final TarMetaData tarMetaData : tarVolume.getEntries()) {
+            createRow(tarMetaData, rowSet);
         }
     }
 
-    private void createRow(final ZipMetaData metaData, final RowSet rowSet) {
+    private void createRow(final TarMetaData metaData, final RowSet rowSet) {
         final String href = String.format("?%s=%s", Const.QUERY_ZIP_ENTRY, metaData.getPath());
-        final long crc = metaData.getCrc();
-        final boolean isDataCRC = ((crc != -1) && (crc != 0));
-        final String crcText = (isDataCRC ? NumberU.toHex((int) crc) : null);
         final InsertRow insertRow = new InsertRow(rowSet);
         insertRow.setNextColumn(new TableViewLink(UTF16.ICON_FILE, null, href));
         insertRow.setNextColumn(metaData.getPath());
+        insertRow.setNextColumn(metaData.getLink());
         insertRow.setNextColumn(new Date(metaData.getLastModified()));
         insertRow.setNextColumn(new FileX(metaData.getPath()).getExtension());
-        insertRow.setNextColumn(metaData.getComment());
-        insertRow.setNextColumn(crcText);
-        insertRow.setNextColumn(metaData.getCompressedLength());
         insertRow.setNextColumn(metaData.getLength());
         rowSet.add(insertRow.getRow());
     }

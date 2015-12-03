@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.app.ssh.sftp.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.core.view.gz.AppTGZView;
 import io.github.greyp9.arwo.app.core.view.zip.AppZipView;
 import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
 import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
@@ -54,9 +55,9 @@ public class SFTPFileView extends SFTPView {
         final Collection<String> editModes = Arrays.asList("edit", "edit16");
         final boolean isModeEdit = editModes.contains(mode);
         // resource interpret (gzip deflated content expected)
-        //final boolean isModeGZ = "viewGZ".equals(mode);
+        final boolean isModeGZ = "viewGZ".equals(mode);
         final boolean isModeZIP = "viewZIP".equals(mode);
-        //final boolean isTGZ = "viewTGZ".equals(mode);
+        final boolean isModeTGZ = "viewTGZ".equals(mode);
         // resource interpret (binary, view hex representation)
         //final boolean isHex = "viewHex".equals(mode);
         // dispose of request
@@ -66,8 +67,11 @@ public class SFTPFileView extends SFTPView {
         } else if (isModeZIP) {
             final AppZipView appZipView = new AppZipView(httpRequest, userState);
             httpResponse = appZipView.addContentTo(html, metaFile, bundle);
+        } else if (isModeTGZ) {
+            final AppTGZView appTGZView = new AppTGZView(httpRequest, userState);
+            httpResponse = appTGZView.addContentTo(html, metaFile, bundle);
         } else {
-            httpResponse = doGetFile(metaFile, encoding, false);
+            httpResponse = doGetFile(metaFile, encoding, isModeGZ);
         }
         return httpResponse;
     }

@@ -33,12 +33,16 @@ public final class DateU {
         return ((interval > 0) ? new Date((date.getTime() / interval) * interval) : date);
     }
 
-    public static Date toDate(final Integer seconds) {
-        return ((seconds == null) ? null : toDate((long) seconds));
+    public static Date fromSeconds(final Integer seconds) {
+        return ((seconds == null) ? null : fromSeconds((long) seconds));
     }
 
-    public static Date toDate(final Long millis) {
-        return ((millis == null) ? null : new Date(Const.ONE_SECOND_MILLIS * millis));
+    public static Date fromSeconds(final Long seconds) {
+        return ((seconds == null) ? null : new Date(seconds * Const.ONE_SECOND_MILLIS));
+    }
+
+    public static Date fromMillis(final Long millis) {
+        return ((millis == null) ? null : new Date(millis));
     }
 
     public static String toString(final Date date, final String tz, final String pattern) {

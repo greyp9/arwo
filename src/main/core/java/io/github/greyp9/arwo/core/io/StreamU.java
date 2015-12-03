@@ -10,6 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.URL;
 
+@SuppressWarnings("PMD.TooManyMethods")
 public final class StreamU {
 
     private StreamU() {
@@ -70,6 +71,19 @@ public final class StreamU {
 
     public static long skipPartial(final InputStream is) throws IOException {
         return skip(new BufferedInputStream(is));
+    }
+
+    public static byte[] read(final InputStream is, final long count) throws IOException {
+        final ByteArrayOutputStream os = new ByteArrayOutputStream();
+        while (os.size() < count) {
+            final int b = is.read();
+            if (b >= 0) {
+                os.write(b);
+            } else {
+                break;
+            }
+        }
+        return os.toByteArray();
     }
 
     @SuppressWarnings("PMD.OnlyOneReturn")
