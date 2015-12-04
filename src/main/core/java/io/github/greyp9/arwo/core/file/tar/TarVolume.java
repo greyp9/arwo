@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.io.ByteU;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.lang.MathU;
+import io.github.greyp9.arwo.core.lang.NumberU;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayInputStream;
@@ -166,7 +167,7 @@ public class TarVolume {
             final byte type, final byte[] header, final InputStream is) throws IOException {
         final String fileNameSizeOctal = UTF8Codec.toString(
                 ByteU.extract(header, Const.OFF_SIZE, Const.SZ_SIZE)).trim();
-        final int fileNameSize = Integer.parseInt(fileNameSizeOctal, Const.RADIX_OCTAL);
+        final int fileNameSize = Integer.parseInt(fileNameSizeOctal, NumberU.Const.RADIX_OCTAL);
         final int blockSize = MathU.roundUp(fileNameSize, Const.TAR_BLOCK_SIZE);
         final byte[] headerFileName = StreamU.read(is, blockSize);
         verifyExpectedActual(blockSize, headerFileName.length);
@@ -180,10 +181,10 @@ public class TarVolume {
         final String fileName = (fileNameIn == null) ?
                 UTF8Codec.toString(ByteU.extract(header, Const.OFF_NAME, Const.SZ_NAME)).trim() : fileNameIn;
         final String fileSizeOctal = UTF8Codec.toString(ByteU.extract(header, Const.OFF_SIZE, Const.SZ_SIZE)).trim();
-        final long fileSize = Long.parseLong(fileSizeOctal, Const.RADIX_OCTAL);
+        final long fileSize = Long.parseLong(fileSizeOctal, NumberU.Const.RADIX_OCTAL);
         final String lastModifiedOctal = UTF8Codec.toString(
                 ByteU.extract(header, Const.OFF_DATE, Const.SZ_DATE)).trim();
-        final long lastModifiedSecs = Long.parseLong(lastModifiedOctal, Const.RADIX_OCTAL);
+        final long lastModifiedSecs = Long.parseLong(lastModifiedOctal, NumberU.Const.RADIX_OCTAL);
         final long lastModified = DateU.fromSeconds(lastModifiedSecs).getTime();
         final boolean directory = (Const.TYPE_DIRECTORY == type);
         final String linkFileName = UTF8Codec.toString(ByteU.extract(header, Const.OFF_LINK, Const.SZ_LINK)).trim();
@@ -223,8 +224,6 @@ public class TarVolume {
         private static final int OFF_LINK_FLAG = 156;
         private static final int OFF_LINK = 157;
         private static final int SZ_LINK = 100;
-
-        private static final int RADIX_OCTAL = 8;
 
         private static final int TAR_BLOCK_SIZE = 512;
 

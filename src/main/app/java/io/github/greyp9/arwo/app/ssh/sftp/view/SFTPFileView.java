@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.app.ssh.sftp.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.gz.AppTGZView;
+import io.github.greyp9.arwo.app.core.view.hex.AppHexView;
 import io.github.greyp9.arwo.app.core.view.zip.AppZipView;
 import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
 import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
@@ -59,7 +60,7 @@ public class SFTPFileView extends SFTPView {
         final boolean isModeZIP = "viewZIP".equals(mode);
         final boolean isModeTGZ = "viewTGZ".equals(mode);
         // resource interpret (binary, view hex representation)
-        //final boolean isHex = "viewHex".equals(mode);
+        final boolean isHex = "viewHex".equals(mode);
         // dispose of request
         HttpResponse httpResponse;
         if (isModeEdit) {
@@ -70,6 +71,9 @@ public class SFTPFileView extends SFTPView {
         } else if (isModeTGZ) {
             final AppTGZView appTGZView = new AppTGZView(httpRequest, userState);
             httpResponse = appTGZView.addContentTo(html, metaFile, bundle);
+        } else if (isHex) {
+            final AppHexView appHexView = new AppHexView(httpRequest, userState);
+            httpResponse = appHexView.addContentTo(html, metaFile);
         } else {
             httpResponse = doGetFile(metaFile, encoding, isModeGZ);
         }

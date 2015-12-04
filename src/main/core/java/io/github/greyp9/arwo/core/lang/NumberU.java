@@ -43,4 +43,9 @@ public final class NumberU {
     public static String toHex(final int value) {
         return String.format("%08x", value);
     }
+
+    public static class Const {
+        public static final int RADIX_OCTAL = 8;
+        public static final int RADIX_HEX = 16;
+    }
 }
