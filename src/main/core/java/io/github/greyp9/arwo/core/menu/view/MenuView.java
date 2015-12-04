@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.menu.view;
 
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.app.AppTitle;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
@@ -35,6 +36,12 @@ public class MenuView {
         final Element form = ElementU.addElement(divMenus, Html.FORM, null, attrs);
         final Element divForm = ElementU.addElement(form, Html.DIV);
         addMenu(divForm, menuItem, home, true);
+    }
+
+    public final void addTitle(final Element html, final AppTitle title) throws IOException {
+        final Element div = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, "page-title"));
+        ElementU.addElement(div, Html.IMG, null, NTV.create(Html.SRC, "${CONTEXT}/ico/app-blue.ico", Html.ALT, ""));
+        ElementU.addElement(div, Html.SPAN, title.getText());
     }
 
     private void addMenu(final Element html, final MenuItem item, final boolean home, final boolean top) {

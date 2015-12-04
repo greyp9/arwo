@@ -9,6 +9,7 @@ import io.github.greyp9.arwo.core.value.Value;
 
 public class XedMenuFactory implements MenuFactory {
 
+    @Override
     public final MenuItem create(final String id, final String type) {
         MenuItem menuItem;
         final String key = Value.join(Http.Token.SLASH, id, type);
@@ -21,8 +22,8 @@ public class XedMenuFactory implements MenuFactory {
     }
 
     private static MenuItem createMenuBarXed(final String key) {
-        final MenuItem[] menuItems = new MenuItem[]{
-                createMenuDocument(key), createMenuClipboard(key), createMenuView(key)};
+        final MenuItem[] menuItems = new MenuItem[] {
+                createMenuDocument(key), createMenuClipboard(key), createMenuView(key) };
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
     }
 

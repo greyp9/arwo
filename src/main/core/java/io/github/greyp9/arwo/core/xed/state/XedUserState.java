@@ -113,16 +113,16 @@ public class XedUserState {
     }
 
     public final String applyPost(
-            final SubmitToken token, final NameTypeValues nameTypeValues, final XedRequest request) throws IOException {
+            final SubmitToken token, final NameTypeValues httpArguments, final XedRequest request) throws IOException {
         // from HTTP POST form arguments...
         String location = request.getHttpRequest().getURI();
         final String action = token.getAction();
-        //final String object = token.getObject();
+        final String object = token.getObject();
         final String message = request.getBundle().getString("alert.action.not.implemented");
         if (App.Action.UPDATE_LOCALE.equals(action)) {
-            applyLocale(nameTypeValues);
+            applyLocale(httpArguments);
         } else if (App.Action.MENU.equals(action)) {
-            menuSystem.toggle(token.getObject());
+            menuSystem.toggle(object);
         } else if (App.Action.LOCALE.equals(action)) {
             PropertiesU.toggleBoolean(properties, action);
         } else if (App.Action.COMMIT.equals(action)) {

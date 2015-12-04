@@ -4,6 +4,26 @@ background-color: Background;
 }
 
 /* START HEADER */
+
+div.page-title
+{
+border: solid thin ThreeDShadow;
+background-color: Highlight;
+color: HighlightText;
+font-family: sans-serif;
+font-size: larger;
+font-weight: bold;
+margin: 0 0 1em 0;
+padding: 0.4em;
+}
+
+div.page-title img
+{
+height: 24px;
+width: 24px;
+vertical-align: middle;
+}
+
 /* END HEADER */
 
 /* START COMMAND */

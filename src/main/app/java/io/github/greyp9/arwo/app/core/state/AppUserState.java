@@ -1,12 +1,20 @@
 package io.github.greyp9.arwo.app.core.state;
 
+import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppFolder;
+import io.github.greyp9.arwo.core.app.AppText;
+import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
+import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.connect.ConnectionCache;
 import io.github.greyp9.arwo.core.date.Interval;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.locus.Locus;
+import io.github.greyp9.arwo.core.menu.MenuSystem;
 import io.github.greyp9.arwo.core.page.Page;
+import io.github.greyp9.arwo.core.resource.PathU;
+import io.github.greyp9.arwo.core.resource.Pather;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.table.state.ViewStates;
 import io.github.greyp9.arwo.core.text.TextFilters;
@@ -16,6 +24,8 @@ import io.github.greyp9.arwo.core.xed.state.XedUserState;
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
 import java.util.Properties;
 
@@ -29,6 +39,8 @@ public class AppUserState {
     private final Locus locus;
     private final Alerts alerts;
     private final XedUserState documentState;
+    // menu system
+    private final MenuSystem menuSystem;
     // connection entries
     private final ConnectionCache cacheSSH;
     // binary viewer state (hex rendering)
@@ -70,6 +82,10 @@ public class AppUserState {
         return documentState;
     }
 
+    public final MenuSystem getMenuSystem() {
+        return menuSystem;
+    }
+
     public final ConnectionCache getCacheSSH() {
         return cacheSSH;
     }
@@ -93,15 +109,36 @@ public class AppUserState {
         this.locus = locus;
         this.alerts = new Alerts();
         this.documentState = new XedUserState(webappRoot, principal, submitID, locus, alerts);
+        this.menuSystem = new MenuSystem(submitID, new AppMenuFactory());
         this.cacheSSH = new ConnectionCache("ssh", alerts);
         this.pageViewHex = Page.Factory.initPage(Const.PAGE_HEX_VIEW, new Properties());
     }
 
     public final String applyPost(final SubmitToken token, final NameTypeValues httpArguments,
                                   final ServletHttpRequest httpRequest) throws IOException {
-        token.getClass();
         httpArguments.getClass();
-        return httpRequest.getURI();
+        // from HTTP POST form arguments...
+        String location = httpRequest.getURI();
+        final String action = token.getAction();
+        final String object = token.getObject();
+        final Collection<String> views = Arrays.asList("view", "viewGZ", "viewZIP", "viewTGZ", "viewHex");
+        final Bundle bundle = new Bundle(new AppText(locus.getLocale()).getBundleCore());
+        final String message = bundle.getString("alert.action.not.implemented");
+        if (action == null) {
+            getClass();
+        } else if (App.Action.MENU.equals(action)) {
+            menuSystem.toggle(object);
+        } else if (views.contains(action)) {
+            location = switchView(httpRequest, action);
+        } else {
+            alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
+        }
+        return location;
+    }
+
+    private String switchView(final ServletHttpRequest httpRequest, final String action) {
+        final String pathInfoNewView = new Pather(httpRequest.getPathInfo()).getRight();
+        return httpRequest.getBaseURI() + PathU.toPath("", action) + pathInfoNewView;
     }
 
     private static class Const {

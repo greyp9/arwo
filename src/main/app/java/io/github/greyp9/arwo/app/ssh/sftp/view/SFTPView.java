@@ -6,11 +6,14 @@ import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
 import io.github.greyp9.arwo.core.app.AppHtml;
 import io.github.greyp9.arwo.core.app.AppTitle;
+import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
+import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
+import io.github.greyp9.arwo.core.menu.view.MenuView;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
@@ -29,6 +32,7 @@ public abstract class SFTPView {
     private final SFTPRequest request;
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
+    private final Bundle bundle;
     private final SSHConnectionResource resource;
 
     public final SFTPRequest getRequest() {
@@ -47,6 +51,7 @@ public abstract class SFTPView {
         this.request = request;
         this.httpRequest = request.getHttpRequest();
         this.userState = userState;
+        this.bundle = request.getBundle();
         this.resource = resource;
     }
 
@@ -55,8 +60,10 @@ public abstract class SFTPView {
         final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(Const.HTML)));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
         // context-specific content
-        //new MenuViewApp(httpRequest, userState).doMenu(body, AppMenuFactory.SFTP);
-        //new MenuViewApp(httpRequest, userState).doTitle(body, title);
+        final AppTitle title = AppTitle.Factory.getResourceLabel(httpRequest, bundle, request.getTitlePath());
+        final MenuView menuView = new MenuView(request.getBundle(), httpRequest, userState.getMenuSystem());
+        menuView.addContentTo(body, AppMenuFactory.Const.FILESYSTEM, true);
+        menuView.addTitle(body, title);
         //if (userState.isToggleProperties()) {
         //    new AppPropertiesView(PROPERTIES_TABLE_ID, userState).addContent(body, null, getFileProperties());
         //}
@@ -67,8 +74,6 @@ public abstract class SFTPView {
             // touch ups
             new AlertsView(userState.getAlerts(), userState.getLocus()).addContentTo(body);
             new StatusBarView(httpRequest, userState.getLocus()).addContentTo(body);
-            final AppTitle title = AppTitle.Factory.getResourceLabel(
-                    request.getHttpRequest(), request.getBundle(), request.getTitlePath());
             new AppHtml(httpRequest).fixup(html, title);
             // package into response
             final byte[] entity = DocumentU.toXHtml(html);
