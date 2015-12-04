@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.app.core.servlet.ServletU;
 import io.github.greyp9.arwo.app.core.state.AppState;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.ssh.sftp.handler.SFTPHandlerGet;
+import io.github.greyp9.arwo.app.ssh.sftp.handler.SFTPHandlerPost;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.gz.HttpResponseGZipU;
@@ -52,5 +53,20 @@ public class SFTPServlet extends javax.servlet.http.HttpServlet {
         // send response
         final HttpResponse httpResponseGZ = HttpResponseGZipU.toHttpResponseGZip(httpRequest, httpResponse);
         ServletU.write(httpResponseGZ, response);
+    }
+
+    @Override
+    protected final void doPost(final HttpServletRequest request, final HttpServletResponse response)
+            throws ServletException, IOException {
+        // get request context
+        final ServletHttpRequest httpRequest = ServletU.read(request);
+        // process request
+        AppUserState userState;
+        synchronized (this) {
+            userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
+        }
+        final HttpResponse httpResponse = new SFTPHandlerPost(httpRequest, userState).doPost();
+        // send response
+        ServletU.write(httpResponse, response);
     }
 }

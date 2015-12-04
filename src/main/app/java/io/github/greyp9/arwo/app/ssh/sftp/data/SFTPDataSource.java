@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.app.ssh.sftp.data;
 import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.SCPClient;
 import ch.ethz.ssh2.SCPInputStream;
+import ch.ethz.ssh2.SCPOutputStream;
 import ch.ethz.ssh2.SFTPv3Client;
 import ch.ethz.ssh2.SFTPv3DirectoryEntry;
 import ch.ethz.ssh2.SFTPv3FileAttributes;
@@ -112,15 +113,34 @@ public class SFTPDataSource {
         return new MetaFile(metaData, new ByteArrayInputStream(bytes));
     }
 
-    private static String normalize(final String path) {
-        return path.replace(" ", "\\ ").replace("(", "\\(").replace(")", "\\)");  // lib quirk
-    }
-
     private static byte[] read(final SCPInputStream is) throws IOException {
         try {
             return StreamU.read(is);
         } finally {
             is.close();
         }
+    }
+
+    @SuppressWarnings("PMD.CloseResource")
+    public final void write(final byte[] bytes, final String folder, final String filename) throws IOException {
+        try {
+            final Connection connection = resource.getSSHConnection().getConnection();
+            final SCPClient client = connection.createSCPClient();
+            write(bytes, client.put(normalize(filename), bytes.length, normalize(folder), Const.UPLOAD_FILE_MODE));
+        } catch (IOException e) {
+            new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
+        }
+    }
+
+    private static void write(final byte[] bytes, final SCPOutputStream os) throws IOException {
+        StreamU.write(os, bytes);
+    }
+
+    private static String normalize(final String path) {
+        return path.replace(" ", "\\ ").replace("(", "\\(").replace(")", "\\)");  // lib quirk
+    }
+
+    private static class Const {
+        private static final String UPLOAD_FILE_MODE = "0600";
     }
 }

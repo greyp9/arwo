@@ -4,10 +4,13 @@ import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.app.AppFolder;
 import io.github.greyp9.arwo.core.connect.ConnectionCache;
 import io.github.greyp9.arwo.core.date.Interval;
+import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.page.Page;
+import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.table.state.ViewStates;
 import io.github.greyp9.arwo.core.text.TextFilters;
+import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.xed.state.XedUserState;
 
 import java.io.File;
@@ -92,6 +95,13 @@ public class AppUserState {
         this.documentState = new XedUserState(webappRoot, principal, submitID, locus, alerts);
         this.cacheSSH = new ConnectionCache("ssh", alerts);
         this.pageViewHex = Page.Factory.initPage(Const.PAGE_HEX_VIEW, new Properties());
+    }
+
+    public final String applyPost(final SubmitToken token, final NameTypeValues httpArguments,
+                                  final ServletHttpRequest httpRequest) throws IOException {
+        token.getClass();
+        httpArguments.getClass();
+        return httpRequest.getURI();
     }
 
     private static class Const {

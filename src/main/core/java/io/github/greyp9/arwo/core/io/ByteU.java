@@ -33,4 +33,9 @@ public final class ByteU {
         os.write(right, 0, right.length);
         return os.toByteArray();
     }
+
+    public static void shiftLeft(final byte[] match, final byte data) {
+        SystemU.arraycopy(match, 1, match, 0, match.length - 1);
+        match[match.length - 1] = data;
+    }
 }

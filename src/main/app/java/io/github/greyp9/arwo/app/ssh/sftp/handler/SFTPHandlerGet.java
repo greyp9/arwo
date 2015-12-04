@@ -15,17 +15,18 @@ import io.github.greyp9.arwo.core.value.Value;
 import java.io.IOException;
 
 public class SFTPHandlerGet {
+    private final SFTPRequest request;
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
 
     public SFTPHandlerGet(final ServletHttpRequest httpRequest, final AppUserState userState) {
+        this.request = new SFTPRequest(httpRequest, userState);
         this.httpRequest = httpRequest;
         this.userState = userState;
     }
 
     public final HttpResponse doGet() throws IOException {
         HttpResponse httpResponse;
-        final SFTPRequest request = new SFTPRequest(httpRequest, userState);
         final String baseURI = httpRequest.getBaseURI();
         final String pathInfo = httpRequest.getPathInfo();
         if (pathInfo == null) {
@@ -35,12 +36,12 @@ public class SFTPHandlerGet {
         } else if (Value.isEmpty(request.getServer())) {
             httpResponse = new SSHView(request.getHttpRequest(), userState).doGetHtmlInventory(Const.MODE_DEFAULT);
         } else {
-            httpResponse = doGet2(request);
+            httpResponse = doGet2();
         }
         return httpResponse;
     }
 
-    private HttpResponse doGet2(final SFTPRequest request) throws IOException {
+    private HttpResponse doGet2() throws IOException {
         HttpResponse httpResponse;
         final SSHConnectionFactory factory = new SSHConnectionFactory(httpRequest, userState);
         final SSHConnectionResource resource = (SSHConnectionResource)

@@ -8,7 +8,9 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.net.URL;
+import java.util.Arrays;
 
 @SuppressWarnings("PMD.TooManyMethods")
 public final class StreamU {
@@ -101,6 +103,31 @@ public final class StreamU {
             os.write(bytes);
         } finally {
             os.close();
+        }
+    }
+
+    public static void write(final OutputStream outputStream, final byte[] bytes) throws IOException {
+        final BufferedOutputStream os = new BufferedOutputStream(outputStream);
+        try {
+            os.write(bytes);
+        } finally {
+            os.close();
+        }
+    }
+
+    @SuppressWarnings("PMD.AssignmentInOperand")
+    public static void readUntil(final InputStream is, final OutputStream os, final byte[] until) throws IOException {
+        int count = 0;
+        if ((until != null) && (until.length > 0)) {
+            final byte[] match = new byte[until.length];
+            int data;
+            while ((data = is.read()) >= 0) {
+                os.write(data);
+                ByteU.shiftLeft(match, (byte) data);
+                if ((++count >= until.length) && (Arrays.equals(until, match))) {
+                    break;
+                }
+            }
         }
     }
 }
