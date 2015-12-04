@@ -12,6 +12,7 @@
     <target name='i18n'>
         <property name='ant.i18n.dir' value='${project.dir}/src/test/app/resources/ant/pseudo-i18n'/>
         <ant antfile='${ant.i18n.dir}/build.i18n.xml' dir='${ant.i18n.dir}' target='i18n'/>
+        <ant antfile='${ant.i18n.dir}/build.i18n.xml' dir='${ant.i18n.dir}' target='i18n-scan'/>
     </target>
 
     <target name='junit'>

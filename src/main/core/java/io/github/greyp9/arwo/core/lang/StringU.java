@@ -7,6 +7,16 @@ public final class StringU {
     private StringU() {
     }
 
+    public static int occurs(final String value, final char toFind) {
+        int occurs = 0;
+        for (final char c : value.toCharArray()) {
+            if (c == toFind) {
+                ++occurs;
+            }
+        }
+        return occurs;
+    }
+
     public static String create(final int size, final char character) {
         final char[] characters = new char[size];
         Arrays.fill(characters, character);

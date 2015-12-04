@@ -38,6 +38,18 @@
         </java>
     </target>
 
+    <target name='i18n-scan' depends='compile'>
+        <java classname='io.github.greyp9.arwo.core.i18n.ScanI18n' classpathref='classpath-i18n' fork='true'>
+            <arg value='${project.dir}/src/main/core/java'/>
+        </java>
+        <java classname='io.github.greyp9.arwo.core.i18n.ScanI18n' classpathref='classpath-i18n' fork='true'>
+            <arg value='${project.dir}/src/main/lib/java'/>
+        </java>
+        <java classname='io.github.greyp9.arwo.core.i18n.ScanI18n' classpathref='classpath-i18n' fork='true'>
+            <arg value='${project.dir}/src/main/app/java'/>
+        </java>
+    </target>
+
     <target name='main' depends='i18n' description='Use -p to view help information.'/>
 
 </project>
