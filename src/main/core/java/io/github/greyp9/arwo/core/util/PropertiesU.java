@@ -26,9 +26,12 @@ public final class PropertiesU {
         return properties;
     }
 
+    public static boolean isBoolean(final Properties properties, final String key) {
+        return Boolean.parseBoolean(properties.getProperty(key));
+    }
+
     public static void toggleBoolean(final Properties properties, final String key) {
-        final boolean value = Boolean.parseBoolean(properties.getProperty(key));
-        properties.setProperty(key, Boolean.toString(!value));
+        properties.setProperty(key, Boolean.toString(!isBoolean(properties, key)));
     }
 
     public static void setProperty(final Properties properties, final Object key, final Object value) {

@@ -1,13 +1,17 @@
 package io.github.greyp9.arwo.app.ssh.sftp.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.core.view.props.AppPropertiesView;
 import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
 import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
+import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPDataSource;
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppHtml;
 import io.github.greyp9.arwo.core.app.AppTitle;
 import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
@@ -15,6 +19,7 @@ import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.menu.view.MenuView;
 import io.github.greyp9.arwo.core.res.ResourceU;
+import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.view.StatusBarView;
@@ -27,7 +32,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 
-@SuppressWarnings("PMD.AbstractNaming")
+@SuppressWarnings({ "PMD.AbstractNaming", "PMD.ExcessiveImports" })
 public abstract class SFTPView {
     private final SFTPRequest request;
     private final ServletHttpRequest httpRequest;
@@ -64,9 +69,6 @@ public abstract class SFTPView {
         final MenuView menuView = new MenuView(request.getBundle(), httpRequest, userState.getMenuSystem());
         menuView.addContentTo(body, AppMenuFactory.Const.FILESYSTEM, true);
         menuView.addTitle(body, title);
-        //if (userState.isToggleProperties()) {
-        //    new AppPropertiesView(PROPERTIES_TABLE_ID, userState).addContent(body, null, getFileProperties());
-        //}
         HttpResponse httpResponse = addContentTo(body);
         //new TextFilterView(userState.getLocus().getLocale(), userState.getSubmitID()).
         //        addUI(userState.isToggleTextFilterForm(), body);
@@ -83,6 +85,18 @@ public abstract class SFTPView {
             httpResponse = new HttpResponse(HttpURLConnection.HTTP_OK, headers, new ByteArrayInputStream(entity));
         }
         return httpResponse;
+    }
+
+    protected final void addFileProperties(final Element html, final MetaFile metaFile) throws IOException {
+        if (PropertiesU.isBoolean(userState.getProperties(), App.Action.PROPERTIES)) {
+            final AppPropertiesView view = new AppPropertiesView("sftpPropertiesType", userState);
+            view.addContentTo(html, metaFile, bundle, getFileProperties());
+        }
+    }
+
+    private NameTypeValues getFileProperties() throws IOException {
+        final SFTPDataSource source = new SFTPDataSource(request, resource.getSSHConnection());
+        return source.properties(request.getPath());
     }
 
     protected abstract HttpResponse addContentTo(Element html) throws IOException;

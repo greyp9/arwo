@@ -19,6 +19,7 @@ import io.github.greyp9.arwo.core.resource.Pather;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.table.state.ViewStates;
 import io.github.greyp9.arwo.core.text.TextFilters;
+import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.xed.state.XedUserState;
 
@@ -46,6 +47,8 @@ public class AppUserState {
     private final ResourceCache cache;
     // connection entries
     private final ConnectionCache cacheSSH;
+    // properties
+    private final Properties properties;
     // binary viewer state (hex rendering)
     private Page pageViewHex;
 
@@ -97,6 +100,10 @@ public class AppUserState {
         return cacheSSH;
     }
 
+    public final Properties getProperties() {
+        return properties;
+    }
+
     public final Page getPageViewHex() {
         return pageViewHex;
     }
@@ -119,6 +126,7 @@ public class AppUserState {
         this.menuSystem = new MenuSystem(submitID, new AppMenuFactory());
         this.cache = new ResourceCache();
         this.cacheSSH = new ConnectionCache("ssh", alerts);
+        this.properties = new Properties();
         this.pageViewHex = Page.Factory.initPage(Const.PAGE_HEX_VIEW, new Properties());
     }
 
@@ -138,6 +146,8 @@ public class AppUserState {
             getClass();
         } else if (App.Action.MENU.equals(action)) {
             menuSystem.toggle(object);
+        } else if (App.Action.TOGGLE.equals(action)) {
+            PropertiesU.toggleBoolean(properties, object);
         } else if (views.contains(action)) {
             location = switchView(httpRequest, action);
         } else {

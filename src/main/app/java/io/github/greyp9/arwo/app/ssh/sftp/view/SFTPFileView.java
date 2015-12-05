@@ -9,6 +9,7 @@ import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
 import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPDataSource;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolder;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
@@ -24,6 +25,7 @@ import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
 import io.github.greyp9.arwo.core.table.state.ViewState;
 import io.github.greyp9.arwo.core.text.TextFilters;
 import io.github.greyp9.arwo.core.text.TextLineFilter;
+import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import org.w3c.dom.Element;
@@ -54,7 +56,7 @@ public class SFTPFileView extends SFTPView {
         final RowSetMetaData metaData = SFTPFolder.createMetaData();
         final Locus locus = userState.getLocus();
         final ViewState viewState = userState.getViewStates().getViewState(metaData, request.getBundle(), locus);
-        final MetaFile metaFile = doGetFileBytes(viewState);
+        final MetaFile metaFile = getFileBytes(viewState);
         // resource interpret (UTF-8 versus Unicode)
         final Collection<String> utf16Modes = Arrays.asList("view16", "edit16");
         final boolean isUTF16 = utf16Modes.contains(mode);
@@ -68,10 +70,15 @@ public class SFTPFileView extends SFTPView {
         final boolean isModeTGZ = "viewTGZ".equals(mode);
         // resource interpret (binary, view hex representation)
         final boolean isHex = "viewHex".equals(mode);
+        // properties of cursor resource
+        final boolean isProperties = PropertiesU.isBoolean(userState.getProperties(), App.Action.PROPERTIES);
+        addFileProperties(html, metaFile);
         // dispose of request
         HttpResponse httpResponse;
         if (isModeEdit) {
             httpResponse = new AppFileEditView(httpRequest, userState).addContentTo(html, metaFile, encoding);
+        } else if (isProperties) {
+            httpResponse = null;
         } else if (isModeZIP) {
             httpResponse = new AppZipView(httpRequest, userState).addContentTo(html, metaFile, bundle);
         } else if (isModeTGZ) {
@@ -84,7 +91,7 @@ public class SFTPFileView extends SFTPView {
         return httpResponse;
     }
 
-    private MetaFile doGetFileBytes(final ViewState viewState) throws IOException {
+    private MetaFile getFileBytes(final ViewState viewState) throws IOException {
         MetaFile metaFile;
         final SFTPRequest request = getRequest();
         final SSHConnectionResource resource = getResource();

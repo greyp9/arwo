@@ -15,6 +15,8 @@ import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.file.meta.FileMetaData;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.io.StreamU;
+import io.github.greyp9.arwo.core.value.NameTypeValue;
+import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.lib.ganymed.ssh.core.SFTP;
 
 import java.io.ByteArrayInputStream;
@@ -23,6 +25,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+@SuppressWarnings("PMD.TooManyMethods")
 public class SFTPDataSource {
     private final SFTPRequest request;
     private final SSHConnection sshConnection;
@@ -98,6 +101,16 @@ public class SFTPDataSource {
                 pathIt = client.readLink(pathIt);
             }
         }
+    }
+
+    public final NameTypeValues properties(final String path) throws IOException {
+        final NameTypeValues nameTypeValues = new NameTypeValues();
+        final SFTPv3FileAttributes attributes = lstat(path);
+        nameTypeValues.add(new NameTypeValue("attributes", null, attributes.getOctalPermissions()));
+        nameTypeValues.add(new NameTypeValue("length", null, Long.toString(attributes.size)));
+        nameTypeValues.add(new NameTypeValue("mtime", null, DateU.fromSeconds(attributes.mtime)));
+        nameTypeValues.add(new NameTypeValue("atime", null, DateU.fromSeconds(attributes.atime)));
+        return nameTypeValues;
     }
 
     @SuppressWarnings("PMD.CloseResource")

@@ -32,6 +32,8 @@ public class SFTPSymlinkView extends SFTPView {
     protected final HttpResponse addContentTo(final Element html) throws IOException {
         final SFTPRequest request = getRequest();
         final AppUserState userState = getUserState();
+        // properties of cursor resource
+        addFileProperties(html, null);
         final RowSetMetaData metaData = SFTPFolder.createMetaData();
         final Locus locus = getUserState().getLocus();
         final ViewState viewState = userState.getViewStates().getViewState(metaData, request.getBundle(), locus);
