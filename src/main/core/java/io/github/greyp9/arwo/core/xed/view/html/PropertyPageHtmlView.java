@@ -37,7 +37,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Properties;
 
-@SuppressWarnings({"PMD.ExcessiveImports", "PMD.TooManyMethods"})
+@SuppressWarnings({ "PMD.ExcessiveImports", "PMD.TooManyMethods" })
 public class PropertyPageHtmlView {
     private final XedPropertyPageView view;
     private final XsdBundle xsdBundle;
@@ -89,8 +89,12 @@ public class PropertyPageHtmlView {
 
     private void addViewInstance(final ViewInstance viewInstance, final Element tbody) {
         final Element tr = ElementU.addElement(tbody, Html.TR);
-        final String nameI18n = xsdBundle.getLabel(view.getCursor().getTypeInstance(), viewInstance.getTypeInstance());
-        ElementU.addElement(tr, Html.TD, nameI18n, NameTypeValuesU.create(Html.CLASS, "attr-name"));
+        final boolean hideName = Boolean.parseBoolean(viewInstance.getTypeInstance().getDirective("hideName"));
+        if (!hideName) {
+            final String nameI18n = xsdBundle.getLabel(
+                    view.getCursor().getTypeInstance(), viewInstance.getTypeInstance());
+            ElementU.addElement(tr, Html.TD, nameI18n, NameTypeValuesU.create(Html.CLASS, "attr-name"));
+        }
         addViewInstanceValue(viewInstance, tr);
     }
 
@@ -143,15 +147,9 @@ public class PropertyPageHtmlView {
 
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private void addActions(final Element tbody) {
-        final String qname = view.getCursor().getTypeInstance().getQName().toString();
-        final String uri = view.getCursor().getURI();
-        final String submitID = request.getState().getSubmitID();
-        final Bundle bundle = view.getCursor().getXed().getBundle();
-        // form submit buttons
         final Properties properties = request.getState().getProperties();
         final boolean isExpanded = Boolean.parseBoolean(properties.getProperty("buttons"));
-        final ActionFactory factory = new ActionFactory(submitID, bundle, App.Target.DOCUMENT, qname, uri);
-        final ActionButtons buttons = factory.create(null, getCursorActions(isExpanded, view));
+        final ActionButtons buttons = ((view.getButtons() == null) ? getActionButtons(isExpanded) : view.getButtons());
         final Element tr = ElementU.addElement(tbody, Html.TR, null, NameTypeValuesU.create(Html.CLASS, Const.FOOTER));
         final Element th = ElementU.addElement(tr, Html.TD, null, NameTypeValuesU.create(
                 Html.COLSPAN, Integer.toString(2), Html.CLASS, Const.DIALOG));
@@ -160,10 +158,21 @@ public class PropertyPageHtmlView {
                     button.getSubject(), button.getAction(), button.getObject(), button.getObject2());
             HtmlU.addButton(th, button.getLabel(), buttons.getSubmitID(), tokenAction.toString(), null, null);
         }
-        final Element span = ElementU.addElement(th, Html.SPAN);  // so buttons and expand/collapse on one line
-        final String buttonToggle = (isExpanded ? UTF16.LIST_COLLAPSE : UTF16.LIST_EXPAND);
-        ElementU.addElement(span, Html.A, buttonToggle, NameTypeValuesU.create(
-                Html.HREF, "?toggle=buttons", Html.CLASS, "trailing"));
+        if (buttons.isExpander()) {
+            final Element span = ElementU.addElement(th, Html.SPAN);  // so buttons and expand/collapse on one line
+            final String buttonToggle = (isExpanded ? UTF16.LIST_COLLAPSE : UTF16.LIST_EXPAND);
+            ElementU.addElement(span, Html.A, buttonToggle, NameTypeValuesU.create(
+                    Html.HREF, "?toggle=buttons", Html.CLASS, "trailing"));
+        }
+    }
+
+    private ActionButtons getActionButtons(final boolean isExpanded) {
+        final String qname = view.getCursor().getTypeInstance().getQName().toString();
+        final String uri = view.getCursor().getURI();
+        final String submitID = request.getState().getSubmitID();
+        final Bundle bundle = view.getCursor().getXed().getBundle();
+        final ActionFactory factory = new ActionFactory(submitID, bundle, App.Target.DOCUMENT, qname, uri);
+        return factory.create(null, true, getCursorActions(isExpanded, view));
     }
 
     private static Collection<String> getCursorActions(final boolean isExpanded, final XedPropertyPageView view) {

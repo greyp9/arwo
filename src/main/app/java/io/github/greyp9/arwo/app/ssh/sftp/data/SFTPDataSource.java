@@ -7,7 +7,7 @@ import ch.ethz.ssh2.SCPOutputStream;
 import ch.ethz.ssh2.SFTPv3Client;
 import ch.ethz.ssh2.SFTPv3DirectoryEntry;
 import ch.ethz.ssh2.SFTPv3FileAttributes;
-import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
+import io.github.greyp9.arwo.app.ssh.connection.SSHConnection;
 import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.model.ExceptionModel;
@@ -25,18 +25,19 @@ import java.util.List;
 
 public class SFTPDataSource {
     private final SFTPRequest request;
-    private final SSHConnectionResource resource;
+    private final SSHConnection sshConnection;
 
-    public SFTPDataSource(final SFTPRequest request, final SSHConnectionResource resource) {
+    public SFTPDataSource(final SFTPRequest request, final SSHConnection sshConnection) {
         this.request = request;
-        this.resource = resource;
+        this.sshConnection = sshConnection;
     }
 
     public final SFTPv3FileAttributes lstat(final String path) throws IOException {
         SFTPv3FileAttributes attributes = null;
-        final SFTPv3Client client = new SFTPv3Client(resource.getSSHConnection().getConnection());
+        final SFTPv3Client client = new SFTPv3Client(sshConnection.getConnection());
         try {
             attributes = client.lstat(path);
+            sshConnection.update(request.getHttpRequest().getDate());
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
         } finally {
@@ -48,9 +49,10 @@ public class SFTPDataSource {
     @SuppressWarnings("PMD.ShortMethodName")
     public final Collection<SFTPv3DirectoryEntry> ls(final String path) throws IOException {
         final Collection<SFTPv3DirectoryEntry> directoryEntries = new ArrayList<SFTPv3DirectoryEntry>();
-        final SFTPv3Client client = new SFTPv3Client(resource.getSSHConnection().getConnection());
+        final SFTPv3Client client = new SFTPv3Client(sshConnection.getConnection());
         try {
             ls2(directoryEntries, client.ls(path));
+            sshConnection.update(request.getHttpRequest().getDate());
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
         } finally {
@@ -68,9 +70,10 @@ public class SFTPDataSource {
 
     public final Collection<SFTPv3DirectoryEntry> lsSymlink(final String path) throws IOException {
         final Collection<SFTPv3DirectoryEntry> directoryEntries = new ArrayList<SFTPv3DirectoryEntry>();
-        final SFTPv3Client client = new SFTPv3Client(resource.getSSHConnection().getConnection());
+        final SFTPv3Client client = new SFTPv3Client(sshConnection.getConnection());
         try {
             lsSymlink2(directoryEntries, path, client);
+            sshConnection.update(request.getHttpRequest().getDate());
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
         } finally {
@@ -101,11 +104,12 @@ public class SFTPDataSource {
     public final MetaFile read(final String path) throws IOException {
         long lastModified = 0L;
         byte[] bytes = new byte[0];
-        final Connection connection = resource.getSSHConnection().getConnection();
+        final Connection connection = sshConnection.getConnection();
         try {
             lastModified = DateU.fromSeconds(lstat(path).mtime).getTime();
             final SCPClient client = connection.createSCPClient();
             bytes = read(client.get(normalize(path)));
+            sshConnection.update(request.getHttpRequest().getDate());
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
         }
@@ -124,9 +128,10 @@ public class SFTPDataSource {
     @SuppressWarnings("PMD.CloseResource")
     public final void write(final byte[] bytes, final String folder, final String filename) throws IOException {
         try {
-            final Connection connection = resource.getSSHConnection().getConnection();
+            final Connection connection = sshConnection.getConnection();
             final SCPClient client = connection.createSCPClient();
             write(bytes, client.put(normalize(filename), bytes.length, normalize(folder), Const.UPLOAD_FILE_MODE));
+            sshConnection.update(request.getHttpRequest().getDate());
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
         }

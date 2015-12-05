@@ -46,4 +46,12 @@
         </xsd:sequence>
     </xsd:complexType>
 
+    <xsd:element name='file' type='action:fileType'/>
+
+    <xsd:complexType name='fileType'>
+        <xsd:sequence>
+            <xsd:element name='file' type='xsd:string'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
 </xsd:schema>

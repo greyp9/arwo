@@ -41,7 +41,7 @@ public class XedActionCommit extends XedAction {
                     submitID, bundle, App.Target.SESSION, App.Action.COMMIT, null);
             final Collection<String> actions = new ArrayList<String>();
             actions.add(App.Action.COMMIT);
-            final ActionButtons buttons = factory.create(App.Action.COMMIT, actions);
+            final ActionButtons buttons = factory.create(App.Action.COMMIT, false, actions);
             new PropertyStripHtmlView(pageView, buttons).addContentDiv(html);
         }
     }

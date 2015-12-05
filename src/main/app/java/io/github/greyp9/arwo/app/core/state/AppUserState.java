@@ -121,7 +121,9 @@ public class AppUserState {
         String location = httpRequest.getURI();
         final String action = token.getAction();
         final String object = token.getObject();
-        final Collection<String> views = Arrays.asList("view", "viewGZ", "viewZIP", "viewTGZ", "viewHex");
+        final Collection<String> views = Arrays.asList(
+                "view", "view16", "edit", "edit16",
+                "viewGZ", "viewZIP", "viewTGZ", "viewHex");
         final Bundle bundle = new Bundle(new AppText(locus.getLocale()).getBundleCore());
         final String message = bundle.getString("alert.action.not.implemented");
         if (action == null) {

@@ -52,13 +52,13 @@ public class SFTPFolderView extends SFTPView {
         //String uri = request.getHttpRequest().getURI();
         // if disconnected, resource will only be fetched if no cached copy is available
         if (viewState.isConnected()) {
-            final SFTPDataSource source = new SFTPDataSource(request, resource);
+            final SFTPDataSource source = new SFTPDataSource(request, resource.getSSHConnection());
             final Collection<SFTPv3DirectoryEntry> directoryEntries = source.ls(request.getPath());
             rowSet = new SFTPFolder(directoryEntries, metaData, true).getRowSet();
             //} else if (cache.containsRowSet(uri)) {
             //    rowSet = cache.getRowSet(uri);
         } else {
-            final SFTPDataSource source = new SFTPDataSource(request, resource);
+            final SFTPDataSource source = new SFTPDataSource(request, resource.getSSHConnection());
             final Collection<SFTPv3DirectoryEntry> directoryEntries = source.ls(request.getPath());
             rowSet = new SFTPFolder(directoryEntries, metaData, true).getRowSet();
             //cache.putRowSet(uri, rowSet);

@@ -78,7 +78,7 @@ public class SFTPHandlerPostMultipart {
                 "SFTPHandlerPostMultipart.file.source", filename)));
         // put data to remote
         final FileX file = new FileX(request.getPath());
-        final SFTPDataSource source = new SFTPDataSource(request, resource);
+        final SFTPDataSource source = new SFTPDataSource(request, resource.getSSHConnection());
         source.write(bytes, file.getFolder(), filename);
         // info alert
         final String hash = HexCodec.encode(HashU.md5(bytes));

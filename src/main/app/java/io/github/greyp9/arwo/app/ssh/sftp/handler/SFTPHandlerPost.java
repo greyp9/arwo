@@ -1,6 +1,10 @@
 package io.github.greyp9.arwo.app.ssh.sftp.handler;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.ssh.connection.SSHConnection;
+import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionFactory;
+import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
+import io.github.greyp9.arwo.app.ssh.sftp.action.SFTPUpdateFile;
 import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
@@ -73,16 +77,28 @@ public class SFTPHandlerPost {
     }
 
     private String applySubmit(
-            final SubmitToken token, final NameTypeValues nameTypeValues, final String locationIn) throws IOException {
+            final SubmitToken token, final NameTypeValues httpArguments, final String locationIn) throws IOException {
         String location = locationIn;
         final String subject = token.getSubject();
         if (App.Target.USER_STATE.equals(subject)) {
-            location = userState.applyPost(token, nameTypeValues, httpRequest);
+            location = userState.applyPost(token, httpArguments, httpRequest);
         } else if (App.Target.VIEW_STATE.equals(subject)) {
-            userState.getViewStates().apply(token, nameTypeValues, request.getBundle(), request.getAlerts());
+            userState.getViewStates().apply(token, httpArguments, request.getBundle(), request.getAlerts());
         } else if (App.Target.SESSION.equals(subject)) {
             getClass();
-            //location = applySession(token, nameValues, location);
+            location = applySession(token, httpArguments, location);
+        }
+        return location;
+    }
+
+    private String applySession(
+            final SubmitToken token, final NameTypeValues httpArguments, final String location) throws IOException {
+        final SSHConnectionFactory factory = new SSHConnectionFactory(httpRequest, userState);
+        final SSHConnectionResource resource = (SSHConnectionResource)
+                userState.getCacheSSH().getResource(request.getServer(), factory);
+        final SSHConnection connection = resource.getSSHConnection();
+        if ("file".equals(token.getAction())) {
+            new SFTPUpdateFile(request, connection).apply(httpArguments);
         }
         return location;
     }

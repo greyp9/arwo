@@ -11,9 +11,13 @@ public final class App {
 
     public static class Actions {
         public static final String XSD = "io/github/greyp9/arwo/xsd/action/action.xsd";
-        public static final QName QNAME_FILTER = new QName("urn:arwo:action", "filter", "action");
-        public static final QName QNAME_LOCALE = new QName("urn:arwo:action", "locale", "action");
-        public static final QName QNAME_COMMIT = new QName("urn:arwo:action", "commit", "action");
+        public static final String URI_ACTION = "urn:arwo:action";
+        public static final String PREFIX_ACTION = "action";
+
+        public static final QName QNAME_FILTER = new QName(URI_ACTION, "filter", PREFIX_ACTION);
+        public static final QName QNAME_LOCALE = new QName(URI_ACTION, "locale", PREFIX_ACTION);
+        public static final QName QNAME_COMMIT = new QName(URI_ACTION, "commit", PREFIX_ACTION);
+        public static final QName QNAME_FILE = new QName(URI_ACTION, "file", PREFIX_ACTION);
     }
 
     public static class Config {
@@ -56,6 +60,7 @@ public final class App {
         public static final String VALIDATE = "validate";
         public static final String LOCALE = "locale";
         public static final String UPDATE_LOCALE = "updateLocale";
+        public static final String FILE = "file";
         public static final String UI = "ui";
         public static final String XML = "xml";
         public static final String XSD = "xsd";

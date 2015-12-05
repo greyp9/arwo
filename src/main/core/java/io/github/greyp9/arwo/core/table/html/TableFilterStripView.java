@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.state.ViewState;
+import io.github.greyp9.arwo.core.util.CollectionU;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
@@ -14,7 +15,6 @@ import io.github.greyp9.arwo.core.xed.view.html.PropertyStripHtmlView;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 
@@ -43,9 +43,8 @@ public class TableFilterStripView {
             final Bundle bundleXed = actionFilter.getXed().getBundle();
             final ActionFactory factory = new ActionFactory(
                     submitID, bundleXed, App.Target.VIEW_STATE, cursorType, null);
-            final Collection<String> actions = new ArrayList<String>();
-            actions.add(ViewState.Action.FILTER);
-            final ActionButtons buttons = factory.create(null, actions);
+            final Collection<String> actions = CollectionU.toCollection(ViewState.Action.FILTER);
+            final ActionButtons buttons = factory.create(null, false, actions);
             new PropertyStripHtmlView(filterView, buttons).addContentForm(html);
         }
     }

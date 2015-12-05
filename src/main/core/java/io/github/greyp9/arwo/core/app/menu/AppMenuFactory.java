@@ -35,12 +35,12 @@ public class AppMenuFactory implements MenuFactory {
         final MenuItem itemViewHex = new MenuItem("viewHex", App.Target.USER_STATE, "viewHex");
         final MenuItem itemEditUtf8 = new MenuItem("editUTF8", App.Target.USER_STATE, "edit");
         final MenuItem itemEditUtf16 = new MenuItem("editUTF16", App.Target.USER_STATE, "edit16");
-        final MenuItem itemProperties = new MenuItem("properties", App.Target.USER_STATE, "properties");
-        final MenuItem itemTextFilters = new MenuItem("textFilters", App.Target.USER_STATE, "textFilters");
+        //final MenuItem itemProperties = new MenuItem("properties", App.Target.USER_STATE, "properties");
+        //final MenuItem itemTextFilters = new MenuItem("textFilters", App.Target.USER_STATE, "textFilters");
         return new MenuItem("view", App.Target.USER_STATE, App.Action.MENU, key + "/view",
                 createMenuViewMime(key),
                 itemViewUtf8, itemViewUtf16, itemViewGZ, itemViewZIP, itemViewTGZ, itemViewHex,
-                itemEditUtf8, itemEditUtf16, itemProperties, itemTextFilters);
+                itemEditUtf8, itemEditUtf16/*, itemProperties, itemTextFilters*/);
     }
 
     private static MenuItem createMenuViewMime(final String key) {

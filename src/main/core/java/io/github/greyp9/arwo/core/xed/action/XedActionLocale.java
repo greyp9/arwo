@@ -35,7 +35,7 @@ public class XedActionLocale extends XedAction {
             final ActionFactory factory = new ActionFactory(submitID, bundle, App.Target.USER_STATE, "locale", null);
             final Collection<String> actions = new ArrayList<String>();
             actions.add("updateLocale");
-            final ActionButtons buttons = factory.create("locale", actions);
+            final ActionButtons buttons = factory.create("locale", false, actions);
             new PropertyStripHtmlView(pageView, buttons).addContentDiv(html);
         }
     }

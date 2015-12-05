@@ -46,7 +46,7 @@ public class SFTPSymlinkView extends SFTPView {
     }
 
     private RowSet createRowSetRaw(final RowSetMetaData metaData) throws IOException {
-        final SFTPDataSource source = new SFTPDataSource(getRequest(), getResource());
+        final SFTPDataSource source = new SFTPDataSource(getRequest(), getResource().getSSHConnection());
         final Collection<SFTPv3DirectoryEntry> directoryEntries = source.lsSymlink(getRequest().getPath());
         return new SFTPFolder(directoryEntries, metaData, false).getRowSet();
     }

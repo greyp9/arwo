@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.app.ssh.sftp.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.core.view.editor.AppFileEditView;
 import io.github.greyp9.arwo.app.core.view.gz.AppTGZView;
 import io.github.greyp9.arwo.app.core.view.hex.AppHexView;
 import io.github.greyp9.arwo.app.core.view.zip.AppZipView;
@@ -46,7 +47,7 @@ public class SFTPFileView extends SFTPView {
         final String mode = request.getMode();
         final Bundle bundle = request.getBundle();
 
-        final SFTPDataSource source = new SFTPDataSource(request, resource);
+        final SFTPDataSource source = new SFTPDataSource(request, resource.getSSHConnection());
         final MetaFile metaFile = source.read(request.getPath());
         // resource interpret (UTF-8 versus Unicode)
         final Collection<String> utf16Modes = Arrays.asList("view16", "edit16");
@@ -64,16 +65,13 @@ public class SFTPFileView extends SFTPView {
         // dispose of request
         HttpResponse httpResponse;
         if (isModeEdit) {
-            httpResponse = doGetFile(metaFile, encoding, false);
+            httpResponse = new AppFileEditView(httpRequest, userState).addContentTo(html, metaFile, encoding);
         } else if (isModeZIP) {
-            final AppZipView appZipView = new AppZipView(httpRequest, userState);
-            httpResponse = appZipView.addContentTo(html, metaFile, bundle);
+            httpResponse = new AppZipView(httpRequest, userState).addContentTo(html, metaFile, bundle);
         } else if (isModeTGZ) {
-            final AppTGZView appTGZView = new AppTGZView(httpRequest, userState);
-            httpResponse = appTGZView.addContentTo(html, metaFile, bundle);
+            httpResponse = new AppTGZView(httpRequest, userState).addContentTo(html, metaFile, bundle);
         } else if (isHex) {
-            final AppHexView appHexView = new AppHexView(httpRequest, userState);
-            httpResponse = appHexView.addContentTo(html, metaFile);
+            httpResponse = new AppHexView(httpRequest, userState).addContentTo(html, metaFile);
         } else {
             httpResponse = doGetFile(metaFile, encoding, isModeGZ);
         }
