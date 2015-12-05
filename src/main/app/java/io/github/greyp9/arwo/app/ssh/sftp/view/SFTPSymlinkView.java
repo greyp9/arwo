@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPDataSource;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolder;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolderStyled;
+import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.table.html.TableView;
@@ -34,7 +35,7 @@ public class SFTPSymlinkView extends SFTPView {
         final RowSetMetaData metaData = SFTPFolder.createMetaData();
         final Locus locus = getUserState().getLocus();
         final ViewState viewState = userState.getViewStates().getViewState(metaData, request.getBundle(), locus);
-        final RowSet rowSetRaw = createRowSetRaw(metaData);
+        final RowSet rowSetRaw = createRowSetRaw(metaData, viewState);
         final RowSet rowSetStyled = new SFTPFolderStyled(request, rowSetRaw).getRowSet();
         final Table table = new Table(rowSetStyled, viewState.getSorts(), viewState.getFilters(),
                 request.getTitlePath(), request.getTitlePath());
@@ -45,9 +46,25 @@ public class SFTPSymlinkView extends SFTPView {
         return null;
     }
 
-    private RowSet createRowSetRaw(final RowSetMetaData metaData) throws IOException {
-        final SFTPDataSource source = new SFTPDataSource(getRequest(), getResource().getSSHConnection());
-        final Collection<SFTPv3DirectoryEntry> directoryEntries = source.lsSymlink(getRequest().getPath());
-        return new SFTPFolder(directoryEntries, metaData, false).getRowSet();
+    private RowSet createRowSetRaw(final RowSetMetaData metaData, final ViewState viewState) throws IOException {
+        RowSet rowSet;
+        final SFTPRequest request = getRequest();
+        final SSHConnectionResource resource = getResource();
+        final ResourceCache cache = getUserState().getCache();
+        final String path = request.getPath();
+        // if disconnected, resource will only be fetched if no cached copy is available
+        if (viewState.isConnected()) {
+            final SFTPDataSource source = new SFTPDataSource(request, resource.getSSHConnection());
+            final Collection<SFTPv3DirectoryEntry> directoryEntries = source.lsSymlink(request.getPath());
+            rowSet = new SFTPFolder(directoryEntries, metaData, false).getRowSet();
+        } else if (cache.containsRowSet(path)) {
+            rowSet = cache.getRowSet(path);
+        } else {
+            final SFTPDataSource source = new SFTPDataSource(request, resource.getSSHConnection());
+            final Collection<SFTPv3DirectoryEntry> directoryEntries = source.lsSymlink(request.getPath());
+            rowSet = new SFTPFolder(directoryEntries, metaData, false).getRowSet();
+            cache.putRowSet(path, rowSet);
+        }
+        return rowSet;
     }
 }

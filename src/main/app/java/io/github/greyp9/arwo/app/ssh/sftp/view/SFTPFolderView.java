@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPDataSource;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolder;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolderStyled;
+import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.table.html.TableView;
@@ -45,23 +46,23 @@ public class SFTPFolderView extends SFTPView {
     }
 
     private RowSet getRowSetRaw(final RowSetMetaData metaData, final ViewState viewState) throws IOException {
+        RowSet rowSet;
         final SFTPRequest request = getRequest();
         final SSHConnectionResource resource = getResource();
-        RowSet rowSet;
-        //ResourceCache cache = userState.getCache();
-        //String uri = request.getHttpRequest().getURI();
+        final ResourceCache cache = getUserState().getCache();
+        final String path = request.getPath();
         // if disconnected, resource will only be fetched if no cached copy is available
         if (viewState.isConnected()) {
             final SFTPDataSource source = new SFTPDataSource(request, resource.getSSHConnection());
             final Collection<SFTPv3DirectoryEntry> directoryEntries = source.ls(request.getPath());
             rowSet = new SFTPFolder(directoryEntries, metaData, true).getRowSet();
-            //} else if (cache.containsRowSet(uri)) {
-            //    rowSet = cache.getRowSet(uri);
+        } else if (cache.containsRowSet(path)) {
+            rowSet = cache.getRowSet(path);
         } else {
             final SFTPDataSource source = new SFTPDataSource(request, resource.getSSHConnection());
             final Collection<SFTPv3DirectoryEntry> directoryEntries = source.ls(request.getPath());
             rowSet = new SFTPFolder(directoryEntries, metaData, true).getRowSet();
-            //cache.putRowSet(uri, rowSet);
+            cache.putRowSet(path, rowSet);
         }
         return rowSet;
     }

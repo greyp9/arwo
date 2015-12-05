@@ -8,7 +8,9 @@ import io.github.greyp9.arwo.app.core.view.zip.AppZipView;
 import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
 import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPDataSource;
+import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolder;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.codec.gz.GZipCodec;
 import io.github.greyp9.arwo.core.date.HttpDateU;
@@ -17,6 +19,9 @@ import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
+import io.github.greyp9.arwo.core.locus.Locus;
+import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
+import io.github.greyp9.arwo.core.table.state.ViewState;
 import io.github.greyp9.arwo.core.text.TextFilters;
 import io.github.greyp9.arwo.core.text.TextLineFilter;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
@@ -30,6 +35,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 
+@SuppressWarnings("PMD.ExcessiveImports")
 public class SFTPFileView extends SFTPView {
 
     public SFTPFileView(
@@ -37,18 +43,18 @@ public class SFTPFileView extends SFTPView {
         super(request, userState, resource);
     }
 
-    @SuppressWarnings("PMD.AvoidFinalLocalVariable")  // defect?
+    @SuppressWarnings("PMD.AvoidFinalLocalVariable")  // PMD defect?
     @Override
     protected final HttpResponse addContentTo(final Element html) throws IOException {
         final SFTPRequest request = getRequest();
         final ServletHttpRequest httpRequest = request.getHttpRequest();
         final AppUserState userState = getUserState();
-        final SSHConnectionResource resource = getResource();
         final String mode = request.getMode();
         final Bundle bundle = request.getBundle();
-
-        final SFTPDataSource source = new SFTPDataSource(request, resource.getSSHConnection());
-        final MetaFile metaFile = source.read(request.getPath());
+        final RowSetMetaData metaData = SFTPFolder.createMetaData();
+        final Locus locus = userState.getLocus();
+        final ViewState viewState = userState.getViewStates().getViewState(metaData, request.getBundle(), locus);
+        final MetaFile metaFile = doGetFileBytes(viewState);
         // resource interpret (UTF-8 versus Unicode)
         final Collection<String> utf16Modes = Arrays.asList("view16", "edit16");
         final boolean isUTF16 = utf16Modes.contains(mode);
@@ -76,6 +82,25 @@ public class SFTPFileView extends SFTPView {
             httpResponse = doGetFile(metaFile, encoding, isModeGZ);
         }
         return httpResponse;
+    }
+
+    private MetaFile doGetFileBytes(final ViewState viewState) throws IOException {
+        MetaFile metaFile;
+        final SFTPRequest request = getRequest();
+        final SSHConnectionResource resource = getResource();
+        final SFTPDataSource source = new SFTPDataSource(request, resource.getSSHConnection());
+        final ResourceCache cache = getUserState().getCache();
+        final String path = request.getPath();
+        // if disconnected, resource will only be fetched if no cached copy is available
+        if (viewState.isConnected()) {
+            metaFile = source.read(path);
+        } else if (cache.containsFile(path)) {
+            metaFile = cache.getFile(path);
+        } else {
+            metaFile = source.read(path);
+            cache.putFile(path, metaFile);
+        }
+        return metaFile;
     }
 
     public final HttpResponse doGetFile(

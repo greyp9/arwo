@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.app.AppFolder;
 import io.github.greyp9.arwo.core.app.AppText;
 import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.connect.ConnectionCache;
 import io.github.greyp9.arwo.core.date.Interval;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
@@ -41,6 +42,8 @@ public class AppUserState {
     private final XedUserState documentState;
     // menu system
     private final MenuSystem menuSystem;
+    // resource caches (preloaded stuff)
+    private final ResourceCache cache;
     // connection entries
     private final ConnectionCache cacheSSH;
     // binary viewer state (hex rendering)
@@ -86,6 +89,10 @@ public class AppUserState {
         return menuSystem;
     }
 
+    public final ResourceCache getCache() {
+        return cache;
+    }
+
     public final ConnectionCache getCacheSSH() {
         return cacheSSH;
     }
@@ -110,6 +117,7 @@ public class AppUserState {
         this.alerts = new Alerts();
         this.documentState = new XedUserState(webappRoot, principal, submitID, locus, alerts);
         this.menuSystem = new MenuSystem(submitID, new AppMenuFactory());
+        this.cache = new ResourceCache();
         this.cacheSSH = new ConnectionCache("ssh", alerts);
         this.pageViewHex = Page.Factory.initPage(Const.PAGE_HEX_VIEW, new Properties());
     }
