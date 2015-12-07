@@ -54,4 +54,13 @@
         </xsd:sequence>
     </xsd:complexType>
 
+    <xsd:element name='textFilter' type='action:textFilterType'/>
+
+    <xsd:complexType name='textFilterType'>
+        <xsd:sequence>
+            <xsd:element name='include' type='xsd:string'/>
+            <xsd:element name='exclude' type='xsd:string'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
 </xsd:schema>

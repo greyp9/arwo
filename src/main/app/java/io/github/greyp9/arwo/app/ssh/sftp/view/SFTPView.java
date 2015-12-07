@@ -24,6 +24,7 @@ import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.view.StatusBarView;
 import io.github.greyp9.arwo.core.xed.action.XedActionLocale;
+import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import org.w3c.dom.Document;
@@ -70,7 +71,7 @@ public abstract class SFTPView {
         // context-specific content
         final AppTitle title = AppTitle.Factory.getResourceLabel(httpRequest, bundle, request.getTitlePath());
         addMenuView(body, title);
-        addTweaksView(body, userState);
+        addTweaksView(body);
         HttpResponse httpResponse = addContentTo(body);
         //new TextFilterView(userState.getLocus().getLocale(), userState.getSubmitID()).
         //        addUI(userState.isToggleTextFilterForm(), body);
@@ -95,12 +96,13 @@ public abstract class SFTPView {
         menuView.addTitle(html, title);
     }
 
-    private void addTweaksView(final Element html, final AppUserState userState) throws IOException {
+    private void addTweaksView(final Element html) throws IOException {
         // locale property strip
         final Locale locale = userState.getLocus().getLocale();
         final String submitID = userState.getSubmitID();
         final Properties properties = userState.getProperties();
         new XedActionLocale(locale).addContentTo(html, submitID, properties);
+        new XedActionTextFilter(locale).addContentTo(html, submitID, properties);
     }
 
     protected final void addFileProperties(final Element html, final MetaFile metaFile) throws IOException {

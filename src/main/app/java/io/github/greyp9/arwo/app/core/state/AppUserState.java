@@ -22,6 +22,7 @@ import io.github.greyp9.arwo.core.text.TextFilters;
 import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
 import io.github.greyp9.arwo.core.xed.state.XedUserState;
 
 import java.io.File;
@@ -135,8 +136,7 @@ public class AppUserState {
         final String action = token.getAction();
         final String object = token.getObject();
         final Collection<String> views = Arrays.asList(
-                "view", "view16", "edit", "edit16",
-                "viewGZ", "viewZIP", "viewTGZ", "viewHex");
+                "view", "view16", "edit", "edit16", "viewGZ", "viewZIP", "viewTGZ", "viewHex");
         final Locus locus = documentState.getLocus();
         final Properties properties = documentState.getProperties();
         final Bundle bundle = new Bundle(new AppText(locus.getLocale()).getBundleCore());
@@ -145,6 +145,8 @@ public class AppUserState {
             getClass();
         } else if (App.Action.UPDATE_LOCALE.equals(action)) {
             documentState.applyLocale(httpArguments);
+        } else if (App.Action.TEXT_FILTER.equals(action)) {
+            new XedActionTextFilter(locus.getLocale()).updateTextFilters(textFilters, httpArguments);
         } else if (App.Action.MENU.equals(action)) {
             menuSystem.toggle(object);
         } else if (App.Action.TOGGLE.equals(action)) {
@@ -152,14 +154,14 @@ public class AppUserState {
         } else if (App.Action.MIME_TYPE.equals(action)) {
             PropertiesU.setProperty(properties, action, Value.defaultOnEmpty(object, null));
         } else if (views.contains(action)) {
-            location = switchView(httpRequest, action);
+            location = toView(httpRequest, action);
         } else {
             alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }
         return location;
     }
 
-    private String switchView(final ServletHttpRequest httpRequest, final String action) {
+    private String toView(final ServletHttpRequest httpRequest, final String action) {
         final String pathInfoNewView = new Pather(httpRequest.getPathInfo()).getRight();
         return httpRequest.getBaseURI() + PathU.toPath("", action) + pathInfoNewView;
     }

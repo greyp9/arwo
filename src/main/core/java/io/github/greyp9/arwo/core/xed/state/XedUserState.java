@@ -32,6 +32,8 @@ import io.github.greyp9.arwo.core.xed.session.action.SessionValidate;
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Properties;
 
 @SuppressWarnings("PMD.ExcessiveImports")
@@ -118,6 +120,7 @@ public class XedUserState {
         String location = request.getHttpRequest().getURI();
         final String action = token.getAction();
         final String object = token.getObject();
+        final Collection<String> views = Arrays.asList(App.Action.UI, App.Action.XML, App.Action.XSD, App.Action.REV);
         final String message = request.getBundle().getString("alert.action.not.implemented");
         if (action == null) {
             getClass();
@@ -129,13 +132,7 @@ public class XedUserState {
             PropertiesU.toggleBoolean(properties, action);
         } else if (App.Action.COMMIT.equals(action)) {
             PropertiesU.toggleBoolean(properties, action);
-        } else if (App.Action.UI.equals(action)) {
-            location = toView(request.getHttpRequest(), action);
-        } else if (App.Action.XML.equals(action)) {
-            location = toView(request.getHttpRequest(), action);
-        } else if (App.Action.XSD.equals(action)) {
-            location = toView(request.getHttpRequest(), action);
-        } else if (App.Action.REV.equals(action)) {
+        } else if (views.contains(action)) {
             location = toView(request.getHttpRequest(), action);
         } else {
             alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
