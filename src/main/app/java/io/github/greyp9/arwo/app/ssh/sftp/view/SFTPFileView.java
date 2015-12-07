@@ -28,6 +28,7 @@ import io.github.greyp9.arwo.core.text.TextLineFilter;
 import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.value.Value;
 import org.w3c.dom.Element;
 
 import java.io.ByteArrayInputStream;
@@ -120,7 +121,9 @@ public class SFTPFileView extends SFTPView {
         final NameTypeValues headers = new NameTypeValues(new NameTypeValue(Http.Header.LAST_MODIFIED, lastModified));
         final TextFilters textFilters = getUserState().getTextFilters();
         if ((textFilters.getIncludes().isEmpty()) && (textFilters.getExcludes().isEmpty())) {
-            headers.add(new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_PLAIN_UTF8));
+            final String mimeTypeOverride = getUserState().getProperties().getProperty(App.Action.MIME_TYPE);
+            final String mimeType = Value.defaultOnNull(mimeTypeOverride, Http.Mime.TEXT_PLAIN_UTF8);
+            headers.add(new NameTypeValue(Http.Header.CONTENT_TYPE, mimeType));
         } else if (UTF8Codec.Const.UTF16.equals(encoding)) {
             headers.add(new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_PLAIN_UTF16));
             bytes = doTextFilter(bytes, encoding);

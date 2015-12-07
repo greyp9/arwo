@@ -44,11 +44,13 @@ public class AppMenuFactory implements MenuFactory {
     }
 
     private static MenuItem createMenuViewMime(final String key) {
-        final MenuItem itemUseConfig = new MenuItem("useConfig", App.Target.USER_STATE, "viewUseConfig");
-        final MenuItem itemTextPlain = new MenuItem("viewTextPlain", App.Target.USER_STATE, "viewTextPlain");
-        final MenuItem itemTextHtml = new MenuItem("viewTextHtml", App.Target.USER_STATE, "viewTextHtml");
-        final MenuItem itemTextXml = new MenuItem("viewTextXml", App.Target.USER_STATE, "viewTextXml");
-        return new MenuItem("viewMime", App.Target.USER_STATE, App.Action.MENU, key + "/viewMime",
+        final String subject = App.Target.USER_STATE;
+        final String action = App.Action.MIME_TYPE;
+        final MenuItem itemUseConfig = new MenuItem("useConfig", subject, action);
+        final MenuItem itemTextPlain = new MenuItem("viewTextPlain", subject, action, Http.Mime.TEXT_PLAIN_UTF8);
+        final MenuItem itemTextHtml = new MenuItem("viewTextHtml", subject, action, Http.Mime.TEXT_HTML_UTF8);
+        final MenuItem itemTextXml = new MenuItem("viewTextXml", subject, action, Http.Mime.TEXT_XML_UTF8);
+        return new MenuItem("viewMime", subject, App.Action.MENU, key + "/viewMime",
                 itemUseConfig, itemTextPlain, itemTextHtml, itemTextXml);
     }
 

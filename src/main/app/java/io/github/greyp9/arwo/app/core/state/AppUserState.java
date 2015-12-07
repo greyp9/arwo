@@ -21,6 +21,7 @@ import io.github.greyp9.arwo.core.table.state.ViewStates;
 import io.github.greyp9.arwo.core.text.TextFilters;
 import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.state.XedUserState;
 
 import java.io.File;
@@ -31,6 +32,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Properties;
 
+@SuppressWarnings("PMD.ExcessiveImports")
 public class AppUserState {
     private final Principal principal;
     private final Interval interval;
@@ -148,6 +150,8 @@ public class AppUserState {
             menuSystem.toggle(object);
         } else if (App.Action.TOGGLE.equals(action)) {
             PropertiesU.toggleBoolean(properties, object);
+        } else if (App.Action.MIME_TYPE.equals(action)) {
+            PropertiesU.setProperty(properties, action, Value.defaultOnEmpty(object, null));
         } else if (views.contains(action)) {
             location = switchView(httpRequest, action);
         } else {

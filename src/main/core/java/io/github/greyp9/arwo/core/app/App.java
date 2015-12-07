@@ -47,13 +47,13 @@ public final class App {
     }
 
     public static class Action {
-        public static final String CLOSE = "close";
+        //public static final String CLOSE = "close";
         public static final String LOAD_REVISION = "loadRevision";
         public static final String MENU = "menu";
-        public static final String NAVIGATE = "navigate";
+        //public static final String NAVIGATE = "navigate";
         public static final String PRETTY = "pretty";
         public static final String RELOAD = "reload";
-        public static final String RESET = "reset";
+        //public static final String RESET = "reset";
         public static final String SAVE = "save";
         public static final String COMMIT = "commit";
         public static final String TOGGLE = "toggle";
@@ -62,6 +62,7 @@ public final class App {
         public static final String UPDATE_LOCALE = "updateLocale";
         public static final String FILE = "file";
         public static final String PROPERTIES = "properties";
+        public static final String MIME_TYPE = "mimeType";
         public static final String UI = "ui";
         public static final String XML = "xml";
         public static final String XSD = "xsd";
