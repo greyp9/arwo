@@ -3,8 +3,8 @@ package io.github.greyp9.arwo.app.ssh.sftp.handler;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionFactory;
 import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
-import io.github.greyp9.arwo.app.ssh.core.view.SSHView;
 import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
+import io.github.greyp9.arwo.app.ssh.sftp.view.SFTPInventoryView;
 import io.github.greyp9.arwo.app.ssh.sftp.view.SFTPResourceView;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
@@ -34,7 +34,7 @@ public class SFTPHandlerGet {
         } else if (Value.isEmpty(request.getMode())) {
             httpResponse = HttpResponseU.to302(PathU.toDir(httpRequest.getBaseURI(), Const.MODE_DEFAULT));
         } else if (Value.isEmpty(request.getServer())) {
-            httpResponse = new SSHView(request.getHttpRequest(), userState).doGetHtmlInventory(Const.MODE_DEFAULT);
+            httpResponse = new SFTPInventoryView(request, userState, null, Const.MODE_DEFAULT).doGetResponse();
         } else {
             httpResponse = doGet2();
         }
