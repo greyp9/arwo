@@ -116,6 +116,7 @@ public class PseudoI18n {
     private String pseudoLocalizeValue(final String valueOld, final Properties properties) {
         final StringBuilder buffer = new StringBuilder();
         final int length = valueOld.length();
+        int inFormatToken = 0;
         for (int i = 0; (i < length); ++i) {
             final int remaining = length - i;
             if (remaining >= LENGTH_SEQUENCE) {
@@ -128,6 +129,15 @@ public class PseudoI18n {
                 }
             }
             final String characterOld = new String(new char[] { valueOld.charAt(i) });
+            if ("{".equals(characterOld)) {
+                ++inFormatToken;
+            } else if ("}".equals(characterOld)) {
+                --inFormatToken;
+            }
+            if (inFormatToken > 0) {
+                buffer.append(characterOld);
+                continue;
+            }
             final String characterNew = properties.getProperty(characterOld, characterOld);
             buffer.append(characterNew);
         }

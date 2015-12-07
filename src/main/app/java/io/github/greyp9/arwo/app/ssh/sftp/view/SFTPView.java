@@ -23,6 +23,7 @@ import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.view.StatusBarView;
+import io.github.greyp9.arwo.core.xed.action.XedActionLocale;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import org.w3c.dom.Document;
@@ -31,6 +32,8 @@ import org.w3c.dom.Element;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.Locale;
+import java.util.Properties;
 
 @SuppressWarnings({ "PMD.AbstractNaming", "PMD.ExcessiveImports" })
 public abstract class SFTPView {
@@ -66,9 +69,8 @@ public abstract class SFTPView {
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
         // context-specific content
         final AppTitle title = AppTitle.Factory.getResourceLabel(httpRequest, bundle, request.getTitlePath());
-        final MenuView menuView = new MenuView(request.getBundle(), httpRequest, userState.getMenuSystem());
-        menuView.addContentTo(body, AppMenuFactory.Const.FILESYSTEM, true);
-        menuView.addTitle(body, title);
+        addMenuView(body, title);
+        addTweaksView(body, userState);
         HttpResponse httpResponse = addContentTo(body);
         //new TextFilterView(userState.getLocus().getLocale(), userState.getSubmitID()).
         //        addUI(userState.isToggleTextFilterForm(), body);
@@ -85,6 +87,20 @@ public abstract class SFTPView {
             httpResponse = new HttpResponse(HttpURLConnection.HTTP_OK, headers, new ByteArrayInputStream(entity));
         }
         return httpResponse;
+    }
+
+    private void addMenuView(final Element html, final AppTitle title) throws IOException {
+        final MenuView menuView = new MenuView(request.getBundle(), httpRequest, userState.getMenuSystem());
+        menuView.addContentTo(html, AppMenuFactory.Const.FILESYSTEM, true);
+        menuView.addTitle(html, title);
+    }
+
+    private void addTweaksView(final Element html, final AppUserState userState) throws IOException {
+        // locale property strip
+        final Locale locale = userState.getLocus().getLocale();
+        final String submitID = userState.getSubmitID();
+        final Properties properties = userState.getProperties();
+        new XedActionLocale(locale).addContentTo(html, submitID, properties);
     }
 
     protected final void addFileProperties(final Element html, final MetaFile metaFile) throws IOException {

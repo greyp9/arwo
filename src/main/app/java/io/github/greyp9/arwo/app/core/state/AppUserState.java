@@ -40,7 +40,6 @@ public class AppUserState {
     private final String submitID;
     private final ViewStates viewStates;
     private final TextFilters textFilters;
-    private final Locus locus;
     private final Alerts alerts;
     private final XedUserState documentState;
     // menu system
@@ -49,8 +48,6 @@ public class AppUserState {
     private final ResourceCache cache;
     // connection entries
     private final ConnectionCache cacheSSH;
-    // properties
-    private final Properties properties;
     // binary viewer state (hex rendering)
     private Page pageViewHex;
 
@@ -79,7 +76,7 @@ public class AppUserState {
     }
 
     public final Locus getLocus() {
-        return locus;
+        return documentState.getLocus();
     }
 
     public final Alerts getAlerts() {
@@ -103,7 +100,7 @@ public class AppUserState {
     }
 
     public final Properties getProperties() {
-        return properties;
+        return documentState.getProperties();
     }
 
     public final Page getPageViewHex() {
@@ -122,13 +119,11 @@ public class AppUserState {
         this.submitID = submitID;
         this.viewStates = new ViewStates();
         this.textFilters = new TextFilters();
-        this.locus = locus;
         this.alerts = new Alerts();
         this.documentState = new XedUserState(webappRoot, principal, submitID, locus, alerts);
         this.menuSystem = new MenuSystem(submitID, new AppMenuFactory());
         this.cache = new ResourceCache();
         this.cacheSSH = new ConnectionCache("ssh", alerts);
-        this.properties = new Properties();
         this.pageViewHex = Page.Factory.initPage(Const.PAGE_HEX_VIEW, new Properties());
     }
 
@@ -142,10 +137,14 @@ public class AppUserState {
         final Collection<String> views = Arrays.asList(
                 "view", "view16", "edit", "edit16",
                 "viewGZ", "viewZIP", "viewTGZ", "viewHex");
+        final Locus locus = documentState.getLocus();
+        final Properties properties = documentState.getProperties();
         final Bundle bundle = new Bundle(new AppText(locus.getLocale()).getBundleCore());
         final String message = bundle.getString("alert.action.not.implemented");
         if (action == null) {
             getClass();
+        } else if (App.Action.UPDATE_LOCALE.equals(action)) {
+            documentState.applyLocale(httpArguments);
         } else if (App.Action.MENU.equals(action)) {
             menuSystem.toggle(object);
         } else if (App.Action.TOGGLE.equals(action)) {

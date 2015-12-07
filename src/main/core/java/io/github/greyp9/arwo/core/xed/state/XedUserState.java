@@ -119,7 +119,9 @@ public class XedUserState {
         final String action = token.getAction();
         final String object = token.getObject();
         final String message = request.getBundle().getString("alert.action.not.implemented");
-        if (App.Action.UPDATE_LOCALE.equals(action)) {
+        if (action == null) {
+            getClass();
+        } else if (App.Action.UPDATE_LOCALE.equals(action)) {
             applyLocale(httpArguments);
         } else if (App.Action.MENU.equals(action)) {
             menuSystem.toggle(object);
@@ -168,7 +170,7 @@ public class XedUserState {
         }
     }
 
-    private void applyLocale(final NameTypeValues nameTypeValues) throws IOException {
+    public final void applyLocale(final NameTypeValues nameTypeValues) throws IOException {
         // apply to user state
         final Xed actionLocale = new XedActionLocale(null).update(nameTypeValues);
         final String localeID = actionLocale.getXPather().getText("/action:locale");
