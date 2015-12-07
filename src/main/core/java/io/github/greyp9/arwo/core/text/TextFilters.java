@@ -19,4 +19,10 @@ public class TextFilters {
         this.includes = new ArrayList<String>();
         this.excludes = new ArrayList<String>();
     }
+
+    public final boolean isData() {
+        final boolean isDataIncludes = (!includes.isEmpty());
+        final boolean isDataExcludes = (!excludes.isEmpty());
+        return (isDataIncludes || isDataExcludes);
+    }
 }

@@ -38,10 +38,12 @@ public class MenuView {
         addMenu(divForm, menuItem, home, true);
     }
 
-    public final void addTitle(final Element html, final AppTitle title) throws IOException {
-        final Element div = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, "page-title"));
+    public final Element addTitle(final Element html, final AppTitle title) throws IOException {
+        final Element divMenus = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENUS));
+        final Element div = ElementU.addElement(divMenus, Html.DIV, null, NTV.create(Html.CLASS, "page-title"));
         ElementU.addElement(div, Html.IMG, null, NTV.create(Html.SRC, "${CONTEXT}/ico/app-blue.ico", Html.ALT, ""));
         ElementU.addElement(div, Html.SPAN, title.getText());
+        return divMenus;
     }
 
     private void addMenu(final Element html, final MenuItem item, final boolean home, final boolean top) {

@@ -49,8 +49,7 @@ public abstract class HtmlView {
         // template html
         final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(Const.HTML)));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
-        addMenuView(body);
-        addTweaksView(body, userState);
+        addHeaderView(body, userState);
         // cursor content
         final String context = addContentTo(body);
         // touch ups
@@ -69,15 +68,13 @@ public abstract class HtmlView {
         return new HttpResponse(HttpURLConnection.HTTP_OK, headers, new ByteArrayInputStream(entity));
     }
 
-    private void addMenuView(final Element html) throws IOException {
+    private void addHeaderView(final Element html, final XedUserState userState) throws IOException {
+        // context menu
         final Bundle bundle = request.getSession().getXed().getBundle();
         final ServletHttpRequest httpRequest = request.getHttpRequest();
         final MenuSystem menuSystem = request.getState().getMenuSystem();
         new MenuView(bundle, httpRequest, menuSystem).addContentTo(html, XedMenuFactory.Const.XED, true);
-    }
-
-    private void addTweaksView(final Element html, final XedUserState userState) throws IOException {
-        // locale property strip
+        // settings property strips
         final Locale locale = userState.getLocus().getLocale();
         final String submitID = userState.getSubmitID();
         final Properties properties = userState.getProperties();

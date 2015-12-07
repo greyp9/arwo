@@ -19,13 +19,16 @@ import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.menu.view.MenuView;
 import io.github.greyp9.arwo.core.res.ResourceU;
+import io.github.greyp9.arwo.core.text.TextFilters;
 import io.github.greyp9.arwo.core.util.PropertiesU;
+import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.view.StatusBarView;
 import io.github.greyp9.arwo.core.xed.action.XedActionLocale;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
 import io.github.greyp9.arwo.core.xml.DocumentU;
+import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -33,6 +36,9 @@ import org.w3c.dom.Element;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -70,11 +76,8 @@ public abstract class SFTPView {
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
         // context-specific content
         final AppTitle title = AppTitle.Factory.getResourceLabel(httpRequest, bundle, request.getTitlePath());
-        addMenuView(body, title);
-        addTweaksView(body);
+        addHeaderView(body, title);
         HttpResponse httpResponse = addContentTo(body);
-        //new TextFilterView(userState.getLocus().getLocale(), userState.getSubmitID()).
-        //        addUI(userState.isToggleTextFilterForm(), body);
         if (httpResponse == null) {
             // touch ups
             new AlertsView(userState.getAlerts(), userState.getLocus()).addContentTo(body);
@@ -90,19 +93,42 @@ public abstract class SFTPView {
         return httpResponse;
     }
 
-    private void addMenuView(final Element html, final AppTitle title) throws IOException {
+    private void addHeaderView(final Element html, final AppTitle title) throws IOException {
+        // context menu
         final MenuView menuView = new MenuView(request.getBundle(), httpRequest, userState.getMenuSystem());
         menuView.addContentTo(html, AppMenuFactory.Const.FILESYSTEM, true);
-        menuView.addTitle(html, title);
-    }
-
-    private void addTweaksView(final Element html) throws IOException {
-        // locale property strip
+        // context title (+ text filters)
+        final Element divMenus = menuView.addTitle(html, title);
+        addTextFiltersView(divMenus);
+        // settings property strips
         final Locale locale = userState.getLocus().getLocale();
         final String submitID = userState.getSubmitID();
         final Properties properties = userState.getProperties();
         new XedActionLocale(locale).addContentTo(html, submitID, properties);
         new XedActionTextFilter(locale).addContentTo(html, submitID, properties);
+    }
+
+    private void addTextFiltersView(final Element html) {
+        final TextFilters textFilters = userState.getTextFilters();
+        if (textFilters.isData()) {
+            final Collection<String> tokens = new ArrayList<String>();
+            // label
+            tokens.add(bundle.getString("menu.view.textFilter"));
+            // filter display
+            final String patternInclude = bundle.getString("SFTPView.include");
+            for (final String include : textFilters.getIncludes()) {
+                tokens.add(MessageFormat.format(patternInclude, include));
+            }
+            final String patternExclude = bundle.getString("SFTPView.exclude");
+            for (final String exclude : textFilters.getExcludes()) {
+                tokens.add(MessageFormat.format(patternExclude, exclude));
+            }
+            // render
+            final Element divToolbar = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENU));
+            for (final String token : tokens) {
+                ElementU.addElement(divToolbar, Html.SPAN, token, NTV.create(Html.CLASS, App.CSS.MENU));
+            }
+        }
     }
 
     protected final void addFileProperties(final Element html, final MetaFile metaFile) throws IOException {
