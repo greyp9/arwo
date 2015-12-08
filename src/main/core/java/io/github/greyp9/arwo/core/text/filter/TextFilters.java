@@ -1,4 +1,4 @@
-package io.github.greyp9.arwo.core.text;
+package io.github.greyp9.arwo.core.text.filter;
 
 import java.util.ArrayList;
 import java.util.Collection;

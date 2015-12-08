@@ -1,4 +1,4 @@
-package io.github.greyp9.arwo.core.text;
+package io.github.greyp9.arwo.core.text.filter;
 
 import io.github.greyp9.arwo.core.lang.SystemU;
 
