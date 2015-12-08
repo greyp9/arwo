@@ -1,6 +1,6 @@
 package io.github.greyp9.arwo.app.ssh.sftp.action;
 
-import io.github.greyp9.arwo.app.ssh.connection.SSHConnection;
+import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
 import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPDataSource;
 import io.github.greyp9.arwo.core.alert.Alert;

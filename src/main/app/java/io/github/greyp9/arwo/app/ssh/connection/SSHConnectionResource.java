@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.app.ssh.connection;
 
 import io.github.greyp9.arwo.core.connect.ConnectionResource;
 import io.github.greyp9.arwo.core.lang.CompareU;
+import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
 
 public class SSHConnectionResource implements ConnectionResource, Comparable<ConnectionResource> {
     private final String name;
