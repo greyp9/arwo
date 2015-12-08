@@ -1,6 +1,7 @@
-package io.github.greyp9.arwo.app.ssh.connection;
+package io.github.greyp9.arwo.lib.ganymed.ssh.connection;
 
 import ch.ethz.ssh2.Connection;
+import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.util.PropertiesX;
 
 import java.util.Date;
@@ -63,7 +64,7 @@ public class SSHConnection {
     public final void update(final Date date) {
         propertiesX.setLong("dateLast", date.getTime());
         propertiesX.addLong("count", 1L);
-        final long millis = System.currentTimeMillis() - date.getTime();
+        final long millis = SystemU.currentTimeMillis() - date.getTime();
         propertiesX.addLong("millis", millis);
     }
 }
