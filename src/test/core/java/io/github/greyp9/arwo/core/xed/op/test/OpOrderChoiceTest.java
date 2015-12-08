@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.xed.op.test;
 
 import io.github.greyp9.arwo.core.app.test.TestApp;
+import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
@@ -47,7 +48,7 @@ public class OpOrderChoiceTest extends TestCase {
         for (Element child : children) {
             ElementU.detach(child);
         }
-        Collections.shuffle(children, new Random(System.currentTimeMillis()));
+        Collections.shuffle(children, new Random(SystemU.currentTimeMillis()));
         for (Element child : children) {
             ElementU.addElement(container, child, null);
         }

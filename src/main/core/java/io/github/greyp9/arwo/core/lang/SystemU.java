@@ -35,6 +35,10 @@ public final class SystemU {
         return ((path == null) ? null : path.replace(userHome(), "~"));
     }
 
+    public static long currentTimeMillis() {
+        return System.currentTimeMillis();
+    }
+
     @SuppressWarnings("SuspiciousSystemArraycopy")
     public static void arraycopy(final Object source, final int sourceOffset,
                                  final Object target, final int targetOffset, final int length) {
