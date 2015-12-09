@@ -14,6 +14,7 @@ public final class App {
         public static final String URI_ACTION = "urn:arwo:action";
         public static final String PREFIX_ACTION = "action";
 
+        public static final QName QNAME_COMMAND = new QName(URI_ACTION, "command", PREFIX_ACTION);
         public static final QName QNAME_COMMIT = new QName(URI_ACTION, "commit", PREFIX_ACTION);
         public static final QName QNAME_FILE = new QName(URI_ACTION, "file", PREFIX_ACTION);
         public static final QName QNAME_FILTER = new QName(URI_ACTION, "filter", PREFIX_ACTION);
@@ -63,6 +64,7 @@ public final class App {
         public static final String UPDATE_LOCALE = "updateLocale";
         public static final String TEXT_FILTER = "textFilter";
         public static final String FILE = "file";
+        public static final String COMMAND = "command";
         public static final String PROPERTIES = "properties";
         public static final String MIME_TYPE = "mimeType";
         public static final String UI = "ui";

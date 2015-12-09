@@ -15,27 +15,30 @@ import java.io.PrintStream;
 
 public class ScriptWriter {
     private final Script script;
+    private final Locus locus;
 
-    public ScriptWriter(final Script script) {
+    public ScriptWriter(final Script script, final Locus locus) {
         this.script = script;
+        this.locus = locus;
     }
 
-    public final void writeTo(final File file, final Locus locus) throws IOException {
+    public final void writeTo(final File file) throws IOException {
         if ((file != null) && (locus != null)) {
             FileU.ensureFolders(file.getParentFile());
             final PrintStream ps = new PrintStream(new FileOutputStream(file), true, UTF8Codec.Const.UTF8);
             try {
-                writeTo(ps, locus);
+                writeTo(ps);
             } finally {
                 ps.close();
             }
         }
     }
 
-    private void writeTo(final PrintStream ps, final Locus locus) {
+    private void writeTo(final PrintStream ps) {
         final String separator = StringU.create(76, Html.HYPHEN);
         ps.println(locus.getDateX().toString(script.getStart()));
         ps.println(separator);
+        ps.println(script.getContext());
         for (final Command command : script.getCommands()) {
             ps.println(separator);
             ps.println("STDIN");

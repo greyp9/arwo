@@ -1,7 +1,6 @@
 package io.github.greyp9.arwo.app.ssh.sftp.handler;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
-import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
 import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionFactory;
 import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
 import io.github.greyp9.arwo.app.ssh.sftp.action.SFTPUpdateFile;
@@ -20,6 +19,7 @@ import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.submit.SubmitTokenU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
 
 import java.io.IOException;
 
@@ -85,7 +85,6 @@ public class SFTPHandlerPost {
         } else if (App.Target.VIEW_STATE.equals(subject)) {
             userState.getViewStates().apply(token, httpArguments, request.getBundle(), request.getAlerts());
         } else if (App.Target.SESSION.equals(subject)) {
-            getClass();
             location = applySession(token, httpArguments, location);
         }
         return location;

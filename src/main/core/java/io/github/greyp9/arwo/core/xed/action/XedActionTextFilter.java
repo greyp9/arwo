@@ -45,7 +45,7 @@ public class XedActionTextFilter extends XedAction {
     public final void updateTextFilters(
             final TextFilters textFilters, final NameTypeValues httpArguments) throws IOException {
         final Xed xed = super.update(httpArguments);
-        final XPather xpather = new XPather(xed.getDocument(), xed.getXsdTypes().getContext());
+        final XPather xpather = xed.getXPather();
         final String include = xpather.getText("/action:textFilter/action:include");
         final String exclude = xpather.getText("/action:textFilter/action:exclude");
         final boolean isInclude = (!Value.isEmpty(include));

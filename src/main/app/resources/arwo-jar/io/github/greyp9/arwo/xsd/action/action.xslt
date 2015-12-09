@@ -14,6 +14,15 @@
         </xsl:copy>
     </xsl:template>
 
+    <xsl:template match='/xsd:schema/xsd:complexType[@name="commandType"]//xsd:element[@name="command"]'>
+        <xsl:copy>
+            <xsl:attribute name='xed:rows'>12</xsl:attribute>
+            <xsl:attribute name='xed:cols'>80</xsl:attribute>
+            <xsl:attribute name='xed:hideName'>true</xsl:attribute>
+            <xsl:apply-templates select='@*|node()'/>
+        </xsl:copy>
+    </xsl:template>
+
     <xsl:template match='/xsd:schema/xsd:complexType[@name="fileType"]//xsd:element[@name="file"]'>
         <xsl:copy>
             <xsl:attribute name='xed:rows'>25</xsl:attribute>

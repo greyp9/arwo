@@ -1,4 +1,4 @@
-package io.github.greyp9.arwo.app.ssh.sftp.core;
+package io.github.greyp9.arwo.app.ssh.sh.core;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.alert.Alerts;
@@ -11,10 +11,9 @@ import io.github.greyp9.arwo.core.value.Value;
 
 import java.util.Locale;
 
-public class SFTPRequest {
+public class SHRequest {
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
-    private final Pather patherMode;
     private final Pather patherServer;
     private final Locale locale;
     private final Bundle bundle;
@@ -40,37 +39,20 @@ public class SFTPRequest {
         return alerts;
     }
 
-    public SFTPRequest(final ServletHttpRequest httpRequest, final AppUserState userState) {
+    public SHRequest(final ServletHttpRequest httpRequest, final AppUserState userState) {
         this.httpRequest = httpRequest;
         this.userState = userState;
-        this.patherMode = new Pather(httpRequest.getPathInfo());
-        this.patherServer = new Pather(patherMode.getRight());
+        this.patherServer = new Pather(httpRequest.getPathInfo());
         this.locale = userState.getLocus().getLocale();
         this.bundle = new Bundle(new AppText(locale).getBundleCore());
         this.alerts = userState.getAlerts();
-    }
-
-    public final String getBaseURIMode() {
-        return httpRequest.getBaseURI() + patherMode.getLeft();
-    }
-
-    public final String getBaseURIServer() {
-        return getBaseURIMode() + patherServer.getLeft();
-    }
-
-    public final String getMode() {
-        return patherMode.getLeftToken();
     }
 
     public final String getServer() {
         return patherServer.getLeftToken();
     }
 
-    public final String getPath() {
-        return patherServer.getRight();
-    }
-
     public final String getTitlePath() {
-        return "[SFTP] " + Value.join(Http.Token.COLON, getServer(), getPath());
+        return "[SSH] " + Value.join(Http.Token.COLON, getServer());
     }
 }

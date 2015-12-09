@@ -19,7 +19,7 @@ public class ScriptX {
 
     public final Command runCommand(final String stdin) throws IOException {
         final ScriptContext context = new ScriptContext(sshConnection, executorStream);
-        final Script script = new Script(new Date(), stdin);
+        final Script script = new Script(null, new Date(), stdin);
         final ScriptRunnable runnable = new ScriptRunnable(script, context);
         runnable.run();  // synchronous
         return script.getCommands().iterator().next();

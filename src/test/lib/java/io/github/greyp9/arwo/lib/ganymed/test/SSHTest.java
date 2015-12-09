@@ -131,7 +131,7 @@ public class SSHTest extends TestCase {
     private void checkCommandExplicit(Connection connection, UserExecutor executor) throws IOException {
         final SSHConnection sshConnection = new SSHConnection(connection);
         final ExecutorService executorStream = executor.getExecutorStream();
-        final Script script = new Script(new Date(), "ls /");
+        final Script script = new Script(null, new Date(), "ls /");
         final ScriptContext context = new ScriptContext(sshConnection, executorStream);
         final ScriptRunnable runnable = new ScriptRunnable(script, context);
         runnable.run();

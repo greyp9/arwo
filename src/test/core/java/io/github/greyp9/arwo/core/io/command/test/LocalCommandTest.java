@@ -27,13 +27,13 @@ public class LocalCommandTest extends TestCase {
     }
 
     public void testPreProcess() throws Exception {
-        final Script script = new Script(new Date(), "ls\npwd\ndf\n");
+        final Script script = new Script(null, new Date(), "ls\npwd\ndf\n");
         final Collection<Command> commands = script.getCommands();
         Assert.assertEquals(3, commands.size());
     }
 
     public void testSimpleCommandGood() throws Exception {
-        final Script script = new Script(new Date(), "ls");
+        final Script script = new Script(null, new Date(), "ls");
         final Collection<Command> commandsPre = script.getCommands();
         Assert.assertEquals(1, commandsPre.size());
         final AppPrincipal principal = new AppPrincipal("root", CollectionU.toCollection("*"));
@@ -59,7 +59,7 @@ public class LocalCommandTest extends TestCase {
     }
 
     public void testSimpleCommandBad() throws Exception {
-        final Script script = new Script(new Date(), "lslsls");
+        final Script script = new Script(null, new Date(), "lslsls");
         final Collection<Command> commandsPre = script.getCommands();
         Assert.assertEquals(1, commandsPre.size());
         final AppPrincipal principal = new AppPrincipal("root", CollectionU.toCollection("*"));

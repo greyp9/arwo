@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.lib.ganymed.ssh.command.runnable;
 
 import ch.ethz.ssh2.ChannelCondition;
 import ch.ethz.ssh2.Session;
+import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.io.buffer.ByteBuffer;
 import io.github.greyp9.arwo.core.io.command.CommandToDo;
@@ -9,6 +10,7 @@ import io.github.greyp9.arwo.core.io.command.CommandWork;
 import io.github.greyp9.arwo.core.io.runnable.InputStreamRunnable;
 import io.github.greyp9.arwo.core.io.runnable.OutputStreamRunnable;
 import io.github.greyp9.arwo.core.io.script.Script;
+import io.github.greyp9.arwo.core.io.script.write.ScriptWriter;
 import io.github.greyp9.arwo.core.vm.mutex.MutexU;
 import io.github.greyp9.arwo.core.vm.thread.ThreadU;
 import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
@@ -39,13 +41,11 @@ public class ScriptRunnable implements Runnable {
         } finally {
             script.finish();
         }
-/*
         try {
-            new ScriptWriter(script).writeTo(script.getFile(folder), locus);
-        } catch (Exception e) {
-            alerts.add(new Alert(Alert.Severity.ERR, e.getMessage()));
+            new ScriptWriter(script, context.getLocus()).writeTo(script.getFile(context.getFolder()));
+        } catch (IOException e) {
+            context.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
         }
-*/
     }
 
     @SuppressWarnings("PMD.AssignmentInOperand")
@@ -58,7 +58,7 @@ public class ScriptRunnable implements Runnable {
     }
 
     private void runCommand(final CommandToDo commandToDo) throws IOException {
-        final SSHConnection sshConnection = context.getConnection();
+        final SSHConnection sshConnection = context.getSSHConnection();
         final String requestPTY = context.getRequestPTY();
         final Session session = sshConnection.getConnection().openSession();
         try {

@@ -19,7 +19,7 @@ public class XedActionFilter extends XedAction {
     public final Filter getFilter(final NameTypeValues nameTypeValues) throws IOException {
         final Xed xed = super.update(nameTypeValues);
         // query xed instance for parameters
-        final XPather xpather = new XPather(xed.getDocument(), xed.getXsdTypes().getContext());
+        final XPather xpather = xed.getXPather();
         final String columnString = xpather.getText("/action:filter/action:column");
         final String operatorString = xpather.getText("/action:filter/action:operator");
         final String valueString = xpather.getText("/action:filter/action:value");

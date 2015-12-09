@@ -8,7 +8,6 @@ import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
 import io.github.greyp9.arwo.core.xed.view.html.PropertyStripHtmlView;
-import io.github.greyp9.arwo.core.xpath.XPather;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
@@ -25,9 +24,7 @@ public class XedActionCommit extends XedAction {
 
     public final String getComment(final NameTypeValues nameTypeValues) throws IOException {
         final Xed xed = super.update(nameTypeValues);
-        // query xed instance for parameters
-        final XPather xpather = new XPather(xed.getDocument(), xed.getXsdTypes().getContext());
-        return xpather.getText("/action:commit/action:comment");
+        return xed.getXPather().getText("/action:commit/action:comment");
     }
 
     public final void addContentTo(

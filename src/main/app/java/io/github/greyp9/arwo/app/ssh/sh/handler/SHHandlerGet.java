@@ -1,24 +1,43 @@
 package io.github.greyp9.arwo.app.ssh.sh.handler;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.ssh.sh.core.SHRequest;
+import io.github.greyp9.arwo.app.ssh.sh.view.SHCommandView;
+import io.github.greyp9.arwo.app.ssh.sh.view.SHInventoryView;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
+import io.github.greyp9.arwo.core.resource.PathU;
+import io.github.greyp9.arwo.core.value.Value;
 
 import java.io.IOException;
 
 public class SHHandlerGet {
+    private final SHRequest request;
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
 
     public SHHandlerGet(final ServletHttpRequest httpRequest, final AppUserState userState) {
+        this.request = new SHRequest(httpRequest, userState);
         this.httpRequest = httpRequest;
         this.userState = userState;
     }
 
     public final HttpResponse doGet() throws IOException {
-        httpRequest.getClass();
-        userState.getClass();
-        return HttpResponseU.to501();
+        HttpResponse httpResponse;
+        final String baseURI = httpRequest.getBaseURI();
+        final String pathInfo = httpRequest.getPathInfo();
+        final String query = httpRequest.getHttpRequest().getQuery();
+        final boolean isQuery = (query != null);
+        if (pathInfo == null) {
+            httpResponse = HttpResponseU.to302(PathU.toDir(baseURI));
+        } else if (isQuery) {
+            httpResponse = HttpResponseU.to302(httpRequest.getURI());
+        } else if (Value.isEmpty(request.getServer())) {
+            httpResponse = new SHInventoryView(request, userState, "").doGetResponse();
+        } else {
+            httpResponse = new SHCommandView(request, userState, "").doGetResponse();
+        }
+        return httpResponse;
     }
 }

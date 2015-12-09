@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.io.script;
 
+import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.io.command.Command;
 import io.github.greyp9.arwo.core.io.command.CommandDone;
 import io.github.greyp9.arwo.core.io.command.CommandToDo;
@@ -7,6 +8,7 @@ import io.github.greyp9.arwo.core.io.command.CommandWork;
 import io.github.greyp9.arwo.core.text.line.LineU;
 import io.github.greyp9.arwo.core.util.PropertiesX;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -15,12 +17,17 @@ import java.util.Properties;
 
 @SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
 public class Script {
+    private final String context;
     private final long date;
     private final String text;
     private final Properties properties;
     private final Collection<CommandToDo> commandsToDo;
     private final Collection<CommandWork> commandsWork;
     private final Collection<CommandDone> commandsDone;
+
+    public final String getContext() {
+        return context;
+    }
 
     public final Date getDate() {
         return new Date(date);
@@ -35,7 +42,8 @@ public class Script {
     }
 
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public Script(final Date date, final String text) throws IOException {
+    public Script(final String context, final Date date, final String text) throws IOException {
+        this.context = context;
         this.date = date.getTime();
         this.text = text;
         this.properties = new Properties();
@@ -46,6 +54,11 @@ public class Script {
         for (final String stdin : stdinLines) {
             commandsToDo.add(new CommandToDo(stdin));
         }
+    }
+
+    public final File getFile(final File folder) {
+        final String filename = String.format("%s.txt", DateX.toFilename(new Date(date)));
+        return ((folder == null) ? null : new File(folder, filename));
     }
 
     public final synchronized Date getStart() {

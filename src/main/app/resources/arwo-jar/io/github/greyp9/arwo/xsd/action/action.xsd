@@ -63,4 +63,12 @@
         </xsd:sequence>
     </xsd:complexType>
 
+    <xsd:element name='command' type='action:commandType'/>
+
+    <xsd:complexType name='commandType'>
+        <xsd:sequence>
+            <xsd:element name='command' type='xsd:string'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
 </xsd:schema>
