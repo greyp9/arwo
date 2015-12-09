@@ -91,6 +91,17 @@
         <url-pattern>/sftp/*</url-pattern>
     </servlet-mapping>
 
+    <!--ssh-command-->
+    <servlet>
+        <description>access remote ssh servers</description>
+        <servlet-name>SHServletSSH</servlet-name>
+        <servlet-class>io.github.greyp9.arwo.app.ssh.servlet.SHServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SHServletSSH</servlet-name>
+        <url-pattern>/ssh/*</url-pattern>
+    </servlet-mapping>
+
     <!--filesystem-->
     <servlet>
         <description>view ${user.home}</description>

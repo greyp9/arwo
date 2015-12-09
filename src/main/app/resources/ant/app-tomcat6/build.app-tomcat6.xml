@@ -126,6 +126,8 @@
             <include name='io/github/greyp9/arwo/app/xed/servlet/Xed1Servlet.java'/>
             <!--sftp-->
             <include name='io/github/greyp9/arwo/app/ssh/servlet/SFTPServlet.java'/>
+            <!--ssh-->
+            <include name='io/github/greyp9/arwo/app/ssh/servlet/SHServlet.java'/>
 
 
             <!--table testing-->
