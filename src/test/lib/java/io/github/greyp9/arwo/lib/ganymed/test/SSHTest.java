@@ -5,8 +5,18 @@ import ch.ethz.ssh2.InteractiveCallback;
 import ch.ethz.ssh2.SFTPv3Client;
 import ch.ethz.ssh2.SFTPv3DirectoryEntry;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
+import io.github.greyp9.arwo.core.io.command.Command;
+import io.github.greyp9.arwo.core.io.script.Script;
 import io.github.greyp9.arwo.core.lang.SystemU;
+import io.github.greyp9.arwo.core.security.realm.AppPrincipal;
+import io.github.greyp9.arwo.core.util.CollectionU;
 import io.github.greyp9.arwo.core.util.PropertiesU;
+import io.github.greyp9.arwo.core.vm.exec.UserExecutor;
+import io.github.greyp9.arwo.lib.ganymed.ssh.command.runnable.ScriptContext;
+import io.github.greyp9.arwo.lib.ganymed.ssh.command.runnable.ScriptRunnable;
+import io.github.greyp9.arwo.lib.ganymed.ssh.command.runnable.ScriptX;
+import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
+import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnectionX;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
@@ -15,8 +25,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintStream;
 import java.security.GeneralSecurityException;
+import java.util.Date;
 import java.util.List;
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
 import java.util.logging.Logger;
 
 public class SSHTest extends TestCase {
@@ -73,12 +85,19 @@ public class SSHTest extends TestCase {
             }
         }
         logger.info(String.format("Authenticated: HOST=[%s] PORT=[%s]", host, port));
+        // test sftp subsystem
+        checkSFTP("/", connection);
+        // test command subsystem
+        final AppPrincipal principal = new AppPrincipal("root", CollectionU.toCollection("*"));
+        final UserExecutor executor = new UserExecutor(principal, new Date(), null);
+        checkCommandBuiltIn(connection, executor);
+        checkCommandAdHoc(connection, executor);
+        checkCommandExplicit(connection, executor);
         // execute command
-        ls("/", connection);
         connection.close();
     }
 
-    private void ls(String directory, Connection connection) throws IOException {
+    private void checkSFTP(String directory, Connection connection) throws IOException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(os, true, UTF8Codec.Const.UTF8);
         SFTPv3Client client = new SFTPv3Client(connection);
@@ -87,6 +106,38 @@ public class SSHTest extends TestCase {
             ps.println(entry.filename);
         }
         logger.info(UTF8Codec.toString(os.toByteArray()));
+    }
+
+    private void checkCommandBuiltIn(Connection connection, UserExecutor executor) throws IOException {
+        final SSHConnection sshConnection = new SSHConnection(connection);
+        final ExecutorService executorStream = executor.getExecutorStream();
+        final SSHConnectionX sshConnectionX = new SSHConnectionX(sshConnection, executorStream);
+        final String uid = sshConnectionX.toNameUID(0);
+        final String gid = sshConnectionX.toNameGID(0);
+        logger.info(String.format("uid(0) = %s", uid));
+        logger.info(String.format("gid(0) = %s", gid));
+        Assert.assertEquals("root", uid);
+        Assert.assertEquals("root", gid);
+    }
+
+    private void checkCommandAdHoc(Connection connection, UserExecutor executor) throws IOException {
+        final SSHConnection sshConnection = new SSHConnection(connection);
+        final ExecutorService executorStream = executor.getExecutorStream();
+        final Command command = new ScriptX(sshConnection, executorStream).runCommand("ls /");
+        Assert.assertEquals(Integer.valueOf(0), command.getExitValue());
+        logger.info(command.getStdout());
+    }
+
+    private void checkCommandExplicit(Connection connection, UserExecutor executor) throws IOException {
+        final SSHConnection sshConnection = new SSHConnection(connection);
+        final ExecutorService executorStream = executor.getExecutorStream();
+        final Script script = new Script(new Date(), "ls /");
+        final ScriptContext context = new ScriptContext(sshConnection, executorStream);
+        final ScriptRunnable runnable = new ScriptRunnable(script, context);
+        runnable.run();
+        final Command command = script.getCommands().iterator().next();
+        Assert.assertEquals(Integer.valueOf(0), command.getExitValue());
+        logger.info(command.getStdout());
     }
 
     public static class InteractiveCallbackImpl implements InteractiveCallback {

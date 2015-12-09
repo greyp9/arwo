@@ -20,6 +20,7 @@ import io.github.greyp9.arwo.core.xed.extension.XedKey;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.lib.ganymed.ssh.client.ClientParams;
+import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
 import io.github.greyp9.arwo.lib.ganymed.ssh.server.ServerParams;
 
 import java.io.IOException;

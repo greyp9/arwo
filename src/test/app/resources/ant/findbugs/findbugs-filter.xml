@@ -5,6 +5,10 @@
         <Bug code="PZLA"/>
     </Match>
     <Match>
+        <Class name="io.github.greyp9.arwo.core.vm.mutex.MutexU"/>
+        <Bug code="NN,UW,Wa"/>
+    </Match>
+    <Match>
         <Class name="io.github.greyp9.arwo.core.xml.DocumentU"/>
         <Bug code="PZLA"/>
     </Match>

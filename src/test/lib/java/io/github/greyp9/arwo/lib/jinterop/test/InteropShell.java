@@ -1,7 +1,8 @@
 package io.github.greyp9.arwo.lib.jinterop.test;
 
-import io.github.greyp9.arwo.core.command.Command;
-import io.github.greyp9.arwo.core.date.Interval;
+import io.github.greyp9.arwo.core.io.command.Command;
+import io.github.greyp9.arwo.core.io.command.CommandDone;
+import io.github.greyp9.arwo.core.io.command.CommandWork;
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.common.JISystem;
 import org.jinterop.dcom.core.IJIComObject;
@@ -78,25 +79,25 @@ public class InteropShell {
     }
 
     private Command runCommand(String stdin, IJIDispatch shell) throws JIException {
-        String context = getClass().getSimpleName();
         Date dateStart = new Date();
-        Object[] params = {new JIString(String.format("cmd /c %s", stdin))};
+        Object[] params = { new JIString(String.format("cmd /c %s", stdin)) };
         JIVariant[] results = shell.callMethodA("Exec", params);
         if ((results == null) || (results.length == 0)) {
-            return new Command(context, stdin, "", "", new Interval(dateStart, new Date()), 0, -1);
+            CommandWork commandWork = new CommandWork(stdin, null, dateStart, 0);
+            return new CommandDone(commandWork, "", "", new Date(), -1);
         } else {
             return processResults(stdin, dateStart, results[0]);
         }
     }
 
     private Command processResults(String stdin, Date dateStart, JIVariant variant) throws JIException {
-        String context = getClass().getSimpleName();
         IJIComObject comObject = variant.getObjectAsComObject();
         IJIDispatch results = (IJIDispatch) JIObjectFactory.narrowObject(comObject);
         String stdOut = consumeStream(results.get("StdOut"));
         String stdErr = consumeStream(results.get("StdErr"));
         results.release();
-        return new Command(context, stdin, stdOut, stdErr, new Interval(dateStart, new Date()), 0, 0);
+        CommandWork commandWork = new CommandWork(stdin, null, dateStart, 0);
+        return new CommandDone(commandWork, stdOut, stdErr, new Date(), 0);
     }
 
     private String consumeStream(JIVariant variant) throws JIException {

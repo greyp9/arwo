@@ -12,6 +12,7 @@ import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.sort.Sort;
 import io.github.greyp9.arwo.core.table.sort.Sorts;
 import io.github.greyp9.arwo.core.util.PropertiesX;
+import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnectionX;
 import io.github.greyp9.arwo.lib.ganymed.ssh.core.SFTP;
 
 import java.sql.Types;
@@ -27,8 +28,8 @@ public class SFTPFolder {
     /**
      * Store folder information, such that no additional connectivity to data endpoint is needed.
      */
-    public SFTPFolder(final Collection<SFTPv3DirectoryEntry> directoryEntries,
-                      final RowSetMetaData metaData, final boolean sort) {
+    public SFTPFolder(final Collection<SFTPv3DirectoryEntry> directoryEntries, final RowSetMetaData metaData,
+                      final boolean sort, final SSHConnectionX sshConnectionX) {
         // "native" sort, in case none supplied by user
         final Sorts sorts = (sort ? new Sorts(new Sort("type", true), new Sort("name", true)) : null);
         // load from source data
@@ -40,7 +41,7 @@ public class SFTPFolder {
             } else if ("..".equals(directoryEntry.filename)) {
                 directoryEntry.getClass();
             } else {
-                loadRow(rowSet, directoryEntry);
+                loadRow(rowSet, directoryEntry, sshConnectionX);
             }
         }
         rowSet.updateOrdinals();
@@ -60,7 +61,8 @@ public class SFTPFolder {
         return new RowSetMetaData("sftpFolderType", columns);
     }
 
-    private static void loadRow(final RowSet rowSet, final SFTPv3DirectoryEntry directoryEntry) {
+    private static void loadRow(
+            final RowSet rowSet, final SFTPv3DirectoryEntry directoryEntry, final SSHConnectionX sshConnectionX) {
         // prep
         final SFTPv3FileAttributes attributes = directoryEntry.attributes;
         final Integer type = toType(attributes);
@@ -75,8 +77,8 @@ public class SFTPFolder {
         insertRow.setNextColumn(directoryEntry.filename);
         insertRow.setNextColumn(DateU.fromSeconds(attributes.mtime));
         insertRow.setNextColumn(extension);
-        insertRow.setNextColumn(attributes.uid);
-        insertRow.setNextColumn(attributes.gid);
+        insertRow.setNextColumn(sshConnectionX.toNameUID(attributes.uid));
+        insertRow.setNextColumn(sshConnectionX.toNameGID(attributes.gid));
         insertRow.setNextColumn(attributes.getOctalPermissions());
         insertRow.setNextColumn(attributes.size);
         rowSet.add(insertRow.getRow());

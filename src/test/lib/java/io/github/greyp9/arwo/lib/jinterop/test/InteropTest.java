@@ -1,7 +1,7 @@
 package io.github.greyp9.arwo.lib.jinterop.test;
 
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
-import io.github.greyp9.arwo.core.command.Command;
+import io.github.greyp9.arwo.core.io.command.Command;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.util.PropertiesU;
 import junit.framework.TestCase;
@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.io.PrintStream;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -53,7 +54,7 @@ public class InteropTest extends TestCase {
             ps.println("---------=---------=---------=---------=---------=---------=");
             ps.println(String.format("> %s", command.getStdin()));
             ps.println(String.format("[%s] [%d] [%d]",
-                    command.getDateStart(), command.getElapsed(), command.getExitValue()));
+                    command.getStart(), command.getElapsed(new Date()), command.getExitValue()));
             ps.println(String.format("<STDERR>%s</STDERR>", command.getStderr()));
             ps.println(command.getStdout());
             ps.println("---------=---------=---------=---------=---------=---------=");

@@ -11,6 +11,7 @@ import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.connect.ConnectionCache;
 import io.github.greyp9.arwo.core.date.Interval;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
+import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.menu.MenuSystem;
 import io.github.greyp9.arwo.core.page.Page;
@@ -18,10 +19,11 @@ import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.resource.Pather;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.table.state.ViewStates;
-import io.github.greyp9.arwo.core.text.TextFilters;
+import io.github.greyp9.arwo.core.text.filter.TextFilters;
 import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.core.vm.exec.UserExecutor;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
 import io.github.greyp9.arwo.core.xed.state.XedUserState;
 
@@ -35,73 +37,80 @@ import java.util.Properties;
 
 @SuppressWarnings("PMD.ExcessiveImports")
 public class AppUserState {
-    private final Principal principal;
+    // lifetime
     private final Interval interval;
-    private final File userHome;
+    // user identity token
+    private final Principal principal;
     private final String submitID;
-    private final ViewStates viewStates;
-    private final TextFilters textFilters;
-    private final Alerts alerts;
+    // executor service
+    private final UserExecutor userExecutor;
+    // application state
+    private final File userRoot;
+    // configuration state
     private final XedUserState documentState;
-    // menu system
-    private final MenuSystem menuSystem;
-    // resource caches (preloaded stuff)
-    private final ResourceCache cache;
     // connection entries
     private final ConnectionCache cacheSSH;
+    // table view states
+    private final ViewStates viewStates;
+    // local cache of remote resources
+    private final ResourceCache cache;
+    // user alerts
+    private final Alerts alerts;
+    // text filters (for file display)
+    private final TextFilters textFilters;
+    // menu system
+    private final MenuSystem menuSystem;
+
     // binary viewer state (hex rendering)
     private Page pageViewHex;
 
-    public final Principal getPrincipal() {
-        return principal;
-    }
 
     public final Interval getInterval() {
         return interval;
     }
 
-    public final File getUserHome() {
-        return userHome;
+    public final Principal getPrincipal() {
+        return principal;
     }
 
     public final String getSubmitID() {
         return submitID;
     }
 
-    public final ViewStates getViewStates() {
-        return viewStates;
+    public final UserExecutor getUserExecutor() {
+        return userExecutor;
     }
 
-    public final TextFilters getTextFilters() {
-        return textFilters;
-    }
-
-    public final Locus getLocus() {
-        return documentState.getLocus();
-    }
-
-    public final Alerts getAlerts() {
-        return alerts;
+    public final File getUserRoot() {
+        return userRoot;
     }
 
     public final XedUserState getDocumentState() {
         return documentState;
     }
 
-    public final MenuSystem getMenuSystem() {
-        return menuSystem;
+    public final ConnectionCache getCacheSSH() {
+        return cacheSSH;
+    }
+
+    public final ViewStates getViewStates() {
+        return viewStates;
     }
 
     public final ResourceCache getCache() {
         return cache;
     }
 
-    public final ConnectionCache getCacheSSH() {
-        return cacheSSH;
+    public final Alerts getAlerts() {
+        return alerts;
     }
 
-    public final Properties getProperties() {
-        return documentState.getProperties();
+    public final TextFilters getTextFilters() {
+        return textFilters;
+    }
+
+    public final MenuSystem getMenuSystem() {
+        return menuSystem;
     }
 
     public final Page getPageViewHex() {
@@ -112,16 +121,26 @@ public class AppUserState {
         this.pageViewHex = pageViewHex;
     }
 
+
+    public final Locus getLocus() {
+        return documentState.getLocus();
+    }
+
+    public final Properties getProperties() {
+        return documentState.getProperties();
+    }
+
     public AppUserState(final Principal principal, final Date date, final File webappRoot,
                         final String submitID, final Locus locus) throws IOException {
         this.principal = principal;
         this.interval = new Interval(date, null);
-        this.userHome = AppFolder.getUserHome(webappRoot, principal);
+        this.userRoot = AppFolder.getUserHome(webappRoot, principal);
         this.submitID = submitID;
         this.viewStates = new ViewStates();
         this.textFilters = new TextFilters();
         this.alerts = new Alerts();
         this.documentState = new XedUserState(webappRoot, principal, submitID, locus, alerts);
+        this.userExecutor = new UserExecutor(principal, date, new File(SystemU.userHome()));
         this.menuSystem = new MenuSystem(submitID, new AppMenuFactory());
         this.cache = new ResourceCache();
         this.cacheSSH = new ConnectionCache("ssh", alerts);
