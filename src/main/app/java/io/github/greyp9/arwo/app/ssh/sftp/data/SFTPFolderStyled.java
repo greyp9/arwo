@@ -84,7 +84,8 @@ public class SFTPFolderStyled {
     private static String toHref(final SFTPRequest request, final String name,
                                  final boolean isDirectory) throws UnsupportedEncodingException {
         final boolean fullPath = name.contains(Http.Token.SLASH);  // in case of load from symlink context
-        final String folderURI = (fullPath ? request.getBaseURIServer() : request.getHttpRequest().getURI());
+        final String folderURI = (fullPath ? request.getBaseURIServer() :
+                request.getHttpRequest().getHttpRequest().getResource());
         final String filename = (fullPath ? name : URLCodec.encode(name));
         final String suffix = (isDirectory ? Http.Token.SLASH : "");
         return Value.join("", folderURI, filename, suffix);
