@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.app.ssh.sftp.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
+import io.github.greyp9.arwo.app.ssh.core.view.SSHConnectionView;
 import io.github.greyp9.arwo.app.ssh.core.view.SSHInventoryView;
 import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.core.http.HttpResponse;
@@ -24,6 +25,7 @@ public class SFTPInventoryView extends SFTPView {
         final ServletHttpRequest httpRequest = getRequest().getHttpRequest();
         final AppUserState userState = getUserState();
         new SSHInventoryView(httpRequest, userState, offsetURI).addContent(html);
+        new SSHConnectionView(httpRequest, userState, offsetURI).addContent(html);
         return null;
     }
 }

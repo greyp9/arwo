@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.connect;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.core.vm.mutex.CollectionU;
 
 import java.io.IOException;
 import java.util.Collection;
@@ -18,6 +19,10 @@ public class ConnectionCache {
         this.cacheName = cacheName;
         this.resources = new TreeSet<ConnectionResource>();
         this.alerts = alerts;
+    }
+
+    public final synchronized Collection<ConnectionResource> getResources() {
+        return CollectionU.copy(new TreeSet<ConnectionResource>(), resources);
     }
 
     public final synchronized ConnectionResource getResource(

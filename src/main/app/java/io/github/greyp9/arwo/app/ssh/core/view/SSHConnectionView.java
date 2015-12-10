@@ -1,13 +1,17 @@
 package io.github.greyp9.arwo.app.ssh.core.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
-import io.github.greyp9.arwo.core.config.CursorSSH;
-import io.github.greyp9.arwo.core.config.CursorSetSSH;
+import io.github.greyp9.arwo.core.connect.ConnectionResource;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.resource.PathU;
+import io.github.greyp9.arwo.core.submit.SubmitToken;
+import io.github.greyp9.arwo.core.table.cell.Duration;
+import io.github.greyp9.arwo.core.table.cell.TableViewButton;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
 import io.github.greyp9.arwo.core.table.core.TableU;
 import io.github.greyp9.arwo.core.table.html.TableView;
@@ -18,20 +22,20 @@ import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewState;
-import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
+import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
 import java.sql.Types;
 import java.util.Collection;
 
-public class SSHInventoryView {
+public class SSHConnectionView {
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
     private final String offsetURI;
 
-    public SSHInventoryView(
+    public SSHConnectionView(
             final ServletHttpRequest httpRequest, final AppUserState userState, final String offsetURI) {
         this.httpRequest = httpRequest;
         this.userState = userState;
@@ -41,7 +45,7 @@ public class SSHInventoryView {
     public final void addContent(final Element html) throws IOException {
         final Xed xed = userState.getDocumentState().getSession("/app").getXed();
         final RowSetMetaData metaData = createMetaData();
-        final RowSet rowSet = createRowSet(metaData, xed);
+        final RowSet rowSet = createRowSet(metaData);
         final Bundle bundle = xed.getBundle();
         final Locus locus = userState.getLocus();
         final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
@@ -54,38 +58,43 @@ public class SSHInventoryView {
 
     private RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData("connect", Types.VARCHAR),
+                new ColumnMetaData("select", Types.VARCHAR),
                 new ColumnMetaData("name", Types.VARCHAR, true),
-                new ColumnMetaData("comment", Types.VARCHAR),
-                new ColumnMetaData("user", Types.VARCHAR),
-                new ColumnMetaData("authPassword/authPublicKey", Types.VARCHAR),
-                new ColumnMetaData("host", Types.VARCHAR),
-                new ColumnMetaData("port", Types.VARCHAR),
+                new ColumnMetaData("hashCode", Types.VARCHAR),
+                new ColumnMetaData("opened", Types.TIMESTAMP),
+                new ColumnMetaData("last", Types.TIMESTAMP),
+                new ColumnMetaData("count", Types.INTEGER),
+                new ColumnMetaData("millis", Types.INTEGER),
+                new ColumnMetaData("close", Types.VARCHAR),
         };
-        return new RowSetMetaData("server.sshServerType", columns);
+        return new RowSetMetaData("sshConnectionType", columns);
     }
 
-    private RowSet createRowSet(final RowSetMetaData metaData, final Xed xed) throws IOException {
+    private RowSet createRowSet(final RowSetMetaData metaData) throws IOException {
         final RowSet rowSet = new RowSet(metaData, null, null);
         final String baseURI = PathU.toPath(httpRequest.getBaseURI(), offsetURI);
-        final Collection<XedCursor> cursors = new CursorSetSSH(xed).getCursors();
-        for (final XedCursor cursor : cursors) {
-            createRow(rowSet, baseURI, cursor);
+        final Collection<ConnectionResource> resources = userState.getCacheSSH().getResources();
+        for (final ConnectionResource resource : resources) {
+            createRow(rowSet, baseURI, resource);
         }
         return rowSet;
     }
 
-    private void createRow(final RowSet rowSet, final String baseURI, final XedCursor cursor) {
-        final CursorSSH cursorSSH = new CursorSSH(cursor);
-        final String href = PathU.toDir(baseURI, cursorSSH.getName());
+    private void createRow(final RowSet rowSet, final String baseURI, final ConnectionResource resource) {
+        final SSHConnection sshConnection = ((SSHConnectionResource) resource).getSSHConnection();
+        final String href = PathU.toDir(baseURI, resource.getName());
+        final String hashCode = Integer.toHexString(sshConnection.hashCode());
+        final SubmitToken tokenClose = new SubmitToken(
+                App.Target.USER_STATE, App.Action.CLOSE, "ssh", resource.getName());
         final InsertRow insertRow = new InsertRow(rowSet);
         insertRow.setNextColumn(new TableViewLink(UTF16.SELECT, null, href));
-        insertRow.setNextColumn(cursorSSH.getName());
-        insertRow.setNextColumn(cursorSSH.getComment());
-        insertRow.setNextColumn(cursorSSH.getUser());
-        insertRow.setNextColumn(cursorSSH.getAuthentication());
-        insertRow.setNextColumn(cursorSSH.getHost());
-        insertRow.setNextColumn(cursorSSH.getPort());
+        insertRow.setNextColumn(resource.getName());
+        insertRow.setNextColumn(hashCode);
+        insertRow.setNextColumn(sshConnection.getDateOpen());
+        insertRow.setNextColumn(sshConnection.getDateLast());
+        insertRow.setNextColumn(sshConnection.getCount());
+        insertRow.setNextColumn(new Duration(sshConnection.getMillis()));
+        insertRow.setNextColumn(new TableViewButton(UTF16.CLOSE, userState.getSubmitID(), tokenClose.toString()));
         rowSet.add(insertRow.getRow());
     }
 }

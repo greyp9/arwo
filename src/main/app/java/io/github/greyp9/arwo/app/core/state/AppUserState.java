@@ -162,6 +162,8 @@ public class AppUserState {
         final String message = bundle.getString("alert.action.not.implemented");
         if (action == null) {
             getClass();
+        } else if (App.Action.CLOSE.equals(action)) {
+            doClose(token);
         } else if (App.Action.UPDATE_LOCALE.equals(action)) {
             documentState.applyLocale(httpArguments);
         } else if (App.Action.TEXT_FILTER.equals(action)) {
@@ -178,6 +180,14 @@ public class AppUserState {
             alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }
         return location;
+    }
+
+    private void doClose(final SubmitToken token) throws IOException {
+        final String cacheName = token.getObject();
+        final String resourceName = token.getObject2();
+        if ("ssh".equals(cacheName)) {
+            cacheSSH.removeResource(resourceName);
+        }
     }
 
     private String toView(final ServletHttpRequest httpRequest, final String action) {

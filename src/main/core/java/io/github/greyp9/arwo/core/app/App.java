@@ -49,7 +49,7 @@ public final class App {
     }
 
     public static class Action {
-        //public static final String CLOSE = "close";
+        public static final String CLOSE = "close";
         public static final String LOAD_REVISION = "loadRevision";
         public static final String MENU = "menu";
         //public static final String NAVIGATE = "navigate";
