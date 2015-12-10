@@ -7,7 +7,6 @@ import ch.ethz.ssh2.SCPOutputStream;
 import ch.ethz.ssh2.SFTPv3Client;
 import ch.ethz.ssh2.SFTPv3DirectoryEntry;
 import ch.ethz.ssh2.SFTPv3FileAttributes;
-import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
 import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.model.ExceptionModel;
@@ -17,6 +16,7 @@ import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
 import io.github.greyp9.arwo.lib.ganymed.ssh.core.SFTP;
 
 import java.io.ByteArrayInputStream;
@@ -121,7 +121,7 @@ public class SFTPDataSource {
         try {
             lastModified = DateU.fromSeconds(lstat(path).mtime).getTime();
             final SCPClient client = connection.createSCPClient();
-            bytes = read(client.get(normalize(path)));
+            bytes = read(client.get(path));
             sshConnection.update(request.getHttpRequest().getDate());
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
@@ -143,7 +143,7 @@ public class SFTPDataSource {
         try {
             final Connection connection = sshConnection.getConnection();
             final SCPClient client = connection.createSCPClient();
-            write(bytes, client.put(normalize(filename), bytes.length, normalize(folder), Const.UPLOAD_FILE_MODE));
+            write(bytes, client.put(filename, bytes.length, folder, Const.UPLOAD_FILE_MODE));
             sshConnection.update(request.getHttpRequest().getDate());
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
@@ -154,9 +154,11 @@ public class SFTPDataSource {
         StreamU.write(os, bytes);
     }
 
+/* was needed for lib versions prior to "ganymed-ssh2-262.jar"
     private static String normalize(final String path) {
         return path.replace(" ", "\\ ").replace("(", "\\(").replace(")", "\\)");  // lib quirk
     }
+*/
 
     private static class Const {
         private static final String UPLOAD_FILE_MODE = "0600";
