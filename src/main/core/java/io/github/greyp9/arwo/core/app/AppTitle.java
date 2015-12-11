@@ -21,7 +21,8 @@ public class AppTitle {
         private Factory() {
         }
 
-        public static AppTitle getHostLabel(final ServletHttpRequest httpRequest, final Bundle bundle) {
+        public static AppTitle getHostLabel(
+                final ServletHttpRequest httpRequest, final Bundle bundle) {
             final String host = httpRequest.getHttpRequest().getHeader(Http.Header.HOST);
             return new AppTitle(getLabel(httpRequest, bundle), host);
         }

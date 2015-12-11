@@ -57,6 +57,7 @@ public class AppMenuFactory implements MenuFactory {
     }
 
     public static class Const {
+        public static final String DASHBOARD = "dash";
         public static final String FILESYSTEM = "fs";
         public static final String COMMAND = "cmd";
     }

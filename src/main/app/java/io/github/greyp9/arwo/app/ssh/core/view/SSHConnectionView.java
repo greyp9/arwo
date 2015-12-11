@@ -34,12 +34,14 @@ public class SSHConnectionView {
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
     private final String offsetURI;
+    private final boolean select;
 
-    public SSHConnectionView(
-            final ServletHttpRequest httpRequest, final AppUserState userState, final String offsetURI) {
+    public SSHConnectionView(final ServletHttpRequest httpRequest, final AppUserState userState,
+                             final String offsetURI, final boolean select) {
         this.httpRequest = httpRequest;
         this.userState = userState;
         this.offsetURI = offsetURI;
+        this.select = select;
     }
 
     public final void addContent(final Element html) throws IOException {
@@ -87,7 +89,8 @@ public class SSHConnectionView {
         final SubmitToken tokenClose = new SubmitToken(
                 App.Target.USER_STATE, App.Action.CLOSE, "ssh", resource.getName());
         final InsertRow insertRow = new InsertRow(rowSet);
-        insertRow.setNextColumn(new TableViewLink(UTF16.SELECT, null, href));
+        final Object cellSelect = (select ? new TableViewLink(UTF16.SELECT, null, href) : null);
+        insertRow.setNextColumn(cellSelect);
         insertRow.setNextColumn(resource.getName());
         insertRow.setNextColumn(hashCode);
         insertRow.setNextColumn(sshConnection.getDateOpen());

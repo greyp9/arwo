@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.xed.session;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Map;
 import java.util.TreeMap;
@@ -14,6 +15,10 @@ public class XedSessions {
     public XedSessions(final XedEntries entries) {
         this.entries = entries;
         this.sessions = new TreeMap<String, XedSession>();
+    }
+
+    public final Collection<XedSession> getSessions() {
+        return sessions.values();
     }
 
     public final XedSession getSession(final String contextPath, final Locale locale) throws IOException {

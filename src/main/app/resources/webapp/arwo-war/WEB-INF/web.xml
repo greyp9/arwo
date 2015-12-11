@@ -74,6 +74,17 @@
         <url-pattern>/doc3/*</url-pattern>
     </servlet-mapping>
 
+    <!--sftp-->
+    <servlet>
+        <description>dashboard</description>
+        <servlet-name>DashServlet</servlet-name>
+        <servlet-class>io.github.greyp9.arwo.app.dash.servlet.DashServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DashServlet</servlet-name>
+        <url-pattern>/dash/*</url-pattern>
+    </servlet-mapping>
+
     <!--arwo document-->
     <servlet-mapping>
         <servlet-name>Xed1Servlet</servlet-name>

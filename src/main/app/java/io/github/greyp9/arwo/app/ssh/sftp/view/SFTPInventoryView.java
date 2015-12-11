@@ -25,7 +25,7 @@ public class SFTPInventoryView extends SFTPView {
         final ServletHttpRequest httpRequest = getRequest().getHttpRequest();
         final AppUserState userState = getUserState();
         new SSHInventoryView(httpRequest, userState, offsetURI).addContent(html);
-        new SSHConnectionView(httpRequest, userState, offsetURI).addContent(html);
+        new SSHConnectionView(httpRequest, userState, offsetURI, true).addContent(html);
         return null;
     }
 }
