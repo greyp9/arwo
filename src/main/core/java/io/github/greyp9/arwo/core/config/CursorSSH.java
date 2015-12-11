@@ -32,7 +32,7 @@ public class CursorSSH {
         return cursor.getValue(cursor.getChildInstance("name"));
     }
 
-    public final boolean getEnabled() {
+    public final boolean isEnabled() {
         return TypeU.toBooleanP(cursor.getValue(cursor.getChildInstance("enabled")));
     }
 
