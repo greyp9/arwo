@@ -77,15 +77,18 @@ public class SSHInventoryView {
 
     private void createRow(final RowSet rowSet, final String baseURI, final XedCursor cursor) {
         final CursorSSH cursorSSH = new CursorSSH(cursor);
-        final String href = PathU.toDir(baseURI, cursorSSH.getName());
-        final InsertRow insertRow = new InsertRow(rowSet);
-        insertRow.setNextColumn(new TableViewLink(UTF16.SELECT, null, href));
-        insertRow.setNextColumn(cursorSSH.getName());
-        insertRow.setNextColumn(cursorSSH.getComment());
-        insertRow.setNextColumn(cursorSSH.getUser());
-        insertRow.setNextColumn(cursorSSH.getAuthentication());
-        insertRow.setNextColumn(cursorSSH.getHost());
-        insertRow.setNextColumn(cursorSSH.getPort());
-        rowSet.add(insertRow.getRow());
+        final boolean enabled = cursorSSH.getEnabled();
+        if (enabled) {
+            final String href = PathU.toDir(baseURI, cursorSSH.getName());
+            final InsertRow insertRow = new InsertRow(rowSet);
+            insertRow.setNextColumn(new TableViewLink(UTF16.SELECT, null, href));
+            insertRow.setNextColumn(cursorSSH.getName());
+            insertRow.setNextColumn(cursorSSH.getComment());
+            insertRow.setNextColumn(cursorSSH.getUser());
+            insertRow.setNextColumn(cursorSSH.getAuthentication());
+            insertRow.setNextColumn(cursorSSH.getHost());
+            insertRow.setNextColumn(cursorSSH.getPort());
+            rowSet.add(insertRow.getRow());
+        }
     }
 }

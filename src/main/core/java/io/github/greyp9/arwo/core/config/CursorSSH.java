@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.config;
 
+import io.github.greyp9.arwo.core.lang.TypeU;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.bundle.XsdBundle;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
@@ -29,6 +30,10 @@ public class CursorSSH {
 
     public final String getName() {
         return cursor.getValue(cursor.getChildInstance("name"));
+    }
+
+    public final boolean getEnabled() {
+        return TypeU.toBooleanP(cursor.getValue(cursor.getChildInstance("enabled")));
     }
 
     public final String getComment() {

@@ -5,6 +5,11 @@ public final class TypeU {
     private TypeU() {
     }
 
+    public static boolean toBooleanP(final String value) {
+        final Boolean b = toBoolean(value);
+        return ((b != null) && (b));
+    }
+
     public static Boolean toBoolean(final String value) {
         return ((value == null) ? null : Boolean.valueOf(value));
     }
