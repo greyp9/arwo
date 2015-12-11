@@ -41,7 +41,7 @@ public class SHQueueCommand {
         final Alerts alerts = request.getAlerts();
         final String server = request.getServer();
         final SSHConnectionFactory factory = new SSHConnectionFactory(httpRequest, userState);
-        final ConnectionCache cacheSSH = userState.getCacheSSH();
+        final ConnectionCache cacheSSH = userState.getSSH().getCache();
         final SSHConnectionResource resource = (SSHConnectionResource) cacheSSH.getResource(server, factory);
         if (resource == null) {
             alerts.add(new Alert(Alert.Severity.WARN, bundle.format("SFTPHandlerPostMultipart.no.connect", server)));
@@ -60,6 +60,8 @@ public class SHQueueCommand {
         // queue command text for execution
         final String command = new XedActionCommand(request.getLocale()).getCommand(httpArguments);
         final Script script = new Script(server, httpRequest.getDate(), command);
+        userState.getSSH().getHistory().add(script);
+        userState.getSSH().getProperties().setProperty("command", command);
         // runnable to execute commands
         final UserExecutor userExecutor = userState.getUserExecutor();
         final ExecutorService executorStream = userExecutor.getExecutorStream();

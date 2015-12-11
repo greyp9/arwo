@@ -15,6 +15,7 @@ public class SHRequest {
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
     private final Pather patherServer;
+    private final Pather patherScriptID;
     private final Locale locale;
     private final Bundle bundle;
     private final Alerts alerts;
@@ -43,6 +44,7 @@ public class SHRequest {
         this.httpRequest = httpRequest;
         this.userState = userState;
         this.patherServer = new Pather(httpRequest.getPathInfo());
+        this.patherScriptID = new Pather(patherServer.getRight());
         this.locale = userState.getLocus().getLocale();
         this.bundle = new Bundle(new AppText(locale).getBundleCore());
         this.alerts = userState.getAlerts();
@@ -50,6 +52,10 @@ public class SHRequest {
 
     public final String getServer() {
         return patherServer.getLeftToken();
+    }
+
+    public final String getScriptID() {
+        return patherScriptID.getLeftToken();
     }
 
     public final String getTitlePath() {

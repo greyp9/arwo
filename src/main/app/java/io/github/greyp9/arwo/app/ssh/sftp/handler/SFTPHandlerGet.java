@@ -45,7 +45,7 @@ public class SFTPHandlerGet {
         HttpResponse httpResponse;
         final SSHConnectionFactory factory = new SSHConnectionFactory(httpRequest, userState);
         final SSHConnectionResource resource = (SSHConnectionResource)
-                userState.getCacheSSH().getResource(request.getServer(), factory);
+                userState.getSSH().getCache().getResource(request.getServer(), factory);
         if (resource == null) {
             httpResponse = HttpResponseU.to302(PathU.toDir(httpRequest.getBaseURI(), Const.MODE_DEFAULT));
         } else {

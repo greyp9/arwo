@@ -36,7 +36,7 @@ public class SHHandlerGet {
         } else if (Value.isEmpty(request.getServer())) {
             httpResponse = new SHInventoryView(request, userState, "").doGetResponse();
         } else {
-            httpResponse = new SHCommandView(request, userState, "").doGetResponse();
+            httpResponse = new SHCommandView(request, userState).doGetResponse();
         }
         return httpResponse;
     }

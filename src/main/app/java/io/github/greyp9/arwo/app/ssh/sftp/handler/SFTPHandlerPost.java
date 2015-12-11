@@ -94,7 +94,7 @@ public class SFTPHandlerPost {
             final SubmitToken token, final NameTypeValues httpArguments, final String location) throws IOException {
         final SSHConnectionFactory factory = new SSHConnectionFactory(httpRequest, userState);
         final SSHConnectionResource resource = (SSHConnectionResource)
-                userState.getCacheSSH().getResource(request.getServer(), factory);
+                userState.getSSH().getCache().getResource(request.getServer(), factory);
         final SSHConnection connection = resource.getSSHConnection();
         if ("file".equals(token.getAction())) {
             new SFTPUpdateFile(request, connection).apply(httpArguments);

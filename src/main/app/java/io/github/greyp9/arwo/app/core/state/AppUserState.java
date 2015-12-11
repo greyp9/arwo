@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.app.core.state;
 
+import io.github.greyp9.arwo.app.core.subsystem.ssh.SubsystemSSH;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.app.App;
@@ -8,7 +9,6 @@ import io.github.greyp9.arwo.core.app.AppText;
 import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
-import io.github.greyp9.arwo.core.connect.ConnectionCache;
 import io.github.greyp9.arwo.core.date.Interval;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.lang.SystemU;
@@ -48,8 +48,6 @@ public class AppUserState {
     private final File userRoot;
     // configuration state
     private final XedUserState documentState;
-    // connection entries
-    private final ConnectionCache cacheSSH;
     // table view states
     private final ViewStates viewStates;
     // local cache of remote resources
@@ -58,6 +56,8 @@ public class AppUserState {
     private final Alerts alerts;
     // text filters (for file display)
     private final TextFilters textFilters;
+    // widget subsystems
+    private final SubsystemSSH ssh;
     // menu system
     private final MenuSystem menuSystem;
 
@@ -89,10 +89,6 @@ public class AppUserState {
         return documentState;
     }
 
-    public final ConnectionCache getCacheSSH() {
-        return cacheSSH;
-    }
-
     public final ViewStates getViewStates() {
         return viewStates;
     }
@@ -107,6 +103,10 @@ public class AppUserState {
 
     public final TextFilters getTextFilters() {
         return textFilters;
+    }
+
+    public final SubsystemSSH getSSH() {
+        return ssh;
     }
 
     public final MenuSystem getMenuSystem() {
@@ -141,9 +141,9 @@ public class AppUserState {
         this.alerts = new Alerts();
         this.documentState = new XedUserState(webappRoot, principal, submitID, locus, alerts);
         this.userExecutor = new UserExecutor(principal, date, new File(SystemU.userHome()));
+        this.ssh = new SubsystemSSH(alerts);
         this.menuSystem = new MenuSystem(submitID, new AppMenuFactory());
         this.cache = new ResourceCache();
-        this.cacheSSH = new ConnectionCache("ssh", alerts);
         this.pageViewHex = Page.Factory.initPage(Const.PAGE_HEX_VIEW, new Properties());
     }
 
@@ -186,7 +186,7 @@ public class AppUserState {
         final String cacheName = token.getObject();
         final String resourceName = token.getObject2();
         if ("ssh".equals(cacheName)) {
-            cacheSSH.removeResource(resourceName);
+            ssh.getCache().removeResource(resourceName);
         }
     }
 

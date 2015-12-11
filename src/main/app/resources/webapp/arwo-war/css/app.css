@@ -26,7 +26,72 @@ vertical-align: middle;
 /* END HEADER */
 
 /* START COMMAND */
+
+div.command
+{
+border: solid thin ThreeDShadow;
+margin: 1em 0 1em 0;
+}
+
+div.command-body
+{
+margin: 0.5em;
+}
+
+div.command-head, div.command-foot
+{
+border: solid thin ThreeDShadow;
+background-color: InfoBackground;
+color: InfoText;
+margin: 0;
+padding: 2px 4px;
+font-family: monospace;
+}
+
+div.command-stderr, div.command-stdout
+{
+border: thin dotted ThreeDShadow;
+color: WindowText;
+margin: 0;
+padding: 0 4px;
+}
+
+div.command-stderr pre, div.command-stdout pre
+{
+margin: 4px 0;
+}
+
+div.command-stderr
+{
+background-color: Highlight;
+color: HighlightText;
+}
+
 /* END COMMAND */
 
 /* START RESULTS */
+
+div.text-result
+{
+border: solid thin ThreeDShadow;
+margin: 0.5em 0;
+}
+
+div.text-result-header
+{
+border: solid thin ThreeDShadow;
+background-color: Highlight;
+color: HighlightText;
+font-family: sans-serif;
+font-size: larger;
+font-weight: bold;
+padding: 0.4em;
+}
+
+div.text-result pre
+{
+margin: 0.5em;
+padding: 0;
+}
+
 /* END RESULTS */

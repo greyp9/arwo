@@ -112,4 +112,52 @@ public class Script {
         commandsDone.add(commandDone);
         return commandDone;
     }
+
+    public final synchronized Long getDelay(final Date now) {  // how long waiting to start
+        final Date dateA = new Date(date);
+        final Date dateZ = ((getStart() == null) ? now : getStart());
+        final boolean isValue = (dateZ != null);
+        return (isValue ? (dateZ.getTime() - dateA.getTime()) : null);
+    }
+
+    public final synchronized Long getElapsed(final Date now) {
+        final Date dateA = getStart();
+        final Date dateZ = ((getFinish() == null) ? now : getFinish());
+        final boolean isValue = ((dateA != null) && (dateZ != null));
+        return (isValue ? (dateZ.getTime() - dateA.getTime()) : null);
+    }
+
+    public final synchronized long getStdoutLength() {
+        long length = 0L;
+        final Collection<Command> commands = getCommands();
+        for (final Command command : commands) {
+            final String stdout = command.getStdout();
+            length += ((stdout == null) ? 0L : stdout.length());
+        }
+        return length;
+    }
+
+    public final synchronized long getStderrLength() {
+        long length = 0L;
+        final Collection<Command> commands = getCommands();
+        for (final Command command : commands) {
+            final String stderr = command.getStderr();
+            length += ((stderr == null) ? 0L : stderr.length());
+        }
+        return length;
+    }
+
+    public final synchronized Integer getExitValue() {
+        Integer exitValue = 0;
+        final Collection<Command> commands = getCommands();
+        for (final Command command : commands) {
+            exitValue = command.getExitValue();
+            if (exitValue == null) {
+                break;
+            } else if (!exitValue.equals(0)) {
+                break;
+            }
+        }
+        return exitValue;
+    }
 }

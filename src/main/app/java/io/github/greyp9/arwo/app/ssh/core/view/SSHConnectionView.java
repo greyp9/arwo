@@ -73,7 +73,7 @@ public class SSHConnectionView {
     private RowSet createRowSet(final RowSetMetaData metaData) throws IOException {
         final RowSet rowSet = new RowSet(metaData, null, null);
         final String baseURI = PathU.toPath(httpRequest.getBaseURI(), offsetURI);
-        final Collection<ConnectionResource> resources = userState.getCacheSSH().getResources();
+        final Collection<ConnectionResource> resources = userState.getSSH().getCache().getResources();
         for (final ConnectionResource resource : resources) {
             createRow(rowSet, baseURI, resource);
         }

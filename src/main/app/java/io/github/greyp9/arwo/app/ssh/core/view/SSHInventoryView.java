@@ -54,7 +54,7 @@ public class SSHInventoryView {
 
     private RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData("connect", Types.VARCHAR),
+                new ColumnMetaData("select", Types.VARCHAR),
                 new ColumnMetaData("name", Types.VARCHAR, true),
                 new ColumnMetaData("comment", Types.VARCHAR),
                 new ColumnMetaData("user", Types.VARCHAR),

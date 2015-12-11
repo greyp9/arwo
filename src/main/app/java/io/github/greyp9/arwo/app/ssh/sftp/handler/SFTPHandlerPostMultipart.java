@@ -60,7 +60,7 @@ public class SFTPHandlerPostMultipart {
         final String filename = properties.getProperty(Const.CD_FILENAME);
         final SSHConnectionFactory factory = new SSHConnectionFactory(httpRequest, userState);
         final SSHConnectionResource resource = (SSHConnectionResource)
-                userState.getCacheSSH().getResource(server, factory);
+                userState.getSSH().getCache().getResource(server, factory);
         if (resource == null) {
             alerts.add(new Alert(Alert.Severity.WARN, bundle.format("SFTPHandlerPostMultipart.no.connect", server)));
         } else if (filename.length() == 0) {

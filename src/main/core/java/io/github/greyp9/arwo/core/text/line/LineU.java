@@ -32,7 +32,6 @@ public final class LineU {
         return lines;
     }
 
-/*
     public static String toText(final Collection<String> lines, final String newline) {
         final StringBuilder buffer = new StringBuilder();
         for (final String line : lines) {
@@ -41,6 +40,7 @@ public final class LineU {
         return buffer.toString();
     }
 
+/*
     public static String toTextLines(final String text, final String newline, final int maxLines) throws IOException {
         return toText(toLines(text, maxLines), newline);
     }
