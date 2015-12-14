@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.app.core.view.history;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.glyph.UTF16;
@@ -59,7 +60,7 @@ public class AppHistoryView {
 
     private RowSetMetaData createMetaData(final String id) {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData("select", Types.VARCHAR),
+                new ColumnMetaData(App.Action.SELECT, Types.VARCHAR),
                 new ColumnMetaData("context", Types.VARCHAR),
                 new ColumnMetaData("stdin", Types.VARCHAR),
                 new ColumnMetaData("dateSubmit", Types.TIMESTAMP, true),

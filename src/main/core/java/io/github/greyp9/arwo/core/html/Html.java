@@ -41,8 +41,8 @@ public final class Html {
     public static final String RADIO = "radio";
     public static final String REFID = "refid";
     public static final String ROWS = "rows";
-    public static final String SELECT = "select";
-    public static final String SELECTED = "selected";
+    //public static final String SELECT = "select";
+    //public static final String SELECTED = "selected";
     public static final String SIZE = "size";
     public static final String SPAN = "span";
     public static final String SRC = "src";

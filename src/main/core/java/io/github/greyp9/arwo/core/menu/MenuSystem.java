@@ -26,13 +26,13 @@ public class MenuSystem {
 
     public final MenuItem get(final String id, final String type) {
         final String key = Value.join(Http.Token.SLASH, id, type);
+        //menus.clear();  // menu dev hook, always create menus
         if (!menus.containsKey(key)) {
             menus.put(key, factory.create(id, type));
         }
         return menus.get(key);
     }
 
-/*
     public final boolean isOpen(final String object) {
         boolean isOpen = false;
         for (final MenuItem menuItem : menus.values()) {
@@ -52,7 +52,6 @@ public class MenuSystem {
         }
         return isOpen;
     }
-*/
 
     public final void toggle(final String object) {
         for (final MenuItem menuItem : menus.values()) {

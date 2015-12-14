@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.app.ssh.sftp.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.core.view.favorite.AppFavoriteView;
 import io.github.greyp9.arwo.app.core.view.props.AppPropertiesView;
 import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
 import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
@@ -27,6 +28,8 @@ import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.view.StatusBarView;
 import io.github.greyp9.arwo.core.xed.action.XedActionLocale;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
+import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
+import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xpath.XPather;
@@ -97,9 +100,14 @@ public abstract class SFTPView {
         // context menu
         final MenuView menuView = new MenuView(request.getBundle(), httpRequest, userState.getMenuSystem());
         menuView.addContentTo(html, AppMenuFactory.Const.FILESYSTEM, true);
-        // context title (+ text filters)
+        // context title (with text filters)
         final Element divMenus = menuView.addTitle(html, title);
         addTextFiltersView(divMenus);
+        // favorites (if toggled)
+        final XedNav nav = new XedNav(userState.getDocumentState().getSession("/fav").getXed());
+        final XedCursor cursorFavorites = nav.findX("/app:favorites/app:sftp-favorites");
+        final XedCursor cursorType = nav.find("sftp-favorite", cursorFavorites);
+        new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.FILESYSTEM).addContentTo(html);
         // settings property strips
         final Locale locale = userState.getLocus().getLocale();
         final String submitID = userState.getSubmitID();

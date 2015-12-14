@@ -34,26 +34,26 @@ public class XedNavNode {
     }
 
     public final XedCursor findChild(final Node node, final XedCursor cursor) {
-        final XedCursor cursorTI = findTypeInstance(node.getLocalName(), cursor);
+        final XedCursor cursorType = findTypeInstance(node.getLocalName(), cursor);
         XedCursor cursorChild = null;
-        if ((node instanceof Attr) && (cursorTI != null)) {
-            cursorChild = findChildAttr((Attr) node, cursor, cursorTI);
-        } else if ((node instanceof Element) && (cursorTI != null)) {
-            cursorChild = findChildElement((Element) node, cursor, cursorTI);
+        if ((node instanceof Attr) && (cursorType != null)) {
+            cursorChild = findChildAttr((Attr) node, cursor, cursorType);
+        } else if ((node instanceof Element) && (cursorType != null)) {
+            cursorChild = findChildElement((Element) node, cursor, cursorType);
         }
         return cursorChild;
     }
 
     public final XedCursor findTypeInstanceChild(final String name, final XedCursor cursor) {
         final Element element = cursor.getElement();
-        final XedCursor cursorTI = findTypeInstance(name, cursor);
+        final XedCursor cursorType = findTypeInstance(name, cursor);
         XedCursor cursorChild = null;
-        final TypeInstance typeInstance = cursorTI.getTypeInstance();
+        final TypeInstance typeInstance = cursorType.getTypeInstance();
         final NodeType nodeType = (typeInstance == null) ? null : typeInstance.getNodeType();
         if (NodeType.attribute.equals(nodeType)) {
-            cursorChild = findChildAttr(ElementU.getAttributeNode(element, name), cursor, cursorTI);
+            cursorChild = findChildAttr(ElementU.getAttributeNode(element, name), cursor, cursorType);
         } else if (NodeType.element.equals(nodeType)) {
-            cursorChild = findChildElement(ElementU.getChild(element, typeInstance.getQName()), cursor, cursorTI);
+            cursorChild = findChildElement(ElementU.getChild(element, typeInstance.getQName()), cursor, cursorType);
         }
         return cursorChild;
     }
@@ -64,44 +64,44 @@ public class XedNavNode {
 
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public final XedCursor findTypeInstance(final String name, final XedCursor cursor) {
-        XedCursor cursorTI = null;
+        XedCursor cursorType = null;
         final TypeInstance typeInstance = cursor.getTypeInstance();
         final TypeInstance typeInstanceChild = typeInstance.getInstance(name);
         if (typeInstance.getInstances().contains(typeInstanceChild)) {
-            cursorTI = new XedCursor(cursor.getXed(), cursor, null, null, typeInstanceChild);
+            cursorType = new XedCursor(cursor.getXed(), cursor, null, null, typeInstanceChild);
         } else {
             final TypeInstanceTraversal traversal = new TypeInstanceTraversal(typeInstance);
             final List<TypeInstance> typeInstances = traversal.getForName(name);
             if (!typeInstances.isEmpty()) {
-                cursorTI = cursor;
+                cursorType = cursor;
                 for (final TypeInstance typeInstanceIt : typeInstances) {
-                    cursorTI = new XedCursor(cursor.getXed(), cursorTI, null, null, typeInstanceIt);
+                    cursorType = new XedCursor(cursor.getXed(), cursorType, null, null, typeInstanceIt);
                 }
             }
         }
-        return cursorTI;
+        return cursorType;
     }
 
-    private XedCursor findChildAttr(final Attr attr, final XedCursor cursorParent, final XedCursor cursorTI) {
+    private XedCursor findChildAttr(final Attr attr, final XedCursor cursorParent, final XedCursor cursorType) {
         final Xed xed = cursorParent.getXed();
         final Element elementParent = cursorParent.getElement();
-        final TypeInstance typeInstance = cursorTI.getTypeInstance();
+        final TypeInstance typeInstance = cursorType.getTypeInstance();
         final Attr attrIt = (elementParent == null) ? null : ElementU.getAttributeNode(elementParent, attr.getName());
-        return ((attrIt == null) ? null : new XedCursor(xed, cursorTI, attrIt, 0, typeInstance));
+        return ((attrIt == null) ? null : new XedCursor(xed, cursorType, attrIt, 0, typeInstance));
     }
 
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    private XedCursor findChildElement(final Element child, final XedCursor cursorParent, final XedCursor cursorTI) {
+    private XedCursor findChildElement(final Element child, final XedCursor cursorParent, final XedCursor cursorType) {
         final Xed xed = cursorParent.getXed();
         final Element elementParent = cursorParent.getElement();
-        final TypeInstance typeInstance = cursorTI.getTypeInstance();
-        XedCursor cursor = new XedCursor(xed, cursorTI, null, null, typeInstance);
+        final TypeInstance typeInstance = cursorType.getTypeInstance();
+        XedCursor cursor = new XedCursor(xed, cursorType, null, null, typeInstance);
         final Collection<Element> children = ElementU.getChildren(elementParent, typeInstance.getName());
         int ordinal = -1;
         for (final Element childIt : children) {
             ++ordinal;
             if (childIt.equals(child)) {
-                cursor = new XedCursor(xed, cursorTI, childIt, ordinal, typeInstance);
+                cursor = new XedCursor(xed, cursorType, childIt, ordinal, typeInstance);
                 break;
             }
         }

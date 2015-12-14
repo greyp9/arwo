@@ -24,7 +24,8 @@ public final class App {
 
     public static class Config {
         public static final String XSD = "io/github/greyp9/arwo/xsd/app/app.xsd";
-        public static final QName QNAME = new QName("urn:arwo:app", "app", "app");
+        public static final QName QNAME_APP = new QName("urn:arwo:app", "app", "app");
+        public static final QName QNAME_FAVORITES = new QName("urn:arwo:app", "favorites", "app");
     }
 
     public static class Realm {
@@ -67,6 +68,9 @@ public final class App {
         public static final String COMMAND = "command";
         public static final String PROPERTIES = "properties";
         public static final String MIME_TYPE = "mimeType";
+        public static final String SELECT = "select";
+        public static final String ADD_FAV = "addFavorite";
+        public static final String SELECT_FAV = "selectFavorite";
         public static final String UI = "ui";
         public static final String XML = "xml";
         public static final String XSD = "xsd";

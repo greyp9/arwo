@@ -28,6 +28,7 @@ import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
+import java.util.Properties;
 
 public class SHCommandView extends SHView {
     private final SubsystemSSH ssh;
@@ -53,12 +54,13 @@ public class SHCommandView extends SHView {
         final SHRequest request = getRequest();
         final ServletHttpRequest httpRequest = request.getHttpRequest();
         final AppUserState userState = request.getUserState();
+        final Properties sshProperties = ssh.getProperties();
         // command input form (prep)
-        final String commandLast = ssh.getProperties().getProperty("command", "");
-        final String commandText = (script == null) ? commandLast : script.getText();
+        final String command = (script == null) ? sshProperties.getProperty("command", "") : script.getText();
+        sshProperties.setProperty("command", command);
         final XedActionCommand action = new XedActionCommand(userState.getLocus().getLocale());
         final Bundle bundle = action.getXed().getBundle();
-        final NameTypeValues ntv = NameTypeValuesU.create("command.commandType.command", commandText);
+        final NameTypeValues ntv = NameTypeValuesU.create("command.commandType.command", command);
         final XedCursor cursor = action.getCursor();
         final ValueInstance valueInstanceIn = ValueInstance.create(cursor.getTypeInstance(), ntv);
         new OpUpdate(null, action.getXed().getXsdTypes()).apply(cursor.getElement(), valueInstanceIn);

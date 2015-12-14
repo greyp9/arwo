@@ -85,7 +85,13 @@
         <url-pattern>/dash/*</url-pattern>
     </servlet-mapping>
 
-    <!--arwo document-->
+    <!--user favorites-->
+    <servlet-mapping>
+        <servlet-name>Xed1Servlet</servlet-name>
+        <url-pattern>/fav/*</url-pattern>
+    </servlet-mapping>
+
+    <!--user settings-->
     <servlet-mapping>
         <servlet-name>Xed1Servlet</servlet-name>
         <url-pattern>/app/*</url-pattern>

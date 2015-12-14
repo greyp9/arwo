@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.app.ssh.core.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.config.CursorSSH;
 import io.github.greyp9.arwo.core.config.CursorSetSSH;
@@ -54,7 +55,7 @@ public class SSHInventoryView {
 
     private RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData("select", Types.VARCHAR),
+                new ColumnMetaData(App.Action.SELECT, Types.VARCHAR),
                 new ColumnMetaData("name", Types.VARCHAR, true),
                 new ColumnMetaData("comment", Types.VARCHAR),
                 new ColumnMetaData("user", Types.VARCHAR),

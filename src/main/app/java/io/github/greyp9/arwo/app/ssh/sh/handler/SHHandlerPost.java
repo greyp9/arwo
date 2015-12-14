@@ -1,7 +1,9 @@
 package io.github.greyp9.arwo.app.ssh.sh.handler;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.ssh.sh.action.SHAddFavorite;
 import io.github.greyp9.arwo.app.ssh.sh.action.SHQueueCommand;
+import io.github.greyp9.arwo.app.ssh.sh.action.SHSelectFavorite;
 import io.github.greyp9.arwo.app.ssh.sh.core.SHRequest;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.http.HttpArguments;
@@ -60,8 +62,13 @@ public class SHHandlerPost {
     private String applySession(
             final SubmitToken token, final NameTypeValues httpArguments, final String locationIn) throws IOException {
         String location = locationIn;
-        if (App.Action.COMMAND.equals(token.getAction())) {
+        final String action = token.getAction();
+        if (App.Action.COMMAND.equals(action)) {
             location = new SHQueueCommand(request).doAction(location, httpArguments);
+        } else if (App.Action.ADD_FAV.equals(action)) {
+            new SHAddFavorite(request).doAction();
+        } else if (App.Action.SELECT_FAV.equals(action)) {
+            location = new SHSelectFavorite(request).doAction(token);
         }
         return location;
     }

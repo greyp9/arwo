@@ -15,6 +15,8 @@ public class AppMenuFactory implements MenuFactory {
         final String key = Value.join(Http.Token.SLASH, id, type);
         if (Const.FILESYSTEM.equals(type)) {
             menuItem = createMenuBarFileSystem(key);
+        } else if (Const.COMMAND.equals(type)) {
+            menuItem = createMenuBarCommand(key);
         } else {
             menuItem = new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU);
         }
@@ -22,7 +24,12 @@ public class AppMenuFactory implements MenuFactory {
     }
 
     private static MenuItem createMenuBarFileSystem(final String key) {
-        final MenuItem[] menuItems = new MenuItem[] { createMenuView(key) };
+        final MenuItem[] menuItems = new MenuItem[] { createMenuView(key), createMenuFavorites(key) };
+        return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
+    }
+
+    private static MenuItem createMenuBarCommand(final String key) {
+        final MenuItem[] menuItems = new MenuItem[] { createMenuFavorites(key) };
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
     }
 
@@ -54,6 +61,12 @@ public class AppMenuFactory implements MenuFactory {
         final MenuItem itemTextXml = new MenuItem("viewTextXml", subject, action, Http.Mime.TEXT_XML_UTF8);
         return new MenuItem("viewMime", subject, App.Action.MENU, key + "/viewMime",
                 itemUseConfig, itemTextPlain, itemTextHtml, itemTextXml);
+    }
+
+    private static MenuItem createMenuFavorites(final String key) {
+        final MenuItem itemAddFavorite = new MenuItem(App.Action.ADD_FAV, App.Target.SESSION, App.Action.ADD_FAV);
+        return new MenuItem("favorites", App.Target.USER_STATE, App.Action.MENU, key + "/favorites",
+                itemAddFavorite);
     }
 
     public static class Const {

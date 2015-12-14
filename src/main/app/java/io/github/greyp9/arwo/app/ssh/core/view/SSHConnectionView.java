@@ -60,7 +60,7 @@ public class SSHConnectionView {
 
     private RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData("select", Types.VARCHAR),
+                new ColumnMetaData(App.Action.SELECT, Types.VARCHAR),
                 new ColumnMetaData("name", Types.VARCHAR, true),
                 new ColumnMetaData("hashCode", Types.VARCHAR),
                 new ColumnMetaData("opened", Types.TIMESTAMP),

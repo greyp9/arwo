@@ -8,6 +8,7 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
 import javax.xml.namespace.QName;
+import java.io.IOException;
 
 public class XedNav {
     private final Xed xed;
@@ -53,5 +54,9 @@ public class XedNav {
 
     public final XedCursor findChild(final String typeInstanceName, final XedCursor cursor) {
         return new XedNavNode().findTypeInstanceChild(typeInstanceName, cursor);
+    }
+
+    public final XedCursor findX(final String xpath) throws IOException {
+        return find(xed.getXPather().getElement(xpath));
     }
 }

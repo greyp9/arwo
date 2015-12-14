@@ -38,6 +38,7 @@ public class SessionSave {
             // save new file
             try {
                 StreamU.write(file, xmlPretty);
+                session.setDateModify(null);
                 alert(Alert.Severity.INFO, "document.save", null);
                 trigger();
             } catch (FileNotFoundException e) {

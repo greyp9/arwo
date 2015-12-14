@@ -4,6 +4,8 @@
             xmlns:xsd='http://www.w3.org/2001/XMLSchema'
             elementFormDefault='qualified'>
 
+    <!--user configuration-->
+
     <xsd:element name='app' type='app:appType'/>
 
     <xsd:complexType name='appType'>
@@ -63,6 +65,41 @@
             <xsd:element name='xsdPath' type='xsd:string'/>
             <xsd:element name='xsltPath' type='xsd:string'/>
         </xsd:sequence>
+    </xsd:complexType>
+
+    <!--favorites-->
+
+    <xsd:element name='favorites' type='app:favoritesType'/>
+
+    <xsd:complexType name='favoritesType'>
+        <xsd:sequence>
+            <xsd:element name='ssh-favorites' type='app:sshFavoritesType'/>
+            <xsd:element name='sftp-favorites' type='app:sftpFavoritesType'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name='sshFavoritesType'>
+        <xsd:sequence>
+            <xsd:element name='ssh-favorite' type='app:sshFavoriteType' minOccurs='0' maxOccurs='unbounded'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name='sftpFavoritesType'>
+        <xsd:sequence>
+            <xsd:element name='sftp-favorite' type='app:sftpFavoriteType' minOccurs='0' maxOccurs='unbounded'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="sshFavoriteType">
+        <xsd:attribute name='server' type='xsd:string'/>
+        <xsd:attribute name='command' type='xsd:string'/>
+        <xsd:attribute name='comment' type='xsd:string'/>
+    </xsd:complexType>
+
+    <xsd:complexType name="sftpFavoriteType">
+        <xsd:attribute name='server' type='xsd:string'/>
+        <xsd:attribute name='resource' type='xsd:string'/>
+        <xsd:attribute name='comment' type='xsd:string'/>
     </xsd:complexType>
 
 </xsd:schema>

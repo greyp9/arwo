@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.app.ssh.sh.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.core.view.favorite.AppFavoriteView;
 import io.github.greyp9.arwo.app.ssh.sh.core.SHRequest;
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
 import io.github.greyp9.arwo.core.app.AppHtml;
@@ -19,6 +20,8 @@ import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.view.StatusBarView;
 import io.github.greyp9.arwo.core.xed.action.XedActionLocale;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
+import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
+import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import org.w3c.dom.Document;
@@ -30,7 +33,7 @@ import java.net.HttpURLConnection;
 import java.util.Locale;
 import java.util.Properties;
 
-@SuppressWarnings("PMD.AbstractNaming")
+@SuppressWarnings({ "PMD.AbstractNaming", "PMD.ExcessiveImports" })
 public abstract class SHView {
     private final SHRequest request;
     private final ServletHttpRequest httpRequest;
@@ -81,6 +84,11 @@ public abstract class SHView {
         menuView.addContentTo(html, AppMenuFactory.Const.COMMAND, true);
         // context title
         menuView.addTitle(html, title);
+        // favorites (if toggled)
+        final XedNav nav = new XedNav(userState.getDocumentState().getSession("/fav").getXed());
+        final XedCursor cursorFavorites = nav.findX("/app:favorites/app:ssh-favorites");
+        final XedCursor cursorType = nav.find("ssh-favorite", cursorFavorites);
+        new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.COMMAND).addContentTo(html);
         // settings property strips
         final Locale locale = userState.getLocus().getLocale();
         final String submitID = userState.getSubmitID();

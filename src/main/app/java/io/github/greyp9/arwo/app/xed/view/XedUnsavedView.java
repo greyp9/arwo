@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.app.xed.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppText;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.glyph.UTF16;
@@ -52,7 +53,7 @@ public class XedUnsavedView {
 
     private RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData("select", Types.VARCHAR),
+                new ColumnMetaData(App.Action.SELECT, Types.VARCHAR),
                 new ColumnMetaData("url", Types.VARCHAR, true),
                 new ColumnMetaData("title", Types.VARCHAR, true),
                 new ColumnMetaData("opened", Types.TIMESTAMP),

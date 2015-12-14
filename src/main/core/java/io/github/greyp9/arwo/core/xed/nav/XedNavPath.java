@@ -35,15 +35,15 @@ public class XedNavPath {
         for (final TypeInstance typeInstance : typeInstances) {
             final String id = XedCursor.getID(typeInstance, null);
             if (id.equals(token)) {
-                final XedCursor cursorTI = new XedCursor(cursor.getXed(), cursor, null, null, typeInstance);
-                cursorFind = find(path, cursor, cursorTI);
+                final XedCursor cursorType = new XedCursor(cursor.getXed(), cursor, null, null, typeInstance);
+                cursorFind = find(path, cursor, cursorType);
                 break;
             }
         }
         return cursorFind;
     }
 
-    private XedCursor find(final String path, final XedCursor cursor, final XedCursor cursorTI) {
+    private XedCursor find(final String path, final XedCursor cursor, final XedCursor cursorType) {
         XedCursor cursorFind;
         final Pather pather = new Pather(path);
         final String leftToken = pather.getLeftToken();
@@ -51,44 +51,44 @@ public class XedNavPath {
         if (leftToken == null) {
             cursorFind = null;
         } else if ((leftToken.length() == 0) && (right == null)) {
-            cursorFind = cursorTI;
+            cursorFind = cursorType;
         } else {
-            cursorFind = find(right, cursor, cursorTI, leftToken);
+            cursorFind = find(right, cursor, cursorType, leftToken);
         }
         return cursorFind;
     }
 
-    private XedCursor find(final String path, final XedCursor cursor, final XedCursor cursorTI, final String token) {
+    private XedCursor find(final String path, final XedCursor cursor, final XedCursor cursorType, final String token) {
         XedCursor cursorFind = null;
-        final TypeInstance typeInstance = cursorTI.getTypeInstance();
+        final TypeInstance typeInstance = cursorType.getTypeInstance();
         final NodeType nodeType = typeInstance.getNodeType();
         if (NodeType.attribute.equals(nodeType)) {
-            cursorFind = findAttr(cursor, cursorTI);
+            cursorFind = findAttr(cursor, cursorType);
         } else if (NodeType.element.equals(nodeType)) {
-            cursorFind = findElement(path, cursor, cursorTI, token);
+            cursorFind = findElement(path, cursor, cursorType, token);
         } else if (NodeType.choice.equals(nodeType)) {
-            cursorFind = findChoice(path, cursor, cursorTI, token);
+            cursorFind = findChoice(path, cursor, cursorType, token);
         }
         return cursorFind;
     }
 
-    private XedCursor findAttr(final XedCursor cursor, final XedCursor cursorTI) {
-        final TypeInstance typeInstance = cursorTI.getTypeInstance();
+    private XedCursor findAttr(final XedCursor cursor, final XedCursor cursorType) {
+        final TypeInstance typeInstance = cursorType.getTypeInstance();
         final Attr attrIt = ElementU.getAttributeNode(cursor.getElement(), typeInstance.getName());
-        return ((attrIt == null) ? null : new XedCursor(cursor.getXed(), cursorTI, attrIt, 0, typeInstance));
+        return ((attrIt == null) ? null : new XedCursor(cursor.getXed(), cursorType, attrIt, 0, typeInstance));
     }
 
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private XedCursor findElement(
-            final String path, final XedCursor cursor, final XedCursor cursorTI, final String token) {
+            final String path, final XedCursor cursor, final XedCursor cursorType, final String token) {
         XedCursor cursorFind = null;
-        final TypeInstance typeInstance = cursorTI.getTypeInstance();
+        final TypeInstance typeInstance = cursorType.getTypeInstance();
         final Collection<Element> children = ElementU.getChildren(cursor.getElement(), typeInstance.getName());
         int ordinal = -1;
         for (final Element child : children) {
             final String id = XedCursor.getID(typeInstance, ++ordinal);
             if (id.equals(token)) {
-                final XedCursor cursorChild = new XedCursor(cursor.getXed(), cursorTI, child, ordinal, typeInstance);
+                final XedCursor cursorChild = new XedCursor(cursor.getXed(), cursorType, child, ordinal, typeInstance);
                 cursorFind = find(path, cursorChild);
             }
         }
@@ -97,14 +97,14 @@ public class XedNavPath {
 
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private XedCursor findChoice(
-            final String path, final XedCursor cursor, final XedCursor cursorTI, final String token) {
+            final String path, final XedCursor cursor, final XedCursor cursorType, final String token) {
         XedCursor cursorFind = null;
-        final ChoiceTypeInstance choiceInstance = (ChoiceTypeInstance) cursorTI.getTypeInstance();
+        final ChoiceTypeInstance choiceInstance = (ChoiceTypeInstance) cursorType.getTypeInstance();
         final Collection<TypeInstance> typeInstances = choiceInstance.getTypeInstances().getTypeInstances();
         for (final TypeInstance typeInstance : typeInstances) {
             final String id = XedCursor.getID(typeInstance, null);
             if (id.equals(token)) {
-                final XedCursor cursorChoice = new XedCursor(cursor.getXed(), cursorTI, null, null, typeInstance);
+                final XedCursor cursorChoice = new XedCursor(cursor.getXed(), cursorType, null, null, typeInstance);
                 cursorFind = find(path, cursor, cursorChoice);
                 break;
             }

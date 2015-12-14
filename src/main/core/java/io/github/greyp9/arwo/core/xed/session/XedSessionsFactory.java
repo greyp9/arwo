@@ -35,6 +35,7 @@ public class XedSessionsFactory {
         if (SystemU.isTrue()) {
             addEntryRealm(entries);
         }
+        addEntryFavorites(entries, principal);
         addEntryConfig(entries, principal);
         addEntriesConfig(entries, principal, locus);
         return new XedSessions(entries);
@@ -48,14 +49,25 @@ public class XedSessionsFactory {
         entries.add(new XedEntry(null, "/users", App.Realm.QNAME, xmlPath, xsdPath, null, trigger));
     }
 
+    // user favorites (bookmarks)
+    private void addEntryFavorites(final XedEntries entries, final Principal principal) throws IOException {
+        final File userHome = AppFolder.getUserHome(webappRoot, principal);
+        final File fileConfig = new File(userHome, "config/fav.xml");
+        final String xmlPath = fileConfig.getCanonicalPath();
+        final String xsdPath = ResourceU.resolve(App.Config.XSD).toExternalForm();
+        entries.add(new XedEntry(null, "/fav", App.Config.QNAME_FAVORITES, xmlPath, xsdPath, null, null));
+    }
+
+    // user settings
     private void addEntryConfig(final XedEntries entries, final Principal principal) throws IOException {
         final File userHome = AppFolder.getUserHome(webappRoot, principal);
         final File fileConfig = new File(userHome, "config/app.xml");
         final String xmlPath = fileConfig.getCanonicalPath();
         final String xsdPath = ResourceU.resolve(App.Config.XSD).toExternalForm();
-        entries.add(new XedEntry(null, "/app", App.Config.QNAME, xmlPath, xsdPath, null, null));
+        entries.add(new XedEntry(null, "/app", App.Config.QNAME_APP, xmlPath, xsdPath, null, null));
     }
 
+    // documents defined in user settings
     private void addEntriesConfig(
             final XedEntries entries, final Principal principal, final Locus locus) throws IOException {
         final File userHome = AppFolder.getUserHome(webappRoot, principal);

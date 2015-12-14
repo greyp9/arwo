@@ -35,9 +35,9 @@ public class DrillDownHtmlView {
         getAnchor(td, href, String.format("%s (%d)", UTF16.ARROW_RIGHT, typeCount), title);
     }
 
-    private XedCursor getCursorTypeInstance(final XedCursor cursorTI) {
-        XedCursor cursor = cursorTI;
-        final XedNav nav = new XedNav(cursorTI.getXed());
+    private XedCursor getCursorTypeInstance(final XedCursor cursorType) {
+        XedCursor cursor = cursorType;
+        final XedNav nav = new XedNav(cursorType.getXed());
         // if this is a [1..1] TypeInstance, provide link straight to element
         final TypeInstance typeInstance = cursor.getTypeInstance();
         if (typeInstance.isSingleton()) {

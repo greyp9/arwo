@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xed.table;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.table.metadata.ColumnMetaData;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
 import io.github.greyp9.arwo.core.xsd.core.XsdTypeU;
@@ -18,7 +19,7 @@ public class XedMetaDataFactory {
     public final RowSetMetaData create(final TypeInstance typeInstance, final boolean rowLinks) {
         final ArrayList<ColumnMetaData> columns = new ArrayList<ColumnMetaData>();
         if (rowLinks) {
-            columns.add(new ColumnMetaData("select", Types.VARCHAR, false));
+            columns.add(new ColumnMetaData(App.Action.SELECT, Types.VARCHAR, false));
         }
         // populate column data
         final Collection<TypeInstance> typeInstances = new TypeInstanceX(typeInstance).getTableInstances();
