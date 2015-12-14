@@ -30,6 +30,7 @@ public class AppLifecycleServlet extends javax.servlet.http.HttpServlet {
         final Context context = AppNaming.lookupSubcontext(contextPath);
         synchronized (this) {
             AppNaming.unbind(context, App.Naming.APP_STATE);
+            this.appState.shutdown(getClass().getName());
             this.appState = null;
         }
         super.destroy();

@@ -56,7 +56,7 @@ public class ExecutorServlet extends javax.servlet.http.HttpServlet {
     }
 
     private static class Const {
-        private static final int START_NUM_THREAD = 3;  // RealmUpdateRunnable, CronService, UserService
+        private static final int START_NUM_THREAD = 4;  // Realm, Connect, CronService, UserService
         private static final int STOP_AWAIT_SECS = 5;
     }
 }

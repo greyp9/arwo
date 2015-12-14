@@ -4,6 +4,8 @@ import io.github.greyp9.arwo.core.connect.ConnectionResource;
 import io.github.greyp9.arwo.core.lang.CompareU;
 import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
 
+import java.util.Date;
+
 public class SSHConnectionResource implements ConnectionResource, Comparable<ConnectionResource> {
     private final String name;
     private final SSHConnection sshConnection;
@@ -20,6 +22,11 @@ public class SSHConnectionResource implements ConnectionResource, Comparable<Con
     @Override
     public final String getName() {
         return name;
+    }
+
+    @Override
+    public final Date getDate() {
+        return sshConnection.getDateLast();
     }
 
     @Override

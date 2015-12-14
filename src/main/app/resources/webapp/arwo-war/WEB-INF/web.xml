@@ -32,6 +32,12 @@
         <servlet-class>io.github.greyp9.arwo.app.lifecycle.servlet.AppLifecycleServlet</servlet-class>
         <load-on-startup>4</load-on-startup>
     </servlet>
+    <servlet>
+        <description>depends(AppServlet), initialize connection monitor at webapp startup</description>
+        <servlet-name>DaemonServlet</servlet-name>
+        <servlet-class>io.github.greyp9.arwo.app.daemon.connect.servlet.ConnectionServlet</servlet-class>
+        <load-on-startup>5</load-on-startup>
+    </servlet>
 
     <!--users document-->
     <servlet>

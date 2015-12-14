@@ -11,16 +11,32 @@ import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.Locale;
 import java.util.TimeZone;
+import java.util.concurrent.atomic.AtomicReference;
 
 public class AppState {
     private final String contextPath;
     private final Collection<AppUserState> userStates;
+    private final AtomicReference<String> reference;
+
+    public final AtomicReference<String> getReference() {
+        return reference;
+    }
 
     public AppState(final String contextPath) {
         this.contextPath = contextPath;
         this.userStates = new ArrayList<AppUserState>();
+        this.reference = new AtomicReference<String>();
+    }
+
+    public final Iterator<AppUserState> getIterator() {
+        return userStates.iterator();
+    }
+
+    public final void shutdown(final String cause) {
+        reference.set(cause);
     }
 
     public final AppUserState getUserState(final Principal principal, final Date date) throws IOException {
