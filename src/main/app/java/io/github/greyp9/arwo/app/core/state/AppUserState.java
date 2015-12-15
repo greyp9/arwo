@@ -155,7 +155,7 @@ public class AppUserState {
         final String action = token.getAction();
         final String object = token.getObject();
         final Collection<String> views = Arrays.asList(
-                "view", "view16", "edit", "edit16", "viewGZ", "viewZIP", "viewTGZ", "viewHex");
+                "view", "view16", "edit", "edit16", "create", "create16", "viewGZ", "viewZIP", "viewTGZ", "viewHex");
         final Locus locus = documentState.getLocus();
         final Properties properties = documentState.getProperties();
         final Bundle bundle = new Bundle(new AppText(locus.getLocale()).getBundleCore());

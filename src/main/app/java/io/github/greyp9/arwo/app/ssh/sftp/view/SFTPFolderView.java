@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.app.ssh.sftp.view;
 
 import ch.ethz.ssh2.SFTPv3DirectoryEntry;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.core.view.create.AppFileCreateView;
 import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
 import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPDataSource;
@@ -9,6 +10,7 @@ import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolder;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolderStyled;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.http.HttpResponse;
+import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.table.html.TableView;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
@@ -22,6 +24,7 @@ import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnectionX;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.ExecutorService;
 
@@ -34,6 +37,25 @@ public class SFTPFolderView extends SFTPView {
 
     @Override
     protected final HttpResponse addContentTo(final Element html) throws IOException {
+        final SFTPRequest request = getRequest();
+        final String mode = request.getMode();
+        // resource access (read versus write)
+        final Collection<String> createModes = Arrays.asList("create", "create16");
+        final boolean isModeCreate = createModes.contains(mode);
+        if (isModeCreate) {
+            doGetFileCreate(html);
+        }
+        return doGetFolder(html);
+    }
+
+    private HttpResponse doGetFileCreate(final Element html) throws IOException {
+        final SFTPRequest request = getRequest();
+        final ServletHttpRequest httpRequest = request.getHttpRequest();
+        final AppUserState userState = getUserState();
+        return new AppFileCreateView(httpRequest, userState).addContentTo(html);
+    }
+
+    private HttpResponse doGetFolder(final Element html) throws IOException {
         final SFTPRequest request = getRequest();
         final AppUserState userState = getUserState();
         // properties of cursor resource

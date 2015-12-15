@@ -24,13 +24,23 @@ public class AppMenuFactory implements MenuFactory {
     }
 
     private static MenuItem createMenuBarFileSystem(final String key) {
-        final MenuItem[] menuItems = new MenuItem[] { createMenuView(key), createMenuFavorites(key) };
+        final MenuItem[] menuItems = new MenuItem[] {
+                createMenuFile(key), createMenuView(key), createMenuFavorites(key) };
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
     }
 
     private static MenuItem createMenuBarCommand(final String key) {
         final MenuItem[] menuItems = new MenuItem[] { createMenuFavorites(key) };
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
+    }
+
+    private static MenuItem createMenuFile(final String key) {
+        final MenuItem itemFileNew = new MenuItem("createUTF8", App.Target.USER_STATE, "create");
+        final MenuItem itemFileNew16 = new MenuItem("createUTF16", App.Target.USER_STATE, "create16");
+        final MenuItem itemFileEdit = new MenuItem("editUTF8", App.Target.USER_STATE, "edit");
+        final MenuItem itemFileEdit16 = new MenuItem("editUTF16", App.Target.USER_STATE, "edit16");
+        return new MenuItem("file", App.Target.USER_STATE, App.Action.MENU, key + "/file",
+                itemFileNew, itemFileNew16, itemFileEdit, itemFileEdit16);
     }
 
     private static MenuItem createMenuView(final String key) {
@@ -40,16 +50,15 @@ public class AppMenuFactory implements MenuFactory {
         final MenuItem itemViewZIP = new MenuItem("viewZIP", App.Target.USER_STATE, "viewZIP");
         final MenuItem itemViewTGZ = new MenuItem("viewTGZ", App.Target.USER_STATE, "viewTGZ");
         final MenuItem itemViewHex = new MenuItem("viewHex", App.Target.USER_STATE, "viewHex");
-        final MenuItem itemEditUtf8 = new MenuItem("editUTF8", App.Target.USER_STATE, "edit");
-        final MenuItem itemEditUtf16 = new MenuItem("editUTF16", App.Target.USER_STATE, "edit16");
+        //final MenuItem itemEditUtf8 = new MenuItem("editUTF8", App.Target.USER_STATE, "edit");
+        //final MenuItem itemEditUtf16 = new MenuItem("editUTF16", App.Target.USER_STATE, "edit16");
         final String properties = App.Action.PROPERTIES;
         final String textFilter = App.Action.TEXT_FILTER;
         final MenuItem itemProps = new MenuItem(properties, App.Target.USER_STATE, App.Action.TOGGLE, properties);
         final MenuItem itemFilter = new MenuItem(textFilter, App.Target.USER_STATE, App.Action.TOGGLE, textFilter);
         return new MenuItem("view", App.Target.USER_STATE, App.Action.MENU, key + "/view",
                 createMenuViewMime(key),
-                itemViewUtf8, itemViewUtf16, itemViewGZ, itemViewZIP, itemViewTGZ, itemViewHex,
-                itemEditUtf8, itemEditUtf16, itemProps, itemFilter);
+                itemViewUtf8, itemViewUtf16, itemViewGZ, itemViewZIP, itemViewTGZ, itemViewHex, itemProps, itemFilter);
     }
 
     private static MenuItem createMenuViewMime(final String key) {

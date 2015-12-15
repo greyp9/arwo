@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionFactory;
 import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
 import io.github.greyp9.arwo.app.ssh.sftp.action.SFTPAddFavorite;
+import io.github.greyp9.arwo.app.ssh.sftp.action.SFTPCreateFile;
 import io.github.greyp9.arwo.app.ssh.sftp.action.SFTPSelectFavorite;
 import io.github.greyp9.arwo.app.ssh.sftp.action.SFTPUpdateFile;
 import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
@@ -95,13 +96,18 @@ public class SFTPHandlerPost {
     private String applySession(
             final SubmitToken token, final NameTypeValues httpArguments, final String locationIn) throws IOException {
         String location = locationIn;
+        final String message = request.getBundle().getString("alert.action.not.implemented");
         final String action = token.getAction();
-        if (App.Action.FILE.equals(action)) {
+        if (App.Action.FILE_CREATE.equals(action)) {
+            new SFTPCreateFile(request, getSSHConnection()).apply(httpArguments);
+        } else if (App.Action.FILE_UPDATE.equals(action)) {
             new SFTPUpdateFile(request, getSSHConnection()).apply(httpArguments);
         } else if (App.Action.ADD_FAV.equals(action)) {
             new SFTPAddFavorite(request).doAction();
         } else if (App.Action.SELECT_FAV.equals(action)) {
             location = new SFTPSelectFavorite(request).doAction(token);
+        } else {
+            request.getAlerts().add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }
         return location;
     }

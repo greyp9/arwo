@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.core.action.ActionFactory;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.text.filter.TextFilters;
+import io.github.greyp9.arwo.core.util.CollectionU;
 import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
@@ -15,7 +16,6 @@ import io.github.greyp9.arwo.core.xpath.XPather;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Locale;
 import java.util.Properties;
@@ -35,8 +35,7 @@ public class XedActionTextFilter extends XedAction {
             final Bundle bundle = this.getXed().getBundle();
             final ActionFactory factory = new ActionFactory(
                     submitID, bundle, App.Target.USER_STATE, App.Action.TEXT_FILTER, null);
-            final Collection<String> actions = new ArrayList<String>();
-            actions.add(App.Action.TEXT_FILTER);
+            final Collection<String> actions = CollectionU.toCollection(App.Action.TEXT_FILTER);
             final ActionButtons buttons = factory.create(App.Action.TEXT_FILTER, false, actions);
             new PropertyStripHtmlView(pageView, buttons).addContentDiv(html);
         }

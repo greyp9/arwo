@@ -4,6 +4,7 @@ import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.SCPClient;
 import ch.ethz.ssh2.SCPInputStream;
 import ch.ethz.ssh2.SCPOutputStream;
+import ch.ethz.ssh2.SFTPException;
 import ch.ethz.ssh2.SFTPv3Client;
 import ch.ethz.ssh2.SFTPv3DirectoryEntry;
 import ch.ethz.ssh2.SFTPv3FileAttributes;
@@ -33,6 +34,22 @@ public class SFTPDataSource {
     public SFTPDataSource(final SFTPRequest request, final SSHConnection sshConnection) {
         this.request = request;
         this.sshConnection = sshConnection;
+    }
+
+    public final SFTPv3FileAttributes exists(final String path) throws IOException {
+        SFTPv3FileAttributes attributes = null;
+        final SFTPv3Client client = new SFTPv3Client(sshConnection.getConnection());
+        try {
+            attributes = client.lstat(path);
+            sshConnection.update(request.getHttpRequest().getDate());
+        } catch (SFTPException e) {
+            if (e.getServerErrorCode() != Const.ERR_NO_SUCH_FILE) {
+                new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
+            }
+        } finally {
+            client.close();
+        }
+        return attributes;
     }
 
     public final SFTPv3FileAttributes lstat(final String path) throws IOException {
@@ -162,5 +179,7 @@ public class SFTPDataSource {
 
     private static class Const {
         private static final String UPLOAD_FILE_MODE = "0600";
+
+        private static final int ERR_NO_SUCH_FILE = 2;
     }
 }

@@ -23,11 +23,19 @@
         </xsl:copy>
     </xsl:template>
 
-    <xsl:template match='/xsd:schema/xsd:complexType[@name="fileType"]//xsd:element[@name="file"]'>
+    <xsl:template match='/xsd:schema/xsd:complexType[@name="fileEditType"]//xsd:element[@name="file"]'>
         <xsl:copy>
             <xsl:attribute name='xed:rows'>25</xsl:attribute>
             <xsl:attribute name='xed:cols'>132</xsl:attribute>
             <xsl:attribute name='xed:hideName'>true</xsl:attribute>
+            <xsl:apply-templates select='@*|node()'/>
+        </xsl:copy>
+    </xsl:template>
+
+    <xsl:template match='/xsd:schema/xsd:complexType[@name="fileNewType"]//xsd:element[@name="file"]'>
+        <xsl:copy>
+            <xsl:attribute name='xed:rows'>25</xsl:attribute>
+            <xsl:attribute name='xed:cols'>132</xsl:attribute>
             <xsl:apply-templates select='@*|node()'/>
         </xsl:copy>
     </xsl:template>

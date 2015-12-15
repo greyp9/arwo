@@ -9,6 +9,10 @@ public final class ByteU {
     private ByteU() {
     }
 
+    public static int length(final byte[] bytes) {
+        return ((bytes == null) ? 0 : bytes.length);
+    }
+
     public static byte[] copy(final byte[] bytes) {
         return ((bytes == null) ? null : extract(bytes, 0, bytes.length));
     }

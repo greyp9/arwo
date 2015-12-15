@@ -18,6 +18,7 @@ import io.github.greyp9.arwo.core.date.HttpDateU;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
+import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.locus.Locus;
@@ -63,6 +64,9 @@ public class SFTPFileView extends SFTPView {
         final boolean isUTF16 = utf16Modes.contains(mode);
         final String encoding = (isUTF16 ? UTF8Codec.Const.UTF16 : UTF8Codec.Const.UTF8);
         // resource access (read versus write)
+        final Collection<String> createModes = Arrays.asList("create", "create16");
+        final boolean isModeCreate = createModes.contains(mode);
+        // resource access (read versus write)
         final Collection<String> editModes = Arrays.asList("edit", "edit16");
         final boolean isModeEdit = editModes.contains(mode);
         // resource interpret (gzip deflated content expected)
@@ -76,7 +80,9 @@ public class SFTPFileView extends SFTPView {
         addFileProperties(html, metaFile);
         // dispose of request
         HttpResponse httpResponse;
-        if (isModeEdit) {
+        if (isModeCreate) {
+            httpResponse = HttpResponseU.to302(".");  // go to containing folder
+        } else if (isModeEdit) {
             httpResponse = new AppFileEditView(httpRequest, userState).addContentTo(html, metaFile, encoding);
         } else if (isProperties) {
             httpResponse = null;

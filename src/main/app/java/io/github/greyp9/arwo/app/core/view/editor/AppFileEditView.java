@@ -19,7 +19,7 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.util.CollectionU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
-import io.github.greyp9.arwo.core.xed.action.XedActionFile;
+import io.github.greyp9.arwo.core.xed.action.XedActionFileEdit;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.op.OpUpdate;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
@@ -28,9 +28,12 @@ import io.github.greyp9.arwo.core.xed.view.html.PropertyPageHtmlView;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
 import org.w3c.dom.Element;
 
+import javax.xml.namespace.QName;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Date;
 
+@SuppressWarnings("PMD.ExcessiveImports")
 public class AppFileEditView {
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
@@ -45,17 +48,19 @@ public class AppFileEditView {
         final byte[] bytes = StreamU.read(metaFile.getBytes());
         final String fileText = UTF8Codec.toString(bytes, encoding);
         // command input form (prep)
-        final XedActionFile actionFile = new XedActionFile(userState.getLocus().getLocale());
-        final NameTypeValues ntv = NameTypeValuesU.create("file.fileType.file", fileText);
-        final XedCursor cursor = actionFile.getCursor();
+        final XedActionFileEdit action = new XedActionFileEdit(userState.getLocus().getLocale());
+        final NameTypeValues ntv = NameTypeValuesU.create("fileEdit.fileEditType.file", fileText);
+        final XedCursor cursor = action.getCursor();
         final ValueInstance valueInstanceIn = ValueInstance.create(cursor.getTypeInstance(), ntv);
-        new OpUpdate(null, actionFile.getXed().getXsdTypes()).apply(cursor.getElement(), valueInstanceIn);
+        new OpUpdate(null, action.getXed().getXsdTypes()).apply(cursor.getElement(), valueInstanceIn);
         // command input form
         final Bundle bundle = cursor.getXed().getBundle();
-        final String qname = cursor.getTypeInstance().getQName().toString();
+        final QName qname = cursor.getTypeInstance().getQName();
+        final String cursorType = qname.toString();
         final String submitID = userState.getSubmitID();
-        final ActionFactory factory = new ActionFactory(submitID, bundle, App.Target.SESSION, qname, null);
-        final ActionButtons buttons = factory.create(App.Action.FILE, false, CollectionU.toCollection(App.Action.FILE));
+        final ActionFactory factory = new ActionFactory(submitID, bundle, App.Target.SESSION, cursorType, null);
+        final Collection<String> actions = CollectionU.toCollection(App.Action.FILE_UPDATE);
+        final ActionButtons buttons = factory.create(qname.getLocalPart(), false, actions);
         final XedRequest xedRequest = new XedRequest(httpRequest, null, userState.getDocumentState());
         new PropertyPageHtmlView(new XedPropertyPageView(null, cursor, buttons), xedRequest).addContentTo(html);
         // info alert

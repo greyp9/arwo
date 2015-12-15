@@ -59,9 +59,9 @@ public class ValueInstanceTest extends TestCase {
         final NameTypeValues nameTypeValuesTransform = valueInstanceTransform.getNameTypeValues();
         Assert.assertEquals(3, nameTypeValuesTransform.size());
         Assert.assertNull(nameTypeValuesTransform.getNameValue("name"));
-        Assert.assertEquals("foo.txt", nameTypeValuesTransform.getValue("file.fileType.name"));
-        Assert.assertEquals("text", nameTypeValuesTransform.getValue("file.fileType.type"));
-        Assert.assertEquals("false", nameTypeValuesTransform.getValue("file.fileType.hidden"));
+        Assert.assertEquals("foo.txt", nameTypeValuesTransform.getValue("fileEdit.fileEditType.name"));
+        Assert.assertEquals("text", nameTypeValuesTransform.getValue("fileEdit.fileEditType.type"));
+        Assert.assertEquals("false", nameTypeValuesTransform.getValue("fileEdit.fileEditType.hidden"));
     }
 
     public void testTransformProtectHash() throws Exception {

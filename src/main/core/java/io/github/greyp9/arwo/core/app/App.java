@@ -16,7 +16,8 @@ public final class App {
 
         public static final QName QNAME_COMMAND = new QName(URI_ACTION, "command", PREFIX_ACTION);
         public static final QName QNAME_COMMIT = new QName(URI_ACTION, "commit", PREFIX_ACTION);
-        public static final QName QNAME_FILE = new QName(URI_ACTION, "file", PREFIX_ACTION);
+        public static final QName QNAME_FILE_EDIT = new QName(URI_ACTION, "fileEdit", PREFIX_ACTION);
+        public static final QName QNAME_FILE_NEW = new QName(URI_ACTION, "fileNew", PREFIX_ACTION);
         public static final QName QNAME_FILTER = new QName(URI_ACTION, "filter", PREFIX_ACTION);
         public static final QName QNAME_LOCALE = new QName(URI_ACTION, "locale", PREFIX_ACTION);
         public static final QName QNAME_TEXT_FILTER = new QName(URI_ACTION, "textFilter", PREFIX_ACTION);
@@ -64,7 +65,8 @@ public final class App {
         public static final String LOCALE = "locale";
         public static final String UPDATE_LOCALE = "updateLocale";
         public static final String TEXT_FILTER = "textFilter";
-        public static final String FILE = "file";
+        public static final String FILE_UPDATE = "fileUpdate";
+        public static final String FILE_CREATE = "fileCreate";
         public static final String COMMAND = "command";
         public static final String PROPERTIES = "properties";
         public static final String MIME_TYPE = "mimeType";
