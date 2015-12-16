@@ -110,11 +110,11 @@ public class RowSet {
     }
 
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public final void updateOrdinals() {
-        int ordinal = -1;
+    public final void updateOrdinals(final int ordinal) {
+        int ordinalIt = ordinal - 1;
         final List<Row> rowsUpdate = new ArrayList<Row>();
         for (final Row row : rows) {
-            rowsUpdate.add(new Row(++ordinal, row));
+            rowsUpdate.add(new Row(++ordinalIt, row));
         }
         rows.clear();
         rows.addAll(rowsUpdate);

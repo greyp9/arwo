@@ -8,6 +8,7 @@ import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPDataSource;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolder;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolderStyled;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
@@ -18,6 +19,8 @@ import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewState;
+import io.github.greyp9.arwo.core.util.PropertiesU;
+import io.github.greyp9.arwo.core.util.PropertiesX;
 import io.github.greyp9.arwo.core.vm.exec.UserExecutor;
 import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
 import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnectionX;
@@ -26,8 +29,10 @@ import org.w3c.dom.Element;
 import java.io.IOException;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
+@SuppressWarnings("PMD.ExcessiveImports")
 public class SFTPFolderView extends SFTPView {
 
     public SFTPFolderView(
@@ -64,7 +69,15 @@ public class SFTPFolderView extends SFTPView {
         final RowSetMetaData metaData = SFTPFolder.createMetaData();
         final Locus locus = userState.getLocus();
         final ViewState viewState = userState.getViewStates().getViewState(metaData, request.getBundle(), locus);
-        final RowSet rowSetRaw = getRowSetRaw(metaData, viewState);
+        final boolean findMode = PropertiesU.isBoolean(userState.getProperties(), App.Action.FIND);
+        if (findMode) {
+            viewState.getHiddenColumns().remove("folder");
+        } else {
+            viewState.getHiddenColumns().add("folder");
+        }
+        final RowSet rowSetRaw = (findMode ?
+                getRowSetRawFind(metaData, viewState) :
+                getRowSetRaw(metaData, viewState));
         final RowSet rowSetStyled = new SFTPFolderStyled(request, rowSetRaw).getRowSet();
         final Table table = new Table(rowSetStyled, viewState.getSorts(), viewState.getFilters(),
                 request.getTitlePath(), request.getTitlePath());
@@ -89,16 +102,63 @@ public class SFTPFolderView extends SFTPView {
         // if disconnected, resource will only be fetched if no cached copy is available
         if (viewState.isConnected()) {
             final SFTPDataSource source = new SFTPDataSource(request, sshConnection);
-            final Collection<SFTPv3DirectoryEntry> directoryEntries = source.ls(request.getPath());
-            rowSet = new SFTPFolder(directoryEntries, metaData, true, sshConnectionX).getRowSet();
+            final Collection<SFTPv3DirectoryEntry> directoryEntries = source.ls(path);
+            rowSet = new SFTPFolder(null, directoryEntries, metaData, true, sshConnectionX).getRowSet();
+            cache.putRowSet(path, rowSet);
         } else if (cache.containsRowSet(path)) {
             rowSet = cache.getRowSet(path);
         } else {
             final SFTPDataSource source = new SFTPDataSource(request, sshConnection);
-            final Collection<SFTPv3DirectoryEntry> directoryEntries = source.ls(request.getPath());
-            rowSet = new SFTPFolder(directoryEntries, metaData, true, sshConnectionX).getRowSet();
+            final Collection<SFTPv3DirectoryEntry> directoryEntries = source.ls(path);
+            rowSet = new SFTPFolder(null, directoryEntries, metaData, true, sshConnectionX).getRowSet();
             cache.putRowSet(path, rowSet);
         }
         return rowSet;
+    }
+
+    private RowSet getRowSetRawFind(final RowSetMetaData metaData, final ViewState viewState) throws IOException {
+        RowSet rowSet;
+        final SFTPRequest request = getRequest();
+        final AppUserState userState = getUserState();
+        final ResourceCache cache = userState.getCache();
+        final String path = request.getPath();
+        // if disconnected, resource will only be fetched if no cached copy is available
+        if (viewState.isConnected()) {
+            rowSet = getRowSetRawFindRemote(metaData);
+            cache.putRowSet(path, rowSet);
+        } else if (cache.containsRowSet(path)) {
+            rowSet = cache.getRowSet(path);
+        } else {
+            rowSet = getRowSetRawFindRemote(metaData);
+            cache.putRowSet(path, rowSet);
+        }
+        return rowSet;
+    }
+
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    private RowSet getRowSetRawFindRemote(final RowSetMetaData metaData) throws IOException {
+        final RowSet rowSetComposite = new RowSet(metaData, null, null);
+        final PropertiesX propertiesC = new PropertiesX(rowSetComposite.getProperties());
+        final SFTPRequest request = getRequest();
+        final AppUserState userState = getUserState();
+        final SSHConnectionResource resource = getResource();
+        final SSHConnection sshConnection = resource.getSSHConnection();
+        final SFTPDataSource source = new SFTPDataSource(request, sshConnection);
+        final String path = request.getPath();
+        final UserExecutor userExecutor = userState.getUserExecutor();
+        final ExecutorService executorStream = userExecutor.getExecutorStream();
+        final SSHConnectionX sshConnectionX = new SSHConnectionX(sshConnection, executorStream);
+        final Map<String, Collection<SFTPv3DirectoryEntry>> map = source.find(path);
+        for (final Map.Entry<String, Collection<SFTPv3DirectoryEntry>> entry : map.entrySet()) {
+            final String folder = entry.getKey();
+            final String subfolder = folder.substring(path.length());
+            final Collection<SFTPv3DirectoryEntry> directoryEntries = entry.getValue();
+            final RowSet rowSet = new SFTPFolder(
+                    subfolder, directoryEntries, metaData, true, sshConnectionX).getRowSet();
+            rowSet.updateOrdinals(rowSetComposite.getRows());
+            rowSetComposite.addAll(rowSet);
+            propertiesC.addAll(rowSet.getProperties());
+        }
+        return rowSetComposite;
     }
 }

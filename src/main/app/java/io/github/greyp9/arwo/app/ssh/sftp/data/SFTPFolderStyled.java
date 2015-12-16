@@ -42,12 +42,14 @@ public class SFTPFolderStyled {
         // input
         final RowSetMetaData metaData = rowSetStyled.getMetaData();
         final Integer type = rowRaw.getInteger(metaData.getIndex("type"));
+        final String folder = rowRaw.getString(metaData.getIndex("folder"));
         final String name = rowRaw.getString(metaData.getIndex("name"));
         // processing
         final boolean isDirectory = (SFTP.S_IFDIR == NumberU.toInt(type, 0));
         // output
         final InsertRow insertRow = new InsertRow(rowSetStyled);
-        insertRow.setNextColumn(getTypeStyled(type, name, isDirectory));
+        insertRow.setNextColumn(getTypeStyled(type, folder, name, isDirectory));
+        insertRow.setNextColumn(folder);
         insertRow.setNextColumn(name);
         insertRow.setNextColumn(rowRaw.getColumn(metaData.getIndex("mtime")));
         insertRow.setNextColumn(rowRaw.getColumn(metaData.getIndex("ext")));
@@ -58,10 +60,10 @@ public class SFTPFolderStyled {
         rowSetStyled.add(insertRow.getRow());
     }
 
-    private Object getTypeStyled(
-            final Integer type, final String name, final boolean isDirectory) throws UnsupportedEncodingException {
+    private Object getTypeStyled(final Integer type, final String folder, final String name,
+                                 final boolean isDirectory) throws UnsupportedEncodingException {
         final String text = toTypeText(type);
-        final String href = toHref(request, name, isDirectory);
+        final String href = toHref(request, folder, name, isDirectory);
         return new TableViewLink(text, null, href);
     }
 
@@ -81,14 +83,14 @@ public class SFTPFolderStyled {
         return text;
     }
 
-    private static String toHref(final SFTPRequest request, final String name,
+    private static String toHref(final SFTPRequest request, final String folder, final String name,
                                  final boolean isDirectory) throws UnsupportedEncodingException {
         final boolean fullPath = name.contains(Http.Token.SLASH);  // in case of load from symlink context
         final String folderURI = (fullPath ? request.getBaseURIServer() :
                 request.getHttpRequest().getHttpRequest().getResource());
         final String filename = (fullPath ? name : URLCodec.encode(name));
         final String suffix = (isDirectory ? Http.Token.SLASH : "");
-        return Value.join("", folderURI, filename, suffix);
+        return Value.join("", folderURI, folder, filename, suffix);
     }
 
     private static void addFooter(final RowSet rowSet, final Bundle bundle) {

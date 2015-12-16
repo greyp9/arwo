@@ -44,6 +44,10 @@ public class AppMenuFactory implements MenuFactory {
     }
 
     private static MenuItem createMenuView(final String key) {
+        final String find = App.Action.FIND;
+        final String properties = App.Action.PROPERTIES;
+        final String textFilter = App.Action.TEXT_FILTER;
+        final MenuItem itemViewFind = new MenuItem(find, App.Target.USER_STATE, App.Action.TOGGLE, find);
         final MenuItem itemViewUtf8 = new MenuItem("viewUTF8", App.Target.USER_STATE, "view");
         final MenuItem itemViewUtf16 = new MenuItem("viewUTF16", App.Target.USER_STATE, "view16");
         final MenuItem itemViewGZ = new MenuItem("viewGZ", App.Target.USER_STATE, "viewGZ");
@@ -52,12 +56,10 @@ public class AppMenuFactory implements MenuFactory {
         final MenuItem itemViewHex = new MenuItem("viewHex", App.Target.USER_STATE, "viewHex");
         //final MenuItem itemEditUtf8 = new MenuItem("editUTF8", App.Target.USER_STATE, "edit");
         //final MenuItem itemEditUtf16 = new MenuItem("editUTF16", App.Target.USER_STATE, "edit16");
-        final String properties = App.Action.PROPERTIES;
-        final String textFilter = App.Action.TEXT_FILTER;
         final MenuItem itemProps = new MenuItem(properties, App.Target.USER_STATE, App.Action.TOGGLE, properties);
         final MenuItem itemFilter = new MenuItem(textFilter, App.Target.USER_STATE, App.Action.TOGGLE, textFilter);
         return new MenuItem("view", App.Target.USER_STATE, App.Action.MENU, key + "/view",
-                createMenuViewMime(key),
+                createMenuViewMime(key), itemViewFind,
                 itemViewUtf8, itemViewUtf16, itemViewGZ, itemViewZIP, itemViewTGZ, itemViewHex, itemProps, itemFilter);
     }
 

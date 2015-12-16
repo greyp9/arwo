@@ -14,6 +14,7 @@ import io.github.greyp9.arwo.core.alert.model.ExceptionModel;
 import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.file.meta.FileMetaData;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
+import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
@@ -25,6 +26,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.Stack;
+import java.util.TreeMap;
 
 @SuppressWarnings("PMD.TooManyMethods")
 public class SFTPDataSource {
@@ -118,6 +122,41 @@ public class SFTPDataSource {
                 pathIt = client.readLink(pathIt);
             }
         }
+    }
+
+    @SuppressWarnings({ "PMD.UseConcurrentHashMap", "PMD.AvoidInstantiatingObjectsInLoops" })
+    public final Map<String, Collection<SFTPv3DirectoryEntry>> find(final String path) throws IOException {
+        final Map<String, Collection<SFTPv3DirectoryEntry>> find =
+                new TreeMap<String, Collection<SFTPv3DirectoryEntry>>();
+        final SFTPv3Client client = new SFTPv3Client(sshConnection.getConnection());
+        final Stack<String> paths = new Stack<String>();
+        paths.push(path);
+        while (!paths.isEmpty()) {
+            final String pathIt = paths.pop();
+            final Collection<SFTPv3DirectoryEntry> directoryEntries = new ArrayList<SFTPv3DirectoryEntry>();
+            ls2(directoryEntries, client.ls(pathIt));
+            find.put(pathIt, directoryEntries);
+            for (final SFTPv3DirectoryEntry directoryEntry : directoryEntries) {
+                if (shouldRecurse(directoryEntry)) {
+                    paths.push(pathIt + directoryEntry.filename + Http.Token.SLASH);
+                }
+            }
+        }
+        return find;
+    }
+
+    private boolean shouldRecurse(final SFTPv3DirectoryEntry directoryEntry) {
+        boolean shouldRecurse = false;
+        if (directoryEntry.attributes.isDirectory()) {
+            if (".".equals(directoryEntry.filename)) {
+                directoryEntry.getClass();
+            } else if ("..".equals(directoryEntry.filename)) {
+                directoryEntry.getClass();
+            } else {
+                shouldRecurse = true;
+            }
+        }
+        return shouldRecurse;
     }
 
     public final NameTypeValues properties(final String path) throws IOException {

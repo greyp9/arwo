@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.util;
 
 import java.util.Properties;
+import java.util.Set;
 
 public class PropertiesX {
     private final Properties properties;
@@ -25,5 +26,13 @@ public class PropertiesX {
 
     public final long addLong(final String key, final long value) {
         return setLong(key, getLong(key) + value);
+    }
+
+    public final void addAll(final Properties propertiesIn) {
+        final PropertiesX propertiesX = new PropertiesX(propertiesIn);
+        final Set<String> keys = propertiesIn.stringPropertyNames();
+        for (final String key : keys) {
+            addLong(key, propertiesX.getLong(key));
+        }
     }
 }

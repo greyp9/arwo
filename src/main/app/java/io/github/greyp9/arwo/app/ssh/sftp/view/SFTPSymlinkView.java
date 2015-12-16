@@ -67,13 +67,13 @@ public class SFTPSymlinkView extends SFTPView {
         if (viewState.isConnected()) {
             final SFTPDataSource source = new SFTPDataSource(request, sshConnection);
             final Collection<SFTPv3DirectoryEntry> directoryEntries = source.lsSymlink(request.getPath());
-            rowSet = new SFTPFolder(directoryEntries, metaData, false, sshConnectionX).getRowSet();
+            rowSet = new SFTPFolder(null, directoryEntries, metaData, false, sshConnectionX).getRowSet();
         } else if (cache.containsRowSet(path)) {
             rowSet = cache.getRowSet(path);
         } else {
             final SFTPDataSource source = new SFTPDataSource(request, sshConnection);
             final Collection<SFTPv3DirectoryEntry> directoryEntries = source.lsSymlink(request.getPath());
-            rowSet = new SFTPFolder(directoryEntries, metaData, false, sshConnectionX).getRowSet();
+            rowSet = new SFTPFolder(null, directoryEntries, metaData, false, sshConnectionX).getRowSet();
             cache.putRowSet(path, rowSet);
         }
         return rowSet;

@@ -26,7 +26,11 @@ public class ResourceCache {
     }
 
     public final void putRowSet(final String id, final RowSet rowSet) {
-        rowSets.put(id, rowSet);
+        if (rowSet == null) {
+            rowSets.remove(id);
+        } else {
+            rowSets.put(id, rowSet);
+        }
     }
 
     public final boolean containsFile(final String id) {

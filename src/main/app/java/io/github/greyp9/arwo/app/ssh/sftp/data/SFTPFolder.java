@@ -28,8 +28,8 @@ public class SFTPFolder {
     /**
      * Store folder information, such that no additional connectivity to data endpoint is needed.
      */
-    public SFTPFolder(final Collection<SFTPv3DirectoryEntry> directoryEntries, final RowSetMetaData metaData,
-                      final boolean sort, final SSHConnectionX sshConnectionX) {
+    public SFTPFolder(final String folder, final Collection<SFTPv3DirectoryEntry> directoryEntries,
+                      final RowSetMetaData metaData, final boolean sort, final SSHConnectionX sshConnectionX) {
         // "native" sort, in case none supplied by user
         final Sorts sorts = (sort ? new Sorts(new Sort("type", true), new Sort("name", true)) : null);
         // load from source data
@@ -41,15 +41,16 @@ public class SFTPFolder {
             } else if ("..".equals(directoryEntry.filename)) {
                 directoryEntry.getClass();
             } else {
-                loadRow(rowSet, directoryEntry, sshConnectionX);
+                loadRow(rowSet, folder, directoryEntry, sshConnectionX);
             }
         }
-        rowSet.updateOrdinals();
+        rowSet.updateOrdinals(0);
     }
 
     public static RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
                 new ColumnMetaData("type", Types.VARCHAR),
+                new ColumnMetaData("folder", Types.VARCHAR, true),
                 new ColumnMetaData("name", Types.VARCHAR, true),
                 new ColumnMetaData("mtime", Types.TIMESTAMP),
                 new ColumnMetaData("ext", Types.VARCHAR),
@@ -61,8 +62,8 @@ public class SFTPFolder {
         return new RowSetMetaData("sftpFolderType", columns);
     }
 
-    private static void loadRow(
-            final RowSet rowSet, final SFTPv3DirectoryEntry directoryEntry, final SSHConnectionX sshConnectionX) {
+    private static void loadRow(final RowSet rowSet, final String folder,
+                                final SFTPv3DirectoryEntry directoryEntry, final SSHConnectionX sshConnectionX) {
         // prep
         final SFTPv3FileAttributes attributes = directoryEntry.attributes;
         final Integer type = toType(attributes);
@@ -74,6 +75,7 @@ public class SFTPFolder {
         // populate columns
         final InsertRow insertRow = new InsertRow(rowSet);
         insertRow.setNextColumn(type);
+        insertRow.setNextColumn(folder);
         insertRow.setNextColumn(directoryEntry.filename);
         insertRow.setNextColumn(DateU.fromSeconds(attributes.mtime));
         insertRow.setNextColumn(extension);
