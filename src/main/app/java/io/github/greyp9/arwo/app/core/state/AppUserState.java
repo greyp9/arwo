@@ -35,7 +35,8 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Properties;
 
-@SuppressWarnings("PMD.ExcessiveImports")
+@SuppressWarnings({ "PMD.ExcessiveImports",
+        "PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity", "PMD.ModifiedCyclomaticComplexity" })
 public class AppUserState {
     // lifetime
     private final Interval interval;
@@ -174,6 +175,8 @@ public class AppUserState {
             PropertiesU.toggleBoolean(properties, object);
         } else if (App.Action.MIME_TYPE.equals(action)) {
             PropertiesU.setProperty(properties, action, Value.defaultOnEmpty(object, null));
+        } else if (App.Action.VIEW_HEX.equals(action)) {
+            updateViewHex(object);
         } else if (views.contains(action)) {
             location = toView(httpRequest, action);
         } else {
@@ -187,6 +190,24 @@ public class AppUserState {
         final String resourceName = token.getObject2();
         if ("ssh".equals(cacheName)) {
             ssh.getCache().removeResource(resourceName);
+        }
+    }
+
+    private void updateViewHex(final String object) {
+        if ("first".equals(object)) {
+            pageViewHex = Page.Factory.firstPage(pageViewHex);
+        } else if ("prev".equals(object)) {
+            pageViewHex = Page.Factory.prevPage(pageViewHex);
+        } else if ("next".equals(object)) {
+            pageViewHex = Page.Factory.nextPage(pageViewHex);
+        } else if ("last".equals(object)) {
+            pageViewHex = Page.Factory.lastPage(pageViewHex);
+        } else if ("16".equals(object)) {
+            pageViewHex.getProperties().remove(App.Action.VIEW_HEX);
+        } else if ("32".equals(object)) {
+            pageViewHex.getProperties().setProperty(App.Action.VIEW_HEX, object);
+        } else if ("64".equals(object)) {
+            pageViewHex.getProperties().setProperty(App.Action.VIEW_HEX, object);
         }
     }
 

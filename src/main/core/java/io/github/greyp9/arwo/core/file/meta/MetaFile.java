@@ -11,6 +11,7 @@ public class MetaFile {
     }
 
     public final ByteArrayInputStream getBytes() {
+        bis.reset();
         return bis;
     }
 

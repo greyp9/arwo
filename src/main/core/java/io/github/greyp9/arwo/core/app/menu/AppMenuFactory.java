@@ -15,6 +15,8 @@ public class AppMenuFactory implements MenuFactory {
         final String key = Value.join(Http.Token.SLASH, id, type);
         if (Const.FILESYSTEM.equals(type)) {
             menuItem = createMenuBarFileSystem(key);
+        } else if (Const.HEX.equals(type)) {
+            menuItem = createMenuBarHex(key);
         } else if (Const.COMMAND.equals(type)) {
             menuItem = createMenuBarCommand(key);
         } else {
@@ -27,6 +29,22 @@ public class AppMenuFactory implements MenuFactory {
         final MenuItem[] menuItems = new MenuItem[] {
                 createMenuFile(key), createMenuView(key), createMenuFavorites(key) };
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
+    }
+
+    private static MenuItem createMenuBarHex(final String key) {
+        final String subject = App.Target.USER_STATE;
+        final String action = App.Action.VIEW_HEX;
+        final MenuItem itemFirst = new MenuItem(widen(UTF16.ARROW_FIRST), subject, action, "first");
+        final MenuItem itemPrev = new MenuItem(widen(UTF16.ARROW_LEFT), subject, action, "prev");
+        final MenuItem itemNext = new MenuItem(widen(UTF16.ARROW_RIGHT), subject, action, "next");
+        final MenuItem itemLast = new MenuItem(widen(UTF16.ARROW_LAST), subject, action, "last");
+        final MenuItem item16 = new MenuItem(widen("16"), subject, action, "16");
+        final MenuItem item32 = new MenuItem(widen("32"), subject, action, "32");
+        final MenuItem item64 = new MenuItem(widen("64"), subject, action, "64");
+        final MenuItem menuHex = new MenuItem(action, subject, action, key + "/viewHex",
+                itemFirst, itemPrev, itemNext, itemLast, item16, item32, item64);
+        menuHex.setOpen(true);
+        return menuHex;
     }
 
     private static MenuItem createMenuBarCommand(final String key) {
@@ -80,9 +98,14 @@ public class AppMenuFactory implements MenuFactory {
                 itemAddFavorite);
     }
 
+    private static String widen(final String text) {  // bigger menu target
+        return String.format("[ %s ]", text);
+    }
+
     public static class Const {
         public static final String DASHBOARD = "dash";
         public static final String FILESYSTEM = "fs";
+        public static final String HEX = "hex";
         public static final String COMMAND = "cmd";
     }
 }

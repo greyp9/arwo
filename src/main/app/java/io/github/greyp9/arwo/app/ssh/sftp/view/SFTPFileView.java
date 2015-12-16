@@ -91,7 +91,7 @@ public class SFTPFileView extends SFTPView {
         } else if (isModeTGZ) {
             httpResponse = new AppTGZView(httpRequest, userState).addContentTo(html, metaFile, bundle);
         } else if (isHex) {
-            httpResponse = new AppHexView(httpRequest, userState).addContentTo(html, metaFile);
+            httpResponse = new AppHexView(httpRequest, userState).addContentTo(html, metaFile, bundle);
         } else {
             httpResponse = doGetFile(metaFile, encoding, isModeGZ);
         }
