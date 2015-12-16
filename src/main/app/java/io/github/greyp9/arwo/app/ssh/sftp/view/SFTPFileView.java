@@ -9,6 +9,8 @@ import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
 import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPDataSource;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolder;
+import io.github.greyp9.arwo.core.alert.Alert;
+import io.github.greyp9.arwo.core.alert.model.ExceptionModel;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
@@ -112,11 +114,8 @@ public class SFTPFileView extends SFTPView {
 
     public final HttpResponse doGetFile(
             final MetaFile file, final String charset, final boolean isGZ) throws IOException {
-        byte[] bytes = StreamU.read(file.getBytes());
+        byte[] bytes = getBytes(file, isGZ);
         final String lastModified = HttpDateU.toHttpZ(new Date(file.getMetaData().getLastModified()));
-        if (isGZ) {
-            bytes = new GZipCodec().decode(bytes);
-        }
         final NameTypeValues headers = new NameTypeValues(new NameTypeValue(Http.Header.LAST_MODIFIED, lastModified));
         final TextFilters textFilters = getUserState().getTextFilters();
         if ((textFilters.getIncludes().isEmpty()) && (textFilters.getExcludes().isEmpty())) {
@@ -131,6 +130,18 @@ public class SFTPFileView extends SFTPView {
             bytes = doTextFilter(bytes, charset);
         }
         return new HttpResponse(HttpURLConnection.HTTP_OK, headers, new ByteArrayInputStream(bytes));
+    }
+
+    private byte[] getBytes(final MetaFile file, final boolean isGZ) throws IOException {
+        byte[] bytes = StreamU.read(file.getBytes());
+        try {
+            if (isGZ) {
+                bytes = new GZipCodec().decode(bytes);
+            }
+        } catch (IOException e) {
+            new ExceptionModel(getRequest().getAlerts()).service(e, Alert.Severity.WARN);
+        }
+        return bytes;
     }
 
     private byte[] doTextFilter(final byte[] bytes, final String charset) throws IOException {
