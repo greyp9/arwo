@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.app.menu;
 
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.menu.MenuItem;
@@ -53,12 +54,10 @@ public class AppMenuFactory implements MenuFactory {
     }
 
     private static MenuItem createMenuFile(final String key) {
-        final MenuItem itemFileNew = new MenuItem("createUTF8", App.Target.USER_STATE, "create");
-        final MenuItem itemFileNew16 = new MenuItem("createUTF16", App.Target.USER_STATE, "create16");
-        final MenuItem itemFileEdit = new MenuItem("editUTF8", App.Target.USER_STATE, "edit");
-        final MenuItem itemFileEdit16 = new MenuItem("editUTF16", App.Target.USER_STATE, "edit16");
+        final MenuItem itemFileNew = new MenuItem("create", App.Target.USER_STATE, "create");
+        final MenuItem itemFileEdit = new MenuItem("edit", App.Target.USER_STATE, "edit");
         return new MenuItem("file", App.Target.USER_STATE, App.Action.MENU, key + "/file",
-                itemFileNew, itemFileNew16, itemFileEdit, itemFileEdit16);
+                itemFileNew, itemFileEdit);
     }
 
     private static MenuItem createMenuView(final String key) {
@@ -66,19 +65,16 @@ public class AppMenuFactory implements MenuFactory {
         final String properties = App.Action.PROPERTIES;
         final String textFilter = App.Action.TEXT_FILTER;
         final MenuItem itemViewFind = new MenuItem(find, App.Target.USER_STATE, App.Action.TOGGLE, find);
-        final MenuItem itemViewUtf8 = new MenuItem("viewUTF8", App.Target.USER_STATE, "view");
-        final MenuItem itemViewUtf16 = new MenuItem("viewUTF16", App.Target.USER_STATE, "view16");
+        final MenuItem itemView = new MenuItem("view", App.Target.USER_STATE, "view");
         final MenuItem itemViewGZ = new MenuItem("viewGZ", App.Target.USER_STATE, "viewGZ");
         final MenuItem itemViewZIP = new MenuItem("viewZIP", App.Target.USER_STATE, "viewZIP");
         final MenuItem itemViewTGZ = new MenuItem("viewTGZ", App.Target.USER_STATE, "viewTGZ");
         final MenuItem itemViewHex = new MenuItem("viewHex", App.Target.USER_STATE, "viewHex");
-        //final MenuItem itemEditUtf8 = new MenuItem("editUTF8", App.Target.USER_STATE, "edit");
-        //final MenuItem itemEditUtf16 = new MenuItem("editUTF16", App.Target.USER_STATE, "edit16");
         final MenuItem itemProps = new MenuItem(properties, App.Target.USER_STATE, App.Action.TOGGLE, properties);
         final MenuItem itemFilter = new MenuItem(textFilter, App.Target.USER_STATE, App.Action.TOGGLE, textFilter);
         return new MenuItem("view", App.Target.USER_STATE, App.Action.MENU, key + "/view",
-                createMenuViewMime(key), itemViewFind,
-                itemViewUtf8, itemViewUtf16, itemViewGZ, itemViewZIP, itemViewTGZ, itemViewHex, itemProps, itemFilter);
+                createMenuViewMime(key), createMenuViewCharset(key), itemViewFind,
+                itemView, itemViewGZ, itemViewZIP, itemViewTGZ, itemViewHex, itemProps, itemFilter);
     }
 
     private static MenuItem createMenuViewMime(final String key) {
@@ -90,6 +86,15 @@ public class AppMenuFactory implements MenuFactory {
         final MenuItem itemTextXml = new MenuItem("viewTextXml", subject, action, Http.Mime.TEXT_XML_UTF8);
         return new MenuItem("viewMime", subject, App.Action.MENU, key + "/viewMime",
                 itemUseConfig, itemTextPlain, itemTextHtml, itemTextXml);
+    }
+
+    private static MenuItem createMenuViewCharset(final String key) {
+        final String subject = App.Target.USER_STATE;
+        final String action = App.Action.CHARSET;
+        final MenuItem itemUTF8 = new MenuItem(UTF8Codec.Const.UTF8, subject, action, UTF8Codec.Const.UTF8);
+        final MenuItem itemUTF16 = new MenuItem(UTF8Codec.Const.UTF16, subject, action, UTF8Codec.Const.UTF16);
+        return new MenuItem("viewCharset", subject, App.Action.MENU, key + "/viewCharset",
+                itemUTF8, itemUTF16);
     }
 
     private static MenuItem createMenuFavorites(final String key) {

@@ -16,8 +16,6 @@ import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
 
 import java.io.IOException;
-import java.util.Arrays;
-import java.util.Collection;
 
 public class SFTPCreateFile {
     private final SFTPRequest request;
@@ -33,13 +31,11 @@ public class SFTPCreateFile {
     }
 
     public final void apply(final NameTypeValues httpArguments) throws IOException {
-        final Collection<String> utf16Modes = Arrays.asList("view16", "edit16", "create16");
-        final boolean isUTF16 = utf16Modes.contains(request.getMode());
-        final String encoding = (isUTF16 ? UTF8Codec.Const.UTF16 : UTF8Codec.Const.UTF8);
+        final String charset = request.getUserState().getCharset();
         //String text = new XedActionFileNew(request.getLocale()).getFile();  // filter POST data through document
         final String filename = httpArguments.getValue("fileNew.fileNewType.filename");
         final String content = httpArguments.getValue("fileNew.fileNewType.file");  // just grab from POST data
-        final byte[] bytes = UTF8Codec.toBytes(content, encoding);
+        final byte[] bytes = UTF8Codec.toBytes(content, charset);
         final int length = ByteU.length(bytes);
         // put data to remote
         final FileX file = new FileX(Value.join("", request.getPath(), filename));

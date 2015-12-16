@@ -39,9 +39,9 @@ public class AppTitle {
             return new AppTitle(context, getLabel(httpRequest, bundle), host);
         }
 
-        public static AppTitle getResourceLabel(
-                final ServletHttpRequest httpRequest, final Bundle bundle, final String resource) {
-            return new AppTitle(resource, getLabel(httpRequest, bundle));
+        public static AppTitle getResourceLabel(final ServletHttpRequest httpRequest, final Bundle bundle,
+                                                final String resource, final String charset) {
+            return new AppTitle(resource, getLabel(httpRequest, bundle), charset);
         }
 
         private static String getLabel(final ServletHttpRequest httpRequest, final Bundle bundle) {

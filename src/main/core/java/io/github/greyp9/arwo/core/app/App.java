@@ -72,6 +72,7 @@ public final class App {
         public static final String VIEW_HEX = "viewHex";
         public static final String PROPERTIES = "properties";
         public static final String MIME_TYPE = "mimeType";
+        public static final String CHARSET = "charset";
         public static final String SELECT = "select";
         public static final String ADD_FAV = "addFavorite";
         public static final String SELECT_FAV = "selectFavorite";

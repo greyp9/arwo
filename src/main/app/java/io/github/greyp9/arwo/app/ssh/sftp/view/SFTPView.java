@@ -78,7 +78,8 @@ public abstract class SFTPView {
         final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(Const.HTML)));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
         // context-specific content
-        final AppTitle title = AppTitle.Factory.getResourceLabel(httpRequest, bundle, request.getTitlePath());
+        final AppTitle title = AppTitle.Factory.getResourceLabel(
+                httpRequest, bundle, request.getTitlePath(), userState.getCharset());
         addHeaderView(body, title);
         HttpResponse httpResponse = addContentTo(body);
         if (httpResponse == null) {

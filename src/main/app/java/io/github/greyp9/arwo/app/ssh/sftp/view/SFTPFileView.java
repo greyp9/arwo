@@ -35,8 +35,6 @@ import org.w3c.dom.Element;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.util.Arrays;
-import java.util.Collection;
 import java.util.Date;
 
 @SuppressWarnings("PMD.ExcessiveImports")
@@ -60,15 +58,10 @@ public class SFTPFileView extends SFTPView {
         final ViewState viewState = userState.getViewStates().getViewState(metaData, request.getBundle(), locus);
         final MetaFile metaFile = getFileBytes(viewState);
         // resource interpret (UTF-8 versus Unicode)
-        final Collection<String> utf16Modes = Arrays.asList("view16", "edit16");
-        final boolean isUTF16 = utf16Modes.contains(mode);
-        final String encoding = (isUTF16 ? UTF8Codec.Const.UTF16 : UTF8Codec.Const.UTF8);
+        final String charset = userState.getCharset();
         // resource access (read versus write)
-        final Collection<String> createModes = Arrays.asList("create", "create16");
-        final boolean isModeCreate = createModes.contains(mode);
-        // resource access (read versus write)
-        final Collection<String> editModes = Arrays.asList("edit", "edit16");
-        final boolean isModeEdit = editModes.contains(mode);
+        final boolean isModeCreate = "create".equals(mode);
+        final boolean isModeEdit = "edit".equals(mode);
         // resource interpret (gzip deflated content expected)
         final boolean isModeGZ = "viewGZ".equals(mode);
         final boolean isModeZIP = "viewZIP".equals(mode);
@@ -83,7 +76,7 @@ public class SFTPFileView extends SFTPView {
         if (isModeCreate) {
             httpResponse = HttpResponseU.to302(".");  // go to containing folder
         } else if (isModeEdit) {
-            httpResponse = new AppFileEditView(httpRequest, userState).addContentTo(html, metaFile, encoding);
+            httpResponse = new AppFileEditView(httpRequest, userState).addContentTo(html, metaFile, charset);
         } else if (isProperties) {
             httpResponse = null;
         } else if (isModeZIP) {
@@ -93,7 +86,7 @@ public class SFTPFileView extends SFTPView {
         } else if (isHex) {
             httpResponse = new AppHexView(httpRequest, userState).addContentTo(html, metaFile, bundle);
         } else {
-            httpResponse = doGetFile(metaFile, encoding, isModeGZ);
+            httpResponse = doGetFile(metaFile, charset, isModeGZ);
         }
         return httpResponse;
     }
@@ -118,7 +111,7 @@ public class SFTPFileView extends SFTPView {
     }
 
     public final HttpResponse doGetFile(
-            final MetaFile file, final String encoding, final boolean isGZ) throws IOException {
+            final MetaFile file, final String charset, final boolean isGZ) throws IOException {
         byte[] bytes = StreamU.read(file.getBytes());
         final String lastModified = HttpDateU.toHttpZ(new Date(file.getMetaData().getLastModified()));
         if (isGZ) {
@@ -130,17 +123,17 @@ public class SFTPFileView extends SFTPView {
             final String mimeTypeOverride = getUserState().getProperties().getProperty(App.Action.MIME_TYPE);
             final String mimeType = Value.defaultOnNull(mimeTypeOverride, Http.Mime.TEXT_PLAIN_UTF8);
             headers.add(new NameTypeValue(Http.Header.CONTENT_TYPE, mimeType));
-        } else if (UTF8Codec.Const.UTF16.equals(encoding)) {
+        } else if (UTF8Codec.Const.UTF16.equals(charset)) {
             headers.add(new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_PLAIN_UTF16));
-            bytes = doTextFilter(bytes, encoding);
+            bytes = doTextFilter(bytes, charset);
         } else {
             headers.add(new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_PLAIN_UTF8));
-            bytes = doTextFilter(bytes, encoding);
+            bytes = doTextFilter(bytes, charset);
         }
         return new HttpResponse(HttpURLConnection.HTTP_OK, headers, new ByteArrayInputStream(bytes));
     }
 
-    private byte[] doTextFilter(final byte[] bytes, final String encoding) throws IOException {
-        return new TextLineFilter(getUserState().getTextFilters()).doFilter(bytes, encoding);
+    private byte[] doTextFilter(final byte[] bytes, final String charset) throws IOException {
+        return new TextLineFilter(getUserState().getTextFilters()).doFilter(bytes, charset);
     }
 }

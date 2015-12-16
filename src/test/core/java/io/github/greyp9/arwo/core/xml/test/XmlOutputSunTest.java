@@ -53,7 +53,7 @@ public class XmlOutputSunTest extends TestCase {
         outputFormat.setLineWidth(120);
         //outputFormat.setIndenting(true);
         outputFormat.setIndent(1);
-        outputFormat.setEncoding("UTF-8");
+        outputFormat.setEncoding(UTF8Codec.Const.UTF8);
         XMLSerializer serializer = new XMLSerializer(bos, outputFormat);
         serializer.serialize(document);
         return bos.toByteArray();

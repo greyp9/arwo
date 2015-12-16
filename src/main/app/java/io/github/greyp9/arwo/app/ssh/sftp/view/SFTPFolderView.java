@@ -27,7 +27,6 @@ import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnectionX;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
@@ -45,9 +44,7 @@ public class SFTPFolderView extends SFTPView {
         final SFTPRequest request = getRequest();
         final String mode = request.getMode();
         // resource access (read versus write)
-        final Collection<String> createModes = Arrays.asList("create", "create16");
-        final boolean isModeCreate = createModes.contains(mode);
-        if (isModeCreate) {
+        if ("create".equals(mode)) {
             doGetFileCreate(html);
         }
         return doGetFolder(html);

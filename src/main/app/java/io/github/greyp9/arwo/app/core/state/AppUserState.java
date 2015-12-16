@@ -9,6 +9,7 @@ import io.github.greyp9.arwo.core.app.AppText;
 import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
+import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.date.Interval;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.lang.SystemU;
@@ -131,6 +132,10 @@ public class AppUserState {
         return documentState.getProperties();
     }
 
+    public final String getCharset() {
+        return documentState.getProperties().getProperty("charset", UTF8Codec.Const.UTF8);
+    }
+
     public AppUserState(final Principal principal, final Date date, final File webappRoot,
                         final String submitID, final Locus locus) throws IOException {
         this.principal = principal;
@@ -156,7 +161,7 @@ public class AppUserState {
         final String action = token.getAction();
         final String object = token.getObject();
         final Collection<String> views = Arrays.asList(
-                "view", "view16", "edit", "edit16", "create", "create16", "viewGZ", "viewZIP", "viewTGZ", "viewHex");
+                "view", "edit", "create", "viewGZ", "viewZIP", "viewTGZ", "viewHex");
         final Locus locus = documentState.getLocus();
         final Properties properties = documentState.getProperties();
         final Bundle bundle = new Bundle(new AppText(locus.getLocale()).getBundleCore());
@@ -175,6 +180,8 @@ public class AppUserState {
             PropertiesU.toggleBoolean(properties, object);
         } else if (App.Action.MIME_TYPE.equals(action)) {
             PropertiesU.setProperty(properties, action, Value.defaultOnEmpty(object, null));
+        } else if (App.Action.CHARSET.equals(action)) {
+            getProperties().setProperty("charset", object);
         } else if (App.Action.VIEW_HEX.equals(action)) {
             updateViewHex(object);
         } else if (views.contains(action)) {

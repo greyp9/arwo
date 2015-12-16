@@ -44,9 +44,9 @@ public class AppFileEditView {
     }
 
     public final HttpResponse addContentTo(
-            final Element html, final MetaFile metaFile, final String encoding) throws IOException {
+            final Element html, final MetaFile metaFile, final String charset) throws IOException {
         final byte[] bytes = StreamU.read(metaFile.getBytes());
-        final String fileText = UTF8Codec.toString(bytes, encoding);
+        final String fileText = UTF8Codec.toString(bytes, charset);
         // command input form (prep)
         final XedActionFileEdit action = new XedActionFileEdit(userState.getLocus().getLocale());
         final NameTypeValues ntv = NameTypeValuesU.create("fileEdit.fileEditType.file", fileText);
