@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.table.html;
 
 import io.github.greyp9.arwo.core.locus.Locus;
+import io.github.greyp9.arwo.core.page.Page;
 import io.github.greyp9.arwo.core.table.baseline.BaselineTable;
 import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
@@ -19,6 +20,7 @@ public class TableView {
         this.table = table;
         this.context = context;
         this.viewState = context.getViewState();
+        this.viewState.setPage(Page.Factory.fixPage(viewState.getPage(), table.getRows()));
     }
 
     public final void addContentTo(final Element html) throws IOException {
