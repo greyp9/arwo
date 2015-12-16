@@ -34,7 +34,7 @@ public class AppMenuFactory implements MenuFactory {
 
     private static MenuItem createMenuBarHex(final String key) {
         final String subject = App.Target.USER_STATE;
-        final String action = App.Action.VIEW_HEX;
+        final String action = App.Action.HEX_VIEW_PARAM;
         final MenuItem itemFirst = new MenuItem(widen(UTF16.ARROW_FIRST), subject, action, "first");
         final MenuItem itemPrev = new MenuItem(widen(UTF16.ARROW_LEFT), subject, action, "prev");
         final MenuItem itemNext = new MenuItem(widen(UTF16.ARROW_RIGHT), subject, action, "next");

@@ -40,8 +40,8 @@ public class AppTitle {
         }
 
         public static AppTitle getResourceLabel(final ServletHttpRequest httpRequest, final Bundle bundle,
-                                                final String resource, final String charset) {
-            return new AppTitle(resource, getLabel(httpRequest, bundle), charset);
+                                                final String resource, final String... facets) {
+            return new AppTitle(resource, getLabel(httpRequest, bundle), bundle.localize(facets));
         }
 
         private static String getLabel(final ServletHttpRequest httpRequest, final Bundle bundle) {

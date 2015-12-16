@@ -69,7 +69,7 @@ public final class App {
         public static final String FILE_CREATE = "fileCreate";
         public static final String COMMAND = "command";
         public static final String FIND = "find";
-        public static final String VIEW_HEX = "viewHex";
+        public static final String HEX_VIEW_PARAM = "hexViewParam";
         public static final String PROPERTIES = "properties";
         public static final String MIME_TYPE = "mimeType";
         public static final String CHARSET = "charset";

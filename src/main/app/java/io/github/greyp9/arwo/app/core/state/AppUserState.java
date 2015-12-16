@@ -182,8 +182,8 @@ public class AppUserState {
             PropertiesU.setProperty(properties, action, Value.defaultOnEmpty(object, null));
         } else if (App.Action.CHARSET.equals(action)) {
             getProperties().setProperty("charset", object);
-        } else if (App.Action.VIEW_HEX.equals(action)) {
-            updateViewHex(object);
+        } else if (App.Action.HEX_VIEW_PARAM.equals(action)) {
+            updateHexViewParam(object);
         } else if (views.contains(action)) {
             location = toView(httpRequest, action);
         } else {
@@ -200,7 +200,7 @@ public class AppUserState {
         }
     }
 
-    private void updateViewHex(final String object) {
+    private void updateHexViewParam(final String object) {
         if ("first".equals(object)) {
             pageViewHex = Page.Factory.firstPage(pageViewHex);
         } else if ("prev".equals(object)) {
@@ -210,11 +210,11 @@ public class AppUserState {
         } else if ("last".equals(object)) {
             pageViewHex = Page.Factory.lastPage(pageViewHex);
         } else if ("16".equals(object)) {
-            pageViewHex.getProperties().remove(App.Action.VIEW_HEX);
+            pageViewHex.getProperties().remove(App.Action.HEX_VIEW_PARAM);
         } else if ("32".equals(object)) {
-            pageViewHex.getProperties().setProperty(App.Action.VIEW_HEX, object);
+            pageViewHex.getProperties().setProperty(App.Action.HEX_VIEW_PARAM, object);
         } else if ("64".equals(object)) {
-            pageViewHex.getProperties().setProperty(App.Action.VIEW_HEX, object);
+            pageViewHex.getProperties().setProperty(App.Action.HEX_VIEW_PARAM, object);
         }
     }
 

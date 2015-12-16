@@ -25,6 +25,7 @@ import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.view.StatusBarView;
 import io.github.greyp9.arwo.core.xed.action.XedActionLocale;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
@@ -78,8 +79,9 @@ public abstract class SFTPView {
         final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(Const.HTML)));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
         // context-specific content
+        final String modeKey = Value.join(".", "menu", "view", request.getMode());
         final AppTitle title = AppTitle.Factory.getResourceLabel(
-                httpRequest, bundle, request.getTitlePath(), userState.getCharset());
+                httpRequest, bundle, request.getTitlePath(), userState.getCharset(), modeKey);
         addHeaderView(body, title);
         HttpResponse httpResponse = addContentTo(body);
         if (httpResponse == null) {

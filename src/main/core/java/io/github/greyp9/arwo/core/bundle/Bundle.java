@@ -1,6 +1,8 @@
 package io.github.greyp9.arwo.core.bundle;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.ResourceBundle;
 
 public class Bundle {
@@ -29,5 +31,13 @@ public class Bundle {
     public final String format(final String key, final Object... arguments) {
         final String pattern = getString(key);
         return MessageFormat.format(pattern, arguments);
+    }
+
+    public final String localize(final String... keys) {
+        final Collection<String> values = new ArrayList<String>();
+        for (final String key : keys) {
+            values.add(getString(key));
+        }
+        return ((keys.length == 0) ? null : values.toString());
     }
 }

@@ -38,7 +38,7 @@ public class AppHexView {
         userState.setPageViewHex(Page.Factory.fixPage(userState.getPageViewHex(), bytes.length));
         final Page page = userState.getPageViewHex();
         final int lineWidth = NumberU.toInt(
-                page.getProperties().getProperty(App.Action.VIEW_HEX), NumberU.Const.RADIX_HEX);
+                page.getProperties().getProperty(App.Action.HEX_VIEW_PARAM), NumberU.Const.RADIX_HEX);
         final HexRenderer renderer = new HexRenderer(lineWidth);
         final String text = renderer.render(bytes, page.getPosition(), page.getPosition() + page.getCount());
         ElementU.addElement(html, Html.PRE, text);
