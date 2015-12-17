@@ -103,6 +103,7 @@ public class SFTPFileView extends SFTPView {
         // if disconnected, resource will only be fetched if no cached copy is available
         if (viewState.isConnected()) {
             metaFile = source.read(path);
+            cache.putFile(path, metaFile);
         } else if (cache.containsFile(path)) {
             metaFile = cache.getFile(path);
         } else {

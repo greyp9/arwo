@@ -174,6 +174,8 @@ public class AppUserState {
             documentState.applyLocale(httpArguments);
         } else if (App.Action.TEXT_FILTER.equals(action)) {
             new XedActionTextFilter(locus.getLocale()).updateTextFilters(textFilters, httpArguments);
+        } else if ("clearCache".equals(action)) {
+            doClearCache();
         } else if (App.Action.MENU.equals(action)) {
             menuSystem.toggle(object);
         } else if (App.Action.TOGGLE.equals(action)) {
@@ -198,6 +200,13 @@ public class AppUserState {
         if ("ssh".equals(cacheName)) {
             ssh.getCache().removeResource(resourceName);
         }
+    }
+
+    private void doClearCache() throws IOException {
+        final long size = cache.getSize();
+        cache.clear();
+        final Bundle bundle = new Bundle(new AppText(getLocus().getLocale()).getBundleCore());
+        alerts.add(new Alert(Alert.Severity.INFO, bundle.format("AppUserState.cache.clear", size)));
     }
 
     private void updateHexViewParam(final String object) {

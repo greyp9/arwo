@@ -8,6 +8,7 @@ import io.github.greyp9.arwo.core.menu.MenuItem;
 import io.github.greyp9.arwo.core.menu.factory.MenuFactory;
 import io.github.greyp9.arwo.core.value.Value;
 
+@SuppressWarnings("PMD.TooManyMethods")
 public class AppMenuFactory implements MenuFactory {
 
     @Override
@@ -28,7 +29,7 @@ public class AppMenuFactory implements MenuFactory {
 
     private static MenuItem createMenuBarFileSystem(final String key) {
         final MenuItem[] menuItems = new MenuItem[] {
-                createMenuFile(key), createMenuView(key), createMenuFavorites(key) };
+                createMenuFile(key), createMenuView(key), createMenuSession(key), createMenuFavorites(key) };
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
     }
 
@@ -49,7 +50,7 @@ public class AppMenuFactory implements MenuFactory {
     }
 
     private static MenuItem createMenuBarCommand(final String key) {
-        final MenuItem[] menuItems = new MenuItem[] { createMenuFavorites(key) };
+        final MenuItem[] menuItems = new MenuItem[] { createMenuSession(key), createMenuFavorites(key) };
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
     }
 
@@ -96,6 +97,13 @@ public class AppMenuFactory implements MenuFactory {
         final MenuItem itemUTF16 = new MenuItem(UTF8Codec.Const.UTF16, subject, action, UTF8Codec.Const.UTF16);
         return new MenuItem("viewCharset", subject, App.Action.MENU, key + "/viewCharset",
                 itemUTF8, itemUTF16);
+    }
+
+    private static MenuItem createMenuSession(final String key) {
+        final String subject = App.Target.USER_STATE;
+        final MenuItem clearCache = new MenuItem("clearCache", subject, "clearCache");
+        return new MenuItem("session", subject, App.Action.MENU, key + "/session",
+                clearCache);
     }
 
     private static MenuItem createMenuFavorites(final String key) {
