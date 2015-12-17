@@ -113,7 +113,7 @@ public class SFTPHandlerPost {
     }
 
     private SSHConnection getSSHConnection() throws IOException {
-        final SSHConnectionFactory factory = new SSHConnectionFactory(httpRequest, userState);
+        final SSHConnectionFactory factory = new SSHConnectionFactory(httpRequest, userState, bundle, alerts);
         final SSHConnectionResource resource = (SSHConnectionResource)
                 userState.getSSH().getCache().getResource(request.getServer(), factory);
         return resource.getSSHConnection();

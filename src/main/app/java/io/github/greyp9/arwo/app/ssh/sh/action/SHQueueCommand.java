@@ -40,7 +40,7 @@ public class SHQueueCommand {
         final Bundle bundle = request.getBundle();
         final Alerts alerts = request.getAlerts();
         final String server = request.getServer();
-        final SSHConnectionFactory factory = new SSHConnectionFactory(httpRequest, userState);
+        final SSHConnectionFactory factory = new SSHConnectionFactory(httpRequest, userState, bundle, alerts);
         final ConnectionCache cacheSSH = userState.getSSH().getCache();
         final SSHConnectionResource resource = (SSHConnectionResource) cacheSSH.getResource(server, factory);
         if (resource == null) {

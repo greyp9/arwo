@@ -56,8 +56,9 @@ public class AppMenuFactory implements MenuFactory {
     private static MenuItem createMenuFile(final String key) {
         final MenuItem itemFileNew = new MenuItem("create", App.Target.USER_STATE, "create");
         final MenuItem itemFileEdit = new MenuItem("edit", App.Target.USER_STATE, "edit");
+        final MenuItem itemFileUpload = new MenuItem("upload", App.Target.USER_STATE, App.Action.MENU, key + "/upload");
         return new MenuItem("file", App.Target.USER_STATE, App.Action.MENU, key + "/file",
-                itemFileNew, itemFileEdit);
+                itemFileNew, itemFileEdit, itemFileUpload);
     }
 
     private static MenuItem createMenuView(final String key) {

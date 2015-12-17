@@ -23,18 +23,22 @@ public class MenuView {
     private final ServletHttpRequest httpRequest;
     private final MenuSystem menuSystem;
 
+    public final MenuSystem getMenuSystem() {
+        return menuSystem;
+    }
+
     public MenuView(final Bundle bundle, final ServletHttpRequest httpRequest, final MenuSystem menuSystem) {
         this.bundle = bundle;
         this.httpRequest = httpRequest;
         this.menuSystem = menuSystem;
     }
 
-    public final void addContentTo(
+    public final Element addContentTo(
             final Element html, final String type, final boolean home) throws IOException {
-        addContentTo(html, type, home, true);
+        return addContentTo(html, type, home, true);
     }
 
-    public final void addContentTo(
+    public final Element addContentTo(
             final Element html, final String type, final boolean home, final boolean top) throws IOException {
         final MenuItem menuItem = menuSystem.get(httpRequest.getServletPath(), type);
         final Element divMenus = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENUS));
@@ -42,6 +46,7 @@ public class MenuView {
         final Element form = ElementU.addElement(divMenus, Html.FORM, null, attrs);
         final Element divForm = ElementU.addElement(form, Html.DIV);
         addMenu(divForm, menuItem, home, top);
+        return divMenus;
     }
 
     public final Element addTitle(final Element html, final AppTitle title) throws IOException {

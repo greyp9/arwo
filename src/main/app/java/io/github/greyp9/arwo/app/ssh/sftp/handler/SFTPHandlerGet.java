@@ -43,7 +43,8 @@ public class SFTPHandlerGet {
 
     private HttpResponse doGet2() throws IOException {
         HttpResponse httpResponse;
-        final SSHConnectionFactory factory = new SSHConnectionFactory(httpRequest, userState);
+        final SSHConnectionFactory factory = new SSHConnectionFactory(
+                httpRequest, userState, request.getBundle(), request.getAlerts());
         final SSHConnectionResource resource = (SSHConnectionResource)
                 userState.getSSH().getCache().getResource(request.getServer(), factory);
         if (resource == null) {

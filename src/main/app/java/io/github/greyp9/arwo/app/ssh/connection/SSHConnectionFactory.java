@@ -3,8 +3,8 @@ package io.github.greyp9.arwo.app.ssh.connection;
 import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.ConnectionInfo;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
-import io.github.greyp9.arwo.core.app.AppText;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.codec.b64.Base64Codec;
 import io.github.greyp9.arwo.core.config.CursorSSH;
@@ -28,15 +28,30 @@ import java.io.IOException;
 public class SSHConnectionFactory implements ConnectionFactory {
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
+    private final Bundle bundle;
+    private final Alerts alerts;
 
-    public SSHConnectionFactory(final ServletHttpRequest httpRequest, final AppUserState userState) {
+    public SSHConnectionFactory(final ServletHttpRequest httpRequest, final AppUserState userState,
+                                final Bundle bundle, final Alerts alerts) {
         this.httpRequest = httpRequest;
         this.userState = userState;
+        this.bundle = bundle;
+        this.alerts = alerts;
     }
 
     @Override
     public final ConnectionResource create(final String name) throws IOException {
-        return getConnection(name);
+        ConnectionResource resource = null;
+        final XedSession session = userState.getDocumentState().getSession("/app");
+        final CursorSSH cursorSSH = new CursorSSH(session.getXed(), name);
+        if (Value.isEmpty(name)) {
+            alerts.add(new Alert(Alert.Severity.WARN, bundle.getString("SSHConnectionFactory.no.server")));
+        } else if (cursorSSH.getCursor() == null) {
+            alerts.add(new Alert(Alert.Severity.WARN, bundle.format("SSHConnectionFactory.no.config", name)));
+        } else {
+            resource = getConnection(name);
+        }
+        return resource;
     }
 
     @SuppressWarnings("PMD.CloseResource")
@@ -60,8 +75,6 @@ public class SSHConnectionFactory implements ConnectionFactory {
         final ClientParams clientParams = new ClientParams(name, user, passwordClear, privateKeyClear);
         final Connection connection = new Connection(host, port);
         final ConnectionInfo connectionInfo = connection.connect();
-        final Bundle bundle = new Bundle(new AppText(userState.getLocus().getLocale()).getBundleCore());
-        final Alerts alerts = userState.getAlerts();
         new SSHAuthenticatorServer(bundle, alerts).authenticate(connectionInfo, serverParams);
         new SSHAuthenticatorClient(bundle, alerts).authenticate(connection, clientParams);
         return new SSHConnectionResource(name, new SSHConnection(connection));

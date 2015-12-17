@@ -58,7 +58,7 @@ public class SFTPHandlerPostMultipart {
     private void doPostUploadFile(final MimePart mimePart, final Properties properties) throws IOException {
         final String server = request.getServer();
         final String filename = properties.getProperty(Const.CD_FILENAME);
-        final SSHConnectionFactory factory = new SSHConnectionFactory(httpRequest, userState);
+        final SSHConnectionFactory factory = new SSHConnectionFactory(httpRequest, userState, bundle, alerts);
         final SSHConnectionResource resource = (SSHConnectionResource)
                 userState.getSSH().getCache().getResource(server, factory);
         if (resource == null) {

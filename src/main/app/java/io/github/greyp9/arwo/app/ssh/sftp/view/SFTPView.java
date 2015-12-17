@@ -14,6 +14,7 @@ import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.html.Html;
+import io.github.greyp9.arwo.core.html.upload.FileUpload;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
@@ -102,10 +103,11 @@ public abstract class SFTPView {
     private void addHeaderView(final Element html, final AppTitle title) throws IOException {
         // context menu
         final MenuView menuView = new MenuView(request.getBundle(), httpRequest, userState.getMenuSystem());
-        menuView.addContentTo(html, AppMenuFactory.Const.FILESYSTEM, true);
+        final Element divMenus = menuView.addContentTo(html, AppMenuFactory.Const.FILESYSTEM, true);
+        new FileUpload(bundle).addContentTo(divMenus, menuView);
         // context title (with text filters)
-        final Element divMenus = menuView.addTitle(html, title);
-        addTextFiltersView(divMenus);
+        final Element divTitle = menuView.addTitle(html, title);
+        addTextFiltersView(divTitle);
         // favorites (if toggled)
         final XedNav nav = new XedNav(userState.getDocumentState().getSession("/fav").getXed());
         final XedCursor cursorFavorites = nav.findX("/app:favorites/app:sftp-favorites");

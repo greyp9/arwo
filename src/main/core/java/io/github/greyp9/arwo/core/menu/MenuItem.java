@@ -15,6 +15,17 @@ public class MenuItem extends ActionItem {
         return menuItems;
     }
 
+    public final MenuItem getMenuItem(final String name) {
+        MenuItem menuItem = null;
+        for (final MenuItem menuItemIt : menuItems) {
+            if (menuItemIt.getName().equals(name)) {
+                menuItem = menuItemIt;
+                break;
+            }
+        }
+        return menuItem;
+    }
+
     public final boolean isOpen() {
         return open;
     }
