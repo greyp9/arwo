@@ -18,6 +18,7 @@ import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
+import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.submit.SubmitTokenU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
@@ -102,6 +103,8 @@ public class SFTPHandlerPost {
             new SFTPCreateFile(request, getSSHConnection()).apply(httpArguments);
         } else if (App.Action.FILE_UPDATE.equals(action)) {
             new SFTPUpdateFile(request, getSSHConnection()).apply(httpArguments);
+        } else if (App.Action.COMMAND.equals(action)) {
+            location = PathU.toDir(httpRequest.getContextPath(), "ssh", request.getServer());
         } else if (App.Action.ADD_FAV.equals(action)) {
             new SFTPAddFavorite(request).doAction();
         } else if (App.Action.SELECT_FAV.equals(action)) {

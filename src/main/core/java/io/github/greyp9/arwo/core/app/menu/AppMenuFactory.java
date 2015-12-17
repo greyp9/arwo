@@ -15,7 +15,9 @@ public class AppMenuFactory implements MenuFactory {
     public final MenuItem create(final String id, final String type) {
         MenuItem menuItem;
         final String key = Value.join(Http.Token.SLASH, id, type);
-        if (Const.FILESYSTEM.equals(type)) {
+        if (Const.DASHBOARD.equals(type)) {
+            menuItem = createMenuBarDash(key);
+        } else if (Const.FILESYSTEM.equals(type)) {
             menuItem = createMenuBarFileSystem(key);
         } else if (Const.HEX.equals(type)) {
             menuItem = createMenuBarHex(key);
@@ -27,9 +29,15 @@ public class AppMenuFactory implements MenuFactory {
         return menuItem;
     }
 
-    private static MenuItem createMenuBarFileSystem(final String key) {
+    private static MenuItem createMenuBarDash(final String key) {
         final MenuItem[] menuItems = new MenuItem[] {
-                createMenuFile(key), createMenuView(key), createMenuSession(key), createMenuFavorites(key) };
+                createMenuSession(key) };
+        return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
+    }
+
+    private static MenuItem createMenuBarFileSystem(final String key) {
+        final MenuItem[] menuItems = new MenuItem[] { createMenuFile(key), createMenuView(key),
+                createMenuFileSystem(key), createMenuSession(key), createMenuFavorites(key) };
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
     }
 
@@ -50,7 +58,8 @@ public class AppMenuFactory implements MenuFactory {
     }
 
     private static MenuItem createMenuBarCommand(final String key) {
-        final MenuItem[] menuItems = new MenuItem[] { createMenuSession(key), createMenuFavorites(key) };
+        final MenuItem[] menuItems = new MenuItem[] {
+                createMenuCommand(key), createMenuSession(key), createMenuFavorites(key) };
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
     }
 
@@ -97,6 +106,20 @@ public class AppMenuFactory implements MenuFactory {
         final MenuItem itemUTF16 = new MenuItem(UTF8Codec.Const.UTF16, subject, action, UTF8Codec.Const.UTF16);
         return new MenuItem("viewCharset", subject, App.Action.MENU, key + "/viewCharset",
                 itemUTF8, itemUTF16);
+    }
+
+    private static MenuItem createMenuFileSystem(final String key) {
+        final String subject = App.Target.SESSION;
+        final MenuItem itemCommand = new MenuItem(App.Action.COMMAND, subject, App.Action.COMMAND);
+        return new MenuItem("filesystem", App.Target.USER_STATE, App.Action.MENU, key + "/filesystem",
+                itemCommand);
+    }
+
+    private static MenuItem createMenuCommand(final String key) {
+        final String subject = App.Target.SESSION;
+        final MenuItem itemFileSystem = new MenuItem(App.Action.FILESYSTEM, subject, App.Action.FILESYSTEM);
+        return new MenuItem("command", App.Target.USER_STATE, App.Action.MENU, key + "/command",
+                itemFileSystem);
     }
 
     private static MenuItem createMenuSession(final String key) {

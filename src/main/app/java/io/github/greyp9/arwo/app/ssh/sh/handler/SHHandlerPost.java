@@ -5,12 +5,14 @@ import io.github.greyp9.arwo.app.ssh.sh.action.SHAddFavorite;
 import io.github.greyp9.arwo.app.ssh.sh.action.SHQueueCommand;
 import io.github.greyp9.arwo.app.ssh.sh.action.SHSelectFavorite;
 import io.github.greyp9.arwo.app.ssh.sh.core.SHRequest;
+import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
+import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.submit.SubmitTokenU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
@@ -62,13 +64,18 @@ public class SHHandlerPost {
     private String applySession(
             final SubmitToken token, final NameTypeValues httpArguments, final String locationIn) throws IOException {
         String location = locationIn;
+        final String message = request.getBundle().getString("alert.action.not.implemented");
         final String action = token.getAction();
         if (App.Action.COMMAND.equals(action)) {
             location = new SHQueueCommand(request).doAction(location, httpArguments);
+        } else if (App.Action.FILESYSTEM.equals(action)) {
+            location = PathU.toDir(httpRequest.getContextPath(), "sftp", "view", request.getServer());
         } else if (App.Action.ADD_FAV.equals(action)) {
             new SHAddFavorite(request).doAction();
         } else if (App.Action.SELECT_FAV.equals(action)) {
             location = new SHSelectFavorite(request).doAction(token);
+        } else {
+            request.getAlerts().add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }
         return location;
     }

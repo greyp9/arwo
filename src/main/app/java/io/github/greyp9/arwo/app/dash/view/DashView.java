@@ -48,12 +48,6 @@ public class DashView {
     }
 
     public final HttpResponse doGetResponse() throws IOException {
-        // lifetime of webapp (placeholder)
-        final String durationA = DurationU.duration(userState.getDateAppStart(), httpRequest.getDate());
-        userState.getAlerts().add(new Alert(Alert.Severity.INFO, bundle.format("DashView.webapp.uptime", durationA)));
-        // lifetime of session (placeholder)
-        final String durationU = DurationU.duration(userState.getInterval().getDateStart(), httpRequest.getDate());
-        userState.getAlerts().add(new Alert(Alert.Severity.INFO, bundle.format("DashView.session.uptime", durationU)));
         // template html
         final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(Const.HTML)));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
@@ -63,6 +57,7 @@ public class DashView {
         HttpResponse httpResponse = addContentTo(body);
         if (httpResponse == null) {
             // touch ups
+            addMessagesTemp();
             new AlertsView(userState.getAlerts(), userState.getLocus()).addContentTo(body);
             new StatusBarView(httpRequest, userState.getLocus()).addContentTo(body);
             new AppHtml(httpRequest).fixup(html, title);
@@ -95,6 +90,15 @@ public class DashView {
         new SSHConnectionView(httpRequest, userState, "", false).addContent(html);
         new XedUnsavedView(httpRequest, userState).addContent(html);
         return null;
+    }
+
+    private void addMessagesTemp() throws IOException {
+        // lifetime of webapp (placeholder)
+        final String durationA = DurationU.duration(userState.getDateAppStart(), httpRequest.getDate());
+        userState.getAlerts().add(new Alert(Alert.Severity.INFO, bundle.format("DashView.webapp.uptime", durationA)));
+        // lifetime of session (placeholder)
+        final String durationU = DurationU.duration(userState.getInterval().getDateStart(), httpRequest.getDate());
+        userState.getAlerts().add(new Alert(Alert.Severity.INFO, bundle.format("DashView.session.uptime", durationU)));
     }
 
     private static class Const {

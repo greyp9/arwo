@@ -69,6 +69,7 @@ public final class App {
         public static final String FILE_UPDATE = "fileUpdate";
         public static final String FILE_CREATE = "fileCreate";
         public static final String COMMAND = "command";
+        public static final String FILESYSTEM = "filesystem";
         public static final String FIND = "find";
         public static final String HEX_VIEW_PARAM = "hexViewParam";
         public static final String PROPERTIES = "properties";
