@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.favorite.AppFavoriteView;
 import io.github.greyp9.arwo.app.core.view.props.AppPropertiesView;
 import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
+import io.github.greyp9.arwo.app.ssh.core.view.SSHConnectionView;
 import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPDataSource;
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
@@ -119,6 +120,7 @@ public abstract class SFTPView {
         final Properties properties = userState.getProperties();
         new XedActionLocale(locale).addContentTo(html, submitID, properties);
         new XedActionTextFilter(locale).addContentTo(html, submitID, properties);
+        new SSHConnectionView(httpRequest, userState, resource, bundle).addContent(html);
     }
 
     private void addTextFiltersView(final Element html) {

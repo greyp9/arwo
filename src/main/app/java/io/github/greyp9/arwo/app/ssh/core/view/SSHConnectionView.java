@@ -1,18 +1,15 @@
 package io.github.greyp9.arwo.app.ssh.core.view;
 
+import ch.ethz.ssh2.Connection;
+import ch.ethz.ssh2.ConnectionInfo;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
-import io.github.greyp9.arwo.core.connect.ConnectionResource;
-import io.github.greyp9.arwo.core.glyph.UTF16;
+import io.github.greyp9.arwo.core.codec.hex.HexCodec;
+import io.github.greyp9.arwo.core.hash.secure.HashU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.locus.Locus;
-import io.github.greyp9.arwo.core.resource.PathU;
-import io.github.greyp9.arwo.core.submit.SubmitToken;
-import io.github.greyp9.arwo.core.table.cell.Duration;
-import io.github.greyp9.arwo.core.table.cell.TableViewButton;
-import io.github.greyp9.arwo.core.table.cell.TableViewLink;
 import io.github.greyp9.arwo.core.table.core.TableU;
 import io.github.greyp9.arwo.core.table.html.TableView;
 import io.github.greyp9.arwo.core.table.insert.InsertRow;
@@ -22,82 +19,105 @@ import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewState;
-import io.github.greyp9.arwo.core.xed.model.Xed;
+import io.github.greyp9.arwo.core.util.PropertiesU;
+import io.github.greyp9.arwo.core.value.NameTypeValue;
+import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
 import java.sql.Types;
-import java.util.Collection;
 
 public class SSHConnectionView {
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
-    private final String offsetURI;
-    private final boolean select;
+    private final SSHConnectionResource resource;
+    private final Bundle bundle;
 
     public SSHConnectionView(final ServletHttpRequest httpRequest, final AppUserState userState,
-                             final String offsetURI, final boolean select) {
+                             final SSHConnectionResource resource, final Bundle bundle) {
         this.httpRequest = httpRequest;
         this.userState = userState;
-        this.offsetURI = offsetURI;
-        this.select = select;
+        this.resource = resource;
+        this.bundle = bundle;
     }
 
     public final void addContent(final Element html) throws IOException {
-        final Xed xed = userState.getDocumentState().getSession("/app").getXed();
-        final RowSetMetaData metaData = createMetaData();
-        final RowSet rowSet = createRowSet(metaData);
-        final Bundle bundle = xed.getBundle();
-        final Locus locus = userState.getLocus();
-        final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
-        final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
-        TableU.addFooterStandard(table, bundle);
-        final TableContext tableContext = new TableContext(viewState, userState.getSubmitID(), "table", bundle, locus);
-        final TableView tableView = new TableView(table, tableContext);
-        tableView.addContentTo(html);
+        final String key = Value.join("/", "ssh", App.Action.PROPERTIES);
+        final boolean isPropertiesSSH = PropertiesU.isBoolean(userState.getProperties(), key);
+        if (isPropertiesSSH) {
+            httpRequest.getClass();
+            final RowSetMetaData metaData = createMetaData("propertiesSSH");
+            final RowSet rowSet = createRowSet(metaData);
+            final Locus locus = userState.getLocus();
+            final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
+            final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
+            TableU.addFooterStandard(table, bundle);
+            final TableContext tableContext = new TableContext(
+                    viewState, userState.getSubmitID(), "table", bundle, userState.getLocus());
+            final TableView tableView = new TableView(table, tableContext);
+            tableView.addContentTo(html);
+        }
     }
 
-    private RowSetMetaData createMetaData() {
+    private RowSetMetaData createMetaData(final String tableID) {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData(App.Action.SELECT, Types.VARCHAR),
                 new ColumnMetaData("name", Types.VARCHAR, true),
-                new ColumnMetaData("hashCode", Types.VARCHAR),
-                new ColumnMetaData("opened", Types.TIMESTAMP),
-                new ColumnMetaData("last", Types.TIMESTAMP),
-                new ColumnMetaData("count", Types.INTEGER),
-                new ColumnMetaData("millis", Types.INTEGER),
-                new ColumnMetaData("close", Types.VARCHAR),
+                new ColumnMetaData("value", Types.VARCHAR),
         };
-        return new RowSetMetaData("sshConnectionType", columns);
+        return new RowSetMetaData(tableID, columns);
     }
 
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private RowSet createRowSet(final RowSetMetaData metaData) throws IOException {
+        final NameTypeValues properties = new NameTypeValues();
+        addProperties(properties);
         final RowSet rowSet = new RowSet(metaData, null, null);
-        final String baseURI = PathU.toPath(httpRequest.getBaseURI(), offsetURI);
-        final Collection<ConnectionResource> resources = userState.getSSH().getCache().getResources();
-        for (final ConnectionResource resource : resources) {
-            createRow(rowSet, baseURI, resource);
+        for (final NameTypeValue property : properties) {
+            final InsertRow insertRow = new InsertRow(rowSet);
+            final String nameLabel = bundle.getString(Value.join(".", "sshConnectionType", property.getName()));
+            insertRow.setNextColumn(nameLabel);
+            insertRow.setNextColumn(property.getValue());
+            rowSet.add(insertRow.getRow());
         }
         return rowSet;
     }
 
-    private void createRow(final RowSet rowSet, final String baseURI, final ConnectionResource resource) {
-        final SSHConnection sshConnection = ((SSHConnectionResource) resource).getSSHConnection();
-        final String href = PathU.toDir(baseURI, resource.getName());
-        final String hashCode = Integer.toHexString(sshConnection.hashCode());
-        final SubmitToken tokenClose = new SubmitToken(
-                App.Target.USER_STATE, App.Action.CLOSE, "ssh", resource.getName());
-        final InsertRow insertRow = new InsertRow(rowSet);
-        final Object cellSelect = (select ? new TableViewLink(UTF16.SELECT, null, href) : null);
-        insertRow.setNextColumn(cellSelect);
-        insertRow.setNextColumn(resource.getName());
-        insertRow.setNextColumn(hashCode);
-        insertRow.setNextColumn(sshConnection.getDateOpen());
-        insertRow.setNextColumn(sshConnection.getDateLast());
-        insertRow.setNextColumn(sshConnection.getCount());
-        insertRow.setNextColumn(new Duration(sshConnection.getMillis()));
-        insertRow.setNextColumn(new TableViewButton(UTF16.CLOSE, userState.getSubmitID(), tokenClose.toString()));
-        rowSet.add(insertRow.getRow());
+    private void addProperties(final NameTypeValues properties) throws IOException {
+        if (resource != null) {
+            properties.add(new NameTypeValue("name", resource.getName()));
+            addProperties(properties, resource.getSSHConnection());
+        }
+    }
+
+    private void addProperties(final NameTypeValues properties, final SSHConnection sshConnection) throws IOException {
+        if (sshConnection != null) {
+            properties.add(new NameTypeValue("opened", sshConnection.getDateOpen()));
+            properties.add(new NameTypeValue("last", sshConnection.getDateLast()));
+            properties.add(new NameTypeValue("count", sshConnection.getCount()));
+            properties.add(new NameTypeValue("millis", sshConnection.getMillis()));
+            addProperties(properties, sshConnection.getConnection());
+        }
+    }
+
+    private void addProperties(final NameTypeValues properties, final Connection connection) throws IOException {
+        if (connection != null) {
+            properties.add(new NameTypeValue("host", connection.getHostname()));
+            properties.add(new NameTypeValue("port", connection.getPort()));
+            final ConnectionInfo info = connection.getConnectionInfo();
+            properties.add(new NameTypeValue("clientToServerCryptoAlgorithm", info.clientToServerCryptoAlgorithm));
+            properties.add(new NameTypeValue("clientToServerMACAlgorithm", info.clientToServerMACAlgorithm));
+            properties.add(new NameTypeValue("keyExchangeAlgorithm", info.clientToServerMACAlgorithm));
+            properties.add(new NameTypeValue("keyExchangeCounter", info.clientToServerMACAlgorithm));
+            properties.add(new NameTypeValue("serverToClientCryptoAlgorithm", info.serverToClientCryptoAlgorithm));
+            properties.add(new NameTypeValue("serverToClientMACAlgorithm", info.serverToClientMACAlgorithm));
+            final byte[] serverHostKey = info.serverHostKey;
+            // ssh-keygen -E md5 -l -f /etc/ssh/ssh_host_rsa_key.pub
+            // ssh-keygen -E sha256 -l -f /etc/ssh/ssh_host_rsa_key.pub
+            properties.add(new NameTypeValue("MD5(key)", HexCodec.encode(HashU.md5(serverHostKey), ":")));
+            properties.add(new NameTypeValue("SHA-1(key)", HexCodec.encode(HashU.sha1(serverHostKey), ":")));
+            properties.add(new NameTypeValue("SHA-256(key)", HexCodec.encode(HashU.sha256(serverHostKey), ":")));
+        }
     }
 }

@@ -1,7 +1,7 @@
 package io.github.greyp9.arwo.app.dash.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
-import io.github.greyp9.arwo.app.ssh.core.view.SSHConnectionView;
+import io.github.greyp9.arwo.app.ssh.core.view.SSHConnectionsView;
 import io.github.greyp9.arwo.app.xed.view.XedUnsavedView;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
@@ -87,7 +87,7 @@ public class DashView {
     }
 
     private HttpResponse addContentTo(final Element html) throws IOException {
-        new SSHConnectionView(httpRequest, userState, "", false).addContent(html);
+        new SSHConnectionsView(httpRequest, userState, "", false).addContent(html);
         new XedUnsavedView(httpRequest, userState).addContent(html);
         return null;
     }

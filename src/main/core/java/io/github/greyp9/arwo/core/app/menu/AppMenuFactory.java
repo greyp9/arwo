@@ -36,8 +36,9 @@ public class AppMenuFactory implements MenuFactory {
     }
 
     private static MenuItem createMenuBarFileSystem(final String key) {
-        final MenuItem[] menuItems = new MenuItem[] { createMenuFile(key), createMenuView(key),
-                createMenuFileSystem(key), createMenuSession(key), createMenuFavorites(key) };
+        final MenuItem[] menuItems = new MenuItem[] {
+                createMenuFile(key), createMenuView(key), createMenuConnection(key), createMenuFileSystem(key),
+                createMenuSession(key), createMenuFavorites(key) };
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
     }
 
@@ -106,6 +107,13 @@ public class AppMenuFactory implements MenuFactory {
         final MenuItem itemUTF16 = new MenuItem(UTF8Codec.Const.UTF16, subject, action, UTF8Codec.Const.UTF16);
         return new MenuItem("viewCharset", subject, App.Action.MENU, key + "/viewCharset",
                 itemUTF8, itemUTF16);
+    }
+
+    private static MenuItem createMenuConnection(final String key) {
+        final String properties = App.Action.PROPERTIES;
+        final MenuItem itemProps = new MenuItem(properties, App.Target.SESSION, App.Action.TOGGLE, properties);
+        return new MenuItem("connection", App.Target.USER_STATE, App.Action.MENU, key + "/connection",
+                itemProps);
     }
 
     private static MenuItem createMenuFileSystem(final String key) {

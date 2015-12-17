@@ -21,8 +21,10 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.submit.SubmitTokenU;
+import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
 
 import java.io.IOException;
@@ -99,12 +101,15 @@ public class SFTPHandlerPost {
         String location = locationIn;
         final String message = request.getBundle().getString("alert.action.not.implemented");
         final String action = token.getAction();
+        final String object = token.getObject();
         if (App.Action.FILE_CREATE.equals(action)) {
             new SFTPCreateFile(request, getSSHConnection()).apply(httpArguments);
         } else if (App.Action.FILE_UPDATE.equals(action)) {
             new SFTPUpdateFile(request, getSSHConnection()).apply(httpArguments);
         } else if (App.Action.COMMAND.equals(action)) {
             location = PathU.toDir(httpRequest.getContextPath(), "ssh", request.getServer());
+        } else if (App.Action.TOGGLE.equals(action)) {
+            PropertiesU.toggleBoolean(userState.getProperties(), Value.join("/", "ssh", object));
         } else if (App.Action.ADD_FAV.equals(action)) {
             new SFTPAddFavorite(request).doAction();
         } else if (App.Action.SELECT_FAV.equals(action)) {

@@ -2,7 +2,7 @@ package io.github.greyp9.arwo.app.ssh.sh.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.history.AppHistoryView;
-import io.github.greyp9.arwo.app.ssh.core.view.SSHConnectionView;
+import io.github.greyp9.arwo.app.ssh.core.view.SSHConnectionsView;
 import io.github.greyp9.arwo.app.ssh.core.view.SSHInventoryView;
 import io.github.greyp9.arwo.app.ssh.sh.core.SHRequest;
 import io.github.greyp9.arwo.core.bundle.Bundle;
@@ -28,7 +28,7 @@ public class SHInventoryView extends SHView {
         final AppUserState userState = getUserState();
         final History history = userState.getSSH().getHistory();
         new SSHInventoryView(httpRequest, userState, offsetURI).addContent(html);
-        new SSHConnectionView(httpRequest, userState, offsetURI, true).addContent(html);
+        new SSHConnectionsView(httpRequest, userState, offsetURI, true).addContent(html);
         new AppHistoryView("sshHistoryType", history, bundle, httpRequest, userState).addContentTo(html);
         return null;
     }
