@@ -15,8 +15,10 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.submit.SubmitTokenU;
+import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.value.Value;
 
 import java.io.IOException;
 
@@ -66,10 +68,13 @@ public class SHHandlerPost {
         String location = locationIn;
         final String message = request.getBundle().getString("alert.action.not.implemented");
         final String action = token.getAction();
+        final String object = token.getObject();
         if (App.Action.COMMAND.equals(action)) {
             location = new SHQueueCommand(request).doAction(location, httpArguments);
         } else if (App.Action.FILESYSTEM.equals(action)) {
             location = PathU.toDir(httpRequest.getContextPath(), "sftp", "view", request.getServer());
+        } else if (App.Action.TOGGLE.equals(action)) {
+            PropertiesU.toggleBoolean(userState.getProperties(), Value.join("/", "ssh", object));
         } else if (App.Action.ADD_FAV.equals(action)) {
             new SHAddFavorite(request).doAction();
         } else if (App.Action.SELECT_FAV.equals(action)) {

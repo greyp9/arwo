@@ -28,7 +28,7 @@ public class ConnectionCache {
     public final synchronized ConnectionResource getResource(
             final String name, final ConnectionFactory factory) throws IOException {
         ConnectionResource resource = findResource(name);
-        if (resource == null) {
+        if ((resource == null) && (factory != null)) {
             resource = factory.create(name);
             if (resource != null) {
                 alerts.add(new Alert(Alert.Severity.INFO, String.format("[+%s] %s", cacheName, name)));

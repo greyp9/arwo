@@ -60,7 +60,7 @@ public class AppMenuFactory implements MenuFactory {
 
     private static MenuItem createMenuBarCommand(final String key) {
         final MenuItem[] menuItems = new MenuItem[] {
-                createMenuCommand(key), createMenuSession(key), createMenuFavorites(key) };
+                createMenuConnection(key), createMenuCommand(key), createMenuSession(key), createMenuFavorites(key) };
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
     }
 

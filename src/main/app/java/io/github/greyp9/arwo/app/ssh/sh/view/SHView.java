@@ -2,6 +2,8 @@ package io.github.greyp9.arwo.app.ssh.sh.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.favorite.AppFavoriteView;
+import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
+import io.github.greyp9.arwo.app.ssh.core.view.SSHConnectionView;
 import io.github.greyp9.arwo.app.ssh.sh.core.SHRequest;
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
 import io.github.greyp9.arwo.core.app.AppHtml;
@@ -95,6 +97,9 @@ public abstract class SHView {
         final Properties properties = userState.getProperties();
         new XedActionLocale(locale).addContentTo(html, submitID, properties);
         new XedActionTextFilter(locale).addContentTo(html, submitID, properties);
+        final SSHConnectionResource resource = (SSHConnectionResource)
+                userState.getSSH().getCache().getResource(request.getServer(), null);
+        new SSHConnectionView(httpRequest, userState, resource, bundle).addContent(html);
     }
 
     protected abstract HttpResponse addContentTo(Element html) throws IOException;
