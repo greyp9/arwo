@@ -49,8 +49,11 @@ public class DashView {
 
     public final HttpResponse doGetResponse() throws IOException {
         // lifetime of webapp (placeholder)
-        final String duration = DurationU.duration(userState.getDateAppStart(), httpRequest.getDate());
-        userState.getAlerts().add(new Alert(Alert.Severity.INFO, bundle.format("DashView.webapp.uptime", duration)));
+        final String durationA = DurationU.duration(userState.getDateAppStart(), httpRequest.getDate());
+        userState.getAlerts().add(new Alert(Alert.Severity.INFO, bundle.format("DashView.webapp.uptime", durationA)));
+        // lifetime of session (placeholder)
+        final String durationU = DurationU.duration(userState.getInterval().getDateStart(), httpRequest.getDate());
+        userState.getAlerts().add(new Alert(Alert.Severity.INFO, bundle.format("DashView.session.uptime", durationU)));
         // template html
         final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(Const.HTML)));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);

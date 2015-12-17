@@ -101,9 +101,10 @@ public class AppMenuFactory implements MenuFactory {
 
     private static MenuItem createMenuSession(final String key) {
         final String subject = App.Target.USER_STATE;
-        final MenuItem clearCache = new MenuItem("clearCache", subject, "clearCache");
+        final MenuItem itemClear = new MenuItem(App.Action.CLEAR, subject, App.Action.CLEAR);
+        final MenuItem itemReset = new MenuItem(App.Action.RESET, subject, App.Action.RESET);
         return new MenuItem("session", subject, App.Action.MENU, key + "/session",
-                clearCache);
+                itemClear, itemReset);
     }
 
     private static MenuItem createMenuFavorites(final String key) {

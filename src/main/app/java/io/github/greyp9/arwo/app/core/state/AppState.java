@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.app.core.state;
 
 import io.github.greyp9.arwo.core.app.AppFolder;
+import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.date.HttpDateU;
 import io.github.greyp9.arwo.core.locus.Locus;
@@ -17,17 +18,21 @@ import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class AppState {
-    private final Date dateAppStart;
+    private final Date dateStart;
     private final String contextPath;
     private final Collection<AppUserState> userStates;
     private final AtomicReference<String> reference;
+
+    public final Date getDateStart() {
+        return DateU.copy(dateStart);
+    }
 
     public final AtomicReference<String> getReference() {
         return reference;
     }
 
     public AppState(final String contextPath) {
-        this.dateAppStart = new Date();
+        this.dateStart = new Date();
         this.contextPath = contextPath;
         this.userStates = new ArrayList<AppUserState>();
         this.reference = new AtomicReference<String>();
@@ -49,21 +54,22 @@ public class AppState {
                 final String submitID = Integer.toHexString(hashCode());
                 final DateX dateX = new DateX(HttpDateU.Const.DEFAULT, TimeZone.getTimeZone("UTC"));
                 final Locus locus = new Locus(Locale.getDefault(), dateX);
-                userState = new AppUserState(dateAppStart, principal, date, userHome, submitID, locus);
+                userState = new AppUserState(this, principal, date, userHome, submitID, locus);
                 userStates.add(userState);
             }
             return userState;
         }
     }
 
-/*
-    public synchronized void removeUserState(final Principal principal, final Date date) throws IOException {
-        AppUserState userState = find(principal);
-        if (userState != null) {
-            userStates.remove(userState);
+    public final void removeUserState(final Principal principal, final Date date) throws IOException {
+        synchronized (userStates) {
+            final AppUserState userState = find(principal);
+            if (userState != null) {
+                //userStates.remove(userState);
+                userState.close(date);
+            }
         }
     }
-*/
 
     private AppUserState find(final Principal principal) {
         AppUserState userState = null;

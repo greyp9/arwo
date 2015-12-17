@@ -51,13 +51,14 @@ public final class App {
     }
 
     public static class Action {
+        public static final String CLEAR = "clear";
         public static final String CLOSE = "close";
         public static final String LOAD_REVISION = "loadRevision";
         public static final String MENU = "menu";
         //public static final String NAVIGATE = "navigate";
         public static final String PRETTY = "pretty";
         public static final String RELOAD = "reload";
-        //public static final String RESET = "reset";
+        public static final String RESET = "reset";
         public static final String SAVE = "save";
         public static final String COMMIT = "commit";
         public static final String TOGGLE = "toggle";

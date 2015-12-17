@@ -10,8 +10,9 @@ import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
-import io.github.greyp9.arwo.core.date.DateU;
+import io.github.greyp9.arwo.core.connect.ConnectionCache;
 import io.github.greyp9.arwo.core.date.Interval;
+import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.locus.Locus;
@@ -40,8 +41,8 @@ import java.util.Properties;
 @SuppressWarnings({ "PMD.ExcessiveImports",
         "PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity", "PMD.ModifiedCyclomaticComplexity" })
 public class AppUserState {
+    private final AppState appState;
     // lifetime
-    private final Date dateAppStart;
     private final Interval interval;
     // user identity token
     private final Principal principal;
@@ -69,7 +70,7 @@ public class AppUserState {
     private Page pageViewHex;
 
     public final Date getDateAppStart() {
-        return DateU.copy(dateAppStart);
+        return appState.getDateStart();
     }
 
     public final Interval getInterval() {
@@ -141,9 +142,9 @@ public class AppUserState {
         return documentState.getProperties().getProperty("charset", UTF8Codec.Const.UTF8);
     }
 
-    public AppUserState(final Date dateAppStart, final Principal principal, final Date date, final File webappRoot,
+    public AppUserState(final AppState appState, final Principal principal, final Date date, final File webappRoot,
                         final String submitID, final Locus locus) throws IOException {
-        this.dateAppStart = dateAppStart;
+        this.appState = appState;
         this.principal = principal;
         this.interval = new Interval(date, null);
         this.userRoot = AppFolder.getUserHome(webappRoot, principal);
@@ -174,13 +175,16 @@ public class AppUserState {
         final String message = bundle.getString("alert.action.not.implemented");
         if (action == null) {
             getClass();
+        } else if (App.Action.RESET.equals(action)) {
+            appState.removeUserState(principal, httpRequest.getDate());
+            location = Http.Token.SLASH;
         } else if (App.Action.CLOSE.equals(action)) {
             doClose(token);
         } else if (App.Action.UPDATE_LOCALE.equals(action)) {
             documentState.applyLocale(httpArguments);
         } else if (App.Action.TEXT_FILTER.equals(action)) {
             new XedActionTextFilter(locus.getLocale()).updateTextFilters(textFilters, httpArguments);
-        } else if ("clearCache".equals(action)) {
+        } else if (App.Action.CLEAR.equals(action)) {
             doClearCache();
         } else if (App.Action.MENU.equals(action)) {
             menuSystem.toggle(object);
@@ -189,7 +193,7 @@ public class AppUserState {
         } else if (App.Action.MIME_TYPE.equals(action)) {
             PropertiesU.setProperty(properties, action, Value.defaultOnEmpty(object, null));
         } else if (App.Action.CHARSET.equals(action)) {
-            getProperties().setProperty("charset", object);
+            getProperties().setProperty(App.Action.CHARSET, object);
         } else if (App.Action.HEX_VIEW_PARAM.equals(action)) {
             updateHexViewParam(object);
         } else if (views.contains(action)) {
@@ -198,6 +202,18 @@ public class AppUserState {
             alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }
         return location;
+    }
+
+    public final void close(final Date date) throws IOException {
+        doClearCache();
+        interval.setDateFinish(date);
+        final ConnectionCache[] caches = { ssh.getCache() };
+        for (final ConnectionCache cacheIt : caches) {
+            while (!cacheIt.getResources().isEmpty()) {
+                final String name = cacheIt.getResources().iterator().next().getName();
+                cacheIt.removeResource(name);
+            }
+        }
     }
 
     private void doClose(final SubmitToken token) throws IOException {
