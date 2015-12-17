@@ -17,6 +17,7 @@ import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class AppState {
+    private final Date dateAppStart;
     private final String contextPath;
     private final Collection<AppUserState> userStates;
     private final AtomicReference<String> reference;
@@ -26,6 +27,7 @@ public class AppState {
     }
 
     public AppState(final String contextPath) {
+        this.dateAppStart = new Date();
         this.contextPath = contextPath;
         this.userStates = new ArrayList<AppUserState>();
         this.reference = new AtomicReference<String>();
@@ -47,7 +49,7 @@ public class AppState {
                 final String submitID = Integer.toHexString(hashCode());
                 final DateX dateX = new DateX(HttpDateU.Const.DEFAULT, TimeZone.getTimeZone("UTC"));
                 final Locus locus = new Locus(Locale.getDefault(), dateX);
-                userState = new AppUserState(principal, date, userHome, submitID, locus);
+                userState = new AppUserState(dateAppStart, principal, date, userHome, submitID, locus);
                 userStates.add(userState);
             }
             return userState;

@@ -13,7 +13,7 @@ public class NamingServlet extends javax.servlet.http.HttpServlet {
     public final void init(final ServletConfig config) throws ServletException {
         super.init(config);
         // leaves behind a arwo.core.logging.FormatterX
-        //arwo.core.logging.LoggerU.adjust(Logger.getLogger(getClass().getName()));
+        //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(getClass().getName()));
         Logger.getLogger(getClass().getName()).info("init()");
         final String contextPath = getServletContext().getContextPath();
         AppNaming.createSubcontext(contextPath);

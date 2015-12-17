@@ -10,6 +10,7 @@ import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
+import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.date.Interval;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.lang.SystemU;
@@ -40,6 +41,7 @@ import java.util.Properties;
         "PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity", "PMD.ModifiedCyclomaticComplexity" })
 public class AppUserState {
     // lifetime
+    private final Date dateAppStart;
     private final Interval interval;
     // user identity token
     private final Principal principal;
@@ -66,6 +68,9 @@ public class AppUserState {
     // binary viewer state (hex rendering)
     private Page pageViewHex;
 
+    public final Date getDateAppStart() {
+        return DateU.copy(dateAppStart);
+    }
 
     public final Interval getInterval() {
         return interval;
@@ -136,8 +141,9 @@ public class AppUserState {
         return documentState.getProperties().getProperty("charset", UTF8Codec.Const.UTF8);
     }
 
-    public AppUserState(final Principal principal, final Date date, final File webappRoot,
+    public AppUserState(final Date dateAppStart, final Principal principal, final Date date, final File webappRoot,
                         final String submitID, final Locus locus) throws IOException {
+        this.dateAppStart = dateAppStart;
         this.principal = principal;
         this.interval = new Interval(date, null);
         this.userRoot = AppFolder.getUserHome(webappRoot, principal);

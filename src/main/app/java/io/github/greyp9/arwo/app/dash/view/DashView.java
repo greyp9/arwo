@@ -3,12 +3,14 @@ package io.github.greyp9.arwo.app.dash.view;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.ssh.core.view.SSHConnectionView;
 import io.github.greyp9.arwo.app.xed.view.XedUnsavedView;
+import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
 import io.github.greyp9.arwo.core.app.AppHtml;
 import io.github.greyp9.arwo.core.app.AppText;
 import io.github.greyp9.arwo.core.app.AppTitle;
 import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
@@ -46,6 +48,9 @@ public class DashView {
     }
 
     public final HttpResponse doGetResponse() throws IOException {
+        // lifetime of webapp (placeholder)
+        final String duration = DurationU.duration(userState.getDateAppStart(), httpRequest.getDate());
+        userState.getAlerts().add(new Alert(Alert.Severity.INFO, bundle.format("DashView.webapp.uptime", duration)));
         // template html
         final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(Const.HTML)));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
