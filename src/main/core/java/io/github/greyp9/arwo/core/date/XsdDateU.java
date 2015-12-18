@@ -14,7 +14,9 @@ public final class XsdDateU {
     }
 
     private static Date fromXSDZNotNull(final String dateString) {
-        final DateFormat dateFormat = DateU.getDateFormat(Const.XSD_MILLI_Z, DateU.Const.TZ_GMT, true);
+        final boolean lenient = (dateString.length() > Const.LENGTH_XSD_Z);
+        final String pattern = (lenient ? Const.XSD_MILLI_Z : Const.XSD_Z);
+        final DateFormat dateFormat = DateU.getDateFormat(pattern, DateU.Const.TZ_GMT, lenient);
         Date date = null;  // NOPMD
         try {
             date = dateFormat.parse(dateString);  // NOPMD
@@ -41,6 +43,7 @@ public final class XsdDateU {
     public static class Const {
         private static final String XSD_Z = "yyyy-MM-dd'T'HH:mm:ss'Z'";
         private static final String XSD_MILLI_Z = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";
+        private static final int LENGTH_XSD_Z = 20;
 
         public static final String DATE = "yyyy-MM-dd";
         public static final String TIME = "HH:mm:ss'Z'";
