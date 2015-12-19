@@ -10,12 +10,12 @@ import java.util.regex.Pattern;
 
 public class CronJobFactory {
 
-    public final CronJob create(final String name, final String line) {
+    public final CronJob create(final String line) {
         final Matcher matcher = Pattern.compile(Const.PATTERN_LINE).matcher(line);
-        return (matcher.matches() ? create(name, line, matcher) : null);
+        return (matcher.matches() ? create(line, matcher) : null);
     }
 
-    private CronJob create(final String name, final String line, final Matcher matcher) {
+    private CronJob create(final String line, final Matcher matcher) {
         int group = 0;
         final BitSet minute = new CronToken(CronJob.Const.MINUTES_IN_HOUR, 0).apply(matcher.group(++group));
         final BitSet hour = new CronToken(CronJob.Const.HOURS_IN_DAY, 0).apply(matcher.group(++group));
@@ -23,7 +23,7 @@ public class CronJobFactory {
         final BitSet month = new CronToken(CronJob.Const.MONTHS_IN_YEAR, -1).apply(matcher.group(++group));
         final BitSet dayOfWeek = new CronToken(CronJob.Const.DAYS_IN_WEEK, 0).apply(matcher.group(++group));
         final String command = matcher.group(++group);
-        return new CronJob(name, line, minute, hour, day, month, dayOfWeek, command);
+        return new CronJob(line, minute, hour, day, month, dayOfWeek, command);
     }
 
     private static class Const {

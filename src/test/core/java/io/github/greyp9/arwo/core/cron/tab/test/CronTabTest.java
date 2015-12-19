@@ -17,8 +17,8 @@ public class CronTabTest extends TestCase {
     public void testTabFrequent() throws Exception {
         final CronJobFactory factory = new CronJobFactory();
         final Collection<CronJob> jobs = new ArrayList<CronJob>();
-        jobs.add(factory.create("every-minute", "* * * * * ls"));
-        jobs.add(factory.create("every-hour", "0 * * * * ls"));
+        jobs.add(factory.create("* * * * * ls every-minute"));
+        jobs.add(factory.create("0 * * * * ls every-hour"));
         final CronTab cronTab = new CronTab("couple-of-jobs", jobs, DateU.Const.TZ_GMT);
         Assert.assertEquals("couple-of-jobs", cronTab.getName());
         Assert.assertEquals(jobs, cronTab.getJobs());
@@ -33,8 +33,8 @@ public class CronTabTest extends TestCase {
     public void testTabInfrequent() throws Exception {
         final CronJobFactory factory = new CronJobFactory();
         final Collection<CronJob> jobs = new ArrayList<CronJob>();
-        jobs.add(factory.create("every-day", "0 12 * * * ls"));
-        jobs.add(factory.create("every-week", "0 12 * * 1 ls"));
+        jobs.add(factory.create("0 12 * * * ls every-day"));
+        jobs.add(factory.create("0 12 * * 1 ls every-week"));
         final CronTab cronTab = new CronTab("couple-of-jobs", jobs, DateU.Const.TZ_GMT);
         Assert.assertEquals("couple-of-jobs", cronTab.getName());
         Assert.assertEquals(jobs, cronTab.getJobs());

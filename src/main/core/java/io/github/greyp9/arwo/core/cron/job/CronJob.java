@@ -9,7 +9,6 @@ import java.util.TimeZone;
 
 public class CronJob {
     // job config
-    private final String name;
     private final String line;
     // derived
     private final BitSet minute;
@@ -19,10 +18,6 @@ public class CronJob {
     private final BitSet dayOfWeek;
     private final String command;
 
-    public final String getName() {
-        return name;
-    }
-
     public final String getLine() {
         return line;
     }
@@ -31,10 +26,8 @@ public class CronJob {
         return command;
     }
 
-    @SuppressWarnings({ "PMD.ExcessiveParameterList", "checkstyle:parameternumber" })
-    public CronJob(final String name, final String line, final BitSet minute, final BitSet hour,
+    public CronJob(final String line, final BitSet minute, final BitSet hour,
                    final BitSet day, final BitSet month, final BitSet dayOfWeek, final String command) {
-        this.name = name;
         this.line = line;
         this.minute = minute;
         this.hour = hour;

@@ -12,9 +12,8 @@ import java.util.TimeZone;
 public class CronJobTest extends TestCase {
 
     public void testJob() throws Exception {
-        final CronJob cronJob = new CronJobFactory().create("test", "* * * * * ping localhost");
+        final CronJob cronJob = new CronJobFactory().create("* * * * * ping localhost");
         Assert.assertNotNull(cronJob);
-        Assert.assertEquals("test", cronJob.getName());
         Assert.assertEquals("* * * * * ping localhost", cronJob.getLine());
         Assert.assertEquals("ping localhost", cronJob.getCommand());
     }
@@ -31,7 +30,7 @@ public class CronJobTest extends TestCase {
             final boolean isReadyExpected = Boolean.parseBoolean(row[++i]);
             final Date dateNextExpected = XsdDateU.fromXSDZ(row[++i]);
             // test
-            final CronJob cronJob = new CronJobFactory().create(null, cronText);
+            final CronJob cronJob = new CronJobFactory().create(cronText);
             Assert.assertNotNull(label, cronJob);
             Assert.assertEquals(label, isReadyExpected, cronJob.isReady(dateCheck, tz));
             Assert.assertEquals(label, dateNextExpected, cronJob.getDateNext(dateCheck, tz, durationCheck));

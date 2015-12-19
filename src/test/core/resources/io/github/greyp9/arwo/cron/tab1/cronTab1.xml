@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronTab>
+    <cronJob cron="0 * * * *" enabled="true" name="typeA1">
+        <typeA/>
+    </cronJob>
+    <cronJob cron="0 0 * * *" enabled="true" name="typeB1">
+        <typeB/>
+    </cronJob>
+    <cronJob cron="0 12 1-7,15-21 * 1" enabled="true" name="typeC1">
+        <typeC/>
+    </cronJob>
+    <cronJob cron="0 * * * 6,7" enabled="true" name="typeD1">
+        <typeD/>
+    </cronJob>
+</cronTab>
