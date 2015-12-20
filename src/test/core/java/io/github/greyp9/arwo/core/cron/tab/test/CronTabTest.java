@@ -1,7 +1,6 @@
 package io.github.greyp9.arwo.core.cron.tab.test;
 
 import io.github.greyp9.arwo.core.cron.job.CronJob;
-import io.github.greyp9.arwo.core.cron.job.factory.CronJobFactory;
 import io.github.greyp9.arwo.core.cron.tab.CronTab;
 import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.date.XsdDateU;
@@ -15,10 +14,9 @@ import java.util.Date;
 public class CronTabTest extends TestCase {
 
     public void testTabFrequent() throws Exception {
-        final CronJobFactory factory = new CronJobFactory();
         final Collection<CronJob> jobs = new ArrayList<CronJob>();
-        jobs.add(factory.create("* * * * * ls every-minute"));
-        jobs.add(factory.create("0 * * * * ls every-hour"));
+        jobs.add(new CronJob("every-minute", true, "* * * * * ls", null));
+        jobs.add(new CronJob("every-hour", true, "0 * * * * ls", null));
         final CronTab cronTab = new CronTab("couple-of-jobs", jobs, DateU.Const.TZ_GMT);
         Assert.assertEquals("couple-of-jobs", cronTab.getName());
         Assert.assertEquals(jobs, cronTab.getJobs());
@@ -31,10 +29,9 @@ public class CronTabTest extends TestCase {
     }
 
     public void testTabInfrequent() throws Exception {
-        final CronJobFactory factory = new CronJobFactory();
         final Collection<CronJob> jobs = new ArrayList<CronJob>();
-        jobs.add(factory.create("0 12 * * * ls every-day"));
-        jobs.add(factory.create("0 12 * * 1 ls every-week"));
+        jobs.add(new CronJob("every-day", true, "0 12 * * * ls", null));
+        jobs.add(new CronJob("every-week", true, "0 12 * * 1 ls", null));
         final CronTab cronTab = new CronTab("couple-of-jobs", jobs, DateU.Const.TZ_GMT);
         Assert.assertEquals("couple-of-jobs", cronTab.getName());
         Assert.assertEquals(jobs, cronTab.getJobs());

@@ -1,8 +1,6 @@
 package io.github.greyp9.arwo.core.cron.job.test;
 
 import io.github.greyp9.arwo.core.cron.job.CronJob;
-import io.github.greyp9.arwo.core.cron.job.CronJobX;
-import io.github.greyp9.arwo.core.cron.job.factory.CronJobFactory;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.value.Value;
@@ -31,11 +29,10 @@ public class CronJobXTest extends TestCase {
             Assert.assertNotNull(enabled);
             Assert.assertNotNull(child);
             final String type = child.getLocalName();
-            final CronJob cronJob = new CronJobFactory().create(Value.join(" ", cron, type));
-            final CronJobX cronJobX = new CronJobX(name, enabled, cronJob, child);
-            Assert.assertTrue(cronJobX.getName().startsWith("type"));
-            Assert.assertTrue(cronJobX.isEnabled());
-            Assert.assertTrue(cronJobX.getElement().getLocalName().startsWith("type"));
+            final CronJob cronJob = new CronJob(name, enabled, Value.join(" ", cron, type), child);
+            Assert.assertTrue(cronJob.getName().startsWith("type"));
+            Assert.assertTrue(cronJob.isEnabled());
+            Assert.assertTrue(cronJob.getElement().getLocalName().startsWith("type"));
         }
     }
 

@@ -1,7 +1,6 @@
 package io.github.greyp9.arwo.core.cron.job.test;
 
 import io.github.greyp9.arwo.core.cron.job.CronJob;
-import io.github.greyp9.arwo.core.cron.job.factory.CronJobFactory;
 import io.github.greyp9.arwo.core.date.XsdDateU;
 import junit.framework.TestCase;
 import org.junit.Assert;
@@ -12,7 +11,7 @@ import java.util.TimeZone;
 public class CronJobTest extends TestCase {
 
     public void testJob() throws Exception {
-        final CronJob cronJob = new CronJobFactory().create("* * * * * ping localhost");
+        final CronJob cronJob = new CronJob(null, true, "* * * * * ping localhost", null);
         Assert.assertNotNull(cronJob);
         Assert.assertEquals("* * * * * ping localhost", cronJob.getLine());
         Assert.assertEquals("ping localhost", cronJob.getCommand());
@@ -23,14 +22,14 @@ public class CronJobTest extends TestCase {
             // setup
             int i = -1;
             final String label = row[++i];
-            final String cronText = row[++i];
+            final String line = row[++i];
             final TimeZone tz = TimeZone.getTimeZone(row[++i]);
             final Date dateCheck = XsdDateU.fromXSDZ(row[++i]);
             final String durationCheck = row[++i];
             final boolean isReadyExpected = Boolean.parseBoolean(row[++i]);
             final Date dateNextExpected = XsdDateU.fromXSDZ(row[++i]);
             // test
-            final CronJob cronJob = new CronJobFactory().create(cronText);
+            final CronJob cronJob = new CronJob(null, true, line, null);
             Assert.assertNotNull(label, cronJob);
             Assert.assertEquals(label, isReadyExpected, cronJob.isReady(dateCheck, tz));
             Assert.assertEquals(label, dateNextExpected, cronJob.getDateNext(dateCheck, tz, durationCheck));
