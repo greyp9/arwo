@@ -11,6 +11,7 @@ import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.connect.ConnectionCache;
+import io.github.greyp9.arwo.core.cron.service.CronServiceRegistrar;
 import io.github.greyp9.arwo.core.date.Interval;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
@@ -38,7 +39,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Properties;
 
-@SuppressWarnings({ "PMD.ExcessiveImports",
+@SuppressWarnings({ "PMD.ExcessiveImports", "PMD.GodClass",
         "PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity", "PMD.ModifiedCyclomaticComplexity" })
 public class AppUserState {
     private final AppState appState;
@@ -198,6 +199,10 @@ public class AppUserState {
             updateHexViewParam(object);
         } else if (views.contains(action)) {
             location = toView(httpRequest, action);
+        } else if (App.Action.CRON_ON.equals(action)) {
+            doCronOn(httpRequest);
+        } else if (App.Action.CRON_OFF.equals(action)) {
+            doCronOff(httpRequest);
         } else {
             alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }
@@ -252,6 +257,19 @@ public class AppUserState {
     private String toView(final ServletHttpRequest httpRequest, final String action) {
         final String pathInfoNewView = new Pather(httpRequest.getPathInfo()).getRight();
         return httpRequest.getBaseURI() + PathU.toPath("", action) + pathInfoNewView;
+    }
+
+    private void doCronOff(final ServletHttpRequest httpRequest) throws IOException {
+        final Bundle bundle = new Bundle(new AppText(getLocus().getLocale()).getBundleCore());
+        new CronServiceRegistrar(httpRequest.getDate(), principal, bundle, alerts, appState.getCronService()).
+                unregister();
+    }
+
+    private void doCronOn(final ServletHttpRequest httpRequest) throws IOException {
+        doCronOff(httpRequest);
+        final Bundle bundle = new Bundle(new AppText(getLocus().getLocale()).getBundleCore());
+        new CronServiceRegistrar(httpRequest.getDate(), principal, bundle, alerts, appState.getCronService()).
+                register(documentState.getSession("/app").getXed());
     }
 
     private static class Const {

@@ -2,7 +2,6 @@ package io.github.greyp9.arwo.core.cron.service.test;
 
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.cron.exec.CronTabExecutor;
-import io.github.greyp9.arwo.core.cron.instance.SleepRunnable;
 import io.github.greyp9.arwo.core.cron.job.CronJob;
 import io.github.greyp9.arwo.core.cron.service.CronService;
 import io.github.greyp9.arwo.core.cron.tab.CronTab;
@@ -22,7 +21,6 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Logger;
 
@@ -67,13 +65,13 @@ public class CronServiceTester {
         if (text.equals("\n")) {
             stop = true;
         } else if (text.equals("-2\n")) {
-            cronService.remove("user2", date);
+            cronService.remove("user2", date, null, null);
         } else if (text.equals("-1\n")) {
-            cronService.remove("user1", date);
+            cronService.remove("user1", date, null, null);
         } else if (text.equals("1\n")) {
-            cronService.add(getCronTabExecutor(user1), date);
+            cronService.add(getCronTabExecutor(user1), null, null);
         } else if (text.equals("2\n")) {
-            cronService.add(getCronTabExecutor(user2), date);
+            cronService.add(getCronTabExecutor(user2), null, null);
         }
         if (input.length > 0) {
             MutexU.notifyAll(cronService);
@@ -83,7 +81,7 @@ public class CronServiceTester {
 
     private CronTabExecutor getCronTabExecutor(Principal principal) {
         ExecutorService executorService = ExecutorServiceFactory.create(1, getClass().getSimpleName());
-        return new CronTabExecutor(principal, executorService, getCronTab(), getProperties());
+        return new CronTabExecutor(principal, executorService, getCronTab(), new Date());
     }
 
     private CronTab getCronTab() {
@@ -91,12 +89,6 @@ public class CronServiceTester {
         cronJobs.add(new CronJob("sleep-PT1S", true, "* * * * * sleep duration=PT1S", null));
         cronJobs.add(new CronJob("sleep-PT2S", true, "* * * * * sleep duration=PT2S", null));
         return new CronTab("tab1", cronJobs, DateU.Const.TZ_GMT);
-    }
-
-    private Properties getProperties() {
-        Properties properties = new Properties();
-        properties.setProperty("sleep", SleepRunnable.class.getName());
-        return properties;
     }
 
     public static void main(String[] args) {

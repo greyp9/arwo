@@ -1,12 +1,12 @@
 package io.github.greyp9.arwo.core.cron.exec;
 
 import io.github.greyp9.arwo.core.cron.tab.CronTab;
+import io.github.greyp9.arwo.core.date.DateU;
 
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Date;
 import java.util.List;
-import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
@@ -18,8 +18,8 @@ public class CronTabExecutor {
     private final Principal principal;
     private final ExecutorService executorService;
     private final CronTab cronTab;
-    private final Properties properties;
-    private final AtomicReference<Date> stopDate;
+    private final Date dateStart;
+    private final AtomicReference<Date> dateStop;
 
     public final ExecutorService getExecutorService() {
         return executorService;
@@ -29,30 +29,30 @@ public class CronTabExecutor {
         return cronTab;
     }
 
-    public final Properties getProperties() {
-        return properties;
-    }
-
     public final Principal getPrincipal() {
         return principal;
     }
 
+    public final Date getDateStart() {
+        return DateU.copy(dateStart);
+    }
+
     public final boolean isStopped() {
-        return (stopDate.get() != null);
+        return (dateStop.get() != null);
     }
 
     public CronTabExecutor(final Principal principal, final ExecutorService executorService,
-                           final CronTab cronTab, final Properties properties) {
+                           final CronTab cronTab, final Date dateStart) {
         this.principal = principal;
         this.executorService = executorService;
         this.cronTab = cronTab;
-        this.properties = properties;
-        this.stopDate = new AtomicReference<Date>();
+        this.dateStart = DateU.copy(dateStart);
+        this.dateStop = new AtomicReference<Date>();
     }
 
     @SuppressWarnings({ "PMD.GuardLogStatementJavaUtil", "PMD.GuardLogStatement" })
     public final void stop(final Date date) {
-        this.stopDate.set(date);
+        this.dateStop.set(date);
         // stop executor service
         final List<Runnable> runnables = executorService.shutdownNow();
         for (final Runnable runnable : runnables) {

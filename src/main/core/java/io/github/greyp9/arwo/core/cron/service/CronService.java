@@ -1,5 +1,8 @@
 package io.github.greyp9.arwo.core.cron.service;
 
+import io.github.greyp9.arwo.core.alert.Alert;
+import io.github.greyp9.arwo.core.alert.Alerts;
+import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.cron.exec.CronTabExecutor;
 import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.date.DurationU;
@@ -31,23 +34,35 @@ public class CronService implements Runnable {
         this.stopCondition.set(condition);
     }
 
-    public final void add(final CronTabExecutor executor, final Date date) {
-        final String principalName = executor.getPrincipal().getName();
+    public final void add(final CronTabExecutor executor, final Bundle bundle, final Alerts alerts) {
         synchronized (executors) {
-            remove(principalName, date);
+            final String tabNameIt = executor.getCronTab().getName();
+            final String principalNameIt = executor.getPrincipal().getName();
             executors.add(executor);
-            logger.info(String.format("ADD/%s", principalName));
+            logger.info(String.format("ADD/%s/%s", tabNameIt, principalNameIt));
+            if ((bundle != null) && (alerts != null)) {
+                final String message = bundle.format("CronService.cronTab.on", tabNameIt, principalNameIt);
+                alerts.add(new Alert(Alert.Severity.INFO, message));
+            }
         }
         MutexU.notifyAll(this);
     }
 
-    public final void remove(final String principalName, final Date date) {
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    public final void remove(final String principalName, final Date date, final Bundle bundle, final Alerts alerts) {
         synchronized (executors) {
             for (final CronTabExecutor executor : executors) {
+                final String tabNameIt = executor.getCronTab().getName();
                 final String principalNameIt = executor.getPrincipal().getName();
-                if ((principalNameIt.equals(principalName)) && (!executor.isStopped())) {
+                final boolean isPrincipal = principalNameIt.equals(principalName);
+                final boolean isRunning = (!executor.isStopped());
+                if (isPrincipal && isRunning) {
                     executor.stop(date);
-                    logger.info(String.format("REMOVE/%s", principalName));
+                    logger.info(String.format("REMOVE/%s/%s", tabNameIt, principalNameIt));
+                    if ((bundle != null) && (alerts != null)) {
+                        final String message = bundle.format("CronService.cronTab.off", tabNameIt, principalNameIt);
+                        alerts.add(new Alert(Alert.Severity.INFO, message));
+                    }
                 }
             }
         }
@@ -83,7 +98,7 @@ public class CronService implements Runnable {
             final Date date = new Date();
             for (final CronTabExecutor executor : executors) {
                 final String principalNameIt = executor.getPrincipal().getName();
-                remove(principalNameIt, date);
+                remove(principalNameIt, date, null, null);
             }
         }
     }

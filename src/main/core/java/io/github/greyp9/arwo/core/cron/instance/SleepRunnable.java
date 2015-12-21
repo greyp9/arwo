@@ -10,6 +10,7 @@ import io.github.greyp9.arwo.core.xml.ElementU;
 import java.util.Date;
 import java.util.logging.Logger;
 
+@SuppressWarnings("unused")
 public class SleepRunnable extends CronRunnable {
     private final Logger logger = Logger.getLogger(getClass().getName());
 

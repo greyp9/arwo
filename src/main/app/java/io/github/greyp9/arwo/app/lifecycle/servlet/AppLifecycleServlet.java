@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.naming.AppNaming;
 import javax.naming.Context;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
+import java.util.concurrent.ExecutorService;
 
 public class AppLifecycleServlet extends javax.servlet.http.HttpServlet {
     private static final long serialVersionUID = 2426386463726538976L;
@@ -21,6 +22,10 @@ public class AppLifecycleServlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             this.appState = new AppState(contextPath);
             AppNaming.bind(context, App.Naming.APP_STATE, appState);
+            // start threads (ExecutorService lifecycle managed in ExecutorServlet)
+            final ExecutorService executor = (ExecutorService)
+                    AppNaming.lookup(contextPath, App.Naming.EXECUTOR_SERVICE);
+            executor.execute(appState.getCronService());
         }
     }
 
@@ -29,6 +34,7 @@ public class AppLifecycleServlet extends javax.servlet.http.HttpServlet {
         final String contextPath = getServletContext().getContextPath();
         final Context context = AppNaming.lookupSubcontext(contextPath);
         synchronized (this) {
+            appState.getCronService().stop(getClass().getSimpleName());
             AppNaming.unbind(context, App.Naming.APP_STATE);
             this.appState.shutdown(getClass().getName());
             this.appState = null;

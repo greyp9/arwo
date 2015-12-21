@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.app.core.state;
 
 import io.github.greyp9.arwo.core.app.AppFolder;
+import io.github.greyp9.arwo.core.cron.service.CronService;
 import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.date.HttpDateU;
@@ -20,11 +21,16 @@ import java.util.concurrent.atomic.AtomicReference;
 public class AppState {
     private final Date dateStart;
     private final String contextPath;
+    private final CronService cronService;
     private final Collection<AppUserState> userStates;
     private final AtomicReference<String> reference;
 
     public final Date getDateStart() {
         return DateU.copy(dateStart);
+    }
+
+    public final CronService getCronService() {
+        return cronService;
     }
 
     public final AtomicReference<String> getReference() {
@@ -34,6 +40,7 @@ public class AppState {
     public AppState(final String contextPath) {
         this.dateStart = new Date();
         this.contextPath = contextPath;
+        this.cronService = new CronService(contextPath);
         this.userStates = new ArrayList<AppUserState>();
         this.reference = new AtomicReference<String>();
     }

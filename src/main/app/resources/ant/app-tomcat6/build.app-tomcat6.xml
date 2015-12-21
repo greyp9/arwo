@@ -131,6 +131,8 @@
             <include name='io/github/greyp9/arwo/app/ssh/servlet/SFTPServlet.java'/>
             <!--ssh-->
             <include name='io/github/greyp9/arwo/app/ssh/servlet/SHServlet.java'/>
+            <!--cron-->
+            <include name='io/github/greyp9/arwo/core/cron/instance/*Runnable.java'/>
 
 
             <!--table testing-->

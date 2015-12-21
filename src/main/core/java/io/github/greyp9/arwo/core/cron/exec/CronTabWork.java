@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.cron.exec;
 
 import io.github.greyp9.arwo.core.cron.core.CronParams;
+import io.github.greyp9.arwo.core.cron.core.CronProperties;
 import io.github.greyp9.arwo.core.cron.core.CronRunnable;
 import io.github.greyp9.arwo.core.cron.job.CronJob;
 import io.github.greyp9.arwo.core.cron.tab.CronTab;
@@ -48,7 +49,7 @@ public class CronTabWork {
         final Element elementJob = cronJob.getElement();
         final Element element = ((elementJob == null) ? fabricateElement(cronJob) : elementJob);
         final CronJob cronJob1 = new CronJob(cronJob.getName(), cronJob.isEnabled(), cronJob.getLine(), element);
-        final Properties properties = executor.getProperties();
+        final Properties properties = CronProperties.getProperties();
         final String className = properties.getProperty(element.getLocalName());
         if (className != null) {
             runJob(cronJob1, className);
