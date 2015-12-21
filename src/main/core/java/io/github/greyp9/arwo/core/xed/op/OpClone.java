@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public class OpClone {
 
+/*
     public final Element apply(final Element element) throws IOException {
         // make a deep copy of element node
         final Document documentClone = DocumentU.toDocument(DocumentU.toXml(element));
@@ -21,5 +22,17 @@ public class OpClone {
         final Element next = ElementU.getNextElement(element);
         // insert
         return ElementU.addElement(parent, elementClone, next);
+    }
+*/
+
+    public final Element apply(final Element element) throws IOException {
+        // make a deep copy of element node
+        final Document documentClone = DocumentU.toDocument(DocumentU.toXml(element));
+        // transfer ownership of new element node to existing document
+        final Document document = element.getOwnerDocument();
+        final Element elementClone = (Element) document.importNode(documentClone.getDocumentElement(), true);
+        // insert
+        final Element parent = (Element) element.getParentNode();
+        return ElementU.addElement(parent, elementClone, element);
     }
 }

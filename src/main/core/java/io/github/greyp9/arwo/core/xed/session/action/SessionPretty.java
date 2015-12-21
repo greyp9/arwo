@@ -38,11 +38,9 @@ public class SessionPretty {
         final Date dateLoad = session.getDateLoad();
         final XedTrigger trigger = session.getTrigger();
         // do this step to fix namespaces for new elements (something in JRE?)
-        final byte[] xmlNormal = DocumentU.toXml(xed.getDocument());
-        final Document documentNormal = DocumentU.toDocument(xmlNormal);
+        final Document documentNormal = DocumentU.toDocument(DocumentU.toXml(xed.getDocument()));
+        final Document document = DocumentU.toDocument(DocumentU.toXmlPretty(documentNormal));
         // new session
-        final byte[] xmlPretty = DocumentU.toXmlPretty(documentNormal);
-        final Document document = DocumentU.toDocument(xmlPretty);
         final Xed xedNew = new Xed(document, xed.getXsdTypes(), xed.getLocale());
         final XedSession sessionNew = new XedSession(entry, xedNew, file, dateLoad, trigger);
         // replace

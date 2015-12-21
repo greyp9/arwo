@@ -74,7 +74,9 @@ public class XedWrite {
             cursor.getXed().delete(cursor.getElement());
             location = baseURI + cursor.getParent().getURI();
         } else if (App.Action.CLONE.equals(action)) {
-            cursor.getXed().clone(cursor.getElement());
+            final Element clone = cursor.getXed().clone(cursor.getElement());
+            final XedCursor cursorClone = new XedNav(cursor.getXed()).find(clone);
+            location = baseURI + cursorClone.getURI();
         } else if (App.Action.UP.equals(action)) {
             final Element moveUp = cursor.getXed().moveUp(cursor.getElement());
             final XedCursor cursorMove = new XedNav(cursor.getXed()).find(moveUp);

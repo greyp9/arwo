@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<app xmlns="urn:arwo:app">
+<sshServers/>
+<cron>
+<cronTab enabled="true" name="sleep-tab" threads="1" tz="GMT">
+<cronJob cron="* * * * *" enabled="true" name="sleep-PT1S">
+<sleep duration="PT1S"/>
+</cronJob>
+</cronTab>
+</cron>
+<documents/>
+</app>

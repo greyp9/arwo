@@ -9,6 +9,7 @@ import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
 import io.github.greyp9.arwo.core.xed.trigger.XedTrigger;
 import io.github.greyp9.arwo.core.xml.DocumentU;
+import org.w3c.dom.Document;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -28,7 +29,9 @@ public class SessionSave {
     }
 
     public final void save() throws IOException {
-        final byte[] xmlPretty = DocumentU.toXmlPretty(session.getXed().getDocument());
+        final Document document = session.getXed().getDocument();
+        final Document documentNormal = DocumentU.toDocument(DocumentU.toXml(document));
+        final byte[] xmlPretty = DocumentU.toXmlPretty(documentNormal);
         final File file = session.getFile();
         final File folder = file.getParentFile();
         // ensure parent folder for specified file path
