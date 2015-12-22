@@ -76,8 +76,9 @@ public final class App {
         public static final String MIME_TYPE = "mimeType";
         public static final String CHARSET = "charset";
         public static final String SELECT = "select";
-        public static final String CRON_ON = "cronOn";
         public static final String CRON_OFF = "cronOff";
+        public static final String CRON_ON = "cronOn";
+        public static final String CRON_NOW = "cronNow";
         public static final String ADD_FAV = "addFavorite";
         public static final String SELECT_FAV = "selectFavorite";
         public static final String UI = "ui";

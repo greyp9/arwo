@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.cron.exec;
 
+import io.github.greyp9.arwo.core.cron.job.CronJob;
 import io.github.greyp9.arwo.core.cron.tab.CronTab;
 import io.github.greyp9.arwo.core.date.DateU;
 
@@ -66,5 +67,9 @@ public class CronTabExecutor {
 
     public final void doWork(final String context, final Date dateSchedule) throws IOException {
         new CronTabWork(context, this, dateSchedule).doWork();
+    }
+
+    public final void doWork(final String context, final Date dateNow, final CronJob cronJob) throws IOException {
+        new CronTabWork(context, this, dateNow).doWork(cronJob);
     }
 }

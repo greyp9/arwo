@@ -37,6 +37,10 @@ public class CronTabWork {
         this.dateSchedule = dateSchedule;
     }
 
+    public final void doWork(final CronJob cronJob) throws IOException {
+        runJob(cronJob);
+    }
+
     public final void doWork() throws IOException {
         final CronTab cronTab = executor.getCronTab();
         final Collection<CronJob> cronJobs = cronTab.getJobsReady(dateSchedule);

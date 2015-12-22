@@ -3,12 +3,12 @@ package io.github.greyp9.arwo.core.app;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
-
-import java.util.Locale;
+import io.github.greyp9.arwo.core.locus.Locus;
 
 public class AppRequest {
     private final ServletHttpRequest httpRequest;
-    private final Locale locale;
+    private final String submitID;
+    private final Locus locus;
     private final Bundle bundle;
     private final Alerts alerts;
 
@@ -16,8 +16,12 @@ public class AppRequest {
         return httpRequest;
     }
 
-    public final Locale getLocale() {
-        return locale;
+    public final String getSubmitID() {
+        return submitID;
+    }
+
+    public final Locus getLocus() {
+        return locus;
     }
 
     public final Bundle getBundle() {
@@ -28,10 +32,11 @@ public class AppRequest {
         return alerts;
     }
 
-    public AppRequest(final ServletHttpRequest httpRequest, final Locale locale, final Bundle bundle,
-                      final Alerts alerts) {
+    public AppRequest(final ServletHttpRequest httpRequest, final String submitID,
+                      final Locus locus, final Bundle bundle, final Alerts alerts) {
         this.httpRequest = httpRequest;
-        this.locale = locale;
+        this.submitID = submitID;
+        this.locus = locus;
         this.bundle = bundle;
         this.alerts = alerts;
     }

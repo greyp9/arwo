@@ -84,8 +84,11 @@ public final class DurationU {
         public static final int GROUP_MINUTE = 11;
         public static final int GROUP_SECOND = 13;
         public static final int GROUP_MILLIS = 14;
-    }
 
+        public static final String ONE_DAY = "P1D";
+        public static final String ONE_HOUR = "PT1H";
+        public static final String ONE_SECOND = "PT1S";
+    }
 
     public static String durationXSDZ(final String dateEarlierXSDZ, final String dateLaterXSDZ) {
         final Date dateEarlier = XsdDateU.fromXSDZ(dateEarlierXSDZ);
@@ -136,6 +139,9 @@ public final class DurationU {
             buffer.append(toAtom(seconds, "S"));
         } else {
             buffer.append(String.format("%d.%03dS", seconds, millis));
+        }
+        if ((!t) && (!p)) {
+            buffer.append("PT0S");
         }
         return buffer.toString();
     }

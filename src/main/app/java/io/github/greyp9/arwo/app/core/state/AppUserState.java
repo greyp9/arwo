@@ -5,12 +5,14 @@ import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppFolder;
+import io.github.greyp9.arwo.core.app.AppRequest;
 import io.github.greyp9.arwo.core.app.AppText;
 import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.connect.ConnectionCache;
+import io.github.greyp9.arwo.core.cron.service.CronService;
 import io.github.greyp9.arwo.core.cron.service.CronServiceRegistrar;
 import io.github.greyp9.arwo.core.date.Interval;
 import io.github.greyp9.arwo.core.http.Http;
@@ -69,6 +71,10 @@ public class AppUserState {
 
     // binary viewer state (hex rendering)
     private Page pageViewHex;
+
+    public final CronService getCronService() {
+        return appState.getCronService();
+    }
 
     public final Date getDateAppStart() {
         return appState.getDateStart();
@@ -161,6 +167,11 @@ public class AppUserState {
         this.pageViewHex = Page.Factory.initPage(Const.PAGE_HEX_VIEW, new Properties());
     }
 
+    public final AppRequest getAppRequest(final ServletHttpRequest httpRequest) {
+        final Bundle bundle = new Bundle(new AppText(getLocus().getLocale()).getBundleCore());
+        return new AppRequest(httpRequest, submitID, getLocus(), bundle, alerts);
+    }
+
     public final String applyPost(final SubmitToken token, final NameTypeValues httpArguments,
                                   final ServletHttpRequest httpRequest) throws IOException {
         httpArguments.getClass();
@@ -199,10 +210,12 @@ public class AppUserState {
             updateHexViewParam(object);
         } else if (views.contains(action)) {
             location = toView(httpRequest, action);
-        } else if (App.Action.CRON_ON.equals(action)) {
-            doCronOn(httpRequest);
         } else if (App.Action.CRON_OFF.equals(action)) {
             doCronOff(httpRequest);
+        } else if (App.Action.CRON_ON.equals(action)) {
+            doCronOn(httpRequest);
+        } else if (App.Action.CRON_NOW.equals(action)) {
+            doCronNow(httpRequest, token);
         } else {
             alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }
@@ -270,6 +283,10 @@ public class AppUserState {
         final Bundle bundle = new Bundle(new AppText(getLocus().getLocale()).getBundleCore());
         new CronServiceRegistrar(httpRequest.getDate(), principal, bundle, alerts, appState.getCronService()).
                 register(documentState.getSession("/app").getXed());
+    }
+
+    private void doCronNow(final ServletHttpRequest httpRequest, final SubmitToken token) throws IOException {
+        appState.getCronService().runNow(principal, httpRequest.getDate(), token.getObject(), token.getObject2());
     }
 
     private static class Const {

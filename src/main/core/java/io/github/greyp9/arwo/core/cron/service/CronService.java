@@ -4,12 +4,15 @@ import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.cron.exec.CronTabExecutor;
+import io.github.greyp9.arwo.core.cron.job.CronJob;
 import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.date.XsdDateU;
+import io.github.greyp9.arwo.core.vm.mutex.CollectionU;
 import io.github.greyp9.arwo.core.vm.mutex.MutexU;
 
 import java.io.IOException;
+import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -30,8 +33,32 @@ public class CronService implements Runnable {
         this.stopCondition = new AtomicReference<String>();
     }
 
+    public final Collection<CronTabExecutor> getExecutors() {
+        return CollectionU.copy(new ArrayList<CronTabExecutor>(), executors);
+    }
+
     public final void stop(final String condition) {
         this.stopCondition.set(condition);
+    }
+
+    public final void runNow(final Principal principal, final Date dateNow,
+                             final String tabName, final String jobName) throws IOException {
+        synchronized (executors) {
+            for (final CronTabExecutor executor : executors) {
+                final String tabNameIt = executor.getCronTab().getName();
+                final String principalNameIt = executor.getPrincipal().getName();
+                final boolean isTab = tabNameIt.equals(tabName);
+                final boolean isPrincipal = principalNameIt.equals(principal.getName());
+                final boolean isRunning = (!executor.isStopped());
+                if (isTab && isPrincipal && isRunning) {
+                    for (final CronJob cronJob : executor.getCronTab().getJobs()) {
+                        if (cronJob.getName().equals(jobName)) {
+                            executor.doWork(context, dateNow, cronJob);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     public final void add(final CronTabExecutor executor, final Bundle bundle, final Alerts alerts) {

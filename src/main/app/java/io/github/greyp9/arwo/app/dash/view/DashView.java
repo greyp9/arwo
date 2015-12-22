@@ -1,12 +1,13 @@
 package io.github.greyp9.arwo.app.dash.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.cron.view.CronActiveView;
 import io.github.greyp9.arwo.app.ssh.core.view.SSHConnectionsView;
 import io.github.greyp9.arwo.app.xed.view.XedUnsavedView;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
 import io.github.greyp9.arwo.core.app.AppHtml;
-import io.github.greyp9.arwo.core.app.AppText;
+import io.github.greyp9.arwo.core.app.AppRequest;
 import io.github.greyp9.arwo.core.app.AppTitle;
 import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
@@ -36,15 +37,14 @@ import java.util.Properties;
 
 @SuppressWarnings("PMD.ExcessiveImports")
 public class DashView {
+    private final AppRequest request;
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
-    private final Bundle bundle;
 
     public DashView(final ServletHttpRequest httpRequest, final AppUserState userState) {
+        this.request = userState.getAppRequest(httpRequest);
         this.httpRequest = httpRequest;
         this.userState = userState;
-        final Locale locale = userState.getLocus().getLocale();
-        this.bundle = new Bundle(new AppText(locale).getBundleCore());
     }
 
     public final HttpResponse doGetResponse() throws IOException {
@@ -52,7 +52,7 @@ public class DashView {
         final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(Const.HTML)));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
         // context-specific content
-        final AppTitle title = AppTitle.Factory.getHostLabel(httpRequest, bundle);
+        final AppTitle title = AppTitle.Factory.getHostLabel(httpRequest, request.getBundle());
         addHeaderView(body, title);
         HttpResponse httpResponse = addContentTo(body);
         if (httpResponse == null) {
@@ -73,7 +73,7 @@ public class DashView {
 
     private void addHeaderView(final Element html, final AppTitle title) throws IOException {
         // context menu
-        final MenuView menuView = new MenuView(bundle, httpRequest, userState.getMenuSystem());
+        final MenuView menuView = new MenuView(request.getBundle(), httpRequest, userState.getMenuSystem());
         menuView.addContentTo(html, AppMenuFactory.Const.DASHBOARD, true);
         // context title (+ text filters)
         final Element divMenus = menuView.addTitle(html, title);
@@ -89,10 +89,12 @@ public class DashView {
     private HttpResponse addContentTo(final Element html) throws IOException {
         new SSHConnectionsView(httpRequest, userState, "", false).addContent(html);
         new XedUnsavedView(httpRequest, userState).addContent(html);
+        new CronActiveView(userState.getCronService(), request, userState).addContent(html);
         return null;
     }
 
     private void addMessagesTemp() throws IOException {
+        final Bundle bundle = request.getBundle();
         // lifetime of webapp (placeholder)
         final String durationA = DurationU.duration(userState.getDateAppStart(), httpRequest.getDate());
         userState.getAlerts().add(new Alert(Alert.Severity.INFO, bundle.format("DashView.webapp.uptime", durationA)));
