@@ -1,5 +1,7 @@
 package io.github.greyp9.arwo.core.io;
 
+import io.github.greyp9.arwo.core.file.FileU;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
@@ -95,6 +97,11 @@ public final class StreamU {
         } catch (IOException e) {
             return null;
         }
+    }
+
+    public static void writeMkdirs(final File file, final byte[] bytes) throws IOException {
+        FileU.ensureFolders(file.getParentFile());
+        write(file, bytes);
     }
 
     public static void write(final File file, final byte[] bytes) throws IOException {

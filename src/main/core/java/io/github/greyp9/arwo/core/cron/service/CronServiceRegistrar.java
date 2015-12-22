@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.cron.exec.CronTabExecutor;
 import io.github.greyp9.arwo.core.cron.job.CronJob;
 import io.github.greyp9.arwo.core.cron.tab.CronTab;
+import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.lang.NumberU;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.vm.exec.ExecutorServiceFactory;
@@ -23,14 +24,16 @@ import java.util.concurrent.ExecutorService;
 
 public class CronServiceRegistrar {
     private final Date date;
+    private final String authorization;
     private final Principal principal;
     private final Bundle bundle;
     private final Alerts alerts;
     private final CronService cronService;
 
-    public CronServiceRegistrar(final Date date, final Principal principal,
+    public CronServiceRegistrar(final Date date, final String authorization, final Principal principal,
                                 final Bundle bundle, final Alerts alerts, final CronService cronService) {
-        this.date = date;
+        this.date = DateU.copy(date);
+        this.authorization = authorization;
         this.principal = principal;
         this.bundle = bundle;
         this.alerts = alerts;
@@ -66,7 +69,7 @@ public class CronServiceRegistrar {
         final Integer nThreads = NumberU.toInt(threads, 0);
         final String prefix = String.format("CRON-TAB-%s", name);
         final ExecutorService executorService = ExecutorServiceFactory.create(nThreads, prefix);
-        return new CronTabExecutor(principal, executorService, cronTab, date);
+        return new CronTabExecutor(authorization, principal, executorService, cronTab, date);
     }
 
     private CronJob createJob(final XPather xpatherJob) throws IOException {

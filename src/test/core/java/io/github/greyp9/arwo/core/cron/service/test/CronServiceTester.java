@@ -69,9 +69,9 @@ public class CronServiceTester {
         } else if (text.equals("-1\n")) {
             cronService.remove("user1", date, null, null);
         } else if (text.equals("1\n")) {
-            cronService.add(getCronTabExecutor(user1), null, null);
+            cronService.add(getCronTabExecutor("user1", user1), null, null);
         } else if (text.equals("2\n")) {
-            cronService.add(getCronTabExecutor(user2), null, null);
+            cronService.add(getCronTabExecutor("user2", user2), null, null);
         }
         if (input.length > 0) {
             MutexU.notifyAll(cronService);
@@ -79,9 +79,9 @@ public class CronServiceTester {
         return stop;
     }
 
-    private CronTabExecutor getCronTabExecutor(Principal principal) {
+    private CronTabExecutor getCronTabExecutor(String authorization, Principal principal) {
         ExecutorService executorService = ExecutorServiceFactory.create(1, getClass().getSimpleName());
-        return new CronTabExecutor(principal, executorService, getCronTab(), new Date());
+        return new CronTabExecutor(authorization, principal, executorService, getCronTab(), new Date());
     }
 
     private CronTab getCronTab() {

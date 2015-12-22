@@ -38,4 +38,9 @@ public final class Http {
         public static final String FORM_URL_ENCODED = "application/x-www-form-urlencoded";
         public static final String FORM_MULTIPART = "multipart/form-data";
     }
+
+    public static class Method {
+        public static final String GET = "GET";
+        public static final String POST = "POST";
+    }
 }

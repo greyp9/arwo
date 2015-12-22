@@ -71,6 +71,7 @@
         <xsd:choice>
             <xsd:element name='arguments' type='app:cronArgumentsJobType'/>
             <xsd:element name='sleep' type='app:cronSleepJobType'/>
+            <xsd:element name='ssh' type='app:cronSshJobType'/>
         </xsd:choice>
         <xsd:attributeGroup ref="app:cronJobAttributes"/>
     </xsd:complexType>
@@ -87,6 +88,12 @@
 
     <xsd:complexType name="cronSleepJobType">
         <xsd:attribute name='duration' type='xsd:duration'/>
+    </xsd:complexType>
+
+    <xsd:complexType name="cronSshJobType">
+        <xsd:attribute name='server' type='xsd:string'/>
+        <xsd:attribute name='command' type='xsd:string'/>
+        <xsd:attribute name='comment' type='xsd:string'/>
     </xsd:complexType>
 
     <xsd:complexType name="documentsType">

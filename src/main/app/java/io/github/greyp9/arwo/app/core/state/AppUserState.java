@@ -273,15 +273,19 @@ public class AppUserState {
     }
 
     private void doCronOff(final ServletHttpRequest httpRequest) throws IOException {
+        final Date date = httpRequest.getDate();
+        final String authorization = httpRequest.getHttpRequest().getHeader(Http.Header.AUTHORIZATION);
         final Bundle bundle = new Bundle(new AppText(getLocus().getLocale()).getBundleCore());
-        new CronServiceRegistrar(httpRequest.getDate(), principal, bundle, alerts, appState.getCronService()).
+        new CronServiceRegistrar(date, authorization, principal, bundle, alerts, appState.getCronService()).
                 unregister();
     }
 
     private void doCronOn(final ServletHttpRequest httpRequest) throws IOException {
         doCronOff(httpRequest);
+        final Date date = httpRequest.getDate();
+        final String authorization = httpRequest.getHttpRequest().getHeader(Http.Header.AUTHORIZATION);
         final Bundle bundle = new Bundle(new AppText(getLocus().getLocale()).getBundleCore());
-        new CronServiceRegistrar(httpRequest.getDate(), principal, bundle, alerts, appState.getCronService()).
+        new CronServiceRegistrar(date, authorization, principal, bundle, alerts, appState.getCronService()).
                 register(documentState.getSession("/app").getXed());
     }
 

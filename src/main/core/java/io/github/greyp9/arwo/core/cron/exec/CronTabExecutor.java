@@ -16,6 +16,7 @@ import java.util.logging.Logger;
 public class CronTabExecutor {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    private final String authorization;
     private final Principal principal;
     private final ExecutorService executorService;
     private final CronTab cronTab;
@@ -30,6 +31,10 @@ public class CronTabExecutor {
         return cronTab;
     }
 
+    public final String getAuthorization() {
+        return authorization;
+    }
+
     public final Principal getPrincipal() {
         return principal;
     }
@@ -42,8 +47,9 @@ public class CronTabExecutor {
         return (dateStop.get() != null);
     }
 
-    public CronTabExecutor(final Principal principal, final ExecutorService executorService,
-                           final CronTab cronTab, final Date dateStart) {
+    public CronTabExecutor(final String authorization, final Principal principal,
+                           final ExecutorService executorService, final CronTab cronTab, final Date dateStart) {
+        this.authorization = authorization;
         this.principal = principal;
         this.executorService = executorService;
         this.cronTab = cronTab;

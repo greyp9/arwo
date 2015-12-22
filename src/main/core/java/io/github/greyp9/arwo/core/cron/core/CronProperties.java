@@ -11,6 +11,7 @@ public final class CronProperties {
         final Properties properties = new Properties();
         properties.setProperty("arguments", "io.github.greyp9.arwo.core.cron.instance.ArgumentsRunnable");
         properties.setProperty("sleep", "io.github.greyp9.arwo.core.cron.instance.SleepRunnable");
+        properties.setProperty("ssh", "io.github.greyp9.arwo.app.ssh.sh.cron.SHRunnable");
         return properties;
     }
 }

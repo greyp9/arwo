@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.core.cron.core.CronProperties;
 import io.github.greyp9.arwo.core.cron.core.CronRunnable;
 import io.github.greyp9.arwo.core.cron.job.CronJob;
 import io.github.greyp9.arwo.core.cron.tab.CronTab;
+import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.lang.StringU;
@@ -18,6 +19,7 @@ import org.w3c.dom.Element;
 import javax.xml.XMLConstants;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
+import java.security.Principal;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Properties;
@@ -34,7 +36,7 @@ public class CronTabWork {
     public CronTabWork(final String context, final CronTabExecutor executor, final Date dateSchedule) {
         this.context = context;
         this.executor = executor;
-        this.dateSchedule = dateSchedule;
+        this.dateSchedule = DateU.copy(dateSchedule);
     }
 
     public final void doWork(final CronJob cronJob) throws IOException {
@@ -83,8 +85,10 @@ public class CronTabWork {
     }
 
     private CronParams getParams(final Date date, final CronJob cronJob) {
+        final String authorization = executor.getAuthorization();
+        final Principal principal = executor.getPrincipal();
         final CronTab cronTab = executor.getCronTab();
-        return new CronParams(context, null, null, date, cronTab, cronJob);
+        return new CronParams(context, authorization, principal, date, cronTab, cronJob, cronJob.getElement());
     }
 
     @SuppressWarnings({ "PMD.OnlyOneReturn", "PMD.AvoidCatchingThrowable" })

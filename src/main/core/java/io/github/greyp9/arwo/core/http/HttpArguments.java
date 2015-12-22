@@ -5,6 +5,8 @@ import io.github.greyp9.arwo.core.url.URLCodec;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 
+import java.io.UnsupportedEncodingException;
+
 public final class HttpArguments {
 
     private HttpArguments() {
@@ -32,5 +34,20 @@ public final class HttpArguments {
             }
         }
         return nameTypeValues;
+    }
+
+    public static byte[] toEntity(final NameTypeValues httpArguments) throws UnsupportedEncodingException {
+        return UTF8Codec.toBytes(toQueryString(httpArguments));
+    }
+
+    public static String toQueryString(final NameTypeValues httpArguments) throws UnsupportedEncodingException {
+        final StringBuilder buffer = new StringBuilder();
+        for (final NameTypeValue httpArgument : httpArguments) {
+            buffer.append((buffer.length() == 0) ? "" : Http.Token.AMP);
+            buffer.append(URLCodec.encode(httpArgument.getName()));
+            buffer.append(Http.Token.EQUALS);
+            buffer.append(URLCodec.encode(httpArgument.getValueS()));
+        }
+        return buffer.toString();
     }
 }
