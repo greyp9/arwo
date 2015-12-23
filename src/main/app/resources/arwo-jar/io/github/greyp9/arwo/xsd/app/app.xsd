@@ -119,8 +119,22 @@
 
     <xsd:complexType name='favoritesType'>
         <xsd:sequence>
+            <xsd:element name='lsh-favorites' type='app:lshFavoritesType'/>
+            <xsd:element name='lfs-favorites' type='app:lfsFavoritesType'/>
             <xsd:element name='ssh-favorites' type='app:sshFavoritesType'/>
             <xsd:element name='sftp-favorites' type='app:sftpFavoritesType'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name='lshFavoritesType'>
+        <xsd:sequence>
+            <xsd:element name='lsh-favorite' type='app:lshFavoriteType' minOccurs='0' maxOccurs='unbounded'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name='lfsFavoritesType'>
+        <xsd:sequence>
+            <xsd:element name='lfs-favorite' type='app:lfsFavoriteType' minOccurs='0' maxOccurs='unbounded'/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -134,6 +148,16 @@
         <xsd:sequence>
             <xsd:element name='sftp-favorite' type='app:sftpFavoriteType' minOccurs='0' maxOccurs='unbounded'/>
         </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="lshFavoriteType">
+        <xsd:attribute name='command' type='xsd:string'/>
+        <xsd:attribute name='comment' type='xsd:string'/>
+    </xsd:complexType>
+
+    <xsd:complexType name="lfsFavoriteType">
+        <xsd:attribute name='resource' type='xsd:string'/>
+        <xsd:attribute name='comment' type='xsd:string'/>
     </xsd:complexType>
 
     <xsd:complexType name="sshFavoriteType">

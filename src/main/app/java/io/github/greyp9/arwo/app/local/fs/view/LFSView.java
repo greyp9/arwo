@@ -1,12 +1,9 @@
-package io.github.greyp9.arwo.app.ssh.sftp.view;
+package io.github.greyp9.arwo.app.local.fs.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.favorite.AppFavoriteView;
 import io.github.greyp9.arwo.app.core.view.props.AppPropertiesView;
-import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
-import io.github.greyp9.arwo.app.ssh.core.view.SSHConnectionView;
-import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
-import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPDataSource;
+import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppHtml;
@@ -40,6 +37,7 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.text.MessageFormat;
@@ -49,14 +47,14 @@ import java.util.Locale;
 import java.util.Properties;
 
 @SuppressWarnings({ "PMD.AbstractNaming", "PMD.ExcessiveImports" })
-public abstract class SFTPView {
-    private final SFTPRequest request;
+public abstract class LFSView {
+    private final LFSRequest request;
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
     private final Bundle bundle;
-    private final SSHConnectionResource resource;
+    private final File file;
 
-    public final SFTPRequest getRequest() {
+    public final LFSRequest getRequest() {
         return request;
     }
 
@@ -64,16 +62,16 @@ public abstract class SFTPView {
         return userState;
     }
 
-    public final SSHConnectionResource getResource() {
-        return resource;
+    public final File getFile() {
+        return file;
     }
 
-    public SFTPView(final SFTPRequest request, final AppUserState userState, final SSHConnectionResource resource) {
+    public LFSView(final LFSRequest request, final AppUserState userState, final File file) {
         this.request = request;
         this.httpRequest = request.getHttpRequest();
         this.userState = userState;
         this.bundle = request.getBundle();
-        this.resource = resource;
+        this.file = file;
     }
 
     public final HttpResponse doGetResponse() throws IOException {
@@ -111,8 +109,8 @@ public abstract class SFTPView {
         addTextFiltersView(divTitle);
         // favorites (if toggled)
         final XedNav nav = new XedNav(userState.getDocumentState().getSession("/fav").getXed());
-        final XedCursor cursorFavorites = nav.findX("/app:favorites/app:sftp-favorites");
-        final XedCursor cursorType = nav.find("sftp-favorite", cursorFavorites);
+        final XedCursor cursorFavorites = nav.findX("/app:favorites/app:lfs-favorites");
+        final XedCursor cursorType = nav.find("lfs-favorite", cursorFavorites);
         new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.FILESYSTEM).addContentTo(html);
         // settings property strips
         final Locale locale = userState.getLocus().getLocale();
@@ -120,7 +118,7 @@ public abstract class SFTPView {
         final Properties properties = userState.getProperties();
         new XedActionLocale(locale).addContentTo(html, submitID, properties);
         new XedActionTextFilter(locale).addContentTo(html, submitID, properties);
-        new SSHConnectionView(httpRequest, userState, resource, bundle).addContent(html);
+
     }
 
     private void addTextFiltersView(final Element html) {
@@ -148,14 +146,14 @@ public abstract class SFTPView {
 
     protected final void addFileProperties(final Element html, final MetaFile metaFile) throws IOException {
         if (PropertiesU.isBoolean(userState.getProperties(), App.Action.PROPERTIES)) {
-            final AppPropertiesView view = new AppPropertiesView("sftpPropertiesType", userState);
+            final AppPropertiesView view = new AppPropertiesView("lfsPropertiesType", userState);
             view.addContentTo(html, metaFile, bundle, getFileProperties());
         }
     }
 
     private NameTypeValues getFileProperties() throws IOException {
-        final SFTPDataSource source = new SFTPDataSource(request, resource.getSSHConnection());
-        return source.properties(request.getPath());
+        return new NameTypeValues();
+
     }
 
     protected abstract HttpResponse addContentTo(Element html) throws IOException;

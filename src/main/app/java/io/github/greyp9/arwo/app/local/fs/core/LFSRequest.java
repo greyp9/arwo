@@ -1,4 +1,4 @@
-package io.github.greyp9.arwo.app.ssh.sftp.core;
+package io.github.greyp9.arwo.app.local.fs.core;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.alert.Alerts;
@@ -11,18 +11,13 @@ import io.github.greyp9.arwo.core.value.Value;
 
 import java.util.Locale;
 
-public class SFTPRequest {
+public class LFSRequest {
     private final AppRequest appRequest;
-    private final AppUserState userState;
+    //private final AppUserState userState;
     private final Pather patherMode;
-    private final Pather patherServer;
 
     public final ServletHttpRequest getHttpRequest() {
         return appRequest.getHttpRequest();
-    }
-
-    public final AppUserState getUserState() {
-        return userState;
     }
 
     public final Locale getLocale() {
@@ -37,34 +32,25 @@ public class SFTPRequest {
         return appRequest.getAlerts();
     }
 
-    public SFTPRequest(final ServletHttpRequest httpRequest, final AppUserState userState) {
+    public LFSRequest(final ServletHttpRequest httpRequest, final AppUserState userState) {
         this.appRequest = userState.getAppRequest(httpRequest);
-        this.userState = userState;
+        //this.userState = userState;
         this.patherMode = new Pather(httpRequest.getPathInfo());
-        this.patherServer = new Pather(patherMode.getRight());
     }
 
     public final String getBaseURIMode() {
         return appRequest.getHttpRequest().getBaseURI() + patherMode.getLeft();
     }
 
-    public final String getBaseURIServer() {
-        return getBaseURIMode() + patherServer.getLeft();
-    }
-
     public final String getMode() {
         return patherMode.getLeftToken();
     }
 
-    public final String getServer() {
-        return patherServer.getLeftToken();
-    }
-
     public final String getPath() {
-        return patherServer.getRight();
+        return patherMode.getRight();
     }
 
     public final String getTitlePath() {
-        return "[SFTP] " + Value.join(Http.Token.COLON, getServer(), getPath());
+        return "[FS] " + Value.join(Http.Token.COLON, getPath());
     }
 }

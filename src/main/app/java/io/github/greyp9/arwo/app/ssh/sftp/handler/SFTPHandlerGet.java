@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
 import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.app.ssh.sftp.view.SFTPInventoryView;
 import io.github.greyp9.arwo.app.ssh.sftp.view.SFTPResourceView;
+import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
@@ -27,6 +28,17 @@ public class SFTPHandlerGet {
 
     public final HttpResponse doGet() throws IOException {
         HttpResponse httpResponse;
+        try {
+            httpResponse = doGet2();
+        } catch (IOException e) {
+            userState.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
+            httpResponse = HttpResponseU.to302(httpRequest.getBaseURI());
+        }
+        return httpResponse;
+    }
+
+    private HttpResponse doGet2() throws IOException {
+        HttpResponse httpResponse;
         final String baseURI = httpRequest.getBaseURI();
         final String pathInfo = httpRequest.getPathInfo();
         if (pathInfo == null) {
@@ -36,12 +48,12 @@ public class SFTPHandlerGet {
         } else if (Value.isEmpty(request.getServer())) {
             httpResponse = new SFTPInventoryView(request, userState, null, Const.MODE_DEFAULT).doGetResponse();
         } else {
-            httpResponse = doGet2();
+            httpResponse = doGet3();
         }
         return httpResponse;
     }
 
-    private HttpResponse doGet2() throws IOException {
+    private HttpResponse doGet3() throws IOException {
         HttpResponse httpResponse;
         final SSHConnectionFactory factory = new SSHConnectionFactory(
                 httpRequest, userState, request.getBundle(), request.getAlerts());
