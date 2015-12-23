@@ -76,7 +76,7 @@ public abstract class LFSView {
 
     public final HttpResponse doGetResponse() throws IOException {
         // template html
-        final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(Const.HTML)));
+        final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(App.Html.UI)));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
         // context-specific content
         final String modeKey = Value.join(".", "menu", "view", request.getMode());
@@ -103,7 +103,7 @@ public abstract class LFSView {
         // context menu
         final MenuView menuView = new MenuView(bundle, httpRequest, userState.getMenuSystem());
         final Element divMenus = menuView.addContentTo(html, AppMenuFactory.Const.FILESYSTEM, true);
-        new FileUpload(bundle).addContentTo(divMenus, menuView);
+        new FileUpload(httpRequest.getServletPath(), bundle).addContentTo(divMenus, menuView);
         // context title (with text filters)
         final Element divTitle = menuView.addTitle(html, title);
         addTextFiltersView(divTitle);
@@ -157,8 +157,4 @@ public abstract class LFSView {
     }
 
     protected abstract HttpResponse addContentTo(Element html) throws IOException;
-
-    private static class Const {
-        private static final String HTML = "io/github/greyp9/arwo/html/xed/xed.html";
-    }
 }

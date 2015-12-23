@@ -179,8 +179,8 @@ public class AppUserState {
         String location = httpRequest.getURI();
         final String action = token.getAction();
         final String object = token.getObject();
-        final Collection<String> views = Arrays.asList(
-                "view", "edit", "create", "viewGZ", "viewZIP", "viewTGZ", "viewHex");
+        final Collection<String> views = Arrays.asList(App.Mode.VIEW, App.Mode.EDIT, App.Mode.CREATE,
+                App.Mode.VIEW_GZ, App.Mode.VIEW_ZIP, App.Mode.VIEW_TGZ, App.Mode.VIEW_HEX);
         final Locus locus = documentState.getLocus();
         final Properties properties = documentState.getProperties();
         final Bundle bundle = new Bundle(new AppText(locus.getLocale()).getBundleCore());

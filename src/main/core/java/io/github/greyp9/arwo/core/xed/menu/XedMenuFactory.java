@@ -63,8 +63,8 @@ public class XedMenuFactory implements MenuFactory {
         final MenuItem itemXsd = new MenuItem("xsd", App.Target.USER_STATE, "xsd");
         final MenuItem itemRev = new MenuItem("rev", App.Target.USER_STATE, "rev");
         final MenuItem itemLocale = new MenuItem("locale", App.Target.USER_STATE, "locale");
-        return new MenuItem("view", App.Target.USER_STATE, App.Action.MENU,
-                key + "/view", itemUI, itemXml, itemXsd, itemRev, itemLocale);
+        return new MenuItem(App.Mode.VIEW, App.Target.USER_STATE, App.Action.MENU,
+                Value.join("/", key, App.Mode.VIEW), itemUI, itemXml, itemXsd, itemRev, itemLocale);
     }
 
     public static class Const {

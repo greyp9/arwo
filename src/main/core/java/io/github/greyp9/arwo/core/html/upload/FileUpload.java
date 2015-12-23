@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.html.upload;
 
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.Http;
@@ -14,14 +15,16 @@ import org.w3c.dom.Element;
 import java.io.IOException;
 
 public class FileUpload {
+    private final String servletPath;
     private final Bundle bundle;
 
-    public FileUpload(final Bundle bundle) {
+    public FileUpload(final String servletPath, final Bundle bundle) {
+        this.servletPath = servletPath;
         this.bundle = bundle;
     }
 
     public final HttpResponse addContentTo(final Element html, final MenuView menuView) throws IOException {
-        final MenuItem itemRoot = menuView.getMenuSystem().get("/sftp", "fs");
+        final MenuItem itemRoot = menuView.getMenuSystem().get(servletPath, AppMenuFactory.Const.FILESYSTEM);
         final MenuItem itemFile = itemRoot.getMenuItem("file");
         final MenuItem itemUpload = itemFile.getMenuItem("upload");
         if (itemRoot.isOpen() && itemFile.isOpen() && itemUpload.isOpen()) {

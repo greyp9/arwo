@@ -4,8 +4,11 @@ import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.model.ExceptionModel;
 import io.github.greyp9.arwo.core.file.FileU;
+import io.github.greyp9.arwo.core.file.meta.FileMetaData;
+import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.io.StreamU;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 
@@ -29,6 +32,20 @@ public class LFSDataSource {
     public final File exists(final String path) {
         final File file = new File(folderRoot, path);
         return (file.exists() ? file : null);
+    }
+
+    public final MetaFile read(final String path) throws IOException {
+        long lastModified = 0L;
+        byte[] bytes = new byte[0];
+        try {
+            final File fileTarget = new File(folderRoot, path);
+            lastModified = fileTarget.lastModified();
+            bytes = StreamU.read(fileTarget);
+        } catch (IOException e) {
+            new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
+        }
+        final FileMetaData metaData = new FileMetaData(path, bytes.length, lastModified, false);
+        return new MetaFile(metaData, new ByteArrayInputStream(bytes));
     }
 
     public final void write(final byte[] bytes, final String folder, final String filename) throws IOException {

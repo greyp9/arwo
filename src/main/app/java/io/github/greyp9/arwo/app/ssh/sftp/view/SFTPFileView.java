@@ -47,7 +47,6 @@ public class SFTPFileView extends SFTPView {
         super(request, userState, resource);
     }
 
-    @SuppressWarnings("PMD.AvoidFinalLocalVariable")  // PMD defect?
     @Override
     protected final HttpResponse addContentTo(final Element html) throws IOException {
         final SFTPRequest request = getRequest();
@@ -62,14 +61,14 @@ public class SFTPFileView extends SFTPView {
         // resource interpret (UTF-8 versus Unicode)
         final String charset = userState.getCharset();
         // resource access (read versus write)
-        final boolean isModeCreate = "create".equals(mode);
-        final boolean isModeEdit = "edit".equals(mode);
+        final boolean isModeCreate = App.Mode.CREATE.equals(mode);
+        final boolean isModeEdit = App.Mode.EDIT.equals(mode);
         // resource interpret (gzip deflated content expected)
-        final boolean isModeGZ = "viewGZ".equals(mode);
-        final boolean isModeZIP = "viewZIP".equals(mode);
-        final boolean isModeTGZ = "viewTGZ".equals(mode);
+        final boolean isModeGZ = App.Mode.VIEW_GZ.equals(mode);
+        final boolean isModeZIP = App.Mode.VIEW_ZIP.equals(mode);
+        final boolean isModeTGZ = App.Mode.VIEW_TGZ.equals(mode);
         // resource interpret (binary, view hex representation)
-        final boolean isHex = "viewHex".equals(mode);
+        final boolean isHex = App.Mode.VIEW_HEX.equals(mode);
         // properties of cursor resource
         final boolean isProperties = PropertiesU.isBoolean(userState.getProperties(), App.Action.PROPERTIES);
         addFileProperties(html, metaFile);

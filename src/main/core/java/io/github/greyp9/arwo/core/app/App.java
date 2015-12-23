@@ -39,6 +39,10 @@ public final class App {
         public static final String CORE = "io.github.greyp9.arwo.text.core.core";
     }
 
+    public static class Html {
+        public static final String UI = "io/github/greyp9/arwo/html/xed/xed.html";
+    }
+
     public static class Naming {
         public static final String APP_STATE = "javax.naming.Name-io.github.greyp9.arwo.app.core.state.AppState";
         public static final String EXECUTOR_SERVICE = "javax.naming.Name-java.util.concurrent.ExecutorService";
@@ -48,6 +52,16 @@ public final class App {
         public static final String ACTIVE = "active";
         public static final String MENU = "menu";
         public static final String MENUS = "menus";
+    }
+
+    public static class Mode {
+        public static final String CREATE = "create";
+        public static final String EDIT = "edit";
+        public static final String VIEW = "view";
+        public static final String VIEW_GZ = "viewGZ";
+        public static final String VIEW_ZIP = "viewZIP";
+        public static final String VIEW_TGZ = "viewTGZ";
+        public static final String VIEW_HEX = "viewHex";
     }
 
     public static class Action {

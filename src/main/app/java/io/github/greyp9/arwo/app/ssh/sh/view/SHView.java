@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
 import io.github.greyp9.arwo.app.ssh.core.view.SSHConnectionView;
 import io.github.greyp9.arwo.app.ssh.sh.core.SHRequest;
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppHtml;
 import io.github.greyp9.arwo.core.app.AppTitle;
 import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
@@ -59,7 +60,7 @@ public abstract class SHView {
 
     public final HttpResponse doGetResponse() throws IOException {
         // template html
-        final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(Const.HTML)));
+        final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(App.Html.UI)));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
         // context-specific content
         final AppTitle title = AppTitle.Factory.getResourceLabel(httpRequest, bundle, request.getTitlePath());
@@ -103,8 +104,4 @@ public abstract class SHView {
     }
 
     protected abstract HttpResponse addContentTo(Element html) throws IOException;
-
-    private static class Const {
-        private static final String HTML = "io/github/greyp9/arwo/html/xed/xed.html";
-    }
 }

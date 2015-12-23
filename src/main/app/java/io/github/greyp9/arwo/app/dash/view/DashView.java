@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.app.ssh.core.view.SSHConnectionsView;
 import io.github.greyp9.arwo.app.xed.view.XedUnsavedView;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppHtml;
 import io.github.greyp9.arwo.core.app.AppRequest;
 import io.github.greyp9.arwo.core.app.AppTitle;
@@ -49,7 +50,7 @@ public class DashView {
 
     public final HttpResponse doGetResponse() throws IOException {
         // template html
-        final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(Const.HTML)));
+        final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(App.Html.UI)));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
         // context-specific content
         final AppTitle title = AppTitle.Factory.getHostLabel(httpRequest, request.getBundle());
@@ -101,9 +102,5 @@ public class DashView {
         // lifetime of session (placeholder)
         final String durationU = DurationU.duration(userState.getInterval().getDateStart(), httpRequest.getDate());
         userState.getAlerts().add(new Alert(Alert.Severity.INFO, bundle.format("DashView.session.uptime", durationU)));
-    }
-
-    private static class Const {
-        private static final String HTML = "io/github/greyp9/arwo/html/xed/xed.html";
     }
 }

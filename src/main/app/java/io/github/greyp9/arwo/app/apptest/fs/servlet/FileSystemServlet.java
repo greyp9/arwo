@@ -136,7 +136,7 @@ public class FileSystemServlet extends javax.servlet.http.HttpServlet {
 
         private HttpResponse doGetHtml(final String pathInfo) throws IOException {
             // template html
-            final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(Const.HTML)));
+            final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(App.Html.UI)));
             final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
             // cursor content
             addContentTo(pathInfo, body);
@@ -198,10 +198,6 @@ public class FileSystemServlet extends javax.servlet.http.HttpServlet {
             insertRow.setNextColumn(extension);
             insertRow.setNextColumn(file.length());
             rowSet.add(insertRow.getRow());
-        }
-
-        private static class Const {
-            private static final String HTML = "io/github/greyp9/arwo/html/xed/xed.html";
         }
     }
 

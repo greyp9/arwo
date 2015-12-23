@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.xed.view.html;
 
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppHtml;
 import io.github.greyp9.arwo.core.app.AppTitle;
 import io.github.greyp9.arwo.core.bundle.Bundle;
@@ -31,7 +32,7 @@ import java.net.HttpURLConnection;
 import java.util.Locale;
 import java.util.Properties;
 
-@SuppressWarnings("PMD.AbstractNaming")
+@SuppressWarnings({ "PMD.AbstractNaming", "PMD.ExcessiveImports" })
 public abstract class HtmlView {
     private final XedRequest request;
 
@@ -47,7 +48,7 @@ public abstract class HtmlView {
         final ServletHttpRequest httpRequest = request.getHttpRequest();
         final XedUserState userState = request.getState();
         // template html
-        final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(Const.HTML)));
+        final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(App.Html.UI)));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
         addHeaderView(body, userState);
         // cursor content
@@ -83,8 +84,4 @@ public abstract class HtmlView {
     }
 
     public abstract String addContentTo(final Element html) throws IOException;
-
-    private static class Const {
-        private static final String HTML = "io/github/greyp9/arwo/html/xed/xed.html";
-    }
 }

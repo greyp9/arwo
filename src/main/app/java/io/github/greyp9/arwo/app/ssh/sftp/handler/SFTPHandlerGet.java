@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.app.ssh.sftp.view.SFTPInventoryView;
 import io.github.greyp9.arwo.app.ssh.sftp.view.SFTPResourceView;
 import io.github.greyp9.arwo.core.alert.Alert;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
@@ -44,9 +45,9 @@ public class SFTPHandlerGet {
         if (pathInfo == null) {
             httpResponse = HttpResponseU.to302(PathU.toDir(baseURI));
         } else if (Value.isEmpty(request.getMode())) {
-            httpResponse = HttpResponseU.to302(PathU.toDir(httpRequest.getBaseURI(), Const.MODE_DEFAULT));
+            httpResponse = HttpResponseU.to302(PathU.toDir(httpRequest.getBaseURI(), App.Mode.VIEW));
         } else if (Value.isEmpty(request.getServer())) {
-            httpResponse = new SFTPInventoryView(request, userState, null, Const.MODE_DEFAULT).doGetResponse();
+            httpResponse = new SFTPInventoryView(request, userState, null, App.Mode.VIEW).doGetResponse();
         } else {
             httpResponse = doGet3();
         }
@@ -60,14 +61,10 @@ public class SFTPHandlerGet {
         final SSHConnectionResource resource = (SSHConnectionResource)
                 userState.getSSH().getCache().getResource(request.getServer(), factory);
         if (resource == null) {
-            httpResponse = HttpResponseU.to302(PathU.toDir(httpRequest.getBaseURI(), Const.MODE_DEFAULT));
+            httpResponse = HttpResponseU.to302(PathU.toDir(httpRequest.getBaseURI(), App.Mode.VIEW));
         } else {
             httpResponse = new SFTPResourceView(request, userState, resource).doGetResource(request.getPath());
         }
         return httpResponse;
-    }
-
-    private static class Const {
-        private static final String MODE_DEFAULT = "view";
     }
 }

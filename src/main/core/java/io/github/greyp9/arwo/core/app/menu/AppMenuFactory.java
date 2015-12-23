@@ -77,14 +77,14 @@ public class AppMenuFactory implements MenuFactory {
         final String properties = App.Action.PROPERTIES;
         final String textFilter = App.Action.TEXT_FILTER;
         final MenuItem itemViewFind = new MenuItem(find, App.Target.USER_STATE, App.Action.TOGGLE, find);
-        final MenuItem itemView = new MenuItem("view", App.Target.USER_STATE, "view");
-        final MenuItem itemViewGZ = new MenuItem("viewGZ", App.Target.USER_STATE, "viewGZ");
-        final MenuItem itemViewZIP = new MenuItem("viewZIP", App.Target.USER_STATE, "viewZIP");
-        final MenuItem itemViewTGZ = new MenuItem("viewTGZ", App.Target.USER_STATE, "viewTGZ");
-        final MenuItem itemViewHex = new MenuItem("viewHex", App.Target.USER_STATE, "viewHex");
+        final MenuItem itemView = new MenuItem(App.Mode.VIEW, App.Target.USER_STATE, App.Mode.VIEW);
+        final MenuItem itemViewGZ = new MenuItem(App.Mode.VIEW_GZ, App.Target.USER_STATE, App.Mode.VIEW_GZ);
+        final MenuItem itemViewZIP = new MenuItem(App.Mode.VIEW_ZIP, App.Target.USER_STATE, App.Mode.VIEW_ZIP);
+        final MenuItem itemViewTGZ = new MenuItem(App.Mode.VIEW_TGZ, App.Target.USER_STATE, App.Mode.VIEW_TGZ);
+        final MenuItem itemViewHex = new MenuItem(App.Mode.VIEW_HEX, App.Target.USER_STATE, App.Mode.VIEW_HEX);
         final MenuItem itemProps = new MenuItem(properties, App.Target.USER_STATE, App.Action.TOGGLE, properties);
         final MenuItem itemFilter = new MenuItem(textFilter, App.Target.USER_STATE, App.Action.TOGGLE, textFilter);
-        return new MenuItem("view", App.Target.USER_STATE, App.Action.MENU, key + "/view",
+        return new MenuItem(App.Mode.VIEW, App.Target.USER_STATE, App.Action.MENU, Value.join("/", key, App.Mode.VIEW),
                 createMenuViewMime(key), createMenuViewCharset(key), itemViewFind,
                 itemView, itemViewGZ, itemViewZIP, itemViewTGZ, itemViewHex, itemProps, itemFilter);
     }
