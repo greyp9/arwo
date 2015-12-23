@@ -23,7 +23,7 @@ public class LFSResourceView {
 
     public final HttpResponse doGetResource(final String path) throws IOException {
         HttpResponse httpResponse;
-        final LFSDataSource source = new LFSDataSource(userState.getUserRoot());
+        final LFSDataSource source = new LFSDataSource(request, userState.getUserRoot());
         final File file = source.getFile(path);
         final boolean isFolder = file.isDirectory();
         final boolean isFile = file.isFile();

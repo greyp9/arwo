@@ -1,10 +1,7 @@
-package io.github.greyp9.arwo.app.ssh.sftp.handler;
+package io.github.greyp9.arwo.app.local.fs.handler;
 
-import io.github.greyp9.arwo.app.core.state.AppUserState;
-import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionFactory;
-import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
-import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
-import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPDataSource;
+import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
+import io.github.greyp9.arwo.app.local.fs.data.LFSDataSource;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.bundle.Bundle;
@@ -22,17 +19,17 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Properties;
 
-public class SFTPHandlerPostMultipart {
-    private final SFTPRequest request;
+public class LFSHandlerPostMultipart {
+    private final LFSRequest request;
     private final ServletHttpRequest httpRequest;
-    private final AppUserState userState;
+    //private final AppUserState userState;
     private final Bundle bundle;
     private final Alerts alerts;
 
-    public SFTPHandlerPostMultipart(final SFTPRequest request, final AppUserState userState) {
+    public LFSHandlerPostMultipart(final LFSRequest request/*, final AppUserState userState*/) {
         this.request = request;
         this.httpRequest = request.getHttpRequest();
-        this.userState = userState;
+        //this.userState = userState;
         this.bundle = request.getBundle();
         this.alerts = request.getAlerts();
     }
@@ -57,29 +54,29 @@ public class SFTPHandlerPostMultipart {
     }
 
     private void doPostUploadFile(final MimePart mimePart, final Properties properties) throws IOException {
-        final String server = request.getServer();
+
         final String filename = properties.getProperty(Const.CD_FILENAME);
-        final SSHConnectionFactory factory = new SSHConnectionFactory(httpRequest, userState, bundle, alerts);
-        final SSHConnectionResource resource = (SSHConnectionResource)
-                userState.getSSH().getCache().getResource(server, factory);
-        if (resource == null) {
-            alerts.add(new Alert(Alert.Severity.WARN, bundle.format("SFTPHandlerPostMultipart.no.connect", server)));
-        } else if (filename.length() == 0) {
-            alerts.add(new Alert(Alert.Severity.WARN, bundle.format("SFTPHandlerPostMultipart.no.file", server)));
+
+
+
+
+
+        if (filename.length() == 0) {
+            alerts.add(new Alert(Alert.Severity.WARN, bundle.format("SFTPHandlerPostMultipart.no.file", "")));
         } else {
-            doPostUploadFile(mimePart, filename, resource);
-            resource.getSSHConnection().update(httpRequest.getDate());
+            doPostUploadFile(mimePart, filename);
+
         }
     }
 
     private void doPostUploadFile(
-            final MimePart mimePart, final String filename, final SSHConnectionResource resource) throws IOException {
+            final MimePart mimePart, final String filename) throws IOException {
         final byte[] bytes = mimePart.getBody().toByteArray();
         alerts.add(new Alert(Alert.Severity.INFO, bundle.format(
                 "SFTPHandlerPostMultipart.file.source", filename)));
         // put data to remote
         final FileX fileX = new FileX(Value.join("", request.getPath(), filename));
-        final SFTPDataSource source = new SFTPDataSource(request, resource.getSSHConnection());
+        final LFSDataSource source = new LFSDataSource(request, request.getUserState().getUserRoot());
         source.write(bytes, fileX.getFolder(), fileX.getFilename());
         // info alert
         final String hash = HexCodec.encode(HashU.md5(bytes));

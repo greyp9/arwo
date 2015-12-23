@@ -25,7 +25,8 @@ import java.io.IOException;
 
 public class LFSFolderView extends LFSView {
 
-    public LFSFolderView(final LFSRequest request, final AppUserState userState, final File file) {
+    public LFSFolderView(
+            final LFSRequest request, final AppUserState userState, final File file) {
         super(request, userState, file);
     }
 
@@ -65,9 +66,7 @@ public class LFSFolderView extends LFSView {
         final RowSet rowSetRaw = (findMode ?
                 getRowSetRawFind(metaData, viewState) :
                 getRowSetRaw(metaData, viewState));
-
         final RowSet rowSetStyled = new LFSFolderStyled(request, rowSetRaw).getRowSet();
-
         final Table table = new Table(rowSetStyled, viewState.getSorts(), viewState.getFilters(),
                 request.getTitlePath(), request.getTitlePath());
         final TableContext tableContext = new TableContext(
@@ -81,18 +80,17 @@ public class LFSFolderView extends LFSView {
         RowSet rowSet;
         final LFSRequest request = getRequest();
         final AppUserState userState = getUserState();
+        final LFSDataSource source = new LFSDataSource(request, userState.getUserRoot());
         final ResourceCache cache = userState.getCache();
         final String path = request.getPath();
         // if disconnected, resource will only be fetched if no cached copy is available
         if (viewState.isConnected()) {
-            final LFSDataSource source = new LFSDataSource(userState.getUserRoot());
             final File[] files = source.listFiles(path);
             rowSet = new LFSFolder(null, files, metaData, true).getRowSet();
             cache.putRowSet(path, rowSet);
         } else if (cache.containsRowSet(path)) {
             rowSet = cache.getRowSet(path);
         } else {
-            final LFSDataSource source = new LFSDataSource(userState.getUserRoot());
             final File[] files = source.listFiles(path);
             rowSet = new LFSFolder(null, files, metaData, true).getRowSet();
             cache.putRowSet(path, rowSet);

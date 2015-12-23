@@ -13,11 +13,15 @@ import java.util.Locale;
 
 public class LFSRequest {
     private final AppRequest appRequest;
-    //private final AppUserState userState;
+    private final AppUserState userState;
     private final Pather patherMode;
 
     public final ServletHttpRequest getHttpRequest() {
         return appRequest.getHttpRequest();
+    }
+
+    public final AppUserState getUserState() {
+        return userState;
     }
 
     public final Locale getLocale() {
@@ -34,7 +38,7 @@ public class LFSRequest {
 
     public LFSRequest(final ServletHttpRequest httpRequest, final AppUserState userState) {
         this.appRequest = userState.getAppRequest(httpRequest);
-        //this.userState = userState;
+        this.userState = userState;
         this.patherMode = new Pather(httpRequest.getPathInfo());
     }
 
