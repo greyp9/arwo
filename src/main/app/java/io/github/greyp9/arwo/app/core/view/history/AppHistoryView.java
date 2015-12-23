@@ -29,15 +29,17 @@ import java.sql.Types;
 
 public class AppHistoryView {
     private final String tableID;
+    private final boolean includeContext;
     private final History history;
     private final Bundle bundle;
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
 
 
-    public AppHistoryView(final String tableID, final History history, final Bundle bundle,
-                          final ServletHttpRequest httpRequest, final AppUserState userState) {
+    public AppHistoryView(final String tableID, final boolean includeContext, final History history,
+                          final Bundle bundle, final ServletHttpRequest httpRequest, final AppUserState userState) {
         this.tableID = tableID;
+        this.includeContext = includeContext;
         this.history = history;
         this.bundle = bundle;
         this.httpRequest = httpRequest;
@@ -87,7 +89,9 @@ public class AppHistoryView {
         final boolean isStarted = (script.getStart() != null);
         final boolean isFinished = (script.getFinish() != null);
         final String id = dateX.toString(script.getDate());
-        final String href = PathU.toDir(httpRequest.getBaseURI(), script.getContext(), id);
+        final String href = includeContext ?
+                PathU.toDir(httpRequest.getBaseURI(), script.getContext(), id) :
+                PathU.toDir(httpRequest.getBaseURI(), id);
         final InsertRow insertRow = new InsertRow(rowSet);
         insertRow.setNextColumn(new TableViewLink(UTF16.SELECT, null, href));
         insertRow.setNextColumn(script.getContext());

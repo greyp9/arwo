@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.app.core.state;
 
+import io.github.greyp9.arwo.app.core.subsystem.local.SubsystemLocal;
 import io.github.greyp9.arwo.app.core.subsystem.ssh.SubsystemSSH;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
@@ -65,6 +66,7 @@ public class AppUserState {
     // text filters (for file display)
     private final TextFilters textFilters;
     // widget subsystems
+    private final SubsystemLocal local;
     private final SubsystemSSH ssh;
     // menu system
     private final MenuSystem menuSystem;
@@ -120,6 +122,10 @@ public class AppUserState {
         return textFilters;
     }
 
+    public final SubsystemLocal getLocal() {
+        return local;
+    }
+
     public final SubsystemSSH getSSH() {
         return ssh;
     }
@@ -161,6 +167,7 @@ public class AppUserState {
         this.alerts = new Alerts();
         this.documentState = new XedUserState(webappRoot, principal, submitID, locus, alerts);
         this.userExecutor = new UserExecutor(principal, date, new File(SystemU.userHome()));
+        this.local = new SubsystemLocal();
         this.ssh = new SubsystemSSH(alerts);
         this.menuSystem = new MenuSystem(submitID, new AppMenuFactory());
         this.cache = new ResourceCache();

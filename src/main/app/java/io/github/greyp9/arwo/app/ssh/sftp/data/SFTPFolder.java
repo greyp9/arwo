@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.app.ssh.sftp.data;
 
 import ch.ethz.ssh2.SFTPv3DirectoryEntry;
 import ch.ethz.ssh2.SFTPv3FileAttributes;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.file.FileX;
 import io.github.greyp9.arwo.core.lang.NumberU;
@@ -13,7 +14,6 @@ import io.github.greyp9.arwo.core.table.sort.Sort;
 import io.github.greyp9.arwo.core.table.sort.Sorts;
 import io.github.greyp9.arwo.core.util.PropertiesX;
 import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnectionX;
-import io.github.greyp9.arwo.lib.ganymed.ssh.core.SFTP;
 
 import java.sql.Types;
 import java.util.Collection;
@@ -68,9 +68,9 @@ public class SFTPFolder {
         final SFTPv3FileAttributes attributes = directoryEntry.attributes;
         final Integer type = toType(attributes);
         final int typePrimitive = NumberU.toInt(type, 0);
-        final boolean isDirectory = (SFTP.S_IFDIR == typePrimitive);
-        final boolean isRegularFile = (SFTP.S_IFREG == typePrimitive);
-        final boolean isSymlink = (SFTP.S_IFLNK == typePrimitive);
+        final boolean isDirectory = (App.FS.S_IFDIR == typePrimitive);
+        final boolean isRegularFile = (App.FS.S_IFREG == typePrimitive);
+        final boolean isSymlink = (App.FS.S_IFLNK == typePrimitive);
         final String extension = (isDirectory ? null : new FileX(directoryEntry.filename).getExtension());
         // populate columns
         final InsertRow insertRow = new InsertRow(rowSet);
@@ -87,28 +87,28 @@ public class SFTPFolder {
         // folder properties
         final PropertiesX propertiesX = new PropertiesX(rowSet.getProperties());
         if (isDirectory) {
-            propertiesX.addLong(Const.FOLDERS, 1L);
+            propertiesX.addLong(App.FS.FOLDERS, 1L);
         } else if (isRegularFile) {
-            propertiesX.addLong(Const.FILES, 1L);
-            propertiesX.addLong(Const.BYTES, NumberU.toLong(attributes.size, 0L));
+            propertiesX.addLong(App.FS.FILES, 1L);
+            propertiesX.addLong(App.FS.BYTES, NumberU.toLong(attributes.size, 0L));
         } else if (isSymlink) {
-            propertiesX.addLong(Const.SYMLINKS, 1L);
+            propertiesX.addLong(App.FS.SYMLINKS, 1L);
         }
     }
 
     public static int toType(final SFTPv3FileAttributes attributes) {
         final int permissions = getPermissions(attributes);
         //boolean isSymlink = attributes.isSymlink();  // bug in lib
-        final boolean isSymlink = ((permissions & SFTP.S_IFLNK) == SFTP.S_IFLNK);
+        final boolean isSymlink = ((permissions & App.FS.S_IFLNK) == App.FS.S_IFLNK);
         int type = 0;
         if (attributes == null) {
             type = 0;
         } else if (attributes.isDirectory()) {
-            type = SFTP.S_IFDIR;
+            type = App.FS.S_IFDIR;
         } else if (isSymlink) {
-            type = SFTP.S_IFLNK;
+            type = App.FS.S_IFLNK;
         } else if (attributes.isRegularFile()) {
-            type = SFTP.S_IFREG;
+            type = App.FS.S_IFREG;
         }
         return type;
     }
@@ -123,12 +123,5 @@ public class SFTPFolder {
             permissions = attributes.permissions;
         }
         return permissions;
-    }
-
-    public static class Const {
-        public static final String BYTES = "bytes";
-        public static final String FILES = "files";
-        public static final String FOLDERS = "folders";
-        public static final String SYMLINKS = "symlinks";
     }
 }

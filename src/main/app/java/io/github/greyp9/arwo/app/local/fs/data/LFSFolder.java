@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.app.local.fs.data;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.file.FileX;
 import io.github.greyp9.arwo.core.lang.NumberU;
 import io.github.greyp9.arwo.core.table.insert.InsertRow;
@@ -9,7 +10,6 @@ import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.sort.Sort;
 import io.github.greyp9.arwo.core.table.sort.Sorts;
 import io.github.greyp9.arwo.core.util.PropertiesX;
-import io.github.greyp9.arwo.lib.ganymed.ssh.core.SFTP;
 
 import java.io.File;
 import java.sql.Types;
@@ -56,7 +56,7 @@ public class LFSFolder {
     public static void loadRow(final RowSet rowSet, final String folder, final File file) {
         // prep
         final boolean isDirectory = file.isDirectory();
-        final Integer type = (isDirectory ? SFTP.S_IFDIR : SFTP.S_IFREG);
+        final Integer type = (isDirectory ? App.FS.S_IFDIR : App.FS.S_IFREG);
         final String extension = (isDirectory ? null : new FileX(file.getName()).getExtension());
         // populate columns
         final InsertRow insertRow = new InsertRow(rowSet);
@@ -70,16 +70,10 @@ public class LFSFolder {
         // folder properties
         final PropertiesX propertiesX = new PropertiesX(rowSet.getProperties());
         if (isDirectory) {
-            propertiesX.addLong(Const.FOLDERS, 1L);
+            propertiesX.addLong(App.FS.FOLDERS, 1L);
         } else {
-            propertiesX.addLong(Const.FILES, 1L);
-            propertiesX.addLong(Const.BYTES, NumberU.toLong(file.length(), 0L));
+            propertiesX.addLong(App.FS.FILES, 1L);
+            propertiesX.addLong(App.FS.BYTES, NumberU.toLong(file.length(), 0L));
         }
-    }
-
-    public static class Const {
-        public static final String BYTES = "bytes";
-        public static final String FILES = "files";
-        public static final String FOLDERS = "folders";
     }
 }

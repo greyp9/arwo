@@ -1,7 +1,7 @@
 package io.github.greyp9.arwo.app.local.fs.data;
 
 import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
-import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolder;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.http.Http;
@@ -15,7 +15,6 @@ import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.url.URLCodec;
 import io.github.greyp9.arwo.core.util.PropertiesX;
 import io.github.greyp9.arwo.core.value.Value;
-import io.github.greyp9.arwo.lib.ganymed.ssh.core.SFTP;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
@@ -46,7 +45,7 @@ public class LFSFolderStyled {
         final String folder = rowRaw.getString(metaData.getIndex("folder"));
         final String name = rowRaw.getString(metaData.getIndex("name"));
         // processing
-        final boolean isDirectory = (SFTP.S_IFDIR == NumberU.toInt(type, 0));
+        final boolean isDirectory = (App.FS.S_IFDIR == NumberU.toInt(type, 0));
         // output
         final InsertRow insertRow = new InsertRow(rowSetStyled);
         insertRow.setNextColumn(getTypeStyled(type, folder, name, isDirectory));
@@ -69,11 +68,11 @@ public class LFSFolderStyled {
         String text;
         if (value == null) {
             text = null;
-        } else if (value.equals(SFTP.S_IFDIR)) {
+        } else if (value.equals(App.FS.S_IFDIR)) {
             text = UTF16.ICON_FOLDER;
-        } else if (value.equals(SFTP.S_IFREG)) {
+        } else if (value.equals(App.FS.S_IFREG)) {
             text = UTF16.ICON_FILE;
-        } else if (value.equals(SFTP.S_IFLNK)) {
+        } else if (value.equals(App.FS.S_IFLNK)) {
             text = UTF16.ICON_SYMLINK;
         } else {
             text = null;
@@ -93,10 +92,10 @@ public class LFSFolderStyled {
 
     private static void addFooter(final RowSet rowSet, final Bundle bundle) {
         final PropertiesX propertiesX = new PropertiesX(rowSet.getProperties());
-        final long files = propertiesX.getLong(SFTPFolder.Const.FILES);
-        final long folders = propertiesX.getLong(SFTPFolder.Const.FOLDERS);
+        final long files = propertiesX.getLong(App.FS.FILES);
+        final long folders = propertiesX.getLong(App.FS.FOLDERS);
         //final long symlinks = propertiesX.getLong(SFTPFolder.Const.SYMLINKS);
-        final long bytes = propertiesX.getLong(SFTPFolder.Const.BYTES);
+        final long bytes = propertiesX.getLong(App.FS.BYTES);
         final String footer = bundle.format("table.sftpFolderType.footer", files, folders, 0L, bytes);
         rowSet.getProperties().setProperty(Table.Const.FOOTER_C, footer);
     }

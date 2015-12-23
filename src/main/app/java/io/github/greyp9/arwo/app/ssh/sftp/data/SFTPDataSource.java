@@ -11,6 +11,7 @@ import ch.ethz.ssh2.SFTPv3FileAttributes;
 import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.model.ExceptionModel;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.file.meta.FileMetaData;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
@@ -19,7 +20,6 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
-import io.github.greyp9.arwo.lib.ganymed.ssh.core.SFTP;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
@@ -110,15 +110,15 @@ public class SFTPDataSource {
     private void lsSymlink2(final Collection<SFTPv3DirectoryEntry> directoryEntries,
                             final String path, final SFTPv3Client client) throws IOException {
         String pathIt = path;
-        Integer type = SFTP.S_IFLNK;
-        while (type == SFTP.S_IFLNK) {
+        Integer type = App.FS.S_IFLNK;
+        while (type == App.FS.S_IFLNK) {
             // assemble row entry
             final SFTPv3DirectoryEntry directoryEntry = new SFTPv3DirectoryEntry();
             directoryEntry.filename = pathIt;
             directoryEntry.attributes = client.lstat(pathIt);
             directoryEntries.add(directoryEntry);
             type = SFTPFolder.toType(directoryEntry.attributes);
-            if (type == SFTP.S_IFLNK) {
+            if (type == App.FS.S_IFLNK) {
                 pathIt = client.readLink(pathIt);
             }
         }

@@ -6,11 +6,11 @@ import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPDataSource;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolder;
 import io.github.greyp9.arwo.core.alert.Alert;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.resource.PathU;
-import io.github.greyp9.arwo.lib.ganymed.ssh.core.SFTP;
 
 import java.io.IOException;
 
@@ -30,9 +30,9 @@ public class SFTPResourceView {
         HttpResponse httpResponse;
         final SFTPDataSource source = new SFTPDataSource(request, resource.getSSHConnection());
         final Integer type = SFTPFolder.toType(source.lstat(path));
-        final boolean isFolder = type.equals(SFTP.S_IFDIR);
-        final boolean isFile = type.equals(SFTP.S_IFREG);
-        final boolean isLink = type.equals(SFTP.S_IFLNK);
+        final boolean isFolder = type.equals(App.FS.S_IFDIR);
+        final boolean isFile = type.equals(App.FS.S_IFREG);
+        final boolean isLink = type.equals(App.FS.S_IFLNK);
         if ((isFolder) && (!path.endsWith(Http.Token.SLASH))) {
             // folder path in application should end with slash
             httpResponse = HttpResponseU.to302(PathU.toDir(request.getHttpRequest().getURI()));

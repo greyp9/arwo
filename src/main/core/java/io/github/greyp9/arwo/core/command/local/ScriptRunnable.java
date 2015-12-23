@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.command.local;
 
+import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.io.buffer.ByteBuffer;
 import io.github.greyp9.arwo.core.io.command.CommandToDo;
@@ -7,6 +8,7 @@ import io.github.greyp9.arwo.core.io.command.CommandWork;
 import io.github.greyp9.arwo.core.io.runnable.InputStreamRunnable;
 import io.github.greyp9.arwo.core.io.runnable.OutputStreamRunnable;
 import io.github.greyp9.arwo.core.io.script.Script;
+import io.github.greyp9.arwo.core.io.script.write.ScriptWriter;
 import io.github.greyp9.arwo.core.lang.StringU;
 import io.github.greyp9.arwo.core.vm.mutex.MutexU;
 import io.github.greyp9.arwo.core.vm.process.ProcessU;
@@ -37,6 +39,11 @@ public class ScriptRunnable implements Runnable {
             Logger.getLogger(getClass().getName()).severe(e.getMessage());
         } finally {
             script.finish();
+        }
+        try {
+            new ScriptWriter(script, context.getLocus()).writeTo(script.getFile(context.getFolder()));
+        } catch (IOException e) {
+            context.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
         }
     }
 

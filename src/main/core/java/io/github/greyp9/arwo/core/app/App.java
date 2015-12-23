@@ -64,6 +64,21 @@ public final class App {
         public static final String VIEW_HEX = "viewHex";
     }
 
+    @SuppressWarnings({ "OctalInteger", "PMD.AvoidUsingOctalValues" })
+    public static class FS {
+        public static final String BYTES = "bytes";
+        public static final String FILES = "files";
+        public static final String FOLDERS = "folders";
+        public static final String SYMLINKS = "symlinks";
+
+        /**
+         * @see ch.ethz.ssh2.SFTPv3FileAttributes
+         */
+        public static final int S_IFLNK = 0120000;
+        public static final int S_IFREG = 0100000;
+        public static final int S_IFDIR = 0040000;
+    }
+
     public static class Action {
         public static final String CLEAR = "clear";
         public static final String CLOSE = "close";
