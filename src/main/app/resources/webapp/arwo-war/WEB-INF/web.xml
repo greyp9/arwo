@@ -125,6 +125,28 @@
         <url-pattern>/ssh/*</url-pattern>
     </servlet-mapping>
 
+    <!--local filesystem-->
+    <servlet>
+        <description>access web server filesystem</description>
+        <servlet-name>LFSServlet</servlet-name>
+        <servlet-class>io.github.greyp9.arwo.app.local.servlet.LFSServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>LFSServlet</servlet-name>
+        <url-pattern>/lfs/*</url-pattern>
+    </servlet-mapping>
+
+    <!--ssh-command-->
+    <servlet>
+        <description>access web server commands</description>
+        <servlet-name>SHServletLocal</servlet-name>
+        <servlet-class>io.github.greyp9.arwo.app.local.servlet.SHServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SHServletLocal</servlet-name>
+        <url-pattern>/lsh/*</url-pattern>
+    </servlet-mapping>
+
     <!--filesystem-->
     <servlet>
         <description>view ${user.home}</description>

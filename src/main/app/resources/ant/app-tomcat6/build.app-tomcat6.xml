@@ -127,10 +127,12 @@
             <include name='io/github/greyp9/arwo/app/dash/servlet/DashServlet.java'/>
             <!--webapp settings-->
             <include name='io/github/greyp9/arwo/app/xed/servlet/Xed1Servlet.java'/>
-            <!--sftp-->
-            <include name='io/github/greyp9/arwo/app/ssh/servlet/SFTPServlet.java'/>
             <!--ssh-->
+            <include name='io/github/greyp9/arwo/app/ssh/servlet/SFTPServlet.java'/>
             <include name='io/github/greyp9/arwo/app/ssh/servlet/SHServlet.java'/>
+            <!--local-->
+            <include name='io/github/greyp9/arwo/app/local/servlet/LFSServlet.java'/>
+            <include name='io/github/greyp9/arwo/app/local/servlet/SHServlet.java'/>
             <!--cron-->
             <include name='io/github/greyp9/arwo/core/cron/instance/*Runnable.java'/>
 
