@@ -61,6 +61,7 @@
         <copy file='${arwo.dir}/target/app-tomcat6/artifact/arwo.war' tofile='${tomcat.dir}/webapps/arwo.war'/>
         <!--external dependencies-->
         <copy file='${ganymed-jar}' todir='${tomcat.dir}/lib'/>
+        <copy file='${m2.dir}/repository/com/github/lookfirst/sardine/5.6/sardine-5.6.jar' todir='${tomcat.dir}/lib'/>
     </target>
 
     <target name='tomcat' description='Spawn a Tomcat6 instance.' depends='deploy-arwo'>

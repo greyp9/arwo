@@ -130,6 +130,8 @@
             <!--ssh-->
             <include name='io/github/greyp9/arwo/app/ssh/servlet/SFTPServlet.java'/>
             <include name='io/github/greyp9/arwo/app/ssh/servlet/SHServlet.java'/>
+            <!--webdav-->
+            <include name='io/github/greyp9/arwo/app/webdav/servlet/DavFSServlet.java'/>
             <!--local-->
             <include name='io/github/greyp9/arwo/app/local/servlet/LFSServlet.java'/>
             <include name='io/github/greyp9/arwo/app/local/servlet/SHServlet.java'/>
