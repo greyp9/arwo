@@ -1,5 +1,7 @@
 package io.github.greyp9.arwo.core.tls.manage;
 
+import io.github.greyp9.arwo.core.lang.CharU;
+
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.KeyManagerFactory;
 import java.security.GeneralSecurityException;
@@ -16,18 +18,19 @@ public class TLSKeyManager {
     }
 */
 
-    public TLSKeyManager(KeyStore keyStore, char[] passphrase, String algorithm) {
+    public TLSKeyManager(final KeyStore keyStore, final char[] passphrase, final String algorithm) {
         this.keyStore = keyStore;
-        this.passphrase = passphrase;
+        this.passphrase = CharU.copy(passphrase);
         this.algorithm = algorithm;
     }
 
-    public KeyManager[] getKeyManagers() throws GeneralSecurityException {
-        return (keyStore == null) ? null : getKeyManagersNN();
+    @SuppressWarnings("PMD.MethodReturnsInternalArray")
+    public final KeyManager[] createKeyManagers() throws GeneralSecurityException {
+        return (keyStore == null) ? null : createKeyManagersNN();
     }
 
-    private KeyManager[] getKeyManagersNN() throws GeneralSecurityException {
-        KeyManagerFactory factory = KeyManagerFactory.getInstance(algorithm);
+    private KeyManager[] createKeyManagersNN() throws GeneralSecurityException {
+        final KeyManagerFactory factory = KeyManagerFactory.getInstance(algorithm);
         factory.init(keyStore, passphrase);
         return factory.getKeyManagers();
     }

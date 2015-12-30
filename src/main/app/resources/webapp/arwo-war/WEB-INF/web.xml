@@ -128,12 +128,12 @@
     <!--webdav fs-->
     <servlet>
         <description>access remote webdav file servers</description>
-        <servlet-name>DavFSServlet</servlet-name>
-        <servlet-class>io.github.greyp9.arwo.app.webdav.servlet.DavFSServlet</servlet-class>
+        <servlet-name>WebDAVServlet</servlet-name>
+        <servlet-class>io.github.greyp9.arwo.app.webdav.servlet.WebDAVServlet</servlet-class>
     </servlet>
     <servlet-mapping>
-        <servlet-name>DavFSServlet</servlet-name>
-        <url-pattern>/davfs/*</url-pattern>
+        <servlet-name>WebDAVServlet</servlet-name>
+        <url-pattern>/webdav/*</url-pattern>
     </servlet-mapping>
 
     <!--local filesystem-->

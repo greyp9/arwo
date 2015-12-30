@@ -14,19 +14,19 @@ public class TLSContext {
     private final TLSTrustManager tlsTrustManager;
     private final String protocol;
 
-    public TLSContext(TLSKeyManager tlsKeyManager, TLSTrustManager tlsTrustManager, String protocol) {
+    public TLSContext(final TLSKeyManager tlsKeyManager, final TLSTrustManager tlsTrustManager, final String protocol) {
         this.tlsKeyManager = tlsKeyManager;
         this.tlsTrustManager = tlsTrustManager;
         // SSLv2, SSLv3, TLS, TLSv1.1, TLSv1.2
         this.protocol = protocol;
     }
 
-    public String getProtocol() {
+    public final String getProtocol() {
         return protocol;
     }
 
-    public SSLSocketFactory getSocketFactory() throws GeneralSecurityException {
-        SSLContext context = getContext();
+    public final SSLSocketFactory getSocketFactory() throws GeneralSecurityException {
+        final SSLContext context = getContext();
         return context.getSocketFactory();
     }
 
@@ -37,10 +37,10 @@ public class TLSContext {
     }
 */
 
-    public SSLContext getContext() throws GeneralSecurityException {
-        SSLContext context = SSLContext.getInstance(protocol);
-        KeyManager[] keyManagers = tlsKeyManager == null ? null : tlsKeyManager.getKeyManagers();
-        TrustManager[] trustManagers = tlsTrustManager == null ? null : tlsTrustManager.getTrustManagers();
+    public final SSLContext getContext() throws GeneralSecurityException {
+        final SSLContext context = SSLContext.getInstance(protocol);
+        final KeyManager[] keyManagers = tlsKeyManager == null ? null : tlsKeyManager.createKeyManagers();
+        final TrustManager[] trustManagers = tlsTrustManager == null ? null : tlsTrustManager.createTrustManagers();
         context.init(keyManagers, trustManagers, null);
         return context;
     }

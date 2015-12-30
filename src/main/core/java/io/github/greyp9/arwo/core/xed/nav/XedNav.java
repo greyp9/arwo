@@ -33,11 +33,11 @@ public class XedNav {
     }
 
     public final XedCursor find(final Node node) {
-        return new XedNavNode().find(node, getRoot());
+        return ((node == null) ? null : new XedNavNode().find(node, getRoot()));
     }
 
     public final XedCursor find(final Node node, final XedCursor cursor) {
-        return new XedNavNode().findChild(node, cursor);
+        return ((node == null) ? null : new XedNavNode().findChild(node, cursor));
     }
 
     public final XedCursor find(final TypeInstance typeInstance, final XedCursor cursor) {
@@ -45,15 +45,15 @@ public class XedNav {
     }
 
     public final XedCursor find(final String typeInstanceName, final XedCursor cursor) {
-        return new XedNavNode().findTypeInstance(typeInstanceName, cursor);
+        return ((cursor == null) ? null : new XedNavNode().findTypeInstance(typeInstanceName, cursor));
     }
 
     public final XedCursor findChild(final TypeInstance typeInstance, final XedCursor cursor) {
-        return new XedNavNode().findTypeInstanceChild(typeInstance.getName(), cursor);
+        return ((cursor == null) ? null : new XedNavNode().findTypeInstanceChild(typeInstance.getName(), cursor));
     }
 
     public final XedCursor findChild(final String typeInstanceName, final XedCursor cursor) {
-        return new XedNavNode().findTypeInstanceChild(typeInstanceName, cursor);
+        return ((cursor == null) ? null : new XedNavNode().findTypeInstanceChild(typeInstanceName, cursor));
     }
 
     public final XedCursor findX(final String xpath) throws IOException {

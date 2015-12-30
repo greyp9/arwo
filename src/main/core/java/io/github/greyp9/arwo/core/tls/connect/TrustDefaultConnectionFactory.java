@@ -11,19 +11,19 @@ import java.security.GeneralSecurityException;
 public class TrustDefaultConnectionFactory {
     private final SSLSocketFactory socketFactory;
 
-    public TrustDefaultConnectionFactory(String protocol) throws GeneralSecurityException {
-        SSLContext context = SSLContext.getInstance(protocol);
+    public TrustDefaultConnectionFactory(final String protocol) throws GeneralSecurityException {
+        final SSLContext context = SSLContext.getInstance(protocol);
         context.init(null, null, null);
         socketFactory = context.getSocketFactory();
     }
 
-    public HttpsURLConnection openConnection(URL url) throws IOException {
+    public final HttpsURLConnection openConnection(final URL url) throws IOException {
         return openConnection(url.openConnection());
     }
 
-    private HttpsURLConnection openConnection(URLConnection urlConnection) {
-        HttpsURLConnection httpsURLConnection = (HttpsURLConnection) urlConnection;
-        httpsURLConnection.setSSLSocketFactory(socketFactory);
-        return httpsURLConnection;
+    private HttpsURLConnection openConnection(final URLConnection urlConnection) {
+        final HttpsURLConnection httpsConnection = (HttpsURLConnection) urlConnection;
+        httpsConnection.setSSLSocketFactory(socketFactory);
+        return httpsConnection;
     }
 }

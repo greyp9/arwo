@@ -10,11 +10,11 @@ import java.security.cert.X509Certificate;
 
 public class TLSContextFactory {
 
-    public TLSContext create(String pemCertificate, String protocol) throws IOException {
+    public final TLSContext create(final String pemCertificate, final String protocol) throws IOException {
         return create(UTF8Codec.toBytes(pemCertificate), protocol);
     }
 
-    public TLSContext create(byte[] bytesCertificate, String protocol) throws IOException {
+    public final TLSContext create(final byte[] bytesCertificate, final String protocol) throws IOException {
         try {
             return create(CertificateU.toX509(bytesCertificate), protocol);
         } catch (CertificateException e) {
@@ -22,8 +22,8 @@ public class TLSContextFactory {
         }
     }
 
-    public TLSContext create(X509Certificate certificate, String protocol) {
-        TLSTrustManager trustManager = new TLSTrustManager(new X509Certificate[] { certificate });
+    public final TLSContext create(final X509Certificate certificate, final String protocol) {
+        final TLSTrustManager trustManager = new TLSTrustManager(new X509Certificate[] { certificate });
         return new TLSContext(null, trustManager, protocol);
     }
 }

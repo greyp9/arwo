@@ -52,9 +52,16 @@
 
     <fileset file='${ganymed-jar}' id='libs-ganymed'/>
 
+    <fileset dir='${m2.dir}' id='libs-sardine'>
+        <include name='com/github/lookfirst/sardine/5.6/sardine-5.6.jar'/>
+        <include name='org/apache/httpcomponents/httpclient/4.4.1/httpclient-4.4.1.jar'/>
+        <include name='org/apache/httpcomponents/httpcore/4.4.1/httpcore-4.4.1.jar'/>
+    </fileset>
+
     <path id='classpath-app'>
         <fileset refid='libs-servlet-api'/>
         <fileset refid='libs-ganymed'/>
+        <fileset refid='libs-sardine'/>
     </path>
 
     <path id='classpath-tomcat6'>
@@ -131,7 +138,7 @@
             <include name='io/github/greyp9/arwo/app/ssh/servlet/SFTPServlet.java'/>
             <include name='io/github/greyp9/arwo/app/ssh/servlet/SHServlet.java'/>
             <!--webdav-->
-            <include name='io/github/greyp9/arwo/app/webdav/servlet/DavFSServlet.java'/>
+            <include name='io/github/greyp9/arwo/app/webdav/servlet/WebDAVServlet.java'/>
             <!--local-->
             <include name='io/github/greyp9/arwo/app/local/servlet/LFSServlet.java'/>
             <include name='io/github/greyp9/arwo/app/local/servlet/SHServlet.java'/>

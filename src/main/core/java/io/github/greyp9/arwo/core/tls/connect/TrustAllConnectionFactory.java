@@ -12,17 +12,17 @@ import java.security.GeneralSecurityException;
 public class TrustAllConnectionFactory {
     private final SSLSocketFactory socketFactory;
 
-    public TrustAllConnectionFactory(TLSContext context) throws GeneralSecurityException {
+    public TrustAllConnectionFactory(final TLSContext context) throws GeneralSecurityException {
         socketFactory = context.getSocketFactory();
     }
 
-    public HttpsURLConnection openConnection(URL url) throws IOException {
+    public final HttpsURLConnection openConnection(final URL url) throws IOException {
         return openConnection(url.openConnection());
     }
 
-    private HttpsURLConnection openConnection(URLConnection urlConnection) {
-        HttpsURLConnection httpsURLConnection = (HttpsURLConnection) urlConnection;
-        httpsURLConnection.setSSLSocketFactory(socketFactory);
-        return httpsURLConnection;
+    private HttpsURLConnection openConnection(final URLConnection urlConnection) {
+        final HttpsURLConnection httpsConnection = (HttpsURLConnection) urlConnection;
+        httpsConnection.setSSLSocketFactory(socketFactory);
+        return httpsConnection;
     }
 }

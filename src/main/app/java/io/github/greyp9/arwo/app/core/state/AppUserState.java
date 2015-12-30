@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.app.core.state;
 
+import io.github.greyp9.arwo.app.core.subsystem.dav.SubsystemWebDAV;
 import io.github.greyp9.arwo.app.core.subsystem.local.SubsystemLocal;
 import io.github.greyp9.arwo.app.core.subsystem.ssh.SubsystemSSH;
 import io.github.greyp9.arwo.core.alert.Alert;
@@ -42,7 +43,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Properties;
 
-@SuppressWarnings({ "PMD.ExcessiveImports", "PMD.GodClass",
+@SuppressWarnings({ "PMD.ExcessiveImports", "PMD.GodClass", "PMD.TooManyFields",
         "PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity", "PMD.ModifiedCyclomaticComplexity" })
 public class AppUserState {
     private final AppState appState;
@@ -68,6 +69,7 @@ public class AppUserState {
     // widget subsystems
     private final SubsystemLocal local;
     private final SubsystemSSH ssh;
+    private final SubsystemWebDAV webDAV;
     // menu system
     private final MenuSystem menuSystem;
 
@@ -130,6 +132,10 @@ public class AppUserState {
         return ssh;
     }
 
+    public final SubsystemWebDAV getWebDAV() {
+        return webDAV;
+    }
+
     public final MenuSystem getMenuSystem() {
         return menuSystem;
     }
@@ -169,6 +175,7 @@ public class AppUserState {
         this.userExecutor = new UserExecutor(principal, date, new File(SystemU.userHome()));
         this.local = new SubsystemLocal();
         this.ssh = new SubsystemSSH(alerts);
+        this.webDAV = new SubsystemWebDAV(alerts);
         this.menuSystem = new MenuSystem(submitID, new AppMenuFactory());
         this.cache = new ResourceCache();
         this.pageViewHex = Page.Factory.initPage(Const.PAGE_HEX_VIEW, new Properties());
@@ -246,6 +253,8 @@ public class AppUserState {
         final String resourceName = token.getObject2();
         if ("ssh".equals(cacheName)) {
             ssh.getCache().removeResource(resourceName);
+        } else if ("webdav".equals(cacheName)) {
+            webDAV.getCache().removeResource(resourceName);
         }
     }
 

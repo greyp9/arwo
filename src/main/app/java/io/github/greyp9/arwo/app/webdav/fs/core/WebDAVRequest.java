@@ -11,11 +11,12 @@ import io.github.greyp9.arwo.core.value.Value;
 
 import java.util.Locale;
 
-public class DavFSRequest {
+public class WebDAVRequest {
     private final AppRequest appRequest;
     private final AppUserState userState;
     private final Pather patherMode;
     private final Pather patherServer;
+    private final String path;
 
     public final ServletHttpRequest getHttpRequest() {
         return appRequest.getHttpRequest();
@@ -37,11 +38,12 @@ public class DavFSRequest {
         return appRequest.getAlerts();
     }
 
-    public DavFSRequest(final ServletHttpRequest httpRequest, final AppUserState userState) {
+    public WebDAVRequest(final ServletHttpRequest httpRequest, final AppUserState userState) {
         this.appRequest = userState.getAppRequest(httpRequest);
         this.userState = userState;
         this.patherMode = new Pather(httpRequest.getPathInfo());
         this.patherServer = new Pather(patherMode.getRight());
+        this.path = httpRequest.getHttpRequest().getResource().replace(getBaseURIServer(), "");
     }
 
     public final String getBaseURIMode() {
@@ -62,6 +64,10 @@ public class DavFSRequest {
 
     public final String getPath() {
         return patherServer.getRight();
+    }
+
+    public final String getPathURL() {
+        return path;
     }
 
     public final String getTitlePath() {

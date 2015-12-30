@@ -3,8 +3,8 @@ package io.github.greyp9.arwo.app.webdav.servlet;
 import io.github.greyp9.arwo.app.core.servlet.ServletU;
 import io.github.greyp9.arwo.app.core.state.AppState;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
-import io.github.greyp9.arwo.app.webdav.fs.handler.DavFSHandlerGet;
-import io.github.greyp9.arwo.app.webdav.fs.handler.DavFSHandlerPost;
+import io.github.greyp9.arwo.app.webdav.fs.handler.WebDAVHandlerGet;
+import io.github.greyp9.arwo.app.webdav.fs.handler.WebDAVHandlerPost;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.gz.HttpResponseGZipU;
@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
-public class DavFSServlet extends javax.servlet.http.HttpServlet {
+public class WebDAVServlet extends javax.servlet.http.HttpServlet {
     private static final long serialVersionUID = 973219537829635797L;
 
     private transient AppState appState;
@@ -49,7 +49,7 @@ public class DavFSServlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
         }
-        final HttpResponse httpResponse = new DavFSHandlerGet(httpRequest, userState).doGet();
+        final HttpResponse httpResponse = new WebDAVHandlerGet(httpRequest, userState).doGet();
         // send response
         final HttpResponse httpResponseGZ = HttpResponseGZipU.toHttpResponseGZip(httpRequest, httpResponse);
         ServletU.write(httpResponseGZ, response);
@@ -65,7 +65,7 @@ public class DavFSServlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
         }
-        final HttpResponse httpResponse = new DavFSHandlerPost(httpRequest, userState).doPost();
+        final HttpResponse httpResponse = new WebDAVHandlerPost(httpRequest, userState).doPost();
         // send response
         ServletU.write(httpResponse, response);
     }

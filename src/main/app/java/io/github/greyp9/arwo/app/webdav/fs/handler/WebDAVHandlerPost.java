@@ -1,7 +1,7 @@
 package io.github.greyp9.arwo.app.webdav.fs.handler;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
-import io.github.greyp9.arwo.app.webdav.fs.core.DavFSRequest;
+import io.github.greyp9.arwo.app.webdav.fs.core.WebDAVRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.app.App;
@@ -22,15 +22,15 @@ import io.github.greyp9.arwo.core.value.Value;
 
 import java.io.IOException;
 
-public class DavFSHandlerPost {
-    private final DavFSRequest request;
+public class WebDAVHandlerPost {
+    private final WebDAVRequest request;
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
     private final Bundle bundle;
     private final Alerts alerts;
 
-    public DavFSHandlerPost(final ServletHttpRequest httpRequest, final AppUserState userState) {
-        this.request = new DavFSRequest(httpRequest, userState);
+    public WebDAVHandlerPost(final ServletHttpRequest httpRequest, final AppUserState userState) {
+        this.request = new WebDAVRequest(httpRequest, userState);
         this.httpRequest = httpRequest;
         this.userState = userState;
         this.bundle = request.getBundle();
@@ -47,7 +47,7 @@ public class DavFSHandlerPost {
         } else if (contentType.equalsIgnoreCase(Http.Mime.FORM_URL_ENCODED)) {
             location = doPostFormURLEncoded(location);
         } else if (contentType.startsWith(Http.Mime.FORM_MULTIPART)) {
-            final DavFSHandlerPostMultipart handler = new DavFSHandlerPostMultipart(request);
+            final WebDAVHandlerPostMultipart handler = new WebDAVHandlerPostMultipart(request);
             location = handler.doPostMultipartFormData(location);
         } else {
             doPostContentTypeUnknown(contentType);
@@ -97,17 +97,17 @@ public class DavFSHandlerPost {
         final String action = token.getAction();
         final String object = token.getObject();
         if (App.Action.FILE_CREATE.equals(action)) {
-            getClass(); //new DavFSCreateFile(request, getConnection()).apply(httpArguments);
+            getClass(); //new WebDAVCreateFile(request, getConnection()).apply(httpArguments);
         } else if (App.Action.FILE_UPDATE.equals(action)) {
-            getClass(); //new DavFSUpdateFile(request, getConnection()).apply(httpArguments);
+            getClass(); //new WebDAVUpdateFile(request, getConnection()).apply(httpArguments);
         } else if (App.Action.COMMAND.equals(action)) {
             location = PathU.toDir(httpRequest.getContextPath(), "webdav", request.getServer());
         } else if (App.Action.TOGGLE.equals(action)) {
             PropertiesU.toggleBoolean(userState.getProperties(), Value.join("/", "webdav", object));
         } else if (App.Action.ADD_FAV.equals(action)) {
-            getClass(); //new DavFSAddFavorite(request).doAction();
+            getClass(); //new WebDAVAddFavorite(request).doAction();
         } else if (App.Action.SELECT_FAV.equals(action)) {
-            getClass(); //location = new DavFSSelectFavorite(request).doAction(token);
+            getClass(); //location = new WebDAVSelectFavorite(request).doAction(token);
         } else {
             request.getAlerts().add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }

@@ -11,6 +11,7 @@
     <xsd:complexType name='appType'>
         <xsd:sequence>
             <xsd:element name='sshServers' type='app:sshServersType'/>
+            <xsd:element name='webdavServers' type='app:webdavServersType'/>
             <xsd:element name='cron' type='app:cronType'/>
             <xsd:element name='documents' type='app:documentsType'/>
         </xsd:sequence>
@@ -48,6 +49,26 @@
     <xsd:complexType name='sshAuthPublicKeyType'>
         <xsd:sequence>
             <xsd:element name='privateKey' type='xsd:base64Binary'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name='webdavServersType'>
+        <xsd:sequence>
+            <xsd:element name='server' type='app:webdavServerType' minOccurs='0' maxOccurs='unbounded'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name='webdavServerType'>
+        <xsd:sequence>
+            <xsd:element name='name' type='xsd:string'/>
+            <xsd:element name='comment' type='xsd:string'/>
+            <xsd:element name='enabled' type='xsd:boolean'/>
+            <xsd:element name='protocol' type='xsd:string'/>
+            <xsd:element name='host' type='xsd:string'/>
+            <xsd:element name='port' type='xsd:string'/>
+            <xsd:element name='user' type='xsd:string'/>
+            <xsd:element name='password' type='xsd:string'/>
+            <xsd:element name='certificate' type='xsd:base64Binary'/>
         </xsd:sequence>
     </xsd:complexType>
 

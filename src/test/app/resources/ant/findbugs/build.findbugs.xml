@@ -40,7 +40,7 @@
     <property name='filter' value='${basedir}/findbugs-filter.xml'/>
 
     <target name='fb-core'>
-        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failonerror='true'>
+        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failOnError='true'>
             <fileset dir='${classes.core.dir}'>
                 <include name='**/*.class'/>
             </fileset>
@@ -49,7 +49,7 @@
     </target>
 
     <target name='fb-lib-tomcat6'>
-        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failonerror='true'>
+        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failOnError='true'>
             <auxclasspath location='${classes.core.dir}'/>
             <auxclasspath location='${tomcat6.dir}/lib/catalina.jar'/>
             <fileset dir='${classes.lib.dir}'>
@@ -60,7 +60,7 @@
     </target>
 
     <target name='fb-lib-tomcat7'>
-        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failonerror='true'>
+        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failOnError='true'>
             <auxclasspath location='${classes.core.dir}'/>
             <auxclasspath location='${tomcat7.dir}/lib/catalina.jar'/>
             <fileset dir='${classes.lib.dir}'>
@@ -71,7 +71,7 @@
     </target>
 
     <target name='fb-lib-tomcat8'>
-        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failonerror='true'>
+        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failOnError='true'>
             <auxclasspath location='${classes.core.dir}'/>
             <auxclasspath location='${tomcat8.dir}/lib/catalina.jar'/>
             <auxclasspath location='${tomcat8.dir}/lib/tomcat-util-scan.jar'/>
@@ -83,9 +83,14 @@
     </target>
 
     <target name='fb-lib-other'>
-        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failonerror='true'>
+        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failonerror='true'
+                  errorproperty='fb-error' warningsproperty='fb-warning'>
             <auxclasspath location='${classes.core.dir}'/>
             <auxclasspath location='${m2.dir}/ch/ethz/ganymed/ganymed-ssh2/262/ganymed-ssh2-262.jar'/>
+            <auxclasspath location='${m2.dir}/com/github/lookfirst/sardine/5.6/sardine-5.6.jar'/>
+            <auxclasspath location='${m2.dir}/org/apache/httpcomponents/httpclient/4.4.1/httpclient-4.4.1.jar'/>
+            <auxclasspath location='${m2.dir}/org/apache/httpcomponents/httpcore/4.4.1/httpcore-4.4.1.jar'/>
+
             <fileset dir='${classes.lib.dir}'>
                 <include name='**/lib/**/*.class'/>
                 <exclude name='**/lib/tomcat6/**/*.class'/>
@@ -94,6 +99,8 @@
             </fileset>
             <sourcepath path='${src.lib.dir}'/>
         </findbugs>
+        <fail if='fb-error'/>
+        <fail if='fb-warning'/>
     </target>
 
     <target name='fb-lib'>
@@ -104,7 +111,7 @@
     </target>
 
     <target name='fb-app'>
-        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failonerror='true'>
+        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failOnError='true'>
             <auxclasspath location='${classes.core.dir}'/>
             <auxclasspath location='${classes.lib.dir}'/>
             <auxclasspath location='${tomcat6.dir}/lib/servlet-api.jar'/>
@@ -117,7 +124,7 @@
     </target>
 
     <target name='findbugs-test-lib'>
-        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failonerror='true'>
+        <findbugs home='${findbugs.dir}' excludeFilter='${filter}' reportlevel='low' output='text' failOnError='true'>
             <auxclasspath location='${m2.dir}/junit/junit/4.11/junit-4.11.jar'/>
             <auxclasspath location='${m2.dir}/ch/ethz/ganymed/ganymed-ssh2/262/ganymed-ssh2-262.jar'/>
             <auxclasspath location='${m2.dir}/jcifs/jcifs/1.3.17/jcifs-1.3.17.jar'/>

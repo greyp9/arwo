@@ -45,13 +45,13 @@ public class AppFavoriteView {
         this.httpRequest = httpRequest;
         this.userState = userState;
         this.cursorType = cursorType;
-        this.bundle = cursorType.getXed().getBundle();
+        this.bundle = ((cursorType == null) ? null : cursorType.getXed().getBundle());
         this.type = type;
     }
 
     public final HttpResponse addContentTo(final Element html) throws IOException {
         final String menuKey = Value.join(Http.Token.SLASH, httpRequest.getServletPath(), type, "favorites");
-        if (userState.getMenuSystem().isOpen(menuKey)) {
+        if ((cursorType != null) && (userState.getMenuSystem().isOpen(menuKey))) {
             addContentInner(html);
         }
         return null;

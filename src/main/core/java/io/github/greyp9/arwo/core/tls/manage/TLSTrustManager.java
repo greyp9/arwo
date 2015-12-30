@@ -13,26 +13,28 @@ public class TLSTrustManager {
     private final X509Certificate[] certificates;
     private final String algorithm;
 
-    public TLSTrustManager(X509Certificate[] certificates) {
+    @SuppressWarnings("PMD.UseVarargs")
+    public TLSTrustManager(final X509Certificate[] certificates) {
         this(certificates, TrustManagerFactory.getDefaultAlgorithm());
     }
 
-    public TLSTrustManager(X509Certificate[] certificates, String algorithm) {
-        this.certificates = certificates;
+    public TLSTrustManager(final X509Certificate[] certificates, final String algorithm) {
+        this.certificates = certificates.clone();
         this.algorithm = algorithm;
     }
 
-    public TrustManager[] getTrustManagers() throws GeneralSecurityException {
-        return (certificates == null) ? getTrustManagersN() : getTrustManagersNN();
+    @SuppressWarnings("PMD.MethodReturnsInternalArray")
+    public final TrustManager[] createTrustManagers() throws GeneralSecurityException {
+        return (certificates == null) ? createTrustManagersN() : createTrustManagersNN();
     }
 
-    private TrustManager[] getTrustManagersN() throws GeneralSecurityException {
+    private TrustManager[] createTrustManagersN() throws GeneralSecurityException {
         return new TrustManager[] { new TrustAllTrustManager() };
     }
 
-    private TrustManager[] getTrustManagersNN() throws GeneralSecurityException {
-        KeyStore keyStore = createKeyStore();
-        TrustManagerFactory factory = TrustManagerFactory.getInstance(algorithm);
+    private TrustManager[] createTrustManagersNN() throws GeneralSecurityException {
+        final KeyStore keyStore = createKeyStore();
+        final TrustManagerFactory factory = TrustManagerFactory.getInstance(algorithm);
         factory.init(keyStore);
         return factory.getTrustManagers();
     }
@@ -41,7 +43,7 @@ public class TLSTrustManager {
         KeyStore keyStore = null;
         if (certificates != null) {
             keyStore = createEmptyKeyStore();
-            for (X509Certificate certificate : certificates) {
+            for (final X509Certificate certificate : certificates) {
                 keyStore.setCertificateEntry(certificate.getSubjectDN().getName(), certificate);
             }
         }
@@ -49,7 +51,7 @@ public class TLSTrustManager {
     }
 
     private KeyStore createEmptyKeyStore() throws GeneralSecurityException {
-        KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
+        final KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
         try {
             keyStore.load(null, null);
         } catch (IOException e) {

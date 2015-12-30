@@ -25,6 +25,12 @@
 
     <fileset file='${ganymed-jar}' id='libs-ganymed'/>
 
+    <fileset dir='${m2.dir}' id='libs-sardine'>
+        <include name='com/github/lookfirst/sardine/5.6/sardine-5.6.jar'/>
+        <include name='org/apache/httpcomponents/httpclient/4.4.1/httpclient-4.4.1.jar'/>
+        <include name='org/apache/httpcomponents/httpcore/4.4.1/httpcore-4.4.1.jar'/>
+    </fileset>
+
     <fileset dir='${tomcat6.dir}' id='libs-servlet-api'>
         <include name='lib/servlet-api.jar'/>
     </fileset>
@@ -68,6 +74,7 @@
     <path id='classpath-libs'>
         <pathelement path='${classes.core.dir}'/>
         <fileset refid='libs-ganymed'/>
+        <fileset refid='libs-sardine'/>
     </path>
 
     <path id='classpath-app'>
@@ -75,6 +82,7 @@
         <pathelement path='${classes.lib.dir}'/>
         <fileset refid='libs-servlet-api'/>
         <fileset refid='libs-ganymed'/>
+        <fileset refid='libs-sardine'/>
     </path>
 
     <target name='clean' description='clean up generated resources'>

@@ -1,6 +1,6 @@
 package io.github.greyp9.arwo.app.webdav.fs.handler;
 
-import io.github.greyp9.arwo.app.webdav.fs.core.DavFSRequest;
+import io.github.greyp9.arwo.app.webdav.fs.core.WebDAVRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.bundle.Bundle;
@@ -18,14 +18,14 @@ import java.io.IOException;
 import java.util.Iterator;
 import java.util.Properties;
 
-public class DavFSHandlerPostMultipart {
-    private final DavFSRequest request;
+public class WebDAVHandlerPostMultipart {
+    private final WebDAVRequest request;
     private final ServletHttpRequest httpRequest;
     //private final AppUserState userState;
     private final Bundle bundle;
     private final Alerts alerts;
 
-    public DavFSHandlerPostMultipart(final DavFSRequest request/*, final AppUserState userState*/) {
+    public WebDAVHandlerPostMultipart(final WebDAVRequest request/*, final AppUserState userState*/) {
         this.request = request;
         this.httpRequest = request.getHttpRequest();
         //this.userState = userState;
@@ -57,9 +57,6 @@ public class DavFSHandlerPostMultipart {
         final String filename = properties.getProperty(Const.CD_FILENAME);
 
 
-
-
-
         if (filename.length() == 0) {
             alerts.add(new Alert(Alert.Severity.WARN, bundle.format("SFTPHandlerPostMultipart.no.file", "")));
         } else {
@@ -75,7 +72,7 @@ public class DavFSHandlerPostMultipart {
                 "SFTPHandlerPostMultipart.file.source", filename)));
         // put data to remote
         final FileX fileX = new FileX(Value.join("", request.getPath(), filename));
-        //final DavFSDataSource source = new DavFSDataSource(request, request.getUserState().getUserRoot());
+        //final WebDAVDataSource source = new WebDAVDataSource(request, request.getUserState().getUserRoot());
         //source.write(bytes, fileX.getFolder(), fileX.getFilename());
         // info alert
         final String hash = HexCodec.encode(HashU.md5(bytes));

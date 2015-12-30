@@ -14,6 +14,13 @@
     <property name='test.classes.core.dir' value='${target.dir}/app/test-classes-core'/>
     <property name='test.classes.lib.dir' value='${target.dir}/app/test-classes-lib'/>
 
+    <fileset dir='${m2.dir}' id='libs-sardine'>
+        <include name='com/github/lookfirst/sardine/5.6/sardine-5.6.jar'/>
+        <include name='commons-logging/commons-logging/1.2/commons-logging-1.2.jar'/>
+        <include name='org/apache/httpcomponents/httpclient/4.4.1/httpclient-4.4.1.jar'/>
+        <include name='org/apache/httpcomponents/httpcore/4.4.1/httpcore-4.4.1.jar'/>
+    </fileset>
+
     <path id='classpath-test'>
         <pathelement path='${project.dir}/src/main/app/resources/arwo-jar'/>
         <pathelement path='${project.dir}/src/main/core/resources/arwo-jar'/>
@@ -29,6 +36,7 @@
         <!--
         <fileset file='${m2.dir}/org/apache/derby/derbyclient/10.11.1.1/derbyclient-10.11.1.1.jar' id='libs-derby'/>
         -->
+        <fileset refid='libs-sardine'/>
         <fileset file='${m2.dir}/com/sun/mail/javax.mail/1.5.4/javax.mail-1.5.4.jar' id='libs-javamail'/>
         <pathelement path='${test.classes.core.dir}'/>
         <pathelement path='${test.classes.lib.dir}'/>
