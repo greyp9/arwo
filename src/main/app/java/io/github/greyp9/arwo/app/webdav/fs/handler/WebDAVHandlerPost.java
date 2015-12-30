@@ -1,6 +1,8 @@
 package io.github.greyp9.arwo.app.webdav.fs.handler;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.webdav.action.WebDAVAddFavorite;
+import io.github.greyp9.arwo.app.webdav.action.WebDAVSelectFavorite;
 import io.github.greyp9.arwo.app.webdav.fs.core.WebDAVRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
@@ -105,9 +107,9 @@ public class WebDAVHandlerPost {
         } else if (App.Action.TOGGLE.equals(action)) {
             PropertiesU.toggleBoolean(userState.getProperties(), Value.join("/", "webdav", object));
         } else if (App.Action.ADD_FAV.equals(action)) {
-            getClass(); //new WebDAVAddFavorite(request).doAction();
+            new WebDAVAddFavorite(request).doAction();
         } else if (App.Action.SELECT_FAV.equals(action)) {
-            getClass(); //location = new WebDAVSelectFavorite(request).doAction(token);
+            location = new WebDAVSelectFavorite(request).doAction(token);
         } else {
             request.getAlerts().add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }

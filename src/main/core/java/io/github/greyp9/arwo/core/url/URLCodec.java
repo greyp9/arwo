@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.url;
 
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
+import io.github.greyp9.arwo.core.http.Http;
 
 import java.io.File;
 import java.io.IOException;
@@ -11,6 +12,7 @@ import java.net.URISyntaxException;
 import java.net.URL;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
+import java.util.StringTokenizer;
 
 public final class URLCodec {
 
@@ -65,5 +67,16 @@ public final class URLCodec {
 
     public static String toExternalForm(final URL url) {
         return ((url == null) ? null : url.toExternalForm());
+    }
+
+    public static String encodePath(final String path) throws UnsupportedEncodingException {
+        final StringBuilder buffer = new StringBuilder();
+        final StringTokenizer tokenizer = new StringTokenizer(path, Http.Token.SLASH, true);
+        while (tokenizer.hasMoreTokens()) {
+            final String token = tokenizer.nextToken();
+            final boolean isSlash = Http.Token.SLASH.equals(token);
+            buffer.append(isSlash ? token : encode(token));
+        }
+        return buffer.toString();
     }
 }
