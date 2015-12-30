@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.app.webdav.fs.data;
 
 import com.github.sardine.DavResource;
 import com.github.sardine.Sardine;
+import com.github.sardine.impl.SardineException;
 import io.github.greyp9.arwo.app.webdav.fs.core.WebDAVRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.model.ExceptionModel;
@@ -32,11 +33,17 @@ public class WebDAVDataSource {
     }
 
     public final int lstat(final String path) throws IOException {
-        final List<DavResource> resources = listFiles(path);
-        final DavResource firstResource = (resources.isEmpty() ? null : resources.get(0));
-        final boolean isFolder = ((firstResource != null) && (firstResource.getPath().endsWith(Http.Token.SLASH)));
-        final boolean isFile = ((firstResource != null) && (!isFolder));
-        return (isFolder ? App.FS.S_IFDIR : (isFile ? App.FS.S_IFREG : 0));
+        int lstat;
+        try {
+            final List<DavResource> resources = listFiles(path);
+            final DavResource firstResource = (resources.isEmpty() ? null : resources.get(0));
+            final boolean isFolder = ((firstResource != null) && (firstResource.getPath().endsWith(Http.Token.SLASH)));
+            final boolean isFile = ((firstResource != null) && (!isFolder));
+            lstat = (isFolder ? App.FS.S_IFDIR : (isFile ? App.FS.S_IFREG : 0));
+        } catch (SardineException e) {
+            lstat = e.getStatusCode();
+        }
+        return lstat;
     }
 
     public final List<DavResource> listFiles(final String path) throws IOException {
@@ -85,6 +92,17 @@ public class WebDAVDataSource {
             return StreamU.read(is);
         } finally {
             is.close();
+        }
+    }
+
+    @SuppressWarnings("PMD.CloseResource")
+    public final void write(final byte[] bytes, final String path) throws IOException {
+        try {
+            final Sardine sardine = connection.getConnection();
+            sardine.put(path, bytes);
+            connection.update(request.getHttpRequest().getDate());
+        } catch (IOException e) {
+            new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
         }
     }
 }

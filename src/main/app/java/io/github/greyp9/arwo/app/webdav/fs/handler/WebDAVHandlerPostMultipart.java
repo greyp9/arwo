@@ -1,6 +1,10 @@
 package io.github.greyp9.arwo.app.webdav.fs.handler;
 
+import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.webdav.connection.WebDAVConnectionFactory;
+import io.github.greyp9.arwo.app.webdav.connection.WebDAVConnectionResource;
 import io.github.greyp9.arwo.app.webdav.fs.core.WebDAVRequest;
+import io.github.greyp9.arwo.app.webdav.fs.data.WebDAVDataSource;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.bundle.Bundle;
@@ -11,6 +15,7 @@ import io.github.greyp9.arwo.core.http.form.MimeHeader;
 import io.github.greyp9.arwo.core.http.form.MimePart;
 import io.github.greyp9.arwo.core.http.form.MultipartForm;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
+import io.github.greyp9.arwo.core.url.URLCodec;
 import io.github.greyp9.arwo.core.value.Value;
 
 import java.io.ByteArrayInputStream;
@@ -21,14 +26,14 @@ import java.util.Properties;
 public class WebDAVHandlerPostMultipart {
     private final WebDAVRequest request;
     private final ServletHttpRequest httpRequest;
-    //private final AppUserState userState;
+    private final AppUserState userState;
     private final Bundle bundle;
     private final Alerts alerts;
 
-    public WebDAVHandlerPostMultipart(final WebDAVRequest request/*, final AppUserState userState*/) {
+    public WebDAVHandlerPostMultipart(final WebDAVRequest request, final AppUserState userState) {
         this.request = request;
         this.httpRequest = request.getHttpRequest();
-        //this.userState = userState;
+        this.userState = userState;
         this.bundle = request.getBundle();
         this.alerts = request.getAlerts();
     }
@@ -53,27 +58,30 @@ public class WebDAVHandlerPostMultipart {
     }
 
     private void doPostUploadFile(final MimePart mimePart, final Properties properties) throws IOException {
-
+        final String server = request.getServer();
         final String filename = properties.getProperty(Const.CD_FILENAME);
-
-
-        if (filename.length() == 0) {
-            alerts.add(new Alert(Alert.Severity.WARN, bundle.format("SFTPHandlerPostMultipart.no.file", "")));
+        final WebDAVConnectionFactory factory = new WebDAVConnectionFactory(httpRequest, userState, bundle, alerts);
+        final WebDAVConnectionResource resource = (WebDAVConnectionResource)
+                userState.getWebDAV().getCache().getResource(request.getServer(), factory);
+        if (resource == null) {
+            alerts.add(new Alert(Alert.Severity.WARN, bundle.format("SFTPHandlerPostMultipart.no.connect", server)));
+        } else if (filename.length() == 0) {
+            alerts.add(new Alert(Alert.Severity.WARN, bundle.format("SFTPHandlerPostMultipart.no.file", server)));
         } else {
-            doPostUploadFile(mimePart, filename);
-
+            doPostUploadFile(mimePart, filename, resource);
+            resource.getConnection().update(httpRequest.getDate());
         }
     }
 
-    private void doPostUploadFile(
-            final MimePart mimePart, final String filename) throws IOException {
+    private void doPostUploadFile(final MimePart mimePart, final String filename,
+                                  final WebDAVConnectionResource resource) throws IOException {
         final byte[] bytes = mimePart.getBody().toByteArray();
         alerts.add(new Alert(Alert.Severity.INFO, bundle.format(
                 "SFTPHandlerPostMultipart.file.source", filename)));
         // put data to remote
-        final FileX fileX = new FileX(Value.join("", request.getPath(), filename));
-        //final WebDAVDataSource source = new WebDAVDataSource(request, request.getUserState().getUserRoot());
-        //source.write(bytes, fileX.getFolder(), fileX.getFilename());
+        final FileX fileX = new FileX(Value.join("", request.getPathURL(), URLCodec.encode(filename)));
+        final WebDAVDataSource source = new WebDAVDataSource(request, resource.getConnection());
+        source.write(bytes, resource.getConnection().getURL() + fileX.getPath());
         // info alert
         final String hash = HexCodec.encode(HashU.md5(bytes));
         alerts.add(new Alert(Alert.Severity.INFO, bundle.format(
