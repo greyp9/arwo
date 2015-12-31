@@ -130,6 +130,8 @@
             <include name='io/github/greyp9/arwo/app/lifecycle/servlet/AppLifecycleServlet.java'/>
             <include name='io/github/greyp9/arwo/app/naming/servlet/NamingServlet.java'/>
             <include name='io/github/greyp9/arwo/app/realm/servlet/RealmServlet.java'/>
+            <!--app cron context-->
+            <include name='io/github/greyp9/arwo/app/cron/servlet/CronServlet.java'/>
             <!--app dashboard-->
             <include name='io/github/greyp9/arwo/app/dash/servlet/DashServlet.java'/>
             <!--webapp settings-->

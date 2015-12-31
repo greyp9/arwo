@@ -80,7 +80,18 @@
         <url-pattern>/doc3/*</url-pattern>
     </servlet-mapping>
 
-    <!--sftp-->
+    <!--cron-->
+    <servlet>
+        <description>cron</description>
+        <servlet-name>CronServlet</servlet-name>
+        <servlet-class>io.github.greyp9.arwo.app.cron.servlet.CronServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CronServlet</servlet-name>
+        <url-pattern>/cron/*</url-pattern>
+    </servlet-mapping>
+
+    <!--dashboard-->
     <servlet>
         <description>dashboard</description>
         <servlet-name>DashServlet</servlet-name>
