@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.cron.job.CronJob;
 import io.github.greyp9.arwo.core.cron.tab.CronTab;
 import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.lang.NumberU;
+import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.vm.exec.ExecutorServiceFactory;
 import io.github.greyp9.arwo.core.xed.model.Xed;
@@ -29,15 +30,18 @@ public class CronServiceRegistrar {
     private final Bundle bundle;
     private final Alerts alerts;
     private final CronService cronService;
+    private final RowSet rowSet;
 
     public CronServiceRegistrar(final Date date, final String authorization, final Principal principal,
-                                final Bundle bundle, final Alerts alerts, final CronService cronService) {
+                                final Bundle bundle, final Alerts alerts,
+                                final CronService cronService, final RowSet rowSet) {
         this.date = DateU.copy(date);
         this.authorization = authorization;
         this.principal = principal;
         this.bundle = bundle;
         this.alerts = alerts;
         this.cronService = cronService;
+        this.rowSet = rowSet;
     }
 
     public final void unregister() throws IOException {
@@ -69,7 +73,7 @@ public class CronServiceRegistrar {
         final Integer nThreads = NumberU.toInt(threads, 0);
         final String prefix = String.format("CRON-TAB-%s", name);
         final ExecutorService executorService = ExecutorServiceFactory.create(nThreads, prefix);
-        return new CronTabExecutor(authorization, principal, executorService, cronTab, date);
+        return new CronTabExecutor(authorization, principal, executorService, cronTab, date, rowSet);
     }
 
     private CronJob createJob(final XPather xpatherJob) throws IOException {

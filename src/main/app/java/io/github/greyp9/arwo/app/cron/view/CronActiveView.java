@@ -57,9 +57,9 @@ public class CronActiveView {
 
     private RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
+                new ColumnMetaData("tz", Types.VARCHAR),
                 new ColumnMetaData("tabName", Types.VARCHAR),
                 new ColumnMetaData("jobName", Types.VARCHAR),
-                new ColumnMetaData("tz", Types.VARCHAR),
                 new ColumnMetaData("line", Types.VARCHAR),
                 new ColumnMetaData("next", Types.TIMESTAMP),
                 new ColumnMetaData("until", Types.VARCHAR),
@@ -99,9 +99,9 @@ public class CronActiveView {
         final SubmitToken tokenNow = new SubmitToken(
                 App.Target.USER_STATE, "cronNow", cronTab.getName(), cronJob.getName());
         final InsertRow insertRow = new InsertRow(rowSet);
+        insertRow.setNextColumn(cronTab.getTZ().getID());
         insertRow.setNextColumn(cronTab.getName());
         insertRow.setNextColumn(cronJob.getName());
-        insertRow.setNextColumn(cronTab.getTZ().getID());
         insertRow.setNextColumn(cronJob.getLine());
         insertRow.setNextColumn(due ? dateNext : null);
         insertRow.setNextColumn(due ? new Duration(DurationU.toMillis(until)) : null);

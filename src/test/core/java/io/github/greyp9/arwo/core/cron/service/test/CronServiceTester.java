@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.cron.service.test;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.cron.exec.CronTabExecutor;
 import io.github.greyp9.arwo.core.cron.job.CronJob;
@@ -10,7 +11,9 @@ import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.io.buffer.ByteBuffer;
 import io.github.greyp9.arwo.core.io.runnable.InputStreamRunnable;
 import io.github.greyp9.arwo.core.logging.LoggerU;
+import io.github.greyp9.arwo.core.meter.Meter;
 import io.github.greyp9.arwo.core.security.realm.AppPrincipal;
+import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.vm.exec.ExecutorServiceFactory;
 import io.github.greyp9.arwo.core.vm.mutex.MutexU;
 
@@ -79,9 +82,11 @@ public class CronServiceTester {
         return stop;
     }
 
-    private CronTabExecutor getCronTabExecutor(String authorization, Principal principal) {
-        ExecutorService executorService = ExecutorServiceFactory.create(1, getClass().getSimpleName());
-        return new CronTabExecutor(authorization, principal, executorService, getCronTab(), new Date());
+    private CronTabExecutor getCronTabExecutor(String authorization, Principal principal) throws IOException {
+        final ExecutorService executorService = ExecutorServiceFactory.create(1, getClass().getSimpleName());
+        final Meter meter = new Meter(App.Meter.QNAME_CRON_JOBS);
+        final RowSet rowSet = meter.getRowSet("{urn:xed:metric}cronJobsType", "job");
+        return new CronTabExecutor(authorization, principal, executorService, getCronTab(), new Date(), rowSet);
     }
 
     private CronTab getCronTab() {

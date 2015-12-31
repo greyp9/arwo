@@ -9,6 +9,10 @@ import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.lang.StringU;
+import io.github.greyp9.arwo.core.table.insert.InsertRow;
+import io.github.greyp9.arwo.core.table.row.Row;
+import io.github.greyp9.arwo.core.table.row.RowSet;
+import io.github.greyp9.arwo.core.table.type.RowTyped;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
@@ -31,11 +35,14 @@ public class CronTabWork {
 
     private final String context;
     private final CronTabExecutor executor;
+    private final Principal invokerPrincipal;
     private final Date dateSchedule;
 
-    public CronTabWork(final String context, final CronTabExecutor executor, final Date dateSchedule) {
+    public CronTabWork(final String context, final CronTabExecutor executor,
+                       final Principal principal, final Date dateSchedule) {
         this.context = context;
         this.executor = executor;
+        this.invokerPrincipal = principal;
         this.dateSchedule = DateU.copy(dateSchedule);
     }
 
@@ -88,7 +95,22 @@ public class CronTabWork {
         final String authorization = executor.getAuthorization();
         final Principal principal = executor.getPrincipal();
         final CronTab cronTab = executor.getCronTab();
-        return new CronParams(context, authorization, principal, date, cronTab, cronJob, cronJob.getElement());
+        final Element element = cronJob.getElement();
+        final RowTyped row = createRow(date, cronJob);
+        return new CronParams(context, authorization, principal, date, cronTab, cronJob, element, row);
+    }
+
+    private RowTyped createRow(final Date date, final CronJob cronJob) {
+        final RowSet rowSet = executor.getRowSet();
+        final Row row = new InsertRow(rowSet).getRow();
+        rowSet.add(row);
+        final RowTyped rowTyped = new RowTyped(rowSet.getMetaData(), row);
+        rowTyped.update("cronTab", executor.getCronTab().getName());
+        rowTyped.update("cronJob", cronJob.getName());
+        rowTyped.update("command", cronJob.getLine());
+        rowTyped.update("principal", ((invokerPrincipal == null) ? null : invokerPrincipal.getName()));
+        rowTyped.update("date", date);
+        return rowTyped;
     }
 
     @SuppressWarnings({ "PMD.OnlyOneReturn", "PMD.AvoidCatchingThrowable" })

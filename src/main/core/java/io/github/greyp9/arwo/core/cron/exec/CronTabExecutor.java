@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.cron.exec;
 import io.github.greyp9.arwo.core.cron.job.CronJob;
 import io.github.greyp9.arwo.core.cron.tab.CronTab;
 import io.github.greyp9.arwo.core.date.DateU;
+import io.github.greyp9.arwo.core.table.row.RowSet;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -22,6 +23,7 @@ public class CronTabExecutor {
     private final CronTab cronTab;
     private final Date dateStart;
     private final AtomicReference<Date> dateStop;
+    private final RowSet rowSet;
 
     public final ExecutorService getExecutorService() {
         return executorService;
@@ -51,14 +53,20 @@ public class CronTabExecutor {
         return (dateStop.get() != null);
     }
 
+    public final RowSet getRowSet() {
+        return rowSet;
+    }
+
     public CronTabExecutor(final String authorization, final Principal principal,
-                           final ExecutorService executorService, final CronTab cronTab, final Date dateStart) {
+                           final ExecutorService executorService, final CronTab cronTab,
+                           final Date dateStart, final RowSet rowSet) {
         this.authorization = authorization;
         this.principal = principal;
         this.executorService = executorService;
         this.cronTab = cronTab;
         this.dateStart = DateU.copy(dateStart);
         this.dateStop = new AtomicReference<Date>();
+        this.rowSet = rowSet;
     }
 
     @SuppressWarnings({ "PMD.GuardLogStatementJavaUtil", "PMD.GuardLogStatement" })
@@ -76,10 +84,10 @@ public class CronTabExecutor {
     }
 
     public final void doWork(final String context, final Date dateSchedule) throws IOException {
-        new CronTabWork(context, this, dateSchedule).doWork();
+        new CronTabWork(context, this, null, dateSchedule).doWork();
     }
 
     public final void doWork(final String context, final Date dateNow, final CronJob cronJob) throws IOException {
-        new CronTabWork(context, this, dateNow).doWork(cronJob);
+        new CronTabWork(context, this, principal, dateNow).doWork(cronJob);
     }
 }

@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.app.core.state;
 
+import io.github.greyp9.arwo.app.core.subsystem.cron.SubsystemCron;
 import io.github.greyp9.arwo.app.core.subsystem.dav.SubsystemWebDAV;
 import io.github.greyp9.arwo.app.core.subsystem.local.SubsystemLocal;
 import io.github.greyp9.arwo.app.core.subsystem.ssh.SubsystemSSH;
@@ -26,6 +27,7 @@ import io.github.greyp9.arwo.core.page.Page;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.resource.Pather;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
+import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewStates;
 import io.github.greyp9.arwo.core.text.filter.TextFilters;
 import io.github.greyp9.arwo.core.util.PropertiesU;
@@ -43,7 +45,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Properties;
 
-@SuppressWarnings({ "PMD.ExcessiveImports", "PMD.GodClass", "PMD.TooManyFields",
+@SuppressWarnings({ "PMD.ExcessiveImports", "PMD.GodClass", "PMD.TooManyFields", "PMD.CouplingBetweenObjects",
         "PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity", "PMD.ModifiedCyclomaticComplexity" })
 public class AppUserState {
     private final AppState appState;
@@ -67,6 +69,7 @@ public class AppUserState {
     // text filters (for file display)
     private final TextFilters textFilters;
     // widget subsystems
+    private final SubsystemCron cron;
     private final SubsystemLocal local;
     private final SubsystemSSH ssh;
     private final SubsystemWebDAV webDAV;
@@ -124,6 +127,10 @@ public class AppUserState {
         return textFilters;
     }
 
+    public final SubsystemCron getCron() {
+        return cron;
+    }
+
     public final SubsystemLocal getLocal() {
         return local;
     }
@@ -173,6 +180,7 @@ public class AppUserState {
         this.alerts = new Alerts();
         this.documentState = new XedUserState(webappRoot, principal, submitID, locus, alerts);
         this.userExecutor = new UserExecutor(principal, date, new File(SystemU.userHome()));
+        this.cron = new SubsystemCron();
         this.local = new SubsystemLocal();
         this.ssh = new SubsystemSSH(alerts);
         this.webDAV = new SubsystemWebDAV(alerts);
@@ -292,8 +300,9 @@ public class AppUserState {
         final Date date = httpRequest.getDate();
         final String authorization = httpRequest.getHttpRequest().getHeader(Http.Header.AUTHORIZATION);
         final Bundle bundle = new Bundle(new AppText(getLocus().getLocale()).getBundleCore());
-        new CronServiceRegistrar(date, authorization, principal, bundle, alerts, appState.getCronService()).
-                unregister();
+        final CronService cronService = appState.getCronService();
+        final RowSet rowSet = cron.getRowSetCron();
+        new CronServiceRegistrar(date, authorization, principal, bundle, alerts, cronService, rowSet).unregister();
     }
 
     private void doCronOn(final ServletHttpRequest httpRequest) throws IOException {
@@ -301,7 +310,9 @@ public class AppUserState {
         final Date date = httpRequest.getDate();
         final String authorization = httpRequest.getHttpRequest().getHeader(Http.Header.AUTHORIZATION);
         final Bundle bundle = new Bundle(new AppText(getLocus().getLocale()).getBundleCore());
-        new CronServiceRegistrar(date, authorization, principal, bundle, alerts, appState.getCronService()).
+        final CronService cronService = appState.getCronService();
+        final RowSet rowSet = cron.getRowSetCron();
+        new CronServiceRegistrar(date, authorization, principal, bundle, alerts, cronService, rowSet).
                 register(documentState.getSession("/app").getXed());
     }
 

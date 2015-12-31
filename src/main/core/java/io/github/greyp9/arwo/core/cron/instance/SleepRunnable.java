@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.core.cron.core.CronParams;
 import io.github.greyp9.arwo.core.cron.core.CronRunnable;
 import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.date.DurationU;
+import io.github.greyp9.arwo.core.table.type.RowTyped;
 import io.github.greyp9.arwo.core.vm.thread.ThreadU;
 import io.github.greyp9.arwo.core.xml.ElementU;
 
@@ -20,12 +21,18 @@ public class SleepRunnable extends CronRunnable {
 
     @Override
     public final void run() {
+        final RowTyped row = getParams().getRow();
         logger.info("START");
         final Date dateStart = new Date();
+        row.update("dateStart", dateStart);
+
         final String duration = ElementU.getAttribute(getParams().getCronJob().getElement(), "duration", "PT0S");
         final Date dateUntil = DurationU.add(dateStart, DateU.Const.TZ_GMT, duration);
         final boolean interrupted = ThreadU.sleepUntil(dateUntil);
+
         logger.info(String.format("FINISH(interrupted=%s)", interrupted));
-        //Date dateFinish = new Date();
+        final Date dateFinish = new Date();
+        row.update("duration", DurationU.duration(dateStart, dateFinish));
+        row.update("result", 0);
     }
 }

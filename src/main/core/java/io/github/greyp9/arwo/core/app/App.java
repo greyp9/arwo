@@ -35,6 +35,11 @@ public final class App {
         public static final QName QNAME = new QName("urn:arwo:realm", "realm", "realm");
     }
 
+    public static class Meter {
+        public static final String XSD = "io/github/greyp9/arwo/xsd/meter/meter.xsd";
+        public static final QName QNAME_CRON_JOBS = new QName("urn:arwo:meter", "cronJobs", "cronJobs");
+    }
+
     public static class Bundle {
         public static final String CORE = "io.github.greyp9.arwo.text.core.core";
     }

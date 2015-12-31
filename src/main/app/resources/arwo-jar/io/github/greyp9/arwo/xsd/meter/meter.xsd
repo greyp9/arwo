@@ -1,0 +1,24 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<xsd:schema targetNamespace='urn:arwo:meter' xmlns:meter='urn:arwo:meter'
+            xmlns:xsd='http://www.w3.org/2001/XMLSchema' elementFormDefault='qualified'>
+
+    <xsd:element name='cronJobs' type='meter:cronJobsType'/>
+
+    <xsd:complexType name='cronJobsType'>
+        <xsd:sequence>
+            <xsd:element name='job' type='meter:cronJobType' minOccurs='0' maxOccurs='unbounded'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name='cronJobType'>
+        <xsd:attribute name='cronTab' type='xsd:string' use='required'/>
+        <xsd:attribute name='cronJob' type='xsd:string' use='required'/>
+        <xsd:attribute name='command' type='xsd:string' use='required'/>
+        <xsd:attribute name='principal' type='xsd:string'/>
+        <xsd:attribute name='date' type='xsd:dateTime' use='required'/>
+        <xsd:attribute name='dateStart' type='xsd:dateTime'/>
+        <xsd:attribute name='duration' type='xsd:duration'/>
+        <xsd:attribute name='result' type='xsd:unsignedInt'/>
+    </xsd:complexType>
+
+</xsd:schema>
