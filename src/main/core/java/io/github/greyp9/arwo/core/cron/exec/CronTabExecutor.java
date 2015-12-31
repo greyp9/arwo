@@ -43,6 +43,10 @@ public class CronTabExecutor {
         return DateU.copy(dateStart);
     }
 
+    public final Date getDateStop() {
+        return DateU.copy(dateStop.get());
+    }
+
     public final boolean isStopped() {
         return (dateStop.get() != null);
     }

@@ -81,6 +81,7 @@ public class CronView {
     }
 
     private HttpResponse addContentTo(final Element html) throws IOException {
+        new CronTabView(userState.getCronService(), request, userState).addContent(html);
         new CronActiveView(userState.getCronService(), request, userState).addContent(html);
         return null;
     }

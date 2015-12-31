@@ -5,9 +5,11 @@ import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.cron.exec.CronTabExecutor;
 import io.github.greyp9.arwo.core.cron.job.CronJob;
+import io.github.greyp9.arwo.core.cron.rowset.tab.CronTabRowSet;
 import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.date.XsdDateU;
+import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.vm.mutex.CollectionU;
 import io.github.greyp9.arwo.core.vm.mutex.MutexU;
 
@@ -31,6 +33,10 @@ public class CronService implements Runnable {
         this.context = context;
         this.executors = new ArrayList<CronTabExecutor>();
         this.stopCondition = new AtomicReference<String>();
+    }
+
+    public final RowSet createExecutorRowSet(final Principal principal, final Date dateNow) {
+        return new CronTabRowSet(getExecutors(), dateNow).getRowSet(principal, "cronTabExecutorType");
     }
 
     public final Collection<CronTabExecutor> getExecutors() {
