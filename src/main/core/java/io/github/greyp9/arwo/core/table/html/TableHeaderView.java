@@ -32,7 +32,7 @@ public class TableHeaderView {
         this.context = context;
     }
 
-    public final void addContentTo(final Element tableHtml, final String title) {
+    public final void addContentTo(final Element tableHtml, final String title, final boolean openTB) {
         // table header is always added, since there is always a table header row
         final Element thead = ElementU.addElement(tableHtml, Html.THEAD, null,
                 NameTypeValuesU.create(Html.CLASS, Html.TABLE));
@@ -43,20 +43,22 @@ public class TableHeaderView {
         final SubmitToken token = new SubmitToken(App.Target.VIEW_STATE, ViewState.Toggle.RIBBON, table.getID());
         // (for sftp view, "title" is fs path, but viewState.getName() should be used for button)
         HtmlU.addButton(th, title, context.getSubmitID(), token.toString(), "header", null);
-        // optionally add extra table controls
-        final boolean openTH = context.getViewState().isOpenTH();
-        if (openTH) {
-            // table controls row
-            addRibbonTo(thead, table.getMetaData());
+        if (openTB) {
+            // optionally add extra table controls
+            final boolean openTH = context.getViewState().isOpenTH();
+            if (openTH) {
+                // table controls row
+                addRibbonTo(thead, table.getMetaData());
+            }
+            // table column headers
+            addHeaderRowTo(thead, table.getMetaData(), table.getSorts(), openTH);  // table column headers
+            // table column controls
+            if (openTH) {
+                addControlsRowTo(thead, table.getMetaData());  // table column controls
+            }
+            // table sort/filter state
+            addStatusTo(thead, table.getMetaData(), table.getSorts(), table.getFilters());
         }
-        // table column headers
-        addHeaderRowTo(thead, table.getMetaData(), table.getSorts(), openTH);  // table column headers
-        // table column controls
-        if (openTH) {
-            addControlsRowTo(thead, table.getMetaData());  // table column controls
-        }
-        // table sort/filter state
-        addStatusTo(thead, table.getMetaData(), table.getSorts(), table.getFilters());
     }
 
     private void addRibbonTo(final Element tableHtml, final RowSetMetaData metaData) {

@@ -28,9 +28,10 @@ public class TableViewInner {
                 Html.ACTION, "", Html.METHOD, Html.POST));
         final Element tableHtml = ElementU.addElement(form, Html.TABLE, null, NameTypeValuesU.create(
                 Html.CLASS, context.getTableClass(), Html.SUMMARY, getSummary()));
-        new TableHeaderView(table, context).addContentTo(tableHtml, getTitle());
-        new TableFooterView(table, context).addContentTo(tableHtml);
-        new TableBodyView(table, context).addContentTo(tableHtml);
+        final boolean openTB = context.getViewState().isOpenTB();
+        new TableHeaderView(table, context).addContentTo(tableHtml, getTitle(), openTB);
+        new TableFooterView(table, context).addContentTo(tableHtml, openTB);
+        new TableBodyView(table, context).addContentTo(tableHtml, openTB);
     }
 
     public final String getTitle() {

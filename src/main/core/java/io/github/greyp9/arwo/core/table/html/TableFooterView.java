@@ -24,15 +24,16 @@ public class TableFooterView {
         this.context = context;
     }
 
-    public final void addContentTo(final Element tableHtml) {
-        final Element tfoot = ElementU.addElement(tableHtml, Html.TFOOT, null,
-                NameTypeValuesU.create(Html.CLASS, Html.TABLE));
-        addFooterRowTo(tfoot);
-        if (context.getViewState().getPage() != null) {
-            addFooterPageRowTo(tfoot, context.getViewState().getPage());
+    public final void addContentTo(final Element tableHtml, final boolean openTB) {
+        if (openTB) {
+            final Element tfoot = ElementU.addElement(tableHtml, Html.TFOOT, null,
+                    NameTypeValuesU.create(Html.CLASS, Html.TABLE));
+            addFooterRowTo(tfoot);
+            if (context.getViewState().getPage() != null) {
+                addFooterPageRowTo(tfoot, context.getViewState().getPage());
+            }
+            ElementU.detachOnEmpty(tfoot);
         }
-        ElementU.detachOnEmpty(tfoot);
-
     }
 
     private void addFooterRowTo(final Element tfoot) {

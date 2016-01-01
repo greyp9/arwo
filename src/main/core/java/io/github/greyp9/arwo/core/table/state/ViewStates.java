@@ -59,11 +59,14 @@ public class ViewStates {
             viewState.getHiddenColumns().add(token.getObject2());
 
         } else if (ViewState.Toggle.CONNECT.equals(action)) {
-            viewState.setIsConnected(!viewState.isConnected());
+            viewState.setConnected(!viewState.isConnected());
         } else if (ViewState.Toggle.RIBBON.equals(action)) {
-            viewState.setIsOpenTH(!viewState.isOpenTH());
+            final boolean openTH = viewState.isOpenTH();
+            final boolean openTB = viewState.isOpenTB();
+            viewState.setOpenTH(!openTH && openTB);
+            viewState.setOpenTB(!openTH || !openTB);
         } else if (ViewState.Toggle.BASELINE.equals(action)) {
-            viewState.setIsActiveBaseline(!viewState.isActiveBaseline());
+            viewState.setActiveBaseline(!viewState.isActiveBaseline());
         } else if (ViewState.Toggle.FILTERS.equals(action)) {
             viewState.setFilterColumn(Value.join(Http.Token.DOT, token.getObject(), token.getObject2()));
         } else if (ViewState.Toggle.PAGE.equals(action)) {

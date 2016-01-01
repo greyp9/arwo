@@ -23,7 +23,7 @@ import java.sql.Types;
 import java.util.Date;
 import java.util.Iterator;
 
-@SuppressWarnings("PMD.TooManyMethods")
+@SuppressWarnings({ "PMD.GodClass", "PMD.TooManyMethods" })
 public class TableBodyView {
     private final Table table;
     private final TableContext context;
@@ -33,21 +33,26 @@ public class TableBodyView {
         this.context = context;
     }
 
-    public final void addContentTo(final Element tableHtml) {
+    public final void addContentTo(final Element tableHtml, final boolean openTB) {
         final Element tbody = ElementU.addElement(tableHtml, Html.TBODY, null,
                 NameTypeValuesU.create(Html.CLASS, Html.TABLE));
-        if (table.getRows() == 0) {
-            addEmptyRowTo(tbody);
+        final boolean tableClosed = (!openTB);
+        if (tableClosed) {
+            addEmptyRowTo(tbody, null);
+        } else if (table.getRows() == 0) {
+            addEmptyRowTo(tbody, UTF16.NBSP);
         } else {
             addRowsTo(tbody);
         }
     }
 
-    private void addEmptyRowTo(final Element tableHtml) {
+    private void addEmptyRowTo(final Element tableHtml, final String text) {
         final Element tr = ElementU.addElement(tableHtml, Html.TR);
         final Element th = ElementU.addElement(tr, Html.TH, null, NameTypeValuesU.create(
                 Html.COLSPAN, Integer.toString(table.getMetaData().size())));
-        ElementU.addElement(th, Html.SPAN, UTF16.NBSP, NameTypeValuesU.create());
+        if (text != null) {
+            ElementU.addElement(th, Html.SPAN, text, NameTypeValuesU.create());
+        }
     }
 
     private void addRowsTo(final Element tableHtml) {

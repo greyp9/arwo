@@ -24,6 +24,7 @@ public class ViewState {
 
     private boolean connected;
     private boolean openTH;
+    private boolean openTB;
     private boolean activeBaseline;
     private String filterColumn;
     private Page page;
@@ -37,6 +38,7 @@ public class ViewState {
 
         this.connected = true;
         this.openTH = false;
+        this.openTB = true;
         this.activeBaseline = false;
         this.filterColumn = null;
         this.page = null;
@@ -67,24 +69,32 @@ public class ViewState {
         return connected;
     }
 
-    public final void setIsConnected(final boolean b) {
-        this.connected = b;
+    public final void setConnected(final boolean connected) {
+        this.connected = connected;
     }
 
     public final boolean isOpenTH() {
         return openTH;
     }
 
-    public final void setIsOpenTH(final boolean b) {
-        this.openTH = b;
+    public final void setOpenTH(final boolean openTH) {
+        this.openTH = openTH;
+    }
+
+    public final boolean isOpenTB() {
+        return openTB;
+    }
+
+    public final void setOpenTB(final boolean openTB) {
+        this.openTB = openTB;
     }
 
     public final boolean isActiveBaseline() {
         return activeBaseline;
     }
 
-    public final void setIsActiveBaseline(final boolean b) {
-        this.activeBaseline = b;
+    public final void setActiveBaseline(final boolean activeBaseline) {
+        this.activeBaseline = activeBaseline;
     }
 
     public final Page getPage() {
