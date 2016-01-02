@@ -1,38 +1,51 @@
 package io.github.greyp9.arwo.core.alert;
 
+import io.github.greyp9.arwo.core.alert.action.AlertActions;
+import io.github.greyp9.arwo.core.vm.mutex.CollectionU;
+
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Iterator;
 
 public class Alerts {
-    private final Collection<Alert> values;
+    private final Collection<Alert> alertsTransient;
+    private final Collection<Alert> alertsPersistent;
 
-    public final Collection<Alert> getAlerts() {
+    public Alerts() {
+        this.alertsTransient = new ArrayList<Alert>();
+        this.alertsPersistent = new ArrayList<Alert>();
+    }
+
+    public final Collection<Alert> getTransient() {
         synchronized (this) {
-            return values;
+            return CollectionU.move(new ArrayList<Alert>(), alertsTransient);
         }
     }
 
-    public Alerts() {
-        this.values = new ArrayList<Alert>();
+    public final Collection<Alert> getPersistent() {
+        synchronized (this) {
+            return CollectionU.copy(new ArrayList<Alert>(), alertsPersistent);
+        }
     }
 
     public final void add(final Alert alert) {
         synchronized (this) {
-            values.add(alert);
+            final boolean isTransient = (alert.getActions() == null);
+            final Collection<Alert> alertCollection = (isTransient ? alertsTransient : alertsPersistent);
+            alertCollection.add(alert);
         }
     }
 
-    public final void remove(final Alert alert) {
+    public final void remove(final String id) {
         synchronized (this) {
-            values.remove(alert);
-        }
-    }
-
-    public final Collection<Alert> removeAll() {
-        synchronized (this) {
-            final Collection<Alert> valuesLocal = new ArrayList<Alert>(values);
-            values.clear();
-            return valuesLocal;
+            final Iterator<Alert> iterator = alertsPersistent.iterator();
+            while (iterator.hasNext()) {
+                final Alert alert = iterator.next();
+                final AlertActions actions = alert.getActions();
+                if ((actions != null) && (id.equals(actions.getID()))) {
+                    iterator.remove();
+                }
+            }
         }
     }
 }

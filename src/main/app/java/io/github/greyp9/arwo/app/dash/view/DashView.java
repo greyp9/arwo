@@ -59,7 +59,8 @@ public class DashView {
         if (httpResponse == null) {
             // touch ups
             addMessagesTemp();
-            new AlertsView(userState.getAlerts(), userState.getLocus()).addContentTo(body);
+            new AlertsView(userState.getAlerts(), userState.getLocus(), userState.getBundle(),
+                    userState.getSubmitID()).addContentTo(body);
             new StatusBarView(httpRequest, userState.getLocus()).addContentTo(body);
             new AppHtml(httpRequest).fixup(html, title);
             // package into response

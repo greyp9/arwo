@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.alert;
 
+import io.github.greyp9.arwo.core.alert.action.AlertActions;
 import io.github.greyp9.arwo.core.date.DateU;
 
 import java.util.Date;
@@ -9,6 +10,7 @@ public class Alert {
     private final Severity severity;
     private final String message;
     private final String detail;
+    private final AlertActions actions;
 
     public final Date getDate() {
         return DateU.copy(date);
@@ -26,15 +28,28 @@ public class Alert {
         return detail;
     }
 
-    public Alert(final Severity severity, final String message) {
-        this(severity, message, null);
+    public final AlertActions getActions() {
+        return actions;
     }
 
-    public Alert(final Severity severity, final String message, final String detail) {
+    public Alert(final String message) {
+        this(Severity.INFO, message, null, null);
+    }
+
+    public Alert(final Severity severity, final String message) {
+        this(severity, message, null, null);
+    }
+
+    public Alert(final Severity severity, final String message, final AlertActions actions) {
+        this(severity, message, null, actions);
+    }
+
+    public Alert(final Severity severity, final String message, final String detail, final AlertActions actions) {
         this.date = new Date();
         this.severity = severity;
         this.message = message;
         this.detail = detail;
+        this.actions = actions;
     }
 
     public final String toString() {

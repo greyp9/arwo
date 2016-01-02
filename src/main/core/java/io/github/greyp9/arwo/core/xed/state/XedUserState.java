@@ -135,7 +135,7 @@ public class XedUserState {
         } else if (views.contains(action)) {
             location = toView(request.getHttpRequest(), action);
         } else {
-            alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
+            alerts.add(new Alert(Alert.Severity.WARN, message, token.toString(), null));
         }
         return location;
     }
@@ -163,7 +163,7 @@ public class XedUserState {
         } else if (App.Action.LOAD_REVISION.equals(action)) {
             new SessionRevision(sessionsApply, request.getSession(), request.getBundle(), alerts).loadRevision(token);
         } else {
-            alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
+            alerts.add(new Alert(Alert.Severity.WARN, message, token.toString(), null));
         }
     }
 

@@ -54,7 +54,7 @@ public class SessionSave {
 
     private void alert(final Alert.Severity severity, final String key, final String detail) {
         final String message = bundle.getString(key);
-        alerts.add(new Alert(severity, message, detail));
+        alerts.add(new Alert(severity, message, detail, null));
     }
 
     private void trigger() {

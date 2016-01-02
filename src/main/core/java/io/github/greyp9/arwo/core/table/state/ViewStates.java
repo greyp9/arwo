@@ -80,7 +80,7 @@ public class ViewStates {
         } else if (ViewState.Nav.LAST.equals(action)) {
             viewState.setPage(Page.Factory.lastPage(viewState.getPage()));
         } else {
-            alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
+            alerts.add(new Alert(Alert.Severity.WARN, message, token.toString(), null));
         }
     }
 

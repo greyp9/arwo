@@ -1,5 +1,7 @@
 package io.github.greyp9.arwo.app.core.state;
 
+import io.github.greyp9.arwo.app.core.action.ActionCacheClear;
+import io.github.greyp9.arwo.app.action.DeferredActions;
 import io.github.greyp9.arwo.app.core.subsystem.cron.SubsystemCron;
 import io.github.greyp9.arwo.app.core.subsystem.dav.SubsystemWebDAV;
 import io.github.greyp9.arwo.app.core.subsystem.local.SubsystemLocal;
@@ -68,6 +70,8 @@ public class AppUserState {
     private final Alerts alerts;
     // text filters (for file display)
     private final TextFilters textFilters;
+    // actions to be confirms
+    private final DeferredActions deferredActions;
     // widget subsystems
     private final SubsystemCron cron;
     private final SubsystemLocal local;
@@ -127,6 +131,12 @@ public class AppUserState {
         return textFilters;
     }
 
+/*
+    public final DeferredActions getDeferredActions() {
+        return deferredActions;
+    }
+*/
+
     public final SubsystemCron getCron() {
         return cron;
     }
@@ -155,6 +165,9 @@ public class AppUserState {
         this.pageViewHex = pageViewHex;
     }
 
+    public final Bundle getBundle() {
+        return new Bundle(new AppText(getLocus().getLocale()).getBundleCore());
+    }
 
     public final Locus getLocus() {
         return documentState.getLocus();
@@ -180,6 +193,7 @@ public class AppUserState {
         this.alerts = new Alerts();
         this.documentState = new XedUserState(webappRoot, principal, submitID, locus, alerts);
         this.userExecutor = new UserExecutor(principal, date, new File(SystemU.userHome()));
+        this.deferredActions = new DeferredActions();
         this.cron = new SubsystemCron();
         this.local = new SubsystemLocal();
         this.ssh = new SubsystemSSH(alerts);
@@ -190,8 +204,7 @@ public class AppUserState {
     }
 
     public final AppRequest getAppRequest(final ServletHttpRequest httpRequest) {
-        final Bundle bundle = new Bundle(new AppText(getLocus().getLocale()).getBundleCore());
-        return new AppRequest(httpRequest, submitID, getLocus(), bundle, alerts);
+        return new AppRequest(httpRequest, submitID, getLocus(), getBundle(), alerts);
     }
 
     public final String applyPost(final SubmitToken token, final NameTypeValues httpArguments,
@@ -201,11 +214,11 @@ public class AppUserState {
         String location = httpRequest.getURI();
         final String action = token.getAction();
         final String object = token.getObject();
+        final String object2 = token.getObject2();
         final Collection<String> views = Arrays.asList(App.Mode.VIEW, App.Mode.EDIT, App.Mode.CREATE,
                 App.Mode.VIEW_GZ, App.Mode.VIEW_ZIP, App.Mode.VIEW_TGZ, App.Mode.VIEW_HEX);
-        final Locus locus = documentState.getLocus();
         final Properties properties = documentState.getProperties();
-        final Bundle bundle = new Bundle(new AppText(locus.getLocale()).getBundleCore());
+        final Bundle bundle = getBundle();
         final String message = bundle.getString("alert.action.not.implemented");
         if (action == null) {
             getClass();
@@ -217,7 +230,7 @@ public class AppUserState {
         } else if (App.Action.UPDATE_LOCALE.equals(action)) {
             documentState.applyLocale(httpArguments);
         } else if (App.Action.TEXT_FILTER.equals(action)) {
-            new XedActionTextFilter(locus.getLocale()).updateTextFilters(textFilters, httpArguments);
+            new XedActionTextFilter(getLocus().getLocale()).updateTextFilters(textFilters, httpArguments);
         } else if (App.Action.CLEAR.equals(action)) {
             doClearCache();
         } else if (App.Action.MENU.equals(action)) {
@@ -238,8 +251,11 @@ public class AppUserState {
             doCronOn(httpRequest);
         } else if (App.Action.CRON_NOW.equals(action)) {
             doCronNow(httpRequest, token);
+        } else if (App.Action.ALERT.equals(action)) {
+            alerts.remove(object2);
+            deferredActions.apply(object, object2, bundle, alerts);
         } else {
-            alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
+            alerts.add(new Alert(Alert.Severity.WARN, message, token.toString(), null));
         }
         return location;
     }
@@ -267,10 +283,10 @@ public class AppUserState {
     }
 
     private void doClearCache() throws IOException {
-        final long size = cache.getSize();
-        cache.clear();
-        final Bundle bundle = new Bundle(new AppText(getLocus().getLocale()).getBundleCore());
-        alerts.add(new Alert(Alert.Severity.INFO, bundle.format("AppUserState.cache.clear", size)));
+        final ActionCacheClear action = new ActionCacheClear(cache);
+        deferredActions.add(action);
+        final String message = getBundle().format("AppUserState.cache.clear.confirm");
+        alerts.add(new Alert(Alert.Severity.INFO, message, null, action.getActions()));
     }
 
     private void updateHexViewParam(final String object) {
@@ -299,20 +315,19 @@ public class AppUserState {
     private void doCronOff(final ServletHttpRequest httpRequest) throws IOException {
         final Date date = httpRequest.getDate();
         final String authorization = httpRequest.getHttpRequest().getHeader(Http.Header.AUTHORIZATION);
-        final Bundle bundle = new Bundle(new AppText(getLocus().getLocale()).getBundleCore());
         final CronService cronService = appState.getCronService();
         final RowSet rowSet = cron.getRowSetCron();
-        new CronServiceRegistrar(date, authorization, principal, bundle, alerts, cronService, rowSet).unregister();
+        new CronServiceRegistrar(date, authorization, principal, getBundle(), alerts, cronService, rowSet).
+                unregister();
     }
 
     private void doCronOn(final ServletHttpRequest httpRequest) throws IOException {
         doCronOff(httpRequest);
         final Date date = httpRequest.getDate();
         final String authorization = httpRequest.getHttpRequest().getHeader(Http.Header.AUTHORIZATION);
-        final Bundle bundle = new Bundle(new AppText(getLocus().getLocale()).getBundleCore());
         final CronService cronService = appState.getCronService();
         final RowSet rowSet = cron.getRowSetCron();
-        new CronServiceRegistrar(date, authorization, principal, bundle, alerts, cronService, rowSet).
+        new CronServiceRegistrar(date, authorization, principal, getBundle(), alerts, cronService, rowSet).
                 register(documentState.getSession("/app").getXed());
     }
 

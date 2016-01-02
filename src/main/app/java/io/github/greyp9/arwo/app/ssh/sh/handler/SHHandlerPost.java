@@ -80,7 +80,7 @@ public class SHHandlerPost {
         } else if (App.Action.SELECT_FAV.equals(action)) {
             location = new SHSelectFavorite(request).doAction(token);
         } else {
-            request.getAlerts().add(new Alert(Alert.Severity.WARN, message, token.toString()));
+            request.getAlerts().add(new Alert(Alert.Severity.WARN, message, token.toString(), null));
         }
         return location;
     }

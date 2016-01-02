@@ -49,6 +49,7 @@ public final class HttpDateU {
         private static final String HTTP_MILLI = "EEE, dd MMM yyyy HH:mm:ss.SSS zzz";
         private static final String HTTP_Z = "EEE, dd MMM yyyy HH:mm:ss 'GMT'";
 
+        public static final String DEFAULT2 = HTTP;
         public static final String DEFAULT = HTTP_MILLI;
     }
 }

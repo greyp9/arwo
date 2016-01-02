@@ -41,6 +41,14 @@ public final class CollectionU {
         return collectionTo;
     }
 
+    public static <T> Collection<T> move(final Collection<T> collectionTo, final Collection<T> collectionFrom) {
+        synchronized (collectionFrom) {
+            collectionTo.addAll(collectionFrom);
+            collectionFrom.clear();
+        }
+        return collectionTo;
+    }
+
     public static <T> void clear(final Collection<T> collection) {
         synchronized (collection) {
             collection.clear();

@@ -98,7 +98,7 @@ public class XedWrite {
         } else if (App.Action.CLIP_PASTE.equals(action)) {
             new OpClipPaste(request.getState().getClipboard()).paste(cursor);
         } else {
-            request.getAlerts().add(new Alert(Alert.Severity.WARN, message, token.toString()));
+            request.getAlerts().add(new Alert(Alert.Severity.WARN, message, token.toString(), null));
         }
         request.getSession().setDateModify(request.getHttpRequest().getDate());
         return location;
