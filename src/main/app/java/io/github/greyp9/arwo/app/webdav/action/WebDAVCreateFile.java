@@ -39,6 +39,7 @@ public class WebDAVCreateFile {
         final byte[] bytes = UTF8Codec.toBytes(content, charset);
         final int length = ByteU.length(bytes);
         // put data to remote
+        final FileX fileXDisplay = new FileX(Value.join("", request.getPath(), filename));
         final FileX fileX = new FileX(Value.join("", request.getPathURL(), URLCodec.encode(filename)));
         final WebDAVDataSource source = new WebDAVDataSource(request, connection);
         final int lstat = source.lstat(fileX.getPath());
@@ -46,10 +47,10 @@ public class WebDAVCreateFile {
             final String hash = HexCodec.encode(HashU.md5(bytes));
             source.write(bytes, connection.getURL() + fileX.getPath());
             alerts.add(new Alert(Alert.Severity.INFO, bundle.format(
-                    "SFTPHandlerPostMultipart.file.target", fileX.getPath(), length, hash)));
+                    "SFTPHandlerPostMultipart.file.target", fileXDisplay.getPath(), length, hash)));
         } else {
             alerts.add(new Alert(Alert.Severity.WARN, bundle.format(
-                    "SFTPHandlerPostMultipart.file.exists", fileX.getPath(), request.getServer())));
+                    "SFTPHandlerPostMultipart.file.exists", fileXDisplay.getPath(), request.getServer())));
         }
     }
 }

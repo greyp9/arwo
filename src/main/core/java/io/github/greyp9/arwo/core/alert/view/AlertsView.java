@@ -72,12 +72,12 @@ public class AlertsView {
         final Element form = ElementU.addElement(div, Html.FORM, null,
                 NTV.create(Html.METHOD, Html.POST, Html.ACTION, ""));
         final Element divButtons = ElementU.addElement(form, Html.DIV, null,
-                NTV.create(Html.STYLE, "float: right;"));
+                NTV.create(Html.STYLE, "float: right; clear: both;"));
         final String action = App.Action.ALERT;
         final String id = actions.getID();
         for (final String option : actions.getOptions()) {
             final SubmitToken token = new SubmitToken(App.Target.USER_STATE, action, option, id);
-            HtmlU.addButton(divButtons, bundle.getString(option), submitID, token.toString(), App.CSS.MENU, null);
+            HtmlU.addButton(divButtons, bundle.getString(option), submitID, token.toString(), App.CSS.ALERT, null);
         }
     }
 

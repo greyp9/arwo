@@ -57,11 +57,13 @@ public final class App {
         public static final String ACTIVE = "active";
         public static final String MENU = "menu";
         public static final String MENUS = "menus";
+        public static final String ALERT = "alert";
     }
 
     public static class Mode {
         public static final String CREATE = "create";
         public static final String EDIT = "edit";
+        public static final String DELETE = "delete";
         public static final String VIEW = "view";
         public static final String VIEW_GZ = "viewGZ";
         public static final String VIEW_ZIP = "viewZIP";

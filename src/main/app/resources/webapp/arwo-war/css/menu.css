@@ -32,6 +32,17 @@ font: menu;
 text-decoration: none;
 }
 
+a.alert, button.alert
+{
+margin: 0;
+border: solid thin black;
+padding: 0 4px;
+display: inline-block;
+color: ButtonText;
+font: menu;
+text-decoration: none;
+}
+
 a.active, button.active
 {
 background-color: Highlight;

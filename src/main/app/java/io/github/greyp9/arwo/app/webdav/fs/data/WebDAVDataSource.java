@@ -52,6 +52,12 @@ public class WebDAVDataSource {
         return sardine.list(url);
     }
 
+    public final void delete(final String path) throws IOException {
+        final Sardine sardine = connection.getConnection();
+        final String url = connection.getURL().toExternalForm() + path;
+        sardine.delete(url);
+    }
+
     @SuppressWarnings("PMD.UseConcurrentHashMap")
     public final Map<String, List<DavResource>> find(final String path) throws IOException {
         final Map<String, List<DavResource>> find = new TreeMap<String, List<DavResource>>();
@@ -95,7 +101,6 @@ public class WebDAVDataSource {
         }
     }
 
-    @SuppressWarnings("PMD.CloseResource")
     public final void write(final byte[] bytes, final String path) throws IOException {
         try {
             final Sardine sardine = connection.getConnection();

@@ -131,11 +131,9 @@ public class AppUserState {
         return textFilters;
     }
 
-/*
     public final DeferredActions getDeferredActions() {
         return deferredActions;
     }
-*/
 
     public final SubsystemCron getCron() {
         return cron;
@@ -215,8 +213,8 @@ public class AppUserState {
         final String action = token.getAction();
         final String object = token.getObject();
         final String object2 = token.getObject2();
-        final Collection<String> views = Arrays.asList(App.Mode.VIEW, App.Mode.EDIT, App.Mode.CREATE,
-                App.Mode.VIEW_GZ, App.Mode.VIEW_ZIP, App.Mode.VIEW_TGZ, App.Mode.VIEW_HEX);
+        final Collection<String> views = Arrays.asList(App.Mode.CREATE, App.Mode.EDIT, App.Mode.DELETE,
+                App.Mode.VIEW, App.Mode.VIEW_GZ, App.Mode.VIEW_ZIP, App.Mode.VIEW_TGZ, App.Mode.VIEW_HEX);
         final Properties properties = documentState.getProperties();
         final Bundle bundle = getBundle();
         final String message = bundle.getString("alert.action.not.implemented");
@@ -285,7 +283,7 @@ public class AppUserState {
     private void doClearCache() throws IOException {
         final ActionCacheClear action = new ActionCacheClear(cache);
         deferredActions.add(action);
-        final String message = getBundle().format("AppUserState.cache.clear.confirm");
+        final String message = getBundle().format("AppUserState.cache.clear.message");
         alerts.add(new Alert(Alert.Severity.INFO, message, null, action.getActions()));
     }
 

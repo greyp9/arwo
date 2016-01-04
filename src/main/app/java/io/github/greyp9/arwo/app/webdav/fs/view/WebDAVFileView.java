@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.app.core.view.gz.AppTGZView;
 import io.github.greyp9.arwo.app.core.view.hex.AppHexView;
 import io.github.greyp9.arwo.app.core.view.zip.AppZipView;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolder;
+import io.github.greyp9.arwo.app.webdav.action.WebDAVDeleteFile;
 import io.github.greyp9.arwo.app.webdav.connection.WebDAVConnectionResource;
 import io.github.greyp9.arwo.app.webdav.fs.core.WebDAVRequest;
 import io.github.greyp9.arwo.app.webdav.fs.data.WebDAVDataSource;
@@ -63,6 +64,7 @@ public class WebDAVFileView extends WebDAVView {
         // resource access (read versus write)
         final boolean isModeCreate = App.Mode.CREATE.equals(mode);
         final boolean isModeEdit = App.Mode.EDIT.equals(mode);
+        final boolean isModeDelete = App.Mode.DELETE.equals(mode);
         // resource interpret (gzip deflated content expected)
         final boolean isModeGZ = App.Mode.VIEW_GZ.equals(mode);
         final boolean isModeZIP = App.Mode.VIEW_ZIP.equals(mode);
@@ -78,6 +80,12 @@ public class WebDAVFileView extends WebDAVView {
             httpResponse = HttpResponseU.to302(".");  // go to containing folder
         } else if (isModeEdit) {
             httpResponse = new AppFileEditView(httpRequest, userState).addContentTo(html, metaFile, charset);
+        } else if (isModeDelete) {
+            final WebDAVDeleteFile action = new WebDAVDeleteFile(getRequest());
+            userState.getDeferredActions().add(action);
+            final String message = bundle.format("WebDAVFileView.file.delete.message", request.getPath());
+            userState.getAlerts().add(new Alert(Alert.Severity.INFO, message, null, action.getActions()));
+            httpResponse = HttpResponseU.to302(".");
         } else if (isProperties) {
             httpResponse = null;
         } else if (isModeZIP) {

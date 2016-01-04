@@ -24,8 +24,8 @@ public class ActionCacheClear extends DeferredAction {
     }
 
     @Override
-    public final void doAction(final String instruction, final Bundle bundle, final Alerts alerts) {
-        if (Const.CONFIRM.equals(instruction)) {
+    public final void doAction(final String option, final Bundle bundle, final Alerts alerts) {
+        if (Const.CONFIRM.equals(option)) {
             try {
                 final long size = cache.getSize();
                 cache.clear();
