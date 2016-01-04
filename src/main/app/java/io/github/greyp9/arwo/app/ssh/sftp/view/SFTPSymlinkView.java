@@ -57,21 +57,21 @@ public class SFTPSymlinkView extends SFTPView {
         final SFTPRequest request = getRequest();
         final AppUserState userState = getUserState();
         final SSHConnectionResource resource = getResource();
-        final SSHConnection sshConnection = resource.getSSHConnection();
+        final SSHConnection connection = resource.getConnection();
         final UserExecutor userExecutor = userState.getUserExecutor();
         final ExecutorService executorStream = userExecutor.getExecutorStream();
-        final SSHConnectionX sshConnectionX = new SSHConnectionX(sshConnection, executorStream);
+        final SSHConnectionX sshConnectionX = new SSHConnectionX(connection, executorStream);
         final ResourceCache cache = userState.getCache();
         final String path = request.getPath();
         // if disconnected, resource will only be fetched if no cached copy is available
         if (viewState.isConnected()) {
-            final SFTPDataSource source = new SFTPDataSource(request, sshConnection);
+            final SFTPDataSource source = new SFTPDataSource(request, connection);
             final Collection<SFTPv3DirectoryEntry> directoryEntries = source.lsSymlink(request.getPath());
             rowSet = new SFTPFolder(null, directoryEntries, metaData, false, sshConnectionX).getRowSet();
         } else if (cache.containsRowSet(path)) {
             rowSet = cache.getRowSet(path);
         } else {
-            final SFTPDataSource source = new SFTPDataSource(request, sshConnection);
+            final SFTPDataSource source = new SFTPDataSource(request, connection);
             final Collection<SFTPv3DirectoryEntry> directoryEntries = source.lsSymlink(request.getPath());
             rowSet = new SFTPFolder(null, directoryEntries, metaData, false, sshConnectionX).getRowSet();
             cache.putRowSet(path, rowSet);

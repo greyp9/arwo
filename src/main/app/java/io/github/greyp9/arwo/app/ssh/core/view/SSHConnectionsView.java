@@ -83,7 +83,7 @@ public class SSHConnectionsView {
     }
 
     private void createRow(final RowSet rowSet, final String baseURI, final ConnectionResource resource) {
-        final SSHConnection sshConnection = ((SSHConnectionResource) resource).getSSHConnection();
+        final SSHConnection sshConnection = ((SSHConnectionResource) resource).getConnection();
         final String href = PathU.toDir(baseURI, resource.getName());
         final String hashCode = Integer.toHexString(sshConnection.hashCode());
         final SubmitToken tokenClose = new SubmitToken(

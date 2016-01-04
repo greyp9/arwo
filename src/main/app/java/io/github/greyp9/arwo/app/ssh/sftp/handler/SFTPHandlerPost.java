@@ -103,9 +103,9 @@ public class SFTPHandlerPost {
         final String action = token.getAction();
         final String object = token.getObject();
         if (App.Action.FILE_CREATE.equals(action)) {
-            new SFTPCreateFile(request, getSSHConnection()).apply(httpArguments);
+            new SFTPCreateFile(request, getConnection()).apply(httpArguments);
         } else if (App.Action.FILE_UPDATE.equals(action)) {
-            new SFTPUpdateFile(request, getSSHConnection()).apply(httpArguments);
+            new SFTPUpdateFile(request, getConnection()).apply(httpArguments);
         } else if (App.Action.COMMAND.equals(action)) {
             location = PathU.toDir(httpRequest.getContextPath(), "ssh", request.getServer());
         } else if (App.Action.TOGGLE.equals(action)) {
@@ -120,10 +120,10 @@ public class SFTPHandlerPost {
         return location;
     }
 
-    private SSHConnection getSSHConnection() throws IOException {
+    private SSHConnection getConnection() throws IOException {
         final SSHConnectionFactory factory = new SSHConnectionFactory(httpRequest, userState, bundle, alerts);
         final SSHConnectionResource resource = (SSHConnectionResource)
                 userState.getSSH().getCache().getResource(request.getServer(), factory);
-        return resource.getSSHConnection();
+        return resource.getConnection();
     }
 }

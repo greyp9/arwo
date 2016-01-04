@@ -8,15 +8,15 @@ import java.util.Date;
 
 public class SSHConnectionResource implements ConnectionResource, Comparable<ConnectionResource> {
     private final String name;
-    private final SSHConnection sshConnection;
+    private final SSHConnection connection;
 
-    public final SSHConnection getSSHConnection() {
-        return sshConnection;
+    public final SSHConnection getConnection() {
+        return connection;
     }
 
-    public SSHConnectionResource(final String name, final SSHConnection sshConnection) {
+    public SSHConnectionResource(final String name, final SSHConnection connection) {
         this.name = name;
-        this.sshConnection = sshConnection;
+        this.connection = connection;
     }
 
     @Override
@@ -26,12 +26,12 @@ public class SSHConnectionResource implements ConnectionResource, Comparable<Con
 
     @Override
     public final Date getDate() {
-        return sshConnection.getDateLast();
+        return connection.getDateLast();
     }
 
     @Override
     public final void close() {
-        sshConnection.getConnection().close();
+        connection.getConnection().close();
     }
 
     @Override

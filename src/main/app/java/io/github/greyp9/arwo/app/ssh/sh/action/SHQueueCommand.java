@@ -46,7 +46,7 @@ public class SHQueueCommand {
         if (resource == null) {
             alerts.add(new Alert(Alert.Severity.WARN, bundle.format("SFTPHandlerPostMultipart.no.connect", server)));
         } else {
-            location = doAction(httpArguments, resource.getSSHConnection());
+            location = doAction(httpArguments, resource.getConnection());
         }
         return location;
     }

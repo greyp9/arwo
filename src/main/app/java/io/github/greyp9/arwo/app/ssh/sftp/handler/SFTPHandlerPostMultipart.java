@@ -68,7 +68,7 @@ public class SFTPHandlerPostMultipart {
             alerts.add(new Alert(Alert.Severity.WARN, bundle.format("SFTPHandlerPostMultipart.no.file", server)));
         } else {
             doPostUploadFile(mimePart, filename, resource);
-            resource.getSSHConnection().update(httpRequest.getDate());
+            resource.getConnection().update(httpRequest.getDate());
         }
     }
 
@@ -79,7 +79,7 @@ public class SFTPHandlerPostMultipart {
                 "SFTPHandlerPostMultipart.file.source", filename)));
         // put data to remote
         final FileX fileX = new FileX(Value.join("", request.getPath(), filename));
-        final SFTPDataSource source = new SFTPDataSource(request, resource.getSSHConnection());
+        final SFTPDataSource source = new SFTPDataSource(request, resource.getConnection());
         source.write(bytes, fileX.getFolder(), fileX.getFilename());
         // info alert
         final String hash = HexCodec.encode(HashU.md5(bytes));

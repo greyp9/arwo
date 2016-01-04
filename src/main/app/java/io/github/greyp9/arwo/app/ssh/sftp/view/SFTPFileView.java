@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.app.core.view.gz.AppTGZView;
 import io.github.greyp9.arwo.app.core.view.hex.AppHexView;
 import io.github.greyp9.arwo.app.core.view.zip.AppZipView;
 import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
+import io.github.greyp9.arwo.app.ssh.sftp.action.SFTPDeleteFile;
 import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPDataSource;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolder;
@@ -63,6 +64,7 @@ public class SFTPFileView extends SFTPView {
         // resource access (read versus write)
         final boolean isModeCreate = App.Mode.CREATE.equals(mode);
         final boolean isModeEdit = App.Mode.EDIT.equals(mode);
+        final boolean isModeDelete = App.Mode.DELETE.equals(mode);
         // resource interpret (gzip deflated content expected)
         final boolean isModeGZ = App.Mode.VIEW_GZ.equals(mode);
         final boolean isModeZIP = App.Mode.VIEW_ZIP.equals(mode);
@@ -78,6 +80,12 @@ public class SFTPFileView extends SFTPView {
             httpResponse = HttpResponseU.to302(".");  // go to containing folder
         } else if (isModeEdit) {
             httpResponse = new AppFileEditView(httpRequest, userState).addContentTo(html, metaFile, charset);
+        } else if (isModeDelete) {
+            final SFTPDeleteFile action = new SFTPDeleteFile(getRequest());
+            userState.getDeferredActions().add(action);
+            final String message = bundle.format("WebDAVFileView.file.delete.message", request.getPath());
+            userState.getAlerts().add(new Alert(Alert.Severity.INFO, message, null, action.getActions()));
+            httpResponse = HttpResponseU.to302(".");
         } else if (isProperties) {
             httpResponse = null;
         } else if (isModeZIP) {
@@ -96,7 +104,7 @@ public class SFTPFileView extends SFTPView {
         MetaFile metaFile;
         final SFTPRequest request = getRequest();
         final SSHConnectionResource resource = getResource();
-        final SFTPDataSource source = new SFTPDataSource(request, resource.getSSHConnection());
+        final SFTPDataSource source = new SFTPDataSource(request, resource.getConnection());
         final ResourceCache cache = getUserState().getCache();
         final String path = request.getPath();
         // if disconnected, resource will only be fetched if no cached copy is available

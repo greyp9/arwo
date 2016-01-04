@@ -90,22 +90,22 @@ public class SFTPFolderView extends SFTPView {
         final SFTPRequest request = getRequest();
         final AppUserState userState = getUserState();
         final SSHConnectionResource resource = getResource();
-        final SSHConnection sshConnection = resource.getSSHConnection();
+        final SSHConnection connection = resource.getConnection();
         final UserExecutor userExecutor = userState.getUserExecutor();
         final ExecutorService executorStream = userExecutor.getExecutorStream();
-        final SSHConnectionX sshConnectionX = new SSHConnectionX(sshConnection, executorStream);
+        final SSHConnectionX sshConnectionX = new SSHConnectionX(connection, executorStream);
         final ResourceCache cache = userState.getCache();
         final String path = request.getPath();
         // if disconnected, resource will only be fetched if no cached copy is available
         if (viewState.isConnected()) {
-            final SFTPDataSource source = new SFTPDataSource(request, sshConnection);
+            final SFTPDataSource source = new SFTPDataSource(request, connection);
             final Collection<SFTPv3DirectoryEntry> directoryEntries = source.ls(path);
             rowSet = new SFTPFolder(null, directoryEntries, metaData, true, sshConnectionX).getRowSet();
             cache.putRowSet(path, rowSet);
         } else if (cache.containsRowSet(path)) {
             rowSet = cache.getRowSet(path);
         } else {
-            final SFTPDataSource source = new SFTPDataSource(request, sshConnection);
+            final SFTPDataSource source = new SFTPDataSource(request, connection);
             final Collection<SFTPv3DirectoryEntry> directoryEntries = source.ls(path);
             rowSet = new SFTPFolder(null, directoryEntries, metaData, true, sshConnectionX).getRowSet();
             cache.putRowSet(path, rowSet);
@@ -139,12 +139,12 @@ public class SFTPFolderView extends SFTPView {
         final SFTPRequest request = getRequest();
         final AppUserState userState = getUserState();
         final SSHConnectionResource resource = getResource();
-        final SSHConnection sshConnection = resource.getSSHConnection();
-        final SFTPDataSource source = new SFTPDataSource(request, sshConnection);
+        final SSHConnection connection = resource.getConnection();
+        final SFTPDataSource source = new SFTPDataSource(request, connection);
         final String path = request.getPath();
         final UserExecutor userExecutor = userState.getUserExecutor();
         final ExecutorService executorStream = userExecutor.getExecutorStream();
-        final SSHConnectionX sshConnectionX = new SSHConnectionX(sshConnection, executorStream);
+        final SSHConnectionX sshConnectionX = new SSHConnectionX(connection, executorStream);
         final Map<String, Collection<SFTPv3DirectoryEntry>> map = source.find(path);
         for (final Map.Entry<String, Collection<SFTPv3DirectoryEntry>> entry : map.entrySet()) {
             final String folder = entry.getKey();

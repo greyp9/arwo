@@ -28,7 +28,7 @@ public class SFTPResourceView {
 
     public final HttpResponse doGetResource(final String path) throws IOException {
         HttpResponse httpResponse;
-        final SFTPDataSource source = new SFTPDataSource(request, resource.getSSHConnection());
+        final SFTPDataSource source = new SFTPDataSource(request, resource.getConnection());
         final Integer type = SFTPFolder.toType(source.lstat(path));
         final boolean isFolder = type.equals(App.FS.S_IFDIR);
         final boolean isFile = type.equals(App.FS.S_IFREG);

@@ -87,7 +87,7 @@ public class SSHConnectionView {
     private void addProperties(final NameTypeValues properties) throws IOException {
         if (resource != null) {
             properties.add(new NameTypeValue("name", resource.getName()));
-            addProperties(properties, resource.getSSHConnection());
+            addProperties(properties, resource.getConnection());
         }
     }
 

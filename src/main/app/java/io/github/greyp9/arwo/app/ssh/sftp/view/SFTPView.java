@@ -155,7 +155,7 @@ public abstract class SFTPView {
     }
 
     private NameTypeValues getFileProperties() throws IOException {
-        final SFTPDataSource source = new SFTPDataSource(request, resource.getSSHConnection());
+        final SFTPDataSource source = new SFTPDataSource(request, resource.getConnection());
         return source.properties(request.getPath());
     }
 
