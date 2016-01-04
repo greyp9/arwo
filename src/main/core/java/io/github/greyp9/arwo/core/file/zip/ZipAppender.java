@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.file.zip;
 
+import io.github.greyp9.arwo.core.file.FileU;
 import io.github.greyp9.arwo.core.file.meta.FileMetaData;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.io.StreamU;
@@ -33,7 +34,7 @@ public class ZipAppender {
             success = fileZipNew.renameTo(fileZip);
         } finally {
             if (fileZipNew.exists()) {
-                success |= fileZipNew.delete();
+                success |= FileU.delete(fileZipNew);
             }
         }
         return success;

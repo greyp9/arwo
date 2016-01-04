@@ -29,6 +29,11 @@ public class LFSDataSource {
         return FileU.listFiles(new File(folderRoot, path));
     }
 
+    public final void delete(final String path) throws IOException {
+        final File file = new File(folderRoot, path);
+        FileU.delete(file);
+    }
+
     public final File exists(final String path) {
         final File file = new File(folderRoot, path);
         return (file.exists() ? file : null);
