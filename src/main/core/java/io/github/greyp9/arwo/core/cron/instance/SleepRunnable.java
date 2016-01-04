@@ -21,8 +21,8 @@ public class SleepRunnable extends CronRunnable {
 
     @Override
     public final void run() {
+        logger.finest("START");
         final RowTyped row = getParams().getRow();
-        logger.info("START");
         final Date dateStart = new Date();
         row.update("dateStart", dateStart);
 
@@ -30,9 +30,8 @@ public class SleepRunnable extends CronRunnable {
         final Date dateUntil = DurationU.add(dateStart, DateU.Const.TZ_GMT, duration);
         final boolean interrupted = ThreadU.sleepUntil(dateUntil);
 
-        logger.info(String.format("FINISH(interrupted=%s)", interrupted));
-        final Date dateFinish = new Date();
-        row.update("duration", DurationU.duration(dateStart, dateFinish));
+        row.update("duration", DurationU.duration(dateStart, new Date()));
         row.update("result", 0);
+        logger.finest(String.format("FINISH(interrupted=%s)", interrupted));
     }
 }

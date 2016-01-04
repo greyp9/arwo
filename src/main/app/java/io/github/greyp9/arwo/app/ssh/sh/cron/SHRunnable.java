@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.cron.core.CronParams;
 import io.github.greyp9.arwo.core.cron.core.CronRunnable;
+import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.http.HttpRequest;
@@ -16,6 +17,7 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.naming.AppNaming;
 import io.github.greyp9.arwo.core.resource.PathU;
+import io.github.greyp9.arwo.core.table.type.RowTyped;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.xml.ElementU;
@@ -39,9 +41,11 @@ public class SHRunnable extends CronRunnable {
 
     @Override
     public final void run() {
-        logger.info("START");
-        //final Date dateStart = new Date();
-        //params.getRow().update("dateStart", dateStart);
+        logger.finest("START");
+        final RowTyped row = getParams().getRow();
+        final Date dateStart = new Date();
+        row.update("dateStart", dateStart);
+
         // initialize
         final String server = ElementU.getAttribute(getParams().getElement(), "server");
         final String command = ElementU.getAttribute(getParams().getElement(), "command");
@@ -60,10 +64,10 @@ public class SHRunnable extends CronRunnable {
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         }
-        // wrap up
-        //final Date dateFinish = new Date();
-        //params.getRow().update("duration", DurationU.duration(dateStart, dateFinish));
-        logger.info("FINISH");
+
+        row.update("duration", DurationU.duration(dateStart, new Date()));
+        row.update("result", 0);
+        logger.finest("FINISH");
     }
 
     private void putHttpResponse(final HttpResponse httpResponse, final AppUserState userState) throws IOException {
