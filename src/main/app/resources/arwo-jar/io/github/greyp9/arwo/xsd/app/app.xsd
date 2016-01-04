@@ -14,6 +14,7 @@
             <xsd:element name='webdavServers' type='app:webdavServersType'/>
             <xsd:element name='cron' type='app:cronType'/>
             <xsd:element name='documents' type='app:documentsType'/>
+            <xsd:element name='preferences' type='app:preferencesType'/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -68,7 +69,7 @@
             <xsd:element name='port' type='xsd:string'/>
             <xsd:element name='user' type='xsd:string'/>
             <xsd:element name='password' type='xsd:string'/>
-            <xsd:element name='certificate' type='xsd:base64Binary'/>
+            <xsd:element name='certificate' type='xsd:string'/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -131,6 +132,26 @@
             <xsd:element name='xmlPath' type='xsd:string'/>
             <xsd:element name='xsdPath' type='xsd:string'/>
             <xsd:element name='xsltPath' type='xsd:string'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name="preferencesType">
+        <xsd:sequence>
+            <xsd:element name='mimeTypes' type='app:mimeTypesType'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name='mimeTypesType'>
+        <xsd:sequence>
+            <xsd:element name='mimeType' type='app:mimeTypeType' minOccurs='0' maxOccurs='unbounded'/>
+            <xsd:element name='mimeDefaultType' type='xsd:string'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name='mimeTypeType'>
+        <xsd:sequence>
+            <xsd:element name='extension' type='xsd:string'/>
+            <xsd:element name='type' type='xsd:string'/>
         </xsd:sequence>
     </xsd:complexType>
 

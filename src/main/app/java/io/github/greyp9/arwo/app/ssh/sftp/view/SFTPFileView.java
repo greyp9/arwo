@@ -17,6 +17,7 @@ import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.codec.gz.GZipCodec;
+import io.github.greyp9.arwo.core.config.Preferences;
 import io.github.greyp9.arwo.core.date.HttpDateU;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.http.Http;
@@ -123,12 +124,15 @@ public class SFTPFileView extends SFTPView {
     public final HttpResponse doGetFile(
             final MetaFile file, final String charset, final boolean isGZ) throws IOException {
         byte[] bytes = getBytes(file, isGZ);
+        final String path = file.getMetaData().getPath();
         final String lastModified = HttpDateU.toHttpZ(new Date(file.getMetaData().getLastModified()));
         final NameTypeValues headers = new NameTypeValues(new NameTypeValue(Http.Header.LAST_MODIFIED, lastModified));
         final TextFilters textFilters = getUserState().getTextFilters();
         if ((textFilters.getIncludes().isEmpty()) && (textFilters.getExcludes().isEmpty())) {
+            final Preferences preferences =  new Preferences(getUserState().getConfig());
             final String mimeTypeOverride = getUserState().getProperties().getProperty(App.Action.MIME_TYPE);
-            final String mimeType = Value.defaultOnNull(mimeTypeOverride, Http.Mime.TEXT_PLAIN_UTF8);
+            final String mimeTypePrefs = Value.defaultOnNull(mimeTypeOverride, preferences.getMIMEType(path));
+            final String mimeType = Value.defaultOnEmpty(mimeTypePrefs, Http.Mime.TEXT_PLAIN_UTF8);
             headers.add(new NameTypeValue(Http.Header.CONTENT_TYPE, mimeType));
         } else if (UTF8Codec.Const.UTF16.equals(charset)) {
             headers.add(new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_PLAIN_UTF16));

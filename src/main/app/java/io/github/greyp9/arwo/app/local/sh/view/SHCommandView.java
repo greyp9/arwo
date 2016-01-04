@@ -64,7 +64,7 @@ public class SHCommandView extends SHView {
         final NameTypeValues ntv = NameTypeValuesU.create("command.commandType.command", command);
         final XedCursor cursor = action.getCursor();
         final ValueInstance valueInstanceIn = ValueInstance.create(cursor.getTypeInstance(), ntv);
-        new OpUpdate(null, action.getXed().getXsdTypes()).apply(cursor.getElement(), valueInstanceIn);
+        new OpUpdate(null, action.getXed()).apply(cursor.getElement(), valueInstanceIn);
         // command input form
         final String qname = cursor.getTypeInstance().getQName().toString();
         final String submitID = userState.getSubmitID();

@@ -37,6 +37,7 @@ import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.vm.exec.UserExecutor;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
+import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.state.XedUserState;
 
 import java.io.File;
@@ -169,6 +170,10 @@ public class AppUserState {
 
     public final Locus getLocus() {
         return documentState.getLocus();
+    }
+
+    public final Xed getConfig() throws IOException {
+        return documentState.getSession("/app").getXed();
     }
 
     public final Properties getProperties() {

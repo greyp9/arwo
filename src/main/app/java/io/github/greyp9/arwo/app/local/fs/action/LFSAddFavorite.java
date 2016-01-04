@@ -42,7 +42,7 @@ public class LFSAddFavorite {
                     "lfs-favorite.lfsFavoriteType.resource", resource,
                     "lfs-favorite.lfsFavoriteType.comment", comment);
             final ValueInstance valueInstance = ValueInstance.create(typeInstance, ntv);
-            new OpCreate(null, session.getXed().getXsdTypes()).apply(cursorFavorites.getElement(), valueInstance);
+            new OpCreate(null, session.getXed()).apply(cursorFavorites.getElement(), valueInstance);
             final XedRequest xedRequest = new XedRequest(request.getHttpRequest(), session, documentState);
             new SessionSave(xedRequest, request.getBundle(), request.getAlerts()).save();
         }

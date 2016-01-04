@@ -4,6 +4,8 @@ import io.github.greyp9.arwo.core.lang.CharU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
+import io.github.greyp9.arwo.core.xed.model.Xed;
+import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.transform.ValueInstanceTransform;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xsd.core.XsdU;
@@ -14,7 +16,6 @@ import io.github.greyp9.arwo.core.xsd.document.DocumentFactoryU;
 import io.github.greyp9.arwo.core.xsd.instance.ChoiceTypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstanceX;
-import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -24,11 +25,11 @@ import java.util.Collection;
 
 public class OpCreate {
     private final char[] secret;
-    private final XsdTypes xsdTypes;
+    private final Xed xed;
 
-    public OpCreate(final char[] secret, final XsdTypes xsdTypes) {
+    public OpCreate(final char[] secret, final Xed xed) {
         this.secret = CharU.copy(secret);
-        this.xsdTypes = xsdTypes;
+        this.xed = xed;
     }
 
     public final Element apply(final Element element, final ValueInstance valueInstanceIn) throws IOException {
@@ -41,6 +42,7 @@ public class OpCreate {
         for (final TypeInstance typeInstanceIt : typeInstances) {
             apply(create, typeInstance, typeInstanceIt, nameTypeValues);
         }
+        new OpOrder().apply(new XedNav(xed).find(element));  // reorder children to match xsd
         return create;
     }
 
@@ -93,7 +95,7 @@ public class OpCreate {
             final Element create, final NameTypeValue nameTypeValue, final ChoiceTypeInstance choiceInstance) {
         final String value = nameTypeValue.getValueS();
         final TypeInstance typeInstance = choiceInstance.getInstance(value);
-        final Document document = DocumentFactoryU.generateDocument(xsdTypes, typeInstance, true);
+        final Document document = DocumentFactoryU.generateDocument(xed.getXsdTypes(), typeInstance, true);
         ElementU.importNode(document.getDocumentElement(), create);
     }
 }
