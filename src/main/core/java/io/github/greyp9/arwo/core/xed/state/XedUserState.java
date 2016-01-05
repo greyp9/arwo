@@ -104,6 +104,7 @@ public class XedUserState {
         this.properties = new Properties();
         this.menuSystem = new MenuSystem(submitID, new XedMenuFactory());
         this.clipboard = new XedClipboard();
+        applyLocale();
     }
 
     public final void applyGet(final NameTypeValues nameTypeValues) throws IOException {
