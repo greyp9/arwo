@@ -45,7 +45,7 @@ public final class DocumentU {
             final Transformer transformer = factory.newTransformer();
             //transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
             //transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");  // i18n
             //transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
             //transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
             transformer.transform(source, result);
@@ -76,12 +76,12 @@ public final class DocumentU {
         final TransformerFactory factory = TransformerFactory.newInstance();
         try {
             final Transformer transformer = factory.newTransformer();
-            transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            transformer.setOutputProperty(OutputKeys.METHOD, "xml");  // i18n
+            transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");  // i18n
+            transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");  // i18n
             transformer.setOutputProperty(OutputKeys.DOCTYPE_PUBLIC, documentType.getPublicId());
             transformer.setOutputProperty(OutputKeys.DOCTYPE_SYSTEM, documentType.getSystemId());
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");
+            transformer.setOutputProperty(OutputKeys.INDENT, "yes");  // i18n
             transformer.transform(source, result);
             return bos.toByteArray();
         } catch (TransformerException e) {

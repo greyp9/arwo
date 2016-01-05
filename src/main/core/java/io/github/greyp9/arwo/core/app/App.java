@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.core.glyph.UTF16;
 
 import javax.xml.namespace.QName;
 
+// i18nf
 public final class App {
 
     private App() {
@@ -55,9 +56,19 @@ public final class App {
 
     public static class CSS {
         public static final String ACTIVE = "active";
+        public static final String ALERT = "alert";
+        public static final String DIALOG = "dialog";
+        public static final String FOOTER = "footer";
+        public static final String HEADER = "header";
+        public static final String LABEL = "label";
+        public static final String LEVEL = "level";
         public static final String MENU = "menu";
         public static final String MENUS = "menus";
-        public static final String ALERT = "alert";
+        public static final String NOTIFICATION = "notification";
+        public static final String NOTIFICATIONS = "notifications";
+        public static final String STATE = "state";
+        public static final String TEXT = "text";
+        public static final String TIMESTAMP = "timestamp";
     }
 
     public static class Mode {

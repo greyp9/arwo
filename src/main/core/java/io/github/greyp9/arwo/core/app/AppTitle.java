@@ -14,7 +14,7 @@ public class AppTitle {
     }
 
     public final String getText() {
-        return Value.join(" - ", (Object[]) tokens);
+        return Value.join(" - ", (Object[]) tokens);  // i18n
     }
 
     public static final class Factory {

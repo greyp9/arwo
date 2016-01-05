@@ -23,18 +23,18 @@ public class AppHtml {
     }
 
     private void fixupTitle(final Document xhtml, final AppTitle appTitle) throws IOException {
-        final Element title = new XPather(xhtml).getElement("/html/head/title");
+        final Element title = new XPather(xhtml).getElement("/html/head/title");  // i18n
         ElementU.setTextContent(title, appTitle.getText());
     }
 
     private void fixupContext(final Document xhtml) throws IOException {
         final XPather xpather = new XPather(xhtml);
-        final String[] xpaths = {"//@href", "//@src"};
+        final String[] xpaths = {"//@href", "//@src"};  // i18n
         for (final String xpath : xpaths) {
             final List<Attr> attrs = xpather.getAttributes(xpath);
             for (final Attr attr : attrs) {
                 //attr.setValue(attr.getValue().replace("${CONTEXT}/css", "/css-static"));  // css dev hook
-                attr.setValue(attr.getValue().replace("${CONTEXT}", httpRequest.getContextPath()));
+                attr.setValue(attr.getValue().replace("${CONTEXT}", httpRequest.getContextPath()));  // i18n
             }
         }
     }

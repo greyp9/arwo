@@ -57,7 +57,7 @@ public final class ManifestU {
     }
 
     private static class Const {
-        public static final String BUILD = "Implementation-Build";
-        public static final String VERSION = "Implementation-Version";
+        public static final String BUILD = "Implementation-Build";  // i18n
+        public static final String VERSION = "Implementation-Version";  // i18n
     }
 }

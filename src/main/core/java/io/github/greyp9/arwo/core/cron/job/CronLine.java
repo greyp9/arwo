@@ -67,7 +67,7 @@ public class CronLine {
 
         private static final int CRON_ENTRY_TOKENS = 5;
 
-        private static final String PATTERN_TOKEN = "(\\S+)\\s+";
+        private static final String PATTERN_TOKEN = "(\\S+)\\s+";  // i18n
         private static final String PATTERN_LINE = StringU.create(CRON_ENTRY_TOKENS, PATTERN_TOKEN) + "(.*)";
     }
 }

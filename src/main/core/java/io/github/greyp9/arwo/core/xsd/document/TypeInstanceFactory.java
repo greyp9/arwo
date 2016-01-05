@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.xsd.document;
 
 import io.github.greyp9.arwo.core.date.DateU;
+import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.date.XsdDateU;
 import io.github.greyp9.arwo.core.lang.NumberU;
 import io.github.greyp9.arwo.core.lang.StringU;
@@ -144,7 +145,7 @@ public class TypeInstanceFactory {  // NOPMD
     public static class Const {
         private static final Date DATE_DEFAULT = new Date(0L);
         private static final String BOOLEAN_DEFAULT = Boolean.FALSE.toString();
-        private static final String DURATION_DEFAULT = "PT0S";
+        private static final String DURATION_DEFAULT = DurationU.Const.ZERO_SECONDS;
         private static final String LONG_DEFAULT = Long.toString(0L);
         private static final String QNAME_DEFAULT = "xmlns:qname";
         private static final String STRING_DEFAULT = "";

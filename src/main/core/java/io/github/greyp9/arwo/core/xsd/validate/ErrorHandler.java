@@ -38,19 +38,19 @@ public class ErrorHandler extends org.xml.sax.helpers.DefaultHandler {
 
     public final void warning(final SAXParseException e) throws SAXException {
         if (!checkWhiteList(e, excludes)) {
-            warnings.add(message(e, "WARN"));
+            warnings.add(message(e, "WARN"));  // i18n
         }
     }
 
     public final void error(final SAXParseException e) throws SAXException {
         if (!checkWhiteList(e, excludes)) {
-            errors.add(message(e, "ERROR"));
+            errors.add(message(e, "ERROR"));  // i18n
         }
     }
 
     public final void fatalError(final SAXParseException e) throws SAXException {
         if (!checkWhiteList(e, excludes)) {
-            fatals.add(message(e, "FATAL"));
+            fatals.add(message(e, "FATAL"));  // i18n
         }
     }
 

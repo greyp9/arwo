@@ -23,7 +23,7 @@ public class SardineFactory {
     }
 
     private Sardine createConnectionNN(final String certificate) throws IOException {
-        final TLSContext tlsContext = new TLSContextFactory().create(certificate, "TLS");
+        final TLSContext tlsContext = new TLSContextFactory().create(certificate, Const.TLS);
         final HostnameVerifier verifier = new TrustAllHostnameVerifier();
         return new SardineImpl() {
             @Override
@@ -37,5 +37,9 @@ public class SardineFactory {
                 return factory;
             }
         };
+    }
+
+    private static class Const {
+        private static final String TLS = "TLS";  // i18n
     }
 }

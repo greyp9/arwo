@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.i18n;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.file.find.FindInFolderQuery;
 import io.github.greyp9.arwo.core.io.StreamU;
+import io.github.greyp9.arwo.core.lang.SystemU;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -41,10 +42,14 @@ public class ScanI18n {
         for (String string : strings) {
             logger.info(string);
         }
+        logger.info(String.format("[%d]", strings.size()));
     }
 
     private void scanFile(File file) throws IOException {
         String source = UTF8Codec.toString(StreamU.read(file));
+        if (source.contains("i18nf")) {
+            return;
+        }
         final BufferedReader reader = new BufferedReader(new StringReader(source));
         boolean moreData = true;
         while (moreData) {
@@ -52,14 +57,17 @@ public class ScanI18n {
             if (line == null) {
                 moreData = false;
             } else {
-                scanLine(line);
+                scanLine(file, line);
             }
         }
     }
 
-    private void scanLine(String line) {
+    private void scanLine(File file, String line) {
         boolean ok = true;
         if (line.contains("i18n")) {
+            return;
+        }
+        if (line.contains("@SuppressWarnings")) {
             return;
         }
         final Pattern pattern = Pattern.compile("\"(.*?)\"");
@@ -67,7 +75,9 @@ public class ScanI18n {
         while (matcher.find()) {
             ok &= scanLiteralString(line, matcher.start(1), matcher.group(1));
             if (!ok) {
-                strings.add(matcher.group(1));
+                strings.add(String.format("[%s][%s]", SystemU.unresolve(file.getPath()), matcher.group(1)));
+                //strings.add(SystemU.unresolve(file.getPath()));
+                //strings.add(matcher.group(1));
             }
         }
     }
@@ -87,7 +97,19 @@ public class ScanI18n {
 
     private boolean scanLiteralString(String line, int start, String s) {
         boolean ok = false;
+        if (s.equals("")) {
+            ok = true;
+        }
         if (s.contains(".")) {
+            ok = true;
+        }
+        if (s.contains("%s")) {
+            ok = true;
+        }
+        if (s.contains("%d")) {
+            ok = true;
+        }
+        if (s.contains("checkstyle:")) {
             ok = true;
         }
         final int commentStart = line.indexOf("//");

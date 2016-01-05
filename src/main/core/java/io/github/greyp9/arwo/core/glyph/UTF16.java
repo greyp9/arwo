@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.glyph;
 
+// i18nf
 public final class UTF16 {
     public static final String ARROW_DOWN = "\u25bc";  // ▼
     public static final String ARROW_FIRST = "\u25c0\u25c0";

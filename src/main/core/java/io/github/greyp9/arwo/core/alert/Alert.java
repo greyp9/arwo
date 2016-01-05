@@ -53,21 +53,21 @@ public class Alert {
     }
 
     public final String toString() {
-        return String.format("[%s] [%s] %s %s", date, severity, message, detail);
+        return String.format("[%s] [%s] %s %s", date, severity, message, detail);  // i18n
     }
 
     public final String getIcon() {
         String text;
         if (severity == Severity.QUESTION) {
-            text = "[?]";
+            text = "[?]";  // i18n
         } else if (severity == Severity.INFO) {
-            text = "[i]";
+            text = "[i]";  // i18n
         } else if (severity == Severity.WARN) {
-            text = "[!]";
+            text = "[!]";  // i18n
         } else if (severity == Severity.ERR) {
-            text = "[X]";
+            text = "[X]";  // i18n
         } else {
-            text = "[ ]";
+            text = "[ ]";  // i18n
         }
         return text;
     }

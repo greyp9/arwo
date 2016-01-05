@@ -22,19 +22,19 @@ public class ArgumentsRunnable extends CronRunnable {
 
     @Override
     public final void run() {
-        logger.finest("START");
+        logger.finest("START");  // i18n
         final RowTyped row = getParams().getRow();
         final Date dateStart = new Date();
-        row.update("dateStart", dateStart);
+        row.update("dateStart", dateStart);  // i18n
 
-        final String arguments = ElementU.getAttribute(getParams().getCronJob().getElement(), "arguments");
+        final String arguments = ElementU.getAttribute(getParams().getCronJob().getElement(), "arguments");  // i18n
         final NameTypeValues httpArguments = HttpArguments.toArguments(arguments);
         for (final NameTypeValue httpArgument : httpArguments) {
             logger.finest(httpArgument.toString());
         }
 
-        row.update("duration", DurationU.duration(dateStart, new Date()));
-        row.update("result", 0);
-        logger.finest("FINISH");
+        row.update("duration", DurationU.duration(dateStart, new Date()));  // i18n
+        row.update("result", 0);  // i18n
+        logger.finest("FINISH");  // i18n
     }
 }

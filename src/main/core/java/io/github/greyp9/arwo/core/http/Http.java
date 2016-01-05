@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.http;
 
+// i18nf
 public final class Http {
 
     private Http() {

@@ -8,6 +8,7 @@ import org.w3c.dom.Element;
 
 import java.io.IOException;
 
+// i18nf
 public class CursorWebDAV {
     private final XedCursor cursor;
 

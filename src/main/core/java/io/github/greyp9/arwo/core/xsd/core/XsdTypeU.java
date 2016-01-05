@@ -4,6 +4,7 @@ import javax.xml.namespace.QName;
 import java.util.Arrays;
 import java.util.Collection;
 
+// i18nf
 public final class XsdTypeU {
 
     private XsdTypeU() {

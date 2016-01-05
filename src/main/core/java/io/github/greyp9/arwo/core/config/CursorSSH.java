@@ -11,6 +11,7 @@ import org.w3c.dom.Element;
 
 import java.io.IOException;
 
+// i18nf
 public class CursorSSH {
     private final XedCursor cursor;
 

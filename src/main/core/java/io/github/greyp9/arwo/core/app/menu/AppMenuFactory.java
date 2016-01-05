@@ -8,6 +8,7 @@ import io.github.greyp9.arwo.core.menu.MenuItem;
 import io.github.greyp9.arwo.core.menu.factory.MenuFactory;
 import io.github.greyp9.arwo.core.value.Value;
 
+// i18nf
 @SuppressWarnings("PMD.TooManyMethods")
 public class AppMenuFactory implements MenuFactory {
 

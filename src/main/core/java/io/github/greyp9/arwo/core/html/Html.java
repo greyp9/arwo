@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.html;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.lang.StringU;
 
+// i18nf
 public final class Html {
 
     public static final String A = "a";

@@ -12,7 +12,7 @@ public class DurationTest extends TestCase {
     public void testDurationZero() throws Exception {
         final Date date = XsdDateU.fromXSDZ("2000-01-01T00:00:00.000Z");
         final String duration = DurationU.duration(date, date);
-        Assert.assertEquals("PT0S", duration);
+        Assert.assertEquals(DurationU.Const.ZERO_SECONDS, duration);
     }
 
     public void testDurationOneMilli() throws Exception {

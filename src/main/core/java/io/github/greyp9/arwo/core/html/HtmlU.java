@@ -25,7 +25,7 @@ public final class HtmlU {
     }
 
     public static Element addButton(final Element html, final String label, final String name, final String value,
-                                    final String htmlClass, final String title, String accessKey) {
+                                    final String htmlClass, final String title, final String accessKey) {
         final Element button = addButton(html, label, name, value, htmlClass, title);
         ElementU.setAttribute(button, Html.ACCESSKEY, accessKey);
         return button;

@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.core.xed.view.html;
 
 import io.github.greyp9.arwo.core.action.ActionButton;
 import io.github.greyp9.arwo.core.action.ActionButtons;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.html.HtmlU;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
@@ -32,7 +33,7 @@ public class PropertyStripHtmlView {
 
     public final void addContentDiv(final Element html) {
         final Element divDialog = ElementU.addElement(html, Html.DIV, null, NameTypeValuesU.create(
-                Html.CLASS, Const.DIALOG));
+                Html.CLASS, App.CSS.DIALOG));
         addContentForm(divDialog);
     }
 
@@ -46,10 +47,10 @@ public class PropertyStripHtmlView {
     public final void addContentTable(final Element html) {
         // form table (for name / value alignment)
         final Element table = ElementU.addElement(html, Html.TABLE, null, NameTypeValuesU.create(
-                Html.CLASS, Const.DIALOG, Html.SUMMARY, Const.DIALOG));
+                Html.CLASS, App.CSS.DIALOG, Html.SUMMARY, App.CSS.DIALOG));
         // form table body
         final Element tbody = ElementU.addElement(table, Html.TBODY, null, NameTypeValuesU.create(
-                Html.CLASS, Const.DIALOG));
+                Html.CLASS, App.CSS.DIALOG));
         final Element tr = ElementU.addElement(tbody, Html.TR);
         // form fields correspond to leaf TypeInstances
         addViewInstances(view.getViewInstances(), tr);
@@ -97,9 +98,5 @@ public class PropertyStripHtmlView {
     private void addAction(final ActionButton button, final Element td) {
         final SubmitToken tokenAction = new SubmitToken(button.getSubject(), button.getAction(), button.getObject());
         HtmlU.addButton(td, button.getLabel(), buttons.getSubmitID(), tokenAction.toString(), null, null);
-    }
-
-    private static class Const {
-        private static final String DIALOG = "dialog";
     }
 }

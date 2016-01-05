@@ -30,7 +30,7 @@ public class Matrix {
     private String renderRow(final String spacer, final int row, final int[] widths) {
         final StringBuilder buffer = new StringBuilder();
         for (int column = 0; (column < columns); ++column) {
-            final String format = "%-" + widths[column] + "s";
+            final String format = "%-" + widths[column] + "s";  // i18n
             buffer.append((column == 0) ? "" : spacer);
             buffer.append(String.format(format, values[row][column]));
         }

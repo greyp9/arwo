@@ -98,8 +98,8 @@ public class TrustVerifier {
         }
 
         private static class Const {
-            private static final String ALGORITHM_RSA = "RSA";
-            private static final String LIB_ALGORITHM_RSA = "ssh-rsa";
+            private static final String ALGORITHM_RSA = "RSA";  // i18n
+            private static final String LIB_ALGORITHM_RSA = "ssh-rsa";  // i18n
         }
     }
 }

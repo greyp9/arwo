@@ -37,8 +37,8 @@ public class FileX {
 
     @SuppressWarnings("PMD.LongVariable")
     private static class Const {
-        private static final String DOT = ".";
-        private static final String SLASH = "/";
-        private static final String WIN32_PATH_SEPARATOR = "\\";
+        private static final String DOT = ".";  // i18n
+        private static final String SLASH = "/";  // i18n
+        private static final String WIN32_PATH_SEPARATOR = "\\";  // i18n
     }
 }

@@ -41,15 +41,15 @@ public class AlertsView {
 
     public final void addContentTo(final Element html, final Collection<Alert> alertsDisplay) throws IOException {
         if (!alertsDisplay.isEmpty()) {
-            final NameTypeValues styleNotifies = NTV.create(Html.CLASS, "notifications");
+            final NameTypeValues styleNotifies = NTV.create(Html.CLASS, App.CSS.NOTIFICATIONS);
             final Element divNotifications = ElementU.addElementFirst(html, Html.DIV, null, styleNotifies);
             for (final Alert alert : alertsDisplay) {
                 final String severity = alert.getSeverity().toString().toLowerCase(Locale.ENGLISH);
-                final String severityClass = Value.join(Html.SPACE, "level", severity);
-                final NameTypeValues styleNotify = NTV.create(Html.CLASS, "notification");
+                final String severityClass = Value.join(Html.SPACE, App.CSS.LEVEL, severity);
+                final NameTypeValues styleNotify = NTV.create(Html.CLASS, App.CSS.NOTIFICATION);
                 final NameTypeValues styleSeverity = NTV.create(Html.CLASS, severityClass);
-                final NameTypeValues styleTimestamp = NTV.create(Html.CLASS, "timestamp");
-                final NameTypeValues styleText = NTV.create(Html.CLASS, "text");
+                final NameTypeValues styleTimestamp = NTV.create(Html.CLASS, App.CSS.TIMESTAMP);
+                final NameTypeValues styleText = NTV.create(Html.CLASS, App.CSS.TEXT);
                 final Element divNotify = ElementU.addElement(divNotifications, Html.DIV, null, styleNotify);
                 if (alert.getActions() != null) {
                     addActionsTo(divNotify, alert.getActions());

@@ -1,6 +1,8 @@
 package io.github.greyp9.arwo.core.action;
 
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.html.Html;
+import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.value.Value;
 
 import java.util.ArrayList;
@@ -27,7 +29,7 @@ public class ActionFactory {
             final String actionType, final boolean isExpander, final Collection<String> actions) {
         final ArrayList<ActionButton> actionButtons = new ArrayList<ActionButton>();
         for (final String action : actions) {
-            final String key = Value.join(".", actionType, "action", action);
+            final String key = Value.join(Http.Token.DOT, actionType, Html.ACTION, action);
             final String label = bundle.getString(key, action);
             actionButtons.add(new ActionButton(label, null, targetType, action, cursorType, uri));
         }

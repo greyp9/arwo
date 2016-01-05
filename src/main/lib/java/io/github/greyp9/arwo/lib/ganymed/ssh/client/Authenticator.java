@@ -59,7 +59,7 @@ public class Authenticator {
         final boolean isPassword = (!Value.isEmpty(clientParams.getPassword()));
         if ((!authenticated) && (methodInteractive) && (isPassword)) {
             final Properties properties = new Properties();
-            properties.setProperty("//Password: ", new String(clientParams.getPassword().toCharArray()));
+            properties.setProperty("//Password: ", new String(clientParams.getPassword().toCharArray()));  // i18n
             final InteractiveCallback callback = new InteractiveCallbackImpl(properties);
             authenticated = connection.authenticateWithKeyboardInteractive(user, callback);
             final String message = bundle.getString(authenticated ?
@@ -109,8 +109,8 @@ public class Authenticator {
     }
 
     private static class Const {
-        private static final String PUBLIC_KEY = "publickey";
-        private static final String INTERACTIVE = "keyboard-interactive";
-        private static final String PASSWORD = "password";
+        private static final String PUBLIC_KEY = "publickey";  // i18n
+        private static final String INTERACTIVE = "keyboard-interactive";  // i18n
+        private static final String PASSWORD = "password";  // i18n
     }
 }

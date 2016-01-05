@@ -21,7 +21,7 @@ public final class AppFolder {
     }
 
     public static File getUserHome(final File webappRoot, final Principal principal) {
-        final File appHome = new File(webappRoot, "home");
+        final File appHome = new File(webappRoot, "home");  // i18n
         return new File(appHome, principal.getName());
     }
 

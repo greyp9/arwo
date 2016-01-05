@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.lib.ganymed.ssh.connection;
 
+import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.io.command.Command;
 import io.github.greyp9.arwo.lib.ganymed.ssh.command.runnable.ScriptX;
 
@@ -37,7 +38,7 @@ public class SSHConnectionX {
         try {
             final String stdin = String.format(commandPattern, id);
             final Command command = new ScriptX(sshConnection, executorStream).runCommand(stdin);
-            final String[] resultsTokens = command.getStdout().split(":");
+            final String[] resultsTokens = command.getStdout().split(Http.Token.COLON);
             value = ((resultsTokens.length > 0) ? resultsTokens[0] : id.toString());
         } catch (IOException e) {
             value = id.toString();

@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.core.xsd.core;
 
 import javax.xml.XMLConstants;
 
+// i18nf
 public final class XsdU {
 
     // namespace prefix

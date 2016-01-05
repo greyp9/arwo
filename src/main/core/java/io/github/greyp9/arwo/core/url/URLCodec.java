@@ -21,7 +21,7 @@ public final class URLCodec {
 
     public static String encode(final String value) throws UnsupportedEncodingException {
         final String encode = URLEncoder.encode(value, UTF8Codec.Const.UTF8);
-        return encode.replace("+", "%20");  // is this a bug in JRE?
+        return encode.replace("+", "%20");  // is this a bug in JRE?  // i18n
     }
 
     public static String decode(final String value) throws UnsupportedEncodingException {

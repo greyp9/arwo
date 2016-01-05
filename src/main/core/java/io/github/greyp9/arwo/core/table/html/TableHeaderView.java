@@ -16,7 +16,7 @@ import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.sort.Sort;
 import io.github.greyp9.arwo.core.table.sort.Sorts;
 import io.github.greyp9.arwo.core.table.state.ViewState;
-import io.github.greyp9.arwo.core.value.NameTypeValuesU;
+import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import org.w3c.dom.Element;
@@ -34,15 +34,14 @@ public class TableHeaderView {
 
     public final void addContentTo(final Element tableHtml, final String title, final boolean openTB) {
         // table header is always added, since there is always a table header row
-        final Element thead = ElementU.addElement(tableHtml, Html.THEAD, null,
-                NameTypeValuesU.create(Html.CLASS, Html.TABLE));
+        final Element thead = ElementU.addElement(tableHtml, Html.THEAD, null, NTV.create(Html.CLASS, Html.TABLE));
         // title row
-        final Element tr = ElementU.addElement(thead, Html.TR, null, NameTypeValuesU.create(Html.CLASS, "header"));
-        final Element th = ElementU.addElement(tr, Html.TH, null,
-                NameTypeValuesU.create(Html.COLSPAN, Integer.toString(table.getMetaData().size())));
+        final Element tr = ElementU.addElement(thead, Html.TR, null, NTV.create(Html.CLASS, App.CSS.HEADER));
+        final Element th = ElementU.addElement(tr, Html.TH, null, NTV.create(
+                Html.COLSPAN, Integer.toString(table.getMetaData().size())));
         final SubmitToken token = new SubmitToken(App.Target.VIEW_STATE, ViewState.Toggle.RIBBON, table.getID());
         // (for sftp view, "title" is fs path, but viewState.getName() should be used for button)
-        HtmlU.addButton(th, title, context.getSubmitID(), token.toString(), "header", null, Html.VALUE_2);
+        HtmlU.addButton(th, title, context.getSubmitID(), token.toString(), App.CSS.HEADER, null, Html.VALUE_2);
         if (openTB) {
             // optionally add extra table controls
             final boolean openTH = context.getViewState().isOpenTH();
@@ -66,9 +65,9 @@ public class TableHeaderView {
         final String submitID = context.getSubmitID();
         // row container
         final int width = metaData.size();
-        final Element tr = ElementU.addElement(tableHtml, Html.TR, null, NameTypeValuesU.create(
+        final Element tr = ElementU.addElement(tableHtml, Html.TR, null, NTV.create(
                 Html.CLASS, ViewState.Toggle.RIBBON));
-        final Element th = ElementU.addElement(tr, Html.TH, null, NameTypeValuesU.create(
+        final Element th = ElementU.addElement(tr, Html.TH, null, NTV.create(
                 Html.COLSPAN, Integer.toString(width), Html.CLASS, ViewState.Toggle.RIBBON));
         // reset table UI widget
         final SubmitToken tokenReset = new SubmitToken(App.Target.VIEW_STATE, ViewState.Action.RESET, tableID);
@@ -96,8 +95,8 @@ public class TableHeaderView {
         final boolean addRow = (displaySorts || displayFilters || displayAlways);
         if (addRow) {
             final Element tr = ElementU.addElement(tableHtml, Html.TR);
-            final Element th = ElementU.addElement(tr, Html.TH, null, NameTypeValuesU.create(
-                    Html.COLSPAN, Integer.toString(metaData.size()), Html.CLASS, "state"));
+            final Element th = ElementU.addElement(tr, Html.TH, null, NTV.create(
+                    Html.COLSPAN, Integer.toString(metaData.size()), Html.CLASS, App.CSS.STATE));
             if (displaySorts) {
                 ElementU.addElement(th, Html.SPAN, sortsText);
             }
@@ -138,7 +137,7 @@ public class TableHeaderView {
 
     private void addHeaderRowTo(
             final Element tableHtml, final RowSetMetaData metaData, final Sorts sorts, final boolean openTH) {
-        final Element tr = ElementU.addElement(tableHtml, Html.TR, null, NameTypeValuesU.create(Html.CLASS, "label"));
+        final Element tr = ElementU.addElement(tableHtml, Html.TR, null, NTV.create(Html.CLASS, App.CSS.LABEL));
         final int count = metaData.size();
         for (int i = 0; (i < count); ++i) {
             if (!context.getViewState().getHiddenColumns().contains(metaData.getName(i))) {
@@ -153,19 +152,19 @@ public class TableHeaderView {
         final String name = metaData.getName(i);
         final String key = TableU.getKey(metaData.getID(), name);
         final String label = context.getBundle().getString(key, name);
-        final String text = Value.join(" ", toIcon(sorts.get(name)), label);
+        final String text = Value.join(Html.SPACE, toIcon(sorts.get(name)), label);
         if (openTH) {
-            final Element th = ElementU.addElement(tr, Html.TH, null, NameTypeValuesU.create(Html.CLASS, "label"));
+            final Element th = ElementU.addElement(tr, Html.TH, null, NTV.create(Html.CLASS, App.CSS.LABEL));
             // sort
             final SubmitToken token = new SubmitToken(App.Target.VIEW_STATE, ViewState.Action.SORT, tableID, name);
             HtmlU.addButton(th, text, context.getSubmitID(), token.toString(), null, null);
         } else {
-            ElementU.addElement(tr, Html.TH, text, NameTypeValuesU.create(Html.CLASS, ViewState.Const.COLUMNS));
+            ElementU.addElement(tr, Html.TH, text, NTV.create(Html.CLASS, ViewState.Const.COLUMNS));
         }
     }
 
     private void addControlsRowTo(final Element tableHtml, final RowSetMetaData metaData) {
-        final Element tr = ElementU.addElement(tableHtml, Html.TR, null, NameTypeValuesU.create(
+        final Element tr = ElementU.addElement(tableHtml, Html.TR, null, NTV.create(
                 Html.CLASS, ViewState.Const.COLUMNS));
         final int count = metaData.size();
         for (int i = 0; (i < count); ++i) {
@@ -180,8 +179,7 @@ public class TableHeaderView {
         final String submitID = context.getSubmitID();
         // column
         final String name = metaData.getName(i);
-        final Element th = ElementU.addElement(tr, Html.TH, null, NameTypeValuesU.create(
-                Html.CLASS, ViewState.Const.COLUMNS));
+        final Element th = ElementU.addElement(tr, Html.TH, null, NTV.create(Html.CLASS, ViewState.Const.COLUMNS));
 /*
         // sort
         SubmitToken tokenSort = new SubmitToken(App.Target.VIEW_STATE, ViewState.Action.SORT, table.getID(), name);

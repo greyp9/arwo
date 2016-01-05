@@ -169,7 +169,7 @@ public class CronService implements Runnable {
     }
 
     private static class Const {
-        private static final String DURATION_WORKLOOP = "PT1M";
-        private static final String FUZZ_WORKLOOP = "PT1S";
+        private static final String DURATION_WORKLOOP = DurationU.Const.ONE_MINUTE;
+        private static final String FUZZ_WORKLOOP = DurationU.Const.ONE_SECOND;
     }
 }

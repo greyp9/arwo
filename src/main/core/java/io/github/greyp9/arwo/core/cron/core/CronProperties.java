@@ -9,9 +9,9 @@ public final class CronProperties {
 
     public static Properties getProperties() {
         final Properties properties = new Properties();
-        properties.setProperty("arguments", "io.github.greyp9.arwo.core.cron.instance.ArgumentsRunnable");
-        properties.setProperty("sleep", "io.github.greyp9.arwo.core.cron.instance.SleepRunnable");
-        properties.setProperty("ssh", "io.github.greyp9.arwo.app.ssh.sh.cron.SHRunnable");
+        properties.setProperty("arguments", "io.github.greyp9.arwo.core.cron.instance.ArgumentsRunnable");  // i18n
+        properties.setProperty("sleep", "io.github.greyp9.arwo.core.cron.instance.SleepRunnable");  // i18n
+        properties.setProperty("ssh", "io.github.greyp9.arwo.app.ssh.sh.cron.SHRunnable");  // i18n
         return properties;
     }
 }

@@ -9,6 +9,7 @@ import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.html.HtmlU;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
+import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.xed.bundle.XsdBundle;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
@@ -53,23 +54,23 @@ public class PropertyPageHtmlView {
         final String cursorTypeName = view.getCursor().getTypeInstance().getName();
         // form wrapper
         final Element divDialog = ElementU.addElement(html, Html.DIV, null, NameTypeValuesU.create(
-                Html.CLASS, Const.DIALOG));
+                Html.CLASS, App.CSS.DIALOG));
         final Element form = ElementU.addElement(divDialog, Html.FORM, null, NameTypeValuesU.create(
                 Html.ACTION, "", Html.ID, String.format("form_%s", cursorTypeName), Html.METHOD, Html.POST));
         // form table (for name / value alignment)
         final Element table = ElementU.addElement(form, Html.TABLE, null, NameTypeValuesU.create(
-                Html.CLASS, Const.DIALOG, Html.SUMMARY, Const.DIALOG));
+                Html.CLASS, App.CSS.DIALOG, Html.SUMMARY, App.CSS.DIALOG));
         final Element thead = ElementU.addElement(table, Html.THEAD, null, NameTypeValuesU.create(
-                Html.CLASS, Const.DIALOG));
+                Html.CLASS, App.CSS.DIALOG));
         final Element trHead = ElementU.addElement(thead, Html.TR, null, NameTypeValuesU.create(
-                Html.CLASS, Const.HEADER));
+                Html.CLASS, App.CSS.HEADER));
         final Element th = ElementU.addElement(trHead, Html.TH, null, NameTypeValuesU.create(
-                Html.COLSPAN, Integer.toString(2), Html.CLASS, Const.HEADER));
+                Html.COLSPAN, Integer.toString(2), Html.CLASS, App.CSS.HEADER));
         final String nameI18n = xsdBundle.getLabel(view.getCursor().getTypeInstance());
-        ElementU.addElement(th, Html.SPAN, nameI18n, NameTypeValuesU.create(Html.CLASS, Const.HEADER));
+        ElementU.addElement(th, Html.SPAN, nameI18n, NameTypeValuesU.create(Html.CLASS, App.CSS.HEADER));
         // form table body
         final Element tbody = ElementU.addElement(table, Html.TBODY, null, NameTypeValuesU.create(
-                Html.CLASS, Const.DIALOG));
+                Html.CLASS, App.CSS.DIALOG));
         // form fields correspond to leaf TypeInstances
         final Collection<ViewInstance> viewInstances = view.getViewInstances();
         if (viewInstances.isEmpty()) {
@@ -150,9 +151,9 @@ public class PropertyPageHtmlView {
         final Properties properties = request.getState().getProperties();
         final boolean isExpanded = Boolean.parseBoolean(properties.getProperty("buttons"));
         final ActionButtons buttons = ((view.getButtons() == null) ? getActionButtons(isExpanded) : view.getButtons());
-        final Element tr = ElementU.addElement(tbody, Html.TR, null, NameTypeValuesU.create(Html.CLASS, Const.FOOTER));
+        final Element tr = ElementU.addElement(tbody, Html.TR, null, NTV.create(Html.CLASS, App.CSS.FOOTER));
         final Element th = ElementU.addElement(tr, Html.TD, null, NameTypeValuesU.create(
-                Html.COLSPAN, Integer.toString(2), Html.CLASS, Const.DIALOG));
+                Html.COLSPAN, Integer.toString(2), Html.CLASS, App.CSS.DIALOG));
         for (final ActionButton button : buttons.getButtons()) {
             final SubmitToken token = new SubmitToken(
                     button.getSubject(), button.getAction(), button.getObject(), button.getObject2());
@@ -204,11 +205,5 @@ public class PropertyPageHtmlView {
         if (condition) {
             actions.add(name);
         }
-    }
-
-    private static class Const {
-        private static final String DIALOG = "dialog";
-        private static final String HEADER = "header";
-        private static final String FOOTER = "footer";
     }
 }

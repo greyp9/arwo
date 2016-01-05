@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.table.type.RowTyped;
 import io.github.greyp9.arwo.core.vm.thread.ThreadU;
 import io.github.greyp9.arwo.core.xml.ElementU;
+import org.w3c.dom.Element;
 
 import java.util.Date;
 import java.util.logging.Logger;
@@ -21,17 +22,18 @@ public class SleepRunnable extends CronRunnable {
 
     @Override
     public final void run() {
-        logger.finest("START");
+        logger.finest("START");  // i18n
         final RowTyped row = getParams().getRow();
         final Date dateStart = new Date();
-        row.update("dateStart", dateStart);
+        row.update("dateStart", dateStart);  // i18n
 
-        final String duration = ElementU.getAttribute(getParams().getCronJob().getElement(), "duration", "PT0S");
+        final Element element = getParams().getCronJob().getElement();
+        final String duration = ElementU.getAttribute(element, "duration", DurationU.Const.ZERO_SECONDS);  // i18n
         final Date dateUntil = DurationU.add(dateStart, DateU.Const.TZ_GMT, duration);
         final boolean interrupted = ThreadU.sleepUntil(dateUntil);
 
-        row.update("duration", DurationU.duration(dateStart, new Date()));
-        row.update("result", 0);
+        row.update("duration", DurationU.duration(dateStart, new Date()));  // i18n
+        row.update("result", 0);  // i18n
         logger.finest(String.format("FINISH(interrupted=%s)", interrupted));
     }
 }

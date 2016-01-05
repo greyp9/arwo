@@ -63,7 +63,7 @@ public final class DateU {
     }
 
     public static class Const {
-        public static final TimeZone TZ_GMT = TimeZone.getTimeZone("GMT");
+        public static final TimeZone TZ_GMT = TimeZone.getTimeZone("GMT");  // i18n
 
         public static final long ONE_SECOND_MILLIS = 1000L;
     }

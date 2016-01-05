@@ -45,9 +45,9 @@ public final class HttpDateU {
     }
 
     public static class Const {
-        private static final String HTTP = "EEE, dd MMM yyyy HH:mm:ss zzz";
-        private static final String HTTP_MILLI = "EEE, dd MMM yyyy HH:mm:ss.SSS zzz";
-        private static final String HTTP_Z = "EEE, dd MMM yyyy HH:mm:ss 'GMT'";
+        private static final String HTTP = "EEE, dd MMM yyyy HH:mm:ss zzz";  // i18n
+        private static final String HTTP_MILLI = "EEE, dd MMM yyyy HH:mm:ss.SSS zzz";  // i18n
+        private static final String HTTP_Z = "EEE, dd MMM yyyy HH:mm:ss 'GMT'";  // i18n
 
         public static final String DEFAULT2 = HTTP;
         public static final String DEFAULT = HTTP_MILLI;

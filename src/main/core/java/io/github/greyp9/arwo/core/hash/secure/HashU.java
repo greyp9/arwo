@@ -30,8 +30,8 @@ public final class HashU {
     }
 
     private static class Const {
-        private static final String MD5 = "MD5";
-        private static final String SHA1 = "SHA-1";
-        private static final String SHA256 = "SHA-256";
+        private static final String MD5 = "MD5";  // i18n
+        private static final String SHA1 = "SHA-1";  // i18n
+        private static final String SHA256 = "SHA-256";  // i18n
     }
 }

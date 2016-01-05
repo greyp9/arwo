@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+// i18nf
 public class CursorSetSSH {
     private final Collection<XedCursor> cursors;
 

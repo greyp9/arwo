@@ -43,28 +43,28 @@ public class WebDAVConnection {
 
         this.properties = new Properties();
         this.propertiesX = new PropertiesX(properties);
-        propertiesX.setLong("dateLast", dateOpen);
-        propertiesX.setLong("count", 0L);
-        propertiesX.setLong("millis", 0L);
+        propertiesX.setLong(Const.DATE_LAST, dateOpen);
+        propertiesX.setLong(Const.COUNT, 0L);
+        propertiesX.setLong(Const.MILLIS, 0L);
     }
 
     public final Date getDateLast() {
-        return new Date(propertiesX.getLong("dateLast"));
+        return new Date(propertiesX.getLong(Const.DATE_LAST));
     }
 
     public final long getCount() {
-        return propertiesX.getLong("count");
+        return propertiesX.getLong(Const.COUNT);
     }
 
     public final long getMillis() {
-        return propertiesX.getLong("millis");
+        return propertiesX.getLong(Const.MILLIS);
     }
 
     public final void update(final Date date) {
-        propertiesX.setLong("dateLast", date.getTime());
-        propertiesX.addLong("count", 1L);
+        propertiesX.setLong(Const.DATE_LAST, date.getTime());
+        propertiesX.addLong(Const.COUNT, 1L);
         final long millis = SystemU.currentTimeMillis() - date.getTime();
-        propertiesX.addLong("millis", millis);
+        propertiesX.addLong(Const.MILLIS, millis);
     }
 
     public final void close() {
@@ -73,5 +73,11 @@ public class WebDAVConnection {
         } catch (IOException e) {
             properties.setProperty(e.getClass().getName(), e.getMessage());
         }
+    }
+
+    private static class Const {
+        private static final String DATE_LAST = "dateLast";  // i18n
+        private static final String COUNT = "count";  // i18n
+        private static final String MILLIS = "millis";  // i18n
     }
 }
