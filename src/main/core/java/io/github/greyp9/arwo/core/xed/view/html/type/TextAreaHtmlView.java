@@ -26,7 +26,8 @@ public class TextAreaHtmlView {
         final String valueSafe = (Value.isEmpty(value) ? "\n" : value);  // empty textarea issues in clients
         final String rows = typeInstance.getDirective(Html.ROWS);
         final String columns = typeInstance.getDirective(Html.COLS);
-        final NameTypeValues attrs = NameTypeValuesU.create(Html.NAME, name, Html.ROWS, rows, Html.COLS, columns);
+        final NameTypeValues attrs = NameTypeValuesU.create(
+                Html.NAME, name, Html.ROWS, rows, Html.COLS, columns, Html.ACCESSKEY, Html.VALUE_1);
         ElementU.addElement(td, Html.TEXTAREA, valueSafe, attrs);
     }
 }

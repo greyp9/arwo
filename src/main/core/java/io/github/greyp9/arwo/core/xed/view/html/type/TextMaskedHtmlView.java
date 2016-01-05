@@ -25,8 +25,9 @@ public class TextMaskedHtmlView {
         final String name = typeInstance.getID(parentInstance);
         final String value = Html.MASK;  // cursor.getValue(typeInstance);
         final String title = bundle.getDetail(cursor.getTypeInstance(), viewInstance.getTypeInstance());
+        final String size = Integer.toString(Const.WIDTH_INPUT_TEXT);
         final NameTypeValues attrs = NameTypeValuesU.create(Html.NAME, name, Html.TYPE, Html.PASSWORD,
-                Html.VALUE, value, Html.SIZE, Integer.toString(Const.WIDTH_INPUT_TEXT), Html.TITLE, title);
+                Html.VALUE, value, Html.SIZE, size, Html.TITLE, title, Html.ACCESSKEY, Html.VALUE_1);
         ElementU.addElement(td, Html.INPUT, null, attrs);
     }
 

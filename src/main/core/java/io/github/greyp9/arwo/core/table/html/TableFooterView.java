@@ -9,7 +9,7 @@ import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.state.ViewState;
-import io.github.greyp9.arwo.core.value.NameTypeValuesU;
+import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import org.w3c.dom.Element;
 
@@ -26,8 +26,7 @@ public class TableFooterView {
 
     public final void addContentTo(final Element tableHtml, final boolean openTB) {
         if (openTB) {
-            final Element tfoot = ElementU.addElement(tableHtml, Html.TFOOT, null,
-                    NameTypeValuesU.create(Html.CLASS, Html.TABLE));
+            final Element tfoot = ElementU.addElement(tableHtml, Html.TFOOT, null, NTV.create(Html.CLASS, Html.TABLE));
             addFooterRowTo(tfoot);
             if (context.getViewState().getPage() != null) {
                 addFooterPageRowTo(tfoot, context.getViewState().getPage());
@@ -43,7 +42,7 @@ public class TableFooterView {
         final String footerR = properties.getProperty(Table.Const.FOOTER_R);
         if ((footerC != null) || (footerL != null) || (footerR != null)) {
             final Element tr = ElementU.addElement(tfoot, Html.TR);
-            final Element th = ElementU.addElement(tr, Html.TH, null, NameTypeValuesU.create(
+            final Element th = ElementU.addElement(tr, Html.TH, null, NTV.create(
                     Html.COLSPAN, Integer.toString(table.getMetaData().size()), Html.CLASS, "status"));
             addFooterTo(th, "left", footerL, properties.getProperty(Table.Const.FOOTER_HREF_L));
             addFooterTo(th, "center", footerC, properties.getProperty(Table.Const.FOOTER_HREF_C));
@@ -55,18 +54,17 @@ public class TableFooterView {
         final boolean textNN = (text != null);
         final boolean hrefNN = (href != null);
         if (textNN && hrefNN) {
-            final Element span = ElementU.addElement(th, Html.SPAN, null,
-                    NameTypeValuesU.create(Html.CLASS, spanClass));
+            final Element span = ElementU.addElement(th, Html.SPAN, null, NTV.create(Html.CLASS, spanClass));
             addFooterLinkTo(span, text, href);
         } else if (textNN) {
-            ElementU.addElement(th, Html.SPAN, text, NameTypeValuesU.create(Html.CLASS, spanClass));
+            ElementU.addElement(th, Html.SPAN, text, NTV.create(Html.CLASS, spanClass));
         } else {
-            ElementU.addElement(th, Html.SPAN, UTF16.NBSP, NameTypeValuesU.create(Html.CLASS, spanClass));
+            ElementU.addElement(th, Html.SPAN, UTF16.NBSP, NTV.create(Html.CLASS, spanClass));
         }
     }
 
     private void addFooterLinkTo(final Element span, final String text, final String href) {
-        ElementU.addElement(span, Html.A, text, NameTypeValuesU.create(Html.HREF, href));
+        ElementU.addElement(span, Html.A, text, NTV.create(Html.HREF, href, Html.ACCESSKEY, Html.VALUE_3));
     }
 
     private void addFooterPageRowTo(final Element tfoot, final Page page) {
@@ -74,7 +72,7 @@ public class TableFooterView {
         final String submitID = context.getSubmitID();
         // table context
         final Element tr = ElementU.addElement(tfoot, Html.TR);
-        final Element th = ElementU.addElement(tr, Html.TH, null, NameTypeValuesU.create(
+        final Element th = ElementU.addElement(tr, Html.TH, null, NTV.create(
                 Html.COLSPAN, Integer.toString(table.getMetaData().size()), Html.CLASS, "status"));
         // first page UI widget
         final SubmitToken tokenFirst = new SubmitToken(App.Target.VIEW_STATE, ViewState.Nav.FIRST, tableID);

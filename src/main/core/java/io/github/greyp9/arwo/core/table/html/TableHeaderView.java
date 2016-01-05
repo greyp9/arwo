@@ -42,7 +42,7 @@ public class TableHeaderView {
                 NameTypeValuesU.create(Html.COLSPAN, Integer.toString(table.getMetaData().size())));
         final SubmitToken token = new SubmitToken(App.Target.VIEW_STATE, ViewState.Toggle.RIBBON, table.getID());
         // (for sftp view, "title" is fs path, but viewState.getName() should be used for button)
-        HtmlU.addButton(th, title, context.getSubmitID(), token.toString(), "header", null);
+        HtmlU.addButton(th, title, context.getSubmitID(), token.toString(), "header", null, Html.VALUE_2);
         if (openTB) {
             // optionally add extra table controls
             final boolean openTH = context.getViewState().isOpenTH();

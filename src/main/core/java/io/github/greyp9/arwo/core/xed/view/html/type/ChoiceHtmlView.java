@@ -33,7 +33,7 @@ public class ChoiceHtmlView {
             final String nameIt = typeInstanceIt.getName();
             final String labelIt = bundle.getLabel(parentInstance, typeInstanceIt);
             final NameTypeValues attrs = NameTypeValuesU.create(
-                    Html.TYPE, Html.RADIO, Html.NAME, name, Html.VALUE, nameIt);
+                    Html.TYPE, Html.RADIO, Html.NAME, name, Html.VALUE, nameIt, Html.ACCESSKEY, Html.VALUE_1);
             if (nameIt.equals(value)) {
                 attrs.add(NameTypeValue.U.create(Html.CHECKED, Html.CHECKED));
             }

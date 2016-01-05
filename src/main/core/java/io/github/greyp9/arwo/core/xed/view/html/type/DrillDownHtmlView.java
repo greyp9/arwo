@@ -66,7 +66,8 @@ public class DrillDownHtmlView {
 
     private Element getAnchor(final Element html, final String href, final String label, final String title) {
         final String uri = viewInstance.getBaseURI() + href;
-        final NameTypeValues attrs = NameTypeValuesU.create(Html.CLASS, "menu", Html.HREF, uri, Html.TITLE, title);
+        final NameTypeValues attrs = NameTypeValuesU.create(
+                Html.CLASS, "menu", Html.HREF, uri, Html.TITLE, title, Html.ACCESSKEY, Html.VALUE_1);
         return ElementU.addElement(html, Html.A, label, attrs);
     }
 }

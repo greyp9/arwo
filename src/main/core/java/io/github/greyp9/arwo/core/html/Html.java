@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.core.lang.StringU;
 public final class Html {
 
     public static final String A = "a";
+    public static final String ACCESSKEY = "accesskey";
     public static final String ACTION = "action";
     public static final String ALT = "alt";
     public static final String BODY = "body";
@@ -65,6 +66,10 @@ public final class Html {
 
     public static final String SPACE = " ";
     public static final String MASK = StringU.create(24, UTF16.BULLET);
+
+    public static final String VALUE_1 = "1";
+    public static final String VALUE_2 = "2";
+    public static final String VALUE_3 = "3";
 
     private Html() {
     }

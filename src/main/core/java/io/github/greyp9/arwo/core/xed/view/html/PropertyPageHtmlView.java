@@ -154,9 +154,9 @@ public class PropertyPageHtmlView {
         final Element th = ElementU.addElement(tr, Html.TD, null, NameTypeValuesU.create(
                 Html.COLSPAN, Integer.toString(2), Html.CLASS, Const.DIALOG));
         for (final ActionButton button : buttons.getButtons()) {
-            final SubmitToken tokenAction = new SubmitToken(
+            final SubmitToken token = new SubmitToken(
                     button.getSubject(), button.getAction(), button.getObject(), button.getObject2());
-            HtmlU.addButton(th, button.getLabel(), buttons.getSubmitID(), tokenAction.toString(), null, null);
+            HtmlU.addButton(th, button.getLabel(), buttons.getSubmitID(), token.toString(), null, null, Html.VALUE_1);
         }
         if (buttons.isExpander()) {
             final Element span = ElementU.addElement(th, Html.SPAN);  // so buttons and expand/collapse on one line

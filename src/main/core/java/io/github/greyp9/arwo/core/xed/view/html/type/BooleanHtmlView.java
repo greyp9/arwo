@@ -27,7 +27,7 @@ public class BooleanHtmlView {
         final String value = cursor.getValue(typeInstance);
         final String title = bundle.getDetail(cursor.getTypeInstance(), viewInstance.getTypeInstance());
         final NameTypeValues attrs = NameTypeValuesU.create(
-                Html.NAME, name, Html.TYPE, Html.CHECKBOX, Html.TITLE, title);
+                Html.NAME, name, Html.TYPE, Html.CHECKBOX, Html.TITLE, title, Html.ACCESSKEY, Html.VALUE_1);
         if (Boolean.parseBoolean(value)) {
             attrs.add(new NameTypeValue(Html.CHECKED, Html.CHECKED));
         }
