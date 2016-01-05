@@ -138,6 +138,7 @@
     <xsd:complexType name="preferencesType">
         <xsd:sequence>
             <xsd:element name='mimeTypes' type='app:mimeTypesType'/>
+            <xsd:element name='localization' type='app:localizationType'/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -154,6 +155,25 @@
             <xsd:element name='type' type='xsd:string'/>
         </xsd:sequence>
     </xsd:complexType>
+
+    <xsd:complexType name='localizationType'>
+        <xsd:sequence>
+            <xsd:element name='tz' type='xsd:string' default='GMT'/>
+            <xsd:element name='dateFormat' type='xsd:string' default='EEE, dd MMM yyyy HH:mm:ss.SSS zzz'/>
+            <xsd:element name='language' type='app:languageType'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:simpleType name='languageType'>
+        <xsd:restriction base='xsd:string'>
+            <xsd:enumeration value='EN'/>
+            <xsd:enumeration value='ES'/>
+            <xsd:enumeration value='FR'/>
+            <xsd:enumeration value='DE'/>
+            <xsd:enumeration value='RU'/>
+            <xsd:enumeration value='JA'/>
+        </xsd:restriction>
+    </xsd:simpleType>
 
     <!--favorites-->
 

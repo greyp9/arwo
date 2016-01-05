@@ -3,6 +3,8 @@ package io.github.greyp9.arwo.core.xed.state;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.config.Preferences;
+import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.locus.LocusFactory;
@@ -35,6 +37,7 @@ import java.security.Principal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Properties;
+import java.util.TimeZone;
 
 @SuppressWarnings("PMD.ExcessiveImports")
 public class XedUserState {
@@ -172,6 +175,16 @@ public class XedUserState {
         final Xed actionLocale = new XedActionLocale(null).update(nameTypeValues);
         final String localeID = actionLocale.getXPather().getText("/action:locale");
         locus = new LocusFactory().create(localeID, locus.getDateX());
+        // apply to each xed session
+        sessions.applyLocale(locus.getLocale());
+    }
+
+    public final void applyLocale() throws IOException {
+        final Preferences preferences = new Preferences(getSession("/app").getXed());
+        final String tz = preferences.getTZ();
+        final String dateFormat = preferences.getDateFormat();
+        final String language = preferences.getLanguage();
+        locus = new LocusFactory().create(language, new DateX(dateFormat, TimeZone.getTimeZone(tz)));
         // apply to each xed session
         sessions.applyLocale(locus.getLocale());
     }

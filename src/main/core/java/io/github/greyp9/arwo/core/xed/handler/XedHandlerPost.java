@@ -54,6 +54,7 @@ public class XedHandlerPost {
         } else if (App.Target.VIEW_STATE.equals(subject)) {
             userState.getViewStates().apply(token, httpArguments, request.getBundle(), request.getAlerts());
         }
+        userState.applyLocale();
         return location;
     }
 }

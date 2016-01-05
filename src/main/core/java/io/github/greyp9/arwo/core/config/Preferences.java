@@ -33,9 +33,28 @@ public class Preferences {
         return cursorMIMETypes.getValue(cursorMIMETypes.getChildInstance("mimeDefaultType"));
     }
 
+    public final String getTZ() {
+        final XedCursor cursorIt = new XedNav(cursor.getXed()).findChild("localization", cursor);
+        return cursorIt.getValue(cursorIt.getChildInstance("tz"));
+    }
+
+    public final String getDateFormat() {
+        final XedCursor cursorIt = new XedNav(cursor.getXed()).findChild("localization", cursor);
+        return cursorIt.getValue(cursorIt.getChildInstance("dateFormat"));
+    }
+
+    public final String getLanguage() {
+        final XedCursor cursorLocal = new XedNav(cursor.getXed()).findChild("localization", cursor);
+        return cursorLocal.getValue(cursorLocal.getChildInstance("language"));
+    }
+
     private static class Const {
         private static final String PREFERENCES = "/app:app/app:preferences";
         private static final String MIME_TYPES = PREFERENCES + "/app:mimeTypes";
         private static final String MIME_TYPE_FOR_EXT = MIME_TYPES + "/app:mimeType[app:extension='%s']/app:type";
+        //private static final String LOCALIZATION = PREFERENCES + "/app:localization";
+        //private static final String TZ = LOCALIZATION + "/app:tz";
+        //private static final String DATE_FORMAT = LOCALIZATION + "/app:dateFormat";
+        //private static final String LANGUAGE = LOCALIZATION + "/app:language";
     }
 }
