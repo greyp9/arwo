@@ -21,6 +21,12 @@ font-weight: bold;
 border: thin solid ThreeDShadow;
 }
 
+span.question
+{
+background-color: blue;
+color: white;
+}
+
 span.info
 {
 background-color: blue;

@@ -85,7 +85,7 @@ public class SFTPFileView extends SFTPView {
             final SFTPDeleteFile action = new SFTPDeleteFile(getRequest());
             userState.getDeferredActions().add(action);
             final String message = bundle.format("WebDAVFileView.file.delete.message", request.getPath());
-            userState.getAlerts().add(new Alert(Alert.Severity.INFO, message, null, action.getActions()));
+            userState.getAlerts().add(new Alert(Alert.Severity.QUESTION, message, null, action.getActions()));
             httpResponse = HttpResponseU.to302(".");
         } else if (isProperties) {
             httpResponse = null;

@@ -289,7 +289,7 @@ public class AppUserState {
         final ActionCacheClear action = new ActionCacheClear(cache);
         deferredActions.add(action);
         final String message = getBundle().format("AppUserState.cache.clear.message");
-        alerts.add(new Alert(Alert.Severity.INFO, message, null, action.getActions()));
+        alerts.add(new Alert(Alert.Severity.QUESTION, message, null, action.getActions()));
     }
 
     private void updateHexViewParam(final String object) {

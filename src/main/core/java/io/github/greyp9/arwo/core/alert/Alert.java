@@ -58,19 +58,21 @@ public class Alert {
 
     public final String getIcon() {
         String text;
-        if (severity == Severity.INFO) {
+        if (severity == Severity.QUESTION) {
+            text = "[?]";
+        } else if (severity == Severity.INFO) {
             text = "[i]";
         } else if (severity == Severity.WARN) {
             text = "[!]";
         } else if (severity == Severity.ERR) {
             text = "[X]";
         } else {
-            text = "[?]";
+            text = "[ ]";
         }
         return text;
     }
 
     public enum Severity {
-        INFO, WARN, ERR
+        QUESTION, INFO, WARN, ERR
     }
 }
