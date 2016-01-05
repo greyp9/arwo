@@ -17,6 +17,7 @@ margin: 0.25em 0;
 span.level
 {
 font-family: monospace;
+font-size: larger;
 font-weight: bold;
 border: thin solid ThreeDShadow;
 }
