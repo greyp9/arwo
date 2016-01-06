@@ -55,6 +55,32 @@ public class WebDAVDataSource {
         return list;
     }
 
+
+    public final void createDirectory(final String path) throws IOException {
+        final Sardine sardine = connection.getConnection();
+        final String url = connection.getURL().toExternalForm() + path;
+        final Date date = new Date();
+        sardine.createDirectory(url);
+        connection.update(date);
+    }
+
+    public final void deleteDirectory(final String path) throws IOException {
+        final Sardine sardine = connection.getConnection();
+        final String url = connection.getURL().toExternalForm() + path;
+        final Date date = new Date();
+        sardine.delete(url);
+        connection.update(date);
+    }
+
+    public final void move(final String to, final String from, final boolean overwrite) throws IOException {
+        final Sardine sardine = connection.getConnection();
+        final String urlTo = connection.getURL().toExternalForm() + to;
+        final String urlFrom = connection.getURL().toExternalForm() + from;
+        final Date date = new Date();
+        sardine.move(urlFrom, urlTo, overwrite);
+        connection.update(date);
+    }
+
     public final void delete(final String path) throws IOException {
         final Sardine sardine = connection.getConnection();
         final String url = connection.getURL().toExternalForm() + path;
@@ -76,6 +102,7 @@ public class WebDAVDataSource {
         return find;
     }
 
+    @SuppressWarnings("PMD.PrematureDeclaration")
     public final MetaFile read(final String path) throws IOException {
         long lastModified = 0L;
         byte[] bytes = new byte[0];

@@ -24,6 +24,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Stack;
@@ -43,8 +44,9 @@ public class SFTPDataSource {
         SFTPv3FileAttributes attributes = null;
         final SFTPv3Client client = new SFTPv3Client(connection.getConnection());
         try {
+            final Date date = new Date();
             attributes = client.lstat(path);
-            connection.update(request.getHttpRequest().getDate());
+            connection.update(date);
         } catch (SFTPException e) {
             if (e.getServerErrorCode() != Const.ERR_NO_SUCH_FILE) {
                 new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
@@ -59,8 +61,9 @@ public class SFTPDataSource {
         SFTPv3FileAttributes attributes = null;
         final SFTPv3Client client = new SFTPv3Client(connection.getConnection());
         try {
+            final Date date = new Date();
             attributes = client.lstat(path);
-            connection.update(request.getHttpRequest().getDate());
+            connection.update(date);
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
         } finally {
@@ -74,8 +77,9 @@ public class SFTPDataSource {
         final Collection<SFTPv3DirectoryEntry> directoryEntries = new ArrayList<SFTPv3DirectoryEntry>();
         final SFTPv3Client client = new SFTPv3Client(connection.getConnection());
         try {
+            final Date date = new Date();
             ls2(directoryEntries, client.ls(path));
-            connection.update(request.getHttpRequest().getDate());
+            connection.update(date);
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
         } finally {
@@ -91,11 +95,51 @@ public class SFTPDataSource {
         }
     }
 
+    public final void createDirectory(final String path, final int perms) throws IOException {
+        final SFTPv3Client client = new SFTPv3Client(connection.getConnection());
+        try {
+            final Date date = new Date();
+            client.mkdir(path, perms);
+            connection.update(date);
+        } catch (IOException e) {
+            new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
+        } finally {
+            client.close();
+        }
+    }
+
+    public final void deleteDirectory(final String path) throws IOException {
+        final SFTPv3Client client = new SFTPv3Client(connection.getConnection());
+        try {
+            final Date date = new Date();
+            client.rmdir(path);
+            connection.update(date);
+        } catch (IOException e) {
+            new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
+        } finally {
+            client.close();
+        }
+    }
+
+    public final void move(final String to, final String from) throws IOException {
+        final SFTPv3Client client = new SFTPv3Client(connection.getConnection());
+        try {
+            final Date date = new Date();
+            client.mv(from, to);
+            connection.update(date);
+        } catch (IOException e) {
+            new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
+        } finally {
+            client.close();
+        }
+    }
+
     public final void delete(final String path) throws IOException {
         final SFTPv3Client client = new SFTPv3Client(connection.getConnection());
         try {
+            final Date date = new Date();
             client.rm(path);
-            connection.update(request.getHttpRequest().getDate());
+            connection.update(date);
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
         } finally {
@@ -107,8 +151,9 @@ public class SFTPDataSource {
         final Collection<SFTPv3DirectoryEntry> directoryEntries = new ArrayList<SFTPv3DirectoryEntry>();
         final SFTPv3Client client = new SFTPv3Client(connection.getConnection());
         try {
+            final Date date = new Date();
             lsSymlink2(directoryEntries, path, client);
-            connection.update(request.getHttpRequest().getDate());
+            connection.update(date);
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
         } finally {
@@ -145,7 +190,9 @@ public class SFTPDataSource {
         while (!paths.isEmpty()) {
             final String pathIt = paths.pop();
             final Collection<SFTPv3DirectoryEntry> directoryEntries = new ArrayList<SFTPv3DirectoryEntry>();
+            final Date date = new Date();
             ls2(directoryEntries, client.ls(pathIt));
+            connection.update(date);
             find.put(pathIt, directoryEntries);
             for (final SFTPv3DirectoryEntry directoryEntry : directoryEntries) {
                 if (shouldRecurse(directoryEntry)) {
@@ -187,8 +234,9 @@ public class SFTPDataSource {
         try {
             final SCPClient client = connection.getConnection().createSCPClient();
             lastModified = DateU.fromSeconds(lstat(path).mtime).getTime();
+            final Date date = new Date();
             bytes = read(client.get(path));
-            connection.update(request.getHttpRequest().getDate());
+            connection.update(date);
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
         }
@@ -208,8 +256,9 @@ public class SFTPDataSource {
     public final void write(final byte[] bytes, final String folder, final String filename) throws IOException {
         try {
             final SCPClient client = connection.getConnection().createSCPClient();
+            final Date date = new Date();
             write(bytes, client.put(filename, bytes.length, folder, Const.UPLOAD_FILE_MODE));
-            connection.update(request.getHttpRequest().getDate());
+            connection.update(date);
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
         }
