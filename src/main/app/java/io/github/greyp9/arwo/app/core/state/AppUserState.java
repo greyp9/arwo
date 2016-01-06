@@ -1,7 +1,7 @@
 package io.github.greyp9.arwo.app.core.state;
 
-import io.github.greyp9.arwo.app.core.action.ActionCacheClear;
 import io.github.greyp9.arwo.app.action.DeferredActions;
+import io.github.greyp9.arwo.app.core.action.ActionCacheClear;
 import io.github.greyp9.arwo.app.core.subsystem.cron.SubsystemCron;
 import io.github.greyp9.arwo.app.core.subsystem.dav.SubsystemWebDAV;
 import io.github.greyp9.arwo.app.core.subsystem.local.SubsystemLocal;
@@ -90,6 +90,10 @@ public class AppUserState {
 
     public final Date getDateAppStart() {
         return appState.getDateStart();
+    }
+
+    public final Date getDateSessionStart() {
+        return interval.getDateStart();
     }
 
     public final Interval getInterval() {
@@ -226,8 +230,7 @@ public class AppUserState {
         if (action == null) {
             getClass();
         } else if (App.Action.RESET.equals(action)) {
-            appState.removeUserState(principal, httpRequest.getDate());
-            location = Http.Token.SLASH;
+            location = doLogOff(httpRequest);
         } else if (App.Action.CLOSE.equals(action)) {
             doClose(token);
         } else if (App.Action.UPDATE_LOCALE.equals(action)) {
@@ -273,6 +276,21 @@ public class AppUserState {
                 cacheIt.removeResource(name);
             }
         }
+    }
+
+    private String doLogOff(final ServletHttpRequest httpRequest) throws IOException {
+        String location = Http.Token.SLASH;
+        final boolean isSSH = (!ssh.getCache().getResources().isEmpty());
+        final boolean isWebDAV = (!webDAV.getCache().getResources().isEmpty());
+        final boolean isDocument = documentState.isUnsavedState();
+        final boolean isState = (isSSH || isWebDAV || isDocument);
+        if (isState) {
+            alerts.add(new Alert(Alert.Severity.INFO, getBundle().getString("AppUserState.unsaved.state")));
+            location = httpRequest.getContextPath() + App.Context.DASH;
+        } else {
+            appState.removeUserState(principal, httpRequest.getDate());
+        }
+        return location;
     }
 
     private void doClose(final SubmitToken token) throws IOException {

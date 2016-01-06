@@ -32,19 +32,19 @@ import java.util.TreeMap;
 @SuppressWarnings("PMD.TooManyMethods")
 public class SFTPDataSource {
     private final SFTPRequest request;
-    private final SSHConnection sshConnection;
+    private final SSHConnection connection;
 
     public SFTPDataSource(final SFTPRequest request, final SSHConnection sshConnection) {
         this.request = request;
-        this.sshConnection = sshConnection;
+        this.connection = sshConnection;
     }
 
     public final SFTPv3FileAttributes exists(final String path) throws IOException {
         SFTPv3FileAttributes attributes = null;
-        final SFTPv3Client client = new SFTPv3Client(sshConnection.getConnection());
+        final SFTPv3Client client = new SFTPv3Client(connection.getConnection());
         try {
             attributes = client.lstat(path);
-            sshConnection.update(request.getHttpRequest().getDate());
+            connection.update(request.getHttpRequest().getDate());
         } catch (SFTPException e) {
             if (e.getServerErrorCode() != Const.ERR_NO_SUCH_FILE) {
                 new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
@@ -57,10 +57,10 @@ public class SFTPDataSource {
 
     public final SFTPv3FileAttributes lstat(final String path) throws IOException {
         SFTPv3FileAttributes attributes = null;
-        final SFTPv3Client client = new SFTPv3Client(sshConnection.getConnection());
+        final SFTPv3Client client = new SFTPv3Client(connection.getConnection());
         try {
             attributes = client.lstat(path);
-            sshConnection.update(request.getHttpRequest().getDate());
+            connection.update(request.getHttpRequest().getDate());
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
         } finally {
@@ -72,10 +72,10 @@ public class SFTPDataSource {
     @SuppressWarnings("PMD.ShortMethodName")
     public final Collection<SFTPv3DirectoryEntry> ls(final String path) throws IOException {
         final Collection<SFTPv3DirectoryEntry> directoryEntries = new ArrayList<SFTPv3DirectoryEntry>();
-        final SFTPv3Client client = new SFTPv3Client(sshConnection.getConnection());
+        final SFTPv3Client client = new SFTPv3Client(connection.getConnection());
         try {
             ls2(directoryEntries, client.ls(path));
-            sshConnection.update(request.getHttpRequest().getDate());
+            connection.update(request.getHttpRequest().getDate());
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
         } finally {
@@ -92,10 +92,10 @@ public class SFTPDataSource {
     }
 
     public final void delete(final String path) throws IOException {
-        final SFTPv3Client client = new SFTPv3Client(sshConnection.getConnection());
+        final SFTPv3Client client = new SFTPv3Client(connection.getConnection());
         try {
             client.rm(path);
-            sshConnection.update(request.getHttpRequest().getDate());
+            connection.update(request.getHttpRequest().getDate());
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
         } finally {
@@ -105,10 +105,10 @@ public class SFTPDataSource {
 
     public final Collection<SFTPv3DirectoryEntry> lsSymlink(final String path) throws IOException {
         final Collection<SFTPv3DirectoryEntry> directoryEntries = new ArrayList<SFTPv3DirectoryEntry>();
-        final SFTPv3Client client = new SFTPv3Client(sshConnection.getConnection());
+        final SFTPv3Client client = new SFTPv3Client(connection.getConnection());
         try {
             lsSymlink2(directoryEntries, path, client);
-            sshConnection.update(request.getHttpRequest().getDate());
+            connection.update(request.getHttpRequest().getDate());
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
         } finally {
@@ -139,7 +139,7 @@ public class SFTPDataSource {
     public final Map<String, Collection<SFTPv3DirectoryEntry>> find(final String path) throws IOException {
         final Map<String, Collection<SFTPv3DirectoryEntry>> find =
                 new TreeMap<String, Collection<SFTPv3DirectoryEntry>>();
-        final SFTPv3Client client = new SFTPv3Client(sshConnection.getConnection());
+        final SFTPv3Client client = new SFTPv3Client(connection.getConnection());
         final Stack<String> paths = new Stack<String>();
         paths.push(path);
         while (!paths.isEmpty()) {
@@ -185,10 +185,10 @@ public class SFTPDataSource {
         long lastModified = 0L;
         byte[] bytes = new byte[0];
         try {
-            final SCPClient client = sshConnection.getConnection().createSCPClient();
+            final SCPClient client = connection.getConnection().createSCPClient();
             lastModified = DateU.fromSeconds(lstat(path).mtime).getTime();
             bytes = read(client.get(path));
-            sshConnection.update(request.getHttpRequest().getDate());
+            connection.update(request.getHttpRequest().getDate());
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
         }
@@ -207,9 +207,9 @@ public class SFTPDataSource {
     @SuppressWarnings("PMD.CloseResource")
     public final void write(final byte[] bytes, final String folder, final String filename) throws IOException {
         try {
-            final SCPClient client = sshConnection.getConnection().createSCPClient();
+            final SCPClient client = connection.getConnection().createSCPClient();
             write(bytes, client.put(filename, bytes.length, folder, Const.UPLOAD_FILE_MODE));
-            sshConnection.update(request.getHttpRequest().getDate());
+            connection.update(request.getHttpRequest().getDate());
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
         }

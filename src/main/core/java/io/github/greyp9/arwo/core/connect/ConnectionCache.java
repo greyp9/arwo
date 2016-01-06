@@ -15,6 +15,10 @@ public class ConnectionCache {
     private final Collection<ConnectionResource> resources;
     private final Alerts alerts;
 
+    public final String getName() {
+        return cacheName;
+    }
+
     public ConnectionCache(final String cacheName, final Alerts alerts) {
         this.cacheName = cacheName;
         this.resources = new TreeSet<ConnectionResource>();

@@ -81,7 +81,8 @@ public class SHRunnable extends CronRunnable {
     private ServletHttpRequest getServletHttpRequest(
             final HttpRequest httpRequest, final String pathInfo, final Principal principal) throws IOException {
         final Date date = getParams().getDate();
-        return new ServletHttpRequest(httpRequest, date, principal, getParams().getContext(), Const.SERVLET, pathInfo);
+        final String context = getParams().getContext();
+        return new ServletHttpRequest(httpRequest, date, principal, context, App.Context.SSH, pathInfo);
     }
 
     private HttpRequest getHttpRequest(
@@ -93,12 +94,11 @@ public class SHRunnable extends CronRunnable {
         final NameTypeValues query = NameTypeValuesU.create(
                 "command.commandType.command", command, submitID, Const.SUBMIT);
         final ByteArrayInputStream is = new ByteArrayInputStream(HttpArguments.toEntity(query));
-        final String resource = String.format("%s%s%s", params.getContext(), Const.SERVLET, pathInfo);
+        final String resource = String.format("%s%s%s", params.getContext(), App.Context.SSH, pathInfo);
         return new HttpRequest(Http.Method.POST, resource, null, headers, is);
     }
 
     private static class Const {
-        private static final String SERVLET = "/ssh";
         private static final String SUBMIT = "[session][command][{urn:arwo:action}command][command]";
     }
 }

@@ -189,4 +189,12 @@ public class XedUserState {
         // apply to each xed session
         sessions.applyLocale(locus.getLocale());
     }
+
+    public final boolean isUnsavedState() throws IOException {
+        boolean isUnsavedState = false;
+        for (final XedSession session : sessions.getSessions()) {
+            isUnsavedState |= (session.getDateModify() != null);
+        }
+        return isUnsavedState;
+    }
 }

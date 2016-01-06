@@ -1,10 +1,10 @@
 package io.github.greyp9.arwo.app.dash.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.core.view.connect.AppConnectionView;
+import io.github.greyp9.arwo.app.core.view.props.AppPropertiesView;
 import io.github.greyp9.arwo.app.cron.view.CronActiveView;
-import io.github.greyp9.arwo.app.ssh.core.view.SSHConnectionsView;
 import io.github.greyp9.arwo.app.xed.view.XedUnsavedView;
-import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppHtml;
@@ -58,7 +58,6 @@ public class DashView {
         HttpResponse httpResponse = addContentTo(body);
         if (httpResponse == null) {
             // touch ups
-            addMessagesTemp();
             new AlertsView(userState.getAlerts(), userState.getLocus(), userState.getBundle(),
                     userState.getSubmitID()).addContentTo(body);
             new StatusBarView(httpRequest, userState.getLocus()).addContentTo(body);
@@ -89,19 +88,22 @@ public class DashView {
     }
 
     private HttpResponse addContentTo(final Element html) throws IOException {
-        new SSHConnectionsView(httpRequest, userState, "", false).addContent(html);
+        addPropertiesView(html);
+        new AppConnectionView(httpRequest, userState, userState.getSSH().getCache(), null).addContentTo(html);
+        new AppConnectionView(httpRequest, userState, userState.getWebDAV().getCache(), null).addContentTo(html);
         new XedUnsavedView(httpRequest, userState).addContent(html);
         new CronActiveView(userState.getCronService(), request, userState).addContent(html);
         return null;
     }
 
-    private void addMessagesTemp() throws IOException {
-        final Bundle bundle = request.getBundle();
-        // lifetime of webapp (placeholder)
+    private void addPropertiesView(final Element html) throws IOException {
         final String durationA = DurationU.duration(userState.getDateAppStart(), httpRequest.getDate());
-        userState.getAlerts().add(new Alert(Alert.Severity.INFO, bundle.format("DashView.webapp.uptime", durationA)));
-        // lifetime of session (placeholder)
-        final String durationU = DurationU.duration(userState.getInterval().getDateStart(), httpRequest.getDate());
-        userState.getAlerts().add(new Alert(Alert.Severity.INFO, bundle.format("DashView.session.uptime", durationU)));
+        final String durationU = DurationU.duration(userState.getDateSessionStart(), httpRequest.getDate());
+        final Bundle bundle = request.getBundle();
+        final NameTypeValues properties = new NameTypeValues();
+        properties.add(new NameTypeValue(bundle.getString("DashView.webapp.uptime"), durationA));
+        properties.add(new NameTypeValue(bundle.getString("DashView.session.uptime"), durationU));
+        final AppPropertiesView view = new AppPropertiesView("dashPropertiesType", userState);
+        view.addContentTo(html, null, bundle, properties);
     }
 }

@@ -6,7 +6,15 @@ import java.util.Date;
 public interface ConnectionResource {
     String getName();
 
-    Date getDate();
+    String getID();
+
+    Date getDateOpen();
+
+    Date getDateLast();
+
+    long getCount();
+
+    long getMillis();
 
     void close() throws IOException;
 }

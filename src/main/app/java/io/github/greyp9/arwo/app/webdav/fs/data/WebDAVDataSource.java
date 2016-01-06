@@ -49,13 +49,18 @@ public class WebDAVDataSource {
     public final List<DavResource> listFiles(final String path) throws IOException {
         final Sardine sardine = connection.getConnection();
         final String url = connection.getURL().toExternalForm() + path;
-        return sardine.list(url);
+        final Date date = new Date();
+        final List<DavResource> list = sardine.list(url);
+        connection.update(date);
+        return list;
     }
 
     public final void delete(final String path) throws IOException {
         final Sardine sardine = connection.getConnection();
         final String url = connection.getURL().toExternalForm() + path;
+        final Date date = new Date();
         sardine.delete(url);
+        connection.update(date);
     }
 
     @SuppressWarnings("PMD.UseConcurrentHashMap")
@@ -77,6 +82,7 @@ public class WebDAVDataSource {
         try {
             final Sardine sardine = connection.getConnection();
             final String url = connection.getURL().toExternalForm() + path;
+            final Date date = new Date();
             final List<DavResource> list = sardine.list(url);
             if (list.isEmpty()) {
                 throw new FileNotFoundException(path);
@@ -85,7 +91,7 @@ public class WebDAVDataSource {
             final Date modified = resource.getModified();
             lastModified = ((modified == null) ? lastModified : modified.getTime());
             bytes = read(sardine.get(url));
-            connection.update(request.getHttpRequest().getDate());
+            connection.update(date);
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
         }
@@ -104,8 +110,9 @@ public class WebDAVDataSource {
     public final void write(final byte[] bytes, final String path) throws IOException {
         try {
             final Sardine sardine = connection.getConnection();
+            final Date date = new Date();
             sardine.put(path, bytes);
-            connection.update(request.getHttpRequest().getDate());
+            connection.update(date);
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
         }

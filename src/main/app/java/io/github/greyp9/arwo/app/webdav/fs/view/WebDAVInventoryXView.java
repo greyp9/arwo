@@ -23,7 +23,7 @@ public class WebDAVInventoryXView extends WebDAVView {
         final ServletHttpRequest httpRequest = getRequest().getHttpRequest();
         final AppUserState userState = getUserState();
         new WebDAVInventoryView(httpRequest, userState, offsetURI).addContent(html);
-        new WebDAVConnectionsView(httpRequest, userState, offsetURI, true).addContent(html);
+        new WebDAVConnectionsView(httpRequest, userState, offsetURI).addContent(html);
         return null;
     }
 }

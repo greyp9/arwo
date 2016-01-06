@@ -59,7 +59,7 @@ public class ConnectionRunnable implements Runnable {
         Date dateNextIt = dateNext;
         final ConnectionCache cache = userState.getSSH().getCache();
         for (final ConnectionResource resource : cache.getResources()) {
-            final Date dateIdle = DurationU.add(resource.getDate(), DateU.Const.TZ_GMT, duration);
+            final Date dateIdle = DurationU.add(resource.getDateLast(), DateU.Const.TZ_GMT, duration);
             dateNextIt = DateU.min(dateNext, dateIdle);
         }
         return dateNextIt;
@@ -76,7 +76,7 @@ public class ConnectionRunnable implements Runnable {
         final ConnectionCache cache = userState.getSSH().getCache();
         final Collection<ConnectionResource> resources = cache.getResources();
         for (final ConnectionResource resource : resources) {
-            final Date dateIdle = DurationU.add(resource.getDate(), DateU.Const.TZ_GMT, duration);
+            final Date dateIdle = DurationU.add(resource.getDateLast(), DateU.Const.TZ_GMT, duration);
             if (date.before(dateIdle)) {
                 resource.getClass();
             } else {

@@ -25,9 +25,30 @@ public class SSHConnectionResource implements ConnectionResource, Comparable<Con
     }
 
     @Override
-    public final Date getDate() {
+    public final String getID() {
+        return Integer.toHexString(connection.hashCode());
+    }
+
+    @Override
+    public final Date getDateOpen() {
+        return connection.getDateOpen();
+    }
+
+    @Override
+    public final Date getDateLast() {
         return connection.getDateLast();
     }
+
+    @Override
+    public final long getCount() {
+        return connection.getCount();
+    }
+
+    @Override
+    public final long getMillis() {
+        return connection.getMillis();
+    }
+
 
     @Override
     public final void close() {

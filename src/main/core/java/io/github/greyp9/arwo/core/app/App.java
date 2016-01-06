@@ -30,6 +30,11 @@ public final class App {
         public static final QName QNAME_FAVORITES = new QName("urn:arwo:app", "favorites", "app");
     }
 
+    public static class Context {
+        public static final String DASH = "/dash";
+        public static final String SSH = "/ssh";
+    }
+
     public static class Realm {
         public static final String XSD = "io/github/greyp9/arwo/xsd/realm/realm.xsd";
         public static final String XML_EMPTY = "io/github/greyp9/arwo/xsd/realm/realm.xml";
@@ -67,6 +72,7 @@ public final class App {
         public static final String NOTIFICATION = "notification";
         public static final String NOTIFICATIONS = "notifications";
         public static final String STATE = "state";
+        public static final String TABLE = "table";
         public static final String TEXT = "text";
         public static final String TIMESTAMP = "timestamp";
     }
