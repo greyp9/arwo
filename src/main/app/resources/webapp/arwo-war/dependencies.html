@@ -1,0 +1,120 @@
+<!DOCTYPE html PUBLIC '-//W3C//DTD XHTML 1.1//EN' 'http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd'>
+<html>
+
+<head>
+<meta http-equiv='Content-Type' content='text/html; charset=UTF-8'/>
+<title>Arwo Dependencies</title>
+<style type='text/css'>
+html, body, div.container { background-color: Background; }
+div.left { float: left; width: 50%; }
+div.right { float: right; width: 50%; }
+div.group { margin: 0.4em 0.2em; border: solid thin black; padding: 0.2em; background-color: Highlight; }
+div.tile { margin: 0.5em 0; border: solid thin black; padding: 0.2em; background-color: ButtonFace; }
+h1, h2 { margin: 0.2em; }
+h3, h4, h5 { margin: 0; }
+a.link { text-decoration: none; color: inherit; margin: 0.2em; display: block; }
+span.tile { background-color: ButtonFace; display: block; }
+span.header { font-size: larger; font-weight: bold; }
+table { border: solid thin black; border-collapse: collapse; width: 100%; }
+table th, table td { border: thin solid threedshadow; }
+</style>
+<link rel='shortcut icon' href='./ico/app-black.ico'/>
+</head>
+
+<body>
+<div class='left'>
+<div class='group'>
+<h2>Application</h2>
+
+<div class='tile'>
+<p>The Arwo application is a webapp, hosted inside the Apache Tomcat Java web container.  Arwo uses several third-party
+projects to provide connections to different types of remote servers.</p>
+<p>Usage of these projects involves downloading the library jar file (and any library dependencies), and copying them
+into the library filesystem directory of the Tomcat application.</p>
+<p>If using the downloaded Apache Tomcat image, after extracting the archive to folder "apache-tomcat", the lib
+directory is "apache-tomcat/lib".</p>
+<p>The Apache Maven project <a href='https://maven.apache.org/'>(link)</a> maintains a collection of "published"
+third-party libraries, often with available source code, documentation, etc.  The library authors might also maintain a
+website for their project(s).</p>
+<p>This webapp has been tested with the versions of the libraries referenced on this web page.  Other versions of the
+libraries may also work.</p>
+<h4>Library Loading</h4>
+<p>If a feature is used without first placing the needed libraries in the Tomcat lib folder, an server exception is
+thrown.  Once this happens, the Tomcat process will not attempt to load the libraries again while it is running.  After
+copying the libraries into the Tomcat lib directory, the Tomcat process must be restarted.</p>
+<h4>Permissions</h4>
+<p>On Linux operating systems, be aware that an installed Tomcat instance typically runs in the context of a restricted
+user account.  This account must have read privileges to the library in order for the library load to work.  This is
+typically accomplished by setting the Tomcat user account to be the owner of the library, using the "chown" terminal
+command.</p>
+</div>
+</div>
+</div>
+<div class='right'>
+<div class='group'>
+<h2>Dependencies</h2>
+
+<div class='tile'>
+<h3>SSH / SFTP</h3>
+<span><a href='https://en.wikipedia.org/wiki/Secure_Shell'>Information</a></span>
+<table>
+<thead><tr><th>Resource</th><th>Size</th><th>SHA-1</th></tr></thead>
+<tbody>
+<tr>
+<td><a href='http://search.maven.org/#artifactdetails|ch.ethz.ganymed|ganymed-ssh2|262|jar'>ganymed.jar</a></td>
+<td>300.0K</td>
+<td>7761dc665d0f6993dc846d914214fb93291e2bdf</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class='tile'>
+<h3>CIFS</h3>
+<span><a href='https://en.wikipedia.org/wiki/Server_Message_Block'>Information</a></span>
+<table>
+<thead><tr><th>Resource</th><th>Size</th><th>SHA-1</th></tr></thead>
+<tbody>
+<tr>
+<td><a href='http://search.maven.org/#artifactdetails|jcifs|jcifs|1.3.17|jar'>jcifs.jar</a></td>
+<td>392.8K</td>
+<td>60e3805e7bcfe96bf1f1907b821d251cc9d789ec</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+<div class='tile'>
+<h3>WebDAV</h3>
+<span><a href='https://en.wikipedia.org/wiki/WebDAV'>Information</a></span>
+<table>
+<thead><tr><th>Resource</th><th>Size</th><th>SHA-1</th></tr></thead>
+<tbody>
+<tr>
+<td><a href='http://search.maven.org/#artifactdetails|com.github.lookfirst|sardine|5.6|jar'>sardine.jar</a></td>
+<td>110.4K</td>
+<td>b34f418d6d55fb967b927f8229f1087d0813e232</td>
+</tr>
+<tr>
+<td><a href='http://search.maven.org/#artifactdetails|org.apache.httpcomponents|httpclient|4.4.1|jar'>httpclient.jar</a></td>
+<td>704.0K</td>
+<td>016d0bc512222f1253ee6b64d389c84e22f697f0</td>
+</tr>
+<tr>
+<td><a href='http://search.maven.org/#artifactdetails|org.apache.httpcomponents|httpcore|4.4.1|jar'>httpcore.jar</a></td>
+<td>314.7K</td>
+<td>f5aa318bda4c6c8d688c9d00b90681dcd82ce636</td>
+</tr>
+<tr>
+<td><a href='http://search.maven.org/#artifactdetails|commons-logging|commons-logging|1.2|jar'>commons-logging.jar</a></td>
+<td>60.4K</td>
+<td>4bfc12adfe4842bf07b657f0369c4cb522955686</td>
+</tr>
+</tbody>
+</table>
+</div>
+
+</div>
+</div>
+</body>
+</html>
