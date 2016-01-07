@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.app.webdav.fs.handler;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.webdav.action.WebDAVAddFavorite;
 import io.github.greyp9.arwo.app.webdav.action.WebDAVCreateFile;
+import io.github.greyp9.arwo.app.webdav.action.WebDAVCreateFolder;
 import io.github.greyp9.arwo.app.webdav.action.WebDAVSelectFavorite;
 import io.github.greyp9.arwo.app.webdav.action.WebDAVUpdateFile;
 import io.github.greyp9.arwo.app.webdav.connection.WebDAVConnectionFactory;
@@ -116,6 +117,8 @@ public class WebDAVHandlerPost {
         final String object = token.getObject();
         if (App.Action.FILE_CREATE.equals(action)) {
             new WebDAVCreateFile(request, getConnection()).apply(httpArguments);
+        } else if (App.Action.FOLDER_CREATE.equals(action)) {
+            new WebDAVCreateFolder(request, getConnection()).apply(httpArguments);
         } else if (App.Action.FILE_UPDATE.equals(action)) {
             new WebDAVUpdateFile(request, getConnection()).apply(httpArguments);
         } else if (App.Action.COMMAND.equals(action)) {

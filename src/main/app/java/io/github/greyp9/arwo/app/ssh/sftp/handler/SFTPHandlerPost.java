@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionFactory;
 import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
 import io.github.greyp9.arwo.app.ssh.sftp.action.SFTPAddFavorite;
 import io.github.greyp9.arwo.app.ssh.sftp.action.SFTPCreateFile;
+import io.github.greyp9.arwo.app.ssh.sftp.action.SFTPCreateFolder;
 import io.github.greyp9.arwo.app.ssh.sftp.action.SFTPSelectFavorite;
 import io.github.greyp9.arwo.app.ssh.sftp.action.SFTPUpdateFile;
 import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
@@ -104,6 +105,8 @@ public class SFTPHandlerPost {
         final String object = token.getObject();
         if (App.Action.FILE_CREATE.equals(action)) {
             new SFTPCreateFile(request, getConnection()).apply(httpArguments);
+        } else if (App.Action.FOLDER_CREATE.equals(action)) {
+            new SFTPCreateFolder(request, getConnection()).apply(httpArguments);
         } else if (App.Action.FILE_UPDATE.equals(action)) {
             new SFTPUpdateFile(request, getConnection()).apply(httpArguments);
         } else if (App.Action.COMMAND.equals(action)) {

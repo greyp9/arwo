@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.app.local.fs.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.create.AppFileCreateView;
+import io.github.greyp9.arwo.app.core.view.create.AppFolderCreateView;
 import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
 import io.github.greyp9.arwo.app.local.fs.data.LFSDataSource;
 import io.github.greyp9.arwo.app.local.fs.data.LFSFolder;
@@ -35,8 +36,10 @@ public class LFSFolderView extends LFSView {
         final LFSRequest request = getRequest();
         final String mode = request.getMode();
         // resource access (read versus write)
-        if ("create".equals(mode)) {
+        if (App.Mode.CREATE_F.equals(mode)) {
             doGetFileCreate(html);
+        } else if (App.Mode.CREATE_D.equals(mode)) {
+            doGetFolderCreate(html);
         }
         return doGetFolder(html);
     }
@@ -46,6 +49,13 @@ public class LFSFolderView extends LFSView {
         final ServletHttpRequest httpRequest = request.getHttpRequest();
         final AppUserState userState = getUserState();
         return new AppFileCreateView(httpRequest, userState).addContentTo(html);
+    }
+
+    private HttpResponse doGetFolderCreate(final Element html) throws IOException {
+        final LFSRequest request = getRequest();
+        final ServletHttpRequest httpRequest = request.getHttpRequest();
+        final AppUserState userState = getUserState();
+        return new AppFolderCreateView(httpRequest, userState).addContentTo(html);
     }
 
     private HttpResponse doGetFolder(final Element html) throws IOException {

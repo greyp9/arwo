@@ -11,6 +11,7 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.net.HttpURLConnection;
 
 public class LFSDataSource {
     private final LFSRequest request;
@@ -27,6 +28,19 @@ public class LFSDataSource {
 
     public final File[] listFiles(final String path) {
         return FileU.listFiles(new File(folderRoot, path));
+    }
+
+    public final void createDirectory(final String path) throws IOException {
+        FileU.ensureFolder(new File(folderRoot, path));
+    }
+
+    public final void deleteDirectory(final String path) throws IOException {
+        delete(path);
+    }
+
+    public final void move(final String to, final String from) throws IOException {
+        final IOException e = new IOException(Integer.toString(HttpURLConnection.HTTP_NOT_IMPLEMENTED));
+        new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
     }
 
     public final void delete(final String path) throws IOException {

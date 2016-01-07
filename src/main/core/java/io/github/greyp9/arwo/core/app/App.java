@@ -19,6 +19,7 @@ public final class App {
         public static final QName QNAME_COMMIT = new QName(URI_ACTION, "commit", PREFIX_ACTION);
         public static final QName QNAME_FILE_EDIT = new QName(URI_ACTION, "fileEdit", PREFIX_ACTION);
         public static final QName QNAME_FILE_NEW = new QName(URI_ACTION, "fileNew", PREFIX_ACTION);
+        public static final QName QNAME_FOLDER_NEW = new QName(URI_ACTION, "folderNew", PREFIX_ACTION);
         public static final QName QNAME_FILTER = new QName(URI_ACTION, "filter", PREFIX_ACTION);
         public static final QName QNAME_LOCALE = new QName(URI_ACTION, "locale", PREFIX_ACTION);
         public static final QName QNAME_TEXT_FILTER = new QName(URI_ACTION, "textFilter", PREFIX_ACTION);
@@ -78,7 +79,8 @@ public final class App {
     }
 
     public static class Mode {
-        public static final String CREATE = "create";
+        public static final String CREATE_F = "createF";
+        public static final String CREATE_D = "createD";
         public static final String EDIT = "edit";
         public static final String DELETE = "delete";
         public static final String VIEW = "view";
@@ -122,6 +124,7 @@ public final class App {
         public static final String TEXT_FILTER = "textFilter";
         public static final String FILE_UPDATE = "fileUpdate";
         public static final String FILE_CREATE = "fileCreate";
+        public static final String FOLDER_CREATE = "folderCreate";
         public static final String COMMAND = "command";
         public static final String FILESYSTEM = "filesystem";
         public static final String FIND = "find";

@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.app.local.fs.handler;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.local.fs.action.LFSAddFavorite;
 import io.github.greyp9.arwo.app.local.fs.action.LFSCreateFile;
+import io.github.greyp9.arwo.app.local.fs.action.LFSCreateFolder;
 import io.github.greyp9.arwo.app.local.fs.action.LFSSelectFavorite;
 import io.github.greyp9.arwo.app.local.fs.action.LFSUpdateFile;
 import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
@@ -101,6 +102,8 @@ public class LFSHandlerPost {
         final String object = token.getObject();
         if (App.Action.FILE_CREATE.equals(action)) {
             new LFSCreateFile(request).apply(httpArguments);
+        } else if (App.Action.FOLDER_CREATE.equals(action)) {
+            new LFSCreateFolder(request).apply(httpArguments);
         } else if (App.Action.FILE_UPDATE.equals(action)) {
             new LFSUpdateFile(request).apply(httpArguments);
         } else if (App.Action.COMMAND.equals(action)) {

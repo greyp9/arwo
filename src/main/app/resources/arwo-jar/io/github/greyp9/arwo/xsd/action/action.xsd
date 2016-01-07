@@ -63,6 +63,14 @@
         </xsd:sequence>
     </xsd:complexType>
 
+    <xsd:element name='folderNew' type='action:folderNewType'/>
+
+    <xsd:complexType name='folderNewType'>
+        <xsd:sequence>
+            <xsd:element name='filename' type='xsd:string'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
     <xsd:element name='textFilter' type='action:textFilterType'/>
 
     <xsd:complexType name='textFilterType'>

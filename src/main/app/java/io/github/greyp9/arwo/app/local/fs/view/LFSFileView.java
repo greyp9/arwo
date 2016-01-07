@@ -62,7 +62,8 @@ public class LFSFileView extends LFSView {
         // resource interpret (UTF-8 versus Unicode)
         final String charset = userState.getCharset();
         // resource access (read versus write)
-        final boolean isModeCreate = App.Mode.CREATE.equals(mode);
+        final boolean isModeCreateF = App.Mode.CREATE_F.equals(mode);
+        final boolean isModeCreateD = App.Mode.CREATE_D.equals(mode);
         final boolean isModeEdit = App.Mode.EDIT.equals(mode);
         final boolean isModeDelete = App.Mode.DELETE.equals(mode);
         // resource interpret (gzip deflated content expected)
@@ -76,7 +77,9 @@ public class LFSFileView extends LFSView {
         addFileProperties(html, metaFile);
         // dispose of request
         HttpResponse httpResponse;
-        if (isModeCreate) {
+        if (isModeCreateF) {
+            httpResponse = HttpResponseU.to302(".");  // go to containing folder
+        } else if (isModeCreateD) {
             httpResponse = HttpResponseU.to302(".");  // go to containing folder
         } else if (isModeEdit) {
             httpResponse = new AppFileEditView(httpRequest, userState).addContentTo(html, metaFile, charset);

@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.app.webdav.fs.view;
 import com.github.sardine.DavResource;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.create.AppFileCreateView;
+import io.github.greyp9.arwo.app.core.view.create.AppFolderCreateView;
 import io.github.greyp9.arwo.app.webdav.connection.WebDAVConnectionResource;
 import io.github.greyp9.arwo.app.webdav.fs.core.WebDAVRequest;
 import io.github.greyp9.arwo.app.webdav.fs.data.WebDAVDataSource;
@@ -41,8 +42,10 @@ public class WebDAVFolderView extends WebDAVView {
         final WebDAVRequest request = getRequest();
         final String mode = request.getMode();
         // resource access (read versus write)
-        if (App.Mode.CREATE.equals(mode)) {
+        if (App.Mode.CREATE_F.equals(mode)) {
             doGetFileCreate(html);
+        } else if (App.Mode.CREATE_D.equals(mode)) {
+            doGetFolderCreate(html);
         }
         return doGetFolder(html);
     }
@@ -52,6 +55,13 @@ public class WebDAVFolderView extends WebDAVView {
         final ServletHttpRequest httpRequest = request.getHttpRequest();
         final AppUserState userState = getUserState();
         return new AppFileCreateView(httpRequest, userState).addContentTo(html);
+    }
+
+    private HttpResponse doGetFolderCreate(final Element html) throws IOException {
+        final WebDAVRequest request = getRequest();
+        final ServletHttpRequest httpRequest = request.getHttpRequest();
+        final AppUserState userState = getUserState();
+        return new AppFolderCreateView(httpRequest, userState).addContentTo(html);
     }
 
     private HttpResponse doGetFolder(final Element html) throws IOException {

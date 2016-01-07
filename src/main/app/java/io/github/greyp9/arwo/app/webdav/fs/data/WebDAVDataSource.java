@@ -138,7 +138,7 @@ public class WebDAVDataSource {
         try {
             final Sardine sardine = connection.getConnection();
             final Date date = new Date();
-            sardine.put(path, bytes);
+            sardine.put(connection.getURL().toExternalForm() + path, bytes);
             connection.update(date);
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
