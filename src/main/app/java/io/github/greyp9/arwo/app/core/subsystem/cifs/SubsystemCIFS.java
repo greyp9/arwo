@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.app.core.subsystem.cifs;
 
 import io.github.greyp9.arwo.core.alert.Alerts;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.connect.ConnectionCache;
 
 import java.util.Properties;
@@ -20,7 +21,7 @@ public class SubsystemCIFS {
     }
 
     public SubsystemCIFS(final Alerts alerts) {
-        this.cache = new ConnectionCache("cifs", alerts);
+        this.cache = new ConnectionCache(App.Cache.CIFS, alerts);
         this.properties = new Properties();
     }
 }

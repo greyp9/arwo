@@ -49,15 +49,13 @@ public class SSHConnectionFactory implements ConnectionFactory {
         } else if (cursorSSH.getCursor() == null) {
             alerts.add(new Alert(Alert.Severity.WARN, bundle.format("SSHConnectionFactory.no.config", name)));
         } else {
-            resource = getConnection(name);
+            resource = getConnection(name, cursorSSH);
         }
         return resource;
     }
 
     @SuppressWarnings("PMD.CloseResource")
-    private SSHConnectionResource getConnection(final String name) throws IOException {
-        final XedSession session = userState.getDocumentState().getSession("/app");
-        final CursorSSH cursorSSH = new CursorSSH(session.getXed(), name);
+    private SSHConnectionResource getConnection(final String name, final CursorSSH cursorSSH) throws IOException {
         final String host = cursorSSH.getHost();
         final Integer port = NumberU.toInt(cursorSSH.getPort(), 22);
         final String user = cursorSSH.getUser();

@@ -122,9 +122,9 @@ public class WebDAVHandlerPost {
         } else if (App.Action.FILE_UPDATE.equals(action)) {
             new WebDAVUpdateFile(request, getConnection()).apply(httpArguments);
         } else if (App.Action.COMMAND.equals(action)) {
-            location = PathU.toDir(httpRequest.getContextPath(), "webdav", request.getServer());
+            location = PathU.toDir(httpRequest.getContextPath(), App.Cache.WEBDAV, request.getServer());
         } else if (App.Action.TOGGLE.equals(action)) {
-            PropertiesU.toggleBoolean(userState.getProperties(), Value.join("/", "webdav", object));
+            PropertiesU.toggleBoolean(userState.getProperties(), Value.join("/", App.Cache.WEBDAV, object));
         } else if (App.Action.ADD_FAV.equals(action)) {
             new WebDAVAddFavorite(request).doAction();
         } else if (App.Action.SELECT_FAV.equals(action)) {

@@ -1,6 +1,9 @@
 package io.github.greyp9.arwo.app.interop.handler;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.interop.action.SHAddFavorite;
+import io.github.greyp9.arwo.app.interop.action.SHQueueCommand;
+import io.github.greyp9.arwo.app.interop.action.SHSelectFavorite;
 import io.github.greyp9.arwo.app.interop.core.SHRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
@@ -12,10 +15,13 @@ import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
+import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.submit.SubmitTokenU;
+import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.value.Value;
 
 import java.io.IOException;
 
@@ -85,8 +91,23 @@ public class SHHandlerPost {
 
     private String applySession(
             final SubmitToken token, final NameTypeValues httpArguments, final String locationIn) throws IOException {
-        token.getClass();
-        httpArguments.getClass();
-        return locationIn;
+        String location = locationIn;
+        final String message = request.getBundle().getString("alert.action.not.implemented");
+        final String action = token.getAction();
+        final String object = token.getObject();
+        if (App.Action.COMMAND.equals(action)) {
+            location = new SHQueueCommand(request).doAction(location, httpArguments);
+        } else if (App.Action.FILESYSTEM.equals(action)) {
+            location = PathU.toDir(httpRequest.getContextPath(), App.Cache.CIFS, App.Mode.VIEW, request.getServer());
+        } else if (App.Action.TOGGLE.equals(action)) {
+            PropertiesU.toggleBoolean(userState.getProperties(), Value.join("/", App.Cache.WSH, object));
+        } else if (App.Action.ADD_FAV.equals(action)) {
+            new SHAddFavorite(request).doAction();
+        } else if (App.Action.SELECT_FAV.equals(action)) {
+            location = new SHSelectFavorite(request).doAction(token);
+        } else {
+            request.getAlerts().add(new Alert(Alert.Severity.WARN, message, token.toString(), null));
+        }
+        return location;
     }
 }

@@ -76,7 +76,7 @@ public class SHCommandView extends SHView {
         // contextual content
         if (script == null) {
             final History history = interop.getHistory();
-            new AppHistoryView("wshHistoryType", false, history, bundle, httpRequest, userState).addContentTo(html);
+            new AppHistoryView("wshHistoryType", true, history, bundle, httpRequest, userState).addContentTo(html);
         } else {
             new AppScriptView(script).addContentTo(html);
         }

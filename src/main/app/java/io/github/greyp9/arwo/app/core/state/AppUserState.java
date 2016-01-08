@@ -311,12 +311,13 @@ public class AppUserState {
     private void doClose(final SubmitToken token) throws IOException {
         final String cacheName = token.getObject();
         final String resourceName = token.getObject2();
-        if ("ssh".equals(cacheName)) {
+        if (App.Cache.SSH.equals(cacheName)) {
             ssh.getCache().removeResource(resourceName);
-        } else if ("cifs".equals(cacheName)) {
+        } else if (App.Cache.CIFS.equals(cacheName)) {
             cifs.getCache().removeResource(resourceName);
-
-        } else if ("webdav".equals(cacheName)) {
+        } else if (App.Cache.WSH.equals(cacheName)) {
+            interop.getCache().removeResource(resourceName);
+        } else if (App.Cache.WEBDAV.equals(cacheName)) {
             webDAV.getCache().removeResource(resourceName);
         }
     }

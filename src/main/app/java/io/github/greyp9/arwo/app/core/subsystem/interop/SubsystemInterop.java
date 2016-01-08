@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.app.core.subsystem.interop;
 
 import io.github.greyp9.arwo.core.alert.Alerts;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.connect.ConnectionCache;
 import io.github.greyp9.arwo.core.io.script.History;
 
@@ -27,7 +28,7 @@ public class SubsystemInterop {
     }
 
     public SubsystemInterop(final Alerts alerts) {
-        this.cache = new ConnectionCache("interop", alerts);
+        this.cache = new ConnectionCache(App.Cache.WSH, alerts);
         this.history = new History();
         this.properties = new Properties();
     }

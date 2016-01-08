@@ -44,7 +44,7 @@ public class SSHConnectionView {
     }
 
     public final void addContent(final Element html) throws IOException {
-        final String key = Value.join("/", "ssh", App.Action.PROPERTIES);
+        final String key = Value.join("/", App.Cache.SSH, App.Action.PROPERTIES);
         final boolean isPropertiesSSH = PropertiesU.isBoolean(userState.getProperties(), key);
         if (isPropertiesSSH) {
             httpRequest.getClass();

@@ -36,6 +36,13 @@ public final class App {
         public static final String SSH = "/ssh";
     }
 
+    public static class Cache {
+        public static final String SSH = "ssh";
+        public static final String CIFS = "cifs";
+        public static final String WSH = "wsh";
+        public static final String WEBDAV = "webdav";
+    }
+
     public static class Realm {
         public static final String XSD = "io/github/greyp9/arwo/xsd/realm/realm.xsd";
         public static final String XML_EMPTY = "io/github/greyp9/arwo/xsd/realm/realm.xml";

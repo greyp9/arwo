@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.core.io.command.CommandDone;
 import io.github.greyp9.arwo.core.io.command.CommandToDo;
 import io.github.greyp9.arwo.core.io.command.CommandWork;
 import io.github.greyp9.arwo.core.text.line.LineU;
+import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.util.PropertiesX;
 
 import java.io.File;
@@ -59,6 +60,14 @@ public class Script {
     public final File getFile(final File folder) {
         final String filename = String.format("%s.txt", DateX.toFilename(new Date(date)));
         return ((folder == null) ? null : new File(folder, filename));
+    }
+
+    public final synchronized boolean isInterrupted() {
+        return PropertiesU.isBoolean(properties, "interrupted");
+    }
+
+    public final synchronized void setInterrupted() {
+        PropertiesU.setProperty(properties, "interrupted", Boolean.TRUE.toString());
     }
 
     public final synchronized Date getStart() {

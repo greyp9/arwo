@@ -3,11 +3,13 @@ package io.github.greyp9.arwo.app.interop.handler;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.interop.core.SHRequest;
 import io.github.greyp9.arwo.app.interop.view.SHCommandView;
+import io.github.greyp9.arwo.app.interop.view.SHInventoryXView;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.resource.PathU;
+import io.github.greyp9.arwo.core.value.Value;
 
 import java.io.IOException;
 
@@ -38,6 +40,8 @@ public class SHHandlerGet {
             httpResponse = HttpResponseU.to302(PathU.toDir(httpRequest.getURI()));
         } else if (isQuery) {
             httpResponse = HttpResponseU.to302(httpRequest.getURI());
+        } else if (Value.isEmpty(request.getServer())) {
+            httpResponse = new SHInventoryXView(request, userState).doGetResponse();
         } else {
             httpResponse = new SHCommandView(request, userState).doGetResponse();
         }

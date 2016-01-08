@@ -74,7 +74,7 @@ public class SHHandlerPost {
         } else if (App.Action.FILESYSTEM.equals(action)) {
             location = PathU.toDir(httpRequest.getContextPath(), "sftp", App.Mode.VIEW, request.getServer());
         } else if (App.Action.TOGGLE.equals(action)) {
-            PropertiesU.toggleBoolean(userState.getProperties(), Value.join("/", "ssh", object));
+            PropertiesU.toggleBoolean(userState.getProperties(), Value.join("/", App.Cache.SSH, object));
         } else if (App.Action.ADD_FAV.equals(action)) {
             new SHAddFavorite(request).doAction();
         } else if (App.Action.SELECT_FAV.equals(action)) {

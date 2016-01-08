@@ -204,6 +204,7 @@
             <xsd:element name='lfsFavorites' type='app:lfsFavoritesType'/>
             <xsd:element name='sshFavorites' type='app:sshFavoritesType'/>
             <xsd:element name='sftpFavorites' type='app:sftpFavoritesType'/>
+            <xsd:element name='wshFavorites' type='app:wshFavoritesType'/>
             <xsd:element name='cifsFavorites' type='app:cifsFavoritesType'/>
             <xsd:element name='webdavFavorites' type='app:webdavFavoritesType'/>
         </xsd:sequence>
@@ -230,6 +231,12 @@
     <xsd:complexType name='sftpFavoritesType'>
         <xsd:sequence>
             <xsd:element name='sftpFavorite' type='app:sftpFavoriteType' minOccurs='0' maxOccurs='unbounded'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name='wshFavoritesType'>
+        <xsd:sequence>
+            <xsd:element name='wshFavorite' type='app:wshFavoriteType' minOccurs='0' maxOccurs='unbounded'/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -264,6 +271,12 @@
     <xsd:complexType name="sftpFavoriteType">
         <xsd:attribute name='server' type='xsd:string'/>
         <xsd:attribute name='resource' type='xsd:string'/>
+        <xsd:attribute name='comment' type='xsd:string'/>
+    </xsd:complexType>
+
+    <xsd:complexType name="wshFavoriteType">
+        <xsd:attribute name='server' type='xsd:string'/>
+        <xsd:attribute name='command' type='xsd:string'/>
         <xsd:attribute name='comment' type='xsd:string'/>
     </xsd:complexType>
 

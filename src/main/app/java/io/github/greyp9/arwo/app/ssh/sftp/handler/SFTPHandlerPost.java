@@ -112,7 +112,7 @@ public class SFTPHandlerPost {
         } else if (App.Action.COMMAND.equals(action)) {
             location = PathU.toDir(httpRequest.getContextPath(), "ssh", request.getServer());
         } else if (App.Action.TOGGLE.equals(action)) {
-            PropertiesU.toggleBoolean(userState.getProperties(), Value.join("/", "ssh", object));
+            PropertiesU.toggleBoolean(userState.getProperties(), Value.join("/", App.Cache.SSH, object));
         } else if (App.Action.ADD_FAV.equals(action)) {
             new SFTPAddFavorite(request).doAction();
         } else if (App.Action.SELECT_FAV.equals(action)) {
