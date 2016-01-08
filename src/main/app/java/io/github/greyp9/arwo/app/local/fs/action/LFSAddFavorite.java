@@ -35,12 +35,12 @@ public class LFSAddFavorite {
             final XedUserState documentState = userState.getDocumentState();
             final XedSession session = documentState.getSession("/fav");
             final XedNav nav = new XedNav(session.getXed());
-            final XedCursor cursorFavorites = nav.findX("/app:favorites/app:lfs-favorites");
-            final TypeInstance typeInstance = cursorFavorites.getChildInstance("lfs-favorite");
+            final XedCursor cursorFavorites = nav.findX("/app:favorites/app:lfsFavorites");
+            final TypeInstance typeInstance = cursorFavorites.getChildInstance("lfsFavorite");
             final NameTypeValues ntv = NameTypeValuesU.create(
 
-                    "lfs-favorite.lfsFavoriteType.resource", resource,
-                    "lfs-favorite.lfsFavoriteType.comment", comment);
+                    "lfsFavorite.lfsFavoriteType.resource", resource,
+                    "lfsFavorite.lfsFavoriteType.comment", comment);
             final ValueInstance valueInstance = ValueInstance.create(typeInstance, ntv);
             new OpCreate(null, session.getXed()).apply(cursorFavorites.getElement(), valueInstance);
             final XedRequest xedRequest = new XedRequest(request.getHttpRequest(), session, documentState);

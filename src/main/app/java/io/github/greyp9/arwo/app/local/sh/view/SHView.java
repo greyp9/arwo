@@ -88,8 +88,8 @@ public abstract class SHView {
         menuView.addTitle(html, title);
         // favorites (if toggled)
         final XedNav nav = new XedNav(userState.getDocumentState().getSession("/fav").getXed());
-        final XedCursor cursorFavorites = nav.findX("/app:favorites/app:lsh-favorites");
-        final XedCursor cursorType = nav.find("lsh-favorite", cursorFavorites);
+        final XedCursor cursorFavorites = nav.findX("/app:favorites/app:lshFavorites");
+        final XedCursor cursorType = nav.find("lshFavorite", cursorFavorites);
         new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.COMMAND).addContentTo(html);
         // settings property strips
         final Locale locale = userState.getLocus().getLocale();

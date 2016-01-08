@@ -7,8 +7,10 @@ import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.resource.Pather;
+import io.github.greyp9.arwo.core.url.URLCodec;
 import io.github.greyp9.arwo.core.value.Value;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
 public class CIFSRequest {
@@ -16,6 +18,7 @@ public class CIFSRequest {
     private final AppUserState userState;
     private final Pather patherMode;
     private final Pather patherServer;
+    private final String path;
 
     public final ServletHttpRequest getHttpRequest() {
         return appRequest.getHttpRequest();
@@ -38,11 +41,11 @@ public class CIFSRequest {
     }
 
     public CIFSRequest(final ServletHttpRequest httpRequest, final AppUserState userState) {
-        this.appRequest = ((userState == null) ?
-                AppRequest.create(httpRequest) : userState.getAppRequest(httpRequest));
+        this.appRequest = userState.getAppRequest(httpRequest);
         this.userState = userState;
         this.patherMode = new Pather(httpRequest.getPathInfo());
         this.patherServer = new Pather(patherMode.getRight());
+        this.path = httpRequest.getHttpRequest().getResource().replace(getBaseURIServer(), "");
     }
 
     public final String getBaseURIMode() {
@@ -65,7 +68,11 @@ public class CIFSRequest {
         return patherServer.getRight();
     }
 
-    public final String getTitlePath() {
-        return "[CIFS] " + Value.join(Http.Token.COLON, getServer(), getPath());
+    public final String getPathURL() {
+        return path;
+    }
+
+    public final String getTitlePath() throws UnsupportedEncodingException {
+        return "[CIFS] " + URLCodec.decode(Value.join(Http.Token.COLON, getServer(), getPath()));
     }
 }

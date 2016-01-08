@@ -35,12 +35,12 @@ public class SHAddFavorite {
             final XedUserState documentState = userState.getDocumentState();
             final XedSession session = documentState.getSession("/fav");
             final XedNav nav = new XedNav(session.getXed());
-            final XedCursor cursorFavorites = nav.findX("/app:favorites/app:ssh-favorites");
-            final TypeInstance typeInstance = cursorFavorites.getChildInstance("ssh-favorite");
+            final XedCursor cursorFavorites = nav.findX("/app:favorites/app:sshFavorites");
+            final TypeInstance typeInstance = cursorFavorites.getChildInstance("sshFavorite");
             final NameTypeValues ntv = NameTypeValuesU.create(
-                    "ssh-favorite.sshFavoriteType.server", server,
-                    "ssh-favorite.sshFavoriteType.command", command,
-                    "ssh-favorite.sshFavoriteType.comment", comment);
+                    "sshFavorite.sshFavoriteType.server", server,
+                    "sshFavorite.sshFavoriteType.command", command,
+                    "sshFavorite.sshFavoriteType.comment", comment);
             final ValueInstance valueInstance = ValueInstance.create(typeInstance, ntv);
             new OpCreate(null, session.getXed()).apply(cursorFavorites.getElement(), valueInstance);
             final XedRequest xedRequest = new XedRequest(request.getHttpRequest(), session, documentState);

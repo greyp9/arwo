@@ -111,8 +111,8 @@ public abstract class WebDAVView {
         addTextFiltersView(divTitle);
         // favorites (if toggled)
         final XedNav nav = new XedNav(userState.getDocumentState().getSession("/fav").getXed());
-        final XedCursor cursorFavorites = nav.findX("/app:favorites/app:webdav-favorites");
-        final XedCursor cursorType = nav.find("webdav-favorite", cursorFavorites);
+        final XedCursor cursorFavorites = nav.findX("/app:favorites/app:webdavFavorites");
+        final XedCursor cursorType = nav.find("webdavFavorite", cursorFavorites);
         new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.FILESYSTEM).addContentTo(html);
         // settings property strips
         final Locale locale = userState.getLocus().getLocale();

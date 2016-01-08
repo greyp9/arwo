@@ -1,15 +1,15 @@
-package io.github.greyp9.arwo.app.webdav.fs.view;
+package io.github.greyp9.arwo.app.cifs.view;
 
+import io.github.greyp9.arwo.app.cifs.action.CIFSDeleteFile;
+import io.github.greyp9.arwo.app.cifs.connection.CIFSConnectionResource;
+import io.github.greyp9.arwo.app.cifs.core.CIFSRequest;
+import io.github.greyp9.arwo.app.cifs.data.CIFSDataSource;
+import io.github.greyp9.arwo.app.cifs.data.CIFSFolder;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.editor.AppFileEditView;
 import io.github.greyp9.arwo.app.core.view.gz.AppTGZView;
 import io.github.greyp9.arwo.app.core.view.hex.AppHexView;
 import io.github.greyp9.arwo.app.core.view.zip.AppZipView;
-import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolder;
-import io.github.greyp9.arwo.app.webdav.action.WebDAVDeleteFile;
-import io.github.greyp9.arwo.app.webdav.connection.WebDAVConnectionResource;
-import io.github.greyp9.arwo.app.webdav.fs.core.WebDAVRequest;
-import io.github.greyp9.arwo.app.webdav.fs.data.WebDAVDataSource;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.model.ExceptionModel;
 import io.github.greyp9.arwo.core.app.App;
@@ -42,21 +42,21 @@ import java.net.HttpURLConnection;
 import java.util.Date;
 
 @SuppressWarnings("PMD.ExcessiveImports")
-public class WebDAVFileView extends WebDAVView {
+public class CIFSFileView extends CIFSView {
 
-    public WebDAVFileView(
-            final WebDAVRequest request, final AppUserState userState, final WebDAVConnectionResource resource) {
+    public CIFSFileView(
+            final CIFSRequest request, final AppUserState userState, final CIFSConnectionResource resource) {
         super(request, userState, resource);
     }
 
     @Override
     protected final HttpResponse addContentTo(final Element html) throws IOException {
-        final WebDAVRequest request = getRequest();
+        final CIFSRequest request = getRequest();
         final ServletHttpRequest httpRequest = request.getHttpRequest();
         final AppUserState userState = getUserState();
         final String mode = request.getMode();
         final Bundle bundle = request.getBundle();
-        final RowSetMetaData metaData = SFTPFolder.createMetaData();
+        final RowSetMetaData metaData = CIFSFolder.createMetaData();
         final Locus locus = userState.getLocus();
         final ViewState viewState = userState.getViewStates().getViewState(metaData, request.getBundle(), locus);
         final MetaFile metaFile = getFileBytes(viewState);
@@ -85,7 +85,7 @@ public class WebDAVFileView extends WebDAVView {
         } else if (isModeEdit) {
             httpResponse = new AppFileEditView(httpRequest, userState).addContentTo(html, metaFile, charset);
         } else if (isModeDelete) {
-            final WebDAVDeleteFile action = new WebDAVDeleteFile(getRequest());
+            final CIFSDeleteFile action = new CIFSDeleteFile(getRequest());
             userState.getDeferredActions().add(action);
             final String message = bundle.format("WebDAVFileView.file.delete.message", request.getPath());
             userState.getAlerts().add(new Alert(Alert.Severity.QUESTION, message, null, action.getActions()));
@@ -106,9 +106,9 @@ public class WebDAVFileView extends WebDAVView {
 
     private MetaFile getFileBytes(final ViewState viewState) throws IOException {
         MetaFile metaFile;
-        final WebDAVRequest request = getRequest();
-        final WebDAVConnectionResource resource = getResource();
-        final WebDAVDataSource source = new WebDAVDataSource(request, resource.getConnection());
+        final CIFSRequest request = getRequest();
+        final CIFSConnectionResource resource = getResource();
+        final CIFSDataSource source = new CIFSDataSource(request, resource.getConnection());
         final ResourceCache cache = getUserState().getCache();
         final String path = request.getPathURL();
         // if disconnected, resource will only be fetched if no cached copy is available

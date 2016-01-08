@@ -32,7 +32,8 @@
         </xsl:copy>
     </xsl:template>
 
-    <xsl:template match='/xsd:schema/xsd:complexType[@name="sshAuthPasswordType"]/xsd:sequence/xsd:element[@name="password"]'>
+    <xsl:template match='/xsd:schema/xsd:complexType[@name="sshAuthPasswordType" or @name="cifsServerType" or
+    @name="webdavServerType"]/xsd:sequence/xsd:element[@name="password"]'>
         <xsl:copy>
             <xsl:attribute name='xed:pbe'>PBKDF2WithHmacSHA1</xsl:attribute>
             <xsl:attribute name='xed:salt'>AAECAwQFBgc=</xsl:attribute>
@@ -55,18 +56,6 @@
             <xsl:attribute name='xed:rows'>12</xsl:attribute>
             <xsl:attribute name='xed:cols'>120</xsl:attribute>
             <xsl:attribute name='xed:hideInTable'>true</xsl:attribute>
-            <xsl:apply-templates select='@*|node()'/>
-        </xsl:copy>
-    </xsl:template>
-
-    <xsl:template match='/xsd:schema/xsd:complexType[@name="webdavServerType"]/xsd:sequence/xsd:element[@name="password"]'>
-        <xsl:copy>
-            <xsl:attribute name='xed:pbe'>PBKDF2WithHmacSHA1</xsl:attribute>
-            <xsl:attribute name='xed:salt'>AAECAwQFBgc=</xsl:attribute>
-            <xsl:attribute name='xed:algorithm'>AES</xsl:attribute>
-            <xsl:attribute name='xed:transform'>AES/CBC/PKCS5Padding</xsl:attribute>
-            <xsl:attribute name='xed:iterations'>1000</xsl:attribute>
-            <xsl:attribute name='xed:keysize'>128</xsl:attribute>
             <xsl:apply-templates select='@*|node()'/>
         </xsl:copy>
     </xsl:template>

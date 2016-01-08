@@ -38,7 +38,7 @@ public class WebDAVHandlerGet {
         return httpResponse;
     }
 
-    public final HttpResponse doGet2() throws IOException {
+    private HttpResponse doGet2() throws IOException {
         HttpResponse httpResponse;
         final String baseURI = httpRequest.getBaseURI();
         final String pathInfo = httpRequest.getPathInfo();

@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.app.core.state;
 
 import io.github.greyp9.arwo.app.action.DeferredActions;
 import io.github.greyp9.arwo.app.core.action.ActionCacheClear;
+import io.github.greyp9.arwo.app.core.subsystem.cifs.SubsystemCIFS;
 import io.github.greyp9.arwo.app.core.subsystem.cron.SubsystemCron;
 import io.github.greyp9.arwo.app.core.subsystem.dav.SubsystemWebDAV;
 import io.github.greyp9.arwo.app.core.subsystem.local.SubsystemLocal;
@@ -77,6 +78,7 @@ public class AppUserState {
     private final SubsystemCron cron;
     private final SubsystemLocal local;
     private final SubsystemSSH ssh;
+    private final SubsystemCIFS cifs;
     private final SubsystemWebDAV webDAV;
     // menu system
     private final MenuSystem menuSystem;
@@ -152,6 +154,10 @@ public class AppUserState {
         return ssh;
     }
 
+    public final SubsystemCIFS getCIFS() {
+        return cifs;
+    }
+
     public final SubsystemWebDAV getWebDAV() {
         return webDAV;
     }
@@ -204,6 +210,7 @@ public class AppUserState {
         this.cron = new SubsystemCron();
         this.local = new SubsystemLocal();
         this.ssh = new SubsystemSSH(alerts);
+        this.cifs = new SubsystemCIFS(alerts);
         this.webDAV = new SubsystemWebDAV(alerts);
         this.menuSystem = new MenuSystem(submitID, new AppMenuFactory());
         this.cache = new ResourceCache();
@@ -299,6 +306,9 @@ public class AppUserState {
         final String resourceName = token.getObject2();
         if ("ssh".equals(cacheName)) {
             ssh.getCache().removeResource(resourceName);
+        } else if ("cifs".equals(cacheName)) {
+            cifs.getCache().removeResource(resourceName);
+
         } else if ("webdav".equals(cacheName)) {
             webDAV.getCache().removeResource(resourceName);
         }

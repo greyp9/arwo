@@ -1,6 +1,10 @@
 package io.github.greyp9.arwo.app.cifs.handler;
 
+import io.github.greyp9.arwo.app.cifs.connection.CIFSConnectionFactory;
+import io.github.greyp9.arwo.app.cifs.connection.CIFSConnectionResource;
 import io.github.greyp9.arwo.app.cifs.core.CIFSRequest;
+import io.github.greyp9.arwo.app.cifs.view.CIFSInventoryXView;
+import io.github.greyp9.arwo.app.cifs.view.CIFSResourceView;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.app.App;
@@ -43,8 +47,7 @@ public class CIFSHandlerGet {
         } else if (Value.isEmpty(request.getMode())) {
             httpResponse = HttpResponseU.to302(PathU.toDir(httpRequest.getBaseURI(), App.Mode.VIEW));
         } else if (Value.isEmpty(request.getServer())) {
-            //httpResponse = new CIFSInventoryView(request, userState, null, App.Mode.VIEW).doGetResponse();
-            httpResponse = HttpResponseU.to501();
+            httpResponse = new CIFSInventoryXView(request, userState, null, App.Mode.VIEW).doGetResponse();
         } else {
             httpResponse = doGet3();
         }
@@ -52,6 +55,16 @@ public class CIFSHandlerGet {
     }
 
     private HttpResponse doGet3() throws IOException {
-        return HttpResponseU.to501();
+        HttpResponse httpResponse;
+        final CIFSConnectionFactory factory = new CIFSConnectionFactory(
+                httpRequest, userState, request.getBundle(), request.getAlerts());
+        final CIFSConnectionResource resource = (CIFSConnectionResource)
+                userState.getCIFS().getCache().getResource(request.getServer(), factory);
+        if (resource == null) {
+            httpResponse = HttpResponseU.to302(PathU.toDir(httpRequest.getBaseURI(), App.Mode.VIEW));
+        } else {
+            httpResponse = new CIFSResourceView(request, userState, resource).doGetResource(request.getPath());
+        }
+        return httpResponse;
     }
 }

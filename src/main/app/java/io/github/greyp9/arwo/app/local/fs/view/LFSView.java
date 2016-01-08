@@ -110,8 +110,8 @@ public abstract class LFSView {
         addTextFiltersView(divTitle);
         // favorites (if toggled)
         final XedNav nav = new XedNav(userState.getDocumentState().getSession("/fav").getXed());
-        final XedCursor cursorFavorites = nav.findX("/app:favorites/app:lfs-favorites");
-        final XedCursor cursorType = nav.find("lfs-favorite", cursorFavorites);
+        final XedCursor cursorFavorites = nav.findX("/app:favorites/app:lfsFavorites");
+        final XedCursor cursorType = nav.find("lfsFavorite", cursorFavorites);
         new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.FILESYSTEM).addContentTo(html);
         // settings property strips
         final Locale locale = userState.getLocus().getLocale();

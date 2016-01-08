@@ -90,6 +90,7 @@ public class DashView {
     private HttpResponse addContentTo(final Element html) throws IOException {
         addPropertiesView(html);
         new AppConnectionView(httpRequest, userState, userState.getSSH().getCache(), null).addContentTo(html);
+        new AppConnectionView(httpRequest, userState, userState.getCIFS().getCache(), null).addContentTo(html);
         new AppConnectionView(httpRequest, userState, userState.getWebDAV().getCache(), null).addContentTo(html);
         new XedUnsavedView(httpRequest, userState).addContent(html);
         new CronActiveView(userState.getCronService(), request, userState).addContent(html);

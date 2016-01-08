@@ -1,11 +1,12 @@
-package io.github.greyp9.arwo.app.webdav.fs.data;
+package io.github.greyp9.arwo.app.cifs.data;
 
-import io.github.greyp9.arwo.app.webdav.fs.core.WebDAVRequest;
+import io.github.greyp9.arwo.app.cifs.core.CIFSRequest;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.lang.NumberU;
+import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
 import io.github.greyp9.arwo.core.table.insert.InsertRow;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
@@ -19,15 +20,15 @@ import io.github.greyp9.arwo.core.value.Value;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 
-public class WebDAVFolderStyled {
-    private final WebDAVRequest request;
+public class CIFSFolderStyled {
+    private final CIFSRequest request;
     private final RowSet rowSet;
 
     public final RowSet getRowSet() {
         return rowSet;
     }
 
-    public WebDAVFolderStyled(final WebDAVRequest request, final RowSet rowSetRaw) throws UnsupportedEncodingException {
+    public CIFSFolderStyled(final CIFSRequest request, final RowSet rowSetRaw) throws UnsupportedEncodingException {
         this.request = request;
         this.rowSet = new RowSet(rowSetRaw.getMetaData(), null, null);
         final Iterator<Row> iterator = rowSetRaw.iterator();
@@ -54,9 +55,9 @@ public class WebDAVFolderStyled {
         insertRow.setNextColumn(nameDisplay);
         insertRow.setNextColumn(rowRaw.getColumn(metaData.getIndex("mtime")));
         insertRow.setNextColumn(rowRaw.getColumn(metaData.getIndex("ext")));
-
-
-
+        insertRow.setNextColumn(null);
+        insertRow.setNextColumn(null);
+        insertRow.setNextColumn(null);
         insertRow.setNextColumn(rowRaw.getColumn(metaData.getIndex("size")));
         rowSetStyled.add(insertRow.getRow());
     }
@@ -84,13 +85,14 @@ public class WebDAVFolderStyled {
         return text;
     }
 
-    private static String toHref(final WebDAVRequest request, final String folder, final String name,
+    @SuppressWarnings("PMD.NPathComplexity")
+    private static String toHref(final CIFSRequest request, final String folder, final String name,
                                  final boolean isDirectory) throws UnsupportedEncodingException {
-        final boolean fullPath = name.contains(Http.Token.SLASH);
+        final boolean fullPath = !SystemU.isTrue();  // name.contains(Http.Token.SLASH);
         final String folderURI = (fullPath ? request.getBaseURIServer() :
                 request.getHttpRequest().getHttpRequest().getResource());
-
-        final String filename = (fullPath ? name : URLCodec.encode(name));
+        final String nameDisplay = (isDirectory ? name.substring(0, name.length() - Http.Token.SLASH.length()) : name);
+        final String filename = (fullPath ? name : URLCodec.encode(nameDisplay));
         final String suffix = (isDirectory ? Http.Token.SLASH : "");
         return Value.join("", folderURI, folder, filename, suffix);
     }
