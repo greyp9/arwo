@@ -43,7 +43,7 @@ public class CIFSDeleteFile extends DeferredAction {
                         userState.getCIFS().getCache().getResource(request.getServer(), factory);
                 final CIFSConnection connection = resource.getConnection();
                 final CIFSDataSource source = new CIFSDataSource(request, connection);
-                source.delete(request.getPathURL());
+                source.delete(request.getPath());
                 final String message = bundle.format("WebDAVFileView.file.delete", request.getPath());
                 alerts.add(new Alert(Alert.Severity.INFO, message));
             } catch (IOException e) {

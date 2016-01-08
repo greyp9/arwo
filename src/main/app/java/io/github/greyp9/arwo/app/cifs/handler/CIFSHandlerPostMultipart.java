@@ -79,7 +79,7 @@ public class CIFSHandlerPostMultipart {
         alerts.add(new Alert(Alert.Severity.INFO, bundle.format(
                 "SFTPHandlerPostMultipart.file.source", filename)));
         // put data to remote
-        final FileX fileX = new FileX(Value.join("", request.getPathURL(), URLCodec.encode(filename)));
+        final FileX fileX = new FileX(Value.join("", request.getPath(), filename));
         final CIFSDataSource source = new CIFSDataSource(request, resource.getConnection());
         source.write(bytes, fileX.getPath());
         // info alert

@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.app.cifs.view;
 
 import io.github.greyp9.arwo.app.cifs.connection.CIFSConnectionResource;
 import io.github.greyp9.arwo.app.cifs.core.CIFSRequest;
+import io.github.greyp9.arwo.app.cifs.data.CIFSDataSource;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.favorite.AppFavoriteView;
 import io.github.greyp9.arwo.app.core.view.props.AppPropertiesView;
@@ -154,7 +155,8 @@ public abstract class CIFSView {
     }
 
     private NameTypeValues getFileProperties() throws IOException {
-        return new NameTypeValues();
+        CIFSDataSource source = new CIFSDataSource(request, resource.getConnection());
+        return source.properties(request.getPath());
     }
 
     protected abstract HttpResponse addContentTo(Element html) throws IOException;

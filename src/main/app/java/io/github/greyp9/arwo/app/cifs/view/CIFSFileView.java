@@ -110,7 +110,7 @@ public class CIFSFileView extends CIFSView {
         final CIFSConnectionResource resource = getResource();
         final CIFSDataSource source = new CIFSDataSource(request, resource.getConnection());
         final ResourceCache cache = getUserState().getCache();
-        final String path = request.getPathURL();
+        final String path = request.getPath();
         // if disconnected, resource will only be fetched if no cached copy is available
         if (viewState.isConnected()) {
             metaFile = source.read(path);
