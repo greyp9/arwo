@@ -146,6 +146,8 @@
             <include name='io/github/greyp9/arwo/app/ssh/servlet/SHServlet.java'/>
             <!--cifs-->
             <include name='io/github/greyp9/arwo/app/cifs/servlet/CIFSServlet.java'/>
+            <!--interop-->
+            <include name='io/github/greyp9/arwo/app/interop/servlet/SHServlet.java'/>
             <!--webdav-->
             <include name='io/github/greyp9/arwo/app/webdav/servlet/WebDAVServlet.java'/>
             <!--local-->

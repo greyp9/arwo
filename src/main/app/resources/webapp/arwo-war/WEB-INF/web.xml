@@ -136,6 +136,28 @@
         <url-pattern>/ssh/*</url-pattern>
     </servlet-mapping>
 
+    <!--cifs fs-->
+    <servlet>
+        <description>access remote cifs file servers</description>
+        <servlet-name>CIFSServlet</servlet-name>
+        <servlet-class>io.github.greyp9.arwo.app.cifs.servlet.CIFSServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CIFSServlet</servlet-name>
+        <url-pattern>/cifs/*</url-pattern>
+    </servlet-mapping>
+
+    <!--interop-command-->
+    <servlet>
+        <description>access remote interop servers (dcom)</description>
+        <servlet-name>SHServletInterop</servlet-name>
+        <servlet-class>io.github.greyp9.arwo.app.interop.servlet.SHServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SHServletInterop</servlet-name>
+        <url-pattern>/wsh/*</url-pattern>
+    </servlet-mapping>
+
     <!--webdav fs-->
     <servlet>
         <description>access remote webdav file servers</description>

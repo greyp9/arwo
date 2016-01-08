@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.app.core.action.ActionCacheClear;
 import io.github.greyp9.arwo.app.core.subsystem.cifs.SubsystemCIFS;
 import io.github.greyp9.arwo.app.core.subsystem.cron.SubsystemCron;
 import io.github.greyp9.arwo.app.core.subsystem.dav.SubsystemWebDAV;
+import io.github.greyp9.arwo.app.core.subsystem.interop.SubsystemInterop;
 import io.github.greyp9.arwo.app.core.subsystem.local.SubsystemLocal;
 import io.github.greyp9.arwo.app.core.subsystem.ssh.SubsystemSSH;
 import io.github.greyp9.arwo.core.alert.Alert;
@@ -79,6 +80,7 @@ public class AppUserState {
     private final SubsystemLocal local;
     private final SubsystemSSH ssh;
     private final SubsystemCIFS cifs;
+    private final SubsystemInterop interop;
     private final SubsystemWebDAV webDAV;
     // menu system
     private final MenuSystem menuSystem;
@@ -158,6 +160,10 @@ public class AppUserState {
         return cifs;
     }
 
+    public final SubsystemInterop getInterop() {
+        return interop;
+    }
+
     public final SubsystemWebDAV getWebDAV() {
         return webDAV;
     }
@@ -211,6 +217,7 @@ public class AppUserState {
         this.local = new SubsystemLocal();
         this.ssh = new SubsystemSSH(alerts);
         this.cifs = new SubsystemCIFS(alerts);
+        this.interop = new SubsystemInterop(alerts);
         this.webDAV = new SubsystemWebDAV(alerts);
         this.menuSystem = new MenuSystem(submitID, new AppMenuFactory());
         this.cache = new ResourceCache();
