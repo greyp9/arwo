@@ -61,7 +61,7 @@ public abstract class SHView {
         final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(App.Html.UI)));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
         // context-specific content
-        final AppTitle title = AppTitle.Factory.getHostLabel(httpRequest, bundle);
+        final AppTitle title = AppTitle.Factory.getResourceLabel(httpRequest, bundle, request.getTitlePath());
         addHeaderView(body, title);
         HttpResponse httpResponse = addContentTo(body);
         if (httpResponse == null) {

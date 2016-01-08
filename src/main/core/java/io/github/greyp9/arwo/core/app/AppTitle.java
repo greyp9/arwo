@@ -41,7 +41,8 @@ public class AppTitle {
 
         public static AppTitle getResourceLabel(final ServletHttpRequest httpRequest, final Bundle bundle,
                                                 final String resource, final String... facets) {
-            return new AppTitle(resource, getLabel(httpRequest, bundle), bundle.localize(facets));
+            final String host = httpRequest.getHttpRequest().getHeader(Http.Header.HOST);
+            return new AppTitle(resource, getLabel(httpRequest, bundle), bundle.localize(facets), host);
         }
 
         private static String getLabel(final ServletHttpRequest httpRequest, final Bundle bundle) {
