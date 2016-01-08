@@ -1,5 +1,12 @@
 package io.github.greyp9.arwo.app.cifs.handler;
 
+import io.github.greyp9.arwo.app.cifs.action.CIFSAddFavorite;
+import io.github.greyp9.arwo.app.cifs.action.CIFSCreateFile;
+import io.github.greyp9.arwo.app.cifs.action.CIFSCreateFolder;
+import io.github.greyp9.arwo.app.cifs.action.CIFSSelectFavorite;
+import io.github.greyp9.arwo.app.cifs.action.CIFSUpdateFile;
+import io.github.greyp9.arwo.app.cifs.connection.CIFSConnectionFactory;
+import io.github.greyp9.arwo.app.cifs.connection.CIFSConnectionResource;
 import io.github.greyp9.arwo.app.cifs.core.CIFSRequest;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.alert.Alert;
@@ -12,10 +19,14 @@ import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
+import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.submit.SubmitTokenU;
+import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.lib.jcifs.fs.connection.CIFSConnection;
 
 import java.io.IOException;
 
@@ -88,9 +99,34 @@ public class CIFSHandlerPost {
 
     private String applySession(
             final SubmitToken token, final NameTypeValues httpArguments, final String locationIn) throws IOException {
-        httpArguments.getClass();
+        String location = locationIn;
         final String message = request.getBundle().getString("alert.action.not.implemented");
-        alerts.add(new Alert(Alert.Severity.WARN, message, token.toString(), null));
-        return locationIn;
+        final String action = token.getAction();
+        final String object = token.getObject();
+        if (App.Action.FILE_CREATE.equals(action)) {
+            new CIFSCreateFile(request, getConnection()).apply(httpArguments);
+        } else if (App.Action.FOLDER_CREATE.equals(action)) {
+            new CIFSCreateFolder(request, getConnection()).apply(httpArguments);
+        } else if (App.Action.FILE_UPDATE.equals(action)) {
+            new CIFSUpdateFile(request, getConnection()).apply(httpArguments);
+        } else if (App.Action.COMMAND.equals(action)) {
+            location = PathU.toDir(httpRequest.getContextPath(), "webdav", request.getServer());
+        } else if (App.Action.TOGGLE.equals(action)) {
+            PropertiesU.toggleBoolean(userState.getProperties(), Value.join("/", "webdav", object));
+        } else if (App.Action.ADD_FAV.equals(action)) {
+            new CIFSAddFavorite(request).doAction();
+        } else if (App.Action.SELECT_FAV.equals(action)) {
+            location = new CIFSSelectFavorite(request).doAction(token);
+        } else {
+            alerts.add(new Alert(Alert.Severity.WARN, message, token.toString(), null));
+        }
+        return location;
+    }
+
+    private CIFSConnection getConnection() throws IOException {
+        final CIFSConnectionFactory factory = new CIFSConnectionFactory(httpRequest, userState, bundle, alerts);
+        final CIFSConnectionResource resource = (CIFSConnectionResource)
+                userState.getWebDAV().getCache().getResource(request.getServer(), factory);
+        return resource.getConnection();
     }
 }

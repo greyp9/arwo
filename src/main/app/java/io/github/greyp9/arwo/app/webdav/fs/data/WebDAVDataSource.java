@@ -55,7 +55,6 @@ public class WebDAVDataSource {
         return list;
     }
 
-
     public final void createDirectory(final String path) throws IOException {
         final Sardine sardine = connection.getConnection();
         final String url = connection.getURL().toExternalForm() + path;

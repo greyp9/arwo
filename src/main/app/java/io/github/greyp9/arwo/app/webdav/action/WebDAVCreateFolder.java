@@ -33,7 +33,6 @@ public class WebDAVCreateFolder {
         final FileX fileXDisplay = new FileX(Value.join("", request.getPath(), filename));
         final FileX fileX = new FileX(Value.join("", request.getPathURL(), URLCodec.encode(filename)));
         final WebDAVDataSource source = new WebDAVDataSource(request, connection);
-
         final int lstat = source.lstat(fileX.getPath());
         if (lstat == HttpURLConnection.HTTP_NOT_FOUND) {
             source.createDirectory(fileX.getPath());

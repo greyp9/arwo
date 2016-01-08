@@ -155,7 +155,7 @@ public abstract class CIFSView {
     }
 
     private NameTypeValues getFileProperties() throws IOException {
-        CIFSDataSource source = new CIFSDataSource(request, resource.getConnection());
+        final CIFSDataSource source = new CIFSDataSource(request, resource.getConnection());
         return source.properties(request.getPath());
     }
 
