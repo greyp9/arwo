@@ -33,7 +33,7 @@
     </xsl:template>
 
     <xsl:template match='/xsd:schema/xsd:complexType[@name="sshAuthPasswordType" or @name="cifsServerType" or
-    @name="webdavServerType"]/xsd:sequence/xsd:element[@name="password"]'>
+    @name="webdavServerType" or @name="jdbcServerType"]/xsd:sequence/xsd:element[@name="password"]'>
         <xsl:copy>
             <xsl:attribute name='xed:pbe'>PBKDF2WithHmacSHA1</xsl:attribute>
             <xsl:attribute name='xed:salt'>AAECAwQFBgc=</xsl:attribute>
