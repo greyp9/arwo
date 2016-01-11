@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 
 @SuppressWarnings("PMD.DoNotUseThreads")
 public class ScriptRunnable implements Runnable {
+    private final Logger logger = Logger.getLogger(getClass().getName());
     private final Script script;
     private final ScriptContext context;
 
@@ -34,6 +35,7 @@ public class ScriptRunnable implements Runnable {
     @Override
     public final void run() {
         try {
+            logger.entering(getClass().getName(), Runnable.class.getName());
             script.start();
             runInner();
         } catch (IOException e) {
@@ -45,6 +47,7 @@ public class ScriptRunnable implements Runnable {
             new ScriptWriter(script, context.getLocus()).writeTo(script.getFile(context.getFolder()));
         } catch (IOException e) {
             context.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
+            logger.exiting(getClass().getName(), Runnable.class.getName());
         }
     }
 
@@ -72,7 +75,7 @@ public class ScriptRunnable implements Runnable {
     }
 
     private void runCommand(final CommandToDo commandToDo, final Session session) throws IOException {
-        final CommandWork commandWork = script.startCommand(commandToDo, UTF8Codec.Const.UTF8);
+        final CommandWork commandWork = script.startCommand(commandToDo, UTF8Codec.Const.UTF8, null);
         Integer exitValue = null;
         try {
             session.execCommand(commandWork.getStdin());
@@ -81,6 +84,7 @@ public class ScriptRunnable implements Runnable {
             commandWork.getByteBufferStderr().addString(e.getMessage());
         } finally {
             script.finishCommand(commandWork, exitValue);
+            context.getSSHConnection().update(commandWork.getStart());
         }
     }
 

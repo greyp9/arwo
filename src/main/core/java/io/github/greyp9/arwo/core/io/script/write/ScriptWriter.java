@@ -41,6 +41,10 @@ public class ScriptWriter {
         ps.println(script.getContext());
         for (final Command command : script.getCommands()) {
             ps.println(separator);
+            if (command.getDir() != null) {
+                ps.println("DIR");
+                ps.println(command.getDir());
+            }
             ps.println("STDIN");
             ps.println(command.getStdin());
             ps.println("STDOUT");

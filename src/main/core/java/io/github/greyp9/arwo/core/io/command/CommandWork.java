@@ -6,12 +6,18 @@ import java.io.IOException;
 import java.util.Date;
 
 public class CommandWork extends Command {
+    private final String dir;
     private final String stdin;
     private final long dateStart;
     private final Integer pid;
     private final ByteBuffer byteBufferStdin;
     private final ByteBuffer byteBufferStdout;
     private final ByteBuffer byteBufferStderr;
+
+    @Override
+    public final String getDir() {
+        return dir;
+    }
 
     @Override
     public final String getStdin() {
@@ -68,8 +74,10 @@ public class CommandWork extends Command {
         return byteBufferStderr;
     }
 
-    public CommandWork(final String stdin, final String charset, final Date dateStart, final Integer pid) {
+    public CommandWork(
+            final String dir, final String stdin, final String charset, final Date dateStart, final Integer pid) {
         super();
+        this.dir = dir;
         this.stdin = stdin;
         this.dateStart = dateStart.getTime();
         this.pid = pid;
@@ -81,6 +89,7 @@ public class CommandWork extends Command {
     public CommandWork(final CommandWork command, final Integer pid) {
         super();
         this.stdin = command.getStdin();
+        this.dir = command.getDir();
         this.dateStart = command.getStart().getTime();
         this.pid = pid;
         this.byteBufferStdin = command.getByteBufferStdin();

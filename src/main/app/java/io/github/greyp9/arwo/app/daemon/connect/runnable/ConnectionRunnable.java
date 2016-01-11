@@ -31,7 +31,7 @@ public class ConnectionRunnable implements Runnable {
             "PMD.AvoidInstantiatingObjectsInLoops", "PMD.GuardLogStatementJavaUtil", "PMD.GuardLogStatement" })
     @Override
     public final void run() {
-        logger.info("START");
+        logger.entering(getClass().getName(), Runnable.class.getName());
         Date date = new Date();
         while (reference.get() == null) {
             date = getNextTime(date, Const.DURATION);
@@ -43,7 +43,7 @@ public class ConnectionRunnable implements Runnable {
                 runMonitor(date, Const.DURATION);
             }
         }
-        logger.info("STOP/" + reference.get());
+        logger.exiting(getClass().getName(), Runnable.class.getName(), reference.get());
     }
 
     private Date getNextTime(final Date date, final String duration) {
@@ -73,7 +73,13 @@ public class ConnectionRunnable implements Runnable {
     }
 
     private void runMonitorUserState(final Date date, final String duration, final AppUserState userState) {
-        final ConnectionCache cache = userState.getSSH().getCache();
+        runMonitorCache(date, duration, userState.getSSH().getCache());
+        runMonitorCache(date, duration, userState.getCIFS().getCache());
+        runMonitorCache(date, duration, userState.getInterop().getCache());
+        runMonitorCache(date, duration, userState.getWebDAV().getCache());
+    }
+
+    private void runMonitorCache(final Date date, final String duration, final ConnectionCache cache) {
         final Collection<ConnectionResource> resources = cache.getResources();
         for (final ConnectionResource resource : resources) {
             final Date dateIdle = DurationU.add(resource.getDateLast(), DateU.Const.TZ_GMT, duration);

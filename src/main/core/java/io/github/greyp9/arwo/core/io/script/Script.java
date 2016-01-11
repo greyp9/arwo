@@ -100,8 +100,9 @@ public class Script {
         return (commandsToDo.isEmpty() ? null : commandsToDo.iterator().next());
     }
 
-    public final synchronized CommandWork startCommand(final CommandToDo command, final String charset) {
-        final CommandWork commandWork = new CommandWork(command.getStdin(), charset, new Date(), null);
+    public final synchronized CommandWork startCommand(
+            final CommandToDo command, final String charset, final String dir) {
+        final CommandWork commandWork = new CommandWork(dir, command.getStdin(), charset, new Date(), null);
         commandsToDo.remove(command);
         commandsWork.add(commandWork);
         return commandWork;

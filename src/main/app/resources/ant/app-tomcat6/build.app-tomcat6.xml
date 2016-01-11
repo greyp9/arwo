@@ -160,8 +160,11 @@
             <include name='io/github/greyp9/arwo/app/local/servlet/SHServlet.java'/>
             <!--cron-->
             <include name='io/github/greyp9/arwo/core/cron/instance/*Runnable.java'/>
-
-
+            <!--cron-->
+            <include name='io/github/greyp9/arwo/app/interop/sh/cron/*Runnable.java'/>
+            <include name='io/github/greyp9/arwo/app/local/sh/cron/*Runnable.java'/>
+            <include name='io/github/greyp9/arwo/app/ssh/sftp/cron/*Runnable.java'/>
+            <include name='io/github/greyp9/arwo/app/ssh/sh/cron/*Runnable.java'/>
             <!--table testing-->
             <include name='io/github/greyp9/arwo/app/apptest/fs/servlet/FileSystemServlet.java'/>
 

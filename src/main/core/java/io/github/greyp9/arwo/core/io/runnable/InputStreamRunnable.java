@@ -8,9 +8,11 @@ import io.github.greyp9.arwo.core.vm.thread.ThreadU;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.logging.Logger;
 
 @SuppressWarnings({ "PMD.DoNotUseThreads", "PMD.AvoidSynchronizedAtMethodLevel" })
 public class InputStreamRunnable implements Runnable {
+    private final Logger logger = Logger.getLogger(getClass().getName());
     private final InputStream is;
     private final ByteBuffer byteBuffer;
     private final long pollInterval;
@@ -77,13 +79,14 @@ public class InputStreamRunnable implements Runnable {
 
     @Override
     public final void run() {
-        //java.util.logging.Logger.getLogger(getClass().getName()).info("START");
+        logger.entering(getClass().getName(), Runnable.class.getName());
         try {
             runInner();
         } catch (IOException e) {
             setException(e);
+        } finally {
+            logger.exiting(getClass().getName(), Runnable.class.getName());
         }
-        //java.util.logging.Logger.getLogger(getClass().getName()).info("FINISH");
     }
 
     public final void runInner() throws IOException {

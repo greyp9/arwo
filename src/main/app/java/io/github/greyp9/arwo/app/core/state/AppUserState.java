@@ -301,7 +301,7 @@ public class AppUserState {
         final boolean isState = (isSSH || isWebDAV || isDocument);
         if (isState) {
             alerts.add(new Alert(Alert.Severity.INFO, getBundle().getString("AppUserState.unsaved.state")));
-            location = httpRequest.getContextPath() + App.Context.DASH;
+            location = httpRequest.getContextPath() + App.Servlet.DASH;
         } else {
             appState.removeUserState(principal, httpRequest.getDate());
         }

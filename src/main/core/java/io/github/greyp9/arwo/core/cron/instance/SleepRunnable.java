@@ -22,18 +22,18 @@ public class SleepRunnable extends CronRunnable {
 
     @Override
     public final void run() {
-        logger.finest("START");  // i18n
+        logger.entering(getClass().getName(), CronRunnable.class.getName());
         final RowTyped row = getParams().getRow();
         final Date dateStart = new Date();
-        row.update("dateStart", dateStart);  // i18n
+        row.update(Const.DATE_START, dateStart);
 
         final Element element = getParams().getCronJob().getElement();
-        final String duration = ElementU.getAttribute(element, "duration", DurationU.Const.ZERO_SECONDS);  // i18n
+        final String duration = ElementU.getAttribute(element, Const.DURATION, DurationU.Const.ZERO_SECONDS);
         final Date dateUntil = DurationU.add(dateStart, DateU.Const.TZ_GMT, duration);
         final boolean interrupted = ThreadU.sleepUntil(dateUntil);
 
-        row.update("duration", DurationU.duration(dateStart, new Date()));  // i18n
-        row.update("result", 0);  // i18n
-        logger.finest(String.format("FINISH(interrupted=%s)", interrupted));
+        row.update(Const.DURATION, DurationU.duration(dateStart, new Date()));
+        row.update(Const.RESULT, 0);  // i18n
+        logger.exiting(getClass().getName(), CronRunnable.class.getName(), interrupted);
     }
 }

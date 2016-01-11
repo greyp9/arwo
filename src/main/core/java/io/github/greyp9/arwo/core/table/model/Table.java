@@ -24,15 +24,15 @@ public class Table extends RowSet {
     }
 
     public static class Const {
-        public static final String TABLE = "table";  // i18n lookup
+        public static final String TABLE = "table";  // i18n
 
-        public static final String FOOTER_C = "FOOTER_C";
-        public static final String FOOTER_L = "FOOTER_L";
-        public static final String FOOTER_R = "FOOTER_R";
+        public static final String FOOTER_C = "FOOTER_C";  // i18n
+        public static final String FOOTER_L = "FOOTER_L";  // i18n
+        public static final String FOOTER_R = "FOOTER_R";  // i18n
 
-        public static final String FOOTER_HREF_C = "FOOTER_HREF_C";
-        public static final String FOOTER_HREF_L = "FOOTER_HREF_L";
-        public static final String FOOTER_HREF_R = "FOOTER_HREF_R";
+        public static final String FOOTER_HREF_C = "FOOTER_HREF_C";  // i18n
+        public static final String FOOTER_HREF_L = "FOOTER_HREF_L";  // i18n
+        public static final String FOOTER_HREF_R = "FOOTER_HREF_R";  // i18n
 
         public static final String FOOTER_SIZE = "table.footer.size";
     }

@@ -13,7 +13,6 @@ import java.util.logging.Logger;
 @SuppressWarnings("PMD.DoNotUseThreads")
 public class OutputStreamRunnable implements Runnable {
     private final Logger logger = Logger.getLogger(getClass().getName());
-    private final Level level = Level.FINEST;
     private final long interval;
 
     private final OutputTextStream stream;
@@ -34,15 +33,16 @@ public class OutputStreamRunnable implements Runnable {
 
     @Override
     public final void run() {
-        logger.log(level, "START");
+        logger.entering(getClass().getName(), Runnable.class.getName());
         try {
             runInner();
         } catch (JIException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
+        } finally {
+            logger.exiting(getClass().getName(), Runnable.class.getName());
         }
-        logger.log(level, "FINISH");
     }
 
     public final void runInner() throws IOException, JIException {

@@ -6,7 +6,10 @@ import io.github.greyp9.arwo.app.ssh.sh.action.SHQueueCommand;
 import io.github.greyp9.arwo.app.ssh.sh.action.SHSelectFavorite;
 import io.github.greyp9.arwo.app.ssh.sh.core.SHRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
+import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
@@ -26,16 +29,39 @@ public class SHHandlerPost {
     private final SHRequest request;
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
+    private final Bundle bundle;
+    private final Alerts alerts;
 
     public SHHandlerPost(final ServletHttpRequest httpRequest, final AppUserState userState) {
         this.request = new SHRequest(httpRequest, userState);
         this.httpRequest = httpRequest;
         this.userState = userState;
+        this.bundle = request.getBundle();
+        this.alerts = request.getAlerts();
     }
 
     public final HttpResponse doPost() throws IOException {
         // redirect location (identity by default)
         String location = httpRequest.getHttpRequest().getResource();
+        // branch on content type of incoming request
+        final String contentType = httpRequest.getHeader(Http.Header.CONTENT_TYPE);
+        if (contentType == null) {
+            doPostContentTypeUnknown(null);
+        } else if (contentType.equalsIgnoreCase(Http.Mime.FORM_URL_ENCODED)) {
+            location = doPostFormURLEncoded(location);
+        } else {
+            doPostContentTypeUnknown(contentType);
+        }
+        // redirect to clean up client POST state
+        return HttpResponseU.to302(location);
+    }
+
+    private void doPostContentTypeUnknown(final String contentType) throws IOException {
+        alerts.add(new Alert(Alert.Severity.ERR, bundle.format("SFTPHandlerPost.type.unknown", contentType)));
+    }
+
+    private String doPostFormURLEncoded(final String locationIn) throws IOException {
+        String location = locationIn;
         final byte[] entity = StreamU.read(httpRequest.getHttpRequest().getEntity());
         final NameTypeValues httpArguments = HttpArguments.toArguments(entity);
         for (final NameTypeValue httpArgument : httpArguments) {
@@ -46,7 +72,7 @@ public class SHHandlerPost {
                 }
             }
         }
-        return HttpResponseU.to302(location);
+        return location;
     }
 
     private String applySubmit(

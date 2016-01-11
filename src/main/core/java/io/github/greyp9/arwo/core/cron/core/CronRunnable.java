@@ -11,4 +11,10 @@ public abstract class CronRunnable implements Runnable {
     protected CronRunnable(final CronParams params) {
         this.params = params;
     }
+
+    protected static class Const {
+        public static final String DATE_START = "dateStart";  // i18n
+        public static final String DURATION = "duration";  // i18n
+        public static final String RESULT = "result";  // i18n
+    }
 }

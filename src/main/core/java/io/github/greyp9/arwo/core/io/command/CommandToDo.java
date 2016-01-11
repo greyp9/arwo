@@ -6,6 +6,11 @@ public class CommandToDo extends Command {
     private final String stdin;
 
     @Override
+    public final String getDir() {
+        return null;
+    }
+
+    @Override
     public final String getStdin() {
         return stdin;
     }

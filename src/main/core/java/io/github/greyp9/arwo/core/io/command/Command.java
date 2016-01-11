@@ -5,6 +5,8 @@ import java.util.Date;
 @SuppressWarnings("PMD.AbstractNaming")
 public abstract class Command {
 
+    public abstract String getDir();
+
     public abstract String getStdin();
 
     public abstract String getStdout();

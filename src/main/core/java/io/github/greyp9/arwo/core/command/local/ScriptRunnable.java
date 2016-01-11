@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.core.command.local;
 
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
+import io.github.greyp9.arwo.core.file.FileU;
 import io.github.greyp9.arwo.core.io.buffer.ByteBuffer;
 import io.github.greyp9.arwo.core.io.command.CommandToDo;
 import io.github.greyp9.arwo.core.io.command.CommandWork;
@@ -14,6 +15,7 @@ import io.github.greyp9.arwo.core.vm.mutex.MutexU;
 import io.github.greyp9.arwo.core.vm.process.ProcessU;
 import io.github.greyp9.arwo.core.vm.thread.ThreadU;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -22,6 +24,7 @@ import java.util.logging.Logger;
 
 @SuppressWarnings("PMD.DoNotUseThreads")
 public class ScriptRunnable implements Runnable {
+    private final Logger logger = Logger.getLogger(getClass().getName());
     private final Script script;
     private final ScriptContext context;
 
@@ -33,6 +36,7 @@ public class ScriptRunnable implements Runnable {
     @Override
     public final void run() {
         try {
+            logger.entering(getClass().getName(), Runnable.class.getName());
             script.start();
             runInner();
         } catch (IOException e) {
@@ -44,6 +48,7 @@ public class ScriptRunnable implements Runnable {
             new ScriptWriter(script, context.getLocus()).writeTo(script.getFile(context.getFolder()));
         } catch (IOException e) {
             context.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
+            logger.exiting(getClass().getName(), Runnable.class.getName());
         }
     }
 
@@ -57,12 +62,13 @@ public class ScriptRunnable implements Runnable {
     }
 
     private void runCommand(final CommandToDo commandToDo) throws IOException {
-        CommandWork commandWork = script.startCommand(commandToDo, UTF8Codec.Const.UTF8);
+        final File dir = context.getUserDir();
+        CommandWork commandWork = script.startCommand(commandToDo, UTF8Codec.Const.UTF8, FileU.fromFile(dir));
         Integer exitValue = null;
         try {
             final String[] commandArray = StringU.tokenize(commandWork.getStdin(), StringU.Const.WHITESPACE);
             final Runtime runtime = Runtime.getRuntime();
-            final Process process = runtime.exec(commandArray, null, context.getUserDir());
+            final Process process = runtime.exec(commandArray, null, dir);
             final Integer processId = ProcessU.getProcessId(process);
             commandWork = script.updateCommand(commandWork, processId);
             exitValue = monitorCommand(commandWork, process);

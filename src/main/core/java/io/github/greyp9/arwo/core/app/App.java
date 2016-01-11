@@ -23,6 +23,8 @@ public final class App {
         public static final QName QNAME_FILTER = new QName(URI_ACTION, "filter", PREFIX_ACTION);
         public static final QName QNAME_LOCALE = new QName(URI_ACTION, "locale", PREFIX_ACTION);
         public static final QName QNAME_TEXT_FILTER = new QName(URI_ACTION, "textFilter", PREFIX_ACTION);
+
+        public static final String SUBMIT_COMMAND = "[session][command][{urn:arwo:action}command][command]";
     }
 
     public static class Config {
@@ -31,9 +33,12 @@ public final class App {
         public static final QName QNAME_FAVORITES = new QName("urn:arwo:app", "favorites", "app");
     }
 
-    public static class Context {
+    public static class Servlet {
         public static final String DASH = "/dash";
+        public static final String LSH = "/lsh";
+        public static final String SFTP = "/sftp";
         public static final String SSH = "/ssh";
+        public static final String WSH = "/wsh";
     }
 
     public static class Cache {

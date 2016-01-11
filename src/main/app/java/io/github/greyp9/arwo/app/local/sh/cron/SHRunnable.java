@@ -1,8 +1,8 @@
-package io.github.greyp9.arwo.app.ssh.sh.cron;
+package io.github.greyp9.arwo.app.local.sh.cron;
 
 import io.github.greyp9.arwo.app.core.state.AppState;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
-import io.github.greyp9.arwo.app.ssh.sh.handler.SHHandlerPost;
+import io.github.greyp9.arwo.app.local.sh.handler.SHHandlerPost;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.cron.core.CronParams;
@@ -46,9 +46,8 @@ public class SHRunnable extends CronRunnable {
         final Date dateStart = new Date();
         row.update(Const.DATE_START, dateStart);
         // initialize
-        final String server = ElementU.getAttribute(getParams().getElement(), "server");
         final String command = ElementU.getAttribute(getParams().getElement(), "command");
-        final String pathInfo = PathU.toDir("", server);
+        final String pathInfo = PathU.toDir("");
         // execute
         try {
             final Context context = AppNaming.lookupSubcontext(getParams().getContext());
@@ -80,7 +79,7 @@ public class SHRunnable extends CronRunnable {
             final HttpRequest httpRequest, final String pathInfo, final Principal principal) throws IOException {
         final Date date = getParams().getDate();
         final String context = getParams().getContext();
-        return new ServletHttpRequest(httpRequest, date, principal, context, App.Servlet.SSH, pathInfo);
+        return new ServletHttpRequest(httpRequest, date, principal, context, App.Servlet.LSH, pathInfo);
     }
 
     private HttpRequest getHttpRequest(
@@ -93,7 +92,7 @@ public class SHRunnable extends CronRunnable {
         final NameTypeValues query = NameTypeValuesU.create(
                 "command.commandType.command", command, submitID, App.Actions.SUBMIT_COMMAND);
         final ByteArrayInputStream is = new ByteArrayInputStream(HttpArguments.toEntity(query));
-        final String resource = String.format("%s%s%s", params.getContext(), App.Servlet.SSH, pathInfo);
+        final String resource = String.format("%s%s%s", params.getContext(), App.Servlet.LSH, pathInfo);
         return new HttpRequest(Http.Method.POST, resource, null, headers, is);
     }
 }

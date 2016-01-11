@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.io.command;
 import java.util.Date;
 
 public class CommandDone extends Command {
+    private final String dir;
     private final String stdin;
     private final String stdout;
     private final String stderr;
@@ -10,6 +11,11 @@ public class CommandDone extends Command {
     private final long dateFinish;
     private final Integer pid;
     private final Integer exitValue;
+
+    @Override
+    public final String getDir() {
+        return dir;
+    }
 
     @Override
     public final String getStdin() {
@@ -49,6 +55,7 @@ public class CommandDone extends Command {
     public CommandDone(final CommandWork command, final String stdout, final String stderr,
                        final Date dateFinish, final Integer exitValue) {
         super();
+        this.dir = command.getDir();
         this.stdin = command.getStdin();
         this.stdout = stdout;
         this.stderr = stderr;

@@ -112,7 +112,10 @@
         <xsd:choice>
             <xsd:element name='arguments' type='app:cronArgumentsJobType'/>
             <xsd:element name='sleep' type='app:cronSleepJobType'/>
+            <xsd:element name='lsh' type='app:cronLshJobType'/>
             <xsd:element name='ssh' type='app:cronSshJobType'/>
+            <xsd:element name='wsh' type='app:cronWshJobType'/>
+            <xsd:element name='sftp' type='app:cronSFTPJobType'/>
         </xsd:choice>
         <xsd:attributeGroup ref="app:cronJobAttributes"/>
     </xsd:complexType>
@@ -131,9 +134,26 @@
         <xsd:attribute name='duration' type='xsd:duration'/>
     </xsd:complexType>
 
+    <xsd:complexType name="cronLshJobType">
+        <xsd:attribute name='command' type='xsd:string'/>
+        <xsd:attribute name='comment' type='xsd:string'/>
+    </xsd:complexType>
+
     <xsd:complexType name="cronSshJobType">
         <xsd:attribute name='server' type='xsd:string'/>
         <xsd:attribute name='command' type='xsd:string'/>
+        <xsd:attribute name='comment' type='xsd:string'/>
+    </xsd:complexType>
+
+    <xsd:complexType name="cronWshJobType">
+        <xsd:attribute name='server' type='xsd:string'/>
+        <xsd:attribute name='command' type='xsd:string'/>
+        <xsd:attribute name='comment' type='xsd:string'/>
+    </xsd:complexType>
+
+    <xsd:complexType name="cronSFTPJobType">
+        <xsd:attribute name='server' type='xsd:string'/>
+        <xsd:attribute name='resource' type='xsd:string'/>
         <xsd:attribute name='comment' type='xsd:string'/>
     </xsd:complexType>
 

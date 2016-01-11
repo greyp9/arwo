@@ -21,9 +21,11 @@ import org.jinterop.dcom.core.JISession;
 
 import java.io.IOException;
 import java.util.concurrent.Future;
+import java.util.logging.Logger;
 
 @SuppressWarnings("PMD.DoNotUseThreads")
 public class ScriptRunnable implements Runnable {
+    private final Logger logger = Logger.getLogger(getClass().getName());
     private final ScriptContext context;
     private final Script script;
     private final Locus locus;
@@ -39,8 +41,8 @@ public class ScriptRunnable implements Runnable {
     @Override
     public final void run() {
         try {
+            logger.entering(getClass().getName(), Runnable.class.getName());
             script.start();
-            //alerts.add(new Alert(Alert.Severity.INFO, "START"));
             runInner();
         } catch (JIException e) {
             alerts.add(new Alert(Alert.Severity.ERR, e.getMessage(), e.getClass().getSimpleName(), null));
@@ -48,12 +50,13 @@ public class ScriptRunnable implements Runnable {
             alerts.add(new Alert(Alert.Severity.ERR, e.getMessage(), e.getClass().getSimpleName(), null));
         } finally {
             script.finish();
-            //alerts.add(new Alert(Alert.Severity.INFO, "FINISH"));
         }
         try {
             new ScriptWriter(script, locus).writeTo(script.getFile(context.getFolder()));
         } catch (IOException e) {
             alerts.add(new Alert(Alert.Severity.ERR, e.getMessage()));
+        } finally {
+            logger.exiting(getClass().getName(), Runnable.class.getName());
         }
     }
 
@@ -78,18 +81,19 @@ public class ScriptRunnable implements Runnable {
 
     @SuppressWarnings("PMD.AssignmentInOperand")
     private void runInner3(final WshShell shell) throws JIException, IOException {
-        alerts.add(new Alert(Alert.Severity.INFO, shell.getCurrentDirectory()));
+        final String dir = shell.getCurrentDirectory();
         CommandToDo commandToDo;
         while ((commandToDo = script.getCommandToDo()) != null) {
-            runCommand(shell, commandToDo);
+            runCommand(shell, commandToDo, dir);
         }
         // notify caller thread
         MutexU.notifyAll(this);
     }
 
-    private void runCommand(final WshShell shell, final CommandToDo commandToDo) throws IOException, JIException {
+    private void runCommand(
+            final WshShell shell, final CommandToDo commandToDo, final String dir) throws IOException, JIException {
         // start process
-        CommandWork commandWork = script.startCommand(commandToDo, UTF8Codec.Const.UTF8);
+        CommandWork commandWork = script.startCommand(commandToDo, UTF8Codec.Const.UTF8, dir);
         final WshScriptExec exec = shell.exec(commandWork.getStdin());
         if (exec != null) {
             commandWork = script.updateCommand(commandWork, exec.getPID());
@@ -144,5 +148,6 @@ public class ScriptRunnable implements Runnable {
         }
         // mark process
         script.finishCommand(commandWork, exitCode);
+        context.getConnection().update(commandWork.getStart());
     }
 }

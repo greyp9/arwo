@@ -48,6 +48,10 @@ public final class FileU {
         return ((path == null) ? null : new File(path));
     }
 
+    public static String fromFile(final File file) {
+        return ((file == null) ? null : file.getAbsolutePath());
+    }
+
     public static boolean delete(final File file) {
         return file.delete();
     }

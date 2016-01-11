@@ -22,10 +22,10 @@ public class ArgumentsRunnable extends CronRunnable {
 
     @Override
     public final void run() {
-        logger.finest("START");  // i18n
+        logger.entering(getClass().getName(), CronRunnable.class.getName());
         final RowTyped row = getParams().getRow();
         final Date dateStart = new Date();
-        row.update("dateStart", dateStart);  // i18n
+        row.update(Const.DATE_START, dateStart);
 
         final String arguments = ElementU.getAttribute(getParams().getCronJob().getElement(), "arguments");  // i18n
         final NameTypeValues httpArguments = HttpArguments.toArguments(arguments);
@@ -33,8 +33,8 @@ public class ArgumentsRunnable extends CronRunnable {
             logger.finest(httpArgument.toString());
         }
 
-        row.update("duration", DurationU.duration(dateStart, new Date()));  // i18n
-        row.update("result", 0);  // i18n
-        logger.finest("FINISH");  // i18n
+        row.update(Const.DURATION, DurationU.duration(dateStart, new Date()));
+        row.update(Const.RESULT, 0);  // i18n
+        logger.exiting(getClass().getName(), CronRunnable.class.getName());
     }
 }
