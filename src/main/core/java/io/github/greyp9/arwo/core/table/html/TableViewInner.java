@@ -25,7 +25,7 @@ public class TableViewInner {
                 Html.CLASS, Html.TABLE));
         new TableFilterStripView(context).addContentTo(div);
         final Element form = ElementU.addElement(div, Html.FORM, null, NameTypeValuesU.create(
-                Html.ACTION, "", Html.METHOD, Html.POST));
+                Html.ACTION, Html.EMPTY, Html.METHOD, Html.POST));
         final Element tableHtml = ElementU.addElement(form, Html.TABLE, null, NameTypeValuesU.create(
                 Html.CLASS, context.getTableClass(), Html.SUMMARY, getSummary()));
         final boolean openTB = context.getViewState().isOpenTB();

@@ -40,7 +40,7 @@ public class PropertyStripHtmlView {
     public final void addContentForm(final Element html) {
         final String cursorTypeName = view.getCursor().getTypeInstance().getName();
         final Element form = ElementU.addElement(html, Html.FORM, null, NameTypeValuesU.create(
-                Html.ACTION, "", Html.ID, String.format("form_%s", cursorTypeName), Html.METHOD, Html.POST));
+                Html.ACTION, Html.EMPTY, Html.ID, String.format("form_%s", cursorTypeName), Html.METHOD, Html.POST));
         addContentTable(form);
     }
 

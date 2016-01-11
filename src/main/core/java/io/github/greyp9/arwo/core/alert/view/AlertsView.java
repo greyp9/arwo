@@ -70,7 +70,7 @@ public class AlertsView {
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private void addActionsTo(final Element div, final AlertActions actions) throws IOException {
         final Element form = ElementU.addElement(div, Html.FORM, null,
-                NTV.create(Html.METHOD, Html.POST, Html.ACTION, ""));
+                NTV.create(Html.METHOD, Html.POST, Html.ACTION, Html.EMPTY));
         final Element divButtons = ElementU.addElement(form, Html.DIV, null,
                 NTV.create(Html.STYLE, "float: right; clear: both;"));
         final String action = App.Action.ALERT;

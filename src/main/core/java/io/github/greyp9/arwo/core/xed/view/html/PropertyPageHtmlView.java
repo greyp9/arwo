@@ -56,7 +56,7 @@ public class PropertyPageHtmlView {
         final Element divDialog = ElementU.addElement(html, Html.DIV, null, NameTypeValuesU.create(
                 Html.CLASS, App.CSS.DIALOG));
         final Element form = ElementU.addElement(divDialog, Html.FORM, null, NameTypeValuesU.create(
-                Html.ACTION, "", Html.ID, String.format("form_%s", cursorTypeName), Html.METHOD, Html.POST));
+                Html.ACTION, Html.EMPTY, Html.ID, String.format("form_%s", cursorTypeName), Html.METHOD, Html.POST));
         // form table (for name / value alignment)
         final Element table = ElementU.addElement(form, Html.TABLE, null, NameTypeValuesU.create(
                 Html.CLASS, App.CSS.DIALOG, Html.SUMMARY, App.CSS.DIALOG));

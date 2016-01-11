@@ -42,7 +42,7 @@ public class MenuView {
             final Element html, final String type, final boolean home, final boolean top) throws IOException {
         final MenuItem menuItem = menuSystem.get(httpRequest.getServletPath(), type);
         final Element divMenus = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENUS));
-        final NameTypeValues attrs = NTV.create(Html.METHOD, Html.POST, Html.ACTION, "");
+        final NameTypeValues attrs = NTV.create(Html.METHOD, Html.POST, Html.ACTION, Html.EMPTY);
         final Element form = ElementU.addElement(divMenus, Html.FORM, null, attrs);
         final Element divForm = ElementU.addElement(form, Html.DIV);
         addMenu(divForm, menuItem, home, top);

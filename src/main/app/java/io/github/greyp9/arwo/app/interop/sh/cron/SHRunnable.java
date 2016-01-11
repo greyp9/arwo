@@ -71,7 +71,7 @@ public class SHRunnable extends CronRunnable {
     private void putHttpResponse(final HttpResponse httpResponse, final AppUserState userState) throws IOException {
         if (!SystemU.isTrue()) {
             // persist invocation results
-            final File file = getParams().getFile(userState.getUserRoot());
+            final File file = getParams().getFile(userState.getUserRoot(), null);
             StreamU.writeMkdirs(file, UTF8Codec.toBytes(httpResponse.toString()));
         }
     }

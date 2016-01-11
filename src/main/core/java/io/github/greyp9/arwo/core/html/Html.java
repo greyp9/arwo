@@ -65,6 +65,7 @@ public final class Html {
     public static final String UL = "ul";
     public static final String VALUE = "value";
 
+    public static final String EMPTY = "";
     public static final String SPACE = " ";
     public static final String MASK = StringU.create(24, UTF16.BULLET);
 

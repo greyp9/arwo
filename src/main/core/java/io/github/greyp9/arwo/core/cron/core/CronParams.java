@@ -53,10 +53,14 @@ public class CronParams {
         return row;
     }
 
-    public final File getFile(final File folder) {
+    public final File getFile(final File folder, final String filename) {
         final File folderTab = new File(folder, cronTab.getName());
         final File folderJob = new File(folderTab, cronJob.getName());
-        return new File(folderJob, String.format("cron-%s.txt", DateX.toFilename(date)));
+        final String dateString = DateX.toFilename(date);
+        final String filenameCron = ((filename == null) ?
+                String.format("cron-%s.txt", dateString) :
+                String.format("cron-%s.%s", dateString, filename));
+        return new File(folderJob, filenameCron);
     }
 
     @SuppressWarnings({ "PMD.ExcessiveParameterList", "checkstyle:parameternumber" })

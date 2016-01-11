@@ -1,20 +1,17 @@
-package io.github.greyp9.arwo.app.local.sh.cron;
+package io.github.greyp9.arwo.app.ssh.sftp.cron;
 
 import io.github.greyp9.arwo.app.core.state.AppState;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
-import io.github.greyp9.arwo.app.local.sh.handler.SHHandlerPost;
+import io.github.greyp9.arwo.app.ssh.sftp.handler.SFTPHandlerGet;
 import io.github.greyp9.arwo.core.app.App;
-import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.cron.core.CronParams;
 import io.github.greyp9.arwo.core.cron.core.CronRunnable;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.http.Http;
-import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.http.HttpRequest;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
-import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.naming.AppNaming;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.table.type.RowTyped;
@@ -23,7 +20,6 @@ import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.xml.ElementU;
 
 import javax.naming.Context;
-import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
@@ -32,10 +28,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @SuppressWarnings("unused")  // reflection used to instantiate
-public class SHRunnable extends CronRunnable {
+public class SFTPRunnable extends CronRunnable {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    public SHRunnable(final CronParams params) {
+    public SFTPRunnable(final CronParams params) {
         super(params);
     }
 
@@ -46,18 +42,21 @@ public class SHRunnable extends CronRunnable {
         final Date dateStart = new Date();
         row.update(Const.DATE_START, dateStart);
         // initialize
-        final String command = ElementU.getAttribute(getParams().getElement(), "command");
-        final String pathInfo = PathU.toDir("");
+        final String server = ElementU.getAttribute(getParams().getElement(), "server");
+        final String resource = ElementU.getAttribute(getParams().getElement(), "resource");
+        final String pathInfo = PathU.toPath("", App.Mode.VIEW, server + resource);
+        final String filename = new File(resource).getName();
         // execute
         try {
             final Context context = AppNaming.lookupSubcontext(getParams().getContext());
             final AppState appState = (AppState) AppNaming.lookupQ(context, App.Naming.APP_STATE);
             final AppUserState userState = appState.getUserState(getParams().getPrincipal(), getParams().getDate());
             final Principal principal = userState.getPrincipal();
-            final HttpRequest httpRequest = getHttpRequest(userState.getSubmitID(), pathInfo, command);
+            final String resourceFull = getParams().getContext() + App.Servlet.SFTP + pathInfo;
+            final HttpRequest httpRequest = getHttpRequest(resourceFull);
             final ServletHttpRequest httpRequest1 = getServletHttpRequest(httpRequest, pathInfo, principal);
-            final SHHandlerPost handlerPost = new SHHandlerPost(httpRequest1, userState);
-            putHttpResponse(handlerPost.doPost(), userState);
+            final SFTPHandlerGet handler = new SFTPHandlerGet(httpRequest1, userState);
+            putHttpResponse(handler.doGet(), filename, userState);
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         } finally {
@@ -67,32 +66,25 @@ public class SHRunnable extends CronRunnable {
         }
     }
 
-    private void putHttpResponse(final HttpResponse httpResponse, final AppUserState userState) throws IOException {
-        if (!SystemU.isTrue()) {
-            // persist invocation results
-            final File file = getParams().getFile(userState.getUserRoot(), null);
-            StreamU.writeMkdirs(file, UTF8Codec.toBytes(httpResponse.toString()));
-        }
+    private void putHttpResponse(
+            final HttpResponse httpResponse, final String filename, final AppUserState userState) throws IOException {
+        // write out fetched file
+        final File userCronRoot = new File(userState.getUserRoot(), Const.CRON);
+        final File file = getParams().getFile(userCronRoot, filename);
+        final byte[] entity = StreamU.read(httpResponse.getEntity());
+        StreamU.writeMkdirs(file, entity);
     }
 
     private ServletHttpRequest getServletHttpRequest(
             final HttpRequest httpRequest, final String pathInfo, final Principal principal) throws IOException {
         final Date date = getParams().getDate();
         final String context = getParams().getContext();
-        return new ServletHttpRequest(httpRequest, date, principal, context, App.Servlet.LSH, pathInfo);
+        return new ServletHttpRequest(httpRequest, date, principal, context, App.Servlet.SFTP, pathInfo);
     }
 
-    private HttpRequest getHttpRequest(
-            final String submitID, final String pathInfo, final String command) throws IOException {
+    private HttpRequest getHttpRequest(final String resource) throws IOException {
         final CronParams params = getParams();
-        final NameTypeValues headers = NameTypeValuesU.create(
-                Http.Header.AUTHORIZATION, params.getAuthorization(),
-                Http.Header.CONTENT_TYPE, Http.Mime.FORM_URL_ENCODED,
-                "X-Out", PathU.toDir("", "cron", params.getCronTab().getName(), params.getCronJob().getName()));
-        final NameTypeValues query = NameTypeValuesU.create(
-                "command.commandType.command", command, submitID, App.Actions.SUBMIT_COMMAND);
-        final ByteArrayInputStream is = new ByteArrayInputStream(HttpArguments.toEntity(query));
-        final String resource = String.format("%s%s%s", params.getContext(), App.Servlet.LSH, pathInfo);
-        return new HttpRequest(Http.Method.POST, resource, null, headers, is);
+        final NameTypeValues headers = NameTypeValuesU.create(Http.Header.AUTHORIZATION, params.getAuthorization());
+        return new HttpRequest(Http.Method.GET, resource, null, headers, null);
     }
 }

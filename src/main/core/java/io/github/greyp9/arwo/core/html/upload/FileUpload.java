@@ -30,7 +30,7 @@ public class FileUpload {
         if (itemRoot.isOpen() && itemFile.isOpen() && itemUpload.isOpen()) {
             final String labelMenu = bundle.getString("menu.file.upload");
             final Element form = ElementU.addElement(html, Html.FORM, null, NTV.create(
-                    Html.METHOD, Html.POST, Html.ACTION, "", Html.ENCTYPE, Http.Mime.FORM_MULTIPART));
+                    Html.METHOD, Html.POST, Html.ACTION, Html.EMPTY, Html.ENCTYPE, Http.Mime.FORM_MULTIPART));
             final Element divMenu = ElementU.addElement(form, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENU));
             ElementU.addElement(divMenu, Html.SPAN, String.format("[%s]", labelMenu), NTV.create(
                     Html.CLASS, App.CSS.MENU));
