@@ -34,10 +34,12 @@ public final class App {
     }
 
     public static class Servlet {
+        public static final String CIFS = "/cifs";
         public static final String DASH = "/dash";
         public static final String LSH = "/lsh";
         public static final String SFTP = "/sftp";
         public static final String SSH = "/ssh";
+        public static final String WEBDAV = "/webdav";
         public static final String WSH = "/wsh";
     }
 

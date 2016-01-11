@@ -116,6 +116,8 @@
             <xsd:element name='ssh' type='app:cronSshJobType'/>
             <xsd:element name='wsh' type='app:cronWshJobType'/>
             <xsd:element name='sftp' type='app:cronSFTPJobType'/>
+            <xsd:element name='cifs' type='app:cronCIFSJobType'/>
+            <xsd:element name='webdav' type='app:cronWebDAVJobType'/>
         </xsd:choice>
         <xsd:attributeGroup ref="app:cronJobAttributes"/>
     </xsd:complexType>
@@ -152,6 +154,18 @@
     </xsd:complexType>
 
     <xsd:complexType name="cronSFTPJobType">
+        <xsd:attribute name='server' type='xsd:string'/>
+        <xsd:attribute name='resource' type='xsd:string'/>
+        <xsd:attribute name='comment' type='xsd:string'/>
+    </xsd:complexType>
+
+    <xsd:complexType name="cronCIFSJobType">
+        <xsd:attribute name='server' type='xsd:string'/>
+        <xsd:attribute name='resource' type='xsd:string'/>
+        <xsd:attribute name='comment' type='xsd:string'/>
+    </xsd:complexType>
+
+    <xsd:complexType name="cronWebDAVJobType">
         <xsd:attribute name='server' type='xsd:string'/>
         <xsd:attribute name='resource' type='xsd:string'/>
         <xsd:attribute name='comment' type='xsd:string'/>
