@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.app.core.subsystem.cifs.SubsystemCIFS;
 import io.github.greyp9.arwo.app.core.subsystem.cron.SubsystemCron;
 import io.github.greyp9.arwo.app.core.subsystem.dav.SubsystemWebDAV;
 import io.github.greyp9.arwo.app.core.subsystem.interop.SubsystemInterop;
+import io.github.greyp9.arwo.app.core.subsystem.jdbc.SubsystemJDBC;
 import io.github.greyp9.arwo.app.core.subsystem.local.SubsystemLocal;
 import io.github.greyp9.arwo.app.core.subsystem.ssh.SubsystemSSH;
 import io.github.greyp9.arwo.core.alert.Alert;
@@ -79,6 +80,7 @@ public class AppUserState {
     private final SubsystemCron cron;
     private final SubsystemLocal local;
     private final SubsystemSSH ssh;
+    private final SubsystemJDBC jdbc;
     private final SubsystemCIFS cifs;
     private final SubsystemInterop interop;
     private final SubsystemWebDAV webDAV;
@@ -156,6 +158,10 @@ public class AppUserState {
         return ssh;
     }
 
+    public final SubsystemJDBC getJDBC() {
+        return jdbc;
+    }
+
     public final SubsystemCIFS getCIFS() {
         return cifs;
     }
@@ -216,6 +222,7 @@ public class AppUserState {
         this.cron = new SubsystemCron();
         this.local = new SubsystemLocal();
         this.ssh = new SubsystemSSH(alerts);
+        this.jdbc = new SubsystemJDBC(alerts);
         this.cifs = new SubsystemCIFS(alerts);
         this.interop = new SubsystemInterop(alerts);
         this.webDAV = new SubsystemWebDAV(alerts);
@@ -311,14 +318,16 @@ public class AppUserState {
     private void doClose(final SubmitToken token) throws IOException {
         final String cacheName = token.getObject();
         final String resourceName = token.getObject2();
-        if (App.Cache.SSH.equals(cacheName)) {
-            ssh.getCache().removeResource(resourceName);
-        } else if (App.Cache.CIFS.equals(cacheName)) {
+        if (App.Cache.CIFS.equals(cacheName)) {
             cifs.getCache().removeResource(resourceName);
-        } else if (App.Cache.WSH.equals(cacheName)) {
-            interop.getCache().removeResource(resourceName);
+        } else if (App.Cache.JDBC.equals(cacheName)) {
+            jdbc.getCache().removeResource(resourceName);
+        } else if (App.Cache.SSH.equals(cacheName)) {
+            ssh.getCache().removeResource(resourceName);
         } else if (App.Cache.WEBDAV.equals(cacheName)) {
             webDAV.getCache().removeResource(resourceName);
+        } else if (App.Cache.WSH.equals(cacheName)) {
+            interop.getCache().removeResource(resourceName);
         }
     }
 

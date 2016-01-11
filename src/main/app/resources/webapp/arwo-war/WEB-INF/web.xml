@@ -191,6 +191,17 @@
         <url-pattern>/lsh/*</url-pattern>
     </servlet-mapping>
 
+    <!--jdbc-command-->
+    <servlet>
+        <description>access remote jdbc servers</description>
+        <servlet-name>JDBCServlet</servlet-name>
+        <servlet-class>io.github.greyp9.arwo.app.jdbc.servlet.JDBCServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>JDBCServlet</servlet-name>
+        <url-pattern>/jdbc/*</url-pattern>
+    </servlet-mapping>
+
     <!--filesystem-->
     <servlet>
         <description>view ${user.home}</description>

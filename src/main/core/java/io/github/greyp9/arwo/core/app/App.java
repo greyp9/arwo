@@ -44,10 +44,11 @@ public final class App {
     }
 
     public static class Cache {
-        public static final String SSH = "ssh";
         public static final String CIFS = "cifs";
-        public static final String WSH = "wsh";
+        public static final String JDBC = "jdbc";
+        public static final String SSH = "ssh";
         public static final String WEBDAV = "webdav";
+        public static final String WSH = "wsh";
     }
 
     public static class Realm {
