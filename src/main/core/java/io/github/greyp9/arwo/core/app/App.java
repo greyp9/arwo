@@ -78,6 +78,10 @@ public final class App {
     public static class CSS {
         public static final String ACTIVE = "active";
         public static final String ALERT = "alert";
+        public static final String COMMAND = "command";
+        public static final String COMMAND_BODY = "command-body";
+        public static final String COMMAND_FOOT = "command-foot";
+        public static final String COMMAND_HEAD = "command-head";
         public static final String DIALOG = "dialog";
         public static final String FOOTER = "footer";
         public static final String HEADER = "header";
@@ -90,6 +94,8 @@ public final class App {
         public static final String STATE = "state";
         public static final String TABLE = "table";
         public static final String TEXT = "text";
+        public static final String TEXT_RESULT = "text-result";
+        public static final String TEXT_RESULT_HEAD = "text-result-header";
         public static final String TIMESTAMP = "timestamp";
     }
 
