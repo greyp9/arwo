@@ -60,9 +60,9 @@ public class AlertsView {
                 if (alert.getDetail() != null) {
                     ElementU.addElement(divNotify, Html.PRE, alert.getDetail(), styleText);
                 }
-                if (Alert.Severity.ERR == alert.getSeverity()) {
-                    logAlert(alert);
-                }
+                //if (Alert.Severity.ERR == alert.getSeverity()) {
+                logAlert(alert);
+                //}
             }
         }
     }
