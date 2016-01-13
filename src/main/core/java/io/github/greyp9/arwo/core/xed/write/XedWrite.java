@@ -67,7 +67,7 @@ public class XedWrite {
             new OpUpdate(secret, cursor.getXed()).apply(cursor.getElement(), valueInstance);
         } else if (App.Action.DELETE.equals(action)) {
             cursor.getXed().delete(cursor.getElement());
-            location = baseURI + cursor.getParent().getURI();
+            //location = baseURI + cursor.getParent().getURI();  // don't nav to parent (multi-delete use case)
         } else if (App.Action.CLONE.equals(action)) {
             final Element clone = cursor.getXed().clone(cursor.getElement());
             final XedCursor cursorClone = new XedNav(cursor.getXed()).find(clone);

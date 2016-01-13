@@ -57,8 +57,8 @@ public class JDBCCommandView extends JDBCView {
         final AppUserState userState = request.getUserState();
         final Properties properties = jdbc.getProperties();
         // command input form (prep)
-        final String command = (query == null) ? properties.getProperty("command", "") : query.getText();
-        properties.setProperty("command", command);
+        final String command = (query == null) ? properties.getProperty("sql", "") : query.getText();
+        properties.setProperty("sql", command);
         final XedActionCommand action = new XedActionCommand(userState.getLocus().getLocale());
         final Bundle bundle = action.getXed().getBundle();
         final NameTypeValues ntv = NameTypeValuesU.create("command.commandType.command", command);

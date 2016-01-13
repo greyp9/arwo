@@ -1,6 +1,8 @@
 package io.github.greyp9.arwo.app.jdbc.sh.handler;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.jdbc.sh.action.JDBCAddFavorite;
+import io.github.greyp9.arwo.app.jdbc.sh.action.JDBCSelectFavorite;
 import io.github.greyp9.arwo.app.jdbc.sh.action.SHQueueCommand;
 import io.github.greyp9.arwo.app.jdbc.sh.core.JDBCRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
@@ -91,6 +93,10 @@ public class JDBCHandlerPost {
         final String action = token.getAction();
         if (App.Action.COMMAND.equals(action)) {
             location = new SHQueueCommand(request).doAction(location, httpArguments);
+        } else if (App.Action.ADD_FAV.equals(action)) {
+            new JDBCAddFavorite(request).doAction();
+        } else if (App.Action.SELECT_FAV.equals(action)) {
+            location = new JDBCSelectFavorite(request).doAction(token);
         } else {
             request.getAlerts().add(new Alert(Alert.Severity.WARN, message, token.toString(), null));
         }

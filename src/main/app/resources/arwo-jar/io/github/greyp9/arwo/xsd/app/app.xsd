@@ -260,6 +260,7 @@
             <xsd:element name='wshFavorites' type='app:wshFavoritesType'/>
             <xsd:element name='cifsFavorites' type='app:cifsFavoritesType'/>
             <xsd:element name='webdavFavorites' type='app:webdavFavoritesType'/>
+            <xsd:element name='jdbcFavorites' type='app:jdbcFavoritesType'/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -305,6 +306,12 @@
         </xsd:sequence>
     </xsd:complexType>
 
+    <xsd:complexType name='jdbcFavoritesType'>
+        <xsd:sequence>
+            <xsd:element name='jdbcFavorite' type='app:jdbcFavoriteType' minOccurs='0' maxOccurs='unbounded'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
     <xsd:complexType name="lshFavoriteType">
         <xsd:attribute name='command' type='xsd:string'/>
         <xsd:attribute name='comment' type='xsd:string'/>
@@ -342,6 +349,12 @@
     <xsd:complexType name="webdavFavoriteType">
         <xsd:attribute name='server' type='xsd:string'/>
         <xsd:attribute name='resource' type='xsd:string'/>
+        <xsd:attribute name='comment' type='xsd:string'/>
+    </xsd:complexType>
+
+    <xsd:complexType name="jdbcFavoriteType">
+        <xsd:attribute name='server' type='xsd:string'/>
+        <xsd:attribute name='sql' type='xsd:string'/>
         <xsd:attribute name='comment' type='xsd:string'/>
     </xsd:complexType>
 
