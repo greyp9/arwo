@@ -11,24 +11,27 @@ import java.io.IOException;
 
 public class ActionCacheClear extends DeferredAction {
     private final AlertActions actions;
-    private final ResourceCache cache;
+    private final ResourceCache[] caches;
 
     public final AlertActions getActions() {
         return actions;
     }
 
-    public ActionCacheClear(final ResourceCache cache) {
+    public ActionCacheClear(final ResourceCache... caches) {
         super(Const.ID);
         this.actions = new AlertActions(Const.ID, Const.CANCEL, Const.CONFIRM);
-        this.cache = cache;
+        this.caches = caches;
     }
 
     @Override
     public final void doAction(final String option, final Bundle bundle, final Alerts alerts) {
         if (Const.CONFIRM.equals(option)) {
             try {
-                final long size = cache.getSize();
-                cache.clear();
+                long size = 0L;
+                for (ResourceCache cache : caches) {
+                    size += cache.getSize();
+                    cache.clear();
+                }
                 alerts.add(new Alert(Alert.Severity.INFO, bundle.format("AppUserState.cache.clear", size)));
             } catch (IOException e) {
                 alerts.add(new Alert(Alert.Severity.ERR, e.getMessage(), e.getClass().getName(), null));

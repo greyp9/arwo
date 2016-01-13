@@ -338,7 +338,7 @@ public class AppUserState {
     }
 
     private void doClearCache() throws IOException {
-        final ActionCacheClear action = new ActionCacheClear(cache);
+        final ActionCacheClear action = new ActionCacheClear(cache, cacheBlob);
         deferredActions.add(action);
         final String message = getBundle().format("AppUserState.cache.clear.message");
         alerts.add(new Alert(Alert.Severity.QUESTION, message, null, action.getActions()));
