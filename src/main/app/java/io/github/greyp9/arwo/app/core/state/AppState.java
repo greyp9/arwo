@@ -29,6 +29,10 @@ public class AppState {
         return DateU.copy(dateStart);
     }
 
+    public final String getContextPath() {
+        return contextPath;
+    }
+
     public final CronService getCronService() {
         return cronService;
     }

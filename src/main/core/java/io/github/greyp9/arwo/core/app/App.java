@@ -34,6 +34,7 @@ public final class App {
     }
 
     public static class Servlet {
+        public static final String CACHE = "/cache";
         public static final String CIFS = "/cifs";
         public static final String DASH = "/dash";
         public static final String LSH = "/lsh";

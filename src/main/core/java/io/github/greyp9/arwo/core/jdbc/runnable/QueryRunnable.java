@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.jdbc.runnable;
 
+import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.jdbc.connection.JDBCConnection;
 import io.github.greyp9.arwo.core.jdbc.op.JDBCQuery;
 import io.github.greyp9.arwo.core.jdbc.query.Query;
@@ -41,10 +42,11 @@ public class QueryRunnable implements Runnable {
 
     private void runQuery() throws IOException, SQLException {
         final JDBCConnection connection = context.getConnection();
+        final ResourceCache cacheBlob = context.getCacheBlob();
         final Results results = query.getResults();
         final Date date = new Date();
         results.getInterval().setDateStart(date);
-        new JDBCQuery(connection.getConnection(), results).execute(query.getText());
+        new JDBCQuery(connection.getConnection(), results, cacheBlob).execute(query.getText());
         connection.update(date);
         results.getInterval().setDateFinish(new Date());
     }

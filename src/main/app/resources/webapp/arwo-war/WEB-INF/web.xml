@@ -202,6 +202,17 @@
         <url-pattern>/jdbc/*</url-pattern>
     </servlet-mapping>
 
+    <!--cache-->
+    <servlet>
+        <description>access local cache of remote resources</description>
+        <servlet-name>CacheServlet</servlet-name>
+        <servlet-class>io.github.greyp9.arwo.app.cache.servlet.CacheServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>CacheServlet</servlet-name>
+        <url-pattern>/cache/*</url-pattern>
+    </servlet-mapping>
+
     <!--filesystem-->
     <servlet>
         <description>view ${user.home}</description>

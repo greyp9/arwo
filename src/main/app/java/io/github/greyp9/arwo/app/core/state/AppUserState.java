@@ -70,6 +70,7 @@ public class AppUserState {
     private final ViewStates viewStates;
     // local cache of remote resources
     private final ResourceCache cache;
+    private final ResourceCache cacheBlob;
     // user alerts
     private final Alerts alerts;
     // text filters (for file display)
@@ -132,6 +133,10 @@ public class AppUserState {
 
     public final ResourceCache getCache() {
         return cache;
+    }
+
+    public final ResourceCache getCacheBlob() {
+        return cacheBlob;
     }
 
     public final Alerts getAlerts() {
@@ -227,7 +232,8 @@ public class AppUserState {
         this.interop = new SubsystemInterop(alerts);
         this.webDAV = new SubsystemWebDAV(alerts);
         this.menuSystem = new MenuSystem(submitID, new AppMenuFactory());
-        this.cache = new ResourceCache();
+        this.cache = new ResourceCache(null);
+        this.cacheBlob = new ResourceCache(appState.getContextPath() + App.Servlet.CACHE);
         this.pageViewHex = Page.Factory.initPage(Const.PAGE_HEX_VIEW, new Properties());
     }
 

@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.app.jdbc.sh.core.JDBCRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.connect.ConnectionCache;
 import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
@@ -57,7 +58,8 @@ public class SHQueueCommand {
         userState.getJDBC().getProperties().setProperty("command", command);
         // runnable to execute commands
         final UserExecutor userExecutor = userState.getUserExecutor();
-        final QueryContext context = new QueryContext(connection);
+        final ResourceCache cacheBlob = userState.getCacheBlob();
+        final QueryContext context = new QueryContext(connection, cacheBlob);
         final QueryRunnable runnable = new QueryRunnable(query, context);
         userExecutor.getRunnables().add(runnable);
         userExecutor.getExecutorCommand().execute(runnable);

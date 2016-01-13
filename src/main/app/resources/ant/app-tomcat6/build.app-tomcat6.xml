@@ -160,6 +160,8 @@
             <include name='io/github/greyp9/arwo/app/local/servlet/SHServlet.java'/>
             <!--jdbc-->
             <include name='io/github/greyp9/arwo/app/jdbc/servlet/JDBCServlet.java'/>
+            <!--cache-->
+            <include name='io/github/greyp9/arwo/app/cache/servlet/CacheServlet.java'/>
             <!--cron-->
             <include name='io/github/greyp9/arwo/core/cron/instance/*Runnable.java'/>
             <!--cron-->

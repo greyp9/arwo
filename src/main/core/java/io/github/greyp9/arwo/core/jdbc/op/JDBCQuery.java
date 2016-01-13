@@ -1,7 +1,11 @@
 package io.github.greyp9.arwo.core.jdbc.op;
 
+import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
+import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.glyph.UTF16;
+import io.github.greyp9.arwo.core.hash.CRCU;
+import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.io.ReaderU;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.number.NumberScale;
@@ -12,6 +16,7 @@ import io.github.greyp9.arwo.core.table.metadata.ColumnMetaData;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.Blob;
 import java.sql.Clob;
@@ -26,12 +31,12 @@ import java.util.Date;
 public class JDBCQuery {
     private final Connection connection;
     private final Results results;
-    //private final BlobCache blobCache;
+    private final ResourceCache cacheBlob;
 
-    public JDBCQuery(final Connection connection, final Results results/*, BlobCache blobCache*/) {
+    public JDBCQuery(final Connection connection, final Results results, final ResourceCache cacheBlob) {
         this.connection = connection;
         this.results = results;
-        //this.blobCache = blobCache;
+        this.cacheBlob = cacheBlob;
     }
 
     public final Results execute(final String sql) throws SQLException, IOException {
@@ -125,11 +130,11 @@ public class JDBCQuery {
 
     private Object doBytes(final byte[] bytes, final String sqlType) throws SQLException, IOException {
         // cache blob locally
-        //Http.Token.SLASH + Long.toHexString(CRCU.crc32(bytes));
-        //blobCache.put(new Blob(hash, bytes));
+        final String resource = Http.Token.SLASH + Long.toHexString(CRCU.crc32(bytes));
+        cacheBlob.putFile(resource, new MetaFile(null, new ByteArrayInputStream(bytes)));
         // insert link into result set
         final String title = String.format("%s [%sB]", sqlType, NumberScale.toString(bytes.length));
-        //String href = blobCache.getEndpoint() + hash;
-        return new TableViewLink(UTF16.DOCUMENT_BRACKETS, title, "href");
+        final String href = cacheBlob.getEndpoint() + resource;
+        return new TableViewLink(UTF16.DOCUMENT_BRACKETS, title, href);
     }
 }

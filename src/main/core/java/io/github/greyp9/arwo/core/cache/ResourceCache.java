@@ -9,10 +9,16 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class ResourceCache {
+    private final String endpoint;
     private final Map<String, RowSet> rowSets;
     private final Map<String, MetaFile> files;
 
-    public ResourceCache() {
+    public final String getEndpoint() {
+        return endpoint;
+    }
+
+    public ResourceCache(final String endpoint) {
+        this.endpoint = endpoint;
         this.rowSets = new TreeMap<String, RowSet>();
         this.files = new TreeMap<String, MetaFile>();
     }

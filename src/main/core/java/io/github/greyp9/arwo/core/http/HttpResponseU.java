@@ -12,8 +12,7 @@ public final class HttpResponseU {
     private HttpResponseU() {
     }
 
-    public static HttpResponse to200Text(final String text) {
-        final byte[] entity = UTF8Codec.toBytes(text);
+    public static HttpResponse to200(final byte[] entity) {
         final NameTypeValues headers = new NameTypeValues(
                 new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_PLAIN_UTF8),
                 new NameTypeValue(Http.Header.CONTENT_LENGTH, entity.length));
@@ -23,6 +22,10 @@ public final class HttpResponseU {
     public static HttpResponse to302(final String location) {
         final NameTypeValues headers = new NameTypeValues(new NameTypeValue(Http.Header.LOCATION, location));
         return new HttpResponse(HttpURLConnection.HTTP_MOVED_TEMP, headers, null);
+    }
+
+    public static HttpResponse to404() {
+        return toError(HttpURLConnection.HTTP_NOT_FOUND);
     }
 
     public static HttpResponse to501() {
