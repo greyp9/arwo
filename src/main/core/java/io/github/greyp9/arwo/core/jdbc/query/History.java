@@ -24,7 +24,7 @@ public class History {
     public final synchronized Query find(final String idURL) {
         Query queryFound = null;
         final DateX dateX = DateX.Factory.createURL();
-        for (Query queryIt : queries) {
+        for (final Query queryIt : queries) {
             final String idIt = dateX.toString(queryIt.getDate());
             if (idIt.equals(idURL)) {
                 queryFound = queryIt;

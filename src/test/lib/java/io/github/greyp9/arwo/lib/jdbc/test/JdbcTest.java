@@ -1,8 +1,21 @@
 package io.github.greyp9.arwo.lib.jdbc.test;
 
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
+import io.github.greyp9.arwo.core.html.Html;
+import io.github.greyp9.arwo.core.jdbc.connection.JDBCConnection;
+import io.github.greyp9.arwo.core.jdbc.query.Query;
+import io.github.greyp9.arwo.core.jdbc.runnable.QueryContext;
+import io.github.greyp9.arwo.core.jdbc.runnable.QueryRunnable;
 import io.github.greyp9.arwo.core.lang.SystemU;
+import io.github.greyp9.arwo.core.result.op.Results;
+import io.github.greyp9.arwo.core.result.type.Result;
+import io.github.greyp9.arwo.core.result.type.rowset.RowSetResult;
+import io.github.greyp9.arwo.core.result.type.text.TextResult;
+import io.github.greyp9.arwo.core.security.realm.AppPrincipal;
+import io.github.greyp9.arwo.core.util.CollectionU;
 import io.github.greyp9.arwo.core.util.PropertiesU;
+import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.core.vm.exec.ExecutorServiceFactory;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
@@ -17,7 +30,9 @@ import java.sql.ResultSetMetaData;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.sql.Types;
+import java.util.Date;
 import java.util.Properties;
+import java.util.concurrent.ExecutorService;
 import java.util.logging.Logger;
 
 public class JdbcTest extends TestCase {
@@ -68,6 +83,7 @@ public class JdbcTest extends TestCase {
         String sql = propertiesTest.getProperty(String.format("%s.%s.sql.%d", Const.JDBC_SERVER, server, ++i));
         while (sql != null) {
             doTestConnectivityServer(connection, sql);
+            doTestConnectivityServerExecutor(connection, sql);
             sql = propertiesTest.getProperty(String.format("%s.%s.sql.%d", Const.JDBC_SERVER, server, ++i));
         }
         connection.close();
@@ -80,6 +96,28 @@ public class JdbcTest extends TestCase {
             doTestConnectivityServer(statement, sql);
         } finally {
             statement.close();
+        }
+    }
+
+    private void doTestConnectivityServerExecutor(Connection connection, String sql) throws IOException, SQLException {
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
+        PrintStream ps = new PrintStream(os, true, UTF8Codec.Const.UTF8);
+        final AppPrincipal principal = new AppPrincipal("root", CollectionU.toCollection("*"));
+        final JDBCConnection jdbcConnection = new JDBCConnection(connection);
+        final ExecutorService executor = ExecutorServiceFactory.create(
+                1, Value.join(Html.HYPHEN, getClass().getSimpleName(), principal.getName()));
+        final Query query = new Query(null, new Date().getTime(), sql);
+        final QueryContext context = new QueryContext(jdbcConnection);
+        executor.execute(new QueryRunnable(query, context));
+        final Results results = query.getResults();
+        for (Result result : results.getResults()) {
+            if (result instanceof TextResult) {
+                final TextResult textResult = (TextResult) result;
+                ps.println(textResult.getText());
+            } else if (result instanceof RowSetResult) {
+                final RowSetResult rowSetResult = (RowSetResult) result;
+                ps.println(rowSetResult.getRowSet().getRows());
+            }
         }
     }
 

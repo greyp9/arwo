@@ -6,11 +6,11 @@ import io.github.greyp9.arwo.core.table.row.RowSet;
 public class RowSetResult extends Result {
     private final RowSet rowSet;
 
-    public RowSet getRowSet() {
+    public final RowSet getRowSet() {
         return rowSet;
     }
 
-    public RowSetResult(String id, String type, RowSet rowSet) {
+    public RowSetResult(final String id, final String type, final RowSet rowSet) {
         super(id, type);
         this.rowSet = rowSet;
     }

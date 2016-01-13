@@ -5,6 +5,11 @@
         <Bug code="PZLA"/>
     </Match>
     <Match>
+        <Class name="io.github.greyp9.arwo.core.jdbc.op.JDBCQuery"/>
+        <Method name="execute"/>
+        <Bug code="SQL"/>
+    </Match>
+    <Match>
         <Class name="io.github.greyp9.arwo.core.vm.mutex.MutexU"/>
         <Bug code="NN,UW,Wa"/>
     </Match>

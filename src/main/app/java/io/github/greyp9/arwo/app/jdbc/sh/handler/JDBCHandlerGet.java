@@ -41,7 +41,7 @@ public class JDBCHandlerGet {
         } else if (isQuery) {
             httpResponse = HttpResponseU.to302(httpRequest.getURI());
         } else if (Value.isEmpty(request.getServer())) {
-            httpResponse = new JDBCInventoryXView(request, userState, "").doGetResponse();
+            httpResponse = new JDBCInventoryXView(request, userState).doGetResponse();
         } else {
             httpResponse = new JDBCCommandView(request, userState).doGetResponse();
         }

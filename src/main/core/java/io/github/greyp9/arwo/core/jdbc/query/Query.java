@@ -7,14 +7,16 @@ import io.github.greyp9.arwo.core.util.PropertiesX;
 import java.util.Date;
 import java.util.Properties;
 
+@SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
 public class Query {
     private final String context;
     private final long date;
     private final String text;
     private final Properties properties;
     private final Results results;
+    private Exception exception;
 
-    public String getContext() {
+    public final String getContext() {
         return context;
     }
 
@@ -22,31 +24,41 @@ public class Query {
         return new Date(date);
     }
 
-    public String getText() {
+    public final String getText() {
         return text;
     }
 
-    public Properties getProperties() {
+    public final Properties getProperties() {
         return properties;
     }
 
-    public Results getResults() {
+    public final Results getResults() {
         return results;
     }
 
-    public Query(String context, long date, String text) {
+    public final Exception getException() {
+        return exception;
+    }
+
+    public Query(final String context, final long date, final String text) {
         this.context = context;
         this.date = date;
         this.text = text;
         this.properties = new Properties();
         this.results = new Results(text, new Interval(null, null));
+        this.exception = null;
+    }
+
+    public final Integer getExitValue() {
+        return ((exception == null) ? 0 : -1);
     }
 
     public final synchronized void start() {
         new PropertiesX(properties).setLong("start", new Date().getTime());
     }
 
-    public final synchronized void finish() {
+    public final synchronized void finish(final Exception exceptionIn) {
         new PropertiesX(properties).setLong("finish", new Date().getTime());
+        exception = exceptionIn;
     }
 }

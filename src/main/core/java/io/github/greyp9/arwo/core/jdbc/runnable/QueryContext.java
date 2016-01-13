@@ -5,11 +5,11 @@ import io.github.greyp9.arwo.core.jdbc.connection.JDBCConnection;
 public class QueryContext {
     private final JDBCConnection connection;
 
-    public JDBCConnection getConnection() {
+    public final JDBCConnection getConnection() {
         return connection;
     }
 
-    public QueryContext(JDBCConnection connection) {
+    public QueryContext(final JDBCConnection connection) {
         this.connection = connection;
     }
 }

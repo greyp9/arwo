@@ -2,8 +2,6 @@ package io.github.greyp9.arwo.app.jdbc.sh.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.subsystem.jdbc.SubsystemJDBC;
-import io.github.greyp9.arwo.app.core.view.history.AppHistoryView;
-import io.github.greyp9.arwo.app.core.view.script.AppScriptView;
 import io.github.greyp9.arwo.app.jdbc.sh.core.JDBCRequest;
 import io.github.greyp9.arwo.core.action.ActionButtons;
 import io.github.greyp9.arwo.core.action.ActionFactory;
@@ -12,9 +10,11 @@ import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
-import io.github.greyp9.arwo.core.io.script.History;
-import io.github.greyp9.arwo.core.io.script.Script;
+import io.github.greyp9.arwo.core.jdbc.query.History;
+import io.github.greyp9.arwo.core.jdbc.query.Query;
 import io.github.greyp9.arwo.core.resource.PathU;
+import io.github.greyp9.arwo.core.result.view.ResultsContext;
+import io.github.greyp9.arwo.core.result.view.ResultsView;
 import io.github.greyp9.arwo.core.util.CollectionU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
@@ -42,22 +42,22 @@ public class JDBCCommandView extends JDBCView {
     @Override
     protected final HttpResponse addContentTo(final Element html) throws IOException {
         final JDBCRequest request = getRequest();
-        final String scriptID = request.getScriptID();
-        final Script script = jdbc.getHistory().find(scriptID);
+        final String queryID = request.getQueryID();
+        final Query query = jdbc.getHistory().find(queryID);
         // if command id is not in the list of cached commands, redirect to clear command id from URL
-        final boolean badReference = ((!Value.isEmpty(scriptID)) && (script == null));
+        final boolean badReference = ((!Value.isEmpty(queryID)) && (query == null));
         return (badReference ?
                 HttpResponseU.to302(PathU.toDir(request.getHttpRequest().getBaseURI(), request.getServer())) :
-                addContentTo(html, script));
+                addContentTo(html, query));
     }
 
-    private HttpResponse addContentTo(final Element html, final Script script) throws IOException {
+    private HttpResponse addContentTo(final Element html, final Query query) throws IOException {
         final JDBCRequest request = getRequest();
         final ServletHttpRequest httpRequest = request.getHttpRequest();
         final AppUserState userState = request.getUserState();
         final Properties properties = jdbc.getProperties();
         // command input form (prep)
-        final String command = (script == null) ? properties.getProperty("command", "") : script.getText();
+        final String command = (query == null) ? properties.getProperty("command", "") : query.getText();
         properties.setProperty("command", command);
         final XedActionCommand action = new XedActionCommand(userState.getLocus().getLocale());
         final Bundle bundle = action.getXed().getBundle();
@@ -74,11 +74,13 @@ public class JDBCCommandView extends JDBCView {
         final XedRequest xedRequest = new XedRequest(httpRequest, null, userState.getDocumentState());
         new PropertyPageHtmlView(new XedPropertyPageView(null, cursor, buttons), xedRequest).addContentTo(html);
         // contextual content
-        if (script == null) {
+        if (query == null) {
             final History history = jdbc.getHistory();
-            new AppHistoryView("jdbcHistoryType", true, history, bundle, httpRequest, userState).addContentTo(html);
+            new JDBCHistoryView("jdbcHistoryType", history, bundle, httpRequest, userState).addContentTo(html);
         } else {
-            new AppScriptView(script).addContentTo(html);
+            final ResultsContext context = new ResultsContext(
+                    userState.getViewStates(), userState.getLocus(), request.getBundle(), userState.getSubmitID());
+            new ResultsView(query.getResults(), context).addContentTo(html);
         }
         return null;
     }

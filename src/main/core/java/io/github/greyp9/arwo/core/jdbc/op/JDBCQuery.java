@@ -28,44 +28,45 @@ public class JDBCQuery {
     private final Results results;
     //private final BlobCache blobCache;
 
-    public JDBCQuery(Connection connection, Results results/*, BlobCache blobCache*/) {
+    public JDBCQuery(final Connection connection, final Results results/*, BlobCache blobCache*/) {
         this.connection = connection;
         this.results = results;
         //this.blobCache = blobCache;
     }
 
-    public Results execute(String sql) throws SQLException, IOException {
-        Statement statement = connection.createStatement();
+    public final Results execute(final String sql) throws SQLException, IOException {
+        final Statement statement = connection.createStatement();
         try {
+            results.getInterval().setDateStart(new Date());
             return execute(statement, sql);
         } finally {
+            results.getInterval().setDateFinish(new Date());
             statement.close();
         }
     }
 
-    private Results execute(Statement statement, String sql) throws SQLException, IOException {
-        results.getInterval().setDateStart(new Date());
+    private Results execute(final Statement statement, final String sql) throws SQLException, IOException {
         boolean moreResults = true;
         boolean isResultSet = statement.execute(sql);
         while (moreResults) {
-            moreResults = (isResultSet ? getResultSet(statement, results) : getUpdateCount(statement, results));
+            moreResults = (isResultSet ? getResultSet(statement) : getUpdateCount(statement));
             isResultSet = (moreResults && statement.getMoreResults());
         }
-        results.getInterval().setDateFinish(new Date());
         return results;
     }
 
-    private boolean getResultSet(Statement statement, Results results) throws SQLException, IOException {
-        ResultSet resultSet = statement.getResultSet();
-        ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-        int columnCount = resultSetMetaData.getColumnCount();
-        RowSetMetaData metaData = getMetaData(resultSet);
-        RowSet rowSet = new RowSet(metaData, null, null);
+    @SuppressWarnings({ "PMD.AvoidInstantiatingObjectsInLoops", "PMD.CloseResource" })
+    private boolean getResultSet(final Statement statement) throws SQLException, IOException {
+        final ResultSet resultSet = statement.getResultSet();
+        final ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+        final int columnCount = resultSetMetaData.getColumnCount();
+        final RowSetMetaData metaData = getMetaData(resultSet);
+        final RowSet rowSet = new RowSet(metaData, null, null);
         while (resultSet.next()) {
-            InsertRow insertRow = new InsertRow(rowSet);
+            final InsertRow insertRow = new InsertRow(rowSet);
             for (int i = 1; (i <= columnCount); ++i) {
-                Object object = resultSet.getObject(i);
-                int type = resultSetMetaData.getColumnType(i);
+                final Object object = resultSet.getObject(i);
+                final int type = resultSetMetaData.getColumnType(i);
                 //String columnName = resultSetMetaData.getColumnName(i);
                 //String columnLabel = resultSetMetaData.getColumnLabel(i);
                 if (object == null) {
@@ -86,49 +87,49 @@ public class JDBCQuery {
         return true;
     }
 
-    private boolean getUpdateCount(Statement statement, Results results) throws SQLException {
-        int updateCount = statement.getUpdateCount();
-        boolean isUpdateCount = (updateCount != -1);
+    private boolean getUpdateCount(final Statement statement) throws SQLException {
+        final int updateCount = statement.getUpdateCount();
+        final boolean isUpdateCount = (updateCount != -1);
         if (isUpdateCount) {
             results.add("jdbcUpdateCountType", null, Integer.toString(updateCount));
         }
         return isUpdateCount;
     }
 
-    private RowSetMetaData getMetaData(ResultSet resultSet) throws SQLException {
-        ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
-        int columnCount = resultSetMetaData.getColumnCount();
-        ColumnMetaData[] columns = new ColumnMetaData[columnCount];
+    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    private RowSetMetaData getMetaData(final ResultSet resultSet) throws SQLException {
+        final ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
+        final int columnCount = resultSetMetaData.getColumnCount();
+        final ColumnMetaData[] columns = new ColumnMetaData[columnCount];
         for (int i = 1; (i <= columnCount); ++i) {
-            String name = resultSetMetaData.getColumnName(i);
-            int type = resultSetMetaData.getColumnType(i);
+            final String name = resultSetMetaData.getColumnName(i);
+            final int type = resultSetMetaData.getColumnType(i);
             columns[i - 1] = new ColumnMetaData(name, type);
         }
         return new RowSetMetaData("jdbcResultSetType", columns);
     }
 
-    private Object doClob(Clob clob) throws SQLException, IOException {
-        String string = ReaderU.read(clob.getCharacterStream());
+    private Object doClob(final Clob clob) throws SQLException, IOException {
+        final String string = ReaderU.read(clob.getCharacterStream());
         return doBytes(UTF8Codec.toBytes(string), "CLOB");
     }
 
-    private Object doBlob(Blob blob) throws SQLException, IOException {
-        byte[] bytes = StreamU.read(blob.getBinaryStream());  // pull blob back from server
+    private Object doBlob(final Blob blob) throws SQLException, IOException {
+        final byte[] bytes = StreamU.read(blob.getBinaryStream());  // pull blob back from server
         return doBytes(bytes, "BLOB");
     }
 
-    private Object doVarBinary(byte[] bytes) throws SQLException, IOException {
+    private Object doVarBinary(final byte[] bytes) throws SQLException, IOException {
         return doBytes(bytes, "VARBINARY");
     }
 
-    private Object doBytes(byte[] bytes, String sqlType) throws SQLException, IOException {
+    private Object doBytes(final byte[] bytes, final String sqlType) throws SQLException, IOException {
         // cache blob locally
-        //String hash = Http.Token.SLASH + Long.toHexString(CRCU.crc32(bytes));
+        //Http.Token.SLASH + Long.toHexString(CRCU.crc32(bytes));
         //blobCache.put(new Blob(hash, bytes));
         // insert link into result set
-        String title = String.format("%s [%sB]", sqlType, NumberScale.toString(bytes.length));
+        final String title = String.format("%s [%sB]", sqlType, NumberScale.toString(bytes.length));
         //String href = blobCache.getEndpoint() + hash;
-        String href = "href";
-        return new TableViewLink(UTF16.DOCUMENT_BRACKETS, title, href);
+        return new TableViewLink(UTF16.DOCUMENT_BRACKETS, title, "href");
     }
 }

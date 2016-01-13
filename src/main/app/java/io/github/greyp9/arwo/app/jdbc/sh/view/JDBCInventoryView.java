@@ -61,7 +61,6 @@ public class JDBCInventoryView {
                 new ColumnMetaData("driverClass", Types.VARCHAR),
                 new ColumnMetaData("jdbcURL", Types.VARCHAR),
                 new ColumnMetaData("user", Types.VARCHAR),
-                new ColumnMetaData("password", Types.VARCHAR),
         };
         return new RowSetMetaData("server.jdbcServerType", columns);
     }
@@ -88,7 +87,6 @@ public class JDBCInventoryView {
             insertRow.setNextColumn(cursorIt.getDriverClass());
             insertRow.setNextColumn(cursorIt.getURL());
             insertRow.setNextColumn(cursorIt.getUser());
-            insertRow.setNextColumn(cursorIt.getPassword());
             rowSet.add(insertRow.getRow());
         }
     }

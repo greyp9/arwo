@@ -8,31 +8,34 @@ import io.github.greyp9.arwo.core.result.op.Results;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
+@SuppressWarnings("PMD.DoNotUseThreads")
 public class QueryRunnable implements Runnable {
     private final Logger logger = Logger.getLogger(getClass().getName());
     private final Query query;
     private final QueryContext context;
 
-    public QueryRunnable(Query query, QueryContext context) {
+    public QueryRunnable(final Query query, final QueryContext context) {
         this.query = query;
         this.context = context;
     }
 
     @Override
-    public void run() {
+    public final void run() {
         try {
             logger.entering(getClass().getName(), Runnable.class.getName());
             query.start();
             runQuery();
+            query.finish(null);
         } catch (IOException e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
+            query.getResults().add("jdbcException", "command-stderr", e.getMessage());
+            query.finish(e);
         } catch (SQLException e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
+            query.getResults().add("jdbcException", "command-stderr", e.getMessage());
+            query.finish(e);
         } finally {
-            query.finish();
+            logger.exiting(getClass().getName(), Runnable.class.getName());
         }
     }
 

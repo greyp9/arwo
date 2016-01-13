@@ -12,31 +12,31 @@ import java.util.Collection;
 public class Results {
     private final String command;
     private final Interval interval;
-    private final Collection<Result> results;
+    private final Collection<Result> data;
 
-    public String getCommand() {
+    public final String getCommand() {
         return command;
     }
 
-    public Interval getInterval() {
+    public final Interval getInterval() {
         return interval;
     }
 
-    public Collection<Result> getResults() {
-        return results;
+    public final Collection<Result> getResults() {
+        return data;
     }
 
-    public Results(String command, Interval interval) {
+    public Results(final String command, final Interval interval) {
         this.command = command;
         this.interval = interval;
-        this.results = new ArrayList<Result>();
+        this.data = new ArrayList<Result>();
     }
 
-    public void add(String id, String type, RowSet rowSet) {
-        results.add(new RowSetResult(id, type, rowSet));
+    public final void add(final String id, final String type, final RowSet rowSet) {
+        data.add(new RowSetResult(id, type, rowSet));
     }
 
-    public void add(String id, String type, String text) {
-        results.add(new TextResult(id, type, text));
+    public final void add(final String id, final String type, final String text) {
+        data.add(new TextResult(id, type, text));
     }
 }

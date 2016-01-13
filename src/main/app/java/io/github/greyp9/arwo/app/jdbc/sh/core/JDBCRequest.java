@@ -15,7 +15,7 @@ public class JDBCRequest {
     private final AppRequest request;
     private final AppUserState userState;
     private final Pather patherServer;
-    private final Pather patherScriptID;
+    private final Pather patherQueryID;
 
     public final ServletHttpRequest getHttpRequest() {
         return request.getHttpRequest();
@@ -41,15 +41,15 @@ public class JDBCRequest {
         this.request = userState.getAppRequest(httpRequest);
         this.userState = userState;
         this.patherServer = new Pather(httpRequest.getPathInfo());
-        this.patherScriptID = new Pather(patherServer.getRight());
+        this.patherQueryID = new Pather(patherServer.getRight());
     }
 
     public final String getServer() {
         return patherServer.getLeftToken();
     }
 
-    public final String getScriptID() {
-        return patherScriptID.getLeftToken();
+    public final String getQueryID() {
+        return patherQueryID.getLeftToken();
     }
 
     public final String getTitlePath() {

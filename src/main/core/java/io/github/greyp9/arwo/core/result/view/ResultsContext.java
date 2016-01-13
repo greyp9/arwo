@@ -10,24 +10,23 @@ public class ResultsContext {
     private final Bundle bundle;
     private final String submitID;
 
-    public ViewStates getViewStates() {
+    public final ViewStates getViewStates() {
         return viewStates;
     }
 
-    public Locus getLocus() {
+    public final Locus getLocus() {
         return locus;
     }
 
-    public Bundle getBundle() {
+    public final Bundle getBundle() {
         return bundle;
     }
 
-    public String getSubmitID() {
+    public final String getSubmitID() {
         return submitID;
     }
 
-
-    public ResultsContext(ViewStates viewStates, Locus locus, Bundle bundle, String submitID) {
+    public ResultsContext(final ViewStates viewStates, final Locus locus, final Bundle bundle, final String submitID) {
         this.viewStates = viewStates;
         this.locus = locus;
         this.bundle = bundle;

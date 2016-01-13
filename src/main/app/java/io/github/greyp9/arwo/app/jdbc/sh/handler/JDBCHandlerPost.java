@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.app.jdbc.sh.handler;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.jdbc.sh.action.SHQueueCommand;
 import io.github.greyp9.arwo.app.jdbc.sh.core.JDBCRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
@@ -85,10 +86,14 @@ public class JDBCHandlerPost {
 
     private String applySession(
             final SubmitToken token, final NameTypeValues httpArguments, final String locationIn) throws IOException {
-        token.getClass();
-        httpArguments.getClass();
+        String location = locationIn;
         final String message = request.getBundle().getString("alert.action.not.implemented");
-        request.getAlerts().add(new Alert(Alert.Severity.WARN, message, token.toString(), null));
-        return locationIn;
+        final String action = token.getAction();
+        if (App.Action.COMMAND.equals(action)) {
+            location = new SHQueueCommand(request).doAction(location, httpArguments);
+        } else {
+            request.getAlerts().add(new Alert(Alert.Severity.WARN, message, token.toString(), null));
+        }
+        return location;
     }
 }

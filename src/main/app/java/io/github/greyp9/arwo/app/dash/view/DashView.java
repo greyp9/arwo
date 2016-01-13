@@ -91,7 +91,9 @@ public class DashView {
         addPropertiesView(html);
         new AppConnectionView(httpRequest, userState, userState.getSSH().getCache(), null).addContentTo(html);
         new AppConnectionView(httpRequest, userState, userState.getCIFS().getCache(), null).addContentTo(html);
+        new AppConnectionView(httpRequest, userState, userState.getInterop().getCache(), null).addContentTo(html);
         new AppConnectionView(httpRequest, userState, userState.getWebDAV().getCache(), null).addContentTo(html);
+        new AppConnectionView(httpRequest, userState, userState.getJDBC().getCache(), null).addContentTo(html);
         new XedUnsavedView(httpRequest, userState).addContent(html);
         new CronActiveView(userState.getCronService(), request, userState).addContent(html);
         return null;

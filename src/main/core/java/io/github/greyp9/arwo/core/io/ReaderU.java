@@ -4,10 +4,14 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.Reader;
 
-public class ReaderU {
+public final class ReaderU {
 
-    public static String read(BufferedReader reader) throws IOException {
-        StringBuilder buffer = new StringBuilder();
+    private ReaderU() {
+    }
+
+    @SuppressWarnings("PMD.AssignmentInOperand")
+    public static String read(final BufferedReader reader) throws IOException {
+        final StringBuilder buffer = new StringBuilder();
         int c;
         while ((c = reader.read()) >= 0) {
             buffer.append((char) c);
@@ -15,8 +19,8 @@ public class ReaderU {
         return buffer.toString();
     }
 
-    public static String read(Reader reader) throws IOException {
-        BufferedReader bufferedReader = new BufferedReader(reader);
+    public static String read(final Reader reader) throws IOException {
+        final BufferedReader bufferedReader = new BufferedReader(reader);
         try {
             return read(bufferedReader);
         } finally {

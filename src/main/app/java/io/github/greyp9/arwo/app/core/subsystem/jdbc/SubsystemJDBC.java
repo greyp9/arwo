@@ -3,7 +3,7 @@ package io.github.greyp9.arwo.app.core.subsystem.jdbc;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.connect.ConnectionCache;
-import io.github.greyp9.arwo.core.io.script.History;
+import io.github.greyp9.arwo.core.jdbc.query.History;
 
 import java.util.Properties;
 

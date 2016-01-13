@@ -20,10 +20,10 @@ public final class DurationU {
         return (isValue ? (dateZ.getTime() - dateStart.getTime()) : null);
     }
 
-    public static long toMillis(final String duration) {
+    public static Long toMillis(final String duration) {
         final Date start = new Date();
         final Date finish = add(start, DateU.Const.TZ_GMT, duration);
-        return (finish.getTime() - start.getTime());
+        return ((duration == null) ? null : (finish.getTime() - start.getTime()));
     }
 
     public static Date add(final Date date, final TimeZone tz, final String durationIn) {
@@ -96,6 +96,12 @@ public final class DurationU {
         final Date dateEarlier = XsdDateU.fromXSDZ(dateEarlierXSDZ);
         final Date dateLater = XsdDateU.fromXSDZ(dateLaterXSDZ);
         return duration(dateEarlier, dateLater);
+    }
+
+    public static String duration(final Date dateEarlier, final Date dateLater, final Date dateLaterDefault) {
+        final Date dateLaterIt = Value.defaultOnNull(dateLater, dateLaterDefault);
+        final boolean isValue = ((dateEarlier != null) && (dateLaterIt != null));
+        return (isValue ? duration(dateEarlier, dateLaterIt) : null);
     }
 
     public static String duration(final Date dateEarlier, final Date dateLater) {
