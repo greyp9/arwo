@@ -42,8 +42,10 @@ public class QueryRunnable implements Runnable {
     private void runQuery() throws IOException, SQLException {
         final JDBCConnection connection = context.getConnection();
         final Results results = query.getResults();
-        results.getInterval().setDateStart(new Date());
+        final Date date = new Date();
+        results.getInterval().setDateStart(date);
         new JDBCQuery(connection.getConnection(), results).execute(query.getText());
+        connection.update(date);
         results.getInterval().setDateFinish(new Date());
     }
 }
