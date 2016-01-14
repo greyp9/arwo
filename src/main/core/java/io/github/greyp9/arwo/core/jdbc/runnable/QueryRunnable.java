@@ -1,14 +1,18 @@
 package io.github.greyp9.arwo.core.jdbc.runnable;
 
 import io.github.greyp9.arwo.core.cache.ResourceCache;
+import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.jdbc.connection.JDBCConnection;
 import io.github.greyp9.arwo.core.jdbc.op.JDBCQuery;
 import io.github.greyp9.arwo.core.jdbc.query.Query;
 import io.github.greyp9.arwo.core.result.op.Results;
+import io.github.greyp9.arwo.core.result.xml.ResultsWriter;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @SuppressWarnings("PMD.DoNotUseThreads")
@@ -35,6 +39,15 @@ public class QueryRunnable implements Runnable {
         } catch (SQLException e) {
             query.getResults().add("jdbcException", "command-stderr", e.getMessage());
             query.finish(e);
+        } finally {
+            logger.exiting(getClass().getName(), Runnable.class.getName());
+        }
+        try {
+            final String filename = String.format("%s.xml", DateX.toFilename(query.getDate()));
+            final File file = new File(context.getFolder(), filename);
+            new ResultsWriter().writeTo(file, query.getResults());
+        } catch (IOException e) {
+            logger.log(Level.SEVERE, e.getMessage(), e);
         } finally {
             logger.exiting(getClass().getName(), Runnable.class.getName());
         }

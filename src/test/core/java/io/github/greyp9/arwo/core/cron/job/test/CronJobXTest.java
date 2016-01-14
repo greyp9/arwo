@@ -20,9 +20,9 @@ public class CronJobXTest extends TestCase {
         final Document document = DocumentU.toDocument(StreamU.read(ResourceU.resolve(Const.XML)));
         final List<Element> elements = new XPather(document).getElements("/cronTab/cronJob");
         for (Element element : elements) {
-            final String cron = element.getAttribute("cron");
-            final String name = element.getAttribute("name");
-            final boolean enabled = Boolean.parseBoolean(element.getAttribute("enabled"));
+            final String cron = ElementU.getAttribute(element, "cron");
+            final String name = ElementU.getAttribute(element, "name");
+            final boolean enabled = Boolean.parseBoolean(ElementU.getAttribute(element, "enabled"));
             final Element child = ElementU.getChildren(element).iterator().next();
             Assert.assertNotNull(cron);
             Assert.assertNotNull(name);

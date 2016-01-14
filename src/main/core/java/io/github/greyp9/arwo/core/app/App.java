@@ -110,6 +110,7 @@ public final class App {
         public static final String VIEW_ZIP = "viewZIP";
         public static final String VIEW_TGZ = "viewTGZ";
         public static final String VIEW_HEX = "viewHex";
+        public static final String VIEW_R = "viewR";
     }
 
     @SuppressWarnings({ "OctalInteger", "PMD.AvoidUsingOctalValues" })

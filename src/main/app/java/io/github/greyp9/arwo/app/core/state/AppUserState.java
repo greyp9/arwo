@@ -250,8 +250,8 @@ public class AppUserState {
         final String object = token.getObject();
         final String object2 = token.getObject2();
         final Collection<String> views = Arrays.asList(
-                App.Mode.CREATE_F, App.Mode.CREATE_D, App.Mode.EDIT, App.Mode.DELETE,
-                App.Mode.VIEW, App.Mode.VIEW_GZ, App.Mode.VIEW_ZIP, App.Mode.VIEW_TGZ, App.Mode.VIEW_HEX);
+                App.Mode.CREATE_F, App.Mode.CREATE_D, App.Mode.EDIT, App.Mode.DELETE, App.Mode.VIEW,
+                App.Mode.VIEW_GZ, App.Mode.VIEW_ZIP, App.Mode.VIEW_TGZ, App.Mode.VIEW_HEX, App.Mode.VIEW_R);
         final Properties properties = documentState.getProperties();
         final Bundle bundle = getBundle();
         final String message = bundle.getString("alert.action.not.implemented");

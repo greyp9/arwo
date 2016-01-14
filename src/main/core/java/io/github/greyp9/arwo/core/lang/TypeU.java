@@ -10,6 +10,11 @@ public final class TypeU {
         return ((b != null) && (b));
     }
 
+    public static int toIntegerP(final String value) {
+        final Integer i = toInteger(value);
+        return (i == null) ? 0 : i;
+    }
+
     public static Boolean toBoolean(final String value) {
         return ((value == null) ? null : Boolean.valueOf(value));
     }
@@ -32,5 +37,9 @@ public final class TypeU {
 
     public static String toString(final Long value) {
         return ((value == null) ? null : Long.toString(value));
+    }
+
+    public static String toString(final Object value) {
+        return ((value == null) ? null : value.toString());
     }
 }

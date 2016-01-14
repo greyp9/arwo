@@ -50,6 +50,11 @@ public final class ElementU {
         return getChild(element, qname.getLocalPart(), qname.getNamespaceURI());
     }
 
+    public static Element getChild(final Element element, final String name) {
+        final String uri = ((element == null) ? null : element.getNamespaceURI());
+        return getChild(element, name, uri);
+    }
+
     public static Element getChild(final Element element, final String name, final String uri) {
         return (element == null) ? null : getChildNN(element, name, uri);
     }

@@ -9,6 +9,7 @@ import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.editor.AppFileEditView;
 import io.github.greyp9.arwo.app.core.view.gz.AppTGZView;
 import io.github.greyp9.arwo.app.core.view.hex.AppHexView;
+import io.github.greyp9.arwo.app.core.view.rs.AppResultsView;
 import io.github.greyp9.arwo.app.core.view.zip.AppZipView;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.model.ExceptionModel;
@@ -65,6 +66,7 @@ public class CIFSFileView extends CIFSView {
         // resource access (read versus write)
         final boolean isModeCreateF = App.Mode.CREATE_F.equals(mode);
         final boolean isModeCreateD = App.Mode.CREATE_D.equals(mode);
+        final boolean isModeCreate = (isModeCreateF || isModeCreateD);
         final boolean isModeEdit = App.Mode.EDIT.equals(mode);
         final boolean isModeDelete = App.Mode.DELETE.equals(mode);
         // resource interpret (gzip deflated content expected)
@@ -73,14 +75,14 @@ public class CIFSFileView extends CIFSView {
         final boolean isModeTGZ = App.Mode.VIEW_TGZ.equals(mode);
         // resource interpret (binary, view hex representation)
         final boolean isHex = App.Mode.VIEW_HEX.equals(mode);
+        // resource interpret (webapp results)
+        final boolean isResults = App.Mode.VIEW_R.equals(mode);
         // properties of cursor resource
         final boolean isProperties = PropertiesU.isBoolean(userState.getProperties(), App.Action.PROPERTIES);
         addFileProperties(html, metaFile);
         // dispose of request
         HttpResponse httpResponse;
-        if (isModeCreateF) {
-            httpResponse = HttpResponseU.to302(".");  // go to containing folder
-        } else if (isModeCreateD) {
+        if (isModeCreate) {
             httpResponse = HttpResponseU.to302(".");  // go to containing folder
         } else if (isModeEdit) {
             httpResponse = new AppFileEditView(httpRequest, userState).addContentTo(html, metaFile, charset);
@@ -98,6 +100,8 @@ public class CIFSFileView extends CIFSView {
             httpResponse = new AppTGZView(httpRequest, userState).addContentTo(html, metaFile, bundle);
         } else if (isHex) {
             httpResponse = new AppHexView(httpRequest, userState).addContentTo(html, metaFile, bundle);
+        } else if (isResults) {
+            httpResponse = new AppResultsView(httpRequest, userState).addContentTo(html, metaFile, bundle);
         } else {
             httpResponse = doGetFile(metaFile, charset, isModeGZ);
         }

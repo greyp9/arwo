@@ -28,7 +28,7 @@ public class ActionCacheClear extends DeferredAction {
         if (Const.CONFIRM.equals(option)) {
             try {
                 long size = 0L;
-                for (ResourceCache cache : caches) {
+                for (final ResourceCache cache : caches) {
                     size += cache.getSize();
                     cache.clear();
                 }

@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.xsd.define;
 
 import io.github.greyp9.arwo.core.lang.NumberU;
+import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xsd.atom.XsdAtom;
 import io.github.greyp9.arwo.core.xsd.core.XsdU;
 import io.github.greyp9.arwo.core.xsd.data.DataTypeRestrictions;
@@ -42,37 +43,37 @@ public class DataTypeRestrictionsFactory {
     }
 
     private Collection<String> updateEnumeration(final XsdAtom atom, final Collection<String> enumValues) {
-        final String value = atom.getElement().getAttribute(XsdU.VALUE);
+        final String value = ElementU.getAttribute(atom.getElement(), XsdU.VALUE);
         enumValues.add(value);
         return enumValues;
     }
 
     private Collection<String> updatePattern(final XsdAtom atom, final Collection<String> patterns) {
-        final String value = atom.getElement().getAttribute(XsdU.VALUE);
+        final String value = ElementU.getAttribute(atom.getElement(), XsdU.VALUE);
         patterns.add(value);
         return patterns;
     }
 
     private Long updateMinInclusive(final XsdAtom atom, final Long minInclusive) {
-        final String value = atom.getElement().getAttribute(XsdU.VALUE);
+        final String value = ElementU.getAttribute(atom.getElement(), XsdU.VALUE);
         final Long minInclusiveIt = NumberU.toLong(value, Integer.MIN_VALUE);
         return ((minInclusive == null) ? minInclusiveIt : Math.min(minInclusive, minInclusiveIt));
     }
 
     private Long updateMaxInclusive(final XsdAtom atom, final Long maxInclusive) {
-        final String value = atom.getElement().getAttribute(XsdU.VALUE);
+        final String value = ElementU.getAttribute(atom.getElement(), XsdU.VALUE);
         final Long maxInclusiveIt = NumberU.toLong(value, Integer.MAX_VALUE);
         return ((maxInclusive == null) ? maxInclusiveIt : Math.max(maxInclusive, maxInclusiveIt));
     }
 
     private Integer updateMinLength(final XsdAtom atom, final Integer minLength) {
-        final String value = atom.getElement().getAttribute(XsdU.VALUE);
+        final String value = ElementU.getAttribute(atom.getElement(), XsdU.VALUE);
         final Integer minLengthIt = NumberU.toInt(value, 0);
         return ((minLength == null) ? minLengthIt : Math.min(minLength, minLengthIt));
     }
 
     private Integer updateMaxLength(final XsdAtom atom, final Integer maxLength) {
-        final String value = atom.getElement().getAttribute(XsdU.VALUE);
+        final String value = ElementU.getAttribute(atom.getElement(), XsdU.VALUE);
         final Integer maxLengthIt = NumberU.toInt(value, Integer.MAX_VALUE);
         return ((maxLength == null) ? maxLengthIt : Math.max(maxLength, maxLengthIt));
     }

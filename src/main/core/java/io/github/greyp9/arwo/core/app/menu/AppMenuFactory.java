@@ -84,11 +84,12 @@ public class AppMenuFactory implements MenuFactory {
         final MenuItem itemViewZIP = new MenuItem(App.Mode.VIEW_ZIP, App.Target.USER_STATE, App.Mode.VIEW_ZIP);
         final MenuItem itemViewTGZ = new MenuItem(App.Mode.VIEW_TGZ, App.Target.USER_STATE, App.Mode.VIEW_TGZ);
         final MenuItem itemViewHex = new MenuItem(App.Mode.VIEW_HEX, App.Target.USER_STATE, App.Mode.VIEW_HEX);
+        final MenuItem itemViewR = new MenuItem(App.Mode.VIEW_R, App.Target.USER_STATE, App.Mode.VIEW_R);
         final MenuItem itemProps = new MenuItem(properties, App.Target.USER_STATE, App.Action.TOGGLE, properties);
         final MenuItem itemFilter = new MenuItem(textFilter, App.Target.USER_STATE, App.Action.TOGGLE, textFilter);
         return new MenuItem(App.Mode.VIEW, App.Target.USER_STATE, App.Action.MENU, Value.join("/", key, App.Mode.VIEW),
                 createMenuViewMime(key), createMenuViewCharset(key), /*itemViewFind,*/
-                itemView, itemViewGZ, itemViewZIP, itemViewTGZ, itemViewHex, itemProps, itemFilter);
+                itemView, itemViewGZ, itemViewZIP, itemViewTGZ, itemViewHex, itemViewR, itemProps, itemFilter);
     }
 
     private static MenuItem createMenuViewMime(final String key) {

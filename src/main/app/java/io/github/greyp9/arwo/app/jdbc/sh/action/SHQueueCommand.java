@@ -17,9 +17,11 @@ import io.github.greyp9.arwo.core.jdbc.runnable.QueryContext;
 import io.github.greyp9.arwo.core.jdbc.runnable.QueryRunnable;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.vm.exec.UserExecutor;
 import io.github.greyp9.arwo.core.xed.action.XedActionCommand;
 
+import java.io.File;
 import java.io.IOException;
 
 public class SHQueueCommand {
@@ -59,7 +61,10 @@ public class SHQueueCommand {
         // runnable to execute commands
         final UserExecutor userExecutor = userState.getUserExecutor();
         final ResourceCache cacheBlob = userState.getCacheBlob();
-        final QueryContext context = new QueryContext(connection, cacheBlob);
+        final File folder = new File(userState.getUserRoot(), PathU.toDir("",
+                Value.defaultOnEmpty(httpRequest.getHeader("X-Out"), "interactive"),
+                httpRequest.getServletPath(), request.getServer()));
+        final QueryContext context = new QueryContext(connection, cacheBlob, folder);
         final QueryRunnable runnable = new QueryRunnable(query, context);
         userExecutor.getRunnables().add(runnable);
         userExecutor.getExecutorCommand().execute(runnable);

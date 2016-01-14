@@ -39,8 +39,8 @@ public class ConnectionRunnable implements Runnable {
             MutexU.waitUntil(reference, date);
             logger.finest("resume");
             if (reference.get() == null) {
+                runMonitor(date, Const.DURATION);  // at PT14M59S, age out PT15M stale connections
                 date = new Date();
-                runMonitor(date, Const.DURATION);
             }
         }
         logger.exiting(getClass().getName(), Runnable.class.getName(), reference.get());
