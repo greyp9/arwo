@@ -69,6 +69,7 @@
         <copy file='${m2.dir}/org/apache/httpcomponents/httpcore/4.4.1/httpcore-4.4.1.jar' todir='${tomcat.dir}/lib'/>
         <copy file='${m2.dir}/net/sourceforge/jtds/jtds/1.2.8/jtds-1.2.8.jar' todir='${tomcat.dir}/lib'/>
         <copy file='${m2.dir}/org/apache/derby/derbyclient/10.11.1.1/derbyclient-10.11.1.1.jar' todir='${tomcat.dir}/lib'/>
+        <copy file='${m2.dir}/com/sun/mail/javax.mail/1.5.4/javax.mail-1.5.4.jar' todir='${tomcat.dir}/lib'/>
     </target>
 
     <target name='tomcat' description='Spawn a Tomcat6 instance.' depends='deploy-arwo'>
