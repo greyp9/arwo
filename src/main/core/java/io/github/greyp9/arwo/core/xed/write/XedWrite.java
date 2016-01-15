@@ -61,7 +61,10 @@ public class XedWrite {
             getClass();  // NOOP - null guard
         } else if (App.Action.CREATE.equals(action)) {
             final char[] secret = request.getSecret();
-            new OpCreate(secret, cursor.getXed()).apply(cursor.getParentConcrete().getElement(), valueInstance);
+            final Element create = new OpCreate(secret, cursor.getXed()).apply(
+                    cursor.getParentConcrete().getElement(), valueInstance);
+            final XedCursor cursorCreate = new XedNav(cursor.getXed()).find(create);
+            location = baseURI + cursorCreate.getURI();  // nav to new node (browser "back" for multi-create use case)
         } else if (App.Action.UPDATE.equals(action)) {
             final char[] secret = request.getSecret();
             new OpUpdate(secret, cursor.getXed()).apply(cursor.getElement(), valueInstance);
