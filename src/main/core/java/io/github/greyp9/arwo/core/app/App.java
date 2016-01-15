@@ -84,6 +84,7 @@ public final class App {
         public static final String COMMAND_FOOT = "command-foot";
         public static final String COMMAND_HEAD = "command-head";
         public static final String DIALOG = "dialog";
+        public static final String EXTRA = "extra";
         public static final String FOOTER = "footer";
         public static final String HEADER = "header";
         public static final String LABEL = "label";
@@ -92,11 +93,15 @@ public final class App {
         public static final String MENUS = "menus";
         public static final String NOTIFICATION = "notification";
         public static final String NOTIFICATIONS = "notifications";
+        public static final String ROWSET_RESULT = "rowset-result";
         public static final String STATE = "state";
+        public static final String STDERR = "stderr";
+        public static final String STDOUT = "stdout";
         public static final String TABLE = "table";
         public static final String TEXT = "text";
         public static final String TEXT_RESULT = "text-result";
-        public static final String TEXT_RESULT_HEAD = "text-result-header";
+        public static final String TEXT_RESULT_BODY = "text-result-body";
+        public static final String TEXT_RESULT_HEAD = "text-result-head";
         public static final String TIMESTAMP = "timestamp";
     }
 

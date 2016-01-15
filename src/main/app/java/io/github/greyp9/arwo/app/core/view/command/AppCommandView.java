@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.app.core.view.command;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
@@ -24,7 +25,7 @@ public class AppCommandView {
 
     public final HttpResponse addContentTo(final Element html) throws IOException {
         final Long elapsed = DurationU.toDuration(command.getStart(), command.getFinish(), new Date());
-        final Element divCommand = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, "command"));
+        final Element divCommand = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.COMMAND));
         renderHeader(divCommand, command.getStart(), command.getStdin());
         renderBody(divCommand);
         renderFooter(divCommand, command.getFinish(), elapsed);
@@ -35,24 +36,25 @@ public class AppCommandView {
         final String dateText = ((dateStart == null) ? null : String.format("[@%s]", dateStart));
         final String stdinText = ((stdin == null) ? null : String.format("$ %s", stdin));
         final String text = Value.join(" ", dateText, stdinText);
-        ElementU.addElement(html, Html.DIV, text, NTV.create(Html.CLASS, "command-head"));
+        ElementU.addElement(html, Html.DIV, text, NTV.create(Html.CLASS, App.CSS.COMMAND_HEAD));
     }
 
     private void renderBody(final Element html) throws IOException {
-        final Element divBody = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, "command-body"));
+        final Element divB = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.COMMAND_BODY));
+        final Element divR = ElementU.addElement(divB, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.TEXT_RESULT));
         // stderr
         final TextRenderer rendererStderr = new TextRenderer(command.getStderr());
-        final String cssStderr = Value.join(" ", "text-result", "command-stderr");
-        final Element divStderr = ElementU.addElement(divBody, Html.DIV, null, NTV.create(Html.CLASS, cssStderr));
+        final String cssStderr = Value.join(Html.SPACE, App.CSS.TEXT_RESULT_BODY, App.CSS.STDERR);
+        final Element divStderr = ElementU.addElement(divR, Html.DIV, null, NTV.create(Html.CLASS, cssStderr));
         toOutputText(divStderr, rendererStderr.render(TextRenderer.Const.SCROLLBACK_LINES));
         // stdout
         final TextRenderer rendererStdout = new TextRenderer(command.getStdout());
-        final String cssStdout = Value.join(" ", "text-result", "command-stdout");
-        final Element divStdout = ElementU.addElement(divBody, Html.DIV, null, NTV.create(Html.CLASS, cssStdout));
+        final String cssStdout = Value.join(Html.SPACE, App.CSS.TEXT_RESULT_BODY, App.CSS.STDOUT);
+        final Element divStdout = ElementU.addElement(divR, Html.DIV, null, NTV.create(Html.CLASS, cssStdout));
         toOutputText(divStdout, rendererStdout.render(TextRenderer.Const.SCROLLBACK_LINES));
         // extra info
-        final String cssExtra = Value.join(" ", "text-result", "extra");
-        final Element divExtra = ElementU.addElement(divBody, Html.DIV, null, NTV.create(Html.CLASS, cssExtra));
+        final String cssExtra = Value.join(Html.SPACE, App.CSS.TEXT_RESULT_BODY, App.CSS.EXTRA);
+        final Element divExtra = ElementU.addElement(divR, Html.DIV, null, NTV.create(Html.CLASS, cssExtra));
         toOutputText(divExtra, toExtraInfo(rendererStderr, rendererStdout));
     }
 
@@ -60,7 +62,7 @@ public class AppCommandView {
         final String dateText = ((dateFinish == null) ? null : String.format("[@%s]", dateFinish));
         final String elapsedText = (elapsed == null) ? null : String.format("[%s]", DurationU.durationXSD(elapsed));
         final String text = Value.defaultOnEmpty(Value.join(" ", dateText, elapsedText), UTF16.PAUSE);
-        ElementU.addElement(html, Html.DIV, text, NTV.create(Html.CLASS, "command-foot"));
+        ElementU.addElement(html, Html.DIV, text, NTV.create(Html.CLASS, App.CSS.COMMAND_FOOT));
     }
 
     private void toOutputText(final Element div, final String text) {
@@ -78,7 +80,7 @@ public class AppCommandView {
         final String exitValueText = (exitValue == null) ? null : String.format("[EXIT:%s]", exitValue);
         final String stderrText = toExtraInfo(rendererStderr, "STDERR");
         final String stdoutText = toExtraInfo(rendererStdout, "STDOUT");
-        return Value.defaultOnEmpty(Value.join(" ", pidText, exitValueText, stderrText, stdoutText), null);
+        return Value.defaultOnEmpty(Value.join(Html.SPACE, pidText, exitValueText, stderrText, stdoutText), null);
     }
 
     private String toExtraInfo(final TextRenderer textRenderer, final String label) {

@@ -35,7 +35,7 @@ margin: 1em 0 1em 0;
 
 div.command-body
 {
-margin: 0.5em;
+padding: 0.5em;
 }
 
 div.command-head, div.command-foot
@@ -48,36 +48,20 @@ padding: 2px 4px;
 font-family: monospace;
 }
 
-div.command-stderr, div.command-stdout
-{
-border: thin dotted ThreeDShadow;
-color: WindowText;
-margin: 0;
-padding: 0 4px;
-}
-
-div.command-stderr pre, div.command-stdout pre
-{
-margin: 4px 0;
-}
-
-div.command-stderr
-{
-background-color: Highlight;
-color: HighlightText;
-}
-
 /* END COMMAND */
 
 /* START RESULTS */
 
-div.text-result
+div.rowset-result
 {
-border: solid thin ThreeDShadow;
-margin: 0.5em 0;
 }
 
-div.text-result-header
+div.text-result
+{
+margin: 0 0 1em;
+}
+
+div.text-result-head
 {
 border: solid thin ThreeDShadow;
 background-color: Highlight;
@@ -85,13 +69,36 @@ color: HighlightText;
 font-family: sans-serif;
 font-size: larger;
 font-weight: bold;
+mmargin: 0.5em 0.5em 0 0.5em;
 padding: 0.4em;
 }
 
-div.text-result pre
+div.text-result-body
 {
-margin: 0.5em;
-padding: 0;
+border: solid thin ThreeDShadow;
+background-color: InfoBackground;
+color: InfoText;
+padding: 0 0.5em;
+}
+
+div.text-result-body pre
+{
+margin: 0.5em 0em;
+}
+
+div.stdout
+{
+}
+
+div.stderr
+{
+background-color: yellow;
+color: black;
+font-weight: bold;
+}
+
+div.extra
+{
 }
 
 /* END RESULTS */

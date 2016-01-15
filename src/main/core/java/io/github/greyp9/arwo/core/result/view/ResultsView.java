@@ -84,6 +84,7 @@ public class ResultsView {
     }
 
     private void renderRowSet(final Element html, final RowSetResult result) throws IOException {
+        final Element divR = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.ROWSET_RESULT));
         final RowSet rowSet = result.getRowSet();
         final RowSetMetaData metaData = rowSet.getMetaData();
         final Bundle bundle = context.getBundle();
@@ -94,18 +95,23 @@ public class ResultsView {
         final TableContext tableContext = new TableContext(
                 viewState, context.getSubmitID(), App.CSS.TABLE, bundle, locus);
         final TableView tableView = new TableView(table, tableContext);
-        tableView.addContentTo(html);
+        tableView.addContentTo(divR);
     }
 
     private void renderText(final Element html, final TextResult result) throws IOException {
-        final TextRenderer textRenderer = new TextRenderer(result.getText());
-        final String htmlClass = Value.join(Html.SPACE, App.CSS.TEXT_RESULT, result.getType());
-        final Element divResult = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, htmlClass));
+        // result wrapper
+        final Element divR = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.TEXT_RESULT));
+        // header
         if (result.getID() != null) {
             final String label = context.getBundle().getString(result.getID());
-            ElementU.addElement(divResult, Html.DIV, label, NTV.create(Html.CLASS, App.CSS.TEXT_RESULT_HEAD));
+            ElementU.addElement(divR, Html.DIV, label, NTV.create(Html.CLASS, App.CSS.TEXT_RESULT_HEAD));
         }
-        toOutputText(divResult, textRenderer.render(TextRenderer.Const.SCROLLBACK_LINES));
+        // body
+        final TextRenderer textRenderer = new TextRenderer(result.getText());
+        final String text = textRenderer.render(TextRenderer.Const.SCROLLBACK_LINES);
+        final String htmlClass = Value.join(Html.SPACE, App.CSS.TEXT_RESULT_BODY, result.getType());
+        final Element divTextBody = ElementU.addElement(divR, Html.DIV, null, NTV.create(Html.CLASS, htmlClass));
+        toOutputText(divTextBody, text);
     }
 
     private void toOutputText(final Element div, final String text) {
