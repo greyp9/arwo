@@ -134,6 +134,7 @@
             <xsd:element name='lsh' type='app:cronLshJobType'/>
             <xsd:element name='ssh' type='app:cronSshJobType'/>
             <xsd:element name='wsh' type='app:cronWshJobType'/>
+            <xsd:element name='jdbc' type='app:cronJdbcJobType'/>
             <xsd:element name='sftp' type='app:cronSFTPJobType'/>
             <xsd:element name='cifs' type='app:cronCIFSJobType'/>
             <xsd:element name='webdav' type='app:cronWebDAVJobType'/>
@@ -169,6 +170,12 @@
     <xsd:complexType name="cronWshJobType">
         <xsd:attribute name='server' type='xsd:string'/>
         <xsd:attribute name='command' type='xsd:string'/>
+        <xsd:attribute name='comment' type='xsd:string'/>
+    </xsd:complexType>
+
+    <xsd:complexType name="cronJdbcJobType">
+        <xsd:attribute name='server' type='xsd:string'/>
+        <xsd:attribute name='sql' type='xsd:string'/>
         <xsd:attribute name='comment' type='xsd:string'/>
     </xsd:complexType>
 

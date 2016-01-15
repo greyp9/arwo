@@ -37,6 +37,7 @@ public final class App {
         public static final String CACHE = "/cache";
         public static final String CIFS = "/cifs";
         public static final String DASH = "/dash";
+        public static final String JDBC = "/jdbc";
         public static final String LSH = "/lsh";
         public static final String SFTP = "/sftp";
         public static final String SSH = "/ssh";
