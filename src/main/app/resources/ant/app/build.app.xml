@@ -39,6 +39,10 @@
         <include name='org/apache/httpcomponents/httpcore/4.4.1/httpcore-4.4.1.jar'/>
     </fileset>
 
+    <fileset dir='${m2.dir}' id='libs-mail'>
+        <include name='com/sun/mail/javax.mail/1.5.4/javax.mail-1.5.4.jar'/>
+    </fileset>
+
     <fileset dir='${tomcat6.dir}' id='libs-servlet-api'>
         <include name='lib/servlet-api.jar'/>
     </fileset>
@@ -85,6 +89,7 @@
         <fileset refid='libs-jcifs'/>
         <fileset refid='libs-j-interop'/>
         <fileset refid='libs-sardine'/>
+        <fileset refid='libs-mail'/>
     </path>
 
     <path id='classpath-app'>
@@ -95,6 +100,7 @@
         <fileset refid='libs-jcifs'/>
         <fileset refid='libs-j-interop'/>
         <fileset refid='libs-sardine'/>
+        <fileset refid='libs-mail'/>
     </path>
 
     <target name='clean' description='clean up generated resources'>

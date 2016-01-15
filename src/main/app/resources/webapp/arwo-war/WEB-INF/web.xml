@@ -202,6 +202,39 @@
         <url-pattern>/jdbc/*</url-pattern>
     </servlet-mapping>
 
+    <!--smtp-server-->
+    <servlet>
+        <description>access remote smtp servers</description>
+        <servlet-name>SMTPServlet</servlet-name>
+        <servlet-class>io.github.greyp9.arwo.app.mail.smtp.servlet.SMTPServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SMTPServlet</servlet-name>
+        <url-pattern>/smtp/*</url-pattern>
+    </servlet-mapping>
+
+    <!--imap-server-->
+    <servlet>
+        <description>access remote imap servers</description>
+        <servlet-name>IMAPServlet</servlet-name>
+        <servlet-class>io.github.greyp9.arwo.app.mail.imap.servlet.IMAPServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>IMAPServlet</servlet-name>
+        <url-pattern>/imap/*</url-pattern>
+    </servlet-mapping>
+
+    <!--pop3-server-->
+    <servlet>
+        <description>access remote pop3 servers</description>
+        <servlet-name>POP3Servlet</servlet-name>
+        <servlet-class>io.github.greyp9.arwo.app.mail.pop3.servlet.POP3Servlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>POP3Servlet</servlet-name>
+        <url-pattern>/pop3/*</url-pattern>
+    </servlet-mapping>
+
     <!--cache-->
     <servlet>
         <description>access local cache of remote resources</description>

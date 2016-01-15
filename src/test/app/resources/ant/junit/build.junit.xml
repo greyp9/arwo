@@ -21,6 +21,10 @@
         <include name='org/apache/httpcomponents/httpcore/4.4.1/httpcore-4.4.1.jar'/>
     </fileset>
 
+    <fileset dir='${m2.dir}' id='libs-mail'>
+        <include name='com/sun/mail/javax.mail/1.5.4/javax.mail-1.5.4.jar'/>
+    </fileset>
+
     <path id='classpath-test'>
         <pathelement path='${project.dir}/src/main/app/resources/arwo-jar'/>
         <pathelement path='${project.dir}/src/main/core/resources/arwo-jar'/>
@@ -37,6 +41,7 @@
         <fileset file='${m2.dir}/org/apache/derby/derbyclient/10.11.1.1/derbyclient-10.11.1.1.jar' id='libs-derby'/>
         -->
         <fileset refid='libs-sardine'/>
+        <fileset refid='libs-mail'/>
         <fileset file='${m2.dir}/com/sun/mail/javax.mail/1.5.4/javax.mail-1.5.4.jar' id='libs-javamail'/>
         <pathelement path='${test.classes.core.dir}'/>
         <pathelement path='${test.classes.lib.dir}'/>

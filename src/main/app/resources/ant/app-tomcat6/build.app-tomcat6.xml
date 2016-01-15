@@ -66,12 +66,17 @@
         <include name='org/apache/httpcomponents/httpcore/4.4.1/httpcore-4.4.1.jar'/>
     </fileset>
 
+    <fileset dir='${m2.dir}' id='libs-mail'>
+        <include name='com/sun/mail/javax.mail/1.5.4/javax.mail-1.5.4.jar'/>
+    </fileset>
+
     <path id='classpath-app'>
         <fileset refid='libs-servlet-api'/>
         <fileset refid='libs-ganymed'/>
         <fileset refid='libs-jcifs'/>
         <fileset refid='libs-j-interop'/>
         <fileset refid='libs-sardine'/>
+        <fileset refid='libs-mail'/>
     </path>
 
     <path id='classpath-tomcat6'>
@@ -160,6 +165,10 @@
             <include name='io/github/greyp9/arwo/app/local/servlet/SHServlet.java'/>
             <!--jdbc-->
             <include name='io/github/greyp9/arwo/app/jdbc/servlet/JDBCServlet.java'/>
+            <!--mail-->
+            <include name='io/github/greyp9/arwo/app/mail/smtp/servlet/SMTPServlet.java'/>
+            <include name='io/github/greyp9/arwo/app/mail/imap/servlet/IMAPServlet.java'/>
+            <include name='io/github/greyp9/arwo/app/mail/pop3/servlet/POP3Servlet.java'/>
             <!--cache-->
             <include name='io/github/greyp9/arwo/app/cache/servlet/CacheServlet.java'/>
             <!--cron-->
