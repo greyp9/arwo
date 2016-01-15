@@ -20,9 +20,9 @@ public class XedActionFilter extends XedAction {
         final Xed xed = super.update(nameTypeValues);
         // query xed instance for parameters
         final XPather xpather = xed.getXPather();
-        final String columnString = xpather.getText("/action:filter/action:column");
-        final String operatorString = xpather.getText("/action:filter/action:operator");
-        final String valueString = xpather.getText("/action:filter/action:value");
+        final String columnString = xpather.getText("/action:filter/action:column");  // i18n
+        final String operatorString = xpather.getText("/action:filter/action:operator");  // i18n
+        final String valueString = xpather.getText("/action:filter/action:value");  // i18n
         // null filter unless required data is present
         Filter filter = new Filter(-1, null, null, null);
         // attempt to load filter

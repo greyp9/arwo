@@ -24,7 +24,7 @@ public class XedActionCommit extends XedAction {
 
     public final String getComment(final NameTypeValues nameTypeValues) throws IOException {
         final Xed xed = super.update(nameTypeValues);
-        return xed.getXPather().getText("/action:commit/action:comment");
+        return xed.getXPather().getText("/action:commit/action:comment");  // i18n
     }
 
     public final void addContentTo(

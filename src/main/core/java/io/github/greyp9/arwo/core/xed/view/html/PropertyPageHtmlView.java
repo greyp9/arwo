@@ -10,8 +10,8 @@ import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.html.HtmlU;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.value.NTV;
-import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.xed.bundle.XsdBundle;
+import io.github.greyp9.arwo.core.xed.core.XedU;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
@@ -53,29 +53,26 @@ public class PropertyPageHtmlView {
     public final void addContentTo(final Element html) {
         final String cursorTypeName = view.getCursor().getTypeInstance().getName();
         // form wrapper
-        final Element divDialog = ElementU.addElement(html, Html.DIV, null, NameTypeValuesU.create(
-                Html.CLASS, App.CSS.DIALOG));
-        final Element form = ElementU.addElement(divDialog, Html.FORM, null, NameTypeValuesU.create(
-                Html.ACTION, Html.EMPTY, Html.ID, String.format("form_%s", cursorTypeName), Html.METHOD, Html.POST));
+        final Element divDialog = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.DIALOG));
+        final String formID = String.format("form_%s", cursorTypeName);
+        final Element form = ElementU.addElement(divDialog, Html.FORM, null, NTV.create(
+                Html.ACTION, Html.EMPTY, Html.ID, formID, Html.METHOD, Html.POST));
         // form table (for name / value alignment)
-        final Element table = ElementU.addElement(form, Html.TABLE, null, NameTypeValuesU.create(
+        final Element table = ElementU.addElement(form, Html.TABLE, null, NTV.create(
                 Html.CLASS, App.CSS.DIALOG, Html.SUMMARY, App.CSS.DIALOG));
-        final Element thead = ElementU.addElement(table, Html.THEAD, null, NameTypeValuesU.create(
-                Html.CLASS, App.CSS.DIALOG));
-        final Element trHead = ElementU.addElement(thead, Html.TR, null, NameTypeValuesU.create(
-                Html.CLASS, App.CSS.HEADER));
-        final Element th = ElementU.addElement(trHead, Html.TH, null, NameTypeValuesU.create(
+        final Element thead = ElementU.addElement(table, Html.THEAD, null, NTV.create(Html.CLASS, App.CSS.DIALOG));
+        final Element trHead = ElementU.addElement(thead, Html.TR, null, NTV.create(Html.CLASS, App.CSS.HEADER));
+        final Element th = ElementU.addElement(trHead, Html.TH, null, NTV.create(
                 Html.COLSPAN, Integer.toString(2), Html.CLASS, App.CSS.HEADER));
         final String nameI18n = xsdBundle.getLabel(view.getCursor().getTypeInstance());
-        ElementU.addElement(th, Html.SPAN, nameI18n, NameTypeValuesU.create(Html.CLASS, App.CSS.HEADER));
+        ElementU.addElement(th, Html.SPAN, nameI18n, NTV.create(Html.CLASS, App.CSS.HEADER));
         // form table body
-        final Element tbody = ElementU.addElement(table, Html.TBODY, null, NameTypeValuesU.create(
-                Html.CLASS, App.CSS.DIALOG));
+        final Element tbody = ElementU.addElement(table, Html.TBODY, null, NTV.create(Html.CLASS, App.CSS.DIALOG));
         // form fields correspond to leaf TypeInstances
         final Collection<ViewInstance> viewInstances = view.getViewInstances();
         if (viewInstances.isEmpty()) {
             final Element tr = ElementU.addElement(tbody, Html.TR);
-            ElementU.addElement(tr, Html.TD, null, NameTypeValuesU.create(Html.CLASS, "empty"));
+            ElementU.addElement(tr, Html.TD, null, NTV.create(Html.CLASS, App.CSS.EMPTY));
         } else {
             addViewInstances(viewInstances, tbody);
         }
@@ -90,17 +87,17 @@ public class PropertyPageHtmlView {
 
     private void addViewInstance(final ViewInstance viewInstance, final Element tbody) {
         final Element tr = ElementU.addElement(tbody, Html.TR);
-        final boolean hideName = Boolean.parseBoolean(viewInstance.getTypeInstance().getDirective("hideName"));
+        final boolean hideName = Boolean.parseBoolean(viewInstance.getTypeInstance().getDirective(XedU.HIDE_NAME));
         if (!hideName) {
             final String nameI18n = xsdBundle.getLabel(
                     view.getCursor().getTypeInstance(), viewInstance.getTypeInstance());
-            ElementU.addElement(tr, Html.TD, nameI18n, NameTypeValuesU.create(Html.CLASS, "attr-name"));
+            ElementU.addElement(tr, Html.TD, nameI18n, NTV.create(Html.CLASS, App.CSS.ATTR_NAME));
         }
         addViewInstanceValue(viewInstance, tr);
     }
 
     private void addViewInstanceValue(final ViewInstance viewInstance, final Element tr) {
-        final Element td = ElementU.addElement(tr, Html.TD, null, NameTypeValuesU.create(Html.CLASS, "attr-value"));
+        final Element td = ElementU.addElement(tr, Html.TD, null, NTV.create(Html.CLASS, App.CSS.ATTR_VALUE));
         if (viewInstance instanceof ViewInstanceDrillDown) {
             addViewInstanceValueDrillDown((ViewInstanceDrillDown) viewInstance, td);
         } else if (viewInstance instanceof ViewInstanceBoolean) {
@@ -149,10 +146,10 @@ public class PropertyPageHtmlView {
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private void addActions(final Element tbody) {
         final Properties properties = request.getState().getProperties();
-        final boolean isExpanded = Boolean.parseBoolean(properties.getProperty("buttons"));
+        final boolean isExpanded = Boolean.parseBoolean(properties.getProperty(App.CSS.BUTTONS));
         final ActionButtons buttons = ((view.getButtons() == null) ? getActionButtons(isExpanded) : view.getButtons());
         final Element tr = ElementU.addElement(tbody, Html.TR, null, NTV.create(Html.CLASS, App.CSS.FOOTER));
-        final Element th = ElementU.addElement(tr, Html.TD, null, NameTypeValuesU.create(
+        final Element th = ElementU.addElement(tr, Html.TD, null, NTV.create(
                 Html.COLSPAN, Integer.toString(2), Html.CLASS, App.CSS.DIALOG));
         for (final ActionButton button : buttons.getButtons()) {
             final SubmitToken token = new SubmitToken(
@@ -162,8 +159,8 @@ public class PropertyPageHtmlView {
         if (buttons.isExpander()) {
             final Element span = ElementU.addElement(th, Html.SPAN);  // so buttons and expand/collapse on one line
             final String buttonToggle = (isExpanded ? UTF16.LIST_COLLAPSE : UTF16.LIST_EXPAND);
-            ElementU.addElement(span, Html.A, buttonToggle, NameTypeValuesU.create(
-                    Html.HREF, "?toggle=buttons", Html.CLASS, "trailing"));
+            ElementU.addElement(span, Html.A, buttonToggle, NTV.create(
+                    Html.HREF, "?toggle=buttons", Html.CLASS, App.CSS.TRAILING));  // i18n
         }
     }
 

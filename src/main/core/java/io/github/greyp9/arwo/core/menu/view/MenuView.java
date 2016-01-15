@@ -51,7 +51,7 @@ public class MenuView {
 
     public final Element addTitle(final Element html, final AppTitle title) throws IOException {
         final Element divMenus = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENUS));
-        final Element div = ElementU.addElement(divMenus, Html.DIV, null, NTV.create(Html.CLASS, "page-title"));
+        final Element div = ElementU.addElement(divMenus, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.PAGE_TITLE));
         ElementU.addElement(div, Html.IMG, null, NTV.create(Html.SRC, "${CONTEXT}/ico/app-blue.ico", Html.ALT, ""));
         ElementU.addElement(div, Html.SPAN, title.getText());
         return divMenus;
@@ -76,10 +76,10 @@ public class MenuView {
     }
 
     private void addHome(final Element html) {
-        final Element divNav = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.STYLE, "float: right;"));
+        final Element divNav = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.RIGHT));
         final String label = String.format("[%s]", UTF16.HOME);
         ElementU.addElement(divNav, Html.A, label, NTV.create(
-                Html.CLASS, "menu", Html.HREF, httpRequest.getContextPath()));
+                Html.CLASS, App.CSS.MENU, Html.HREF, httpRequest.getContextPath()));
     }
 
     @SuppressWarnings({ "PMD.NPathComplexity", "PMD.AvoidInstantiatingObjectsInLoops" })
@@ -91,7 +91,8 @@ public class MenuView {
             final String key = Value.join(".", App.CSS.MENU, parentName, itemIt.getName());
             final String label = bundle.getString(key, itemIt.getName());
             final SubmitToken token = new SubmitToken(itemIt.getSubject(), itemIt.getAction(), itemIt.getObject());
-            final String htmlClass = ((itemIt.isOpen()) ? "menu min active" : "menu min");
+            final String htmlClass = Value.join(Html.SPACE, App.CSS.MENU, App.CSS.MIN,
+                    (itemIt.isOpen() ? App.CSS.ACTIVE : null));
             HtmlU.addButton(divMenu, label, menuSystem.getSubmitID(), token.toString(), htmlClass, null);
         }
         if ((itemOpen != null) && (!itemOpen.getMenuItems().isEmpty())) {

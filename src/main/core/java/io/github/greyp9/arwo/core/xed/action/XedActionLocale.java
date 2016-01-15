@@ -25,17 +25,18 @@ public class XedActionLocale extends XedAction {
 
     public final void addContentTo(
             final Element html, final String submitID, final Properties properties) throws IOException {
-        final boolean isToggleLocale = Boolean.parseBoolean(properties.getProperty("locale"));
+        final boolean isToggleLocale = Boolean.parseBoolean(properties.getProperty(App.Action.LOCALE));
         if (isToggleLocale) {
             // model
             update(NameTypeValuesU.create("locale.localeType.locale", locale.getLanguage()));
             // view (form submit buttons)
             final XedPropertyPageView pageView = new XedPropertyPageView(null, getCursor());
             final Bundle bundle = this.getXed().getBundle();
-            final ActionFactory factory = new ActionFactory(submitID, bundle, App.Target.USER_STATE, "locale", null);
+            final ActionFactory factory = new ActionFactory(
+                    submitID, bundle, App.Target.USER_STATE, App.Action.LOCALE, null);
             final Collection<String> actions = new ArrayList<String>();
-            actions.add("updateLocale");
-            final ActionButtons buttons = factory.create("locale", false, actions);
+            actions.add(App.Action.UPDATE_LOCALE);
+            final ActionButtons buttons = factory.create(App.Action.LOCALE, false, actions);
             new PropertyStripHtmlView(pageView, buttons).addContentDiv(html);
         }
     }

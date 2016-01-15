@@ -95,7 +95,7 @@ public class AppRealm {
     }
 
     private String hashCredential(final String name, final String credential) {
-        return Base64Codec.encode(HashU.sha256((credential + name).getBytes(Charset.forName("UTF-8"))));
+        return Base64Codec.encode(HashU.sha256((credential + name).getBytes(Charset.forName("UTF-8"))));  // i18n
     }
 
     private AppPrincipal copy(final AppPrincipal principal) {
@@ -110,8 +110,8 @@ public class AppRealm {
     }
 
     private static class Const {
-        private static final String PRINCIPAL_NAME = "arwo";
-        private static final String ROLE_WILDCARD = "*";
+        private static final String PRINCIPAL_NAME = "arwo";  // i18n
+        private static final String ROLE_WILDCARD = "*";  // i18n
         private static final int SIZE_GEN_PASS = 3;
     }
 }

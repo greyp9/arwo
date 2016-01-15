@@ -14,6 +14,11 @@ div.notification
 margin: 0.25em 0;
 }
 
+div.buttons
+{
+float: right; clear: both;
+}
+
 span.level
 {
 font-family: monospace;

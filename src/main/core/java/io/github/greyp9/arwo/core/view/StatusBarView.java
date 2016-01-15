@@ -33,7 +33,7 @@ public class StatusBarView {
         final String version = ManifestU.getVersion(getClass());
         final Element divMenus = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENUS));
         final Element divToolbar = ElementU.addElement(divMenus, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENU));
-        final Element divR = ElementU.addElement(divToolbar, Html.DIV, null, NTV.create(Html.STYLE, "float: right;"));
+        final Element divR = ElementU.addElement(divToolbar, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.RIGHT));
         final Element divL = ElementU.addElement(divToolbar, Html.DIV, null);
         ElementU.addElement(divL, Html.SPAN, status, NTV.create(Html.CLASS, App.CSS.MENU));
         ElementU.addElement(divR, Html.SPAN, version, NTV.create(Html.CLASS, App.CSS.MENU));

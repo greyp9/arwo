@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.core.xed.cursor;
 
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.hash.CRCU;
+import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xsd.data.NodeType;
@@ -140,7 +141,8 @@ public class XedCursor {
     }
 
     public final String getURI() {
-        return ((parent == null) ? "/" : (parent.getURI() + getID(typeInstance, ordinal) + "/"));
+        return ((parent == null) ? Http.Token.SLASH :
+                (parent.getURI() + getID(typeInstance, ordinal) + Http.Token.SLASH));
     }
 
     private static class Const {

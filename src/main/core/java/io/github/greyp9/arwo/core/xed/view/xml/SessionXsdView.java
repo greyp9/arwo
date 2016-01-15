@@ -8,6 +8,7 @@ import io.github.greyp9.arwo.core.xed.session.XedSession;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xsd.atom.SchemaAtom;
+import io.github.greyp9.arwo.core.xsd.core.XsdU;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollection;
 import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitions;
 import org.w3c.dom.Document;
@@ -28,7 +29,7 @@ public class SessionXsdView {
     public final HttpResponse doGetXSD() throws IOException {
         final TypeDefinitions typeDefinitions = session.getXed().getXsdTypes().getTypeDefinitions();
         final SchemaCollection schemaCollection = typeDefinitions.getTypeComponents().getSchemaCollection();
-        final Document documentSchemaSet = DocumentU.createDocument("schema-set", null);
+        final Document documentSchemaSet = DocumentU.createDocument(XsdU.SCHEMAS, null);
         final Collection<SchemaAtom> schemaAtoms = schemaCollection.getSchemas().values();
         for (final SchemaAtom schemaAtom : schemaAtoms) {
             final byte[] xmlIt = DocumentU.toXml(schemaAtom.getAtom().getElement());

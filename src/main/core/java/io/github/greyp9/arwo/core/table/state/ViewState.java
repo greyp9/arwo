@@ -15,6 +15,7 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.TreeSet;
 
+// i18nf
 public class ViewState {
     private final String name;
     private final Collection<String> hiddenColumns;

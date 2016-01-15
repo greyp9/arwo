@@ -58,9 +58,9 @@ public final class AppRealmFactory {
         final XsdTypes xsdTypes = new XsdTypes(url);
         final XPathContext context = xsdTypes.getContext();
         final XPather xpather = new XPather(document, context);
-        final String name = xpather.getText("/realm:realm/@name");
+        final String name = xpather.getText("/realm:realm/@name");  // i18n
         final Collection<AuthPrincipal> principals = new ArrayList<AuthPrincipal>();
-        final List<Element> elements = xpather.getElements("/realm:realm/realm:principals/realm:principal");
+        final List<Element> elements = xpather.getElements("/realm:realm/realm:principals/realm:principal");  // i18n
         for (final Element element : elements) {
             principals.add(toAuthPrincipal(element, context));
         }
@@ -69,9 +69,9 @@ public final class AppRealmFactory {
 
     private static AuthPrincipal toAuthPrincipal(final Element element, final XPathContext context) throws IOException {
         final XPather xpather = new XPather(element, context);
-        final String name = xpather.getText("realm:user");
-        final String roles = xpather.getText("realm:roles");
-        final String credential = xpather.getText("realm:credential");
+        final String name = xpather.getText("realm:user");  // i18n
+        final String roles = xpather.getText("realm:roles");  // i18n
+        final String credential = xpather.getText("realm:credential");  // i18n
         final AppPrincipal principal = new AppPrincipal(name, Collections.singleton(roles));
         return new AuthPrincipal(principal, credential);
     }

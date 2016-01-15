@@ -16,6 +16,7 @@ public final class Http {
         public static final String SLASH = "/";
         public static final String DOT = ".";
         public static final String CRLF = "\r\n";
+        public static final String LF = "\n";
     }
 
     public static class Header {

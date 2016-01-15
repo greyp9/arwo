@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.table.html;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
@@ -77,9 +78,9 @@ public class TableBodyView {
         final boolean alt = ((ordinal % Const.GUIDE_ROW_PERIOD) >= Const.GUIDE_ROW_ALT);  // guide row background color
         final Element tr = ElementU.addElement(tableHtml, Html.TR);
         if (row.isHighlight()) {
-            ElementU.setAttribute(tr, Html.CLASS, Const.ACTIVE);
+            ElementU.setAttribute(tr, Html.CLASS, App.CSS.ACTIVE);
         } else if (alt) {
-            ElementU.setAttribute(tr, Html.CLASS, Const.ALT);
+            ElementU.setAttribute(tr, Html.CLASS, App.CSS.ALT);
         }
         final int count = table.getColumns();
         for (int i = 0; (i < count); ++i) {
@@ -109,7 +110,7 @@ public class TableBodyView {
         final String text = toCellText(value, type);
         final boolean tooBig = (text.length() > Const.MAX_WIDTH_DISPLAY);
         if (tooBig) {
-            final String textDisplay = text.substring(0, Const.MAX_WIDTH_DISPLAY) + "...";
+            final String textDisplay = text.substring(0, Const.MAX_WIDTH_DISPLAY) + UTF16.ELLIPSIS;
             ElementU.addElement(tr, Html.TD, textDisplay, NameTypeValuesU.create(Html.TITLE, text));
         } else {
             final Element td = ElementU.addElement(tr, Html.TD, text, NameTypeValuesU.create());
@@ -140,7 +141,7 @@ public class TableBodyView {
     }
 
     private String toCellText(final Boolean value) {
-        return ((value ? UTF16.CHECKBOX_TRUE : UTF16.CHECKBOX_FALSE) + " " + value);
+        return ((value ? UTF16.CHECKBOX_TRUE : UTF16.CHECKBOX_FALSE) + Html.SPACE + value);
     }
 
     private String toCellText(final Date value) {
@@ -161,9 +162,9 @@ public class TableBodyView {
 
     private void addStyle(final Element td, final Object value) {
         if (value instanceof Number) {
-            ElementU.setAttribute(td, Html.CLASS, Const.NUMBER);
+            ElementU.setAttribute(td, Html.CLASS, App.CSS.NUMBER);
         } else if (value instanceof Duration) {
-            ElementU.setAttribute(td, Html.CLASS, Const.NUMBER);
+            ElementU.setAttribute(td, Html.CLASS, App.CSS.NUMBER);
         }
     }
 
@@ -171,13 +172,13 @@ public class TableBodyView {
         final Object valueNew = baselineValue.getNew();
         final Object valueOld = baselineValue.getOld();
         final String textNew = toCellText(valueNew, type);
-        final String textOld = (valueOld == null) ? null : "[" + toCellText(valueOld, type) + "]";
+        final String textOld = (valueOld == null) ? null : "[" + toCellText(valueOld, type) + "]";  // i18n
         final boolean isNumber = ((valueNew instanceof Number) || (valueOld instanceof Number));
-        final String style = Value.join(" ", "difference", (isNumber ? "number" : null));
+        final String style = Value.join(Html.SPACE, App.CSS.DIFFERENCE, (isNumber ? App.CSS.NUMBER : null));
         final Element td = ElementU.addElement(tr, Html.TD, null, NameTypeValuesU.create(Html.CLASS, style));
-        ElementU.addElement(td, Html.SPAN, textNew, NameTypeValuesU.create(Html.CLASS, "new"));
+        ElementU.addElement(td, Html.SPAN, textNew, NameTypeValuesU.create(Html.CLASS, App.CSS.NEW));
         if (textOld != null) {
-            ElementU.addElement(td, Html.SPAN, textOld, NameTypeValuesU.create(Html.CLASS, "old"));
+            ElementU.addElement(td, Html.SPAN, textOld, NameTypeValuesU.create(Html.CLASS, App.CSS.OLD));
         }
     }
 
@@ -195,16 +196,12 @@ public class TableBodyView {
     }
 
     private void addCell(final Element tr, final TableViewGlyph tableViewGlyph) {
-        ElementU.addElement(tr, Html.TD, tableViewGlyph.getText(), NameTypeValuesU.create(Html.CLASS, "enhance"));
+        ElementU.addElement(tr, Html.TD, tableViewGlyph.getText(), NameTypeValuesU.create(Html.CLASS, App.CSS.ENHANCE));
     }
 
     private static class Const {
         private static final int MAX_WIDTH_DISPLAY = 360;
         private static final int GUIDE_ROW_PERIOD = 6;
         private static final int GUIDE_ROW_ALT = 3;
-
-        private static final String ACTIVE = "active";
-        private static final String ALT = "alt";
-        private static final String NUMBER = "number";
     }
 }

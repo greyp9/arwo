@@ -112,7 +112,7 @@ public class XedUserState {
         for (final NameTypeValue nameTypeValue : nameTypeValues) {
             final String name = nameTypeValue.getName();
             final String value = nameTypeValue.getValueS();
-            if (("toggle".equals(name)) && ("buttons".equals(value))) {
+            if ((App.Action.TOGGLE.equals(name)) && (App.CSS.BUTTONS.equals(value))) {
                 PropertiesU.toggleBoolean(properties, value);
             }
         }
@@ -174,14 +174,14 @@ public class XedUserState {
     public final void applyLocale(final NameTypeValues nameTypeValues) throws IOException {
         // apply to user state
         final Xed actionLocale = new XedActionLocale(null).update(nameTypeValues);
-        final String localeID = actionLocale.getXPather().getText("/action:locale");
+        final String localeID = actionLocale.getXPather().getText("/action:locale");  // i18n
         locus = new LocusFactory().create(localeID, locus.getDateX());
         // apply to each xed session
         sessions.applyLocale(locus.getLocale());
     }
 
     public final void applyLocale() throws IOException {
-        final Preferences preferences = new Preferences(getSession("/app").getXed());
+        final Preferences preferences = new Preferences(getSession(App.Servlet.SETTINGS).getXed());
         final String tz = preferences.getTZ();
         final String dateFormat = preferences.getDateFormat();
         final String language = preferences.getLanguage();

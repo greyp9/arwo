@@ -15,6 +15,7 @@ import java.sql.Types;
 import java.util.Collection;
 import java.util.Date;
 
+// i18nf
 public class CronTabRowSet {
     private final Collection<CronTabExecutor> executors;
     private final Date dateNow;

@@ -25,20 +25,30 @@ public class FileUpload {
 
     public final HttpResponse addContentTo(final Element html, final MenuView menuView) throws IOException {
         final MenuItem itemRoot = menuView.getMenuSystem().get(servletPath, AppMenuFactory.Const.FILESYSTEM);
-        final MenuItem itemFile = itemRoot.getMenuItem("file");
-        final MenuItem itemUpload = itemFile.getMenuItem("upload");
+        final MenuItem itemFile = itemRoot.getMenuItem(Const.FILE);
+        final MenuItem itemUpload = itemFile.getMenuItem(Const.UPLOAD);
         if (itemRoot.isOpen() && itemFile.isOpen() && itemUpload.isOpen()) {
-            final String labelMenu = bundle.getString("menu.file.upload");
+            final String labelMenu = bundle.getString(Const.MENU_FILE_UPLOAD);
             final Element form = ElementU.addElement(html, Html.FORM, null, NTV.create(
                     Html.METHOD, Html.POST, Html.ACTION, Html.EMPTY, Html.ENCTYPE, Http.Mime.FORM_MULTIPART));
             final Element divMenu = ElementU.addElement(form, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENU));
             ElementU.addElement(divMenu, Html.SPAN, String.format("[%s]", labelMenu), NTV.create(
                     Html.CLASS, App.CSS.MENU));
+            ElementU.addElement(divMenu, Html.INPUT, null, NTV.create(Html.TYPE, Html.FILE,
+                    Html.NAME, Const.UPLOAD_FILE, Html.SIZE, Const.SIZE, Html.STYLE, Const.STYLE));
             ElementU.addElement(divMenu, Html.INPUT, null, NTV.create(
-                    Html.TYPE, Html.FILE, Html.NAME, "uploadFile", Html.SIZE, "80", Html.STYLE, "padding: 0 1em;"));
-            ElementU.addElement(divMenu, Html.INPUT, null, NTV.create(
-                    Html.TYPE, Html.SUBMIT, Html.NAME, "submitUploadFile", Html.VALUE, labelMenu));
+                    Html.TYPE, Html.SUBMIT, Html.NAME, Const.SUBMIT, Html.VALUE, labelMenu));
         }
         return null;
+    }
+
+    private static class Const {
+        private static final String FILE = "file";  // i18n
+        private static final String UPLOAD = "upload";  // i18n
+        private static final String UPLOAD_FILE = "uploadFile";  // i18n
+        private static final String SIZE = "80";  // i18n
+        private static final String STYLE = "padding: 0 1em;";  // i18n
+        private static final String SUBMIT = "submitUploadFile";  // i18n
+        private static final String MENU_FILE_UPLOAD = "menu.file.upload";
     }
 }

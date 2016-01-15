@@ -75,7 +75,7 @@ public class CronTabExecutor {
         // stop executor service
         final List<Runnable> runnables = executorService.shutdownNow();
         for (final Runnable runnable : runnables) {
-            logger.warning("TERMINATE" + runnable.toString());
+            logger.warning("TERMINATE" + runnable.toString());  // i18n
         }
     }
 

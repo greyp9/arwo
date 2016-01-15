@@ -54,11 +54,16 @@ public class Query {
     }
 
     public final synchronized void start() {
-        new PropertiesX(properties).setLong("start", new Date().getTime());
+        new PropertiesX(properties).setLong(Const.START, new Date().getTime());
     }
 
     public final synchronized void finish(final Exception exceptionIn) {
-        new PropertiesX(properties).setLong("finish", new Date().getTime());
+        new PropertiesX(properties).setLong(Const.FINISH, new Date().getTime());
         exception = exceptionIn;
+    }
+
+    private static class Const {
+        private static final String START = "start";  // i18n
+        private static final String FINISH = "finish";  // i18n
     }
 }

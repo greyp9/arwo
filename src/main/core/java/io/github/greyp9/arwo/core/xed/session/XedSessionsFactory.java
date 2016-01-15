@@ -46,7 +46,7 @@ public class XedSessionsFactory {
         final String xmlPath = realmFile.getCanonicalPath();
         final String xsdPath = ResourceU.resolve(App.Realm.XSD).toExternalForm();
         final String trigger = RealmTrigger.class.getName();
-        entries.add(new XedEntry(null, "/users", App.Realm.QNAME, xmlPath, xsdPath, null, trigger));
+        entries.add(new XedEntry(null, App.Servlet.USERS, App.Realm.QNAME, xmlPath, xsdPath, null, trigger));
     }
 
     // user favorites (bookmarks)
@@ -55,7 +55,7 @@ public class XedSessionsFactory {
         final File fileConfig = new File(userHome, "config/fav.xml");
         final String xmlPath = fileConfig.getCanonicalPath();
         final String xsdPath = ResourceU.resolve(App.Config.XSD).toExternalForm();
-        entries.add(new XedEntry(null, "/fav", App.Config.QNAME_FAVORITES, xmlPath, xsdPath, null, null));
+        entries.add(new XedEntry(null, App.Servlet.FAVORITES, App.Config.QNAME_FAVS, xmlPath, xsdPath, null, null));
     }
 
     // user settings
@@ -64,7 +64,7 @@ public class XedSessionsFactory {
         final File fileConfig = new File(userHome, "config/app.xml");
         final String xmlPath = fileConfig.getCanonicalPath();
         final String xsdPath = ResourceU.resolve(App.Config.XSD).toExternalForm();
-        entries.add(new XedEntry(null, "/app", App.Config.QNAME_APP, xmlPath, xsdPath, null, null));
+        entries.add(new XedEntry(null, App.Servlet.SETTINGS, App.Config.QNAME_APP, xmlPath, xsdPath, null, null));
     }
 
     // documents defined in user settings
@@ -81,8 +81,8 @@ public class XedSessionsFactory {
             // find configuration
             final XPather xpather = xed.getXPather();
             final XedNav nav = new XedNav(xed);
-            final XedCursor cursorDocuments = nav.find(xpather.getElement("/app:app/app:documents"));
-            final TypeInstance typeDocument = cursorDocuments.getTypeInstance().getInstance("document");
+            final XedCursor cursorDocuments = nav.find(xpather.getElement("/app:app/app:documents"));  // i18n
+            final TypeInstance typeDocument = cursorDocuments.getTypeInstance().getInstance("document");  // i18n
             final Collection<Element> elements = cursorDocuments.getChildren(typeDocument);
             for (final Element element : elements) {
                 // load entry
@@ -93,12 +93,12 @@ public class XedSessionsFactory {
     }
 
     private void addEntry(final XedEntries entries, final TypeInstance typeDocument, final XedCursor cursorDocument) {
-        final String title = cursorDocument.getValue(typeDocument.getInstance("title"));
-        final String context = cursorDocument.getValue(typeDocument.getInstance("contextPath"));
-        final String qname = cursorDocument.getValue(typeDocument.getInstance("qname"));
-        final String xmlPath = cursorDocument.getValue(typeDocument.getInstance("xmlPath"));
-        final String xsdPath = cursorDocument.getValue(typeDocument.getInstance("xsdPath"));
-        final String xsltPath = cursorDocument.getValue(typeDocument.getInstance("xsltPath"));
+        final String title = cursorDocument.getValue(typeDocument.getInstance("title"));  // i18n
+        final String context = cursorDocument.getValue(typeDocument.getInstance("contextPath"));  // i18n
+        final String qname = cursorDocument.getValue(typeDocument.getInstance("qname"));  // i18n
+        final String xmlPath = cursorDocument.getValue(typeDocument.getInstance("xmlPath"));  // i18n
+        final String xsdPath = cursorDocument.getValue(typeDocument.getInstance("xsdPath"));  // i18n
+        final String xsltPath = cursorDocument.getValue(typeDocument.getInstance("xsltPath"));  // i18n
         entries.add(new XedEntry(title, context, qname, xmlPath, xsdPath, xsltPath, null));
     }
 }

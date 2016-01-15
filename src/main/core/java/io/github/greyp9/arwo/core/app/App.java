@@ -30,7 +30,7 @@ public final class App {
     public static class Config {
         public static final String XSD = "io/github/greyp9/arwo/xsd/app/app.xsd";
         public static final QName QNAME_APP = new QName("urn:arwo:app", "app", "app");
-        public static final QName QNAME_FAVORITES = new QName("urn:arwo:app", "favorites", "app");
+        public static final QName QNAME_FAVS = new QName("urn:arwo:app", "favorites", "app");
     }
 
     public static class Servlet {
@@ -43,6 +43,10 @@ public final class App {
         public static final String SSH = "/ssh";
         public static final String WEBDAV = "/webdav";
         public static final String WSH = "/wsh";
+
+        public static final String SETTINGS = "/app";
+        public static final String FAVORITES = "/fav";
+        public static final String USERS = "/users";
     }
 
     public static class Cache {
@@ -80,22 +84,38 @@ public final class App {
     public static class CSS {
         public static final String ACTIVE = "active";
         public static final String ALERT = "alert";
+        public static final String ALT = "alt";
+        public static final String ATTR_NAME = "attr-name";
+        public static final String ATTR_VALUE = "attr-value";
+        public static final String BUTTONS = "buttons";
+        public static final String CENTER = "center";
         public static final String COMMAND = "command";
         public static final String COMMAND_BODY = "command-body";
         public static final String COMMAND_FOOT = "command-foot";
         public static final String COMMAND_HEAD = "command-head";
         public static final String DIALOG = "dialog";
+        public static final String DIFFERENCE = "difference";
+        public static final String EMPTY = "empty";
+        public static final String ENHANCE = "enhance";
         public static final String EXTRA = "extra";
         public static final String FOOTER = "footer";
         public static final String HEADER = "header";
         public static final String LABEL = "label";
+        public static final String LEFT = "left";
         public static final String LEVEL = "level";
         public static final String MENU = "menu";
         public static final String MENUS = "menus";
+        public static final String MIN = "min";
+        public static final String NEW = "new";
         public static final String NOTIFICATION = "notification";
         public static final String NOTIFICATIONS = "notifications";
+        public static final String NUMBER = "number";
+        public static final String OLD = "old";
+        public static final String PAGE_TITLE = "page-title";
+        public static final String RIGHT = "right";
         public static final String ROWSET_RESULT = "rowset-result";
         public static final String STATE = "state";
+        public static final String STATUS = "status";
         public static final String STDERR = "stderr";
         public static final String STDOUT = "stdout";
         public static final String TABLE = "table";
@@ -104,6 +124,7 @@ public final class App {
         public static final String TEXT_RESULT_BODY = "text-result-body";
         public static final String TEXT_RESULT_HEAD = "text-result-head";
         public static final String TIMESTAMP = "timestamp";
+        public static final String TRAILING = "trailing";
     }
 
     public static class Mode {

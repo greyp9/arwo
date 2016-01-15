@@ -43,10 +43,10 @@ public class TableFooterView {
         if ((footerC != null) || (footerL != null) || (footerR != null)) {
             final Element tr = ElementU.addElement(tfoot, Html.TR);
             final Element th = ElementU.addElement(tr, Html.TH, null, NTV.create(
-                    Html.COLSPAN, Integer.toString(table.getMetaData().size()), Html.CLASS, "status"));
-            addFooterTo(th, "left", footerL, properties.getProperty(Table.Const.FOOTER_HREF_L));
-            addFooterTo(th, "center", footerC, properties.getProperty(Table.Const.FOOTER_HREF_C));
-            addFooterTo(th, "right", footerR, properties.getProperty(Table.Const.FOOTER_HREF_R));
+                    Html.COLSPAN, Integer.toString(table.getMetaData().size()), Html.CLASS, App.CSS.STATUS));
+            addFooterTo(th, App.CSS.LEFT, footerL, properties.getProperty(Table.Const.FOOTER_HREF_L));
+            addFooterTo(th, App.CSS.CENTER, footerC, properties.getProperty(Table.Const.FOOTER_HREF_C));
+            addFooterTo(th, App.CSS.RIGHT, footerR, properties.getProperty(Table.Const.FOOTER_HREF_R));
         }
     }
 
@@ -73,7 +73,7 @@ public class TableFooterView {
         // table context
         final Element tr = ElementU.addElement(tfoot, Html.TR);
         final Element th = ElementU.addElement(tr, Html.TH, null, NTV.create(
-                Html.COLSPAN, Integer.toString(table.getMetaData().size()), Html.CLASS, "status"));
+                Html.COLSPAN, Integer.toString(table.getMetaData().size()), Html.CLASS, App.CSS.STATUS));
         // first page UI widget
         final SubmitToken tokenFirst = new SubmitToken(App.Target.VIEW_STATE, ViewState.Nav.FIRST, tableID);
         HtmlU.addButton(th, UTF16.ARROW_FIRST, submitID, tokenFirst.toString(), ViewState.Toggle.RIBBON, null);
@@ -81,7 +81,7 @@ public class TableFooterView {
         final SubmitToken tokenPrev = new SubmitToken(App.Target.VIEW_STATE, ViewState.Nav.PREVIOUS, tableID);
         HtmlU.addButton(th, UTF16.ARROW_LEFT, submitID, tokenPrev.toString(), ViewState.Toggle.RIBBON, null);
         // text
-        final String text = String.format("%d - %d of %d",
+        final String text = context.getBundle().format("table.page.n.to.m.of.x",
                 page.getFirstUI(), page.getLastUI(table.getRows()), table.getRows());
         ElementU.addElement(th, Html.SPAN, text);
         // next page UI widget

@@ -28,11 +28,11 @@ public final class SystemU {
     }
 
     public static String resolve(final String path) {
-        return ((path == null) ? null : path.replace("~", userHome()));
+        return ((path == null) ? null : path.replace("~", userHome()));  // i18n
     }
 
     public static String unresolve(final String path) {
-        return ((path == null) ? null : path.replace(userHome(), "~"));
+        return ((path == null) ? null : path.replace(userHome(), "~"));  // i18n
     }
 
     public static long currentTimeMillis() {

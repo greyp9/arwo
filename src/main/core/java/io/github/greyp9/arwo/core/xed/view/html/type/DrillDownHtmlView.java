@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xed.view.html.type;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
@@ -67,7 +68,7 @@ public class DrillDownHtmlView {
     private Element getAnchor(final Element html, final String href, final String label, final String title) {
         final String uri = viewInstance.getBaseURI() + href;
         final NameTypeValues attrs = NameTypeValuesU.create(
-                Html.CLASS, "menu", Html.HREF, uri, Html.TITLE, title, Html.ACCESSKEY, Html.VALUE_1);
+                Html.CLASS, App.CSS.MENU, Html.HREF, uri, Html.TITLE, title, Html.ACCESSKEY, Html.VALUE_1);
         return ElementU.addElement(html, Html.A, label, attrs);
     }
 }

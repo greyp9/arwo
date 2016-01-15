@@ -63,29 +63,29 @@ public class Script {
     }
 
     public final synchronized boolean isInterrupted() {
-        return PropertiesU.isBoolean(properties, "interrupted");
+        return PropertiesU.isBoolean(properties, Const.INTERRUPTED);
     }
 
     public final synchronized void setInterrupted() {
-        PropertiesU.setProperty(properties, "interrupted", Boolean.TRUE.toString());
+        PropertiesU.setProperty(properties, Const.INTERRUPTED, Boolean.TRUE.toString());
     }
 
     public final synchronized Date getStart() {
-        final long start = new PropertiesX(properties).getLong("start");
+        final long start = new PropertiesX(properties).getLong(Const.START);
         return ((start == 0) ? null : new Date(start));
     }
 
     public final synchronized Date getFinish() {
-        final long finish = new PropertiesX(properties).getLong("finish");
+        final long finish = new PropertiesX(properties).getLong(Const.FINISH);
         return ((finish == 0) ? null : new Date(finish));
     }
 
     public final synchronized void start() {
-        new PropertiesX(properties).setLong("start", new Date().getTime());
+        new PropertiesX(properties).setLong(Const.START, new Date().getTime());
     }
 
     public final synchronized void finish() {
-        new PropertiesX(properties).setLong("finish", new Date().getTime());
+        new PropertiesX(properties).setLong(Const.FINISH, new Date().getTime());
     }
 
     public final synchronized Collection<Command> getCommands() {
@@ -169,5 +169,11 @@ public class Script {
             }
         }
         return exitValue;
+    }
+
+    private static class Const {
+        private static final String START = "start";  // i18n
+        private static final String FINISH = "finish";  // i18n
+        private static final String INTERRUPTED = "interrupted";  // i18n
     }
 }

@@ -88,7 +88,7 @@ public class JDBCQuery {
             }
             rowSet.add(insertRow.getRow());
         }
-        results.add("rs", null, rowSet);
+        results.add(Const.ID_RESULT_SET, null, rowSet);
         return true;
     }
 
@@ -96,7 +96,7 @@ public class JDBCQuery {
         final int updateCount = statement.getUpdateCount();
         final boolean isUpdateCount = (updateCount != -1);
         if (isUpdateCount) {
-            results.add("jdbcUpdateCountType", null, Integer.toString(updateCount));
+            results.add(Const.UPDATE_COUNT_TYPE, null, Integer.toString(updateCount));
         }
         return isUpdateCount;
     }
@@ -111,21 +111,21 @@ public class JDBCQuery {
             final int type = resultSetMetaData.getColumnType(i);
             columns[i - 1] = new ColumnMetaData(name, type);
         }
-        return new RowSetMetaData("jdbcResultSetType", columns);
+        return new RowSetMetaData(Const.RESULT_SET_TYPE, columns);
     }
 
     private Object doClob(final Clob clob) throws SQLException, IOException {
         final String string = ReaderU.read(clob.getCharacterStream());
-        return doBytes(UTF8Codec.toBytes(string), "CLOB");
+        return doBytes(UTF8Codec.toBytes(string), Const.CLOB);
     }
 
     private Object doBlob(final Blob blob) throws SQLException, IOException {
         final byte[] bytes = StreamU.read(blob.getBinaryStream());  // pull blob back from server
-        return doBytes(bytes, "BLOB");
+        return doBytes(bytes, Const.BLOB);
     }
 
     private Object doVarBinary(final byte[] bytes) throws SQLException, IOException {
-        return doBytes(bytes, "VARBINARY");
+        return doBytes(bytes, Const.VARBINARY);
     }
 
     private Object doBytes(final byte[] bytes, final String sqlType) throws SQLException, IOException {
@@ -136,5 +136,15 @@ public class JDBCQuery {
         final String title = String.format("%s [%sB]", sqlType, NumberScale.toString(bytes.length));
         final String href = cacheBlob.getEndpoint() + resource;
         return new TableViewLink(UTF16.DOCUMENT_BRACKETS, title, href);
+    }
+
+    private static class Const {
+        private static final String ID_RESULT_SET = "resultSet";  // i18n
+        private static final String RESULT_SET_TYPE = "jdbcResultSetType";  // i18n
+        private static final String UPDATE_COUNT_TYPE = "jdbcUpdateCountType";  // i18n
+
+        private static final String BLOB = "BLOB";  // i18n
+        private static final String CLOB = "CLOB";  // i18n
+        private static final String VARBINARY = "VARBINARY";  // i18n
     }
 }

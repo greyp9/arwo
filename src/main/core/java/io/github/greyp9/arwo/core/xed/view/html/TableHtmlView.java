@@ -1,6 +1,8 @@
 package io.github.greyp9.arwo.core.xed.view.html;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.page.Page;
 import io.github.greyp9.arwo.core.table.core.TableU;
@@ -53,7 +55,7 @@ public class TableHtmlView {
         viewState.setPage(Page.Factory.fixPage(viewState.getPage(), rowSet.getRows()));
         final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
         addFooter(table, cursorTableType, bundle);
-        final TableContext context = new TableContext(viewState, submitID, "table", bundle, locus);
+        final TableContext context = new TableContext(viewState, submitID, App.CSS.TABLE, bundle, locus);
         // render
         final TableView tableView = new TableView(table, context);
         tableView.addContentTo(html);
@@ -63,7 +65,7 @@ public class TableHtmlView {
         // insert row link
         final String resource = view.getBaseURI() + cursorTableType.getURI();
         table.getProperties().setProperty(Table.Const.FOOTER_HREF_L, resource);
-        table.getProperties().setProperty(Table.Const.FOOTER_L, "[+]");
+        table.getProperties().setProperty(Table.Const.FOOTER_L, UTF16.CREATE);
         // row count text
         TableU.addFooterStandard(table, bundle);
     }

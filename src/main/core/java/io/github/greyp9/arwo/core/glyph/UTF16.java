@@ -46,6 +46,12 @@ public final class UTF16 {
     public static final String COLUMN_HIDE = String.format("[%s]", "X");
     public static final String COLUMN_SORT = String.format("[%s%s]", ARROW_UP, ARROW_DOWN);
 
+    public static final String CREATE = "[+]";
+    public static final String UPDATE = "[*]";
+    public static final String DELETE = "[-]";
+
+    public static final String ELLIPSIS = "...";
+
     private UTF16() {
     }
 

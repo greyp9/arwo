@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.table.baseline;
 
+import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.table.compare.CellComparator;
 import io.github.greyp9.arwo.core.table.metadata.ColumnMetaData;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
@@ -80,11 +81,11 @@ public class BaselineTable {
         // add row baseline cell with value
         final int baselineColumn = (baselineOnLeft ? 0 : (columnCount - 1));
         if (rowOld == null) {
-            rowMerge.setColumn(baselineColumn, new BaselineValue("[+]", null));
+            rowMerge.setColumn(baselineColumn, new BaselineValue(UTF16.CREATE, null));
         } else if (rowNew == null) {
-            rowMerge.setColumn(baselineColumn, new BaselineValue("[-]", null));
+            rowMerge.setColumn(baselineColumn, new BaselineValue(UTF16.DELETE, null));
         } else if (rowChange) {
-            rowMerge.setColumn(baselineColumn, new BaselineValue("[*]", null));
+            rowMerge.setColumn(baselineColumn, new BaselineValue(UTF16.UPDATE, null));
         }
     }
 

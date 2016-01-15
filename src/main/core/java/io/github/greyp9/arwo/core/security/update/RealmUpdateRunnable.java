@@ -29,7 +29,7 @@ public class RealmUpdateRunnable implements Runnable {
 
     @SuppressWarnings({ "PMD.GuardLogStatementJavaUtil", "PMD.GuardLogStatement" })
     public final void run() {
-        logger.info("RUN/" + appRealm.getSize());
+        logger.info("RUN/" + appRealm.getSize());  // i18n
         // wait until AppRealmContainer registered (in Tomcat, on background thread)
         boolean interrupted = false;
         Object o = AppNaming.lookup(context, AppRealmContainer.NAMING_CONTAINER);
@@ -41,13 +41,13 @@ public class RealmUpdateRunnable implements Runnable {
         if (o instanceof AppRealmContainer) {
             final AppRealmContainer appRealmContainer = (AppRealmContainer) o;
             appRealmContainer.setAppRealm(appRealm);
-            logger.info("OK");
+            logger.info("OK");  // i18n
         } else if (interrupted) {
-            logger.info("INTERRUPTED");
+            logger.info("INTERRUPTED");  // i18n
         } else if (cancelled) {
-            logger.info("CANCEL");
+            logger.info("CANCEL");  // i18n
         } else {
-            logger.warning("ERR/" + ((o == null) ? "" : o.getClass().getName()));
+            logger.warning("ERR/" + ((o == null) ? "" : o.getClass().getName()));  // i18n
         }
     }
 }

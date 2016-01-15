@@ -31,6 +31,6 @@ public class PropertyPageTextView {
             matrix.set(row, 1, viewInstance.getValue());
             ++row;
         }
-        return String.format("%s%n%s", pageHeader, matrix.render(" | "));
+        return String.format("%s%n%s", pageHeader, matrix.render(" | "));  // i18n
     }
 }

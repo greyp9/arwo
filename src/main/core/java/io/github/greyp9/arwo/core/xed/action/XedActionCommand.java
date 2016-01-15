@@ -15,6 +15,6 @@ public class XedActionCommand extends XedAction {
 
     public final String getCommand(final NameTypeValues httpArguments) throws IOException {
         final Xed xed = super.update(httpArguments);
-        return xed.getXPather().getText("/action:command/action:command");
+        return xed.getXPather().getText("/action:command/action:command");  // i18n
     }
 }

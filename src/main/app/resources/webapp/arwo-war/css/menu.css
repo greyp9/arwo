@@ -13,6 +13,11 @@ margin: 0 0 1px 0;
 padding: 1px;
 }
 
+div.right
+{
+float: right;
+}
+
 span.menu
 {
 color: ButtonText;

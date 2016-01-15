@@ -64,11 +64,11 @@ public class RevisionHtmlView extends HtmlView {
 
     private RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[]{
-                new ColumnMetaData("load", Types.VARCHAR),
-                new ColumnMetaData("date", Types.TIMESTAMP, true),
-                new ColumnMetaData("comment", Types.VARCHAR),
-                new ColumnMetaData("crc", Types.VARCHAR),
-                new ColumnMetaData("size", Types.BIGINT),
+                new ColumnMetaData("load", Types.VARCHAR),  // i18n
+                new ColumnMetaData("date", Types.TIMESTAMP, true),  // i18n
+                new ColumnMetaData("comment", Types.VARCHAR),  // i18n
+                new ColumnMetaData("crc", Types.VARCHAR),  // i18n
+                new ColumnMetaData("size", Types.BIGINT),  // i18n
         };
         return new RowSetMetaData("xed.revisionsType", columns);
     }

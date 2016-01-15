@@ -70,6 +70,9 @@ public class ScanI18n {
         if (line.contains("@SuppressWarnings")) {
             return;
         }
+        if (line.contains("checkstyle:")) {
+            return;
+        }
         final Pattern pattern = Pattern.compile("\"(.*?)\"");
         final Matcher matcher = pattern.matcher(line);
         while (matcher.find()) {
@@ -107,9 +110,6 @@ public class ScanI18n {
             ok = true;
         }
         if (s.contains("%d")) {
-            ok = true;
-        }
-        if (s.contains("checkstyle:")) {
             ok = true;
         }
         final int commentStart = line.indexOf("//");

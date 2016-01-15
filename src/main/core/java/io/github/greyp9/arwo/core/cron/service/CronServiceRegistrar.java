@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.core.cron.exec.CronTabExecutor;
 import io.github.greyp9.arwo.core.cron.job.CronJob;
 import io.github.greyp9.arwo.core.cron.tab.CronTab;
 import io.github.greyp9.arwo.core.date.DateU;
+import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.lang.NumberU;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.value.Value;
@@ -51,7 +52,8 @@ public class CronServiceRegistrar {
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     public final void register(final Xed xed) throws IOException {
         final XPather xpather = xed.getXPather();
-        final List<Element> elementsCronTab = xpather.getElements("/app:app/app:cron/app:cronTab[@enabled='true']");
+        final List<Element> elementsCronTab = xpather.getElements(
+                "/app:app/app:cron/app:cronTab[@enabled='true']");  // i18n
         for (final Element elementCronTab : elementsCronTab) {
             final CronTabExecutor executor = addTab(new XPather(elementCronTab, xpather.getContext()));
             cronService.add(executor, bundle, alerts);
@@ -60,13 +62,13 @@ public class CronServiceRegistrar {
 
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private CronTabExecutor addTab(final XPather xpatherTab) throws IOException {
-        final String name = xpatherTab.getText("@name");
-        final String threads = xpatherTab.getText("@threads");
-        final String tz = xpatherTab.getText("@tz");
+        final String name = xpatherTab.getText("@name");  // i18n
+        final String threads = xpatherTab.getText("@threads");  // i18n
+        final String tz = xpatherTab.getText("@tz");  // i18n
         final TimeZone timeZone = TimeZone.getTimeZone(tz);
         final Collection<CronJob> cronJobs = new ArrayList<CronJob>();
         final CronTab cronTab = new CronTab(name, cronJobs, timeZone);
-        final List<Element> elementsJob = xpatherTab.getElements("app:cronJob[@enabled='true']");
+        final List<Element> elementsJob = xpatherTab.getElements("app:cronJob[@enabled='true']");  // i18n
         for (final Element elementJob : elementsJob) {
             cronJobs.add(createJob(new XPather(elementJob, xpatherTab.getContext())));
         }
@@ -77,10 +79,10 @@ public class CronServiceRegistrar {
     }
 
     private CronJob createJob(final XPather xpatherJob) throws IOException {
-        final String name = xpatherJob.getText("@name");
-        final String cron = xpatherJob.getText("@cron");
-        final Element jobType = xpatherJob.getElement("*");
-        final String cron1 = ((jobType == null) ? cron : Value.join(" ", cron, jobType.getLocalName()));
+        final String name = xpatherJob.getText("@name");  // i18n
+        final String cron = xpatherJob.getText("@cron");  // i18n
+        final Element jobType = xpatherJob.getElement("*");  // i18n
+        final String cron1 = ((jobType == null) ? cron : Value.join(Html.SPACE, cron, jobType.getLocalName()));
         return new CronJob(name, true, cron1, jobType);
     }
 }

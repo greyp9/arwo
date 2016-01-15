@@ -71,8 +71,7 @@ public class AlertsView {
     private void addActionsTo(final Element div, final AlertActions actions) throws IOException {
         final Element form = ElementU.addElement(div, Html.FORM, null,
                 NTV.create(Html.METHOD, Html.POST, Html.ACTION, Html.EMPTY));
-        final Element divButtons = ElementU.addElement(form, Html.DIV, null,
-                NTV.create(Html.STYLE, "float: right; clear: both;"));
+        final Element divButtons = ElementU.addElement(form, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.BUTTONS));
         final String action = App.Action.ALERT;
         final String id = actions.getID();
         for (final String option : actions.getOptions()) {

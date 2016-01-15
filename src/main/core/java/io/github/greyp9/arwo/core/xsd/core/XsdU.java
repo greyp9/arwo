@@ -78,6 +78,9 @@ public final class XsdU {
     public static final String DOT = ".";
     //public static final String UNDERSCORE = "_";
 
+    // augment
+    public static final String SCHEMAS = "schemas";
+
     private XsdU() {
     }
 }

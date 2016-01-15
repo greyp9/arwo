@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.jdbc.runnable;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.jdbc.connection.JDBCConnection;
@@ -34,10 +35,10 @@ public class QueryRunnable implements Runnable {
             runQuery();
             query.finish(null);
         } catch (IOException e) {
-            query.getResults().add("jdbcException", "command-stderr", e.getMessage());
+            query.getResults().add(Const.JDBC_EXCEPTION, App.CSS.STDERR, e.getMessage());
             query.finish(e);
         } catch (SQLException e) {
-            query.getResults().add("jdbcException", "command-stderr", e.getMessage());
+            query.getResults().add(Const.JDBC_EXCEPTION, App.CSS.STDERR, e.getMessage());
             query.finish(e);
         } finally {
             logger.exiting(getClass().getName(), Runnable.class.getName());
@@ -62,5 +63,9 @@ public class QueryRunnable implements Runnable {
         new JDBCQuery(connection.getConnection(), results, cacheBlob).execute(query.getText());
         connection.update(date);
         results.getInterval().setDateFinish(new Date());
+    }
+
+    private static class Const {
+        private static final String JDBC_EXCEPTION = "jdbcException";  // i18n
     }
 }

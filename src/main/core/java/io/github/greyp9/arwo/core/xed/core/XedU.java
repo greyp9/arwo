@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xed.core;
 
+// i18nf
 public final class XedU {
     // namespace prefix
     //public static final String NS_PREFIX_XED = "xed";
@@ -12,6 +13,7 @@ public final class XedU {
     // attribute names
     public static final String ALGORITHM = "algorithm";
     public static final String HASH = "hash";
+    public static final String HIDE_NAME = "hideName";
     public static final String IDENTITY = "identity";
     public static final String ITERATIONS = "iterations";
     public static final String KEYSIZE = "keysize";

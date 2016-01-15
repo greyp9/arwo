@@ -68,7 +68,7 @@ public class TypeInstanceX {
     }
 
     private static class Const {
-        public static final String HIDE_IN_PAGE = "hideInPage";
-        public static final String HIDE_IN_TABLE = "hideInTable";
+        public static final String HIDE_IN_PAGE = "hideInPage";  // i18n
+        public static final String HIDE_IN_TABLE = "hideInTable";  // i18n
     }
 }
