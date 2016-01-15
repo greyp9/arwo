@@ -14,6 +14,9 @@
             <xsd:element name='cifsServers' type='app:cifsServersType'/>
             <xsd:element name='webdavServers' type='app:webdavServersType'/>
             <xsd:element name='jdbcServers' type='app:jdbcServersType'/>
+            <xsd:element name='smtpServers' type='app:smtpServersType'/>
+            <xsd:element name='imapServers' type='app:imapServersType'/>
+            <xsd:element name='pop3Servers' type='app:pop3ServersType'/>
             <xsd:element name='cron' type='app:cronType'/>
             <xsd:element name='documents' type='app:documentsType'/>
             <xsd:element name='preferences' type='app:preferencesType'/>
@@ -111,6 +114,63 @@
         </xsd:sequence>
     </xsd:complexType>
 
+    <xsd:complexType name='smtpServersType'>
+        <xsd:sequence>
+            <xsd:element name='server' type='app:smtpServerType' minOccurs='0' maxOccurs='unbounded'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name='smtpServerType'>
+        <xsd:sequence>
+            <xsd:element name='name' type='xsd:string'/>
+            <xsd:element name='comment' type='xsd:string'/>
+            <xsd:element name='protocol' type='xsd:string'/>
+            <xsd:element name='host' type='xsd:string'/>
+            <xsd:element name='port' type='xsd:string'/>
+            <xsd:element name='user' type='xsd:string'/>
+            <xsd:element name='password' type='xsd:string'/>
+            <xsd:element name='certificate' type='xsd:string' minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name='imapServersType'>
+        <xsd:sequence>
+            <xsd:element name='server' type='app:imapServerType' minOccurs='0' maxOccurs='unbounded'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name='imapServerType'>
+        <xsd:sequence>
+            <xsd:element name='name' type='xsd:string'/>
+            <xsd:element name='comment' type='xsd:string'/>
+            <xsd:element name='protocol' type='xsd:string'/>
+            <xsd:element name='host' type='xsd:string'/>
+            <xsd:element name='port' type='xsd:string'/>
+            <xsd:element name='user' type='xsd:string'/>
+            <xsd:element name='password' type='xsd:string'/>
+            <xsd:element name='certificate' type='xsd:string' minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name='pop3ServersType'>
+        <xsd:sequence>
+            <xsd:element name='server' type='app:pop3ServerType' minOccurs='0' maxOccurs='unbounded'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name='pop3ServerType'>
+        <xsd:sequence>
+            <xsd:element name='name' type='xsd:string'/>
+            <xsd:element name='comment' type='xsd:string'/>
+            <xsd:element name='protocol' type='xsd:string'/>
+            <xsd:element name='host' type='xsd:string'/>
+            <xsd:element name='port' type='xsd:string'/>
+            <xsd:element name='user' type='xsd:string'/>
+            <xsd:element name='password' type='xsd:string'/>
+            <xsd:element name='certificate' type='xsd:string' minOccurs="0"/>
+        </xsd:sequence>
+    </xsd:complexType>
+
     <xsd:complexType name="cronType">
         <xsd:sequence>
             <xsd:element name='cronTab' type='app:cronTabType' minOccurs='0' maxOccurs='unbounded'/>
@@ -138,6 +198,9 @@
             <xsd:element name='sftp' type='app:cronSFTPJobType'/>
             <xsd:element name='cifs' type='app:cronCIFSJobType'/>
             <xsd:element name='webdav' type='app:cronWebDAVJobType'/>
+            <xsd:element name='smtp' type='app:cronSMTPJobType'/>
+            <xsd:element name='imap' type='app:cronIMAPJobType'/>
+            <xsd:element name='pop3' type='app:cronPOP3JobType'/>
         </xsd:choice>
         <xsd:attributeGroup ref="app:cronJobAttributes"/>
     </xsd:complexType>
@@ -194,6 +257,21 @@
     <xsd:complexType name="cronWebDAVJobType">
         <xsd:attribute name='server' type='xsd:string'/>
         <xsd:attribute name='resource' type='xsd:string'/>
+        <xsd:attribute name='comment' type='xsd:string'/>
+    </xsd:complexType>
+
+    <xsd:complexType name="cronSMTPJobType">
+        <xsd:attribute name='server' type='xsd:string'/>
+        <xsd:attribute name='comment' type='xsd:string'/>
+    </xsd:complexType>
+
+    <xsd:complexType name="cronIMAPJobType">
+        <xsd:attribute name='server' type='xsd:string'/>
+        <xsd:attribute name='comment' type='xsd:string'/>
+    </xsd:complexType>
+
+    <xsd:complexType name="cronPOP3JobType">
+        <xsd:attribute name='server' type='xsd:string'/>
         <xsd:attribute name='comment' type='xsd:string'/>
     </xsd:complexType>
 
