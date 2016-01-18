@@ -345,6 +345,8 @@ public class AppUserState {
             mail.getCacheSMTP().removeResource(resourceName);
         } else if (App.Cache.IMAP.equals(cacheName)) {
             mail.getCacheIMAP().removeResource(resourceName);
+        } else if (App.Cache.POP3.equals(cacheName)) {
+            mail.getCachePOP3().removeResource(resourceName);
         }
     }
 

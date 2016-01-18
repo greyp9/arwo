@@ -10,6 +10,7 @@ public class SubsystemMail {
     // connection entries
     private final ConnectionCache cacheSMTP;
     private final ConnectionCache cacheIMAP;
+    private final ConnectionCache cachePOP3;
     // properties
     private final Properties properties;
 
@@ -21,6 +22,10 @@ public class SubsystemMail {
         return cacheIMAP;
     }
 
+    public final ConnectionCache getCachePOP3() {
+        return cachePOP3;
+    }
+
     public final Properties getProperties() {
         return properties;
     }
@@ -28,6 +33,7 @@ public class SubsystemMail {
     public SubsystemMail(final Alerts alerts) {
         this.cacheSMTP = new ConnectionCache(App.Cache.SMTP, alerts);
         this.cacheIMAP = new ConnectionCache(App.Cache.IMAP, alerts);
+        this.cachePOP3 = new ConnectionCache(App.Cache.POP3, alerts);
         this.properties = new Properties();
     }
 }

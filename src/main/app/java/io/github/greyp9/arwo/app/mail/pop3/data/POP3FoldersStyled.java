@@ -1,6 +1,6 @@
-package io.github.greyp9.arwo.app.mail.imap.data;
+package io.github.greyp9.arwo.app.mail.pop3.data;
 
-import io.github.greyp9.arwo.app.mail.imap.core.IMAPRequest;
+import io.github.greyp9.arwo.app.mail.pop3.core.POP3Request;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.lang.NumberU;
@@ -15,8 +15,8 @@ import io.github.greyp9.arwo.core.url.URLCodec;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 
-public class IMAPFoldersStyled {
-    private final IMAPRequest request;
+public class POP3FoldersStyled {
+    private final POP3Request request;
     private final RowSet rowSet;
     private final Bundle bundle;
 
@@ -24,7 +24,7 @@ public class IMAPFoldersStyled {
         return rowSet;
     }
 
-    public IMAPFoldersStyled(final IMAPRequest request, final RowSet rowSetRaw) throws UnsupportedEncodingException {
+    public POP3FoldersStyled(final POP3Request request, final RowSet rowSetRaw) throws UnsupportedEncodingException {
         this.request = request;
         this.rowSet = new RowSet(rowSetRaw.getMetaData(), null, null);
         this.bundle = request.getBundle();
@@ -38,10 +38,16 @@ public class IMAPFoldersStyled {
     private void loadRow(final RowSet rowSetStyled, final Row rowRaw) throws UnsupportedEncodingException {
         // input
         final RowSetMetaData metaData = rowSetStyled.getMetaData();
+        final int messages = NumberU.toInt(rowRaw.getInteger(metaData.getIndex("messages")), -1);
+        final int messagesN = NumberU.toInt(rowRaw.getInteger(metaData.getIndex("new")), -1);
+        final int messagesU = NumberU.toInt(rowRaw.getInteger(metaData.getIndex("unread")), -1);
         // output
         final InsertRow insertRow = new InsertRow(rowSetStyled, rowRaw);
         insertRow.getRow().setColumn(metaData.getIndex("select"), getLink(rowRaw, metaData));  // i18n
         insertRow.getRow().setColumn(metaData.getIndex("type"), getType(rowRaw, metaData));  // i18n
+        insertRow.getRow().setColumn(metaData.getIndex("messages"), ((messages == -1) ? null : messages));  // i18n
+        insertRow.getRow().setColumn(metaData.getIndex("new"), ((messagesN == -1) ? null : messagesN));  // i18n
+        insertRow.getRow().setColumn(metaData.getIndex("unread"), ((messagesU == -1) ? null : messagesU));  // i18n
         rowSetStyled.add(insertRow.getRow());
     }
 

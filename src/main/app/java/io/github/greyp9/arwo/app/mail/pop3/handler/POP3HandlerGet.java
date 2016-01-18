@@ -2,6 +2,10 @@ package io.github.greyp9.arwo.app.mail.pop3.handler;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.mail.pop3.core.POP3Request;
+import io.github.greyp9.arwo.app.mail.pop3.view.POP3FoldersView;
+import io.github.greyp9.arwo.app.mail.pop3.view.POP3InventoryXView;
+import io.github.greyp9.arwo.app.mail.pop3.view.POP3MessageView;
+import io.github.greyp9.arwo.app.mail.pop3.view.POP3MessagesView;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
@@ -39,12 +43,13 @@ public class POP3HandlerGet {
         } else if (isQuery) {
             httpResponse = HttpResponseU.to302(httpRequest.getURI());
         } else if (Value.isEmpty(request.getServer())) {
-            userState.getClass();
-            //httpResponse = new POP3InventoryView(request, userState, "").doGetResponse();
-            httpResponse = HttpResponseU.to501();
+            httpResponse = new POP3InventoryXView(request, userState).doGetResponse();
+        } else if (Value.isEmpty(request.getFolder())) {
+            httpResponse = new POP3FoldersView(request, userState).doGetResponse();
+        } else if (Value.isEmpty(request.getMessage())) {
+            httpResponse = new POP3MessagesView(request, userState).doGetResponse();
         } else {
-            //httpResponse = new POP3CommandView(request, userState).doGetResponse();
-            httpResponse = HttpResponseU.to501();
+            httpResponse = new POP3MessageView(request, userState).doGetResponse();
         }
         return httpResponse;
     }

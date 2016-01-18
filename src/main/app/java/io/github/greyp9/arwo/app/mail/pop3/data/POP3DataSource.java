@@ -1,4 +1,4 @@
-package io.github.greyp9.arwo.app.mail.imap.data;
+package io.github.greyp9.arwo.app.mail.pop3.data;
 
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
@@ -14,7 +14,7 @@ import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.sort.Sort;
 import io.github.greyp9.arwo.core.table.sort.Sorts;
-import io.github.greyp9.arwo.lib.mail.imap.connection.IMAPConnection;
+import io.github.greyp9.arwo.lib.mail.pop3.connection.POP3Connection;
 
 import javax.mail.Address;
 import javax.mail.Folder;
@@ -28,11 +28,11 @@ import java.sql.Types;
 import java.util.Date;
 import java.util.Enumeration;
 
-public class IMAPDataSource {
-    private final IMAPConnection connection;
+public class POP3DataSource {
+    private final POP3Connection connection;
     private final Alerts alerts;
 
-    public IMAPDataSource(final IMAPConnection connection, final Alerts alerts) {
+    public POP3DataSource(final POP3Connection connection, final Alerts alerts) {
         this.connection = connection;
         this.alerts = alerts;
     }
@@ -47,7 +47,7 @@ public class IMAPDataSource {
                 new ColumnMetaData("new", Types.INTEGER),
                 new ColumnMetaData("unread", Types.INTEGER),
         };
-        return new RowSetMetaData("imapFoldersType", columns);
+        return new RowSetMetaData("pop3FoldersType", columns);
     }
 
     public static RowSetMetaData getMessagesMetaData() {
@@ -61,7 +61,7 @@ public class IMAPDataSource {
                 new ColumnMetaData("recv", Types.TIMESTAMP),
                 new ColumnMetaData("size", Types.INTEGER),
         };
-        return new RowSetMetaData("imapMessagesType", columns);
+        return new RowSetMetaData("pop3MessagesType", columns);
     }
 
     public final RowSet getFolders(final RowSetMetaData metaData) {
@@ -106,8 +106,8 @@ public class IMAPDataSource {
                 final InsertRow insertRow = InsertRow.create(rowSet);
                 insertRow.setNextColumn(null);
                 insertRow.setNextColumn(message.getMessageNumber());
-                insertRow.setNextColumn(IMAPDataSourceU.toDisplayString(from));
-                insertRow.setNextColumn(IMAPDataSourceU.toDisplayString(to));
+                insertRow.setNextColumn(POP3DataSourceU.toDisplayString(from));
+                insertRow.setNextColumn(POP3DataSourceU.toDisplayString(to));
                 insertRow.setNextColumn(message.getSubject());
                 insertRow.setNextColumn(message.getSentDate());
                 insertRow.setNextColumn(message.getReceivedDate());
