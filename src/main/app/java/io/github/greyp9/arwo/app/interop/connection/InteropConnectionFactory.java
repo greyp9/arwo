@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.app.interop.connection;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.config.CursorCIFS;
 import io.github.greyp9.arwo.core.connect.ConnectionFactory;
@@ -36,7 +37,7 @@ public class InteropConnectionFactory implements ConnectionFactory {
     @Override
     public final ConnectionResource create(final String name) throws IOException {
         ConnectionResource resource = null;
-        final XedSession session = userState.getDocumentState().getSession("/app");
+        final XedSession session = userState.getDocumentState().getSession(App.Servlet.SETTINGS);
         final CursorCIFS cursorCIFS = new CursorCIFS(session.getXed(), name);
         if (Value.isEmpty(name)) {
             alerts.add(new Alert(Alert.Severity.WARN, bundle.getString("SSHConnectionFactory.no.server")));

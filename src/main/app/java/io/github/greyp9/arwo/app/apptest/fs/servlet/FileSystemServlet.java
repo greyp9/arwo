@@ -162,7 +162,7 @@ public class FileSystemServlet extends javax.servlet.http.HttpServlet {
             final String submitID = userState.getSubmitID();
             final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
             TableU.addFooterStandard(table, bundle);
-            final TableContext context = new TableContext(viewState, submitID, "table", bundle, locus);
+            final TableContext context = new TableContext(viewState, submitID, App.CSS.TABLE, bundle, locus);
             // render
             final TableView tableView = new TableView(table, context);
             tableView.addContentTo(html);

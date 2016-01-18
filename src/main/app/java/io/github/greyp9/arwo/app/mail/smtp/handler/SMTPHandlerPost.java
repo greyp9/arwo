@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.app.mail.smtp.handler;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.mail.smtp.action.SMTPQueueMail;
 import io.github.greyp9.arwo.app.mail.smtp.core.SMTPRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
@@ -85,9 +86,14 @@ public class SMTPHandlerPost {
 
     private String applySession(
             final SubmitToken token, final NameTypeValues httpArguments, final String locationIn) throws IOException {
-        httpArguments.getClass();
+        String location = locationIn;
+        final String action = token.getAction();
         final String message = request.getBundle().getString("alert.action.not.implemented");
-        request.getAlerts().add(new Alert(Alert.Severity.WARN, message, token.toString(), null));
-        return locationIn;
+        if (App.Action.MAIL.equals(action)) {
+            location = new SMTPQueueMail(request).doAction(location, httpArguments);
+        } else {
+            request.getAlerts().add(new Alert(Alert.Severity.WARN, message, token.toString(), null));
+        }
+        return location;
     }
 }

@@ -42,6 +42,7 @@ public class SMTPTest extends TestCase {
         String port = properties.getProperty(String.format("%s.%s.port", Const.SMTP_SERVER, server));
         String user = properties.getProperty(String.format("%s.%s.user", Const.SMTP_SERVER, server));
         String pass = properties.getProperty(String.format("%s.%s.pass", Const.SMTP_SERVER, server));
+        //String certificate = properties.getProperty(String.format("%s.%s.cert", Const.SMTP_SERVER, server));
         String to = properties.getProperty(String.format("%s.%s.to", Const.SMTP_SERVER, server));
         String subject = properties.getProperty(String.format("%s.%s.subject", Const.SMTP_SERVER, server));
         logger.info(String.format("Authenticate: HOST=[%s] PORT=[%s]", host, port));

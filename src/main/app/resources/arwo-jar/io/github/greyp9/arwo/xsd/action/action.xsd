@@ -88,4 +88,24 @@
         </xsd:sequence>
     </xsd:complexType>
 
+    <xsd:element name='sql' type='action:sqlType'/>
+
+    <xsd:complexType name='sqlType'>
+        <xsd:sequence>
+            <xsd:element name='sql' type='xsd:string'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:element name='mail' type='action:mailType'/>
+
+    <xsd:complexType name='mailType'>
+        <xsd:sequence>
+            <xsd:element name='to' type='xsd:string'/>
+            <xsd:element name='cc' type='xsd:string'/>
+            <xsd:element name='bcc' type='xsd:string'/>
+            <xsd:element name='subject' type='xsd:string'/>
+            <xsd:element name='body' type='xsd:string'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
 </xsd:schema>

@@ -23,7 +23,8 @@
         </xsl:copy>
     </xsl:template>
 
-    <xsl:template match='/xsd:schema/xsd:complexType[@name="webdavServerType"]//xsd:element[@name="certificate"]'>
+    <xsl:template match='/xsd:schema/xsd:complexType[@name="webdavServerType" or @name="smtpServerType" or
+    @name="imapServerType" or @name="pop3ServerType"]//xsd:element[@name="certificate"]'>
         <xsl:copy>
             <xsl:attribute name='xed:rows'>12</xsl:attribute>
             <xsl:attribute name='xed:cols'>80</xsl:attribute>
@@ -33,7 +34,8 @@
     </xsl:template>
 
     <xsl:template match='/xsd:schema/xsd:complexType[@name="sshAuthPasswordType" or @name="cifsServerType" or
-    @name="webdavServerType" or @name="jdbcServerType"]/xsd:sequence/xsd:element[@name="password"]'>
+    @name="webdavServerType" or @name="jdbcServerType" or @name="smtpServerType" or @name="imapServerType" or
+    @name="pop3ServerType"]/xsd:sequence/xsd:element[@name="password"]'>
         <xsl:copy>
             <xsl:attribute name='xed:pbe'>PBKDF2WithHmacSHA1</xsl:attribute>
             <xsl:attribute name='xed:salt'>AAECAwQFBgc=</xsl:attribute>

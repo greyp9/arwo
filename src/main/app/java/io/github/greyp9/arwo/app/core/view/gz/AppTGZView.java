@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.app.core.view.gz;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.file.FileX;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
@@ -57,7 +58,8 @@ public class AppTGZView {
         final String title = httpRequest.getURI();
         final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), title, title);
         TableU.addFooterStandard(table, bundle);
-        final TableContext tableContext = new TableContext(viewState, userState.getSubmitID(), "table", bundle, locus);
+        final TableContext tableContext = new TableContext(
+                viewState, userState.getSubmitID(), App.CSS.TABLE, bundle, locus);
         final TableView tableView = new TableView(table, tableContext);
         tableView.addContentTo(html);
         return (HttpResponse) rowSet.getProperties().get(Const.QUERY_ZIP_ENTRY);

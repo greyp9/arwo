@@ -111,7 +111,7 @@ public abstract class CIFSView {
         final Element divTitle = menuView.addTitle(html, title);
         addTextFiltersView(divTitle);
         // favorites (if toggled)
-        final XedNav nav = new XedNav(userState.getDocumentState().getSession("/fav").getXed());
+        final XedNav nav = new XedNav(userState.getDocumentState().getSession(App.Servlet.FAVORITES).getXed());
         final XedCursor cursorFavorites = nav.findX("/app:favorites/app:cifsFavorites");
         final XedCursor cursorType = nav.find("cifsFavorite", cursorFavorites);
         new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.FILESYSTEM).addContentTo(html);

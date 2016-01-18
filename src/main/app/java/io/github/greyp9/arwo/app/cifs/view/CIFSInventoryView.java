@@ -40,7 +40,7 @@ public class CIFSInventoryView {
     }
 
     public final void addContent(final Element html) throws IOException {
-        final Xed xed = userState.getDocumentState().getSession("/app").getXed();
+        final Xed xed = userState.getDocumentState().getSession(App.Servlet.SETTINGS).getXed();
         final RowSetMetaData metaData = createMetaData();
         final RowSet rowSet = createRowSet(metaData, xed);
         final Bundle bundle = xed.getBundle();
@@ -48,7 +48,8 @@ public class CIFSInventoryView {
         final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
         final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
         TableU.addFooterStandard(table, bundle);
-        final TableContext tableContext = new TableContext(viewState, userState.getSubmitID(), "table", bundle, locus);
+        final TableContext tableContext = new TableContext(
+                viewState, userState.getSubmitID(), App.CSS.TABLE, bundle, locus);
         final TableView tableView = new TableView(table, tableContext);
         tableView.addContentTo(html);
     }

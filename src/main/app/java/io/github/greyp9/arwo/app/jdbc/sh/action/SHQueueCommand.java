@@ -19,7 +19,7 @@ import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.vm.exec.UserExecutor;
-import io.github.greyp9.arwo.core.xed.action.XedActionCommand;
+import io.github.greyp9.arwo.core.xed.action.XedActionSQL;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,10 +54,10 @@ public class SHQueueCommand {
         final AppUserState userState = request.getUserState();
         final String server = request.getServer();
         // queue command text for execution
-        final String command = new XedActionCommand(request.getLocale()).getCommand(httpArguments);
-        final Query query = new Query(server, httpRequest.getDate().getTime(), command);
+        final String sql = new XedActionSQL(request.getLocale()).getSQL(httpArguments);
+        final Query query = new Query(server, httpRequest.getDate().getTime(), sql);
         userState.getJDBC().getHistory().add(query);
-        userState.getJDBC().getProperties().setProperty("sql", command);
+        userState.getJDBC().getProperties().setProperty("sql", sql);
         // runnable to execute commands
         final UserExecutor userExecutor = userState.getUserExecutor();
         final ResourceCache cacheBlob = userState.getCacheBlob();

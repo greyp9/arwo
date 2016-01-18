@@ -4,6 +4,7 @@ import com.github.sardine.Sardine;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.config.CursorWebDAV;
 import io.github.greyp9.arwo.core.connect.ConnectionFactory;
@@ -40,7 +41,7 @@ public class WebDAVConnectionFactory implements ConnectionFactory {
     @Override
     public final ConnectionResource create(final String name) throws IOException {
         ConnectionResource resource = null;
-        final XedSession session = userState.getDocumentState().getSession("/app");
+        final XedSession session = userState.getDocumentState().getSession(App.Servlet.SETTINGS);
         final CursorWebDAV cursor = new CursorWebDAV(session.getXed(), name);
         if (Value.isEmpty(name)) {
             alerts.add(new Alert(Alert.Severity.WARN, bundle.getString("SSHConnectionFactory.no.server")));
@@ -53,7 +54,7 @@ public class WebDAVConnectionFactory implements ConnectionFactory {
     }
 
     private WebDAVConnectionResource getConnection(final String name) throws IOException {
-        final XedSession session = userState.getDocumentState().getSession("/app");
+        final XedSession session = userState.getDocumentState().getSession(App.Servlet.SETTINGS);
         final CursorWebDAV cursorX = new CursorWebDAV(session.getXed(), name);
         final String protocol = cursorX.getProtocol();
         final String host = cursorX.getHost();

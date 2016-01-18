@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPDataSource;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolder;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolderStyled;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.locus.Locus;
@@ -46,7 +47,7 @@ public class SFTPSymlinkView extends SFTPView {
         final Table table = new Table(rowSetStyled, viewState.getSorts(), viewState.getFilters(),
                 request.getTitlePath(), request.getTitlePath());
         final TableContext tableContext = new TableContext(
-                viewState, userState.getSubmitID(), "table", request.getBundle(), userState.getLocus());
+                viewState, userState.getSubmitID(), App.CSS.TABLE, request.getBundle(), userState.getLocus());
         final TableView tableView = new TableView(table, tableContext);
         tableView.addContentTo(html);
         return null;

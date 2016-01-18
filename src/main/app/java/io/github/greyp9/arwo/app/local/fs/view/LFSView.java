@@ -109,7 +109,7 @@ public abstract class LFSView {
         final Element divTitle = menuView.addTitle(html, title);
         addTextFiltersView(divTitle);
         // favorites (if toggled)
-        final XedNav nav = new XedNav(userState.getDocumentState().getSession("/fav").getXed());
+        final XedNav nav = new XedNav(userState.getDocumentState().getSession(App.Servlet.FAVORITES).getXed());
         final XedCursor cursorFavorites = nav.findX("/app:favorites/app:lfsFavorites");
         final XedCursor cursorType = nav.find("lfsFavorite", cursorFavorites);
         new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.FILESYSTEM).addContentTo(html);

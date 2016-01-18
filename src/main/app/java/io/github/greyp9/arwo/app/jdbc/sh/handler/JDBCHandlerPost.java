@@ -91,7 +91,7 @@ public class JDBCHandlerPost {
         String location = locationIn;
         final String message = request.getBundle().getString("alert.action.not.implemented");
         final String action = token.getAction();
-        if (App.Action.COMMAND.equals(action)) {
+        if (App.Action.SQL.equals(action)) {
             location = new SHQueueCommand(request).doAction(location, httpArguments);
         } else if (App.Action.ADD_FAV.equals(action)) {
             new JDBCAddFavorite(request).doAction();

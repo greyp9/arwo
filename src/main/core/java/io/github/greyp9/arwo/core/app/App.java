@@ -22,6 +22,8 @@ public final class App {
         public static final QName QNAME_FOLDER_NEW = new QName(URI_ACTION, "folderNew", PREFIX_ACTION);
         public static final QName QNAME_FILTER = new QName(URI_ACTION, "filter", PREFIX_ACTION);
         public static final QName QNAME_LOCALE = new QName(URI_ACTION, "locale", PREFIX_ACTION);
+        public static final QName QNAME_MAIL = new QName(URI_ACTION, "mail", PREFIX_ACTION);
+        public static final QName QNAME_SQL = new QName(URI_ACTION, "sql", PREFIX_ACTION);
         public static final QName QNAME_TEXT_FILTER = new QName(URI_ACTION, "textFilter", PREFIX_ACTION);
 
         public static final String SUBMIT_COMMAND = "[session][command][{urn:arwo:action}command][command]";
@@ -52,6 +54,7 @@ public final class App {
     public static class Cache {
         public static final String CIFS = "cifs";
         public static final String JDBC = "jdbc";
+        public static final String SMTP = "smtp";
         public static final String SSH = "ssh";
         public static final String WEBDAV = "webdav";
         public static final String WSH = "wsh";
@@ -176,6 +179,8 @@ public final class App {
         public static final String FILE_CREATE = "fileCreate";
         public static final String FOLDER_CREATE = "folderCreate";
         public static final String COMMAND = "command";
+        public static final String SQL = "sql";
+        public static final String MAIL = "mail";
         public static final String FILESYSTEM = "filesystem";
         public static final String FIND = "find";
         public static final String HEX_VIEW_PARAM = "hexViewParam";

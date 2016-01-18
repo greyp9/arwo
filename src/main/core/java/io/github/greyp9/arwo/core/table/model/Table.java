@@ -24,8 +24,6 @@ public class Table extends RowSet {
     }
 
     public static class Const {
-        public static final String TABLE = "table";  // i18n
-
         public static final String FOOTER_C = "FOOTER_C";  // i18n
         public static final String FOOTER_L = "FOOTER_L";  // i18n
         public static final String FOOTER_R = "FOOTER_R";  // i18n

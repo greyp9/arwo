@@ -92,6 +92,7 @@
             <auxclasspath location='${m2.dir}/com/github/lookfirst/sardine/5.6/sardine-5.6.jar'/>
             <auxclasspath location='${m2.dir}/org/apache/httpcomponents/httpclient/4.4.1/httpclient-4.4.1.jar'/>
             <auxclasspath location='${m2.dir}/org/apache/httpcomponents/httpcore/4.4.1/httpcore-4.4.1.jar'/>
+            <auxclasspath location='${m2.dir}/com/sun/mail/javax.mail/1.5.4/javax.mail-1.5.4.jar'/>
 
             <fileset dir='${classes.lib.dir}'>
                 <include name='**/lib/**/*.class'/>

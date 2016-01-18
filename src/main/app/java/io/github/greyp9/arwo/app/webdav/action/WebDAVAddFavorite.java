@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.app.webdav.action;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.webdav.fs.core.WebDAVRequest;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.date.XsdDateU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
@@ -33,7 +34,7 @@ public class WebDAVAddFavorite {
         if (isData) {
             final AppUserState userState = request.getUserState();
             final XedUserState documentState = userState.getDocumentState();
-            final XedSession session = documentState.getSession("/fav");
+            final XedSession session = documentState.getSession(App.Servlet.FAVORITES);
             final XedNav nav = new XedNav(session.getXed());
             final XedCursor cursorFavorites = nav.findX("/app:favorites/app:webdavFavorites");
             final TypeInstance typeInstance = cursorFavorites.getChildInstance("webdavFavorite");

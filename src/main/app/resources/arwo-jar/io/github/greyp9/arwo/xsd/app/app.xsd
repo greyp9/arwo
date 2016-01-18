@@ -124,6 +124,7 @@
         <xsd:sequence>
             <xsd:element name='name' type='xsd:string'/>
             <xsd:element name='comment' type='xsd:string'/>
+            <xsd:element name='enabled' type='xsd:boolean'/>
             <xsd:element name='protocol' type='xsd:string'/>
             <xsd:element name='host' type='xsd:string'/>
             <xsd:element name='port' type='xsd:string'/>
@@ -143,6 +144,7 @@
         <xsd:sequence>
             <xsd:element name='name' type='xsd:string'/>
             <xsd:element name='comment' type='xsd:string'/>
+            <xsd:element name='enabled' type='xsd:boolean'/>
             <xsd:element name='protocol' type='xsd:string'/>
             <xsd:element name='host' type='xsd:string'/>
             <xsd:element name='port' type='xsd:string'/>
@@ -162,6 +164,7 @@
         <xsd:sequence>
             <xsd:element name='name' type='xsd:string'/>
             <xsd:element name='comment' type='xsd:string'/>
+            <xsd:element name='enabled' type='xsd:boolean'/>
             <xsd:element name='protocol' type='xsd:string'/>
             <xsd:element name='host' type='xsd:string'/>
             <xsd:element name='port' type='xsd:string'/>

@@ -80,7 +80,7 @@ public class LFSFolderView extends LFSView {
         final Table table = new Table(rowSetStyled, viewState.getSorts(), viewState.getFilters(),
                 request.getTitlePath(), request.getTitlePath());
         final TableContext tableContext = new TableContext(
-                viewState, userState.getSubmitID(), "table", request.getBundle(), userState.getLocus());
+                viewState, userState.getSubmitID(), App.CSS.TABLE, request.getBundle(), userState.getLocus());
         final TableView tableView = new TableView(table, tableContext);
         tableView.addContentTo(html);
         return null;

@@ -19,7 +19,7 @@ import io.github.greyp9.arwo.core.util.CollectionU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.value.Value;
-import io.github.greyp9.arwo.core.xed.action.XedActionCommand;
+import io.github.greyp9.arwo.core.xed.action.XedActionSQL;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.op.OpUpdate;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
@@ -57,11 +57,11 @@ public class JDBCCommandView extends JDBCView {
         final AppUserState userState = request.getUserState();
         final Properties properties = jdbc.getProperties();
         // command input form (prep)
-        final String command = (query == null) ? properties.getProperty("sql", "") : query.getText();
-        properties.setProperty("sql", command);
-        final XedActionCommand action = new XedActionCommand(userState.getLocus().getLocale());
+        final String sql = (query == null) ? properties.getProperty("sql", "") : query.getText();
+        properties.setProperty("sql", sql);
+        final XedActionSQL action = new XedActionSQL(userState.getLocus().getLocale());
         final Bundle bundle = action.getXed().getBundle();
-        final NameTypeValues ntv = NameTypeValuesU.create("command.commandType.command", command);
+        final NameTypeValues ntv = NameTypeValuesU.create("sql.sqlType.sql", sql);
         final XedCursor cursor = action.getCursor();
         final ValueInstance valueInstanceIn = ValueInstance.create(cursor.getTypeInstance(), ntv);
         new OpUpdate(null, action.getXed()).apply(cursor.getElement(), valueInstanceIn);
@@ -70,7 +70,7 @@ public class JDBCCommandView extends JDBCView {
         final String submitID = userState.getSubmitID();
         final ActionFactory factory = new ActionFactory(submitID, bundle, App.Target.SESSION, qname, null);
         final ActionButtons buttons = factory.create(
-                App.Action.COMMAND, false, CollectionU.toCollection(App.Action.COMMAND));
+                App.Action.SQL, false, CollectionU.toCollection(App.Action.SQL));
         final XedRequest xedRequest = new XedRequest(httpRequest, null, userState.getDocumentState());
         new PropertyPageHtmlView(new XedPropertyPageView(null, cursor, buttons), xedRequest).addContentTo(html);
         // contextual content

@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.app.ssh.sh.action;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.ssh.sh.core.SHRequest;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
@@ -21,7 +22,7 @@ public class SHSelectFavorite {
         final String uri = token.getObject();
         final AppUserState userState = request.getUserState();
         final XedUserState documentState = userState.getDocumentState();
-        final XedSession session = documentState.getSession("/fav");
+        final XedSession session = documentState.getSession(App.Servlet.FAVORITES);
         final XedNav nav = new XedNav(session.getXed());
         final XedCursor cursor = nav.find(uri);
         final String server = cursor.getValue(cursor.getChildInstance("server"));

@@ -89,7 +89,7 @@ public abstract class SHView {
         // context title
         menuView.addTitle(html, title);
         // favorites (if toggled)
-        final XedNav nav = new XedNav(userState.getDocumentState().getSession("/fav").getXed());
+        final XedNav nav = new XedNav(userState.getDocumentState().getSession(App.Servlet.FAVORITES).getXed());
         final XedCursor cursorFavorites = nav.findX("/app:favorites/app:sshFavorites");
         final XedCursor cursorType = nav.find("sshFavorite", cursorFavorites);
         new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.COMMAND).addContentTo(html);

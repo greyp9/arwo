@@ -46,7 +46,8 @@ public class XedUnsavedView {
         final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
         final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
         TableU.addFooterStandard(table, bundle);
-        final TableContext tableContext = new TableContext(viewState, userState.getSubmitID(), "table", bundle, locus);
+        final TableContext tableContext = new TableContext(
+                viewState, userState.getSubmitID(), App.CSS.TABLE, bundle, locus);
         final TableView tableView = new TableView(table, tableContext);
         tableView.addContentTo(html);
     }

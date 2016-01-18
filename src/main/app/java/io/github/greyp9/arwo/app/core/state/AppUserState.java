@@ -8,6 +8,7 @@ import io.github.greyp9.arwo.app.core.subsystem.dav.SubsystemWebDAV;
 import io.github.greyp9.arwo.app.core.subsystem.interop.SubsystemInterop;
 import io.github.greyp9.arwo.app.core.subsystem.jdbc.SubsystemJDBC;
 import io.github.greyp9.arwo.app.core.subsystem.local.SubsystemLocal;
+import io.github.greyp9.arwo.app.core.subsystem.mail.SubsystemMail;
 import io.github.greyp9.arwo.app.core.subsystem.ssh.SubsystemSSH;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
@@ -82,6 +83,7 @@ public class AppUserState {
     private final SubsystemLocal local;
     private final SubsystemSSH ssh;
     private final SubsystemJDBC jdbc;
+    private final SubsystemMail mail;
     private final SubsystemCIFS cifs;
     private final SubsystemInterop interop;
     private final SubsystemWebDAV webDAV;
@@ -167,6 +169,10 @@ public class AppUserState {
         return jdbc;
     }
 
+    public final SubsystemMail getMail() {
+        return mail;
+    }
+
     public final SubsystemCIFS getCIFS() {
         return cifs;
     }
@@ -200,7 +206,7 @@ public class AppUserState {
     }
 
     public final Xed getConfig() throws IOException {
-        return documentState.getSession("/app").getXed();
+        return documentState.getSession(App.Servlet.SETTINGS).getXed();
     }
 
     public final Properties getProperties() {
@@ -228,6 +234,7 @@ public class AppUserState {
         this.local = new SubsystemLocal();
         this.ssh = new SubsystemSSH(alerts);
         this.jdbc = new SubsystemJDBC(alerts);
+        this.mail = new SubsystemMail(alerts);
         this.cifs = new SubsystemCIFS(alerts);
         this.interop = new SubsystemInterop(alerts);
         this.webDAV = new SubsystemWebDAV(alerts);
@@ -334,6 +341,8 @@ public class AppUserState {
             webDAV.getCache().removeResource(resourceName);
         } else if (App.Cache.WSH.equals(cacheName)) {
             interop.getCache().removeResource(resourceName);
+        } else if (App.Cache.SMTP.equals(cacheName)) {
+            mail.getCacheSMTP().removeResource(resourceName);
         }
     }
 
@@ -383,7 +392,7 @@ public class AppUserState {
         final CronService cronService = appState.getCronService();
         final RowSet rowSet = cron.getRowSetCron();
         new CronServiceRegistrar(date, authorization, principal, getBundle(), alerts, cronService, rowSet).
-                register(documentState.getSession("/app").getXed());
+                register(documentState.getSession(App.Servlet.SETTINGS).getXed());
     }
 
     private void doCronNow(final ServletHttpRequest httpRequest, final SubmitToken token) throws IOException {

@@ -2,6 +2,8 @@ package io.github.greyp9.arwo.app.mail.smtp.handler;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.mail.smtp.core.SMTPRequest;
+import io.github.greyp9.arwo.app.mail.smtp.view.SMTPCommandView;
+import io.github.greyp9.arwo.app.mail.smtp.view.SMTPInventoryXView;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
@@ -39,12 +41,9 @@ public class SMTPHandlerGet {
         } else if (isQuery) {
             httpResponse = HttpResponseU.to302(httpRequest.getURI());
         } else if (Value.isEmpty(request.getServer())) {
-            userState.getClass();
-            //httpResponse = new SMTPInventoryView(request, userState, "").doGetResponse();
-            httpResponse = HttpResponseU.to501();
+            httpResponse = new SMTPInventoryXView(request, userState).doGetResponse();
         } else {
-            //httpResponse = new SMTPCommandView(request, userState).doGetResponse();
-            httpResponse = HttpResponseU.to501();
+            httpResponse = new SMTPCommandView(request, userState).doGetResponse();
         }
         return httpResponse;
     }

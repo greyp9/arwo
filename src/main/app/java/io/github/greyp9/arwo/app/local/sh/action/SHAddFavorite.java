@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.app.local.sh.action;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.local.sh.core.SHRequest;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.date.XsdDateU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
@@ -33,7 +34,7 @@ public class SHAddFavorite {
         if (isData) {
             final AppUserState userState = request.getUserState();
             final XedUserState documentState = userState.getDocumentState();
-            final XedSession session = documentState.getSession("/fav");
+            final XedSession session = documentState.getSession(App.Servlet.FAVORITES);
             final XedNav nav = new XedNav(session.getXed());
             final XedCursor cursorFavorites = nav.findX("/app:favorites/app:lshFavorites");
             final TypeInstance typeInstance = cursorFavorites.getChildInstance("lshFavorite");

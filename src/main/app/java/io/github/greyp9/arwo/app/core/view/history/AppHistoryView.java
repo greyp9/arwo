@@ -54,7 +54,7 @@ public class AppHistoryView {
         final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
         TableU.addFooterStandard(table, bundle);
         final TableContext tableContext = new TableContext(
-                viewState, userState.getSubmitID(), "table", bundle, userState.getLocus());
+                viewState, userState.getSubmitID(), App.CSS.TABLE, bundle, userState.getLocus());
         final TableView tableView = new TableView(table, tableContext);
         tableView.addContentTo(html);
         return null;

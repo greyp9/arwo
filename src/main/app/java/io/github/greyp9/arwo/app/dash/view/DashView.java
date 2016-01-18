@@ -96,6 +96,7 @@ public class DashView {
         new AppConnectionView(httpRequest, userState, userState.getInterop().getCache(), null).addContentTo(html);
         new AppConnectionView(httpRequest, userState, userState.getWebDAV().getCache(), null).addContentTo(html);
         new AppConnectionView(httpRequest, userState, userState.getJDBC().getCache(), null).addContentTo(html);
+        new AppConnectionView(httpRequest, userState, userState.getMail().getCacheSMTP(), null).addContentTo(html);
         return null;
     }
 
