@@ -78,6 +78,8 @@ public class ConnectionRunnable implements Runnable {
         runMonitorCache(date, duration, userState.getInterop().getCache());
         runMonitorCache(date, duration, userState.getWebDAV().getCache());
         runMonitorCache(date, duration, userState.getJDBC().getCache());
+        runMonitorCache(date, duration, userState.getMail().getCacheSMTP());
+        runMonitorCache(date, duration, userState.getMail().getCacheIMAP());
     }
 
     private void runMonitorCache(final Date date, final String duration, final ConnectionCache cache) {

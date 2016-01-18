@@ -9,11 +9,16 @@ import java.util.Properties;
 public class SubsystemMail {
     // connection entries
     private final ConnectionCache cacheSMTP;
+    private final ConnectionCache cacheIMAP;
     // properties
     private final Properties properties;
 
     public final ConnectionCache getCacheSMTP() {
         return cacheSMTP;
+    }
+
+    public final ConnectionCache getCacheIMAP() {
+        return cacheIMAP;
     }
 
     public final Properties getProperties() {
@@ -22,6 +27,7 @@ public class SubsystemMail {
 
     public SubsystemMail(final Alerts alerts) {
         this.cacheSMTP = new ConnectionCache(App.Cache.SMTP, alerts);
+        this.cacheIMAP = new ConnectionCache(App.Cache.IMAP, alerts);
         this.properties = new Properties();
     }
 }

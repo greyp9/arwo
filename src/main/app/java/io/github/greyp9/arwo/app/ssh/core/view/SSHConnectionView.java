@@ -69,13 +69,12 @@ public class SSHConnectionView {
         return new RowSetMetaData(tableID, columns);
     }
 
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private RowSet createRowSet(final RowSetMetaData metaData) throws IOException {
         final NameTypeValues properties = new NameTypeValues();
         addProperties(properties);
         final RowSet rowSet = new RowSet(metaData, null, null);
         for (final NameTypeValue property : properties) {
-            final InsertRow insertRow = new InsertRow(rowSet);
+            final InsertRow insertRow = InsertRow.create(rowSet);
             final String nameLabel = bundle.getString(Value.join(".", "sshConnectionType", property.getName()));
             insertRow.setNextColumn(nameLabel);
             insertRow.setNextColumn(property.getValue());

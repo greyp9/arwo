@@ -2,6 +2,10 @@ package io.github.greyp9.arwo.app.mail.imap.handler;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.mail.imap.core.IMAPRequest;
+import io.github.greyp9.arwo.app.mail.imap.view.IMAPFoldersView;
+import io.github.greyp9.arwo.app.mail.imap.view.IMAPInventoryXView;
+import io.github.greyp9.arwo.app.mail.imap.view.IMAPMessageView;
+import io.github.greyp9.arwo.app.mail.imap.view.IMAPMessagesView;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
@@ -39,12 +43,13 @@ public class IMAPHandlerGet {
         } else if (isQuery) {
             httpResponse = HttpResponseU.to302(httpRequest.getURI());
         } else if (Value.isEmpty(request.getServer())) {
-            userState.getClass();
-            //httpResponse = new IMAPInventoryView(request, userState, "").doGetResponse();
-            httpResponse = HttpResponseU.to501();
+            httpResponse = new IMAPInventoryXView(request, userState).doGetResponse();
+        } else if (Value.isEmpty(request.getFolder())) {
+            httpResponse = new IMAPFoldersView(request, userState).doGetResponse();
+        } else if (Value.isEmpty(request.getMessage())) {
+            httpResponse = new IMAPMessagesView(request, userState).doGetResponse();
         } else {
-            //httpResponse = new IMAPCommandView(request, userState).doGetResponse();
-            httpResponse = HttpResponseU.to501();
+            httpResponse = new IMAPMessageView(request, userState).doGetResponse();
         }
         return httpResponse;
     }

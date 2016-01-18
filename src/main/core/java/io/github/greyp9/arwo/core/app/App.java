@@ -53,7 +53,9 @@ public final class App {
 
     public static class Cache {
         public static final String CIFS = "cifs";
+        public static final String IMAP = "imap";
         public static final String JDBC = "jdbc";
+        public static final String POP3 = "pop3";
         public static final String SMTP = "smtp";
         public static final String SSH = "ssh";
         public static final String WEBDAV = "webdav";

@@ -1,18 +1,19 @@
-package io.github.greyp9.arwo.app.dash.view;
+package io.github.greyp9.arwo.app.mail.imap.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
-import io.github.greyp9.arwo.app.core.view.connect.AppConnectionView;
-import io.github.greyp9.arwo.app.core.view.props.AppPropertiesView;
-import io.github.greyp9.arwo.app.cron.view.CronActiveView;
-import io.github.greyp9.arwo.app.xed.view.XedUnsavedView;
+import io.github.greyp9.arwo.app.core.view.favorite.AppFavoriteView;
+import io.github.greyp9.arwo.app.mail.imap.connection.IMAPConnectionFactory;
+import io.github.greyp9.arwo.app.mail.imap.connection.IMAPConnectionResource;
+import io.github.greyp9.arwo.app.mail.imap.core.IMAPRequest;
+import io.github.greyp9.arwo.app.mail.imap.data.IMAPDataSource;
+import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppHtml;
-import io.github.greyp9.arwo.core.app.AppRequest;
 import io.github.greyp9.arwo.core.app.AppTitle;
 import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
-import io.github.greyp9.arwo.core.date.DurationU;
+import io.github.greyp9.arwo.core.connect.ConnectionCache;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
@@ -25,6 +26,8 @@ import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.view.StatusBarView;
 import io.github.greyp9.arwo.core.xed.action.XedActionLocale;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
+import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
+import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import org.w3c.dom.Document;
@@ -36,16 +39,28 @@ import java.net.HttpURLConnection;
 import java.util.Locale;
 import java.util.Properties;
 
-@SuppressWarnings("PMD.ExcessiveImports")
-public class DashView {
-    private final AppRequest request;
+@SuppressWarnings({ "PMD.AbstractNaming", "PMD.ExcessiveImports" })
+public abstract class IMAPView {
+    private final IMAPRequest request;
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
+    private final Bundle bundle;
+    private final Alerts alerts;
 
-    public DashView(final ServletHttpRequest httpRequest, final AppUserState userState) {
-        this.request = userState.getAppRequest(httpRequest);
-        this.httpRequest = httpRequest;
+    public final IMAPRequest getRequest() {
+        return request;
+    }
+
+    public final AppUserState getUserState() {
+        return userState;
+    }
+
+    public IMAPView(final IMAPRequest request, final AppUserState userState) {
+        this.request = request;
+        this.httpRequest = request.getHttpRequest();
         this.userState = userState;
+        this.bundle = request.getBundle();
+        this.alerts = request.getAlerts();
     }
 
     public final HttpResponse doGetResponse() throws IOException {
@@ -53,7 +68,7 @@ public class DashView {
         final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(App.Html.UI)));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
         // context-specific content
-        final AppTitle title = AppTitle.Factory.getHostLabel(httpRequest, request.getBundle());
+        final AppTitle title = AppTitle.Factory.getResourceLabel(httpRequest, bundle, request.getTitlePath());
         addHeaderView(body, title);
         HttpResponse httpResponse = addContentTo(body);
         if (httpResponse == null) {
@@ -75,40 +90,31 @@ public class DashView {
     private void addHeaderView(final Element html, final AppTitle title) throws IOException {
         // context menu
         final MenuView menuView = new MenuView(request.getBundle(), httpRequest, userState.getMenuSystem());
-        menuView.addContentTo(html, AppMenuFactory.Const.DASHBOARD, true);
-        // context title (+ text filters)
-        final Element divMenus = menuView.addTitle(html, title);
-        divMenus.getClass();
+        menuView.addContentTo(html, AppMenuFactory.Const.COMMAND, true);
+        // context title
+        menuView.addTitle(html, title);
+        // favorites (if toggled)
+        final XedNav nav = new XedNav(userState.getDocumentState().getSession(App.Servlet.FAVORITES).getXed());
+        final XedCursor cursorFavorites = nav.findX("/app:favorites/app:imapFavorites");  // i18n
+        final XedCursor cursorType = nav.find("imapFavorite", cursorFavorites);  // i18n
+        new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.COMMAND).addContentTo(html);
         // settings property strips
         final Locale locale = userState.getLocus().getLocale();
         final String submitID = userState.getSubmitID();
         final Properties properties = userState.getProperties();
         new XedActionLocale(locale).addContentTo(html, submitID, properties);
         new XedActionTextFilter(locale).addContentTo(html, submitID, properties);
+
+
     }
 
-    private HttpResponse addContentTo(final Element html) throws IOException {
-        addPropertiesView(html);
-        new XedUnsavedView(httpRequest, userState).addContent(html);
-        new CronActiveView(userState.getCronService(), request, userState).addContent(html);
-        new AppConnectionView(httpRequest, userState, userState.getSSH().getCache(), null).addContentTo(html);
-        new AppConnectionView(httpRequest, userState, userState.getCIFS().getCache(), null).addContentTo(html);
-        new AppConnectionView(httpRequest, userState, userState.getInterop().getCache(), null).addContentTo(html);
-        new AppConnectionView(httpRequest, userState, userState.getWebDAV().getCache(), null).addContentTo(html);
-        new AppConnectionView(httpRequest, userState, userState.getJDBC().getCache(), null).addContentTo(html);
-        new AppConnectionView(httpRequest, userState, userState.getMail().getCacheSMTP(), null).addContentTo(html);
-        new AppConnectionView(httpRequest, userState, userState.getMail().getCacheIMAP(), null).addContentTo(html);
-        return null;
+    protected final IMAPDataSource getDataSource() throws IOException {
+        final String server = request.getServer();
+        final IMAPConnectionFactory factory = new IMAPConnectionFactory(httpRequest, userState, bundle, alerts);
+        final ConnectionCache cacheIMAP = userState.getMail().getCacheIMAP();
+        final IMAPConnectionResource resource = (IMAPConnectionResource) cacheIMAP.getResource(server, factory);
+        return new IMAPDataSource(resource.getConnection(), alerts);
     }
 
-    private void addPropertiesView(final Element html) throws IOException {
-        final String durationA = DurationU.duration(userState.getDateAppStart(), httpRequest.getDate());
-        final String durationU = DurationU.duration(userState.getDateSessionStart(), httpRequest.getDate());
-        final Bundle bundle = request.getBundle();
-        final NameTypeValues properties = new NameTypeValues();
-        properties.add(new NameTypeValue(bundle.getString("DashView.webapp.uptime"), durationA));
-        properties.add(new NameTypeValue(bundle.getString("DashView.session.uptime"), durationU));
-        final AppPropertiesView view = new AppPropertiesView("dashPropertiesType", userState);
-        view.addContentTo(html, null, bundle, properties);
-    }
+    protected abstract HttpResponse addContentTo(Element html) throws IOException;
 }

@@ -88,8 +88,8 @@ public abstract class JDBCView {
         menuView.addTitle(html, title);
         // favorites (if toggled)
         final XedNav nav = new XedNav(userState.getDocumentState().getSession(App.Servlet.FAVORITES).getXed());
-        final XedCursor cursorFavorites = nav.findX("/app:favorites/app:jdbcFavorites");
-        final XedCursor cursorType = nav.find("jdbcFavorite", cursorFavorites);
+        final XedCursor cursorFavorites = nav.findX("/app:favorites/app:jdbcFavorites");  // i18n
+        final XedCursor cursorType = nav.find("jdbcFavorite", cursorFavorites);  // i18n
         new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.COMMAND).addContentTo(html);
         // settings property strips
         final Locale locale = userState.getLocus().getLocale();

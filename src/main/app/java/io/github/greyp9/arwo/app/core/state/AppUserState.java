@@ -343,6 +343,8 @@ public class AppUserState {
             interop.getCache().removeResource(resourceName);
         } else if (App.Cache.SMTP.equals(cacheName)) {
             mail.getCacheSMTP().removeResource(resourceName);
+        } else if (App.Cache.IMAP.equals(cacheName)) {
+            mail.getCacheIMAP().removeResource(resourceName);
         }
     }
 

@@ -60,7 +60,7 @@ public class JDBCQuery {
         return results;
     }
 
-    @SuppressWarnings({ "PMD.AvoidInstantiatingObjectsInLoops", "PMD.CloseResource" })
+    @SuppressWarnings({ "PMD.CloseResource" })
     private boolean getResultSet(final Statement statement) throws SQLException, IOException {
         final ResultSet resultSet = statement.getResultSet();
         final ResultSetMetaData resultSetMetaData = resultSet.getMetaData();
@@ -68,7 +68,7 @@ public class JDBCQuery {
         final RowSetMetaData metaData = getMetaData(resultSet);
         final RowSet rowSet = new RowSet(metaData, null, null);
         while (resultSet.next()) {
-            final InsertRow insertRow = new InsertRow(rowSet);
+            final InsertRow insertRow = InsertRow.create(rowSet);
             for (int i = 1; (i <= columnCount); ++i) {
                 final Object object = resultSet.getObject(i);
                 final int type = resultSetMetaData.getColumnType(i);
