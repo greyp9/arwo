@@ -1,8 +1,8 @@
-package io.github.greyp9.arwo.app.webdav.fs.runnable;
+package io.github.greyp9.arwo.app.cifs.fs.cron;
 
+import io.github.greyp9.arwo.app.cifs.handler.CIFSHandlerGet;
 import io.github.greyp9.arwo.app.core.state.AppState;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
-import io.github.greyp9.arwo.app.webdav.fs.handler.WebDAVHandlerGet;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.cron.core.CronParams;
 import io.github.greyp9.arwo.core.cron.core.CronRunnable;
@@ -28,10 +28,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @SuppressWarnings("unused")  // reflection used to instantiate
-public class WebDAVRunnable extends CronRunnable {
+public class CIFSRunnable extends CronRunnable {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    public WebDAVRunnable(final CronParams params) {
+    public CIFSRunnable(final CronParams params) {
         super(params);
     }
 
@@ -52,10 +52,10 @@ public class WebDAVRunnable extends CronRunnable {
             final AppState appState = (AppState) AppNaming.lookupQ(context, App.Naming.APP_STATE);
             final AppUserState userState = appState.getUserState(getParams().getPrincipal(), getParams().getDate());
             final Principal principal = userState.getPrincipal();
-            final String resourceFull = getParams().getContext() + App.Servlet.WEBDAV + pathInfo;
+            final String resourceFull = getParams().getContext() + App.Servlet.CIFS + pathInfo;
             final HttpRequest httpRequest = getHttpRequest(resourceFull);
             final ServletHttpRequest httpRequest1 = getServletHttpRequest(httpRequest, pathInfo, principal);
-            final WebDAVHandlerGet handler = new WebDAVHandlerGet(httpRequest1, userState);
+            final CIFSHandlerGet handler = new CIFSHandlerGet(httpRequest1, userState);
             putHttpResponse(handler.doGet(), filename, userState);
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
@@ -79,7 +79,7 @@ public class WebDAVRunnable extends CronRunnable {
             final HttpRequest httpRequest, final String pathInfo, final Principal principal) throws IOException {
         final Date date = getParams().getDate();
         final String context = getParams().getContext();
-        return new ServletHttpRequest(httpRequest, date, principal, context, App.Servlet.WEBDAV, pathInfo);
+        return new ServletHttpRequest(httpRequest, date, principal, context, App.Servlet.CIFS, pathInfo);
     }
 
     private HttpRequest getHttpRequest(final String resource) throws IOException {

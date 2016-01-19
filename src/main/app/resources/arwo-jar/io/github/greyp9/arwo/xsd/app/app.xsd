@@ -266,6 +266,11 @@
     <xsd:complexType name="cronSMTPJobType">
         <xsd:attribute name='server' type='xsd:string'/>
         <xsd:attribute name='comment' type='xsd:string'/>
+        <xsd:attribute name='to' type='xsd:string'/>
+        <xsd:attribute name='cc' type='xsd:string'/>
+        <xsd:attribute name='bcc' type='xsd:string'/>
+        <xsd:attribute name='subject' type='xsd:string'/>
+        <xsd:attribute name='body' type='xsd:string'/>
     </xsd:complexType>
 
     <xsd:complexType name="cronIMAPJobType">

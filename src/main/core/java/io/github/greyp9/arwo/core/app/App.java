@@ -27,6 +27,8 @@ public final class App {
         public static final QName QNAME_TEXT_FILTER = new QName(URI_ACTION, "textFilter", PREFIX_ACTION);
 
         public static final String SUBMIT_COMMAND = "[session][command][{urn:arwo:action}command][command]";
+        public static final String SUBMIT_MAIL = "[session][mail][{urn:arwo:action}mail][mail]";
+        public static final String SUBMIT_SQL = "[session][sql][{urn:arwo:action}sql][sql]";
     }
 
     public static class Config {
@@ -42,6 +44,7 @@ public final class App {
         public static final String JDBC = "/jdbc";
         public static final String LSH = "/lsh";
         public static final String SFTP = "/sftp";
+        public static final String SMTP = "/smtp";
         public static final String SSH = "/ssh";
         public static final String WEBDAV = "/webdav";
         public static final String WSH = "/wsh";

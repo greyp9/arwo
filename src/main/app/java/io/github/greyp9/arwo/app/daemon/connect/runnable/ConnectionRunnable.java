@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.core.connect.ConnectionCache;
 import io.github.greyp9.arwo.core.connect.ConnectionResource;
 import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.date.DurationU;
+import io.github.greyp9.arwo.core.date.XsdDateU;
 import io.github.greyp9.arwo.core.vm.mutex.MutexU;
 
 import java.io.IOException;
@@ -89,14 +90,14 @@ public class ConnectionRunnable implements Runnable {
             if (date.before(dateIdle)) {
                 resource.getClass();
             } else {
-                close(cache, resource);
+                close(cache, resource, resource.getDateLast());
             }
         }
     }
 
-    private void close(final ConnectionCache cache, final ConnectionResource resource) {
+    private void close(final ConnectionCache cache, final ConnectionResource resource, final Date dateLast) {
         try {
-            logger.info(resource.getName());
+            logger.info(String.format("%s [%s]", resource.getName(), XsdDateU.toXSDZMillis(dateLast)));
             cache.removeResource(resource.getName());
         } catch (IOException e) {
             logger.severe(e.getMessage());

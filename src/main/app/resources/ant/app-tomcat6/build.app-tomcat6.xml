@@ -174,10 +174,14 @@
             <!--cron-->
             <include name='io/github/greyp9/arwo/core/cron/instance/*Runnable.java'/>
             <!--cron-->
+            <include name='io/github/greyp9/arwo/app/cifs/fs/cron/*Runnable.java'/>
             <include name='io/github/greyp9/arwo/app/interop/sh/cron/*Runnable.java'/>
+            <include name='io/github/greyp9/arwo/app/jdbc/sh/cron/*Runnable.java'/>
             <include name='io/github/greyp9/arwo/app/local/sh/cron/*Runnable.java'/>
+            <include name='io/github/greyp9/arwo/app/mail/**/cron/*Runnable.java'/>
             <include name='io/github/greyp9/arwo/app/ssh/sftp/cron/*Runnable.java'/>
             <include name='io/github/greyp9/arwo/app/ssh/sh/cron/*Runnable.java'/>
+            <include name='io/github/greyp9/arwo/app/webdav/fs/cron/*Runnable.java'/>
             <!--table testing-->
             <include name='io/github/greyp9/arwo/app/apptest/fs/servlet/FileSystemServlet.java'/>
 

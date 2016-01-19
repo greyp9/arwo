@@ -1,13 +1,14 @@
-package io.github.greyp9.arwo.app.jdbc.sh.cron;
+package io.github.greyp9.arwo.app.mail.smtp.cron;
 
 import io.github.greyp9.arwo.app.core.state.AppState;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
-import io.github.greyp9.arwo.app.jdbc.sh.handler.JDBCHandlerPost;
+import io.github.greyp9.arwo.app.mail.smtp.handler.SMTPHandlerPost;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.cron.core.CronParams;
 import io.github.greyp9.arwo.core.cron.core.CronRunnable;
 import io.github.greyp9.arwo.core.date.DurationU;
+import io.github.greyp9.arwo.core.date.XsdDateU;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.http.HttpRequest;
@@ -21,6 +22,7 @@ import io.github.greyp9.arwo.core.table.type.RowTyped;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.xml.ElementU;
+import org.w3c.dom.Element;
 
 import javax.naming.Context;
 import java.io.ByteArrayInputStream;
@@ -31,11 +33,11 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@SuppressWarnings("unused")  // reflection used to instantiate
-public class JDBCRunnable extends CronRunnable {
+@SuppressWarnings({ "unused", "PMD.ExcessiveImports" })  // reflection used to instantiate
+public class SMTPRunnable extends CronRunnable {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    public JDBCRunnable(final CronParams params) {
+    public SMTPRunnable(final CronParams params) {
         super(params);
     }
 
@@ -47,7 +49,6 @@ public class JDBCRunnable extends CronRunnable {
         row.update(Const.DATE_START, dateStart);
         // initialize
         final String server = ElementU.getAttribute(getParams().getElement(), "server");
-        final String sql = ElementU.getAttribute(getParams().getElement(), "sql");
         final String pathInfo = PathU.toDir("", server);
         // execute
         try {
@@ -55,9 +56,9 @@ public class JDBCRunnable extends CronRunnable {
             final AppState appState = (AppState) AppNaming.lookupQ(context, App.Naming.APP_STATE);
             final AppUserState userState = appState.getUserState(getParams().getPrincipal(), getParams().getDate());
             final Principal principal = userState.getPrincipal();
-            final HttpRequest httpRequest = getHttpRequest(userState.getSubmitID(), pathInfo, sql);
+            final HttpRequest httpRequest = getHttpRequest(userState.getSubmitID(), pathInfo);
             final ServletHttpRequest httpRequest1 = getServletHttpRequest(httpRequest, pathInfo, principal);
-            final JDBCHandlerPost handlerPost = new JDBCHandlerPost(httpRequest1, userState);
+            final SMTPHandlerPost handlerPost = new SMTPHandlerPost(httpRequest1, userState);
             putHttpResponse(handlerPost.doPost(), userState);
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
@@ -80,19 +81,30 @@ public class JDBCRunnable extends CronRunnable {
             final HttpRequest httpRequest, final String pathInfo, final Principal principal) throws IOException {
         final Date date = getParams().getDate();
         final String context = getParams().getContext();
-        return new ServletHttpRequest(httpRequest, date, principal, context, App.Servlet.JDBC, pathInfo);
+        return new ServletHttpRequest(httpRequest, date, principal, context, App.Servlet.SMTP, pathInfo);
     }
 
-    private HttpRequest getHttpRequest(
-            final String submitID, final String pathInfo, final String sql) throws IOException {
+    private HttpRequest getHttpRequest(final String submitID, final String pathInfo) throws IOException {
         final CronParams params = getParams();
+        final Date date = params.getDate();
+        final Element element = params.getElement();
         final NameTypeValues headers = NameTypeValuesU.create(
                 Http.Header.AUTHORIZATION, params.getAuthorization(),
                 Http.Header.CONTENT_TYPE, Http.Mime.FORM_URL_ENCODED,
                 "X-Out", PathU.toDir("", "cron", params.getCronTab().getName(), params.getCronJob().getName()));
-        final NameTypeValues query = NameTypeValuesU.create("sql.sqlType.sql", sql, submitID, App.Actions.SUBMIT_SQL);
+        final NameTypeValues query = NameTypeValuesU.create(
+                "mail.mailType.to", ElementU.getAttribute(element, "to"),
+                "mail.mailType.cc", ElementU.getAttribute(element, "cc"),
+                "mail.mailType.bcc", ElementU.getAttribute(element, "bcc"),
+                "mail.mailType.subject", ElementU.getAttribute(element, "subject"),
+                "mail.mailType.body", getBody(ElementU.getAttribute(element, "body"), date),
+                submitID, App.Actions.SUBMIT_MAIL);
         final ByteArrayInputStream is = new ByteArrayInputStream(HttpArguments.toEntity(query));
-        final String resource = String.format("%s%s%s", params.getContext(), App.Servlet.JDBC, pathInfo);
+        final String resource = String.format("%s%s%s", params.getContext(), App.Servlet.SMTP, pathInfo);
         return new HttpRequest(Http.Method.POST, resource, null, headers, is);
+    }
+
+    private String getBody(final String bodyTemplate, final Date date) {
+        return bodyTemplate.replace("$date", XsdDateU.toXSDZMillis(date));
     }
 }

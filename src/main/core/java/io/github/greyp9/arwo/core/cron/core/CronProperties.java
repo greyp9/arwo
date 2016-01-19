@@ -18,8 +18,12 @@ public final class CronProperties {
         properties.setProperty("jdbc", "io.github.greyp9.arwo.app.jdbc.sh.cron.JDBCRunnable");  // i18n
 
         properties.setProperty("sftp", "io.github.greyp9.arwo.app.ssh.sftp.cron.SFTPRunnable");  // i18n
-        properties.setProperty("cifs", "io.github.greyp9.arwo.app.cifs.fs.runnable.CIFSRunnable");  // i18n
-        properties.setProperty("webdav", "io.github.greyp9.arwo.app.webdav.fs.runnable.WebDAVRunnable");  // i18n
+        properties.setProperty("cifs", "io.github.greyp9.arwo.app.cifs.fs.cron.CIFSRunnable");  // i18n
+        properties.setProperty("webdav", "io.github.greyp9.arwo.app.webdav.fs.cron.WebDAVRunnable");  // i18n
+
+        properties.setProperty("smtp", "io.github.greyp9.arwo.app.mail.smtp.cron.SMTPRunnable");  // i18n
+        properties.setProperty("imap", "io.github.greyp9.arwo.app.mail.imap.cron.IMAPRunnable");  // i18n
+        properties.setProperty("pop3", "io.github.greyp9.arwo.app.mail.pop3.cron.POP3Runnable");  // i18n
         return properties;
     }
 }
