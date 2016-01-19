@@ -11,9 +11,12 @@ import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolder;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolderStyled;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
+import io.github.greyp9.arwo.core.date.Interval;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.locus.Locus;
+import io.github.greyp9.arwo.core.result.io.ResultsPersister;
+import io.github.greyp9.arwo.core.result.op.Results;
 import io.github.greyp9.arwo.core.table.html.TableView;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
 import io.github.greyp9.arwo.core.table.model.Table;
@@ -29,6 +32,7 @@ import org.w3c.dom.Element;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ExecutorService;
 
@@ -86,6 +90,12 @@ public class SFTPFolderView extends SFTPView {
                 getRowSetRawFind(metaData, viewState) :
                 getRowSetRaw(metaData, viewState));
         final RowSet rowSetStyled = new SFTPFolderStyled(request, rowSetRaw).getRowSet();
+        // optionally persist fetched results
+        final Results results = new Results(request.getHttpRequest().getURI(),
+                new Interval(request.getHttpRequest().getDate(), new Date()));
+        results.add(rowSetStyled.getID(), null, rowSetStyled);
+        new ResultsPersister(request.getAppRequest()).write(userState.getUserRoot(), results);
+        // render for response
         final Table table = new Table(rowSetStyled, viewState.getSorts(), viewState.getFilters(),
                 request.getTitlePath(), request.getTitlePath());
         final TableContext tableContext = new TableContext(

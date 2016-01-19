@@ -17,6 +17,10 @@ public class SFTPRequest {
     private final Pather patherMode;
     private final Pather patherServer;
 
+    public final AppRequest getAppRequest() {
+        return appRequest;
+    }
+
     public final ServletHttpRequest getHttpRequest() {
         return appRequest.getHttpRequest();
     }

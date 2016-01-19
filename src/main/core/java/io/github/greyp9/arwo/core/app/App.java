@@ -54,6 +54,10 @@ public final class App {
         public static final String USERS = "/users";
     }
 
+    public static class Header {
+        public static final String PERSIST = "X-Persist";
+    }
+
     public static class Cache {
         public static final String CIFS = "cifs";
         public static final String IMAP = "imap";

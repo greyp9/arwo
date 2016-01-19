@@ -6,12 +6,14 @@ import io.github.greyp9.arwo.app.ssh.sftp.handler.SFTPHandlerGet;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.cron.core.CronParams;
 import io.github.greyp9.arwo.core.cron.core.CronRunnable;
+import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpRequest;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
+import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.naming.AppNaming;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.table.type.RowTyped;
@@ -68,11 +70,13 @@ public class SFTPRunnable extends CronRunnable {
 
     private void putHttpResponse(
             final HttpResponse httpResponse, final String filename, final AppUserState userState) throws IOException {
-        // write out fetched file
-        final File userCronRoot = new File(userState.getUserRoot(), Const.CRON);
-        final File file = getParams().getFile(userCronRoot, filename);
-        final byte[] entity = StreamU.read(httpResponse.getEntity());
-        StreamU.writeMkdirs(file, entity);
+        if (!SystemU.isTrue()) {
+            // write out fetched file
+            final File userCronRoot = new File(userState.getUserRoot(), Const.CRON);
+            final File file = getParams().getFile(userCronRoot, filename);
+            final byte[] entity = StreamU.read(httpResponse.getEntity());
+            StreamU.writeMkdirs(file, entity);
+        }
     }
 
     private ServletHttpRequest getServletHttpRequest(
@@ -84,7 +88,10 @@ public class SFTPRunnable extends CronRunnable {
 
     private HttpRequest getHttpRequest(final String resource) throws IOException {
         final CronParams params = getParams();
-        final NameTypeValues headers = NameTypeValuesU.create(Http.Header.AUTHORIZATION, params.getAuthorization());
+        final String filename = String.format("%s-%s-%s.results", params.getCronTab().getName(),
+                params.getCronJob().getName(), DateX.toFilename(params.getDate()));
+        final NameTypeValues headers = NameTypeValuesU.create(
+                Http.Header.AUTHORIZATION, params.getAuthorization(), App.Header.PERSIST, filename);
         return new HttpRequest(Http.Method.GET, resource, null, headers, null);
     }
 }
