@@ -1,8 +1,8 @@
-package io.github.greyp9.arwo.app.ssh.sftp.cron;
+package io.github.greyp9.arwo.app.mail.imap.cron;
 
 import io.github.greyp9.arwo.app.core.state.AppState;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
-import io.github.greyp9.arwo.app.ssh.sftp.handler.SFTPHandlerGet;
+import io.github.greyp9.arwo.app.mail.imap.handler.IMAPHandlerGet;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.cron.core.CronParams;
@@ -31,10 +31,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @SuppressWarnings("unused")  // reflection used to instantiate
-public class SFTPRunnable extends CronRunnable {
+public class IMAPRunnable extends CronRunnable {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    public SFTPRunnable(final CronParams params) {
+    public IMAPRunnable(final CronParams params) {
         super(params);
     }
 
@@ -47,17 +47,17 @@ public class SFTPRunnable extends CronRunnable {
         // initialize
         final String server = ElementU.getAttribute(getParams().getElement(), "server");
         final String resource = ElementU.getAttribute(getParams().getElement(), "resource");
-        final String pathInfo = PathU.toPath("", App.Mode.VIEW, server + resource);
+        final String pathInfo = PathU.toPath("", server + resource);
         // execute
         try {
             final Context context = AppNaming.lookupSubcontext(getParams().getContext());
             final AppState appState = (AppState) AppNaming.lookupQ(context, App.Naming.APP_STATE);
             final AppUserState userState = appState.getUserState(getParams().getPrincipal(), getParams().getDate());
             final Principal principal = userState.getPrincipal();
-            final String resourceFull = getParams().getContext() + App.Servlet.SFTP + pathInfo;
+            final String resourceFull = getParams().getContext() + App.Servlet.IMAP + pathInfo;
             final HttpRequest httpRequest = getHttpRequest(resourceFull);
             final ServletHttpRequest httpRequest1 = getServletHttpRequest(httpRequest, pathInfo, principal);
-            final SFTPHandlerGet handler = new SFTPHandlerGet(httpRequest1, userState);
+            final IMAPHandlerGet handler = new IMAPHandlerGet(httpRequest1, userState);
             putHttpResponse(handler.doGet(), userState);
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
@@ -80,7 +80,7 @@ public class SFTPRunnable extends CronRunnable {
             final HttpRequest httpRequest, final String pathInfo, final Principal principal) throws IOException {
         final Date date = getParams().getDate();
         final String context = getParams().getContext();
-        return new ServletHttpRequest(httpRequest, date, principal, context, App.Servlet.SFTP, pathInfo);
+        return new ServletHttpRequest(httpRequest, date, principal, context, App.Servlet.IMAP, pathInfo);
     }
 
     private HttpRequest getHttpRequest(final String resource) throws IOException {

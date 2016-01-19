@@ -10,6 +10,7 @@ import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.locus.Locus;
+import io.github.greyp9.arwo.core.result.io.ResultsPersister;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
 import io.github.greyp9.arwo.core.table.state.ViewState;
 import io.github.greyp9.arwo.core.table.state.ViewStates;
@@ -63,6 +64,10 @@ public class IMAPMessageView extends IMAPView {
             message = source.getMessage(request.getFolder(), request.getMessage());
             cache.putFile(path, message);
         }
+        // optionally persist fetched results
+        new ResultsPersister(getRequest().getAppRequest()).write(
+                getUserState().getUserRoot(), StreamU.read(message.getBytes()));
+        // render for response
         return message;
     }
 }

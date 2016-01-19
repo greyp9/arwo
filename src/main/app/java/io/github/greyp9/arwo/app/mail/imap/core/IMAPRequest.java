@@ -17,6 +17,10 @@ public class IMAPRequest {
     private final Pather patherFolder;
     private final Pather patherMessage;
 
+    public final AppRequest getAppRequest() {
+        return request;
+    }
+
     public final ServletHttpRequest getHttpRequest() {
         return request.getHttpRequest();
     }
