@@ -6,7 +6,10 @@ import io.github.greyp9.arwo.app.mail.pop3.data.POP3DataSource;
 import io.github.greyp9.arwo.app.mail.pop3.data.POP3FoldersStyled;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
+import io.github.greyp9.arwo.core.date.Interval;
 import io.github.greyp9.arwo.core.http.HttpResponse;
+import io.github.greyp9.arwo.core.result.io.ResultsPersister;
+import io.github.greyp9.arwo.core.result.op.Results;
 import io.github.greyp9.arwo.core.table.html.TableView;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
 import io.github.greyp9.arwo.core.table.model.Table;
@@ -16,6 +19,7 @@ import io.github.greyp9.arwo.core.table.state.ViewState;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
+import java.util.Date;
 
 public class POP3FoldersView extends POP3View {
 
@@ -33,6 +37,12 @@ public class POP3FoldersView extends POP3View {
 
         final RowSet rowSet = getRowSet(metaData, viewState.isConnected());
         final RowSet rowSetStyled = new POP3FoldersStyled(request, rowSet).getRowSet();
+        // optionally persist fetched results
+        final Results results = new Results(request.getHttpRequest().getURI(),
+                new Interval(request.getHttpRequest().getDate(), new Date()));
+        results.add(rowSetStyled.getID(), null, rowSetStyled);
+        new ResultsPersister(request.getAppRequest()).write(userState.getUserRoot(), results);
+        // render for response
         final Table table = new Table(rowSetStyled, viewState.getSorts(), viewState.getFilters(),
                 request.getTitlePath(), request.getTitlePath());
         final TableContext tableContext = new TableContext(

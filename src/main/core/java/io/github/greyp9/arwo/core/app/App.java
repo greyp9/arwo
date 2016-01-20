@@ -44,6 +44,7 @@ public final class App {
         public static final String IMAP = "/imap";
         public static final String JDBC = "/jdbc";
         public static final String LSH = "/lsh";
+        public static final String POP3 = "/pop3";
         public static final String SFTP = "/sftp";
         public static final String SMTP = "/smtp";
         public static final String SSH = "/ssh";
