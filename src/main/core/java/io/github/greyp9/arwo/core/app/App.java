@@ -57,7 +57,7 @@ public final class App {
     }
 
     public static class Header {
-        public static final String PERSIST = "X-Persist";
+        public static final String RESULT = "X-Result";
     }
 
     public static class Cache {

@@ -21,26 +21,26 @@ public class ResultsPersister {
     }
 
     public final void write(final File folderRoot, final byte[] bytes) throws IOException {
-        final String persist = request.getHttpRequest().getHeader(App.Header.PERSIST);
+        final String persist = request.getHttpRequest().getHeader(App.Header.RESULT);
         if (persist != null) {
             final String servletPath = request.getHttpRequest().getServletPath();
             final FileX fileX = new FileX(request.getHttpRequest().getPathInfo());
             final String filename = Value.join(Http.Token.HYPHEN, persist, fileX.getFilename());
-            final File file = new File(PathU.toDir(folderRoot.getPath(), Const.PERSIST, servletPath, filename));
+            final File file = new File(PathU.toDir(folderRoot.getPath(), Const.RESULT, servletPath, filename));
             StreamU.writeMkdirs(file, bytes);
         }
     }
 
     public final void write(final File folderRoot, final Results results) throws IOException {
-        final String persist = request.getHttpRequest().getHeader(App.Header.PERSIST);
+        final String persist = request.getHttpRequest().getHeader(App.Header.RESULT);
         if (persist != null) {
             final String servletPath = request.getHttpRequest().getServletPath();
-            final File file = new File(PathU.toDir(folderRoot.getPath(), Const.PERSIST, servletPath, persist));
+            final File file = new File(PathU.toDir(folderRoot.getPath(), Const.RESULT, servletPath, persist));
             new ResultsWriter().writeTo(file, results);
         }
     }
 
     private static class Const {
-        private static final String PERSIST = "persist";  // i18n
+        private static final String RESULT = "result";  // i18n
     }
 }
