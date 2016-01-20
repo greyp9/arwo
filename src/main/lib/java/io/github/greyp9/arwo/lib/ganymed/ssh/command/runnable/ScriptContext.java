@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutorService;
 public class ScriptContext {
     private final SSHConnection sshConnection;
     private final ExecutorService executorStream;
-    private final File folder;
+    private final File file;
     private final Locus locus;
     private final Alerts alerts;
     private final String requestPTY;
@@ -24,8 +24,8 @@ public class ScriptContext {
         return executorStream;
     }
 
-    public final File getFolder() {
-        return folder;
+    public final File getFile() {
+        return file;
     }
 
     public final Locus getLocus() {
@@ -50,12 +50,12 @@ public class ScriptContext {
 
     public ScriptContext(final SSHConnection sshConnection, final ExecutorService executorStream,
                          final String requestPTY, final long pollInterval,
-                         final File folder, final Locus locus, final Alerts alerts) {
+                         final File file, final Locus locus, final Alerts alerts) {
         this.sshConnection = sshConnection;
         this.executorStream = executorStream;
         this.requestPTY = requestPTY;
         this.pollInterval = pollInterval;
-        this.folder = folder;
+        this.file = file;
         this.locus = locus;
         this.alerts = alerts;
     }

@@ -10,7 +10,7 @@ import java.util.concurrent.ExecutorService;
 public class ScriptContext {
     private final InteropConnection connection;
     private final ExecutorService executorStream;
-    private final File folder;
+    private final File file;
     private final Locus locus;
     private final Alerts alerts;
 
@@ -24,8 +24,8 @@ public class ScriptContext {
         return executorStream;
     }
 
-    public final File getFolder() {
-        return folder;
+    public final File getFile() {
+        return file;
     }
 
     public final Locus getLocus() {
@@ -41,10 +41,10 @@ public class ScriptContext {
     }
 
     public ScriptContext(final InteropConnection connection, final ExecutorService executorStream,
-                         final File folder, final Locus locus, final Alerts alerts, final long pollInterval) {
+                         final File file, final Locus locus, final Alerts alerts, final long pollInterval) {
         this.connection = connection;
         this.executorStream = executorStream;
-        this.folder = folder;
+        this.file = file;
         this.locus = locus;
         this.alerts = alerts;
         this.pollInterval = pollInterval;

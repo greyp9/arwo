@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.cron.core.CronParams;
 import io.github.greyp9.arwo.core.cron.core.CronRunnable;
+import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpArguments;
@@ -31,7 +32,7 @@ import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-@SuppressWarnings("unused")  // reflection used to instantiate
+@SuppressWarnings({ "unused", "PMD.ExcessiveImports" })  // reflection used to instantiate
 public class SHRunnable extends CronRunnable {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
@@ -86,10 +87,12 @@ public class SHRunnable extends CronRunnable {
     private HttpRequest getHttpRequest(
             final String submitID, final String pathInfo, final String command) throws IOException {
         final CronParams params = getParams();
+        final String filename = String.format("%s-%s-%s.results", params.getCronTab().getName(),
+                params.getCronJob().getName(), DateX.toFilename(params.getDate()));
         final NameTypeValues headers = NameTypeValuesU.create(
                 Http.Header.AUTHORIZATION, params.getAuthorization(),
                 Http.Header.CONTENT_TYPE, Http.Mime.FORM_URL_ENCODED,
-                "X-Out", PathU.toDir("", "cron", params.getCronTab().getName(), params.getCronJob().getName()));
+                App.Header.RESULT, filename);
         final NameTypeValues query = NameTypeValuesU.create(
                 "command.commandType.command", command, submitID, App.Actions.SUBMIT_COMMAND);
         final ByteArrayInputStream is = new ByteArrayInputStream(HttpArguments.toEntity(query));

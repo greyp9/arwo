@@ -27,6 +27,7 @@ import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.locus.Locus;
+import io.github.greyp9.arwo.core.result.io.ResultsPersister;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
 import io.github.greyp9.arwo.core.table.state.ViewState;
 import io.github.greyp9.arwo.core.text.filter.TextFilters;
@@ -148,6 +149,9 @@ public class WebDAVFileView extends WebDAVView {
             headers.add(new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_PLAIN_UTF8));
             bytes = doTextFilter(bytes, charset);
         }
+        // optionally persist fetched results
+        new ResultsPersister(getRequest().getAppRequest()).write(getUserState().getUserRoot(), bytes);
+        // render for response
         return new HttpResponse(HttpURLConnection.HTTP_OK, headers, new ByteArrayInputStream(bytes));
     }
 

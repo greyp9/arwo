@@ -88,7 +88,8 @@ public class IMAPRunnable extends CronRunnable {
         final String filename = String.format("%s-%s-%s.results", params.getCronTab().getName(),
                 params.getCronJob().getName(), DateX.toFilename(params.getDate()));
         final NameTypeValues headers = NameTypeValuesU.create(
-                Http.Header.AUTHORIZATION, params.getAuthorization(), App.Header.PERSIST, filename);
+                Http.Header.AUTHORIZATION, params.getAuthorization(),
+                App.Header.RESULT, filename);
         return new HttpRequest(Http.Method.GET, resource, null, headers, null);
     }
 }

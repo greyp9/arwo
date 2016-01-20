@@ -6,9 +6,11 @@ import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.alert.model.ExceptionModel;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
+import io.github.greyp9.arwo.core.result.io.ResultsPersister;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xpath.XPather;
+import io.github.greyp9.arwo.lib.mail.core.message.MessageU;
 import io.github.greyp9.arwo.lib.mail.smtp.connection.SMTPConnection;
 
 import javax.mail.Message;
@@ -57,6 +59,9 @@ public class SMTPDataSource {
             transport.close();
             connection.update(date);
             alerts.add(new Alert(bundle.format("SMTPDataSource.message.sent", request.getServer(), subject)));
+            // optionally persist fetched results
+            final byte[] bytes = UTF8Codec.toBytes(MessageU.toString(mimeMessage));
+            new ResultsPersister(request.getAppRequest()).write(request.getUserState().getUserRoot(), bytes);
         } catch (MessagingException e) {
             new ExceptionModel(alerts).service(new IOException(e), Alert.Severity.ERR);
         }

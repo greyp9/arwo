@@ -8,7 +8,7 @@ import java.io.File;
 public class QueryContext {
     private final JDBCConnection connection;
     private final ResourceCache cacheBlob;
-    private final File folder;
+    private final File file;
 
     public final JDBCConnection getConnection() {
         return connection;
@@ -18,13 +18,13 @@ public class QueryContext {
         return cacheBlob;
     }
 
-    public final File getFolder() {
-        return folder;
+    public final File getFile() {
+        return file;
     }
 
-    public QueryContext(final JDBCConnection connection, final ResourceCache cacheBlob, final File folder) {
+    public QueryContext(final JDBCConnection connection, final ResourceCache cacheBlob, final File file) {
         this.connection = connection;
         this.cacheBlob = cacheBlob;
-        this.folder = folder;
+        this.file = file;
     }
 }

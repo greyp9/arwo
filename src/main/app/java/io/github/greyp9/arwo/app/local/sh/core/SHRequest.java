@@ -14,6 +14,10 @@ public class SHRequest {
     private final AppUserState userState;
     private final Pather patherScriptID;
 
+    public final AppRequest getAppRequest() {
+        return request;
+    }
+
     public final ServletHttpRequest getHttpRequest() {
         return request.getHttpRequest();
     }

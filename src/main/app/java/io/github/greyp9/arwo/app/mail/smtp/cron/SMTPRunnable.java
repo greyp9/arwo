@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.cron.core.CronParams;
 import io.github.greyp9.arwo.core.cron.core.CronRunnable;
+import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.date.XsdDateU;
 import io.github.greyp9.arwo.core.http.Http;
@@ -88,10 +89,12 @@ public class SMTPRunnable extends CronRunnable {
         final CronParams params = getParams();
         final Date date = params.getDate();
         final Element element = params.getElement();
+        final String filename = String.format("%s-%s-%s.results", params.getCronTab().getName(),
+                params.getCronJob().getName(), DateX.toFilename(params.getDate()));
         final NameTypeValues headers = NameTypeValuesU.create(
                 Http.Header.AUTHORIZATION, params.getAuthorization(),
                 Http.Header.CONTENT_TYPE, Http.Mime.FORM_URL_ENCODED,
-                "X-Out", PathU.toDir("", "cron", params.getCronTab().getName(), params.getCronJob().getName()));
+                App.Header.RESULT, filename);
         final NameTypeValues query = NameTypeValuesU.create(
                 "mail.mailType.to", ElementU.getAttribute(element, "to"),
                 "mail.mailType.cc", ElementU.getAttribute(element, "cc"),

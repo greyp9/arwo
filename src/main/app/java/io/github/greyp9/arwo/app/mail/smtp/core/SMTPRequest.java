@@ -16,6 +16,10 @@ public class SMTPRequest {
     private final AppUserState userState;
     private final Pather patherServer;
 
+    public final AppRequest getAppRequest() {
+        return request;
+    }
+
     public final ServletHttpRequest getHttpRequest() {
         return request.getHttpRequest();
     }

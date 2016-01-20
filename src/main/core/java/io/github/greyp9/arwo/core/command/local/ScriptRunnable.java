@@ -45,7 +45,7 @@ public class ScriptRunnable implements Runnable {
             script.finish();
         }
         try {
-            new ScriptWriter(script, context.getLocus()).writeTo(script.getFile(context.getFolder()));
+            new ScriptWriter(script, context.getLocus()).writeTo(context.getFile());
         } catch (IOException e) {
             context.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
         } finally {

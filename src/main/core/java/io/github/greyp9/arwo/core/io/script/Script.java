@@ -1,6 +1,5 @@
 package io.github.greyp9.arwo.core.io.script;
 
-import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.io.command.Command;
 import io.github.greyp9.arwo.core.io.command.CommandDone;
 import io.github.greyp9.arwo.core.io.command.CommandToDo;
@@ -9,7 +8,6 @@ import io.github.greyp9.arwo.core.text.line.LineU;
 import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.util.PropertiesX;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -55,11 +53,6 @@ public class Script {
         for (final String stdin : stdinLines) {
             commandsToDo.add(new CommandToDo(stdin));
         }
-    }
-
-    public final File getFile(final File folder) {
-        final String filename = String.format("%s.txt", DateX.toFilename(new Date(date)));
-        return ((folder == null) ? null : new File(folder, filename));
     }
 
     public final synchronized boolean isInterrupted() {

@@ -5,8 +5,6 @@ import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.alert.model.ExceptionModel;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
-import io.github.greyp9.arwo.core.http.Http;
-import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.lang.NumberU;
 import io.github.greyp9.arwo.core.table.insert.InsertRow;
 import io.github.greyp9.arwo.core.table.metadata.ColumnMetaData;
@@ -14,6 +12,7 @@ import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.sort.Sort;
 import io.github.greyp9.arwo.core.table.sort.Sorts;
+import io.github.greyp9.arwo.lib.mail.core.message.MessageU;
 import io.github.greyp9.arwo.lib.mail.imap.connection.IMAPConnection;
 
 import javax.mail.Address;
@@ -21,12 +20,10 @@ import javax.mail.Folder;
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Store;
-import javax.mail.internet.MimeMessage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.sql.Types;
 import java.util.Date;
-import java.util.Enumeration;
 
 public class IMAPDataSource {
     private final IMAPConnection connection;
@@ -124,25 +121,15 @@ public class IMAPDataSource {
     }
 
     public final MetaFile getMessage(final String folderName, final String messageNumber) {
-        final StringBuilder buffer = new StringBuilder();
+        MetaFile metaFile = null;
         final Date date = new Date();
         try {
             final Store store = connection.getStore();
             final Folder folder = store.getFolder(folderName);
             folder.open(Folder.READ_ONLY);
             final Message message = folder.getMessage(NumberU.toInt(messageNumber, 0));
-            if (message instanceof MimeMessage) {
-                final MimeMessage mimeMessage = (MimeMessage) message;
-                final Enumeration<?> headerLines = mimeMessage.getAllHeaderLines();
-                while (headerLines.hasMoreElements()) {
-                    final String header = (String) headerLines.nextElement();
-                    buffer.append(header);
-                    buffer.append(Http.Token.CRLF);
-                }
-                buffer.append(Http.Token.CRLF);
-                final byte[] body = StreamU.read(mimeMessage.getRawInputStream());
-                buffer.append(UTF8Codec.toString(body));
-            }
+            final byte[] bytes = UTF8Codec.toBytes(MessageU.toString(message));
+            metaFile = new MetaFile(null, new ByteArrayInputStream(bytes));
             folder.close(false);
         } catch (MessagingException e) {
             new ExceptionModel(alerts).service(new IOException(e), Alert.Severity.ERR);
@@ -150,7 +137,7 @@ public class IMAPDataSource {
             new ExceptionModel(alerts).service(new IOException(e), Alert.Severity.ERR);
         }
         connection.update(date);
-        return new MetaFile(null, new ByteArrayInputStream(UTF8Codec.toBytes(buffer.toString())));
+        return metaFile;
     }
 
     private static class Const {

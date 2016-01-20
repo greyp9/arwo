@@ -20,6 +20,10 @@ public class CIFSRequest {
     private final Pather patherServer;
     private final String path;
 
+    public final AppRequest getAppRequest() {
+        return appRequest;
+    }
+
     public final ServletHttpRequest getHttpRequest() {
         return appRequest.getHttpRequest();
     }

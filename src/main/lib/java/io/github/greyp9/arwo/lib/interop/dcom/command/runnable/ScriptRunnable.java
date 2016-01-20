@@ -52,7 +52,7 @@ public class ScriptRunnable implements Runnable {
             script.finish();
         }
         try {
-            new ScriptWriter(script, locus).writeTo(script.getFile(context.getFolder()));
+            new ScriptWriter(script, locus).writeTo(context.getFile());
         } catch (IOException e) {
             alerts.add(new Alert(Alert.Severity.ERR, e.getMessage()));
         } finally {

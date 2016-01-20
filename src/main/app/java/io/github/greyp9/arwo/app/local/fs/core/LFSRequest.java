@@ -16,6 +16,10 @@ public class LFSRequest {
     private final AppUserState userState;
     private final Pather patherMode;
 
+    public final AppRequest getAppRequest() {
+        return appRequest;
+    }
+
     public final ServletHttpRequest getHttpRequest() {
         return appRequest.getHttpRequest();
     }

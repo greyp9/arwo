@@ -14,8 +14,8 @@ import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.script.Script;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.resource.PathU;
+import io.github.greyp9.arwo.core.result.io.ResultsPersister;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
-import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.vm.exec.UserExecutor;
 import io.github.greyp9.arwo.core.xed.action.XedActionCommand;
 import io.github.greyp9.arwo.lib.ganymed.ssh.command.runnable.ScriptContext;
@@ -66,11 +66,9 @@ public class SHQueueCommand {
         final UserExecutor userExecutor = userState.getUserExecutor();
         final ExecutorService executorStream = userExecutor.getExecutorStream();
         final long pollInterval = DurationU.toMillis("PT0.010S");
-        final File folder = new File(userState.getUserRoot(), PathU.toDir("",
-                Value.defaultOnEmpty(httpRequest.getHeader("X-Out"), "interactive"),
-                httpRequest.getServletPath(), request.getServer()));
+        final File fileResult = new ResultsPersister(request.getAppRequest()).getFile(userState.getUserRoot());
         final ScriptContext context = new ScriptContext(
-                sshConnection, executorStream, "vt100", pollInterval, folder, locus, alerts);
+                sshConnection, executorStream, "vt100", pollInterval, fileResult, locus, alerts);
         final ScriptRunnable runnable = new ScriptRunnable(script, context);
         userExecutor.getRunnables().add(runnable);
         userExecutor.getExecutorCommand().execute(runnable);

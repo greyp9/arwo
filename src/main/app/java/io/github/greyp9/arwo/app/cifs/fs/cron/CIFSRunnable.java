@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.cron.core.CronParams;
 import io.github.greyp9.arwo.core.cron.core.CronRunnable;
+import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpRequest;
@@ -84,7 +85,11 @@ public class CIFSRunnable extends CronRunnable {
 
     private HttpRequest getHttpRequest(final String resource) throws IOException {
         final CronParams params = getParams();
-        final NameTypeValues headers = NameTypeValuesU.create(Http.Header.AUTHORIZATION, params.getAuthorization());
+        final String filename = String.format("%s-%s-%s.results", params.getCronTab().getName(),
+                params.getCronJob().getName(), DateX.toFilename(params.getDate()));
+        final NameTypeValues headers = NameTypeValuesU.create(
+                Http.Header.AUTHORIZATION, params.getAuthorization(),
+                App.Header.RESULT, filename);
         return new HttpRequest(Http.Method.GET, resource, null, headers, null);
     }
 }

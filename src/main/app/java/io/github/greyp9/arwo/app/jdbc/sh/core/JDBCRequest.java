@@ -17,6 +17,10 @@ public class JDBCRequest {
     private final Pather patherServer;
     private final Pather patherQueryID;
 
+    public final AppRequest getAppRequest() {
+        return request;
+    }
+
     public final ServletHttpRequest getHttpRequest() {
         return request.getHttpRequest();
     }

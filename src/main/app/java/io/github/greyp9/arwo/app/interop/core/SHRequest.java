@@ -17,6 +17,10 @@ public class SHRequest {
     private final Pather patherServer;
     private final Pather patherScriptID;
 
+    public final AppRequest getAppRequest() {
+        return request;
+    }
+
     public final ServletHttpRequest getHttpRequest() {
         return request.getHttpRequest();
     }
