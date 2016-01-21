@@ -1,4 +1,4 @@
-package io.github.greyp9.arwo.app.action;
+package io.github.greyp9.arwo.core.actiond;
 
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.bundle.Bundle;
