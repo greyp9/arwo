@@ -92,7 +92,7 @@ public class SMTPHandlerPost {
         if (App.Action.MAIL.equals(action)) {
             location = new SMTPQueueMail(request).doAction(location, httpArguments);
         } else {
-            request.getAlerts().add(new Alert(Alert.Severity.WARN, message, token.toString(), null));
+            request.getAlerts().add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }
         return location;
     }

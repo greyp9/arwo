@@ -1,6 +1,6 @@
 package io.github.greyp9.arwo.app.core.action;
 
-import io.github.greyp9.arwo.app.action.DeferredAction;
+import io.github.greyp9.arwo.core.actiond.DeferredAction;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.alert.action.AlertActions;
@@ -34,7 +34,7 @@ public class ActionCacheClear extends DeferredAction {
                 }
                 alerts.add(new Alert(Alert.Severity.INFO, bundle.format("AppUserState.cache.clear", size)));
             } catch (IOException e) {
-                alerts.add(new Alert(Alert.Severity.ERR, e.getMessage(), e.getClass().getName(), null));
+                alerts.add(new Alert(Alert.Severity.ERR, e.getMessage(), e.getClass().getName()));
             }
         }
     }

@@ -54,8 +54,9 @@ public abstract class HtmlView {
         // cursor content
         final String context = addContentTo(body);
         // touch ups
-        new AlertsView(request.getAlerts(), userState.getLocus(), request.getBundle(), userState.getSubmitID()).
-                addContentTo(body);
+        final boolean displayAlerts = (httpRequest.getHttpRequest().getHeader(App.Header.RESULT) == null);
+        new AlertsView(displayAlerts, request.getAlerts(), userState.getLocus(), request.getBundle(),
+                userState.getSubmitID()).addContentTo(body);
         new StatusBarView(httpRequest, userState.getLocus()).addContentTo(body);
         final String sessionLabel = request.getSession().getEntry().getTitle();
         final AppTitle title = (sessionLabel == null) ?

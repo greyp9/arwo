@@ -6,15 +6,16 @@ import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
 import io.github.greyp9.arwo.app.ssh.sh.core.SHRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.connect.ConnectionCache;
 import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.script.Script;
-import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.resource.PathU;
-import io.github.greyp9.arwo.core.result.io.ResultsPersister;
+import io.github.greyp9.arwo.core.result.view.ResultsContext;
+import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.vm.exec.UserExecutor;
 import io.github.greyp9.arwo.core.xed.action.XedActionCommand;
@@ -22,7 +23,6 @@ import io.github.greyp9.arwo.lib.ganymed.ssh.command.runnable.ScriptContext;
 import io.github.greyp9.arwo.lib.ganymed.ssh.command.runnable.ScriptRunnable;
 import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 
@@ -54,8 +54,6 @@ public class SHQueueCommand {
     private String doAction(final NameTypeValues httpArguments, final SSHConnection sshConnection) throws IOException {
         final ServletHttpRequest httpRequest = request.getHttpRequest();
         final AppUserState userState = request.getUserState();
-        final Locus locus = userState.getLocus();
-        final Alerts alerts = request.getAlerts();
         final String server = request.getServer();
         // queue command text for execution
         final String command = new XedActionCommand(request.getLocale()).getCommand(httpArguments);
@@ -66,9 +64,13 @@ public class SHQueueCommand {
         final UserExecutor userExecutor = userState.getUserExecutor();
         final ExecutorService executorStream = userExecutor.getExecutorStream();
         final long pollInterval = DurationU.toMillis("PT0.010S");
-        final File fileResult = new ResultsPersister(request.getAppRequest()).getFile(userState.getUserRoot());
+        // set call to persist results
+        final String filename = String.format("%s.results", DateX.toFilename(httpRequest.getDate()));
+        httpRequest.getHttpRequest().getHeaders().add(new NameTypeValue(App.Header.RESULT, filename));
+        // schedule runnable
+        final ResultsContext resultsContext = userState.getResultsContext(httpRequest);
         final ScriptContext context = new ScriptContext(
-                sshConnection, executorStream, "vt100", pollInterval, fileResult, locus, alerts);
+                executorStream, resultsContext, sshConnection, "vt100", pollInterval);
         final ScriptRunnable runnable = new ScriptRunnable(script, context);
         userExecutor.getRunnables().add(runnable);
         userExecutor.getExecutorCommand().execute(runnable);

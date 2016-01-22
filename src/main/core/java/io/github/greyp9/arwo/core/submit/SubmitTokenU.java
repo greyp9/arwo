@@ -10,6 +10,12 @@ public final class SubmitTokenU {
     private SubmitTokenU() {
     }
 
+    @SuppressWarnings("PMD.UseObjectForClearerAPI")
+    public static SubmitToken create(
+            final String subject, final String action, final String object, final String object2) {
+        return new SubmitToken(subject, action, object, object2);
+    }
+
     public static SubmitToken fromString(final String tokenString) {
         SubmitToken token = null;
         final Matcher matcher = Pattern.compile(Const.REGEX).matcher(tokenString);

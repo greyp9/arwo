@@ -30,7 +30,7 @@ public class SessionValidate {
         } else {
             final String message = bundle.getString("document.validate.errors");
             final String detail = Value.joinList(Http.Token.CRLF, new ArrayList<Object>(messages));
-            alerts.add(new Alert(Alert.Severity.WARN, message, detail, null));
+            alerts.add(new Alert(Alert.Severity.WARN, message, detail));
         }
     }
 }

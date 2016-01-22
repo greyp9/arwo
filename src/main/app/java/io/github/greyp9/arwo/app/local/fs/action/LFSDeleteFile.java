@@ -1,8 +1,8 @@
 package io.github.greyp9.arwo.app.local.fs.action;
 
-import io.github.greyp9.arwo.app.action.DeferredAction;
 import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
 import io.github.greyp9.arwo.app.local.fs.data.LFSDataSource;
+import io.github.greyp9.arwo.core.actiond.DeferredAction;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.alert.action.AlertActions;
@@ -35,7 +35,7 @@ public class LFSDeleteFile extends DeferredAction {
                 final String message = bundle.format("WebDAVFileView.file.delete", request.getPath());
                 alerts.add(new Alert(Alert.Severity.INFO, message));
             } catch (IOException e) {
-                alerts.add(new Alert(Alert.Severity.ERR, e.getMessage(), e.getClass().getName(), null));
+                alerts.add(new Alert(Alert.Severity.ERR, e.getMessage(), e.getClass().getName()));
             }
         }
     }

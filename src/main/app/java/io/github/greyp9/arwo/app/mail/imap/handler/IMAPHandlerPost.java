@@ -87,7 +87,7 @@ public class IMAPHandlerPost {
             final SubmitToken token, final NameTypeValues httpArguments, final String locationIn) throws IOException {
         httpArguments.getClass();
         final String message = request.getBundle().getString("alert.action.not.implemented");
-        request.getAlerts().add(new Alert(Alert.Severity.WARN, message, token.toString(), null));
+        request.getAlerts().add(new Alert(Alert.Severity.WARN, message, token.toString()));
         return locationIn;
     }
 }

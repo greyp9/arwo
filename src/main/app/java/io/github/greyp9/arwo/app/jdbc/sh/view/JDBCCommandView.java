@@ -78,8 +78,7 @@ public class JDBCCommandView extends JDBCView {
             final History history = jdbc.getHistory();
             new JDBCHistoryView("jdbcHistoryType", history, bundle, httpRequest, userState).addContentTo(html);
         } else {
-            final ResultsContext context = new ResultsContext(
-                    userState.getViewStates(), userState.getLocus(), request.getBundle(), userState.getSubmitID());
+            final ResultsContext context = userState.getResultsContext(httpRequest);
             new ResultsView(query.getResults(), context).addContentTo(html);
         }
         return null;

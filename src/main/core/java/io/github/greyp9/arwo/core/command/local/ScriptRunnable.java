@@ -1,6 +1,9 @@
 package io.github.greyp9.arwo.core.command.local;
 
 import io.github.greyp9.arwo.core.alert.Alert;
+import io.github.greyp9.arwo.core.alert.Alerts;
+import io.github.greyp9.arwo.core.alert.write.AlertWriter;
+import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.file.FileU;
 import io.github.greyp9.arwo.core.io.buffer.ByteBuffer;
@@ -11,6 +14,7 @@ import io.github.greyp9.arwo.core.io.runnable.OutputStreamRunnable;
 import io.github.greyp9.arwo.core.io.script.Script;
 import io.github.greyp9.arwo.core.io.script.write.ScriptWriter;
 import io.github.greyp9.arwo.core.lang.StringU;
+import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.vm.mutex.MutexU;
 import io.github.greyp9.arwo.core.vm.process.ProcessU;
 import io.github.greyp9.arwo.core.vm.thread.ThreadU;
@@ -35,19 +39,25 @@ public class ScriptRunnable implements Runnable {
 
     @Override
     public final void run() {
+        final Locus locus = context.getLocus();
+        final Bundle bundle = context.getBundle();
+        final Alerts alerts = context.getAlerts();
+        final File file = context.getFile();
+        final String href = context.getHref();
         try {
             logger.entering(getClass().getName(), Runnable.class.getName());
             script.start();
             runInner();
         } catch (IOException e) {
-            Logger.getLogger(getClass().getName()).severe(e.getMessage());
+            alerts.add(new Alert(Alert.Severity.ERR, e.getMessage(), e.getClass().getSimpleName()));
         } finally {
             script.finish();
         }
         try {
-            new ScriptWriter(script, context.getLocus()).writeTo(context.getFile());
+            new ScriptWriter(script, locus).writeTo(file);
+            new AlertWriter(bundle, alerts).write("command.finished", "results.view", href);
         } catch (IOException e) {
-            context.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
+            alerts.add(new Alert(Alert.Severity.ERR, e.getMessage()));
         } finally {
             logger.exiting(getClass().getName(), Runnable.class.getName());
         }

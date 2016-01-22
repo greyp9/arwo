@@ -1,6 +1,10 @@
 package io.github.greyp9.arwo.core.jdbc.runnable;
 
+import io.github.greyp9.arwo.core.alert.Alert;
+import io.github.greyp9.arwo.core.alert.Alerts;
+import io.github.greyp9.arwo.core.alert.write.AlertWriter;
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.jdbc.connection.JDBCConnection;
 import io.github.greyp9.arwo.core.jdbc.op.JDBCQuery;
@@ -8,10 +12,10 @@ import io.github.greyp9.arwo.core.jdbc.query.Query;
 import io.github.greyp9.arwo.core.result.op.Results;
 import io.github.greyp9.arwo.core.result.xml.ResultsWriter;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Date;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @SuppressWarnings("PMD.DoNotUseThreads")
@@ -27,6 +31,10 @@ public class QueryRunnable implements Runnable {
 
     @Override
     public final void run() {
+        final Bundle bundle = context.getBundle();
+        final Alerts alerts = context.getAlerts();
+        final File file = context.getFile();
+        final String href = context.getHref();
         try {
             logger.entering(getClass().getName(), Runnable.class.getName());
             query.start();
@@ -42,9 +50,10 @@ public class QueryRunnable implements Runnable {
             logger.exiting(getClass().getName(), Runnable.class.getName());
         }
         try {
-            new ResultsWriter().writeTo(context.getFile(), query.getResults());
+            new ResultsWriter().writeTo(file, query.getResults());
+            new AlertWriter(bundle, alerts).write("command.finished", "results.view", href);
         } catch (IOException e) {
-            logger.log(Level.SEVERE, e.getMessage(), e);
+            alerts.add(new Alert(Alert.Severity.ERR, e.getMessage()));
         } finally {
             logger.exiting(getClass().getName(), Runnable.class.getName());
         }

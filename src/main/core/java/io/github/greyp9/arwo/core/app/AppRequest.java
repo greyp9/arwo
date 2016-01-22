@@ -40,8 +40,4 @@ public class AppRequest {
         this.bundle = bundle;
         this.alerts = alerts;
     }
-
-    public static AppRequest create(final ServletHttpRequest httpRequest) {
-        return new AppRequest(httpRequest, null, null, null, null);
-    }
 }

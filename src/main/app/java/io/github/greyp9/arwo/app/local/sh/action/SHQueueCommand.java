@@ -2,7 +2,7 @@ package io.github.greyp9.arwo.app.local.sh.action;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.local.sh.core.SHRequest;
-import io.github.greyp9.arwo.core.alert.Alerts;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.command.local.ScriptContext;
 import io.github.greyp9.arwo.core.command.local.ScriptRunnable;
 import io.github.greyp9.arwo.core.date.DateX;
@@ -11,9 +11,9 @@ import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.script.Script;
 import io.github.greyp9.arwo.core.lang.SystemU;
-import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.resource.PathU;
-import io.github.greyp9.arwo.core.result.io.ResultsPersister;
+import io.github.greyp9.arwo.core.result.view.ResultsContext;
+import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.vm.exec.UserExecutor;
 import io.github.greyp9.arwo.core.xed.action.XedActionCommand;
@@ -32,8 +32,6 @@ public class SHQueueCommand {
     public final String doAction(final NameTypeValues httpArguments) throws IOException {
         final ServletHttpRequest httpRequest = request.getHttpRequest();
         final AppUserState userState = request.getUserState();
-        final Locus locus = userState.getLocus();
-        final Alerts alerts = request.getAlerts();
         // queue command text for execution
         final String command = new XedActionCommand(request.getLocale()).getCommand(httpArguments);
         final String host = request.getHttpRequest().getHeader(Http.Header.HOST);
@@ -44,10 +42,13 @@ public class SHQueueCommand {
         final UserExecutor userExecutor = userState.getUserExecutor();
         final ExecutorService executorStream = userExecutor.getExecutorStream();
         final long pollInterval = DurationU.toMillis("PT0.010S");
-        final File userHome = new File(SystemU.userHome());
-        final File fileResult = new ResultsPersister(request.getAppRequest()).getFile(userState.getUserRoot());
+        // set call to persist results
+        final String filename = String.format("%s.results", DateX.toFilename(httpRequest.getDate()));
+        httpRequest.getHttpRequest().getHeaders().add(new NameTypeValue(App.Header.RESULT, filename));
+        // schedule runnable
+        final ResultsContext resultsContext = userState.getResultsContext(httpRequest);
         final ScriptContext context = new ScriptContext(
-                executorStream, pollInterval, userHome, fileResult, locus, alerts);
+                executorStream, resultsContext, pollInterval, new File(SystemU.userHome()));
         final ScriptRunnable runnable = new ScriptRunnable(script, context);
         userExecutor.getRunnables().add(runnable);
         userExecutor.getExecutorCommand().execute(runnable);

@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.app.jdbc.connection.JDBCConnectionResource;
 import io.github.greyp9.arwo.app.jdbc.sh.core.JDBCRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.connect.ConnectionCache;
@@ -16,12 +17,12 @@ import io.github.greyp9.arwo.core.jdbc.query.Query;
 import io.github.greyp9.arwo.core.jdbc.runnable.QueryContext;
 import io.github.greyp9.arwo.core.jdbc.runnable.QueryRunnable;
 import io.github.greyp9.arwo.core.resource.PathU;
-import io.github.greyp9.arwo.core.result.io.ResultsPersister;
+import io.github.greyp9.arwo.core.result.view.ResultsContext;
+import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.vm.exec.UserExecutor;
 import io.github.greyp9.arwo.core.xed.action.XedActionSQL;
 
-import java.io.File;
 import java.io.IOException;
 
 public class SHQueueCommand {
@@ -61,8 +62,12 @@ public class SHQueueCommand {
         // runnable to execute commands
         final UserExecutor userExecutor = userState.getUserExecutor();
         final ResourceCache cacheBlob = userState.getCacheBlob();
-        final File fileResult = new ResultsPersister(request.getAppRequest()).getFile(userState.getUserRoot());
-        final QueryContext context = new QueryContext(connection, cacheBlob, fileResult);
+        // set call to persist results
+        final String filename = String.format("%s.results", DateX.toFilename(httpRequest.getDate()));
+        httpRequest.getHttpRequest().getHeaders().add(new NameTypeValue(App.Header.RESULT, filename));
+        // calculate file to which results will be stored, link for "complete" message
+        final ResultsContext resultsContext = userState.getResultsContext(httpRequest);
+        final QueryContext context = new QueryContext(connection, cacheBlob, resultsContext);
         final QueryRunnable runnable = new QueryRunnable(query, context);
         userExecutor.getRunnables().add(runnable);
         userExecutor.getExecutorCommand().execute(runnable);

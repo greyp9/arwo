@@ -130,7 +130,7 @@ public class WebDAVHandlerPost {
         } else if (App.Action.SELECT_FAV.equals(action)) {
             location = new WebDAVSelectFavorite(request).doAction(token);
         } else {
-            alerts.add(new Alert(Alert.Severity.WARN, message, token.toString(), null));
+            alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }
         return location;
     }

@@ -1,52 +1,57 @@
 package io.github.greyp9.arwo.lib.interop.dcom.command.runnable;
 
 import io.github.greyp9.arwo.core.alert.Alerts;
+import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.locus.Locus;
+import io.github.greyp9.arwo.core.result.view.ResultsContext;
 import io.github.greyp9.arwo.lib.interop.dcom.connection.InteropConnection;
 
 import java.io.File;
 import java.util.concurrent.ExecutorService;
 
 public class ScriptContext {
-    private final InteropConnection connection;
     private final ExecutorService executorStream;
-    private final File file;
-    private final Locus locus;
-    private final Alerts alerts;
-
+    private final ResultsContext resultsContext;
+    private final InteropConnection connection;
     private final long pollInterval;
-
-    public final InteropConnection getConnection() {
-        return connection;
-    }
 
     public final ExecutorService getExecutorStream() {
         return executorStream;
     }
 
-    public final File getFile() {
-        return file;
+    public final Locus getLocus() {
+        return resultsContext.getLocus();
     }
 
-    public final Locus getLocus() {
-        return locus;
+    public final Bundle getBundle() {
+        return resultsContext.getBundle();
     }
 
     public final Alerts getAlerts() {
-        return alerts;
+        return resultsContext.getAlerts();
+    }
+
+    public final File getFile() {
+        return resultsContext.getMetaLink().getFile();
+    }
+
+    public final String getHref() {
+        return resultsContext.getMetaLink().getHref();
+    }
+
+    public final InteropConnection getConnection() {
+        return connection;
     }
 
     public final long getPollInterval() {
         return pollInterval;
     }
 
-    public ScriptContext(final InteropConnection connection, final ExecutorService executorStream,
-                         final File file, final Locus locus, final Alerts alerts, final long pollInterval) {
-        this.connection = connection;
+    public ScriptContext(final ExecutorService executorStream, final ResultsContext resultsContext,
+                         final InteropConnection connection, final long pollInterval) {
         this.executorStream = executorStream;
-        this.file = file;
-        this.locus = locus;
-        this.alerts = alerts;
+        this.resultsContext = resultsContext;
+        this.connection = connection;
         this.pollInterval = pollInterval;
     }
 }

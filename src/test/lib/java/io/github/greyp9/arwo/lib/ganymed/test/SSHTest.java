@@ -8,6 +8,7 @@ import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.io.command.Command;
 import io.github.greyp9.arwo.core.io.script.Script;
 import io.github.greyp9.arwo.core.lang.SystemU;
+import io.github.greyp9.arwo.core.result.view.ResultsContext;
 import io.github.greyp9.arwo.core.security.realm.AppPrincipal;
 import io.github.greyp9.arwo.core.util.CollectionU;
 import io.github.greyp9.arwo.core.util.PropertiesU;
@@ -123,7 +124,8 @@ public class SSHTest extends TestCase {
     private void checkCommandAdHoc(Connection connection, UserExecutor executor) throws IOException {
         final SSHConnection sshConnection = new SSHConnection(connection);
         final ExecutorService executorStream = executor.getExecutorStream();
-        final Command command = new ScriptX(sshConnection, executorStream).runCommand("ls /");
+        final ResultsContext resultsContext = ResultsContext.createEmpty();
+        final Command command = new ScriptX(sshConnection, executorStream, resultsContext).runCommand("ls /");
         Assert.assertEquals(Integer.valueOf(0), command.getExitValue());
         logger.info(command.getStdout());
     }
@@ -131,8 +133,9 @@ public class SSHTest extends TestCase {
     private void checkCommandExplicit(Connection connection, UserExecutor executor) throws IOException {
         final SSHConnection sshConnection = new SSHConnection(connection);
         final ExecutorService executorStream = executor.getExecutorStream();
+        final ResultsContext resultsContext = ResultsContext.createEmpty();
         final Script script = new Script(null, new Date(), "ls /");
-        final ScriptContext context = new ScriptContext(sshConnection, executorStream);
+        final ScriptContext context = new ScriptContext(executorStream, resultsContext, sshConnection);
         final ScriptRunnable runnable = new ScriptRunnable(script, context);
         runnable.run();
         final Command command = script.getCommands().iterator().next();

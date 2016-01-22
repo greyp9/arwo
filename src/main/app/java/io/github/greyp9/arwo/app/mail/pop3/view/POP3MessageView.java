@@ -65,8 +65,8 @@ public class POP3MessageView extends POP3View {
             cache.putFile(path, message);
         }
         // optionally persist fetched results
-        new ResultsPersister(getRequest().getAppRequest()).write(
-                getUserState().getUserRoot(), StreamU.read(message.getBytes()));
+        new ResultsPersister(request.getUserState().getResultsContext(
+                request.getHttpRequest())).write(StreamU.read(message.getBytes()));
         // render for response
         return message;
     }

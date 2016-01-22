@@ -12,6 +12,7 @@ import io.github.greyp9.arwo.core.result.op.Results;
 import io.github.greyp9.arwo.core.result.type.Result;
 import io.github.greyp9.arwo.core.result.type.rowset.RowSetResult;
 import io.github.greyp9.arwo.core.result.type.text.TextResult;
+import io.github.greyp9.arwo.core.result.view.ResultsContext;
 import io.github.greyp9.arwo.core.security.realm.AppPrincipal;
 import io.github.greyp9.arwo.core.util.CollectionU;
 import io.github.greyp9.arwo.core.util.PropertiesU;
@@ -108,7 +109,8 @@ public class JdbcTest extends TestCase {
         final ExecutorService executor = ExecutorServiceFactory.create(
                 1, Value.join(Html.HYPHEN, getClass().getSimpleName(), principal.getName()));
         final Query query = new Query(null, new Date().getTime(), sql);
-        final QueryContext context = new QueryContext(jdbcConnection, new ResourceCache(""), null);
+        final QueryContext context = new QueryContext(
+                jdbcConnection, new ResourceCache(""), ResultsContext.createEmpty());
         executor.execute(new QueryRunnable(query, context));
         final Results results = query.getResults();
         for (Result result : results.getResults()) {

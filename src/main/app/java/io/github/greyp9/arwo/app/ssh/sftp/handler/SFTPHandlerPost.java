@@ -118,7 +118,7 @@ public class SFTPHandlerPost {
         } else if (App.Action.SELECT_FAV.equals(action)) {
             location = new SFTPSelectFavorite(request).doAction(token);
         } else {
-            alerts.add(new Alert(Alert.Severity.WARN, message, token.toString(), null));
+            alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }
         return location;
     }

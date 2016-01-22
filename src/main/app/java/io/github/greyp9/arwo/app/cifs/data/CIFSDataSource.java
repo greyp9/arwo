@@ -81,7 +81,7 @@ public class CIFSDataSource {
 
     public final void move(final String to, final String from, final boolean overwrite) throws IOException {
         final String message = request.getBundle().format("alert.action.not.implemented", to, from, overwrite);
-        alerts.add(new Alert(Alert.Severity.WARN, message, null));
+        alerts.add(new Alert(Alert.Severity.WARN, message));
     }
 
     public final NameTypeValues properties(final String path) throws IOException {

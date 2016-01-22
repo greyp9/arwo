@@ -65,8 +65,8 @@ public class IMAPMessageView extends IMAPView {
             cache.putFile(path, message);
         }
         // optionally persist fetched results
-        new ResultsPersister(getRequest().getAppRequest()).write(
-                getUserState().getUserRoot(), StreamU.read(message.getBytes()));
+        new ResultsPersister(request.getUserState().getResultsContext(
+                request.getHttpRequest())).write(StreamU.read(message.getBytes()));
         // render for response
         return message;
     }

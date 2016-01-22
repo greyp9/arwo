@@ -91,7 +91,7 @@ public class CIFSFileView extends CIFSView {
             final CIFSDeleteFile action = new CIFSDeleteFile(getRequest());
             userState.getDeferredActions().add(action);
             final String message = bundle.format("WebDAVFileView.file.delete.message", request.getPath());
-            userState.getAlerts().add(new Alert(Alert.Severity.QUESTION, message, null, action.getActions()));
+            userState.getAlerts().add(new Alert(Alert.Severity.QUESTION, message, null, null, action.getActions()));
             httpResponse = HttpResponseU.to302(".");
         } else if (isProperties) {
             httpResponse = null;
@@ -102,7 +102,7 @@ public class CIFSFileView extends CIFSView {
         } else if (isHex) {
             httpResponse = new AppHexView(httpRequest, userState).addContentTo(html, metaFile, bundle);
         } else if (isResults) {
-            httpResponse = new AppResultsView(httpRequest, userState).addContentTo(html, metaFile, bundle);
+            httpResponse = new AppResultsView(httpRequest, userState).addContentTo(html, metaFile);
         } else {
             httpResponse = doGetFile(metaFile, charset, isModeGZ);
         }
@@ -150,7 +150,7 @@ public class CIFSFileView extends CIFSView {
             bytes = doTextFilter(bytes, charset);
         }
         // optionally persist fetched results
-        new ResultsPersister(getRequest().getAppRequest()).write(getUserState().getUserRoot(), bytes);
+        new ResultsPersister(getUserState().getResultsContext(getRequest().getHttpRequest())).write(bytes);
         // render for response
         return new HttpResponse(HttpURLConnection.HTTP_OK, headers, new ByteArrayInputStream(bytes));
     }

@@ -1,6 +1,5 @@
 package io.github.greyp9.arwo.app.core.state;
 
-import io.github.greyp9.arwo.app.action.DeferredActions;
 import io.github.greyp9.arwo.app.core.action.ActionCacheClear;
 import io.github.greyp9.arwo.app.core.subsystem.cifs.SubsystemCIFS;
 import io.github.greyp9.arwo.app.core.subsystem.cron.SubsystemCron;
@@ -10,6 +9,7 @@ import io.github.greyp9.arwo.app.core.subsystem.jdbc.SubsystemJDBC;
 import io.github.greyp9.arwo.app.core.subsystem.local.SubsystemLocal;
 import io.github.greyp9.arwo.app.core.subsystem.mail.SubsystemMail;
 import io.github.greyp9.arwo.app.core.subsystem.ssh.SubsystemSSH;
+import io.github.greyp9.arwo.core.actiond.DeferredActions;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.app.App;
@@ -24,14 +24,17 @@ import io.github.greyp9.arwo.core.connect.ConnectionCache;
 import io.github.greyp9.arwo.core.cron.service.CronService;
 import io.github.greyp9.arwo.core.cron.service.CronServiceRegistrar;
 import io.github.greyp9.arwo.core.date.Interval;
+import io.github.greyp9.arwo.core.file.FileX;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.lang.SystemU;
+import io.github.greyp9.arwo.core.link.MetaLink;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.menu.MenuSystem;
 import io.github.greyp9.arwo.core.page.Page;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.resource.Pather;
+import io.github.greyp9.arwo.core.result.view.ResultsContext;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewStates;
@@ -248,6 +251,25 @@ public class AppUserState {
         return new AppRequest(httpRequest, submitID, getLocus(), getBundle(), alerts);
     }
 
+    public final ResultsContext getResultsContext(final ServletHttpRequest httpRequest) {
+        return new ResultsContext(viewStates, getLocus(), getBundle(), alerts, submitID, getMetaLink(httpRequest));
+    }
+
+    public final MetaLink getMetaLink(final ServletHttpRequest httpRequest) {
+        MetaLink metaLink = new MetaLink(null, null);
+        final String persist = httpRequest.getHttpRequest().getHeader(App.Header.RESULT);
+        if (persist != null) {
+            final String linkRoot = PathU.toPath(httpRequest.getContextPath(), App.Servlet.LFS, App.Mode.VIEW_R);
+            final String servletPath = httpRequest.getServletPath();
+            final String pathInfo = httpRequest.getPathInfo();
+            final String filenameBase = Value.defaultOnEmpty(new FileX(pathInfo).getFilename(), null);
+            final String filename = Value.join(Http.Token.HYPHEN, persist, filenameBase);
+            final String offset = PathU.toPath("", "result", servletPath, filename);
+            metaLink = new MetaLink(userRoot, linkRoot, offset);
+        }
+        return metaLink;
+    }
+
     public final String applyPost(final SubmitToken token, final NameTypeValues httpArguments,
                                   final ServletHttpRequest httpRequest) throws IOException {
         httpArguments.getClass();
@@ -296,7 +318,7 @@ public class AppUserState {
             alerts.remove(object2);
             deferredActions.apply(object, object2, bundle, alerts);
         } else {
-            alerts.add(new Alert(Alert.Severity.WARN, message, token.toString(), null));
+            alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }
         return location;
     }
@@ -354,7 +376,7 @@ public class AppUserState {
         final ActionCacheClear action = new ActionCacheClear(cache, cacheBlob);
         deferredActions.add(action);
         final String message = getBundle().format("AppUserState.cache.clear.message");
-        alerts.add(new Alert(Alert.Severity.QUESTION, message, null, action.getActions()));
+        alerts.add(new Alert(Alert.Severity.QUESTION, message, null, null, action.getActions()));
     }
 
     private void updateHexViewParam(final String object) {

@@ -13,6 +13,7 @@ import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.command.Command;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.resource.PathU;
+import io.github.greyp9.arwo.core.result.view.ResultsContext;
 import io.github.greyp9.arwo.core.security.realm.AppPrincipal;
 import io.github.greyp9.arwo.core.util.CollectionU;
 import io.github.greyp9.arwo.core.util.PropertiesU;
@@ -71,7 +72,8 @@ public class SFTPTest extends TestCase {
         final AppPrincipal principal = new AppPrincipal("root", CollectionU.toCollection("*"));
         final UserExecutor executor = new UserExecutor(principal, new Date(), null);
         final ExecutorService executorStream = executor.getExecutorStream();
-        final Command command = new ScriptX(sshConnection, executorStream).runCommand("pwd");
+        final ResultsContext resultsContext = ResultsContext.createEmpty();
+        final Command command = new ScriptX(sshConnection, executorStream, resultsContext).runCommand("pwd");
         Assert.assertEquals(Integer.valueOf(0), command.getExitValue());
         final String userHome = command.getStdout().trim();
         logger.info(userHome);

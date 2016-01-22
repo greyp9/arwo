@@ -2,6 +2,8 @@ package io.github.greyp9.arwo.lib.interop.dcom.command.runnable;
 
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
+import io.github.greyp9.arwo.core.alert.write.AlertWriter;
+import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.io.buffer.ByteBuffer;
 import io.github.greyp9.arwo.core.io.command.CommandToDo;
@@ -19,6 +21,7 @@ import io.github.greyp9.arwo.lib.interop.dcom.connection.InteropConnection;
 import org.jinterop.dcom.common.JIException;
 import org.jinterop.dcom.core.JISession;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.Future;
 import java.util.logging.Logger;
@@ -28,31 +31,33 @@ public class ScriptRunnable implements Runnable {
     private final Logger logger = Logger.getLogger(getClass().getName());
     private final ScriptContext context;
     private final Script script;
-    private final Locus locus;
-    private final Alerts alerts;
 
     public ScriptRunnable(final ScriptContext context, final Script script) {
         this.context = context;
         this.script = script;
-        this.locus = context.getLocus();
-        this.alerts = context.getAlerts();
     }
 
     @Override
     public final void run() {
+        final Locus locus = context.getLocus();
+        final Bundle bundle = context.getBundle();
+        final Alerts alerts = context.getAlerts();
+        final File file = context.getFile();
+        final String href = context.getHref();
         try {
             logger.entering(getClass().getName(), Runnable.class.getName());
             script.start();
             runInner();
         } catch (JIException e) {
-            alerts.add(new Alert(Alert.Severity.ERR, e.getMessage(), e.getClass().getSimpleName(), null));
+            alerts.add(new Alert(Alert.Severity.ERR, e.getMessage(), e.getClass().getSimpleName()));
         } catch (IOException e) {
-            alerts.add(new Alert(Alert.Severity.ERR, e.getMessage(), e.getClass().getSimpleName(), null));
+            alerts.add(new Alert(Alert.Severity.ERR, e.getMessage(), e.getClass().getSimpleName()));
         } finally {
             script.finish();
         }
         try {
-            new ScriptWriter(script, locus).writeTo(context.getFile());
+            new ScriptWriter(script, locus).writeTo(file);
+            new AlertWriter(bundle, alerts).write("command.finished", "results.view", href);
         } catch (IOException e) {
             alerts.add(new Alert(Alert.Severity.ERR, e.getMessage()));
         } finally {

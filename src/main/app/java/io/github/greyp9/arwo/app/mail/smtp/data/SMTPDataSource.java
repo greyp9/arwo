@@ -58,10 +58,11 @@ public class SMTPDataSource {
             transport.sendMessage(mimeMessage, mimeMessage.getAllRecipients());
             transport.close();
             connection.update(date);
-            alerts.add(new Alert(bundle.format("SMTPDataSource.message.sent", request.getServer(), subject)));
+            alerts.add(new Alert(Alert.Severity.INFO, bundle.format(
+                    "SMTPDataSource.message.sent", request.getServer(), subject)));
             // optionally persist fetched results
             final byte[] bytes = UTF8Codec.toBytes(MessageU.toString(mimeMessage));
-            new ResultsPersister(request.getAppRequest()).write(request.getUserState().getUserRoot(), bytes);
+            new ResultsPersister(request.getUserState().getResultsContext(request.getHttpRequest())).write(bytes);
         } catch (MessagingException e) {
             new ExceptionModel(alerts).service(new IOException(e), Alert.Severity.ERR);
         }

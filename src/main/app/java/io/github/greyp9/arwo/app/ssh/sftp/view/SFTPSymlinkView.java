@@ -52,7 +52,8 @@ public class SFTPSymlinkView extends SFTPView {
         final Results results = new Results(request.getHttpRequest().getURI(),
                 new Interval(request.getHttpRequest().getDate(), new Date()));
         results.add(rowSetStyled.getID(), null, rowSetStyled);
-        new ResultsPersister(request.getAppRequest()).write(userState.getUserRoot(), results);
+        // optionally persist fetched results
+        new ResultsPersister(request.getUserState().getResultsContext(request.getHttpRequest())).write(results);
         // render for response
         final Table table = new Table(rowSetStyled, viewState.getSorts(), viewState.getFilters(),
                 request.getTitlePath(), request.getTitlePath());

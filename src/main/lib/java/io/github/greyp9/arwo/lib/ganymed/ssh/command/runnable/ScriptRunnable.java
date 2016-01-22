@@ -3,6 +3,9 @@ package io.github.greyp9.arwo.lib.ganymed.ssh.command.runnable;
 import ch.ethz.ssh2.ChannelCondition;
 import ch.ethz.ssh2.Session;
 import io.github.greyp9.arwo.core.alert.Alert;
+import io.github.greyp9.arwo.core.alert.Alerts;
+import io.github.greyp9.arwo.core.alert.write.AlertWriter;
+import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.io.buffer.ByteBuffer;
 import io.github.greyp9.arwo.core.io.command.CommandToDo;
@@ -11,10 +14,12 @@ import io.github.greyp9.arwo.core.io.runnable.InputStreamRunnable;
 import io.github.greyp9.arwo.core.io.runnable.OutputStreamRunnable;
 import io.github.greyp9.arwo.core.io.script.Script;
 import io.github.greyp9.arwo.core.io.script.write.ScriptWriter;
+import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.vm.mutex.MutexU;
 import io.github.greyp9.arwo.core.vm.thread.ThreadU;
 import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -34,19 +39,25 @@ public class ScriptRunnable implements Runnable {
 
     @Override
     public final void run() {
+        final Locus locus = context.getLocus();
+        final Bundle bundle = context.getBundle();
+        final Alerts alerts = context.getAlerts();
+        final File file = context.getFile();
+        final String href = context.getHref();
         try {
             logger.entering(getClass().getName(), Runnable.class.getName());
             script.start();
             runInner();
         } catch (IOException e) {
-            Logger.getLogger(getClass().getName()).severe(e.getMessage());
+            alerts.add(new Alert(Alert.Severity.ERR, e.getMessage(), e.getClass().getSimpleName()));
         } finally {
             script.finish();
         }
         try {
-            new ScriptWriter(script, context.getLocus()).writeTo(context.getFile());
+            new ScriptWriter(script, locus).writeTo(file);
+            new AlertWriter(bundle, alerts).write("command.finished", "results.view", href);
         } catch (IOException e) {
-            context.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
+            alerts.add(new Alert(Alert.Severity.ERR, e.getMessage()));
         } finally {
             logger.exiting(getClass().getName(), Runnable.class.getName());
         }
@@ -89,6 +100,7 @@ public class ScriptRunnable implements Runnable {
         }
     }
 
+    @SuppressWarnings({ "PMD.GuardLogStatementJavaUtil", "PMD.GuardLogStatement" })
     private Integer monitorCommand(final CommandWork commandWork, final Session session) throws IOException {
         final ExecutorService executorStream = context.getExecutorStream();
         final long pollInterval = context.getPollInterval();
@@ -110,9 +122,9 @@ public class ScriptRunnable implements Runnable {
         }
         // monitor process
         final int conditionExit = session.waitForCondition(ChannelCondition.EXIT_STATUS, 0L);
-        Logger.getLogger(getClass().getName()).finest("conditionExitStatus/" + conditionExit);  // i18n
+        logger.finest("conditionExitStatus/" + conditionExit);  // i18n
         final int conditionData = waitForData(session, runnableStdout.getPollInterval());
-        Logger.getLogger(getClass().getName()).finest("conditionData/" + conditionData);  // i18n
+        logger.finest("conditionData/" + conditionData);  // i18n
         final Integer exitValue = session.getExitStatus();
         // allow process complete
         runnableStdin.stop();

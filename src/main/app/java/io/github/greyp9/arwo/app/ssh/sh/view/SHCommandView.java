@@ -78,7 +78,7 @@ public class SHCommandView extends SHView {
             final History history = ssh.getHistory();
             new AppHistoryView("sshHistoryType", true, history, bundle, httpRequest, userState).addContentTo(html);
         } else {
-            new AppScriptView(script).addContentTo(html);
+            new AppScriptView(script, userState.getLocus()).addContentTo(html);
         }
         return null;
     }

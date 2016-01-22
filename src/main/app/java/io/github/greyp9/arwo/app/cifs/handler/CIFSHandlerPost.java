@@ -118,7 +118,7 @@ public class CIFSHandlerPost {
         } else if (App.Action.SELECT_FAV.equals(action)) {
             location = new CIFSSelectFavorite(request).doAction(token);
         } else {
-            alerts.add(new Alert(Alert.Severity.WARN, message, token.toString(), null));
+            alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }
         return location;
     }

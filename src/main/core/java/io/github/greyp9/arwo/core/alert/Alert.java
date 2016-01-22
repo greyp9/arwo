@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.alert;
 
 import io.github.greyp9.arwo.core.alert.action.AlertActions;
+import io.github.greyp9.arwo.core.alert.link.AlertLinks;
 import io.github.greyp9.arwo.core.date.DateU;
 
 import java.util.Date;
@@ -10,6 +11,7 @@ public class Alert {
     private final Severity severity;
     private final String message;
     private final String detail;
+    private final AlertLinks links;
     private final AlertActions actions;
 
     public final Date getDate() {
@@ -28,27 +30,37 @@ public class Alert {
         return detail;
     }
 
+    public final AlertLinks getLinks() {
+        return links;
+    }
+
     public final AlertActions getActions() {
         return actions;
     }
 
-    public Alert(final String message) {
-        this(Severity.INFO, message, null, null);
+    public Alert(final Severity severity, final String message) {
+        this(severity, message, null, null, null);
     }
 
-    public Alert(final Severity severity, final String message) {
-        this(severity, message, null, null);
+    public Alert(final Severity severity, final String message, final String detail) {
+        this(severity, message, detail, null, null);
+    }
+
+    public Alert(final Severity severity, final String message, final AlertLinks links) {
+        this(severity, message, null, links, null);
     }
 
     public Alert(final Severity severity, final String message, final AlertActions actions) {
-        this(severity, message, null, actions);
+        this(severity, message, null, null, actions);
     }
 
-    public Alert(final Severity severity, final String message, final String detail, final AlertActions actions) {
+    public Alert(final Severity severity, final String message, final String detail,
+                 final AlertLinks links, final AlertActions actions) {
         this.date = new Date();
-        this.severity = severity;
+        this.severity = ((severity == null) ? Severity.INFO : severity);
         this.message = message;
         this.detail = detail;
+        this.links = links;
         this.actions = actions;
     }
 

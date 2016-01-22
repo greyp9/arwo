@@ -1,11 +1,13 @@
 package io.github.greyp9.arwo.app.core.view.command;
 
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.io.command.Command;
+import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.number.NumberScale;
 import io.github.greyp9.arwo.core.text.render.TextRenderer;
 import io.github.greyp9.arwo.core.value.NTV;
@@ -18,9 +20,11 @@ import java.util.Date;
 
 public class AppCommandView {
     private final Command command;
+    private final DateX dateX;
 
-    public AppCommandView(final Command command) {
+    public AppCommandView(final Command command, final Locus locus) {
         this.command = command;
+        this.dateX = locus.getDateX();
     }
 
     public final HttpResponse addContentTo(final Element html) throws IOException {
@@ -33,7 +37,7 @@ public class AppCommandView {
     }
 
     private void renderHeader(final Element html, final Date dateStart, final String stdin) throws IOException {
-        final String dateText = ((dateStart == null) ? null : String.format("[@%s]", dateStart));
+        final String dateText = ((dateStart == null) ? null : String.format("[@%s]", dateX.toString(dateStart)));
         final String stdinText = ((stdin == null) ? null : String.format("$ %s", stdin));
         final String text = Value.join(" ", dateText, stdinText);
         ElementU.addElement(html, Html.DIV, text, NTV.create(Html.CLASS, App.CSS.COMMAND_HEAD));
@@ -59,7 +63,7 @@ public class AppCommandView {
     }
 
     private void renderFooter(final Element html, final Date dateFinish, final Long elapsed) throws IOException {
-        final String dateText = ((dateFinish == null) ? null : String.format("[@%s]", dateFinish));
+        final String dateText = ((dateFinish == null) ? null : String.format("[@%s]", dateX.toString(dateFinish)));
         final String elapsedText = (elapsed == null) ? null : String.format("[%s]", DurationU.durationXSD(elapsed));
         final String text = Value.defaultOnEmpty(Value.join(" ", dateText, elapsedText), UTF16.PAUSE);
         ElementU.addElement(html, Html.DIV, text, NTV.create(Html.CLASS, App.CSS.COMMAND_FOOT));

@@ -13,7 +13,8 @@ public final class PathU {
         buffer.append(basePath);
         for (final String token : tokens) {
             if (!Value.isEmpty(token)) {
-                buffer.append(Http.Token.SLASH).append(token);
+                buffer.append(token.startsWith(Http.Token.SLASH) ? "" : Http.Token.SLASH);
+                buffer.append(token);
             }
         }
         return buffer.toString();

@@ -66,7 +66,8 @@ public abstract class SMTPView {
         HttpResponse httpResponse = addContentTo(body);
         if (httpResponse == null) {
             // touch ups
-            new AlertsView(userState.getAlerts(), userState.getLocus(), userState.getBundle(),
+            final boolean displayAlerts = (httpRequest.getHttpRequest().getHeader(App.Header.RESULT) == null);
+            new AlertsView(displayAlerts, userState.getAlerts(), userState.getLocus(), userState.getBundle(),
                     userState.getSubmitID()).addContentTo(body);
             new StatusBarView(httpRequest, userState.getLocus()).addContentTo(body);
             new AppHtml(httpRequest).fixup(html, title);

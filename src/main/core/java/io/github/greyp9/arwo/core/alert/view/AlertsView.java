@@ -3,12 +3,15 @@ package io.github.greyp9.arwo.core.alert.view;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.alert.action.AlertActions;
+import io.github.greyp9.arwo.core.alert.link.AlertLink;
+import io.github.greyp9.arwo.core.alert.link.AlertLinks;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.html.HtmlU;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
+import io.github.greyp9.arwo.core.submit.SubmitTokenU;
 import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
@@ -22,12 +25,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class AlertsView {
+    private final boolean display;
     private final Alerts alerts;
     private final Locus locus;
     private final Bundle bundle;
     private final String submitID;
 
-    public AlertsView(final Alerts alerts, final Locus locus, final Bundle bundle, final String submitID) {
+    public AlertsView(final boolean display, final Alerts alerts,
+                      final Locus locus, final Bundle bundle, final String submitID) {
+        this.display = display;
         this.alerts = alerts;
         this.locus = locus;
         this.bundle = bundle;
@@ -35,11 +41,13 @@ public class AlertsView {
     }
 
     public final void addContentTo(final Element html) throws IOException {
-        addContentTo(html, alerts.getTransient());
-        addContentTo(html, alerts.getPersistent());
+        if (display) {
+            addContentTo(html, alerts.getTransient());
+            addContentTo(html, alerts.getPersistent());
+        }
     }
 
-    public final void addContentTo(final Element html, final Collection<Alert> alertsDisplay) throws IOException {
+    private void addContentTo(final Element html, final Collection<Alert> alertsDisplay) throws IOException {
         if (!alertsDisplay.isEmpty()) {
             final NameTypeValues styleNotifies = NTV.create(Html.CLASS, App.CSS.NOTIFICATIONS);
             final Element divNotifications = ElementU.addElementFirst(html, Html.DIV, null, styleNotifies);
@@ -51,6 +59,9 @@ public class AlertsView {
                 final NameTypeValues styleTimestamp = NTV.create(Html.CLASS, App.CSS.TIMESTAMP);
                 final NameTypeValues styleText = NTV.create(Html.CLASS, App.CSS.TEXT);
                 final Element divNotify = ElementU.addElement(divNotifications, Html.DIV, null, styleNotify);
+                if (alert.getLinks() != null) {
+                    addLinksTo(divNotify, alert.getLinks());
+                }
                 if (alert.getActions() != null) {
                     addActionsTo(divNotify, alert.getActions());
                 }
@@ -67,7 +78,16 @@ public class AlertsView {
         }
     }
 
-    @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
+    private void addLinksTo(final Element div, final AlertLinks links) throws IOException {
+        final Element divButtons = ElementU.addElement(div, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.BUTTONS));
+        for (final AlertLink alertLink : links.getLinks()) {
+            final String label = bundle.getString(alertLink.getSubject());
+            final String href = alertLink.getObject();
+            ElementU.addElement(divButtons, Html.A, label, NTV.create(
+                    Html.HREF, href, Html.TITLE, label, Html.CLASS, App.CSS.ALERT));
+        }
+    }
+
     private void addActionsTo(final Element div, final AlertActions actions) throws IOException {
         final Element form = ElementU.addElement(div, Html.FORM, null,
                 NTV.create(Html.METHOD, Html.POST, Html.ACTION, Html.EMPTY));
@@ -75,7 +95,7 @@ public class AlertsView {
         final String action = App.Action.ALERT;
         final String id = actions.getID();
         for (final String option : actions.getOptions()) {
-            final SubmitToken token = new SubmitToken(App.Target.USER_STATE, action, option, id);
+            final SubmitToken token = SubmitTokenU.create(App.Target.USER_STATE, action, option, id);
             HtmlU.addButton(divButtons, bundle.getString(option), submitID, token.toString(), App.CSS.ALERT, null);
         }
     }

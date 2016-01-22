@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.io.command.Command;
 import io.github.greyp9.arwo.core.io.command.CommandDone;
 import io.github.greyp9.arwo.core.io.script.Script;
+import io.github.greyp9.arwo.core.result.view.ResultsContext;
 import io.github.greyp9.arwo.core.security.realm.AppPrincipal;
 import io.github.greyp9.arwo.core.util.CollectionU;
 import io.github.greyp9.arwo.core.value.Value;
@@ -38,7 +39,7 @@ public class LocalCommandTest extends TestCase {
         Assert.assertEquals(1, commandsPre.size());
         final AppPrincipal principal = new AppPrincipal("root", CollectionU.toCollection("*"));
         final UserExecutor executor = new UserExecutor(principal, new Date(), null);
-        final ScriptContext context = new ScriptContext(executor.getExecutorStream());
+        final ScriptContext context = new ScriptContext(executor.getExecutorStream(), ResultsContext.createEmpty());
         final ScriptRunnable scriptRunnable = new ScriptRunnable(script, context);
         scriptRunnable.run();
         final Collection<Command> commands = script.getCommands();
@@ -64,7 +65,7 @@ public class LocalCommandTest extends TestCase {
         Assert.assertEquals(1, commandsPre.size());
         final AppPrincipal principal = new AppPrincipal("root", CollectionU.toCollection("*"));
         final UserExecutor executor = new UserExecutor(principal, new Date(), null);
-        final ScriptContext context = new ScriptContext(executor.getExecutorStream());
+        final ScriptContext context = new ScriptContext(executor.getExecutorStream(), ResultsContext.createEmpty());
         final ScriptRunnable scriptRunnable = new ScriptRunnable(script, context);
         scriptRunnable.run();
         final Collection<Command> commands = script.getCommands();
