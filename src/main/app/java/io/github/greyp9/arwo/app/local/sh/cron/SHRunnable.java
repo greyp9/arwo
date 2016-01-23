@@ -47,7 +47,7 @@ public class SHRunnable extends CronRunnable {
         final Date dateStart = new Date();
         row.update(Const.DATE_START, dateStart);
         // initialize
-        final String command = ElementU.getAttribute(getParams().getElement(), "command");
+        final String command = ElementU.getAttribute(getParams().getElement(), App.Settings.COMMAND);
         final String pathInfo = PathU.toDir("");
         // execute
         try {

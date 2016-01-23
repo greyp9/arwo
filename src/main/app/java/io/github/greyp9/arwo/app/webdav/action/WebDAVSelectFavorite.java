@@ -26,8 +26,8 @@ public class WebDAVSelectFavorite {
         final XedSession session = documentState.getSession(App.Servlet.FAVORITES);
         final XedNav nav = new XedNav(session.getXed());
         final XedCursor cursor = nav.find(uri);
-        final String server = cursor.getValue(cursor.getChildInstance("server"));
-        final String resource = cursor.getValue(cursor.getChildInstance("resource"));
+        final String server = cursor.getValue(cursor.getChildInstance(App.Settings.SERVER));
+        final String resource = cursor.getValue(cursor.getChildInstance(App.Settings.RESOURCE));
         final String resourceEncoded = URLCodec.encodePath(resource);
         return String.format("%s/%s%s", request.getBaseURIMode(), server, resourceEncoded);
     }

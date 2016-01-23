@@ -47,8 +47,8 @@ public class JDBCRunnable extends CronRunnable {
         final Date dateStart = new Date();
         row.update(Const.DATE_START, dateStart);
         // initialize
-        final String server = ElementU.getAttribute(getParams().getElement(), "server");
-        final String sql = ElementU.getAttribute(getParams().getElement(), "sql");
+        final String server = ElementU.getAttribute(getParams().getElement(), App.Settings.SERVER);
+        final String sql = ElementU.getAttribute(getParams().getElement(), App.Settings.SQL);
         final String pathInfo = PathU.toDir("", server);
         // execute
         try {

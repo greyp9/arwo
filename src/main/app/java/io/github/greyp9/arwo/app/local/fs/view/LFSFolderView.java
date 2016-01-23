@@ -73,9 +73,9 @@ public class LFSFolderView extends LFSView {
         final ViewState viewState = userState.getViewStates().getViewState(metaData, request.getBundle(), locus);
         final boolean findMode = PropertiesU.isBoolean(userState.getProperties(), App.Action.FIND);
         if (findMode) {
-            viewState.getHiddenColumns().remove("folder");
+            viewState.getHiddenColumns().remove("folder");  // i18n metadata
         } else {
-            viewState.getHiddenColumns().add("folder");
+            viewState.getHiddenColumns().add("folder");  // i18n metadata
         }
         final RowSet rowSetRaw = (findMode ?
                 getRowSetRawFind(metaData, viewState) :

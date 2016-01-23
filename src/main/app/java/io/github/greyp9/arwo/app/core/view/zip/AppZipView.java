@@ -69,16 +69,16 @@ public class AppZipView {
 
     private RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData("type", Types.VARCHAR),
-                new ColumnMetaData("name", Types.VARCHAR, true),
-                new ColumnMetaData("mtime", Types.TIMESTAMP),
-                new ColumnMetaData("ext", Types.VARCHAR),
-                new ColumnMetaData("comment", Types.VARCHAR),
-                new ColumnMetaData("crc", Types.VARCHAR),
-                new ColumnMetaData("sizeCompress", Types.BIGINT),
-                new ColumnMetaData("size", Types.BIGINT),
+                new ColumnMetaData("type", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("name", Types.VARCHAR, true),  // i18n metadata
+                new ColumnMetaData("mtime", Types.TIMESTAMP),  // i18n metadata
+                new ColumnMetaData("ext", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("comment", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("crc", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("sizeCompress", Types.BIGINT),  // i18n metadata
+                new ColumnMetaData("size", Types.BIGINT),  // i18n metadata
         };
-        return new RowSetMetaData("zipFolderType", columns);
+        return new RowSetMetaData("zipFolderType", columns);  // i18n metadata
     }
 
     private RowSet createRowSet(final RowSetMetaData metaData, final byte[] bytes) throws IOException {

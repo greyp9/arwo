@@ -67,14 +67,14 @@ public class AppTGZView {
 
     private RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData("type", Types.VARCHAR),
-                new ColumnMetaData("name", Types.VARCHAR, true),
-                new ColumnMetaData("link", Types.VARCHAR),
-                new ColumnMetaData("mtime", Types.TIMESTAMP),
-                new ColumnMetaData("ext", Types.VARCHAR),
-                new ColumnMetaData("size", Types.BIGINT),
+                new ColumnMetaData("type", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("name", Types.VARCHAR, true),  // i18n metadata
+                new ColumnMetaData("link", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("mtime", Types.TIMESTAMP),  // i18n metadata
+                new ColumnMetaData("ext", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("size", Types.BIGINT),  // i18n metadata
         };
-        return new RowSetMetaData("tarFolderType", columns);
+        return new RowSetMetaData("tarFolderType", columns);  // i18n metadata
     }
 
     private RowSet createRowSet(final RowSetMetaData metaData, final byte[] bytes) throws IOException {
@@ -115,6 +115,6 @@ public class AppTGZView {
     }
 
     public static class Const {
-        public static final String QUERY_ZIP_ENTRY = "zipEntry";
+        public static final String QUERY_ZIP_ENTRY = "zipEntry";  // i18n http
     }
 }

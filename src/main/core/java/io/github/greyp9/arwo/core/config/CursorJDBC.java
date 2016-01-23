@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.config;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.lang.TypeU;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
@@ -27,31 +28,31 @@ public class CursorJDBC {
     }
 
     public final String getName() {
-        return cursor.getValue(cursor.getChildInstance("name"));
+        return cursor.getValue(cursor.getChildInstance(App.Settings.NAME));
     }
 
     public final boolean isEnabled() {
-        return TypeU.toBooleanP(cursor.getValue(cursor.getChildInstance("enabled")));
+        return TypeU.toBooleanP(cursor.getValue(cursor.getChildInstance(App.Settings.ENABLED)));
     }
 
     public final String getComment() {
-        return cursor.getValue(cursor.getChildInstance("comment"));
+        return cursor.getValue(cursor.getChildInstance(App.Settings.COMMENT));
     }
 
     public final String getDriverClass() {
-        return cursor.getValue(cursor.getChildInstance("driverClass"));
+        return cursor.getValue(cursor.getChildInstance(App.Settings.DRIVER_CLASS));
     }
 
     public final String getURL() {
-        return cursor.getValue(cursor.getChildInstance("url"));
+        return cursor.getValue(cursor.getChildInstance(App.Settings.JDBC_URL));
     }
 
     public final String getUser() {
-        return cursor.getValue(cursor.getChildInstance("user"));
+        return cursor.getValue(cursor.getChildInstance(App.Settings.USER));
     }
 
     public final String getPassword() {
-        return cursor.getValue(cursor.getChildInstance("password"));
+        return cursor.getValue(cursor.getChildInstance(App.Settings.PASSWORD));
     }
 
     private static class Const {

@@ -63,15 +63,15 @@ public class AppHistoryView {
     private RowSetMetaData createMetaData(final String id) {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
                 new ColumnMetaData(App.Action.SELECT, Types.VARCHAR),
-                new ColumnMetaData("context", Types.VARCHAR),
-                new ColumnMetaData("stdin", Types.VARCHAR),
-                new ColumnMetaData("dateSubmit", Types.TIMESTAMP, true),
-                new ColumnMetaData("state", Types.VARCHAR),
-                new ColumnMetaData("wait", Types.INTEGER),
-                new ColumnMetaData("run", Types.INTEGER),
-                new ColumnMetaData("stdout", Types.INTEGER),
-                new ColumnMetaData("stderr", Types.INTEGER),
-                new ColumnMetaData("exit", Types.INTEGER),
+                new ColumnMetaData("context", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("stdin", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("dateSubmit", Types.TIMESTAMP, true),  // i18n metadata
+                new ColumnMetaData("state", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("wait", Types.INTEGER),  // i18n metadata
+                new ColumnMetaData("run", Types.INTEGER),  // i18n metadata
+                new ColumnMetaData("stdout", Types.INTEGER),  // i18n metadata
+                new ColumnMetaData("stderr", Types.INTEGER),  // i18n metadata
+                new ColumnMetaData("exit", Types.INTEGER),  // i18n metadata
         };
         return new RowSetMetaData(id, columns);
     }

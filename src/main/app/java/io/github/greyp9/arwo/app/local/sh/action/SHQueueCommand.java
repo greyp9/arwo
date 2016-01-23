@@ -37,7 +37,7 @@ public class SHQueueCommand {
         final String host = request.getHttpRequest().getHeader(Http.Header.HOST);
         final Script script = new Script(host, httpRequest.getDate(), command);
         userState.getLocal().getHistory().add(script);
-        userState.getLocal().getProperties().setProperty("command", command);
+        userState.getLocal().getProperties().setProperty(App.Settings.COMMAND, command);
         // runnable to execute commands
         final UserExecutor userExecutor = userState.getUserExecutor();
         final ExecutorService executorStream = userExecutor.getExecutorStream();

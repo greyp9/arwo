@@ -42,9 +42,9 @@ public class CIFSFolderStyled {
     private void loadRow(final RowSet rowSetStyled, final Row rowRaw) throws UnsupportedEncodingException {
         // input
         final RowSetMetaData metaData = rowSetStyled.getMetaData();
-        final Integer type = rowRaw.getInteger(metaData.getIndex("type"));
-        final String folder = rowRaw.getString(metaData.getIndex("folder"));
-        final String name = rowRaw.getString(metaData.getIndex("name"));
+        final Integer type = rowRaw.getInteger(metaData.getIndex("type"));  // i18n metadata
+        final String folder = rowRaw.getString(metaData.getIndex("folder"));  // i18n metadata
+        final String name = rowRaw.getString(metaData.getIndex("name"));  // i18n metadata
         final String nameDisplay = URLCodec.decode(name);
         // processing
         final boolean isDirectory = (App.FS.S_IFDIR == NumberU.toInt(type, 0));
@@ -53,12 +53,12 @@ public class CIFSFolderStyled {
         insertRow.setNextColumn(getTypeStyled(type, folder, name, isDirectory));
         insertRow.setNextColumn(folder);
         insertRow.setNextColumn(nameDisplay);
-        insertRow.setNextColumn(rowRaw.getColumn(metaData.getIndex("mtime")));
-        insertRow.setNextColumn(rowRaw.getColumn(metaData.getIndex("ext")));
+        insertRow.setNextColumn(rowRaw.getColumn(metaData.getIndex("mtime")));  // i18n metadata
+        insertRow.setNextColumn(rowRaw.getColumn(metaData.getIndex("ext")));  // i18n metadata
         insertRow.setNextColumn(null);
         insertRow.setNextColumn(null);
         insertRow.setNextColumn(null);
-        insertRow.setNextColumn(rowRaw.getColumn(metaData.getIndex("size")));
+        insertRow.setNextColumn(rowRaw.getColumn(metaData.getIndex("size")));  // i18n metadata
         rowSetStyled.add(insertRow.getRow());
     }
 

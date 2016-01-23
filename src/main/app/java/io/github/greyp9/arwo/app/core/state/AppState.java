@@ -15,7 +15,6 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
-import java.util.TimeZone;
 import java.util.concurrent.atomic.AtomicReference;
 
 public class AppState {
@@ -63,7 +62,7 @@ public class AppState {
             if (userState == null) {
                 final File userHome = AppFolder.getWebappRoot(contextPath);
                 final String submitID = Integer.toHexString(hashCode());
-                final DateX dateX = new DateX(HttpDateU.Const.DEFAULT, TimeZone.getTimeZone("UTC"));
+                final DateX dateX = new DateX(HttpDateU.Const.DEFAULT, DateU.Const.TZ_GMT);
                 final Locus locus = new Locus(Locale.getDefault(), dateX);
                 userState = new AppUserState(this, principal, date, userHome, submitID, locus);
                 userStates.add(userState);

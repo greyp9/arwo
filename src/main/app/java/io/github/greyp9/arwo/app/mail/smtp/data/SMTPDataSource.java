@@ -37,11 +37,11 @@ public class SMTPDataSource {
 
     public final void sendMessage(final Xed message) throws IOException {
         final XPather xpather = new XPather(message.getDocument(), message.getXsdTypes().getContext());
-        final String to = xpather.getText("/action:mail/action:to");
-        final String cc = xpather.getText("/action:mail/action:cc");
-        final String bcc = xpather.getText("/action:mail/action:bcc");
-        final String subject = xpather.getText("/action:mail/action:subject");
-        final String body = xpather.getText("/action:mail/action:body");
+        final String to = xpather.getText("/action:mail/action:to");  // i18n xpath
+        final String cc = xpather.getText("/action:mail/action:cc");  // i18n xpath
+        final String bcc = xpather.getText("/action:mail/action:bcc");  // i18n xpath
+        final String subject = xpather.getText("/action:mail/action:subject");  // i18n xpath
+        final String body = xpather.getText("/action:mail/action:body");  // i18n xpath
         try {
             final Date date = new Date();
             final Session session = connection.getSession();

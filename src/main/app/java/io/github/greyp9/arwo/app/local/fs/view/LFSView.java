@@ -79,7 +79,7 @@ public abstract class LFSView {
         final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(App.Html.UI)));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
         // context-specific content
-        final String modeKey = Value.join(".", "menu", "view", request.getMode());
+        final String modeKey = Value.join(Http.Token.DOT, App.Action.MENU, App.Mode.VIEW, request.getMode());
         final AppTitle title = AppTitle.Factory.getResourceLabel(
                 httpRequest, bundle, request.getTitlePath(), userState.getCharset(), modeKey);
         addHeaderView(body, title);
@@ -111,8 +111,8 @@ public abstract class LFSView {
         addTextFiltersView(divTitle);
         // favorites (if toggled)
         final XedNav nav = new XedNav(userState.getDocumentState().getSession(App.Servlet.FAVORITES).getXed());
-        final XedCursor cursorFavorites = nav.findX("/app:favorites/app:lfsFavorites");
-        final XedCursor cursorType = nav.find("lfsFavorite", cursorFavorites);
+        final XedCursor cursorFavorites = nav.findX("/app:favorites/app:lfsFavorites");  // i18n xpath
+        final XedCursor cursorType = nav.find("lfsFavorite", cursorFavorites);  // i18n xpath
         new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.FILESYSTEM).addContentTo(html);
         // settings property strips
         final Locale locale = userState.getLocus().getLocale();
@@ -148,7 +148,7 @@ public abstract class LFSView {
 
     protected final void addFileProperties(final Element html, final MetaFile metaFile) throws IOException {
         if (PropertiesU.isBoolean(userState.getProperties(), App.Action.PROPERTIES)) {
-            final AppPropertiesView view = new AppPropertiesView("lfsPropertiesType", userState);
+            final AppPropertiesView view = new AppPropertiesView("lfsPropertiesType", userState);  // i18n metadata
             view.addContentTo(html, metaFile, bundle, getFileProperties());
         }
     }

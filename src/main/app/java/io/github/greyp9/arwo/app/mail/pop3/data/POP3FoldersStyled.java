@@ -38,28 +38,28 @@ public class POP3FoldersStyled {
     private void loadRow(final RowSet rowSetStyled, final Row rowRaw) throws UnsupportedEncodingException {
         // input
         final RowSetMetaData metaData = rowSetStyled.getMetaData();
-        final int messages = NumberU.toInt(rowRaw.getInteger(metaData.getIndex("messages")), -1);
-        final int messagesN = NumberU.toInt(rowRaw.getInteger(metaData.getIndex("new")), -1);
-        final int messagesU = NumberU.toInt(rowRaw.getInteger(metaData.getIndex("unread")), -1);
+        final int messages = NumberU.toInt(rowRaw.getInteger(metaData.getIndex("messages")), -1);  // i18n metadata
+        final int messagesN = NumberU.toInt(rowRaw.getInteger(metaData.getIndex("new")), -1);  // i18n metadata
+        final int messagesU = NumberU.toInt(rowRaw.getInteger(metaData.getIndex("unread")), -1);  // i18n metadata
         // output
         final InsertRow insertRow = new InsertRow(rowSetStyled, rowRaw);
-        insertRow.getRow().setColumn(metaData.getIndex("select"), getLink(rowRaw, metaData));  // i18n
-        insertRow.getRow().setColumn(metaData.getIndex("type"), getType(rowRaw, metaData));  // i18n
-        insertRow.getRow().setColumn(metaData.getIndex("messages"), ((messages == -1) ? null : messages));  // i18n
-        insertRow.getRow().setColumn(metaData.getIndex("new"), ((messagesN == -1) ? null : messagesN));  // i18n
-        insertRow.getRow().setColumn(metaData.getIndex("unread"), ((messagesU == -1) ? null : messagesU));  // i18n
+        insertRow.getRow().setColumn(metaData.getIndex("select"), getLink(rowRaw, metaData));  // i18n metadata
+        insertRow.getRow().setColumn(metaData.getIndex("type"), getType(rowRaw, metaData));  // i18n metadata
+        insertRow.getRow().setColumn(metaData.getIndex("messages"), ((messages == -1) ? null : messages)); // i18n meta
+        insertRow.getRow().setColumn(metaData.getIndex("new"), ((messagesN == -1) ? null : messagesN)); // i18n metadata
+        insertRow.getRow().setColumn(metaData.getIndex("unread"), ((messagesU == -1) ? null : messagesU)); // i18n meta
         rowSetStyled.add(insertRow.getRow());
     }
 
     private TableViewLink getLink(final Row rowRaw, final RowSetMetaData metaData) throws UnsupportedEncodingException {
-        final String name = rowRaw.getString(metaData.getIndex("name"));  // i18n
+        final String name = rowRaw.getString(metaData.getIndex("name"));  // i18n metadata
         final String href = PathU.toDir(request.getHttpRequest().getBaseURI(),
                 request.getServer(), URLCodec.encode(name));
         return new TableViewLink(UTF16.SELECT, null, href);
     }
 
     private Object getType(final Row rowRaw, final RowSetMetaData metaData) {
-        final int type = NumberU.toInt(rowRaw.getInteger(metaData.getIndex("type")), 0);  // i18n
+        final int type = NumberU.toInt(rowRaw.getInteger(metaData.getIndex("type")), 0);  // i18n metadata
         final boolean canOpen = ((type % 2) != 0);
         return bundle.getString(canOpen ?
                 "IMAPFoldersStyled.folderType.canOpen" :

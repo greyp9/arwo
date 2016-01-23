@@ -110,7 +110,7 @@ public class DashView {
         final NameTypeValues properties = new NameTypeValues();
         properties.add(new NameTypeValue(bundle.getString("DashView.webapp.uptime"), durationA));
         properties.add(new NameTypeValue(bundle.getString("DashView.session.uptime"), durationU));
-        final AppPropertiesView view = new AppPropertiesView("dashPropertiesType", userState);
+        final AppPropertiesView view = new AppPropertiesView("dashPropertiesType", userState);  // i18n metadata
         view.addContentTo(html, null, bundle, properties);
     }
 }

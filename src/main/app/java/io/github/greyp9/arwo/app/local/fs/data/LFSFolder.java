@@ -25,7 +25,7 @@ public class LFSFolder {
     public LFSFolder(final String folder, final File[] files,
                      final RowSetMetaData metaData, final boolean sort) {
         // "native" sort, in case none supplied by user
-        final Sorts sorts = (sort ? new Sorts(new Sort("type", true), new Sort("name", true)) : null);
+        final Sorts sorts = (sort ? new Sorts(new Sort("type", true), new Sort("name", true)) : null);  // i18n metadata
         // load from source data
         this.rowSet = new RowSet(metaData, sorts, null);
         for (final File file : files) {
@@ -43,14 +43,14 @@ public class LFSFolder {
 
     public static RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData("type", Types.VARCHAR),
-                new ColumnMetaData("folder", Types.VARCHAR, true),
-                new ColumnMetaData("name", Types.VARCHAR, true),
-                new ColumnMetaData("mtime", Types.TIMESTAMP),
-                new ColumnMetaData("ext", Types.VARCHAR),
-                new ColumnMetaData("size", Types.BIGINT),
+                new ColumnMetaData("type", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("folder", Types.VARCHAR, true),  // i18n metadata
+                new ColumnMetaData("name", Types.VARCHAR, true),  // i18n metadata
+                new ColumnMetaData("mtime", Types.TIMESTAMP),  // i18n metadata
+                new ColumnMetaData("ext", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("size", Types.BIGINT),  // i18n metadata
         };
-        return new RowSetMetaData("lfsFolderType", columns);
+        return new RowSetMetaData("lfsFolderType", columns);  // i18n metadata
     }
 
     public static void loadRow(final RowSet rowSet, final String folder, final File file) {

@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
 import io.github.greyp9.arwo.app.local.fs.data.LFSDataSource;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.codec.hex.HexCodec;
 import io.github.greyp9.arwo.core.file.FileX;
@@ -45,8 +46,8 @@ public class LFSHandlerPostMultipart {
                 final MimeHeader mimeHeader = headerIt.next();
                 mimeHeader.addTo(propertiesPart);
             }
-            final String name = propertiesPart.getProperty(Const.CD_NAME);
-            if (Const.UPLOAD_FILE.equals(name)) {
+            final String name = propertiesPart.getProperty(App.Post.CD_NAME);
+            if (App.Post.UPLOAD_FILE.equals(name)) {
                 doPostUploadFile(mimePart, propertiesPart);
             }
         }
@@ -54,13 +55,7 @@ public class LFSHandlerPostMultipart {
     }
 
     private void doPostUploadFile(final MimePart mimePart, final Properties properties) throws IOException {
-
-        final String filename = properties.getProperty(Const.CD_FILENAME);
-
-
-
-
-
+        final String filename = properties.getProperty(App.Post.CD_FILENAME);
         if (filename.length() == 0) {
             alerts.add(new Alert(Alert.Severity.WARN, bundle.format("SFTPHandlerPostMultipart.no.file", "")));
         } else {
@@ -82,11 +77,5 @@ public class LFSHandlerPostMultipart {
         final String hash = HexCodec.encode(HashU.md5(bytes));
         alerts.add(new Alert(Alert.Severity.INFO, bundle.format(
                 "SFTPHandlerPostMultipart.file.target", fileX.getFolderSlash(), bytes.length, hash)));
-    }
-
-    private static class Const {
-        private static final String CD_FILENAME = "Content-Disposition.filename";
-        private static final String CD_NAME = "Content-Disposition.name";
-        private static final String UPLOAD_FILE = "uploadFile";
     }
 }

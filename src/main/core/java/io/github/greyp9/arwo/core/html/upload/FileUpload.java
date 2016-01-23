@@ -35,7 +35,7 @@ public class FileUpload {
             ElementU.addElement(divMenu, Html.SPAN, String.format("[%s]", labelMenu), NTV.create(
                     Html.CLASS, App.CSS.MENU));
             ElementU.addElement(divMenu, Html.INPUT, null, NTV.create(Html.TYPE, Html.FILE,
-                    Html.NAME, Const.UPLOAD_FILE, Html.SIZE, Const.SIZE, Html.STYLE, Const.STYLE));
+                    Html.NAME, App.Post.UPLOAD_FILE, Html.SIZE, Const.SIZE, Html.STYLE, Const.STYLE));
             ElementU.addElement(divMenu, Html.INPUT, null, NTV.create(
                     Html.TYPE, Html.SUBMIT, Html.NAME, Const.SUBMIT, Html.VALUE, labelMenu));
         }
@@ -45,7 +45,6 @@ public class FileUpload {
     private static class Const {
         private static final String FILE = "file";  // i18n
         private static final String UPLOAD = "upload";  // i18n
-        private static final String UPLOAD_FILE = "uploadFile";  // i18n
         private static final String SIZE = "80";  // i18n
         private static final String STYLE = "padding: 0 1em;";  // i18n
         private static final String SUBMIT = "submitUploadFile";  // i18n

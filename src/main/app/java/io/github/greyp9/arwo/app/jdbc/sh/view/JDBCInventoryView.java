@@ -57,11 +57,11 @@ public class JDBCInventoryView {
     private RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
                 new ColumnMetaData(App.Action.SELECT, Types.VARCHAR),
-                new ColumnMetaData("name", Types.VARCHAR, true),
-                new ColumnMetaData("comment", Types.VARCHAR),
-                new ColumnMetaData("driverClass", Types.VARCHAR),
-                new ColumnMetaData("jdbcURL", Types.VARCHAR),
-                new ColumnMetaData("user", Types.VARCHAR),
+                new ColumnMetaData(App.Settings.NAME, Types.VARCHAR, true),
+                new ColumnMetaData(App.Settings.COMMENT, Types.VARCHAR),
+                new ColumnMetaData(App.Settings.DRIVER_CLASS, Types.VARCHAR),
+                new ColumnMetaData(App.Settings.JDBC_URL, Types.VARCHAR),
+                new ColumnMetaData(App.Settings.USER, Types.VARCHAR),
         };
         return new RowSetMetaData("server.jdbcServerType", columns);
     }

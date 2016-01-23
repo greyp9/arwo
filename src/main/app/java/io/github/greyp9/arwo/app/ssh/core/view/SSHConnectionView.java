@@ -48,7 +48,7 @@ public class SSHConnectionView {
         final boolean isPropertiesSSH = PropertiesU.isBoolean(userState.getProperties(), key);
         if (isPropertiesSSH) {
             httpRequest.getClass();
-            final RowSetMetaData metaData = createMetaData("propertiesSSH");
+            final RowSetMetaData metaData = createMetaData("propertiesSSH");  // i18n metadata
             final RowSet rowSet = createRowSet(metaData);
             final Locus locus = userState.getLocus();
             final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
@@ -63,8 +63,8 @@ public class SSHConnectionView {
 
     private RowSetMetaData createMetaData(final String tableID) {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData("name", Types.VARCHAR, true),
-                new ColumnMetaData("value", Types.VARCHAR),
+                new ColumnMetaData("name", Types.VARCHAR, true),  // i18n metadata
+                new ColumnMetaData("value", Types.VARCHAR),  // i18n metadata
         };
         return new RowSetMetaData(tableID, columns);
     }
@@ -75,7 +75,8 @@ public class SSHConnectionView {
         final RowSet rowSet = new RowSet(metaData, null, null);
         for (final NameTypeValue property : properties) {
             final InsertRow insertRow = InsertRow.create(rowSet);
-            final String nameLabel = bundle.getString(Value.join(".", "sshConnectionType", property.getName()));
+            final String nameLabel = bundle.getString(
+                    Value.join(".", "sshConnectionType", property.getName()));  // i18n metadata
             insertRow.setNextColumn(nameLabel);
             insertRow.setNextColumn(property.getValue());
             rowSet.add(insertRow.getRow());
@@ -85,17 +86,17 @@ public class SSHConnectionView {
 
     private void addProperties(final NameTypeValues properties) throws IOException {
         if (resource != null) {
-            properties.add(new NameTypeValue("name", resource.getName()));
+            properties.add(new NameTypeValue("name", resource.getName()));  // i18n metadata
             addProperties(properties, resource.getConnection());
         }
     }
 
     private void addProperties(final NameTypeValues properties, final SSHConnection sshConnection) throws IOException {
         if (sshConnection != null) {
-            properties.add(new NameTypeValue("opened", sshConnection.getDateOpen()));
-            properties.add(new NameTypeValue("last", sshConnection.getDateLast()));
-            properties.add(new NameTypeValue("count", sshConnection.getCount()));
-            properties.add(new NameTypeValue("millis", sshConnection.getMillis()));
+            properties.add(new NameTypeValue("opened", sshConnection.getDateOpen()));  // i18n metadata
+            properties.add(new NameTypeValue("last", sshConnection.getDateLast()));  // i18n metadata
+            properties.add(new NameTypeValue("count", sshConnection.getCount()));  // i18n metadata
+            properties.add(new NameTypeValue("millis", sshConnection.getMillis()));  // i18n metadata
             addProperties(properties, sshConnection.getConnection());
         }
     }

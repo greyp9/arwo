@@ -100,7 +100,7 @@ public class SHHandlerPost {
         } else if (App.Action.FILESYSTEM.equals(action)) {
             location = PathU.toDir(httpRequest.getContextPath(), App.Cache.CIFS, App.Mode.VIEW, request.getServer());
         } else if (App.Action.TOGGLE.equals(action)) {
-            PropertiesU.toggleBoolean(userState.getProperties(), Value.join("/", App.Cache.WSH, object));
+            PropertiesU.toggleBoolean(userState.getProperties(), Value.join(Http.Token.SLASH, App.Cache.WSH, object));
         } else if (App.Action.ADD_FAV.equals(action)) {
             new SHAddFavorite(request).doAction();
         } else if (App.Action.SELECT_FAV.equals(action)) {

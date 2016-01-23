@@ -31,7 +31,7 @@ public class SFTPFolder {
     public SFTPFolder(final String folder, final Collection<SFTPv3DirectoryEntry> directoryEntries,
                       final RowSetMetaData metaData, final boolean sort, final SSHConnectionX sshConnectionX) {
         // "native" sort, in case none supplied by user
-        final Sorts sorts = (sort ? new Sorts(new Sort("type", true), new Sort("name", true)) : null);
+        final Sorts sorts = (sort ? new Sorts(new Sort("type", true), new Sort("name", true)) : null);  // i18n metadata
         // load from source data
         this.rowSet = new RowSet(metaData, sorts, null);
         for (final SFTPv3DirectoryEntry directoryEntry : directoryEntries) {
@@ -49,17 +49,17 @@ public class SFTPFolder {
 
     public static RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData("type", Types.VARCHAR),
-                new ColumnMetaData("folder", Types.VARCHAR, true),
-                new ColumnMetaData("name", Types.VARCHAR, true),
-                new ColumnMetaData("mtime", Types.TIMESTAMP),
-                new ColumnMetaData("ext", Types.VARCHAR),
-                new ColumnMetaData("uid", Types.VARCHAR),
-                new ColumnMetaData("gid", Types.VARCHAR),
-                new ColumnMetaData("perms", Types.VARCHAR),
-                new ColumnMetaData("size", Types.BIGINT),
+                new ColumnMetaData("type", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("folder", Types.VARCHAR, true),  // i18n metadata
+                new ColumnMetaData("name", Types.VARCHAR, true),  // i18n metadata
+                new ColumnMetaData("mtime", Types.TIMESTAMP),  // i18n metadata
+                new ColumnMetaData("ext", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("uid", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("gid", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("perms", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("size", Types.BIGINT),  // i18n metadata
         };
-        return new RowSetMetaData("sftpFolderType", columns);
+        return new RowSetMetaData("sftpFolderType", columns);  // i18n metadata
     }
 
     private static void loadRow(final RowSet rowSet, final String folder,

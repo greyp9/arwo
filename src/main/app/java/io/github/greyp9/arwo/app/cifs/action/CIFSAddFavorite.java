@@ -36,8 +36,8 @@ public class CIFSAddFavorite {
             final XedUserState documentState = userState.getDocumentState();
             final XedSession session = documentState.getSession(App.Servlet.FAVORITES);
             final XedNav nav = new XedNav(session.getXed());
-            final XedCursor cursorFavorites = nav.findX("/app:favorites/app:cifsFavorites");
-            final TypeInstance typeInstance = cursorFavorites.getChildInstance("cifsFavorite");
+            final XedCursor cursorFavorites = nav.findX("/app:favorites/app:cifsFavorites");  // i18n xpath
+            final TypeInstance typeInstance = cursorFavorites.getChildInstance("cifsFavorite");  // i18n xpath
             final NameTypeValues ntv = NameTypeValuesU.create(
                     "cifsFavorite.cifsFavoriteType.server", server,
                     "cifsFavorite.cifsFavoriteType.resource", resource,

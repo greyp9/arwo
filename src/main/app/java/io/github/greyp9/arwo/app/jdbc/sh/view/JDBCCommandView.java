@@ -57,8 +57,8 @@ public class JDBCCommandView extends JDBCView {
         final AppUserState userState = request.getUserState();
         final Properties properties = jdbc.getProperties();
         // command input form (prep)
-        final String sql = (query == null) ? properties.getProperty("sql", "") : query.getText();
-        properties.setProperty("sql", sql);
+        final String sql = (query == null) ? properties.getProperty(App.Settings.SQL, "") : query.getText();
+        properties.setProperty(App.Settings.SQL, sql);
         final XedActionSQL action = new XedActionSQL(userState.getLocus().getLocale());
         final Bundle bundle = action.getXed().getBundle();
         final NameTypeValues ntv = NameTypeValuesU.create("sql.sqlType.sql", sql);
@@ -76,7 +76,8 @@ public class JDBCCommandView extends JDBCView {
         // contextual content
         if (query == null) {
             final History history = jdbc.getHistory();
-            new JDBCHistoryView("jdbcHistoryType", history, bundle, httpRequest, userState).addContentTo(html);
+            new JDBCHistoryView("jdbcHistoryType", history, bundle,  // i18n metadata
+                    httpRequest, userState).addContentTo(html);
         } else {
             final ResultsContext context = userState.getResultsContext(httpRequest);
             new ResultsView(query.getResults(), context).addContentTo(html);

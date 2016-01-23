@@ -98,9 +98,9 @@ public class SHHandlerPost {
         if (App.Action.COMMAND.equals(action)) {
             location = new SHQueueCommand(request).doAction(location, httpArguments);
         } else if (App.Action.FILESYSTEM.equals(action)) {
-            location = PathU.toDir(httpRequest.getContextPath(), "sftp", App.Mode.VIEW, request.getServer());
+            location = PathU.toDir(httpRequest.getContextPath(), App.Servlet.SFTP, App.Mode.VIEW, request.getServer());
         } else if (App.Action.TOGGLE.equals(action)) {
-            PropertiesU.toggleBoolean(userState.getProperties(), Value.join("/", App.Cache.SSH, object));
+            PropertiesU.toggleBoolean(userState.getProperties(), Value.join(Http.Token.SLASH, App.Cache.SSH, object));
         } else if (App.Action.ADD_FAV.equals(action)) {
             new SHAddFavorite(request).doAction();
         } else if (App.Action.SELECT_FAV.equals(action)) {

@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.config;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.lang.TypeU;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
@@ -27,39 +28,39 @@ public class CursorSMTP {
     }
 
     public final String getName() {
-        return cursor.getValue(cursor.getChildInstance("name"));
+        return cursor.getValue(cursor.getChildInstance(App.Settings.NAME));
     }
 
     public final boolean isEnabled() {
-        return TypeU.toBooleanP(cursor.getValue(cursor.getChildInstance("enabled")));
+        return TypeU.toBooleanP(cursor.getValue(cursor.getChildInstance(App.Settings.ENABLED)));
     }
 
     public final String getComment() {
-        return cursor.getValue(cursor.getChildInstance("comment"));
+        return cursor.getValue(cursor.getChildInstance(App.Settings.COMMENT));
     }
 
     public final String getProtocol() {
-        return cursor.getValue(cursor.getChildInstance("protocol"));
+        return cursor.getValue(cursor.getChildInstance(App.Settings.PROTOCOL));
     }
 
     public final String getHost() {
-        return cursor.getValue(cursor.getChildInstance("host"));
+        return cursor.getValue(cursor.getChildInstance(App.Settings.HOST));
     }
 
     public final Integer getPort() {
-        return TypeU.toInteger(cursor.getValue(cursor.getChildInstance("port")));
+        return TypeU.toInteger(cursor.getValue(cursor.getChildInstance(App.Settings.PORT)));
     }
 
     public final String getUser() {
-        return cursor.getValue(cursor.getChildInstance("user"));
+        return cursor.getValue(cursor.getChildInstance(App.Settings.USER));
     }
 
     public final String getPassword() {
-        return cursor.getValue(cursor.getChildInstance("password"));
+        return cursor.getValue(cursor.getChildInstance(App.Settings.PASSWORD));
     }
 
     public final String getCertificate() {
-        return cursor.getValue(cursor.getChildInstance("certificate"));
+        return cursor.getValue(cursor.getChildInstance(App.Settings.CERTIFICATE));
     }
 
     private static class Const {

@@ -28,7 +28,7 @@ public class JDBCAddFavorite {
 
     public final String doAction() throws IOException {
         final String server = request.getServer();
-        final String sql = request.getUserState().getJDBC().getProperties().getProperty("sql", "");
+        final String sql = request.getUserState().getJDBC().getProperties().getProperty(App.Settings.SQL, "");
         final String comment = XsdDateU.toXSDZ(request.getHttpRequest().getDate());
         final boolean isData = (Value.isData(server) && Value.isData(sql));
         if (isData) {
@@ -36,8 +36,8 @@ public class JDBCAddFavorite {
             final XedUserState documentState = userState.getDocumentState();
             final XedSession session = documentState.getSession(App.Servlet.FAVORITES);
             final XedNav nav = new XedNav(session.getXed());
-            final XedCursor cursorFavorites = nav.findX("/app:favorites/app:jdbcFavorites");
-            final TypeInstance typeInstance = cursorFavorites.getChildInstance("jdbcFavorite");
+            final XedCursor cursorFavorites = nav.findX("/app:favorites/app:jdbcFavorites");  // i18n xpath
+            final TypeInstance typeInstance = cursorFavorites.getChildInstance("jdbcFavorite");  // i18n xpath
             final NameTypeValues ntv = NameTypeValuesU.create(
                     "jdbcFavorite.jdbcFavoriteType.server", server,
                     "jdbcFavorite.jdbcFavoriteType.sql", sql,

@@ -36,9 +36,9 @@ public class ConnectionRunnable implements Runnable {
         Date date = new Date();
         while (reference.get() == null) {
             date = getNextTime(date, Const.DURATION);
-            logger.finest("pause");
+            logger.finest("pause");  // i18n log
             MutexU.waitUntil(reference, date);
-            logger.finest("resume");
+            logger.finest("resume");  // i18n log
             if (reference.get() == null) {
                 runMonitor(date, Const.DURATION);  // at PT14M59S, age out PT15M stale connections
                 date = new Date();
@@ -105,6 +105,6 @@ public class ConnectionRunnable implements Runnable {
     }
 
     private static class Const {
-        private static final String DURATION = "PT15M";
+        private static final String DURATION = "PT15M";  // i18n
     }
 }

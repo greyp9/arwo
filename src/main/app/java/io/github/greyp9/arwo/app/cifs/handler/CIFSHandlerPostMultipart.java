@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.app.cifs.data.CIFSDataSource;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.codec.hex.HexCodec;
 import io.github.greyp9.arwo.core.file.FileX;
@@ -48,8 +49,8 @@ public class CIFSHandlerPostMultipart {
                 final MimeHeader mimeHeader = headerIt.next();
                 mimeHeader.addTo(propertiesPart);
             }
-            final String name = propertiesPart.getProperty(Const.CD_NAME);
-            if (Const.UPLOAD_FILE.equals(name)) {
+            final String name = propertiesPart.getProperty(App.Post.CD_NAME);
+            if (App.Post.UPLOAD_FILE.equals(name)) {
                 doPostUploadFile(mimePart, propertiesPart);
             }
         }
@@ -58,7 +59,7 @@ public class CIFSHandlerPostMultipart {
 
     private void doPostUploadFile(final MimePart mimePart, final Properties properties) throws IOException {
         final String server = request.getServer();
-        final String filename = properties.getProperty(Const.CD_FILENAME);
+        final String filename = properties.getProperty(App.Post.CD_FILENAME);
         final CIFSConnectionFactory factory = new CIFSConnectionFactory(httpRequest, userState, bundle, alerts);
         final CIFSConnectionResource resource = (CIFSConnectionResource)
                 userState.getCIFS().getCache().getResource(request.getServer(), factory);
@@ -85,11 +86,5 @@ public class CIFSHandlerPostMultipart {
         final String hash = HexCodec.encode(HashU.md5(bytes));
         alerts.add(new Alert(Alert.Severity.INFO, bundle.format(
                 "SFTPHandlerPostMultipart.file.target", fileX.getFolderSlash(), bytes.length, hash)));
-    }
-
-    private static class Const {
-        private static final String CD_FILENAME = "Content-Disposition.filename";
-        private static final String CD_NAME = "Content-Disposition.name";
-        private static final String UPLOAD_FILE = "uploadFile";
     }
 }

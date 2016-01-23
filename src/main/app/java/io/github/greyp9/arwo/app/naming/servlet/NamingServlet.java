@@ -14,7 +14,7 @@ public class NamingServlet extends javax.servlet.http.HttpServlet {
         super.init(config);
         // leaves behind a arwo.core.logging.FormatterX
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(getClass().getName()));
-        Logger.getLogger(getClass().getName()).info("init()");
+        Logger.getLogger(getClass().getName()).info("init()");  // i18n log
         final String contextPath = getServletContext().getContextPath();
         AppNaming.createSubcontext(contextPath);
     }
@@ -23,7 +23,7 @@ public class NamingServlet extends javax.servlet.http.HttpServlet {
     public final void destroy() {
         final String contextPath = getServletContext().getContextPath();
         AppNaming.destroySubcontext(contextPath);
-        Logger.getLogger(getClass().getName()).info("destroy()");
+        Logger.getLogger(getClass().getName()).info("destroy()");  // i18n log
         super.destroy();
     }
 }

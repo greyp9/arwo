@@ -41,9 +41,9 @@ public class LFSFolderStyled {
     private void loadRow(final RowSet rowSetStyled, final Row rowRaw) throws UnsupportedEncodingException {
         // input
         final RowSetMetaData metaData = rowSetStyled.getMetaData();
-        final Integer type = rowRaw.getInteger(metaData.getIndex("type"));
-        final String folder = rowRaw.getString(metaData.getIndex("folder"));
-        final String name = rowRaw.getString(metaData.getIndex("name"));
+        final Integer type = rowRaw.getInteger(metaData.getIndex("type"));  // i18n metadata
+        final String folder = rowRaw.getString(metaData.getIndex("folder"));  // i18n metadata
+        final String name = rowRaw.getString(metaData.getIndex("name"));  // i18n metadata
         // processing
         final boolean isDirectory = (App.FS.S_IFDIR == NumberU.toInt(type, 0));
         // output
@@ -51,9 +51,9 @@ public class LFSFolderStyled {
         insertRow.setNextColumn(getTypeStyled(type, folder, name, isDirectory));
         insertRow.setNextColumn(folder);
         insertRow.setNextColumn(name);
-        insertRow.setNextColumn(rowRaw.getColumn(metaData.getIndex("mtime")));
-        insertRow.setNextColumn(rowRaw.getColumn(metaData.getIndex("ext")));
-        insertRow.setNextColumn(rowRaw.getColumn(metaData.getIndex("size")));
+        insertRow.setNextColumn(rowRaw.getColumn(metaData.getIndex("mtime")));  // i18n metadata
+        insertRow.setNextColumn(rowRaw.getColumn(metaData.getIndex("ext")));  // i18n metadata
+        insertRow.setNextColumn(rowRaw.getColumn(metaData.getIndex("size")));  // i18n metadata
         rowSetStyled.add(insertRow.getRow());
     }
 

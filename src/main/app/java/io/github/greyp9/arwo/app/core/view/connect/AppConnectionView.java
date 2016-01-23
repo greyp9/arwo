@@ -58,15 +58,15 @@ public class AppConnectionView {
     }
 
     private RowSetMetaData createMetaData() {
-        final String id = cache.getName() + "ConnectionType";
+        final String id = cache.getName() + "ConnectionType";  // i18n metadata
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData("name", Types.VARCHAR, true),
-                new ColumnMetaData("hashCode", Types.VARCHAR),
-                new ColumnMetaData("opened", Types.TIMESTAMP),
-                new ColumnMetaData("last", Types.TIMESTAMP),
-                new ColumnMetaData("count", Types.INTEGER),
-                new ColumnMetaData("millis", Types.INTEGER),
-                new ColumnMetaData("close", Types.VARCHAR),
+                new ColumnMetaData("name", Types.VARCHAR, true),  // i18n metadata
+                new ColumnMetaData("hashCode", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("opened", Types.TIMESTAMP),  // i18n metadata
+                new ColumnMetaData("last", Types.TIMESTAMP),  // i18n metadata
+                new ColumnMetaData("count", Types.INTEGER),  // i18n metadata
+                new ColumnMetaData("millis", Types.INTEGER),  // i18n metadata
+                new ColumnMetaData("close", Types.VARCHAR),  // i18n metadata
         };
         RowSetMetaData metaData = new RowSetMetaData(id, columns);
         if (baseURI != null) {

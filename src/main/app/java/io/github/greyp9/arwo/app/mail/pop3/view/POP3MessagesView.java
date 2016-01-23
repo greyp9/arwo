@@ -34,7 +34,7 @@ public class POP3MessagesView extends POP3View {
         final RowSetMetaData metaData = POP3DataSource.getMessagesMetaData();
         final ViewState viewState = userState.getViewStates().getViewState(
                 metaData, request.getBundle(), request.getLocus());
-        viewState.getHiddenColumns().add("message");
+        viewState.getHiddenColumns().add("message");  // i18n metadata
         final RowSet rowSet = getRowSet(metaData, viewState.isConnected());
         final RowSet rowSetStyled = new POP3MessagesStyled(request, rowSet).getRowSet();
         // optionally persist fetched results

@@ -49,7 +49,7 @@ public class SMTPRunnable extends CronRunnable {
         final Date dateStart = new Date();
         row.update(Const.DATE_START, dateStart);
         // initialize
-        final String server = ElementU.getAttribute(getParams().getElement(), "server");
+        final String server = ElementU.getAttribute(getParams().getElement(), App.Settings.SERVER);
         final String pathInfo = PathU.toDir("", server);
         // execute
         try {
@@ -96,11 +96,11 @@ public class SMTPRunnable extends CronRunnable {
                 Http.Header.CONTENT_TYPE, Http.Mime.FORM_URL_ENCODED,
                 App.Header.RESULT, filename);
         final NameTypeValues query = NameTypeValuesU.create(
-                "mail.mailType.to", ElementU.getAttribute(element, "to"),
-                "mail.mailType.cc", ElementU.getAttribute(element, "cc"),
-                "mail.mailType.bcc", ElementU.getAttribute(element, "bcc"),
-                "mail.mailType.subject", ElementU.getAttribute(element, "subject"),
-                "mail.mailType.body", getBody(ElementU.getAttribute(element, "body"), date),
+                "mail.mailType.to", ElementU.getAttribute(element, "to"),  // i18n xml
+                "mail.mailType.cc", ElementU.getAttribute(element, "cc"),  // i18n xml
+                "mail.mailType.bcc", ElementU.getAttribute(element, "bcc"),  // i18n xml
+                "mail.mailType.subject", ElementU.getAttribute(element, "subject"),  // i18n xml
+                "mail.mailType.body", getBody(ElementU.getAttribute(element, "body"), date),  // i18n xml
                 submitID, App.Actions.SUBMIT_MAIL);
         final ByteArrayInputStream is = new ByteArrayInputStream(HttpArguments.toEntity(query));
         final String resource = String.format("%s%s%s", params.getContext(), App.Servlet.SMTP, pathInfo);

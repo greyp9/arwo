@@ -18,6 +18,7 @@ import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
 
 import java.io.IOException;
+import java.util.Properties;
 
 public class SHAddFavorite {
     private final SHRequest request;
@@ -28,7 +29,8 @@ public class SHAddFavorite {
 
     public final String doAction() throws IOException {
         final String server = request.getServer();
-        final String command = request.getUserState().getInterop().getProperties().getProperty("command", "");
+        final Properties properties = request.getUserState().getInterop().getProperties();
+        final String command = properties.getProperty(App.Settings.COMMAND, "");
         final String comment = XsdDateU.toXSDZ(request.getHttpRequest().getDate());
         final boolean isData = (Value.isData(server) && Value.isData(command));
         if (isData) {
@@ -36,8 +38,8 @@ public class SHAddFavorite {
             final XedUserState documentState = userState.getDocumentState();
             final XedSession session = documentState.getSession(App.Servlet.FAVORITES);
             final XedNav nav = new XedNav(session.getXed());
-            final XedCursor cursorFavorites = nav.findX("/app:favorites/app:wshFavorites");
-            final TypeInstance typeInstance = cursorFavorites.getChildInstance("wshFavorite");
+            final XedCursor cursorFavorites = nav.findX("/app:favorites/app:wshFavorites");  // i18n xpath
+            final TypeInstance typeInstance = cursorFavorites.getChildInstance("wshFavorite");  // i18n xpath
             final NameTypeValues ntv = NameTypeValuesU.create(
                     "wshFavorite.wshFavoriteType.server", server,
                     "wshFavorite.wshFavoriteType.command", command,

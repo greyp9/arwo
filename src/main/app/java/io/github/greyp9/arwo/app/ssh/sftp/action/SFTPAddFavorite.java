@@ -36,8 +36,8 @@ public class SFTPAddFavorite {
             final XedUserState documentState = userState.getDocumentState();
             final XedSession session = documentState.getSession(App.Servlet.FAVORITES);
             final XedNav nav = new XedNav(session.getXed());
-            final XedCursor cursorFavorites = nav.findX("/app:favorites/app:sftpFavorites");
-            final TypeInstance typeInstance = cursorFavorites.getChildInstance("sftpFavorite");
+            final XedCursor cursorFavorites = nav.findX("/app:favorites/app:sftpFavorites");  // i18n xpath
+            final TypeInstance typeInstance = cursorFavorites.getChildInstance("sftpFavorite");  // i18n xpath
             final NameTypeValues ntv = NameTypeValuesU.create(
                     "sftpFavorite.sftpFavoriteType.server", server,
                     "sftpFavorite.sftpFavoriteType.resource", resource,

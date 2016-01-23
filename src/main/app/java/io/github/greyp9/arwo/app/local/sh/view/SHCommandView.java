@@ -55,10 +55,10 @@ public class SHCommandView extends SHView {
         final SHRequest request = getRequest();
         final ServletHttpRequest httpRequest = request.getHttpRequest();
         final AppUserState userState = request.getUserState();
-        final Properties localProperties = local.getProperties();
+        final Properties properties = local.getProperties();
         // command input form (prep)
-        final String command = (script == null) ? localProperties.getProperty("command", "") : script.getText();
-        localProperties.setProperty("command", command);
+        final String command = (script == null) ? properties.getProperty(App.Settings.COMMAND, "") : script.getText();
+        properties.setProperty(App.Settings.COMMAND, command);
         final XedActionCommand action = new XedActionCommand(userState.getLocus().getLocale());
         final Bundle bundle = action.getXed().getBundle();
         final NameTypeValues ntv = NameTypeValuesU.create("command.commandType.command", command);
@@ -76,7 +76,8 @@ public class SHCommandView extends SHView {
         // contextual content
         if (script == null) {
             final History history = local.getHistory();
-            new AppHistoryView("lshHistoryType", false, history, bundle, httpRequest, userState).addContentTo(html);
+            new AppHistoryView("lshHistoryType", false, history, bundle,  // i18n metadata
+                    httpRequest, userState).addContentTo(html);
         } else {
             new AppScriptView(script, userState.getLocus()).addContentTo(html);
         }

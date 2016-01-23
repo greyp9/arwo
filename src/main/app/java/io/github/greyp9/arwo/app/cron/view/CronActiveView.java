@@ -58,15 +58,15 @@ public class CronActiveView {
 
     private RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData("tz", Types.VARCHAR),
-                new ColumnMetaData("tabName", Types.VARCHAR),
-                new ColumnMetaData("jobName", Types.VARCHAR),
-                new ColumnMetaData("line", Types.VARCHAR),
-                new ColumnMetaData("next", Types.TIMESTAMP),
-                new ColumnMetaData("until", Types.VARCHAR),
-                new ColumnMetaData("now", Types.VARCHAR),
+                new ColumnMetaData("tz", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("tabName", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("jobName", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("line", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("next", Types.TIMESTAMP),  // i18n metadata
+                new ColumnMetaData("until", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("now", Types.VARCHAR),  // i18n metadata
         };
-        return new RowSetMetaData("cronEntriesType", columns);
+        return new RowSetMetaData("cronEntriesType", columns);  // i18n metadata
     }
 
     private RowSet createRowSetComposite(final RowSetMetaData metaData, final Principal principal) throws IOException {
@@ -98,7 +98,7 @@ public class CronActiveView {
         final String until = DurationU.duration(dateRequest, dateNext);
         final boolean due = (!DurationU.Const.ONE_DAY.equals(until));
         final SubmitToken tokenNow = new SubmitToken(
-                App.Target.USER_STATE, "cronNow", cronTab.getName(), cronJob.getName());
+                App.Target.USER_STATE, App.Action.CRON_NOW, cronTab.getName(), cronJob.getName());
         final InsertRow insertRow = new InsertRow(rowSet);
         insertRow.setNextColumn(cronTab.getTZ().getID());
         insertRow.setNextColumn(cronTab.getName());

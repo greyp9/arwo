@@ -34,7 +34,7 @@ public class IMAPMessagesView extends IMAPView {
         final RowSetMetaData metaData = IMAPDataSource.getMessagesMetaData();
         final ViewState viewState = userState.getViewStates().getViewState(
                 metaData, request.getBundle(), request.getLocus());
-        viewState.getHiddenColumns().add("message");
+        viewState.getHiddenColumns().add("message");  // i18n metadata
         final RowSet rowSet = getRowSet(metaData, viewState.isConnected());
         final RowSet rowSetStyled = new IMAPMessagesStyled(request, rowSet).getRowSet();
         // optionally persist fetched results

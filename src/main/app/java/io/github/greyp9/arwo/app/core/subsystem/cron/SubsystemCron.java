@@ -20,6 +20,6 @@ public class SubsystemCron {
 
     public SubsystemCron() throws IOException {
         this.meterCron = new Meter(App.Meter.QNAME_CRON_JOBS);
-        this.rowSetCron = this.meterCron.getRowSet("{urn:arwo:meter}cronJobsType", "job");
+        this.rowSetCron = this.meterCron.getRowSet("{urn:arwo:meter}cronJobsType", "job");  // i18n
     }
 }

@@ -60,7 +60,7 @@ public class IMAPConnectionFactory implements ConnectionFactory {
         final String password = cursorIMAP.getPassword();
         final char[] secret = Value.toCharArray(httpRequest.getHeader(Http.Header.AUTHORIZATION));
         final XedCursor cursor = cursorIMAP.getCursor();
-        final TypeInstance instancePassword = cursor.getChildInstance("password");
+        final TypeInstance instancePassword = cursor.getChildInstance(App.Settings.PASSWORD);
         final KeyX keyPassword = XedKey.getKeyPBE(secret, instancePassword);
         final String passwordClear = ((password == null) ? null : keyPassword.unprotect(password));
         final String certificate = cursorIMAP.getCertificate();

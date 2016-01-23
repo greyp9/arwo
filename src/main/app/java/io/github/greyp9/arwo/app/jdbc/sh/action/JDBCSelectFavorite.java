@@ -25,9 +25,9 @@ public class JDBCSelectFavorite {
         final XedSession session = documentState.getSession(App.Servlet.FAVORITES);
         final XedNav nav = new XedNav(session.getXed());
         final XedCursor cursor = nav.find(uri);
-        final String server = cursor.getValue(cursor.getChildInstance("server"));
-        final String sql = cursor.getValue(cursor.getChildInstance("sql"));
-        userState.getJDBC().getProperties().setProperty("sql", sql);
+        final String server = cursor.getValue(cursor.getChildInstance(App.Settings.SERVER));
+        final String sql = cursor.getValue(cursor.getChildInstance(App.Settings.SQL));
+        userState.getJDBC().getProperties().setProperty(App.Settings.SQL, sql);
         return String.format("%s/%s", request.getHttpRequest().getBaseURI(), server);
     }
 }

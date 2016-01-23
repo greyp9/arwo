@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.lib.mail.smtp.connection;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.config.CursorSMTP;
 import io.github.greyp9.arwo.core.tls.context.TLSContext;
 import io.github.greyp9.arwo.core.tls.context.TLSContextFactory;
@@ -38,7 +39,7 @@ public class SessionFactory {
         try {
             final Transport transport = session.getTransport("smtp");  // i18n
             transport.connect(cursorSMTP.getHost(), cursorSMTP.getPort(),
-                    cursorSMTP.getUser(), properties.getProperty("password"));  // i18n
+                    cursorSMTP.getUser(), properties.getProperty(App.Settings.PASSWORD));  // i18n
             return transport;
         } catch (MessagingException e) {
             throw new IOException(e);

@@ -23,7 +23,7 @@ public class ExecutorServlet extends javax.servlet.http.HttpServlet {
     public final void init(final ServletConfig config) throws ServletException {
         super.init(config);
         final Logger logger = Logger.getLogger(getClass().getName());
-        logger.info("init()");
+        logger.info("init()"); // i18n log
         final String contextPath = config.getServletContext().getContextPath();
         context = AppNaming.lookupSubcontext(contextPath);
         executorService = ExecutorServiceFactory.create(Const.START_NUM_THREAD, getClass().getSimpleName());
@@ -43,7 +43,7 @@ public class ExecutorServlet extends javax.servlet.http.HttpServlet {
             } catch (InterruptedException e) {
                 logger.severe(e.getMessage());
             }
-            logger.info("awaitTermination()");
+            logger.info("awaitTermination()"); // i18n log
             for (final Runnable runnable : runnables) {
                 logger.warning(runnable.getClass().getName());
             }
@@ -51,7 +51,7 @@ public class ExecutorServlet extends javax.servlet.http.HttpServlet {
             executorService = null;
             context = null;
         }
-        logger.info("destroy()");
+        logger.info("destroy()"); // i18n log
         super.destroy();
     }
 

@@ -64,13 +64,13 @@ public class JDBCHistoryView {
     private RowSetMetaData createMetaData(final String id) {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
                 new ColumnMetaData(App.Action.SELECT, Types.VARCHAR),
-                new ColumnMetaData("context", Types.VARCHAR),
-                new ColumnMetaData("sql", Types.VARCHAR),
-                new ColumnMetaData("dateSubmit", Types.TIMESTAMP, true),
-                new ColumnMetaData("state", Types.VARCHAR),
-                new ColumnMetaData("wait", Types.INTEGER),
-                new ColumnMetaData("run", Types.INTEGER),
-                new ColumnMetaData("exitValue", Types.INTEGER),
+                new ColumnMetaData("context", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("sql", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("dateSubmit", Types.TIMESTAMP, true),  // i18n metadata
+                new ColumnMetaData("state", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("wait", Types.INTEGER),  // i18n metadata
+                new ColumnMetaData("run", Types.INTEGER),  // i18n metadata
+                new ColumnMetaData("exitValue", Types.INTEGER),  // i18n metadata
         };
         return new RowSetMetaData(id, columns);
     }

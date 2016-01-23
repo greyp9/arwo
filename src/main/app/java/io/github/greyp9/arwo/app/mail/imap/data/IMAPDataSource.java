@@ -36,29 +36,29 @@ public class IMAPDataSource {
 
     public static RowSetMetaData getFoldersMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData("select", Types.VARCHAR),
-                new ColumnMetaData("name", Types.VARCHAR, true),
-                new ColumnMetaData("fullName", Types.VARCHAR),
-                new ColumnMetaData("type", Types.INTEGER),
-                new ColumnMetaData("messages", Types.INTEGER),
-                new ColumnMetaData("new", Types.INTEGER),
-                new ColumnMetaData("unread", Types.INTEGER),
+                new ColumnMetaData("select", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("name", Types.VARCHAR, true),  // i18n metadata
+                new ColumnMetaData("fullName", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("type", Types.INTEGER),  // i18n metadata
+                new ColumnMetaData("messages", Types.INTEGER),  // i18n metadata
+                new ColumnMetaData("new", Types.INTEGER),  // i18n metadata
+                new ColumnMetaData("unread", Types.INTEGER),  // i18n metadata
         };
-        return new RowSetMetaData("imapFoldersType", columns);
+        return new RowSetMetaData("imapFoldersType", columns);  // i18n metadata
     }
 
     public static RowSetMetaData getMessagesMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData("select", Types.VARCHAR),
-                new ColumnMetaData("message", Types.INTEGER, true),
-                new ColumnMetaData("from", Types.VARCHAR),
-                new ColumnMetaData("to", Types.VARCHAR),
-                new ColumnMetaData("subject", Types.VARCHAR),
-                new ColumnMetaData("sent", Types.TIMESTAMP),
-                new ColumnMetaData("recv", Types.TIMESTAMP),
-                new ColumnMetaData("size", Types.INTEGER),
+                new ColumnMetaData("select", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("message", Types.INTEGER, true),  // i18n metadata
+                new ColumnMetaData("from", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("to", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("subject", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("sent", Types.TIMESTAMP),  // i18n metadata
+                new ColumnMetaData("recv", Types.TIMESTAMP),  // i18n metadata
+                new ColumnMetaData("size", Types.INTEGER),  // i18n metadata
         };
-        return new RowSetMetaData("imapMessagesType", columns);
+        return new RowSetMetaData("imapMessagesType", columns);  // i18n metadata
     }
 
     public final RowSet getFolders(final RowSetMetaData metaData) {
@@ -87,7 +87,7 @@ public class IMAPDataSource {
 
     public final RowSet getMessages(final RowSetMetaData metaData, final String folderName) {
         // "native" sort, in case none supplied by user
-        final Sorts sorts = new Sorts(new Sort("recv", false), new Sort("sent", false));  // i18n
+        final Sorts sorts = new Sorts(new Sort("recv", false), new Sort("sent", false));  // i18n metadata
         final RowSet rowSet = new RowSet(metaData, sorts, null);
         final Date date = new Date();
         try {

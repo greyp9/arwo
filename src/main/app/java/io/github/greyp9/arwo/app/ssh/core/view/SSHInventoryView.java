@@ -57,12 +57,12 @@ public class SSHInventoryView {
     private RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
                 new ColumnMetaData(App.Action.SELECT, Types.VARCHAR),
-                new ColumnMetaData("name", Types.VARCHAR, true),
-                new ColumnMetaData("comment", Types.VARCHAR),
-                new ColumnMetaData("user", Types.VARCHAR),
-                new ColumnMetaData("authPassword/authPublicKey", Types.VARCHAR),
-                new ColumnMetaData("host", Types.VARCHAR),
-                new ColumnMetaData("port", Types.VARCHAR),
+                new ColumnMetaData(App.Settings.NAME, Types.VARCHAR, true),
+                new ColumnMetaData(App.Settings.COMMENT, Types.VARCHAR),
+                new ColumnMetaData(App.Settings.USER, Types.VARCHAR),
+                new ColumnMetaData("authPassword/authPublicKey", Types.VARCHAR),  // i18n
+                new ColumnMetaData(App.Settings.HOST, Types.VARCHAR),
+                new ColumnMetaData(App.Settings.PORT, Types.VARCHAR),
         };
         return new RowSetMetaData("server.sshServerType", columns);
     }

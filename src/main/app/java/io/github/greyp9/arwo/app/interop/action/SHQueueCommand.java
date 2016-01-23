@@ -59,7 +59,7 @@ public class SHQueueCommand {
         final String command = new XedActionCommand(request.getLocale()).getCommand(httpArguments);
         final Script script = new Script(server, httpRequest.getDate(), command);
         userState.getInterop().getHistory().add(script);
-        userState.getInterop().getProperties().setProperty("command", command);
+        userState.getInterop().getProperties().setProperty(App.Settings.COMMAND, command);
         // runnable to execute commands
         final UserExecutor userExecutor = userState.getUserExecutor();
         final ExecutorService executorStream = userExecutor.getExecutorStream();

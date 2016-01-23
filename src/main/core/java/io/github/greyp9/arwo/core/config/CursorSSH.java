@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.config;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.lang.TypeU;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.bundle.XsdBundle;
@@ -30,27 +31,27 @@ public class CursorSSH {
     }
 
     public final String getName() {
-        return cursor.getValue(cursor.getChildInstance("name"));
+        return cursor.getValue(cursor.getChildInstance(App.Settings.NAME));
     }
 
     public final boolean isEnabled() {
-        return TypeU.toBooleanP(cursor.getValue(cursor.getChildInstance("enabled")));
+        return TypeU.toBooleanP(cursor.getValue(cursor.getChildInstance(App.Settings.ENABLED)));
     }
 
     public final String getComment() {
-        return cursor.getValue(cursor.getChildInstance("comment"));
+        return cursor.getValue(cursor.getChildInstance(App.Settings.COMMENT));
     }
 
     public final String getHost() {
-        return cursor.getValue(cursor.getChildInstance("host"));
+        return cursor.getValue(cursor.getChildInstance(App.Settings.HOST));
     }
 
     public final String getPort() {
-        return cursor.getValue(cursor.getChildInstance("port"));
+        return cursor.getValue(cursor.getChildInstance(App.Settings.PORT));
     }
 
     public final String getUser() {
-        return cursor.getValue(cursor.getChildInstance("user"));
+        return cursor.getValue(cursor.getChildInstance(App.Settings.USER));
     }
 
     public final String getAuthentication() {
@@ -58,27 +59,29 @@ public class CursorSSH {
         final XsdBundle bundle = cursor.getXed().getXsdBundle();
         final TypeInstance parentInstance = cursor.getTypeInstance();
         if (Value.isData(getPassword())) {
-            authentication = bundle.getLabel(parentInstance, parentInstance.getInstance("authPassword"));
+            authentication = bundle.getLabel(parentInstance, parentInstance.getInstance(App.Settings.AUTH_PASSWORD));
         } else if (Value.isData(getPrivateKey())) {
-            authentication = bundle.getLabel(parentInstance, parentInstance.getInstance("authPublicKey"));
+            authentication = bundle.getLabel(parentInstance, parentInstance.getInstance(App.Settings.AUTH_PUBLIC_KEY));
         }
         return authentication;
     }
 
     public final String getPassword() {
-        return cursor.getValue(cursor.getChildInstance("authPassword").getInstance("password"));
+        return cursor.getValue(cursor.getChildInstance(
+                App.Settings.AUTH_PASSWORD).getInstance(App.Settings.PASSWORD));
     }
 
     public final String getPrivateKey() {
-        return cursor.getValue(cursor.getChildInstance("authPublicKey").getInstance("privateKey"));
+        return cursor.getValue(cursor.getChildInstance(
+                App.Settings.AUTH_PUBLIC_KEY).getInstance(App.Settings.PRIVATE_KEY));
     }
 
     public final String getAlgorithm() {
-        return cursor.getValue(cursor.getChildInstance("algorithm"));
+        return cursor.getValue(cursor.getChildInstance(App.Settings.ALGORITHM));
     }
 
     public final String getPublicKey() {
-        return cursor.getValue(cursor.getChildInstance("publicKey"));
+        return cursor.getValue(cursor.getChildInstance(App.Settings.PUBLIC_KEY));
     }
 
     private static class Const {

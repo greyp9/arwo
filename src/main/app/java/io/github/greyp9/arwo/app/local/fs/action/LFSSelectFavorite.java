@@ -26,7 +26,7 @@ public class LFSSelectFavorite {
         final XedNav nav = new XedNav(session.getXed());
         final XedCursor cursor = nav.find(uri);
 
-        final String resource = cursor.getValue(cursor.getChildInstance("resource"));
+        final String resource = cursor.getValue(cursor.getChildInstance(App.Settings.RESOURCE));
         return String.format("%s%s", request.getBaseURIMode(), resource);
     }
 }

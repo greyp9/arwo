@@ -56,7 +56,7 @@ public class InteropConnectionFactory implements ConnectionFactory {
         final String password = cursorCIFS.getPassword();
         final char[] secret = Value.toCharArray(httpRequest.getHeader(Http.Header.AUTHORIZATION));
         final XedCursor cursor = cursorCIFS.getCursor();
-        final TypeInstance instancePassword = cursor.getChildInstance("password");
+        final TypeInstance instancePassword = cursor.getChildInstance(App.Settings.PASSWORD);
         final KeyX keyPassword = XedKey.getKeyPBE(secret, instancePassword);
         final String passwordClear = ((password == null) ? null : keyPassword.unprotect(password));
         return new InteropConnectionResource(name, new InteropConnection(host, user, passwordClear));

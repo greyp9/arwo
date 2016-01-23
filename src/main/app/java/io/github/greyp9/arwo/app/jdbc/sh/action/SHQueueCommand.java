@@ -58,7 +58,7 @@ public class SHQueueCommand {
         final String sql = new XedActionSQL(request.getLocale()).getSQL(httpArguments);
         final Query query = new Query(server, httpRequest.getDate().getTime(), sql);
         userState.getJDBC().getHistory().add(query);
-        userState.getJDBC().getProperties().setProperty("sql", sql);
+        userState.getJDBC().getProperties().setProperty(App.Settings.SQL, sql);
         // runnable to execute commands
         final UserExecutor userExecutor = userState.getUserExecutor();
         final ResourceCache cacheBlob = userState.getCacheBlob();

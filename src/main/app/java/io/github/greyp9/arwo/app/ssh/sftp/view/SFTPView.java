@@ -113,8 +113,8 @@ public abstract class SFTPView {
         addTextFiltersView(divTitle);
         // favorites (if toggled)
         final XedNav nav = new XedNav(userState.getDocumentState().getSession(App.Servlet.FAVORITES).getXed());
-        final XedCursor cursorFavorites = nav.findX("/app:favorites/app:sftpFavorites");
-        final XedCursor cursorType = nav.find("sftpFavorite", cursorFavorites);
+        final XedCursor cursorFavorites = nav.findX("/app:favorites/app:sftpFavorites");  // i18n xpath
+        final XedCursor cursorType = nav.find("sftpFavorite", cursorFavorites);  // i18n xpath
         new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.FILESYSTEM).addContentTo(html);
         // settings property strips
         final Locale locale = userState.getLocus().getLocale();
@@ -150,7 +150,7 @@ public abstract class SFTPView {
 
     protected final void addFileProperties(final Element html, final MetaFile metaFile) throws IOException {
         if (PropertiesU.isBoolean(userState.getProperties(), App.Action.PROPERTIES)) {
-            final AppPropertiesView view = new AppPropertiesView("sftpPropertiesType", userState);
+            final AppPropertiesView view = new AppPropertiesView("sftpPropertiesType", userState);  // i18n metadata
             view.addContentTo(html, metaFile, bundle, getFileProperties());
         }
     }

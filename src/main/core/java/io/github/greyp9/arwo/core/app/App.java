@@ -15,7 +15,7 @@ public final class App {
         public static final String URI_ACTION = "urn:arwo:action";
         public static final String PREFIX_ACTION = "action";
 
-        public static final QName QNAME_COMMAND = new QName(URI_ACTION, "command", PREFIX_ACTION);
+        public static final QName QNAME_COMMAND = new QName(URI_ACTION, Action.COMMAND, PREFIX_ACTION);
         public static final QName QNAME_COMMIT = new QName(URI_ACTION, "commit", PREFIX_ACTION);
         public static final QName QNAME_FILE_EDIT = new QName(URI_ACTION, "fileEdit", PREFIX_ACTION);
         public static final QName QNAME_FILE_NEW = new QName(URI_ACTION, "fileNew", PREFIX_ACTION);
@@ -65,10 +65,12 @@ public final class App {
         public static final String CIFS = "cifs";
         public static final String IMAP = "imap";
         public static final String JDBC = "jdbc";
+        public static final String LFS = "lfs";
+        public static final String LSH = "lsh";
         public static final String POP3 = "pop3";
         public static final String SMTP = "smtp";
         public static final String SSH = "ssh";
-        public static final String WEBDAV = "webdav";
+        public static final String DAV = "webdav";
         public static final String WSH = "wsh";
     }
 
@@ -155,6 +157,30 @@ public final class App {
         public static final String VIEW_R = "viewR";
     }
 
+    public static class Settings {
+        public static final String ALGORITHM = "algorithm";
+        public static final String AUTH_PASSWORD = "authPassword";
+        public static final String AUTH_PUBLIC_KEY = "authPublicKey";
+        public static final String CERTIFICATE = "certificate";
+        public static final String COMMAND = "command";
+        public static final String COMMENT = "comment";
+        public static final String DRIVER_CLASS = "driverClass";
+        public static final String ENABLED = "enabled";
+        public static final String HOST = "host";
+        public static final String JDBC_URL = "jdbcURL";
+        public static final String NAME = "name";
+        public static final String PORT = "port";
+        public static final String PRIVATE_KEY = "privateKey";
+        public static final String PROTOCOL = "protocol";
+        public static final String PUBLIC_KEY = "publicKey";
+        public static final String RESOURCE = "resource";
+        public static final String SERVER = "server";
+        public static final String SHARE = "share";
+        public static final String SQL = "sql";
+        public static final String USER = "user";
+        public static final String PASSWORD = "password";
+    }
+
     @SuppressWarnings({ "OctalInteger", "PMD.AvoidUsingOctalValues" })
     public static class FS {
         public static final String BYTES = "bytes";
@@ -231,5 +257,11 @@ public final class App {
         public static final String SESSION = "session";
         public static final String USER_STATE = "userState";
         public static final String VIEW_STATE = "viewState";
+    }
+
+    public static class Post {
+        public static final String CD_FILENAME = "Content-Disposition.filename";
+        public static final String CD_NAME = "Content-Disposition.name";
+        public static final String UPLOAD_FILE = "uploadFile";
     }
 }

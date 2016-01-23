@@ -98,9 +98,9 @@ public class SHHandlerPost {
         if (App.Action.COMMAND.equals(action)) {
             location = new SHQueueCommand(request).doAction(httpArguments);
         } else if (App.Action.FILESYSTEM.equals(action)) {
-            location = PathU.toDir(httpRequest.getContextPath(), "lfs", App.Mode.VIEW);
+            location = PathU.toDir(httpRequest.getContextPath(), App.Servlet.LFS, App.Mode.VIEW);
         } else if (App.Action.TOGGLE.equals(action)) {
-            PropertiesU.toggleBoolean(userState.getProperties(), Value.join("/", "lsh", object));
+            PropertiesU.toggleBoolean(userState.getProperties(), Value.join(Http.Token.SLASH, App.Cache.LSH, object));
         } else if (App.Action.ADD_FAV.equals(action)) {
             new SHAddFavorite(request).doAction();
         } else if (App.Action.SELECT_FAV.equals(action)) {

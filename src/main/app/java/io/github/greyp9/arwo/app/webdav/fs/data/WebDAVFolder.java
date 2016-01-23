@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.app.webdav.fs.data;
 import com.github.sardine.DavResource;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.file.FileX;
+import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.lang.NumberU;
 import io.github.greyp9.arwo.core.table.insert.InsertRow;
 import io.github.greyp9.arwo.core.table.metadata.ColumnMetaData;
@@ -25,12 +26,12 @@ public class WebDAVFolder {
     public WebDAVFolder(final String folder, final Collection<DavResource> directoryEntries,
                         final RowSetMetaData metaData, final boolean sort) {
         // "native" sort, in case none supplied by user
-        final Sorts sorts = (sort ? new Sorts(new Sort("type", true), new Sort("name", true)) : null);
+        final Sorts sorts = (sort ? new Sorts(new Sort("type", true), new Sort("name", true)) : null);  // i18n metadata
         // load from source data
         this.rowSet = new RowSet(metaData, sorts, null);
         for (final DavResource directoryEntry : directoryEntries) {
             // skip spurious entries
-            if (directoryEntry.getPath().endsWith("/")) {  // identity entry
+            if (directoryEntry.getPath().endsWith(Http.Token.SLASH)) {  // identity entry
                 directoryEntry.getClass();
             } else {
                 loadRow(rowSet, folder, directoryEntry);
@@ -41,17 +42,17 @@ public class WebDAVFolder {
 
     public static RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData("type", Types.VARCHAR),
-                new ColumnMetaData("folder", Types.VARCHAR, true),
-                new ColumnMetaData("name", Types.VARCHAR, true),
-                new ColumnMetaData("mtime", Types.TIMESTAMP),
-                new ColumnMetaData("ext", Types.VARCHAR),
+                new ColumnMetaData("type", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("folder", Types.VARCHAR, true),  // i18n metadata
+                new ColumnMetaData("name", Types.VARCHAR, true),  // i18n metadata
+                new ColumnMetaData("mtime", Types.TIMESTAMP),  // i18n metadata
+                new ColumnMetaData("ext", Types.VARCHAR),  // i18n metadata
 
 
 
-                new ColumnMetaData("size", Types.BIGINT),
+                new ColumnMetaData("size", Types.BIGINT),  // i18n metadata
         };
-        return new RowSetMetaData("webdavFolderType", columns);
+        return new RowSetMetaData("webdavFolderType", columns);  // i18n metadata
     }
 
     @SuppressWarnings("PMD.NPathComplexity")

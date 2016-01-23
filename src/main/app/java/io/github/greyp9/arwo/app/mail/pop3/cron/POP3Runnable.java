@@ -45,8 +45,8 @@ public class POP3Runnable extends CronRunnable {
         final Date dateStart = new Date();
         row.update(Const.DATE_START, dateStart);
         // initialize
-        final String server = ElementU.getAttribute(getParams().getElement(), "server");
-        final String resource = ElementU.getAttribute(getParams().getElement(), "resource");
+        final String server = ElementU.getAttribute(getParams().getElement(), App.Settings.SERVER);
+        final String resource = ElementU.getAttribute(getParams().getElement(), App.Settings.RESOURCE);
         final String pathInfo = PathU.toPath("", server + resource);
         // execute
         try {

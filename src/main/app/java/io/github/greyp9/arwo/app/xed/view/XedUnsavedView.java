@@ -55,10 +55,10 @@ public class XedUnsavedView {
     private RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
                 new ColumnMetaData(App.Action.SELECT, Types.VARCHAR),
-                new ColumnMetaData("url", Types.VARCHAR, true),
-                new ColumnMetaData("title", Types.VARCHAR, true),
-                new ColumnMetaData("opened", Types.TIMESTAMP),
-                new ColumnMetaData("modified", Types.TIMESTAMP),
+                new ColumnMetaData("url", Types.VARCHAR, true),  // i18n metadata
+                new ColumnMetaData("title", Types.VARCHAR, true),  // i18n metadata
+                new ColumnMetaData("opened", Types.TIMESTAMP),  // i18n metadata
+                new ColumnMetaData("modified", Types.TIMESTAMP),  // i18n metadata
         };
         return new RowSetMetaData("xed.unsavedType", columns);
     }

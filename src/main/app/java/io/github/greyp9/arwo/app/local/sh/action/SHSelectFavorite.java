@@ -25,8 +25,8 @@ public class SHSelectFavorite {
         final XedSession session = documentState.getSession(App.Servlet.FAVORITES);
         final XedNav nav = new XedNav(session.getXed());
         final XedCursor cursor = nav.find(uri);
-        final String command = cursor.getValue(cursor.getChildInstance("command"));
-        userState.getLocal().getProperties().setProperty("command", command);
+        final String command = cursor.getValue(cursor.getChildInstance(App.Settings.COMMAND));
+        userState.getLocal().getProperties().setProperty(App.Settings.COMMAND, command);
         return request.getHttpRequest().getBaseURI();
     }
 }

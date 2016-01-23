@@ -64,7 +64,8 @@ public class SSHConnectionFactory implements ConnectionFactory {
         final String privateKey = cursorSSH.getPrivateKey();
         final char[] secret = Value.toCharArray(httpRequest.getHeader(Http.Header.AUTHORIZATION));
         final XedCursor cursor = cursorSSH.getCursor();
-        final TypeInstance instancePassword = cursor.getChildInstance("authPassword").getInstance("password");
+        final TypeInstance instancePassword = cursor.getChildInstance(
+                App.Settings.AUTH_PASSWORD).getInstance(App.Settings.PASSWORD);
         final KeyX keyPassword = XedKey.getKeyPBE(secret, instancePassword);
         final String passwordClear = ((password == null) ? null : keyPassword.unprotect(password));
         final String privateKeyClear = ((privateKey == null) ? null : keyPassword.unprotect(privateKey));

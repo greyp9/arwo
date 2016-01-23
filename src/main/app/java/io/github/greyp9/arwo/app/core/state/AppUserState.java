@@ -359,7 +359,7 @@ public class AppUserState {
             jdbc.getCache().removeResource(resourceName);
         } else if (App.Cache.SSH.equals(cacheName)) {
             ssh.getCache().removeResource(resourceName);
-        } else if (App.Cache.WEBDAV.equals(cacheName)) {
+        } else if (App.Cache.DAV.equals(cacheName)) {
             webDAV.getCache().removeResource(resourceName);
         } else if (App.Cache.WSH.equals(cacheName)) {
             interop.getCache().removeResource(resourceName);

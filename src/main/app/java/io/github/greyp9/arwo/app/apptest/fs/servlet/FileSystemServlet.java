@@ -170,13 +170,13 @@ public class FileSystemServlet extends javax.servlet.http.HttpServlet {
 
         public static RowSetMetaData createMetaData() {
             final ColumnMetaData[] columns = new ColumnMetaData[]{
-                    new ColumnMetaData("type", Types.VARCHAR),
-                    new ColumnMetaData("name", Types.VARCHAR, true),
-                    new ColumnMetaData("mtime", Types.TIMESTAMP),
-                    new ColumnMetaData("ext", Types.VARCHAR),
-                    new ColumnMetaData("size", Types.BIGINT),
+                    new ColumnMetaData("type", Types.VARCHAR),  // i18n metadata
+                    new ColumnMetaData("name", Types.VARCHAR, true),  // i18n metadata
+                    new ColumnMetaData("mtime", Types.TIMESTAMP),  // i18n metadata
+                    new ColumnMetaData("ext", Types.VARCHAR),  // i18n metadata
+                    new ColumnMetaData("size", Types.BIGINT),  // i18n metadata
             };
-            return new RowSetMetaData("lfsFolderType", columns);
+            return new RowSetMetaData("lfsFolderType", columns);  // i18n metadata
         }
 
         public static RowSet loadRowSet(final File folder, final RowSetMetaData metaData) throws IOException {

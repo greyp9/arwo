@@ -54,11 +54,11 @@ public class SMTPConnectionFactory implements ConnectionFactory {
         final String password = cursorSMTP.getPassword();
         final char[] secret = Value.toCharArray(httpRequest.getHeader(Http.Header.AUTHORIZATION));
         final XedCursor cursor = cursorSMTP.getCursor();
-        final TypeInstance instancePassword = cursor.getChildInstance("password");
+        final TypeInstance instancePassword = cursor.getChildInstance(App.Settings.PASSWORD);
         final KeyX keyPassword = XedKey.getKeyPBE(secret, instancePassword);
         final String passwordClear = ((password == null) ? null : keyPassword.unprotect(password));
         final SMTPConnection connection = new SMTPConnection(cursorSMTP);
-        PropertiesU.setProperty(connection.getProperties(), "password", passwordClear);
+        PropertiesU.setProperty(connection.getProperties(), App.Settings.PASSWORD, passwordClear);
         return new SMTPConnectionResource(name, connection);
     }
 }

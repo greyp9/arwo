@@ -52,8 +52,8 @@ public class AppPropertiesView {
 
     public static RowSetMetaData createMetaData(final String tableID) {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData("name", Types.VARCHAR, true),
-                new ColumnMetaData("value", Types.VARCHAR),
+                new ColumnMetaData("name", Types.VARCHAR, true),  // i18n metadata
+                new ColumnMetaData("value", Types.VARCHAR),  // i18n metadata
         };
         return new RowSetMetaData(tableID, columns);
     }

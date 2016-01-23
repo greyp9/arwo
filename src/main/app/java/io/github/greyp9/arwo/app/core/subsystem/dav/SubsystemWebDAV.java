@@ -21,7 +21,7 @@ public class SubsystemWebDAV {
     }
 
     public SubsystemWebDAV(final Alerts alerts) {
-        this.cache = new ConnectionCache(App.Cache.WEBDAV, alerts);
+        this.cache = new ConnectionCache(App.Cache.DAV, alerts);
         this.properties = new Properties();
     }
 }

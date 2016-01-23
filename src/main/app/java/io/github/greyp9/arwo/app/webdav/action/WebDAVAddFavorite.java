@@ -36,8 +36,8 @@ public class WebDAVAddFavorite {
             final XedUserState documentState = userState.getDocumentState();
             final XedSession session = documentState.getSession(App.Servlet.FAVORITES);
             final XedNav nav = new XedNav(session.getXed());
-            final XedCursor cursorFavorites = nav.findX("/app:favorites/app:webdavFavorites");
-            final TypeInstance typeInstance = cursorFavorites.getChildInstance("webdavFavorite");
+            final XedCursor cursorFavorites = nav.findX("/app:favorites/app:webdavFavorites");  // i18n xpath
+            final TypeInstance typeInstance = cursorFavorites.getChildInstance("webdavFavorite");  // i18n xpath
             final NameTypeValues ntv = NameTypeValuesU.create(
                     "webdavFavorite.webdavFavoriteType.server", server,
                     "webdavFavorite.webdavFavoriteType.resource", resource,

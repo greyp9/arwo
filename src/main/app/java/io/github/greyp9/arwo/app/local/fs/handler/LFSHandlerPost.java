@@ -107,9 +107,9 @@ public class LFSHandlerPost {
         } else if (App.Action.FILE_UPDATE.equals(action)) {
             new LFSUpdateFile(request).apply(httpArguments);
         } else if (App.Action.COMMAND.equals(action)) {
-            location = PathU.toDir(httpRequest.getContextPath(), "lsh");
+            location = PathU.toDir(httpRequest.getContextPath(), App.Servlet.LSH);
         } else if (App.Action.TOGGLE.equals(action)) {
-            PropertiesU.toggleBoolean(userState.getProperties(), Value.join("/", "lfs", object));
+            PropertiesU.toggleBoolean(userState.getProperties(), Value.join(Http.Token.SLASH, App.Cache.LFS, object));
         } else if (App.Action.ADD_FAV.equals(action)) {
             new LFSAddFavorite(request).doAction();
         } else if (App.Action.SELECT_FAV.equals(action)) {

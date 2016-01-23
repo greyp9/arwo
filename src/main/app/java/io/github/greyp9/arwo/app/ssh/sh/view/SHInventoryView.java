@@ -29,7 +29,8 @@ public class SHInventoryView extends SHView {
         final History history = userState.getSSH().getHistory();
         new SSHInventoryView(httpRequest, userState, offsetURI).addContent(html);
         new SSHConnectionsView(httpRequest, userState, offsetURI).addContent(html);
-        new AppHistoryView("sshHistoryType", true, history, bundle, httpRequest, userState).addContentTo(html);
+        new AppHistoryView("sshHistoryType", true, history, bundle,  // i18n metadata
+                httpRequest, userState).addContentTo(html);
         return null;
     }
 }

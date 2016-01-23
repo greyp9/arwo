@@ -63,12 +63,12 @@ public class JDBCConnectionFactory implements ConnectionFactory {
         final String password = cursorJDBC.getPassword();
         final char[] secret = Value.toCharArray(httpRequest.getHeader(Http.Header.AUTHORIZATION));
         final XedCursor cursor = cursorJDBC.getCursor();
-        final TypeInstance instancePassword = cursor.getChildInstance("password");
+        final TypeInstance instancePassword = cursor.getChildInstance(App.Settings.PASSWORD);
         final KeyX keyPassword = XedKey.getKeyPBE(secret, instancePassword);
         final String passwordClear = ((password == null) ? null : keyPassword.unprotect(password));
         final Properties properties = new Properties();
-        PropertiesU.setProperty(properties, "user", user);
-        PropertiesU.setProperty(properties, "password", passwordClear);
+        PropertiesU.setProperty(properties, App.Settings.USER, user);
+        PropertiesU.setProperty(properties, App.Settings.PASSWORD, passwordClear);
         final Connection connection = getConnection(driverClass, url, properties);
         return ((connection == null) ? null : new JDBCConnectionResource(name, new JDBCConnection(connection)));
     }
