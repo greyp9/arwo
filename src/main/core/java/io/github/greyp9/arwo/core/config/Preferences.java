@@ -8,6 +8,7 @@ import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
+import java.util.Locale;
 
 // i18nf
 public class Preferences {
@@ -24,7 +25,8 @@ public class Preferences {
 
     public final String getMIMEType(final String path) throws IOException {
         final String extensionFile = Value.defaultOnNull(new FileX(path).getExtension(), "");
-        final String xpath = String.format(Const.MIME_TYPE_FOR_EXT, extensionFile);
+        final String extensionToLower = extensionFile.toLowerCase(Locale.getDefault());
+        final String xpath = String.format(Const.MIME_TYPE_FOR_EXT, extensionToLower);
         final String mimeType = cursor.getXed().getXPather().getText(xpath);
         return Value.defaultOnEmpty(mimeType, getDefaultMIMEType());
     }
