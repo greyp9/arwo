@@ -59,16 +59,16 @@ public class AppPropertiesView {
     }
 
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    private static RowSet createRowSet(final RowSetMetaData metaData, final MetaFile metaFile,
-                                       final NameTypeValues properties) throws IOException {
+    private RowSet createRowSet(final RowSetMetaData metaData, final MetaFile metaFile,
+                                final NameTypeValues properties) throws IOException {
+        final Bundle bundle = userState.getBundle();
         final RowSet rowSet = new RowSet(metaData, null, null);
         if (metaFile != null) {
             final byte[] bytes = StreamU.read(metaFile.getBytes());
-            metaFile.getBytes().reset();
-            properties.add(new NameTypeValue("crc32", null, Long.toHexString(CRCU.crc32(bytes))));
-            properties.add(new NameTypeValue("md5", null, HexCodec.encode(HashU.md5(bytes))));
-            properties.add(new NameTypeValue("sha1", null, HexCodec.encode(HashU.sha1(bytes))));
-            properties.add(new NameTypeValue("sha256", null, HexCodec.encode(HashU.sha256(bytes))));
+            properties.add(bundle.getString("propertiesView.CRC32"), Long.toHexString(CRCU.crc32(bytes)));
+            properties.add(bundle.getString("propertiesView.MD5"), HexCodec.encode(HashU.md5(bytes)));
+            properties.add(bundle.getString("propertiesView.SHA1"), HexCodec.encode(HashU.sha1(bytes)));
+            properties.add(bundle.getString("propertiesView.SHA256"), HexCodec.encode(HashU.sha256(bytes)));
         }
         for (final NameTypeValue property : properties) {
             final InsertRow insertRow = new InsertRow(rowSet);

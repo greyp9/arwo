@@ -75,9 +75,9 @@ public class TrustVerifier {
             final RSAPublicKey publicKey = getPublicKey(publicKeyBytes);
             alerts.add(new Alert(severity, bundle.format("TrustVerifier.key.info",
                     publicKey.getAlgorithm(), publicKey.getModulus().bitLength())));
-            alerts.add(new Alert(severity, bundle.format("TrustVerifier.key.md5",
+            alerts.add(new Alert(severity, bundle.format("TrustVerifier.key.MD5",
                     HexCodec.encode(HashU.md5(publicKeyBytes), Http.Token.COLON))));
-            alerts.add(new Alert(severity, bundle.format("TrustVerifier.key.sha1",
+            alerts.add(new Alert(severity, bundle.format("TrustVerifier.key.SHA1",
                     HexCodec.encode(HashU.sha1(publicKeyBytes), Http.Token.COLON))));
             alerts.add(new Alert(severity, Base64Codec.encode(publicKeyBytes)));
         }

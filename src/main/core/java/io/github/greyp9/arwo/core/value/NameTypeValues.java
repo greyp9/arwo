@@ -23,6 +23,10 @@ public final class NameTypeValues extends ArrayList<NameTypeValue> {
         }
     }
 
+    public void add(final String name, final Object value) {
+        add(new NameTypeValue(name, value));
+    }
+
     public String getValue(final String name) {
         final NameTypeValue nameTypeValue = getNameValue(name);
         return ((nameTypeValue == null) ? null : nameTypeValue.getValueS());

@@ -75,8 +75,7 @@ public class SSHConnectionView {
         final RowSet rowSet = new RowSet(metaData, null, null);
         for (final NameTypeValue property : properties) {
             final InsertRow insertRow = InsertRow.create(rowSet);
-            final String nameLabel = bundle.getString(
-                    Value.join(".", "sshConnectionType", property.getName()));  // i18n metadata
+            final String nameLabel = bundle.getString(property.getName());
             insertRow.setNextColumn(nameLabel);
             insertRow.setNextColumn(property.getValue());
             rowSet.add(insertRow.getRow());
@@ -86,38 +85,38 @@ public class SSHConnectionView {
 
     private void addProperties(final NameTypeValues properties) throws IOException {
         if (resource != null) {
-            properties.add(new NameTypeValue("name", resource.getName()));  // i18n metadata
+            properties.add("sshConnectionType.name", resource.getName());
             addProperties(properties, resource.getConnection());
         }
     }
 
     private void addProperties(final NameTypeValues properties, final SSHConnection sshConnection) throws IOException {
         if (sshConnection != null) {
-            properties.add(new NameTypeValue("opened", sshConnection.getDateOpen()));  // i18n metadata
-            properties.add(new NameTypeValue("last", sshConnection.getDateLast()));  // i18n metadata
-            properties.add(new NameTypeValue("count", sshConnection.getCount()));  // i18n metadata
-            properties.add(new NameTypeValue("millis", sshConnection.getMillis()));  // i18n metadata
+            properties.add("sshConnectionType.opened", sshConnection.getDateOpen());
+            properties.add("sshConnectionType.last", sshConnection.getDateLast());
+            properties.add("sshConnectionType.count", sshConnection.getCount());
+            properties.add("sshConnectionType.millis", sshConnection.getMillis());
             addProperties(properties, sshConnection.getConnection());
         }
     }
 
     private void addProperties(final NameTypeValues properties, final Connection connection) throws IOException {
         if (connection != null) {
-            properties.add(new NameTypeValue("host", connection.getHostname()));
-            properties.add(new NameTypeValue("port", connection.getPort()));
+            properties.add("sshConnectionType.host", connection.getHostname());
+            properties.add("sshConnectionType.port", connection.getPort());
             final ConnectionInfo info = connection.getConnectionInfo();
-            properties.add(new NameTypeValue("clientToServerCryptoAlgorithm", info.clientToServerCryptoAlgorithm));
-            properties.add(new NameTypeValue("clientToServerMACAlgorithm", info.clientToServerMACAlgorithm));
-            properties.add(new NameTypeValue("keyExchangeAlgorithm", info.clientToServerMACAlgorithm));
-            properties.add(new NameTypeValue("keyExchangeCounter", info.clientToServerMACAlgorithm));
-            properties.add(new NameTypeValue("serverToClientCryptoAlgorithm", info.serverToClientCryptoAlgorithm));
-            properties.add(new NameTypeValue("serverToClientMACAlgorithm", info.serverToClientMACAlgorithm));
+            properties.add("sshConnectionType.clientToServerCryptoAlgorithm", info.clientToServerCryptoAlgorithm);
+            properties.add("sshConnectionType.clientToServerMACAlgorithm", info.clientToServerMACAlgorithm);
+            properties.add("sshConnectionType.keyExchangeAlgorithm", info.clientToServerMACAlgorithm);
+            properties.add("sshConnectionType.keyExchangeCounter", info.clientToServerMACAlgorithm);
+            properties.add("sshConnectionType.serverToClientCryptoAlgorithm", info.serverToClientCryptoAlgorithm);
+            properties.add("sshConnectionType.serverToClientMACAlgorithm", info.serverToClientMACAlgorithm);
             final byte[] serverHostKey = info.serverHostKey;
             // ssh-keygen -E md5 -l -f /etc/ssh/ssh_host_rsa_key.pub
             // ssh-keygen -E sha256 -l -f /etc/ssh/ssh_host_rsa_key.pub
-            properties.add(new NameTypeValue("MD5(key)", HexCodec.encode(HashU.md5(serverHostKey), ":")));
-            properties.add(new NameTypeValue("SHA-1(key)", HexCodec.encode(HashU.sha1(serverHostKey), ":")));
-            properties.add(new NameTypeValue("SHA-256(key)", HexCodec.encode(HashU.sha256(serverHostKey), ":")));
+            properties.add("sshConnectionType.MD5-key", HexCodec.encode(HashU.md5(serverHostKey), ":"));
+            properties.add("sshConnectionType.SHA1-key", HexCodec.encode(HashU.sha1(serverHostKey), ":"));
+            properties.add("sshConnectionType.SHA256-key", HexCodec.encode(HashU.sha256(serverHostKey), ":"));
         }
     }
 }
