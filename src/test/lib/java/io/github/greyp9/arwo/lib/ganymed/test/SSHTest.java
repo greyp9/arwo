@@ -110,7 +110,7 @@ public class SSHTest extends TestCase {
     }
 
     private void checkCommandBuiltIn(Connection connection, UserExecutor executor) throws IOException {
-        final SSHConnection sshConnection = new SSHConnection(connection);
+        final SSHConnection sshConnection = new SSHConnection(connection, "xterm");
         final ExecutorService executorStream = executor.getExecutorStream();
         final SSHConnectionX sshConnectionX = new SSHConnectionX(sshConnection, executorStream);
         final String uid = sshConnectionX.toNameUID(0);
@@ -122,7 +122,7 @@ public class SSHTest extends TestCase {
     }
 
     private void checkCommandAdHoc(Connection connection, UserExecutor executor) throws IOException {
-        final SSHConnection sshConnection = new SSHConnection(connection);
+        final SSHConnection sshConnection = new SSHConnection(connection, "xterm");
         final ExecutorService executorStream = executor.getExecutorStream();
         final ResultsContext resultsContext = ResultsContext.createEmpty();
         final Command command = new ScriptX(sshConnection, executorStream, resultsContext).runCommand("ls /");
@@ -131,7 +131,7 @@ public class SSHTest extends TestCase {
     }
 
     private void checkCommandExplicit(Connection connection, UserExecutor executor) throws IOException {
-        final SSHConnection sshConnection = new SSHConnection(connection);
+        final SSHConnection sshConnection = new SSHConnection(connection, "xterm");
         final ExecutorService executorStream = executor.getExecutorStream();
         final ResultsContext resultsContext = ResultsContext.createEmpty();
         final Script script = new Script(null, new Date(), "ls /");

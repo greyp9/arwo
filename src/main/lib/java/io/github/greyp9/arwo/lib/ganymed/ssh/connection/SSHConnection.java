@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.lib.ganymed.ssh.connection;
 import ch.ethz.ssh2.Connection;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.lang.SystemU;
+import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.util.PropertiesX;
 
 import java.util.Date;
@@ -38,16 +39,21 @@ public class SSHConnection {
         return properties;
     }
 
-    public SSHConnection(final Connection connection) {
+    public SSHConnection(final Connection connection, final String terminalType) {
         this.connection = connection;
         this.dateOpen = new Date().getTime();
         this.uidToName = new TreeMap<Integer, String>();
         this.gidToName = new TreeMap<Integer, String>();
         this.properties = new Properties();
+        PropertiesU.setProperty(properties, App.Settings.TERM, terminalType);
         this.propertiesX = new PropertiesX(properties);
         propertiesX.setLong(App.Connection.DATE_LAST, dateOpen);
         propertiesX.setLong(App.Connection.COUNT, 0L);
         propertiesX.setLong(App.Connection.MILLIS, 0L);
+    }
+
+    public final String getTerm() {
+        return properties.getProperty(App.Settings.TERM);
     }
 
     public final Date getDateLast() {

@@ -50,6 +50,10 @@ public class CursorSSH {
         return cursor.getValue(cursor.getChildInstance(App.Settings.PORT));
     }
 
+    public final String getTerm() {
+        return cursor.getValue(cursor.getChildInstance(App.Settings.TERM));
+    }
+
     public final String getUser() {
         return cursor.getValue(cursor.getChildInstance(App.Settings.USER));
     }

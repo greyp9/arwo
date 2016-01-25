@@ -178,6 +178,7 @@ public final class App {
         public static final String SERVER = "server";
         public static final String SHARE = "share";
         public static final String SQL = "sql";
+        public static final String TERM = "term";
         public static final String USER = "user";
         public static final String PASSWORD = "password";
     }

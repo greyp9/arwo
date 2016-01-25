@@ -59,6 +59,7 @@ public class SSHConnectionFactory implements ConnectionFactory {
     private SSHConnectionResource getConnection(final String name, final CursorSSH cursorSSH) throws IOException {
         final String host = cursorSSH.getHost();
         final Integer port = NumberU.toInt(cursorSSH.getPort(), 22);
+        final String term = Value.defaultOnEmpty(cursorSSH.getTerm(), null);
         final String user = cursorSSH.getUser();
         final String password = cursorSSH.getPassword();
         final String privateKey = cursorSSH.getPrivateKey();
@@ -77,6 +78,6 @@ public class SSHConnectionFactory implements ConnectionFactory {
         final ConnectionInfo connectionInfo = connection.connect();
         new SSHAuthenticatorServer(bundle, alerts).authenticate(connectionInfo, serverParams);
         new SSHAuthenticatorClient(bundle, alerts).authenticate(connection, clientParams);
-        return new SSHConnectionResource(name, new SSHConnection(connection));
+        return new SSHConnectionResource(name, new SSHConnection(connection, term));
     }
 }

@@ -70,7 +70,7 @@ public class SHQueueCommand {
         // schedule runnable
         final ResultsContext resultsContext = userState.getResultsContext(httpRequest);
         final ScriptContext context = new ScriptContext(
-                executorStream, resultsContext, sshConnection, "vt100", pollInterval);
+                executorStream, resultsContext, sshConnection, sshConnection.getTerm(), pollInterval);
         final ScriptRunnable runnable = new ScriptRunnable(script, context);
         userExecutor.getRunnables().add(runnable);
         userExecutor.getExecutorCommand().execute(runnable);

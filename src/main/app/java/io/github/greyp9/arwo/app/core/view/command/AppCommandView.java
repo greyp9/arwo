@@ -82,8 +82,8 @@ public class AppCommandView {
         final String pidText = (pid == null) ? null : String.format("[PID:%s]", pid);
         final Integer exitValue = command.getExitValue();
         final String exitValueText = (exitValue == null) ? null : String.format("[EXIT:%s]", exitValue);
-        final String stderrText = toExtraInfo(rendererStderr, App.CSS.STDERR);
-        final String stdoutText = toExtraInfo(rendererStdout, App.CSS.STDOUT);
+        final String stderrText = toExtraInfo(rendererStderr, "STDERR");  // i18n internal
+        final String stdoutText = toExtraInfo(rendererStdout, "STDOUT");  // i18n internal
         return Value.defaultOnEmpty(Value.join(Html.SPACE, pidText, exitValueText, stderrText, stdoutText), null);
     }
 

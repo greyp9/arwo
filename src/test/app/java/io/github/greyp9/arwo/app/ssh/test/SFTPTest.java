@@ -67,7 +67,7 @@ public class SFTPTest extends TestCase {
         final ClientParams clientParams = new ClientParams(null, user, pass, null);
         //new SSHAuthenticatorServer(bundle, alerts).authenticate(connectionInfo, serverParams);  // ignore pubkey
         new SSHAuthenticatorClient(new Bundle(), new Alerts()).authenticate(connection, clientParams);
-        final SSHConnection sshConnection = new SSHConnection(connection);
+        final SSHConnection sshConnection = new SSHConnection(connection, "xterm");
         // acquire user.home
         final AppPrincipal principal = new AppPrincipal("root", CollectionU.toCollection("*"));
         final UserExecutor executor = new UserExecutor(principal, new Date(), null);

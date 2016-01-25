@@ -63,6 +63,7 @@ public class SSHInventoryView {
                 new ColumnMetaData("authPassword/authPublicKey", Types.VARCHAR),  // i18n metadata
                 new ColumnMetaData(App.Settings.HOST, Types.VARCHAR),
                 new ColumnMetaData(App.Settings.PORT, Types.VARCHAR),
+                new ColumnMetaData(App.Settings.TERM, Types.VARCHAR),
         };
         return new RowSetMetaData("server.sshServerType", columns);
     }
@@ -90,6 +91,7 @@ public class SSHInventoryView {
             insertRow.setNextColumn(cursorSSH.getAuthentication());
             insertRow.setNextColumn(cursorSSH.getHost());
             insertRow.setNextColumn(cursorSSH.getPort());
+            insertRow.setNextColumn(cursorSSH.getTerm());
             rowSet.add(insertRow.getRow());
         }
     }
