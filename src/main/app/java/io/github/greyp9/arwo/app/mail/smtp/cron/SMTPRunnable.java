@@ -108,6 +108,6 @@ public class SMTPRunnable extends CronRunnable {
     }
 
     private String getBody(final String bodyTemplate, final Date date) {
-        return bodyTemplate.replace("$date", XsdDateU.toXSDZMillis(date));
+        return bodyTemplate.replace("$date", XsdDateU.toXSDZMillis(date));  // i18n token
     }
 }
