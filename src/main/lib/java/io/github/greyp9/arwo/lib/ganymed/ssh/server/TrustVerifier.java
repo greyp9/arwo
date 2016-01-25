@@ -8,9 +8,8 @@ import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.codec.b64.Base64Codec;
-import io.github.greyp9.arwo.core.codec.hex.HexCodec;
 import io.github.greyp9.arwo.core.hash.secure.HashU;
-import io.github.greyp9.arwo.core.http.Http;
+import io.github.greyp9.arwo.core.hash.text.FingerPrint;
 import io.github.greyp9.arwo.core.value.Value;
 
 import java.io.IOException;
@@ -76,9 +75,9 @@ public class TrustVerifier {
             alerts.add(new Alert(severity, bundle.format("TrustVerifier.key.info",
                     publicKey.getAlgorithm(), publicKey.getModulus().bitLength())));
             alerts.add(new Alert(severity, bundle.format("TrustVerifier.key.MD5",
-                    HexCodec.encode(HashU.md5(publicKeyBytes), Http.Token.COLON))));
+                    FingerPrint.toHex(HashU.md5(publicKeyBytes)))));
             alerts.add(new Alert(severity, bundle.format("TrustVerifier.key.SHA1",
-                    HexCodec.encode(HashU.sha1(publicKeyBytes), Http.Token.COLON))));
+                    FingerPrint.toHex(HashU.sha1(publicKeyBytes)))));
             alerts.add(new Alert(severity, Base64Codec.encode(publicKeyBytes)));
         }
 

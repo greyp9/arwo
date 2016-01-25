@@ -145,7 +145,7 @@ public class AppMenuFactory implements MenuFactory {
 
     private static MenuItem createMenuFavorites(final String key) {
         final MenuItem itemAddFavorite = new MenuItem(App.Action.ADD_FAV, App.Target.SESSION, App.Action.ADD_FAV);
-        return new MenuItem("favorites", App.Target.USER_STATE, App.Action.MENU, key + "/favorites",
+        return new MenuItem(Const.FAVORITES, App.Target.USER_STATE, App.Action.MENU, key + "/favorites",
                 itemAddFavorite);
     }
 
@@ -158,5 +158,7 @@ public class AppMenuFactory implements MenuFactory {
         public static final String FILESYSTEM = "fs";
         public static final String HEX = "hex";
         public static final String COMMAND = "cmd";
+
+        public static final String FAVORITES = "favorites";
     }
 }

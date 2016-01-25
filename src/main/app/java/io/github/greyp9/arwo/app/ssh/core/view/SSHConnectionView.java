@@ -6,8 +6,9 @@ import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.ssh.connection.SSHConnectionResource;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
-import io.github.greyp9.arwo.core.codec.hex.HexCodec;
 import io.github.greyp9.arwo.core.hash.secure.HashU;
+import io.github.greyp9.arwo.core.hash.text.FingerPrint;
+import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.table.core.TableU;
@@ -44,7 +45,7 @@ public class SSHConnectionView {
     }
 
     public final void addContent(final Element html) throws IOException {
-        final String key = Value.join("/", App.Cache.SSH, App.Action.PROPERTIES);
+        final String key = Value.join(Http.Token.SLASH, App.Cache.SSH, App.Action.PROPERTIES);
         final boolean isPropertiesSSH = PropertiesU.isBoolean(userState.getProperties(), key);
         if (isPropertiesSSH) {
             httpRequest.getClass();
@@ -114,9 +115,9 @@ public class SSHConnectionView {
             final byte[] serverHostKey = info.serverHostKey;
             // ssh-keygen -E md5 -l -f /etc/ssh/ssh_host_rsa_key.pub
             // ssh-keygen -E sha256 -l -f /etc/ssh/ssh_host_rsa_key.pub
-            properties.add("sshConnectionType.MD5-key", HexCodec.encode(HashU.md5(serverHostKey), ":"));
-            properties.add("sshConnectionType.SHA1-key", HexCodec.encode(HashU.sha1(serverHostKey), ":"));
-            properties.add("sshConnectionType.SHA256-key", HexCodec.encode(HashU.sha256(serverHostKey), ":"));
+            properties.add("sshConnectionType.MD5-key", FingerPrint.toHex(HashU.md5(serverHostKey)));
+            properties.add("sshConnectionType.SHA1-key", FingerPrint.toHex(HashU.sha1(serverHostKey)));
+            properties.add("sshConnectionType.SHA256-key", FingerPrint.toHex(HashU.sha256(serverHostKey)));
         }
     }
 }

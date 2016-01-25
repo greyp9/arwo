@@ -124,6 +124,6 @@ public class AppZipView {
     }
 
     public static class Const {
-        public static final String QUERY_ZIP_ENTRY = "zipEntry";
+        public static final String QUERY_ZIP_ENTRY = "zipEntry";  // i18n http
     }
 }

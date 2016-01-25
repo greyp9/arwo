@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.app.core.view.favorite;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.http.Http;
@@ -50,7 +51,8 @@ public class AppFavoriteView {
     }
 
     public final HttpResponse addContentTo(final Element html) throws IOException {
-        final String menuKey = Value.join(Http.Token.SLASH, httpRequest.getServletPath(), type, "favorites");
+        final String menuKey = Value.join(Http.Token.SLASH,
+                httpRequest.getServletPath(), type, AppMenuFactory.Const.FAVORITES);
         if ((cursorType != null) && (userState.getMenuSystem().isOpen(menuKey))) {
             addContentInner(html);
         }
