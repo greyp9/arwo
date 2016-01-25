@@ -30,7 +30,7 @@ public final class ProcessU {
         public final Integer run() {
             Integer processId = null;
             try {
-                final Field field = process.getClass().getDeclaredField("pid");  // i18n
+                final Field field = process.getClass().getDeclaredField("pid");  // i18n internal
                 field.setAccessible(true);
                 processId = ((Integer) field.get(process));
             } catch (IllegalAccessException e) {

@@ -20,6 +20,6 @@ public class MimeMagic {
     }
 
     private static class Const {
-        private static final byte[] XML = UTF8Codec.toBytes("<?xml");  // i18n
+        private static final byte[] XML = UTF8Codec.toBytes("<?xml");  // i18n internal
     }
 }

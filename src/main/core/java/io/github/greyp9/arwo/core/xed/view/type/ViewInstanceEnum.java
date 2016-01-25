@@ -23,7 +23,7 @@ public class ViewInstanceEnum extends ViewInstance {
             final String textEnumValue = xsdBundle.getLabelEnum(parentInstance, typeInstance, enumValue);
             final boolean isSelected = enumValue.equals(value);
             final String textSelected = (isSelected ? "x" : " ");  // i18n
-            buffer.append(String.format("[%s] %s   ", textSelected, textEnumValue));  // i18n
+            buffer.append(String.format("[%s] %s   ", textSelected, textEnumValue));
         }
         return buffer.toString();
     }

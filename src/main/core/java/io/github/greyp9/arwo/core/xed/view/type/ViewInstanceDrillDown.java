@@ -24,6 +24,6 @@ public class ViewInstanceDrillDown extends ViewInstance {
 
     @Override
     public final String getValue() {
-        return String.format("href(%s)(%s)", cursorDrillDown.getURI(), ">>");  // i18n
+        return String.format("href(%s)(%s)", cursorDrillDown.getURI(), ">>");  // i18n internal
     }
 }

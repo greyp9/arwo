@@ -48,6 +48,6 @@ public class TableTextView {
                 matrix.set(row, ++column, value);
             }
         }
-        return String.format("%s%n%s", tableHeader, matrix.render(" | "));  // i18n
+        return String.format("%s%n%s", tableHeader, matrix.render(" | "));  // i18n internal
     }
 }

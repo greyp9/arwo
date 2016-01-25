@@ -60,7 +60,7 @@ public class SSHInventoryView {
                 new ColumnMetaData(App.Settings.NAME, Types.VARCHAR, true),
                 new ColumnMetaData(App.Settings.COMMENT, Types.VARCHAR),
                 new ColumnMetaData(App.Settings.USER, Types.VARCHAR),
-                new ColumnMetaData("authPassword/authPublicKey", Types.VARCHAR),  // i18n
+                new ColumnMetaData("authPassword/authPublicKey", Types.VARCHAR),  // i18n metadata
                 new ColumnMetaData(App.Settings.HOST, Types.VARCHAR),
                 new ColumnMetaData(App.Settings.PORT, Types.VARCHAR),
         };

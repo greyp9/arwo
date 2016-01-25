@@ -81,8 +81,8 @@ public class XedSessionsFactory {
             // find configuration
             final XPather xpather = xed.getXPather();
             final XedNav nav = new XedNav(xed);
-            final XedCursor cursorDocuments = nav.find(xpather.getElement("/app:app/app:documents"));  // i18n
-            final TypeInstance typeDocument = cursorDocuments.getTypeInstance().getInstance("document");  // i18n
+            final XedCursor cursorDocuments = nav.find(xpather.getElement("/app:app/app:documents"));  // i18n xpath
+            final TypeInstance typeDocument = cursorDocuments.getTypeInstance().getInstance("document");  // i18n xpath
             final Collection<Element> elements = cursorDocuments.getChildren(typeDocument);
             for (final Element element : elements) {
                 // load entry
@@ -93,12 +93,12 @@ public class XedSessionsFactory {
     }
 
     private void addEntry(final XedEntries entries, final TypeInstance typeDocument, final XedCursor cursorDocument) {
-        final String title = cursorDocument.getValue(typeDocument.getInstance("title"));  // i18n
-        final String context = cursorDocument.getValue(typeDocument.getInstance("contextPath"));  // i18n
-        final String qname = cursorDocument.getValue(typeDocument.getInstance("qname"));  // i18n
-        final String xmlPath = cursorDocument.getValue(typeDocument.getInstance("xmlPath"));  // i18n
-        final String xsdPath = cursorDocument.getValue(typeDocument.getInstance("xsdPath"));  // i18n
-        final String xsltPath = cursorDocument.getValue(typeDocument.getInstance("xsltPath"));  // i18n
+        final String title = cursorDocument.getValue(typeDocument.getInstance("title"));  // i18n xpath
+        final String context = cursorDocument.getValue(typeDocument.getInstance("contextPath"));  // i18n xpath
+        final String qname = cursorDocument.getValue(typeDocument.getInstance("qname"));  // i18n xpath
+        final String xmlPath = cursorDocument.getValue(typeDocument.getInstance("xmlPath"));  // i18n xpath
+        final String xsdPath = cursorDocument.getValue(typeDocument.getInstance("xsdPath"));  // i18n xpath
+        final String xsltPath = cursorDocument.getValue(typeDocument.getInstance("xsltPath"));  // i18n xpath
         entries.add(new XedEntry(title, context, qname, xmlPath, xsdPath, xsltPath, null));
     }
 }

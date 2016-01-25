@@ -54,7 +54,7 @@ public class XedSessionFactory {
     }
 
     private String resolveInternal(final String path) throws IOException {
-        final boolean isInternal = ((path != null) && (path.startsWith("io/github/greyp9/arwo")));  // i18n
+        final boolean isInternal = ((path != null) && (path.startsWith("io/github/greyp9/arwo")));  // i18n internal
         return (isInternal ? ResourceU.resolve(path).toExternalForm() : path);
     }
 

@@ -104,7 +104,7 @@ public class TableHeaderView {
                 ElementU.addElement(th, Html.SPAN, filtersText);
             }
             if (displayAlways) {
-                ElementU.addElement(th, Html.SPAN, "[]");  // i18n
+                ElementU.addElement(th, Html.SPAN, "[]");  // i18n internal
             }
         }
     }

@@ -122,9 +122,9 @@ public class ScriptRunnable implements Runnable {
         }
         // monitor process
         final int conditionExit = session.waitForCondition(ChannelCondition.EXIT_STATUS, 0L);
-        logger.finest("conditionExitStatus/" + conditionExit);  // i18n
+        logger.finest("conditionExitStatus/" + conditionExit);  // i18n log
         final int conditionData = waitForData(session, runnableStdout.getPollInterval());
-        logger.finest("conditionData/" + conditionData);  // i18n
+        logger.finest("conditionData/" + conditionData);  // i18n log
         final Integer exitValue = session.getExitStatus();
         // allow process complete
         runnableStdin.stop();

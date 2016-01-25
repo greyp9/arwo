@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.io.script.write;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.file.FileU;
 import io.github.greyp9.arwo.core.html.Html;
@@ -46,12 +47,12 @@ public class ScriptWriter {
                 ps.println("DIR");
                 ps.println(command.getDir());
             }
-            ps.println("STDIN");
+            ps.println(App.CSS.STDIN);
             ps.println(command.getStdin());
-            ps.println("STDOUT");
-            ps.println(command.getStdout());
-            ps.println("STDERR");
+            ps.println(App.CSS.STDERR);
             ps.println(command.getStderr());
+            ps.println(App.CSS.STDOUT);
+            ps.println(command.getStdout());
         }
         ps.println(separator);
         ps.println(locus.getDateX().toString(script.getFinish()));

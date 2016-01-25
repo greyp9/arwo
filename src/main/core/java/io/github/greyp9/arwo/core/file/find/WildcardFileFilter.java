@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileFilter;
 import java.util.regex.Pattern;
 
+// i18nf
 public class WildcardFileFilter implements FileFilter {
     private final Pattern pattern;
 
@@ -18,9 +19,9 @@ public class WildcardFileFilter implements FileFilter {
 
     private static Pattern toPattern(final String regex0) {
         // file wildcard characters to regex characters...
-        final String regex1 = regex0.replace(".", "\\.");  // i18n
-        final String regex2 = regex1.replace("*", ".*");  // i18n
-        final String regex3 = regex2.replace("?", ".");  // i18n
+        final String regex1 = regex0.replace(".", "\\.");
+        final String regex2 = regex1.replace("*", ".*");
+        final String regex3 = regex2.replace("?", ".");
         return Pattern.compile(regex3);
     }
 }

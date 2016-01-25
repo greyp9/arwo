@@ -55,10 +55,10 @@ public class CronToken {
     }
 
     private static class Const {
-        private static final String ALL = "*";  // i18n
-        private static final String DELIMITER = ",";  // i18n
-        private static final String PATTERN_NUMBER = "(\\d+)";  // i18n
-        private static final String PATTERN_DASH = "(\\d+)-(\\d+)";  // i18n
-        private static final String PATTERN_SLASH = "\\*/(\\d+)";  // i18n
+        private static final String ALL = "*";  // i18n internal
+        private static final String DELIMITER = ",";  // i18n internal
+        private static final String PATTERN_NUMBER = "(\\d+)";  // i18n internal
+        private static final String PATTERN_DASH = "(\\d+)-(\\d+)";  // i18n internal
+        private static final String PATTERN_SLASH = "\\*/(\\d+)";  // i18n internal
     }
 }

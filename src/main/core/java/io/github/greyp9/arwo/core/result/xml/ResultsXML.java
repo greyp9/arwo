@@ -11,10 +11,11 @@ import io.github.greyp9.arwo.core.table.row.RowSet;
 
 import java.util.Date;
 
+// i18nf
 public class ResultsXML {
-    protected static final String NS_RESULTS = "urn:arwo:xml";  // i18n
+    protected static final String NS_RESULTS = "urn:arwo:xml";
 
-    protected static final String E_NULL = "null";  // i18n
+    protected static final String E_NULL = "null";
     protected static final String E_RESULTS = Results.class.getSimpleName();
     protected static final String E_ROW_SET_RESULT = RowSetResult.class.getSimpleName();
     protected static final String E_TEXT_RESULT = TextResult.class.getSimpleName();
@@ -29,17 +30,17 @@ public class ResultsXML {
     protected static final String E_DATE = Date.class.getSimpleName();
     protected static final String E_TABLE_LINK = TableViewLink.class.getSimpleName();
 
-    protected static final String A_COMMAND = "command";  // i18n
-    protected static final String A_START = "start";  // i18n
-    protected static final String A_FINISH = "finish";  // i18n
-    protected static final String A_ID = "id";  // i18n
-    protected static final String A_IDENTITY = "identity";  // i18n
-    protected static final String A_LABEL = "label";  // i18n
-    protected static final String A_NAME = "name";  // i18n
-    protected static final String A_TYPE = "type";  // i18n
-    protected static final String A_TEXT = "text";  // i18n
-    protected static final String A_TITLE = "title";  // i18n
-    protected static final String A_HREF = "href";  // i18n
+    protected static final String A_COMMAND = "command";
+    protected static final String A_START = "start";
+    protected static final String A_FINISH = "finish";
+    protected static final String A_ID = "id";
+    protected static final String A_IDENTITY = "identity";
+    protected static final String A_LABEL = "label";
+    protected static final String A_NAME = "name";
+    protected static final String A_TYPE = "type";
+    protected static final String A_TEXT = "text";
+    protected static final String A_TITLE = "title";
+    protected static final String A_HREF = "href";
 
     protected ResultsXML() {
         // checkstyle: "Utility classes should not have a public or default constructor."

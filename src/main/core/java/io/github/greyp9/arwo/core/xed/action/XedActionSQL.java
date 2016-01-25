@@ -15,6 +15,6 @@ public class XedActionSQL extends XedAction {
 
     public final String getSQL(final NameTypeValues httpArguments) throws IOException {
         final Xed xed = super.update(httpArguments);
-        return xed.getXPather().getText("/action:sql/action:sql");  // i18n
+        return xed.getXPather().getText("/action:sql/action:sql");  // i18n xpath
     }
 }

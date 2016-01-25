@@ -160,7 +160,7 @@ public class PropertyPageHtmlView {
             final Element span = ElementU.addElement(th, Html.SPAN);  // so buttons and expand/collapse on one line
             final String buttonToggle = (isExpanded ? UTF16.LIST_COLLAPSE : UTF16.LIST_EXPAND);
             ElementU.addElement(span, Html.A, buttonToggle, NTV.create(
-                    Html.HREF, "?toggle=buttons", Html.CLASS, App.CSS.TRAILING));  // i18n
+                    Html.HREF, "?toggle=buttons", Html.CLASS, App.CSS.TRAILING));  // i18n http
         }
     }
 

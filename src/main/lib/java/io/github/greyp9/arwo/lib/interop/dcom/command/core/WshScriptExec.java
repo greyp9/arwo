@@ -18,41 +18,41 @@ public class WshScriptExec {
     }
 
     public final int getStatus() throws JIException {
-        final JIVariant variant = dispatch.get("Status");  // i18n
+        final JIVariant variant = dispatch.get("Status");  // i18n lib
         return variant.getObjectAsInt();
     }
 
     public final int getExitCode() throws JIException {
-        final JIVariant variant = dispatch.get("ExitCode");  // i18n
+        final JIVariant variant = dispatch.get("ExitCode");  // i18n lib
         return variant.getObjectAsInt();
     }
 
     public final int getPID() throws JIException {
-        final JIVariant variant = dispatch.get("ProcessID");  // i18n
+        final JIVariant variant = dispatch.get("ProcessID");  // i18n lib
         return variant.getObjectAsInt();
     }
 
     public final OutputTextStream getStdin() throws JIException {
-        final JIVariant variant = dispatch.get("StdIn");  // i18n
+        final JIVariant variant = dispatch.get("StdIn");  // i18n lib
         final IJIComObject comObject = variant.getObjectAsComObject();
         return new OutputTextStream((IJIDispatch) JIObjectFactory.narrowObject(comObject));
     }
 
     public final InputTextStream getStdout() throws JIException {
-        final JIVariant variant = dispatch.get("StdOut");  // i18n
+        final JIVariant variant = dispatch.get("StdOut");  // i18n lib
         final IJIComObject comObject = variant.getObjectAsComObject();
         return new InputTextStream((IJIDispatch) JIObjectFactory.narrowObject(comObject));
     }
 
     public final InputTextStream getStderr() throws JIException {
-        final JIVariant variant = dispatch.get("StdErr");  // i18n
+        final JIVariant variant = dispatch.get("StdErr");  // i18n lib
         final IJIComObject comObject = variant.getObjectAsComObject();
         return new InputTextStream((IJIDispatch) JIObjectFactory.narrowObject(comObject));
     }
 
     @SuppressWarnings("unused")
     public final void terminate() throws JIException {
-        dispatch.callMethodA("Terminate");  // i18n
+        dispatch.callMethodA("Terminate");  // i18n lib
     }
 
     public static final class Factory {

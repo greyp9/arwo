@@ -21,23 +21,23 @@ public class InputTextStream {
     }
 
     public final boolean atEndOfLine() throws JIException {
-        final JIVariant atEndOfLine = dispatch.get("AtEndOfLine");  // i18n
+        final JIVariant atEndOfLine = dispatch.get("AtEndOfLine");  // i18n lib
         return atEndOfLine.getObjectAsBoolean();
     }
 
     public final String readAll() throws JIException {
-        final JIVariant readAll = dispatch.callMethodA("ReadAll");  // i18n
+        final JIVariant readAll = dispatch.callMethodA("ReadAll");  // i18n lib
         return readAll.getObjectAsString().getString();
     }
 
     public final String readLine() throws JIException {
-        final JIVariant readLine = dispatch.callMethodA("ReadLine");  // i18n
+        final JIVariant readLine = dispatch.callMethodA("ReadLine");  // i18n lib
         return readLine.getObjectAsString().getString();
     }
 
     public final String read(final int count) throws JIException {
         final Object[] params = new Object[] { count };
-        final JIVariant[] read = dispatch.callMethodA("Read", params);  // i18n
+        final JIVariant[] read = dispatch.callMethodA("Read", params);  // i18n lib
         final boolean isData = (read != null) && (read.length > 0);
         return (isData ? read[0].getObjectAsString().getString() : null);
     }

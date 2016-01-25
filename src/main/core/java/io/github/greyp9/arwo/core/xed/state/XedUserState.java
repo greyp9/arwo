@@ -174,7 +174,7 @@ public class XedUserState {
     public final void applyLocale(final NameTypeValues nameTypeValues) throws IOException {
         // apply to user state
         final Xed actionLocale = new XedActionLocale(null).update(nameTypeValues);
-        final String localeID = actionLocale.getXPather().getText("/action:locale");  // i18n
+        final String localeID = actionLocale.getXPather().getText("/action:locale");  // i18n xpath
         locus = new LocusFactory().create(localeID, locus.getDateX());
         // apply to each xed session
         sessions.applyLocale(locus.getLocale());

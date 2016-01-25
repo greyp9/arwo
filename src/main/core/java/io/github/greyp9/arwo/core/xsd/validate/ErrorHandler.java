@@ -44,13 +44,13 @@ public class ErrorHandler extends org.xml.sax.helpers.DefaultHandler {
 
     public final void error(final SAXParseException e) throws SAXException {
         if (!checkWhiteList(e, excludes)) {
-            errors.add(message(e, "ERROR"));  // i18n
+            errors.add(message(e, "ERROR"));  // i18n internal
         }
     }
 
     public final void fatalError(final SAXParseException e) throws SAXException {
         if (!checkWhiteList(e, excludes)) {
-            fatals.add(message(e, "FATAL"));  // i18n
+            fatals.add(message(e, "FATAL"));  // i18n internal
         }
     }
 

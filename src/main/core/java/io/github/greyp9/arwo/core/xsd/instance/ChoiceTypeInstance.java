@@ -27,7 +27,7 @@ public class ChoiceTypeInstance extends TypeInstance {
     public final String getName() {
         final StringBuilder buffer = new StringBuilder();
         for (final TypeInstance instanceIt : typeInstances.getTypeInstances()) {
-            buffer.append((buffer.length() == 0) ? "" : "/");  // i18n
+            buffer.append((buffer.length() == 0) ? "" : "/");  // i18n internal
             buffer.append(instanceIt.getName());
         }
         return buffer.toString();

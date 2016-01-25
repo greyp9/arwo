@@ -269,7 +269,7 @@ public class SFTPDataSource {
 
 /* was needed for lib versions prior to "ganymed-ssh2-262.jar"
     private static String normalize(final String path) {
-        return path.replace(" ", "\\ ").replace("(", "\\(").replace(")", "\\)");  // lib quirk  // i18n
+        return path.replace(" ", "\\ ").replace("(", "\\(").replace(")", "\\)");  // lib quirk  // i18n comment
     }
 */
 

@@ -26,9 +26,9 @@ public class SessionFactory {
     public final Session getSession() throws IOException {
         final Properties propertiesSession = new Properties();
         //properties.setProperty("mail.debug", "true");
-        if ("starttls".equals(cursorSMTP.getProtocol())) {  // i18n
+        if ("starttls".equals(cursorSMTP.getProtocol())) {  // i18n revisit
             propertiesSession.setProperty("mail.smtp.starttls.enable", Boolean.TRUE.toString());
-        } else if ("smtps".equals(cursorSMTP.getProtocol())) {  // i18n
+        } else if ("smtps".equals(cursorSMTP.getProtocol())) {  // i18n revisit
             propertiesSession.setProperty("mail.smtp.ssl.enable", Boolean.TRUE.toString());
         }
         setCustomSocketFactory(cursorSMTP.getCertificate(), propertiesSession);
@@ -37,7 +37,7 @@ public class SessionFactory {
 
     public final Transport getTransport(final Session session) throws IOException {
         try {
-            final Transport transport = session.getTransport("smtp");  // i18n
+            final Transport transport = session.getTransport("smtp");  // i18n lib
             transport.connect(cursorSMTP.getHost(), cursorSMTP.getPort(),
                     cursorSMTP.getUser(), properties.getProperty(App.Settings.PASSWORD));  // i18n
             return transport;
@@ -50,7 +50,7 @@ public class SessionFactory {
             final String certificate, final Properties properties) throws IOException {
         if (!Value.isEmpty(certificate)) {
             try {
-                final TLSContext tlsContext = new TLSContextFactory().create(certificate, "TLS");  // i18n
+                final TLSContext tlsContext = new TLSContextFactory().create(certificate, "TLS");  // i18n JRE
                 TLSSocketFactory.initialize(tlsContext.getContext());
                 properties.setProperty("mail.smtp.ssl.socketFactory.class", TLSSocketFactory.class.getName());
                 properties.setProperty("mail.smtp.ssl.socketFactory.fallback", Boolean.FALSE.toString());

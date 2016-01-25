@@ -147,7 +147,7 @@ public class TypeInstanceFactory {  // NOPMD
         private static final String BOOLEAN_DEFAULT = Boolean.FALSE.toString();
         private static final String DURATION_DEFAULT = DurationU.Const.ZERO_SECONDS;
         private static final String LONG_DEFAULT = Long.toString(0L);
-        private static final String QNAME_DEFAULT = "xmlns:qname";  // i18n
+        private static final String QNAME_DEFAULT = "xmlns:qname";  // i18n internal
         private static final String STRING_DEFAULT = "";
     }
 }

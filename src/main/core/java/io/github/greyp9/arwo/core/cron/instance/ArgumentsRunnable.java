@@ -27,7 +27,7 @@ public class ArgumentsRunnable extends CronRunnable {
         final Date dateStart = new Date();
         row.update(Const.DATE_START, dateStart);
 
-        final String arguments = ElementU.getAttribute(getParams().getCronJob().getElement(), "arguments");  // i18n
+        final String arguments = ElementU.getAttribute(getParams().getCronJob().getElement(), "arguments");  // i18n in
         final NameTypeValues httpArguments = HttpArguments.toArguments(arguments);
         for (final NameTypeValue httpArgument : httpArguments) {
             logger.finest(httpArgument.toString());

@@ -85,11 +85,11 @@ public final class DurationU {
         public static final int GROUP_SECOND = 13;
         public static final int GROUP_MILLIS = 14;
 
-        public static final String ONE_DAY = "P1D";  // i18n
-        public static final String ONE_HOUR = "PT1H";  // i18n
-        public static final String ONE_MINUTE = "PT1M";  // i18n
-        public static final String ONE_SECOND = "PT1S";  // i18n
-        public static final String ZERO_SECONDS = "PT0S";  // i18n
+        public static final String ONE_DAY = "P1D";  // i18n internal
+        public static final String ONE_HOUR = "PT1H";  // i18n internal
+        public static final String ONE_MINUTE = "PT1M";  // i18n internal
+        public static final String ONE_SECOND = "PT1S";  // i18n internal
+        public static final String ZERO_SECONDS = "PT0S";  // i18n internal
     }
 
     public static String durationXSDZ(final String dateEarlierXSDZ, final String dateLaterXSDZ) {
@@ -136,15 +136,15 @@ public final class DurationU {
         final boolean t = ((hours != 0) || (minutes != 0) || (seconds != 0) || (millis != 0));
         final boolean p = ((years != 0) || (months != 0) || (days != 0) || (t));
         final StringBuilder buffer = new StringBuilder();
-        buffer.append(p ? "P" : "")  // i18n
-                .append(toAtom(years, "Y"))  // i18n
-                .append(toAtom(months, "M"))  // i18n
-                .append(toAtom(days, "D"))  // i18n
-                .append(t ? "T" : "")  // i18n
-                .append(toAtom(hours, "H"))  // i18n
-                .append(toAtom(minutes, "M"));  // i18n
+        buffer.append(p ? "P" : "")  // i18n internal
+                .append(toAtom(years, "Y"))  // i18n internal
+                .append(toAtom(months, "M"))  // i18n internal
+                .append(toAtom(days, "D"))  // i18n internal
+                .append(t ? "T" : "")  // i18n internal
+                .append(toAtom(hours, "H"))  // i18n internal
+                .append(toAtom(minutes, "M"));  // i18n internal
         if (millis == 0) {
-            buffer.append(toAtom(seconds, "S"));  // i18n
+            buffer.append(toAtom(seconds, "S"));  // i18n internal
         } else {
             buffer.append(String.format("%d.%03dS", seconds, millis));
         }

@@ -43,11 +43,11 @@ public class FileUpload {
     }
 
     private static class Const {
-        private static final String FILE = "file";  // i18n
-        private static final String UPLOAD = "upload";  // i18n
-        private static final String SIZE = "80";  // i18n
-        private static final String STYLE = "padding: 0 1em;";  // i18n
-        private static final String SUBMIT = "submitUploadFile";  // i18n
+        private static final String FILE = "file";  // i18n internal
+        private static final String UPLOAD = "upload";  // i18n internal
+        private static final String SIZE = "80";  // i18n internal
+        private static final String STYLE = "padding: 0 1em;";  // i18n internal
+        private static final String SUBMIT = "submitUploadFile";  // i18n internal
         private static final String MENU_FILE_UPLOAD = "menu.file.upload";
     }
 }

@@ -42,7 +42,7 @@ public class InputStreamRunnable implements Runnable {
 
     public final synchronized void waitForComplete() {
         stop();
-        MutexU.wait(this, DurationU.toMillis("PT5S"));  // i18n
+        MutexU.wait(this, DurationU.toMillis("PT5S"));  // i18n internal
     }
 
     public final synchronized Exception getException() {

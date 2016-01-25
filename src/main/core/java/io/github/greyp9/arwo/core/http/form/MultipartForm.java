@@ -64,6 +64,6 @@ public class MultipartForm {
         private static final byte[] BYTES_CRLF = UTF8Codec.toBytes(CRLF);
         private static final int CRLF_LENGTH = CRLF.length();
 
-        private static final String END_MARKER = "--";  // i18n
+        private static final String END_MARKER = "--";  // i18n internal
     }
 }

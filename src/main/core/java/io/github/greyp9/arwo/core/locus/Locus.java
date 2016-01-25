@@ -29,11 +29,11 @@ public class Locus {
     }
 
     public final String toString(final Long value) {
-        return ((value == null) ? null : String.format("%,d", value));  // i18n
+        return ((value == null) ? null : String.format("%,d", value));  // i18n internal
     }
 
     public final String toString(final Integer value) {
-        return ((value == null) ? null : String.format("%,d", value));  // i18n
+        return ((value == null) ? null : String.format("%,d", value));  // i18n internal
     }
 
     public final String toString(final Object value) {

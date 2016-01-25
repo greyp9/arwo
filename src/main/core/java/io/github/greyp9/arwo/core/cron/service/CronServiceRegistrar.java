@@ -53,7 +53,7 @@ public class CronServiceRegistrar {
     public final void register(final Xed xed) throws IOException {
         final XPather xpather = xed.getXPather();
         final List<Element> elementsCronTab = xpather.getElements(
-                "/app:app/app:cron/app:cronTab[@enabled='true']");  // i18n
+                "/app:app/app:cron/app:cronTab[@enabled='true']");  // i18n xpath
         for (final Element elementCronTab : elementsCronTab) {
             final CronTabExecutor executor = addTab(new XPather(elementCronTab, xpather.getContext()));
             cronService.add(executor, bundle, alerts);
@@ -62,13 +62,13 @@ public class CronServiceRegistrar {
 
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
     private CronTabExecutor addTab(final XPather xpatherTab) throws IOException {
-        final String name = xpatherTab.getText("@name");  // i18n
-        final String threads = xpatherTab.getText("@threads");  // i18n
-        final String tz = xpatherTab.getText("@tz");  // i18n
+        final String name = xpatherTab.getText("@name");  // i18n xpath
+        final String threads = xpatherTab.getText("@threads");  // i18n xpath
+        final String tz = xpatherTab.getText("@tz");  // i18n xpath
         final TimeZone timeZone = TimeZone.getTimeZone(tz);
         final Collection<CronJob> cronJobs = new ArrayList<CronJob>();
         final CronTab cronTab = new CronTab(name, cronJobs, timeZone);
-        final List<Element> elementsJob = xpatherTab.getElements("app:cronJob[@enabled='true']");  // i18n
+        final List<Element> elementsJob = xpatherTab.getElements("app:cronJob[@enabled='true']");  // i18n xpath
         for (final Element elementJob : elementsJob) {
             cronJobs.add(createJob(new XPather(elementJob, xpatherTab.getContext())));
         }
@@ -79,9 +79,9 @@ public class CronServiceRegistrar {
     }
 
     private CronJob createJob(final XPather xpatherJob) throws IOException {
-        final String name = xpatherJob.getText("@name");  // i18n
-        final String cron = xpatherJob.getText("@cron");  // i18n
-        final Element jobType = xpatherJob.getElement("*");  // i18n
+        final String name = xpatherJob.getText("@name");  // i18n xpath
+        final String cron = xpatherJob.getText("@cron");  // i18n xpath
+        final Element jobType = xpatherJob.getElement("*");  // i18n xpath
         final String cron1 = ((jobType == null) ? cron : Value.join(Html.SPACE, cron, jobType.getLocalName()));
         return new CronJob(name, true, cron1, jobType);
     }

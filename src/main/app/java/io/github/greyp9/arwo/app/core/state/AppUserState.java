@@ -21,6 +21,7 @@ import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.connect.ConnectionCache;
+import io.github.greyp9.arwo.core.cron.core.CronRunnable;
 import io.github.greyp9.arwo.core.cron.service.CronService;
 import io.github.greyp9.arwo.core.cron.service.CronServiceRegistrar;
 import io.github.greyp9.arwo.core.date.Interval;
@@ -218,7 +219,7 @@ public class AppUserState {
     }
 
     public final String getCharset() {
-        return documentState.getProperties().getProperty("charset", UTF8Codec.Const.UTF8);
+        return documentState.getProperties().getProperty(App.Action.CHARSET, UTF8Codec.Const.UTF8);
     }
 
     public AppUserState(final AppState appState, final Principal principal, final Date date, final File webappRoot,
@@ -265,7 +266,7 @@ public class AppUserState {
             final String pathInfo = httpRequest.getPathInfo();
             final String filenameBase = Value.defaultOnEmpty(new FileX(pathInfo).getFilename(), null);
             final String filename = Value.join(Http.Token.HYPHEN, persist, filenameBase);
-            final String offset = PathU.toPath("", "result", servletPath, filename);
+            final String offset = PathU.toPath("", CronRunnable.Const.RESULT, servletPath, filename);
             metaLink = new MetaLink(userRoot, linkRoot, offset);
         }
         return metaLink;

@@ -16,6 +16,6 @@ public class OutputTextStream {
 
     public final void write(final String string) throws JIException {
         final Object[] params = new Object[] { string };
-        dispatch.callMethodA("Write", params);  // i18n
+        dispatch.callMethodA("Write", params);  // i18n lib
     }
 }

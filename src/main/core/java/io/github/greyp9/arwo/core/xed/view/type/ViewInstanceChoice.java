@@ -24,7 +24,7 @@ public class ViewInstanceChoice extends ViewInstance {
         final Collection<TypeInstance> typeInstances = choiceInstance.getInstances();
         for (final TypeInstance typeInstanceIt : typeInstances) {
             final boolean isSelected = typeInstanceIt.getName().equals(value);
-            final String textSelected = (isSelected ? "x" : " ");  // i18n
+            final String textSelected = (isSelected ? "x" : " ");  // i18n internal
             buffer.append(String.format("[%s] %s   ", textSelected, typeInstanceIt.getName()));
         }
         return buffer.toString();

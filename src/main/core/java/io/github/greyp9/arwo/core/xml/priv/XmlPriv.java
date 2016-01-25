@@ -13,11 +13,11 @@ public final class XmlPriv {
     public static byte[] toXmlPretty(final Document document) throws IOException {
         final ByteArrayOutputStream bos = new ByteArrayOutputStream();
         final com.sun.org.apache.xml.internal.serialize.OutputFormat outputFormat =
-                new com.sun.org.apache.xml.internal.serialize.OutputFormat(document, "xml", true);  // i18n
+                new com.sun.org.apache.xml.internal.serialize.OutputFormat(document, "xml", true);  // i18n internal
         outputFormat.setLineWidth(Const.LINE_WIDTH);
         //outputFormat.setIndenting(true);
         outputFormat.setIndent(1);
-        outputFormat.setEncoding("UTF-8");  // i18n
+        outputFormat.setEncoding("UTF-8");  // i18n internal
         final com.sun.org.apache.xml.internal.serialize.XMLSerializer serializer =
                 new com.sun.org.apache.xml.internal.serialize.XMLSerializer(bos, outputFormat);
         serializer.serialize(document);

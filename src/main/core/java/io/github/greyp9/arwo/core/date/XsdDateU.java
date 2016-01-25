@@ -41,12 +41,12 @@ public final class XsdDateU {
     }
 
     public static class Const {
-        private static final String XSD_Z = "yyyy-MM-dd'T'HH:mm:ss'Z'";  // i18n
-        private static final String XSD_MILLI_Z = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";  // i18n
+        private static final String XSD_Z = "yyyy-MM-dd'T'HH:mm:ss'Z'";  // i18n internal
+        private static final String XSD_MILLI_Z = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";  // i18n internal
         private static final int LENGTH_XSD_Z = 20;
 
-        public static final String DATE = "yyyy-MM-dd";  // i18n
-        public static final String TIME = "HH:mm:ss'Z'";  // i18n
+        public static final String DATE = "yyyy-MM-dd";  // i18n internal
+        public static final String TIME = "HH:mm:ss'Z'";  // i18n internal
         public static final String DATETIME = XSD_Z;
     }
 }

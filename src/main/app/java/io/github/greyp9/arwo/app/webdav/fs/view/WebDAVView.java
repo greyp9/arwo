@@ -112,8 +112,8 @@ public abstract class WebDAVView {
         addTextFiltersView(divTitle);
         // favorites (if toggled)
         final XedNav nav = new XedNav(userState.getDocumentState().getSession(App.Servlet.FAVORITES).getXed());
-        final XedCursor cursorFavorites = nav.findX("/app:favorites/app:webdavFavorites");  // i18n
-        final XedCursor cursorType = nav.find("webdavFavorite", cursorFavorites);  // i18n
+        final XedCursor cursorFavorites = nav.findX("/app:favorites/app:webdavFavorites");  // i18n xpath
+        final XedCursor cursorType = nav.find("webdavFavorite", cursorFavorites);  // i18n xpath
         new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.FILESYSTEM).addContentTo(html);
         // settings property strips
         final Locale locale = userState.getLocus().getLocale();
@@ -149,7 +149,7 @@ public abstract class WebDAVView {
 
     protected final void addFileProperties(final Element html, final MetaFile metaFile) throws IOException {
         if (PropertiesU.isBoolean(userState.getProperties(), App.Action.PROPERTIES)) {
-            final AppPropertiesView view = new AppPropertiesView("webdavPropertiesType", userState);  // i18n
+            final AppPropertiesView view = new AppPropertiesView("webdavPropertiesType", userState);  // i18n metadata
             view.addContentTo(html, metaFile, bundle, getFileProperties());
         }
     }

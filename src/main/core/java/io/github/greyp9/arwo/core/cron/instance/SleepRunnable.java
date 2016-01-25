@@ -33,7 +33,7 @@ public class SleepRunnable extends CronRunnable {
         final boolean interrupted = ThreadU.sleepUntil(dateUntil);
 
         row.update(Const.DURATION, DurationU.duration(dateStart, new Date()));
-        row.update(Const.RESULT, 0);  // i18n
+        row.update(Const.RESULT, 0);  // i18n internal
         logger.exiting(getClass().getName(), CronRunnable.class.getName(), interrupted);
     }
 }

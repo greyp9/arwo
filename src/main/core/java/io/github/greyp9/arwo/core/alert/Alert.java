@@ -65,21 +65,21 @@ public class Alert {
     }
 
     public final String toString() {
-        return String.format("[%s] [%s] %s %s", date, severity, message, detail);  // i18n
+        return String.format("[%s] [%s] %s %s", date, severity, message, detail);  // i18n internal
     }
 
     public final String getIcon() {
         String text;
         if (severity == Severity.QUESTION) {
-            text = "[?]";  // i18n
+            text = "[?]";  // i18n revisit
         } else if (severity == Severity.INFO) {
-            text = "[i]";  // i18n
+            text = "[i]";  // i18n revisit
         } else if (severity == Severity.WARN) {
-            text = "[!]";  // i18n
+            text = "[!]";  // i18n revisit
         } else if (severity == Severity.ERR) {
-            text = "[X]";  // i18n
+            text = "[X]";  // i18n revisit
         } else {
-            text = "[ ]";  // i18n
+            text = "[ ]";  // i18n revisit
         }
         return text;
     }

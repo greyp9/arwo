@@ -39,7 +39,7 @@ public class AppCommandView {
     private void renderHeader(final Element html, final Date dateStart, final String stdin) throws IOException {
         final String dateText = ((dateStart == null) ? null : String.format("[@%s]", dateX.toString(dateStart)));
         final String stdinText = ((stdin == null) ? null : String.format("$ %s", stdin));
-        final String text = Value.join(" ", dateText, stdinText);
+        final String text = Value.join(Html.SPACE, dateText, stdinText);
         ElementU.addElement(html, Html.DIV, text, NTV.create(Html.CLASS, App.CSS.COMMAND_HEAD));
     }
 
@@ -65,7 +65,7 @@ public class AppCommandView {
     private void renderFooter(final Element html, final Date dateFinish, final Long elapsed) throws IOException {
         final String dateText = ((dateFinish == null) ? null : String.format("[@%s]", dateX.toString(dateFinish)));
         final String elapsedText = (elapsed == null) ? null : String.format("[%s]", DurationU.durationXSD(elapsed));
-        final String text = Value.defaultOnEmpty(Value.join(" ", dateText, elapsedText), UTF16.PAUSE);
+        final String text = Value.defaultOnEmpty(Value.join(Html.SPACE, dateText, elapsedText), UTF16.PAUSE);
         ElementU.addElement(html, Html.DIV, text, NTV.create(Html.CLASS, App.CSS.COMMAND_FOOT));
     }
 
@@ -82,8 +82,8 @@ public class AppCommandView {
         final String pidText = (pid == null) ? null : String.format("[PID:%s]", pid);
         final Integer exitValue = command.getExitValue();
         final String exitValueText = (exitValue == null) ? null : String.format("[EXIT:%s]", exitValue);
-        final String stderrText = toExtraInfo(rendererStderr, "STDERR");
-        final String stdoutText = toExtraInfo(rendererStdout, "STDOUT");
+        final String stderrText = toExtraInfo(rendererStderr, App.CSS.STDERR);
+        final String stdoutText = toExtraInfo(rendererStdout, App.CSS.STDOUT);
         return Value.defaultOnEmpty(Value.join(Html.SPACE, pidText, exitValueText, stderrText, stdoutText), null);
     }
 

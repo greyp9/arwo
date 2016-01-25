@@ -52,6 +52,6 @@ public class Pather {
 
     private static class Const {
         private static final Pattern PATH_TOKEN = Pattern.compile("(/.*?)(/.*)?");
-        private static final String SLASH = "/";  // i18n
+        private static final String SLASH = "/";  // i18n internal
     }
 }

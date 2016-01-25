@@ -40,13 +40,13 @@ public class IMAPFoldersStyled {
         final RowSetMetaData metaData = rowSetStyled.getMetaData();
         // output
         final InsertRow insertRow = new InsertRow(rowSetStyled, rowRaw);
-        insertRow.getRow().setColumn(metaData.getIndex("select"), getLink(rowRaw, metaData));  // i18n
-        insertRow.getRow().setColumn(metaData.getIndex("type"), getType(rowRaw, metaData));  // i18n
+        insertRow.getRow().setColumn(metaData.getIndex("select"), getLink(rowRaw, metaData));  // i18n metadata
+        insertRow.getRow().setColumn(metaData.getIndex("type"), getType(rowRaw, metaData));  // i18n metadata
         rowSetStyled.add(insertRow.getRow());
     }
 
     private TableViewLink getLink(final Row rowRaw, final RowSetMetaData metaData) throws UnsupportedEncodingException {
-        final String name = rowRaw.getString(metaData.getIndex("name"));  // i18n
+        final String name = rowRaw.getString(metaData.getIndex("name"));  // i18n metadata
         final String href = PathU.toDir(request.getHttpRequest().getBaseURI(),
                 request.getServer(), URLCodec.encode(name));
         return new TableViewLink(UTF16.SELECT, null, href);

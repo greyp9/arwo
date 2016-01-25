@@ -44,8 +44,8 @@ public final class UTF8Codec {
     }
 
     public static class Const {
-        public static final String UTF8 = "UTF-8";  // i18n
-        public static final String UTF16 = "UTF-16";  // i18n
+        public static final String UTF8 = "UTF-8";  // i18n JRE
+        public static final String UTF16 = "UTF-16";  // i18n JRE
 
         //public static final Charset CHARSET_UTF8 = Charset.forName(UTF8);
     }

@@ -35,7 +35,7 @@ public class HexRenderer {
     }
 
     private String renderHex(final byte b) {
-        return String.format("%02x", (b & Const.ONE_BYTE_MASK));  // i18n
+        return String.format("%02x", (b & Const.ONE_BYTE_MASK));  // i18n internal
     }
 
     private String renderPrintable(final byte[] bytes, final int position) {

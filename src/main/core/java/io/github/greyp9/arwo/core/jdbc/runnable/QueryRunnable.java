@@ -71,6 +71,6 @@ public class QueryRunnable implements Runnable {
     }
 
     private static class Const {
-        private static final String JDBC_EXCEPTION = "jdbcException";  // i18n
+        private static final String JDBC_EXCEPTION = "jdbcException";  // i18n internal
     }
 }

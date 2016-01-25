@@ -34,7 +34,7 @@ public final class HexCodec {
     }
 
     private static class Const {
-        private static final char[] ALPHABET = "0123456789abcdef".toCharArray();  // i18n
+        private static final char[] ALPHABET = "0123456789abcdef".toCharArray();  // i18n internal
         private static final int SIZE_NIBBLE = 4;
         private static final int MASK_NIBBLE = 0xf;
     }

@@ -72,10 +72,10 @@ public class DateX {
     }
 
     private static class Const {
-        private static final String URL = "yyyy-MM-dd'T'HH-mm-ss.SSS'Z'";  // i18n
-        private static final String HTTP = "EEE, dd MMM yyyy HH:mm:ss zzz";  // i18n
-        private static final String XSD_UTC = "yyyy-MM-dd'T'HH:mm:ss'Z'";  // i18n
-        private static final String XSD_UTC_MILLI = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";  // i18n
-        private static final String FILE_UTC_MILLI = "yyyy-MM-dd'T'HH-mm-ss-SSS'Z'";  // i18n
+        private static final String URL = "yyyy-MM-dd'T'HH-mm-ss.SSS'Z'";  // i18n internal
+        private static final String HTTP = "EEE, dd MMM yyyy HH:mm:ss zzz";  // i18n internal
+        private static final String XSD_UTC = "yyyy-MM-dd'T'HH:mm:ss'Z'";  // i18n internal
+        private static final String XSD_UTC_MILLI = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";  // i18n internal
+        private static final String FILE_UTC_MILLI = "yyyy-MM-dd'T'HH-mm-ss-SSS'Z'";  // i18n internal
     }
 }

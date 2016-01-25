@@ -54,7 +54,7 @@ public class SchemaCollectionFactory {
         final String initialURL = URLCodec.toExternalForm(url);
         final String uri = ((catalogURL == null) ? initialURL : initialURL.replace(catalogURL, ""));
         final String protocol = url.getProtocol();
-        final boolean isLocal = (("file".equals(protocol)) || ("jar".equals(protocol)));  // i18n
+        final boolean isLocal = (("file".equals(protocol)) || ("jar".equals(protocol)));  // i18n internal
         final boolean isLoaded = schemaAtoms.containsKey(uri);
         if (isLocal && (!isLoaded)) {
             // get schema content

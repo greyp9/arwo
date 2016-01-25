@@ -134,6 +134,7 @@ public final class App {
         public static final String STATE = "state";
         public static final String STATUS = "status";
         public static final String STDERR = "stderr";
+        public static final String STDIN = "stdin";
         public static final String STDOUT = "stdout";
         public static final String TABLE = "table";
         public static final String TEXT = "text";
@@ -269,5 +270,11 @@ public final class App {
         public static final String CD_FILENAME = "Content-Disposition.filename";
         public static final String CD_NAME = "Content-Disposition.name";
         public static final String UPLOAD_FILE = "uploadFile";
+    }
+
+    public static class Connection {
+        public static final String DATE_LAST = "dateLast";
+        public static final String COUNT = "count";
+        public static final String MILLIS = "millis";
     }
 }

@@ -139,12 +139,12 @@ public class JDBCQuery {
     }
 
     private static class Const {
-        private static final String ID_RESULT_SET = "resultSet";  // i18n
-        private static final String RESULT_SET_TYPE = "jdbcResultSetType";  // i18n
-        private static final String UPDATE_COUNT_TYPE = "jdbcUpdateCountType";  // i18n
+        private static final String ID_RESULT_SET = "resultSet";  // i18n internal
+        private static final String RESULT_SET_TYPE = "jdbcResultSetType";  // i18n internal
+        private static final String UPDATE_COUNT_TYPE = "jdbcUpdateCountType";  // i18n internal
 
-        private static final String BLOB = "BLOB";  // i18n
-        private static final String CLOB = "CLOB";  // i18n
-        private static final String VARBINARY = "VARBINARY";  // i18n
+        private static final String BLOB = "BLOB";  // i18n internal
+        private static final String CLOB = "CLOB";  // i18n internal
+        private static final String VARBINARY = "VARBINARY";  // i18n internal
     }
 }

@@ -63,7 +63,7 @@ public class Query {
     }
 
     private static class Const {
-        private static final String START = "start";  // i18n
-        private static final String FINISH = "finish";  // i18n
+        private static final String START = "start";  // i18n internal
+        private static final String FINISH = "finish";  // i18n internal
     }
 }

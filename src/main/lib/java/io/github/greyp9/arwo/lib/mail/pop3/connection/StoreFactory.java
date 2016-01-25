@@ -49,7 +49,7 @@ public class StoreFactory {
             final String certificate, final Properties properties) throws IOException {
         if (!Value.isEmpty(certificate)) {
             try {
-                final TLSContext tlsContext = new TLSContextFactory().create(certificate, "TLS");  // i18n
+                final TLSContext tlsContext = new TLSContextFactory().create(certificate, "TLS");  // i18n JRE
                 TLSSocketFactory.initialize(tlsContext.getContext());
                 properties.setProperty("mail.pop3s.socketFactory.class", TLSSocketFactory.class.getName());
                 properties.setProperty("mail.pop3s.socketFactory.fallback", Boolean.FALSE.toString());

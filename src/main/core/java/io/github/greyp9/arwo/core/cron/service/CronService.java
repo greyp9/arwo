@@ -36,7 +36,7 @@ public class CronService implements Runnable {
     }
 
     public final RowSet createExecutorRowSet(final Principal principal, final Date dateNow) {
-        return new CronTabRowSet(getExecutors(), dateNow).getRowSet(principal, "cronTabExecutorType");  // i18n
+        return new CronTabRowSet(getExecutors(), dateNow).getRowSet(principal, "cronTabExecutorType");  // i18n metadata
     }
 
     public final Collection<CronTabExecutor> getExecutors() {

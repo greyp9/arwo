@@ -19,12 +19,12 @@ public final class XmlLS {
         try {
             final ByteArrayOutputStream bos = new ByteArrayOutputStream();
             final DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();
-            final DOMImplementationLS loadSave = (DOMImplementationLS) registry.getDOMImplementation("LS");  // i18n
+            final DOMImplementationLS loadSave = (DOMImplementationLS) registry.getDOMImplementation("LS");  // i18n in
             final LSOutput output = loadSave.createLSOutput();
             output.setByteStream(bos);
             final LSSerializer serializer = loadSave.createLSSerializer();
             final DOMConfiguration config = serializer.getDomConfig();
-            config.setParameter("format-pretty-print", true);  // i18n
+            config.setParameter("format-pretty-print", true);  // i18n internal
             serializer.write(document, output);
             return bos.toByteArray();
         } catch (ClassNotFoundException e) {

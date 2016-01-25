@@ -30,9 +30,9 @@ public class WshShell {
     }
 
     public final WshScriptExec exec(final String command) throws JIException {
-        final String commandLine = "%COMSPEC% /c " + command;  // i18n
+        final String commandLine = "%COMSPEC% /c " + command;  // i18n lib
         final Object[] params = { new JIString(commandLine) };
-        final JIVariant[] variants = dispatch.callMethodA("Exec", params);  // i18n
+        final JIVariant[] variants = dispatch.callMethodA("Exec", params);  // i18n lib
         return WshScriptExec.Factory.create(variants);
     }
 

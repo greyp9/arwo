@@ -37,7 +37,7 @@ public class XsdBundle {
             final TypeInstance typeInstance, final TypeInstance typeInstanceChild, final String enumValue) {
         final String uri = typeInstance.getURI();
         final String id = Value.join(Http.Token.DOT,
-                typeInstanceChild.getID(typeInstance), "enum", enumValue); // i18n
+                typeInstanceChild.getID(typeInstance), "enum", enumValue); // i18n internal
         final ResourceBundle bundle = xsdBundles.getBundle(uri);
         return new Bundle(bundle).getString(id);
     }
@@ -46,7 +46,7 @@ public class XsdBundle {
             final TypeInstance typeInstance, final TypeInstance typeInstanceChild, final String enumValue) {
         final String uri = typeInstance.getURI();
         final String id = Value.join(Http.Token.DOT,
-                typeInstanceChild.getID(typeInstance), "enum", "c", enumValue);  // i18n
+                typeInstanceChild.getID(typeInstance), "enum", "c", enumValue);  // i18n internal
         final ResourceBundle bundle = xsdBundles.getBundle(uri);
         return new Bundle(bundle).getString(id);
     }

@@ -40,6 +40,6 @@ public class SardineFactory {
     }
 
     private static class Const {
-        private static final String TLS = "TLS";  // i18n
+        private static final String TLS = "TLS";  // i18n lib
     }
 }

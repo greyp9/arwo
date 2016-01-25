@@ -33,6 +33,6 @@ public final class NumberScale {
         private static final long SCALE_HUNDRED = 100L;
         private static final long KILO = 1024L;
 
-        private static final String[] SUFFIX = { "", "K", "M", "G", "T", "P", "E" };  // i18n
+        private static final String[] SUFFIX = { "", "K", "M", "G", "T", "P", "E" };  // i18n internal
     }
 }

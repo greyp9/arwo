@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.app.cifs.core.CIFSRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.alert.model.ExceptionModel;
+import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.file.meta.FileMetaData;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.io.StreamU;
@@ -85,6 +86,7 @@ public class CIFSDataSource {
     }
 
     public final NameTypeValues properties(final String path) throws IOException {
+        final Bundle bundle = request.getBundle();
         final NameTypeValues nameValues = new NameTypeValues();
         final Date date = new Date();
         try {
@@ -100,13 +102,12 @@ public class CIFSDataSource {
             final ACE[] security = smbFile.getSecurity();
             for (final ACE ace : security) {
                 final String sid = ace.getSID().toDisplayString();
-                final String allow = (ace.isAllow() ? "ALLOW" : "DENY");
                 final String access = Integer.toHexString(ace.getAccessMask());
-                //String accessDisplay = CIFSDataSourceU.toDisplayAccess(ace.getAccessMask());
                 final String flags = Integer.toHexString(ace.getFlags());
-                final String value = String.format("[%s] ACCESS:[%s] FLAGS:[%s]", allow, access, flags);
-                nameValues.add(NameTypeValue.U.create("[ACE]" + sid, value));
-                //nameValues.add(new NameValue(String.format("[%s]", sid), ace.toString()));
+                final String name = bundle.format("cifsPropertiesType.ACE.key", sid);
+                final String valueK = ace.isAllow() ? "cifsPropertiesType.ACE.allow" : "cifsPropertiesType.ACE.deny";
+                final String value = bundle.format(valueK, access, flags);
+                nameValues.add(NameTypeValue.U.create(name, value));
             }
         } catch (IOException e) {
             new ExceptionModel(alerts).service(e, Alert.Severity.ERR);

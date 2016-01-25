@@ -132,7 +132,7 @@ public class XedRowSetFactory {
             for (final TypeInstance typeInstanceIt : typeInstances) {
                 final String name = bundle.getLabel(childInstance, typeInstanceIt);
                 final String value = cursorIt.getValue(typeInstanceIt);
-                tokens.add(String.format("[%s=\"%s\"]", name, value));  // i18n
+                tokens.add(String.format("[%s=\"%s\"]", name, value));  // i18n internal
             }
         }
         // render

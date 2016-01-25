@@ -86,7 +86,7 @@ public class CronTabWork {
         final CronParams params = getParams(dateSchedule, cronJob);
         final CronRunnable runnable = getRunnable(className, params);
         if (runnable != null) {
-            logger.info(String.format("execute(%s/%s)", cronTab.getName(), cronJob.getName()));  // i18n
+            logger.info(String.format("execute(%s/%s)", cronTab.getName(), cronJob.getName()));  // i18n log
             executorService.execute(runnable);
         }
     }
@@ -105,11 +105,11 @@ public class CronTabWork {
         final Row row = new InsertRow(rowSet).getRow();
         rowSet.add(row);
         final RowTyped rowTyped = new RowTyped(rowSet.getMetaData(), row);
-        rowTyped.update("cronTab", executor.getCronTab().getName());  // i18n
-        rowTyped.update("cronJob", cronJob.getName());  // i18n
-        rowTyped.update("command", cronJob.getLine());  // i18n
-        rowTyped.update("principal", ((invokerPrincipal == null) ? null : invokerPrincipal.getName()));  // i18n
-        rowTyped.update("date", date);  // i18n
+        rowTyped.update("cronTab", executor.getCronTab().getName());  // i18n metadata
+        rowTyped.update("cronJob", cronJob.getName());  // i18n metadata
+        rowTyped.update("command", cronJob.getLine());  // i18n metadata
+        rowTyped.update("principal", ((invokerPrincipal == null) ? null : invokerPrincipal.getName()));  // i18n meta
+        rowTyped.update("date", date);  // i18n metadata
         return rowTyped;
     }
 

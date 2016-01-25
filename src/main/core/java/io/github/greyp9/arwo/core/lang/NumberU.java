@@ -41,7 +41,7 @@ public final class NumberU {
     }
 
     public static String toHex(final int value) {
-        return String.format("%08x", value);  // i18n
+        return String.format("%08x", value);  // i18n internal
     }
 
     public static class Const {

@@ -172,7 +172,7 @@ public class TableBodyView {
         final Object valueNew = baselineValue.getNew();
         final Object valueOld = baselineValue.getOld();
         final String textNew = toCellText(valueNew, type);
-        final String textOld = (valueOld == null) ? null : "[" + toCellText(valueOld, type) + "]";  // i18n
+        final String textOld = (valueOld == null) ? null : "[" + toCellText(valueOld, type) + "]";  // i18n internal
         final boolean isNumber = ((valueNew instanceof Number) || (valueOld instanceof Number));
         final String style = Value.join(Html.SPACE, App.CSS.DIFFERENCE, (isNumber ? App.CSS.NUMBER : null));
         final Element td = ElementU.addElement(tr, Html.TD, null, NameTypeValuesU.create(Html.CLASS, style));

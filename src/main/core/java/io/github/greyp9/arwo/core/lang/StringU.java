@@ -52,6 +52,6 @@ public final class StringU {
     }
 
     public static class Const {
-        public static final String WHITESPACE = "\\s+";  // i18n
+        public static final String WHITESPACE = "\\s+";  // i18n internal
     }
 }
