@@ -43,7 +43,7 @@ public class SFTPCreateFile {
         final SFTPv3FileAttributes lstat = source.exists(fileX.getPath());
         if (lstat == null) {
             final String hash = HexCodec.encode(HashU.md5(bytes));
-            source.write(bytes, fileX.getFolder(), fileX.getFilename());
+            source.write(bytes, fileX.getFolder(), fileX.getFilename(), null);
             alerts.add(new Alert(Alert.Severity.INFO, bundle.format(
                     "SFTPHandlerPostMultipart.file.target", fileX.getPath(), length, hash)));
         } else {

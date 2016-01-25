@@ -34,7 +34,7 @@ public class SFTPUpdateFile {
         // put data to remote
         final FileX file = new FileX(request.getPath());
         final SFTPDataSource source = new SFTPDataSource(request, sshConnection);
-        source.write(bytes, file.getFolder(), file.getFilename());
+        source.write(bytes, file.getFolder(), file.getFilename(), null);
         // info alert
         final String hash = HexCodec.encode(HashU.md5(bytes));
         request.getAlerts().add(new Alert(Alert.Severity.INFO, request.getBundle().format(

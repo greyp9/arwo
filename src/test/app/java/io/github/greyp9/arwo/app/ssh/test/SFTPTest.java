@@ -99,7 +99,7 @@ public class SFTPTest extends TestCase {
         final SFTPv3FileAttributes attributesFolderPre = dataSource.exists(pathFolder);
         Assert.assertNotNull(attributesFolderPre);
         // create test file
-        dataSource.write(UTF8Codec.toBytes(filename), pathFolder, filename);
+        dataSource.write(UTF8Codec.toBytes(filename), pathFolder, filename, null);
         final String pathFile = PathU.toPath(pathFolder, filename);
         final SFTPv3FileAttributes attributesFileYes = dataSource.exists(pathFile);
         Assert.assertNotNull(attributesFileYes);

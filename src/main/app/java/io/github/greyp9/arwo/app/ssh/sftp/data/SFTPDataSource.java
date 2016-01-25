@@ -252,11 +252,12 @@ public class SFTPDataSource {
     }
 
     @SuppressWarnings("PMD.CloseResource")
-    public final void write(final byte[] bytes, final String folder, final String filename) throws IOException {
+    public final void write(
+            final byte[] bytes, final String folder, final String filename, final String mode) throws IOException {
         try {
             final SCPClient client = connection.getConnection().createSCPClient();
             final Date date = new Date();
-            write(bytes, client.put(filename, bytes.length, folder, Const.UPLOAD_FILE_MODE));
+            write(bytes, client.put(filename, bytes.length, folder, mode));
             connection.update(date);
         } catch (IOException e) {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
@@ -274,8 +275,6 @@ public class SFTPDataSource {
 */
 
     private static class Const {
-        private static final String UPLOAD_FILE_MODE = "0600";
-
         private static final int ERR_NO_SUCH_FILE = 2;
     }
 }
