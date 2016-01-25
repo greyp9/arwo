@@ -72,7 +72,7 @@ public class AppPropertiesView {
         }
         for (final NameTypeValue property : properties) {
             final InsertRow insertRow = new InsertRow(rowSet);
-            insertRow.setNextColumn(property.getName());
+            insertRow.setNextColumn(bundle.getString(property.getName()));
             insertRow.setNextColumn(property.getValue());
             rowSet.add(insertRow.getRow());
         }

@@ -37,6 +37,7 @@ import io.github.greyp9.arwo.core.resource.Pather;
 import io.github.greyp9.arwo.core.result.view.ResultsContext;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.table.row.RowSet;
+import io.github.greyp9.arwo.core.table.state.ViewState;
 import io.github.greyp9.arwo.core.table.state.ViewStates;
 import io.github.greyp9.arwo.core.text.filter.TextFilters;
 import io.github.greyp9.arwo.core.util.PropertiesU;
@@ -380,19 +381,19 @@ public class AppUserState {
     }
 
     private void updateHexViewParam(final String object) {
-        if ("first".equals(object)) {
+        if (ViewState.Nav.FIRST.equals(object)) {
             pageViewHex = Page.Factory.firstPage(pageViewHex);
-        } else if ("prev".equals(object)) {
+        } else if (ViewState.Nav.PREVIOUS.equals(object)) {
             pageViewHex = Page.Factory.prevPage(pageViewHex);
-        } else if ("next".equals(object)) {
+        } else if (ViewState.Nav.NEXT.equals(object)) {
             pageViewHex = Page.Factory.nextPage(pageViewHex);
-        } else if ("last".equals(object)) {
+        } else if (ViewState.Nav.LAST.equals(object)) {
             pageViewHex = Page.Factory.lastPage(pageViewHex);
-        } else if ("16".equals(object)) {
+        } else if (App.Hex.WIDTH_16.equals(object)) {
             pageViewHex.getProperties().remove(App.Action.HEX_VIEW_PARAM);
-        } else if ("32".equals(object)) {
+        } else if (App.Hex.WIDTH_32.equals(object)) {
             pageViewHex.getProperties().setProperty(App.Action.HEX_VIEW_PARAM, object);
-        } else if ("64".equals(object)) {
+        } else if (App.Hex.WIDTH_64.equals(object)) {
             pageViewHex.getProperties().setProperty(App.Action.HEX_VIEW_PARAM, object);
         }
     }

@@ -90,6 +90,6 @@ public class CIFSFolder {
     private static String toPermissionsDisplay(final SmbFile directoryEntry) throws SmbException {
         final boolean canRead = directoryEntry.canRead();
         final boolean canWrite = directoryEntry.canWrite();
-        return ((canRead ? "R" : "") + (canWrite ? "W" : ""));
+        return ((canRead ? "R" : "") + (canWrite ? "W" : ""));  // i18n cifsFolderType.perms.XX
     }
 }

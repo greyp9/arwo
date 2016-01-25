@@ -16,7 +16,6 @@ import io.github.greyp9.arwo.core.file.meta.FileMetaData;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.io.StreamU;
-import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
 
@@ -220,10 +219,10 @@ public class SFTPDataSource {
     public final NameTypeValues properties(final String path) throws IOException {
         final NameTypeValues nameTypeValues = new NameTypeValues();
         final SFTPv3FileAttributes attributes = lstat(path);
-        nameTypeValues.add(new NameTypeValue("attributes", null, attributes.getOctalPermissions()));
-        nameTypeValues.add(new NameTypeValue("length", null, Long.toString(attributes.size)));
-        nameTypeValues.add(new NameTypeValue("mtime", null, DateU.fromSeconds(attributes.mtime)));
-        nameTypeValues.add(new NameTypeValue("atime", null, DateU.fromSeconds(attributes.atime)));
+        nameTypeValues.add("sftpPropertiesType.attributes", attributes.getOctalPermissions());
+        nameTypeValues.add("sftpPropertiesType.length", Long.toString(attributes.size));
+        nameTypeValues.add("sftpPropertiesType.mtime", DateU.fromSeconds(attributes.mtime));
+        nameTypeValues.add("sftpPropertiesType.atime", DateU.fromSeconds(attributes.atime));
         return nameTypeValues;
     }
 

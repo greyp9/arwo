@@ -252,6 +252,12 @@ public final class App {
         public static final String CLIP_PASTE = "paste";
     }
 
+    public static class Hex {
+        public static final String WIDTH_16 = "16";
+        public static final String WIDTH_32 = "32";
+        public static final String WIDTH_64 = "64";
+    }
+
     public static class Target {
         public static final String DOCUMENT = "document";
         public static final String SESSION = "session";

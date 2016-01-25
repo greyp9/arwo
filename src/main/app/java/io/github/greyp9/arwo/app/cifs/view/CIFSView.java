@@ -151,13 +151,10 @@ public abstract class CIFSView {
     protected final void addFileProperties(final Element html, final MetaFile metaFile) throws IOException {
         if (PropertiesU.isBoolean(userState.getProperties(), App.Action.PROPERTIES)) {
             final AppPropertiesView view = new AppPropertiesView("cifsPropertiesType", userState);  // i18n metadata
-            view.addContentTo(html, metaFile, bundle, getFileProperties());
+            final CIFSDataSource source = new CIFSDataSource(request, resource.getConnection());
+            final NameTypeValues properties = source.properties(request.getPath());
+            view.addContentTo(html, metaFile, bundle, properties);
         }
-    }
-
-    private NameTypeValues getFileProperties() throws IOException {
-        final CIFSDataSource source = new CIFSDataSource(request, resource.getConnection());
-        return source.properties(request.getPath());
     }
 
     protected abstract HttpResponse addContentTo(Element html) throws IOException;

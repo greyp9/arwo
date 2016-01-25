@@ -45,6 +45,7 @@ public class CIFSFolderStyled {
         final Integer type = rowRaw.getInteger(metaData.getIndex("type"));  // i18n metadata
         final String folder = rowRaw.getString(metaData.getIndex("folder"));  // i18n metadata
         final String name = rowRaw.getString(metaData.getIndex("name"));  // i18n metadata
+        final String perms = rowRaw.getString(metaData.getIndex("perms"));  // i18n metadata
         final String nameDisplay = URLCodec.decode(name);
         // processing
         final boolean isDirectory = (App.FS.S_IFDIR == NumberU.toInt(type, 0));
@@ -57,7 +58,7 @@ public class CIFSFolderStyled {
         insertRow.setNextColumn(rowRaw.getColumn(metaData.getIndex("ext")));  // i18n metadata
         insertRow.setNextColumn(null);
         insertRow.setNextColumn(null);
-        insertRow.setNextColumn(null);
+        insertRow.setNextColumn(getPermsStyled(perms));
         insertRow.setNextColumn(rowRaw.getColumn(metaData.getIndex("size")));  // i18n metadata
         rowSetStyled.add(insertRow.getRow());
     }
@@ -67,6 +68,11 @@ public class CIFSFolderStyled {
         final String text = toTypeText(type);
         final String href = toHref(request, folder, name, isDirectory);
         return new TableViewLink(text, null, href);
+    }
+
+    private String getPermsStyled(final String permsRaw) {
+        final String key = Value.join(Http.Token.DOT, rowSet.getID(), "perms", permsRaw);  // i18n metadata
+        return request.getBundle().getString(key);
     }
 
     private static String toTypeText(final Integer value) {

@@ -89,14 +89,14 @@ public class CIFSDataSource {
         final Date date = new Date();
         try {
             final SmbFile smbFile = connection.getSmbFile(path);
-            nameValues.add(new NameTypeValue("attributes", null, Integer.toHexString(smbFile.getAttributes())));
-            nameValues.add(new NameTypeValue("length", null, Long.toString(smbFile.length())));
-            nameValues.add(new NameTypeValue("available", null, Long.toString(smbFile.getDiskFreeSpace())));
-            nameValues.add(new NameTypeValue("principal", null, smbFile.getPrincipal().toString()));
-            nameValues.add(new NameTypeValue("createTime", null, new Date(smbFile.createTime())));
-            nameValues.add(new NameTypeValue("updateTime", null, new Date(smbFile.lastModified())));
-            nameValues.add(new NameTypeValue("R", null, Boolean.toString(smbFile.canRead())));
-            nameValues.add(new NameTypeValue("W", null, Boolean.toString(smbFile.canWrite())));
+            nameValues.add("cifsPropertiesType.attributes", Integer.toHexString(smbFile.getAttributes()));
+            nameValues.add("cifsPropertiesType.length", Long.toString(smbFile.length()));
+            nameValues.add("cifsPropertiesType.available", Long.toString(smbFile.getDiskFreeSpace()));
+            nameValues.add("cifsPropertiesType.principal", smbFile.getPrincipal().toString());
+            nameValues.add("cifsPropertiesType.createTime", new Date(smbFile.createTime()));
+            nameValues.add("cifsPropertiesType.updateTime", new Date(smbFile.lastModified()));
+            nameValues.add("cifsPropertiesType.R", Boolean.toString(smbFile.canRead()));
+            nameValues.add("cifsPropertiesType.W", Boolean.toString(smbFile.canWrite()));
             final ACE[] security = smbFile.getSecurity();
             for (final ACE ace : security) {
                 final String sid = ace.getSID().toDisplayString();
