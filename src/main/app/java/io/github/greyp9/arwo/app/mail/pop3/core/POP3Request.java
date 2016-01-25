@@ -64,6 +64,6 @@ public class POP3Request {
     }
 
     public final String getTitlePath() {
-        return "[POP3] " + Value.join(Http.Token.COLON, getServer());
+        return Value.join(Http.Token.COLON, getServer());
     }
 }

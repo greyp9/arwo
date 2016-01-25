@@ -57,6 +57,6 @@ public class SHRequest {
     }
 
     public final String getTitlePath() {
-        return "[WSH] " + Value.join(Http.Token.COLON, getServer());
+        return Value.join(Http.Token.COLON, getServer());
     }
 }

@@ -77,6 +77,6 @@ public class CIFSRequest {
     }
 
     public final String getTitlePath() throws UnsupportedEncodingException {
-        return "[CIFS] " + URLCodec.decode(Value.join(Http.Token.COLON, getServer(), getPath()));
+        return URLCodec.decode(Value.join(Http.Token.COLON, getServer(), getPath()));
     }
 }

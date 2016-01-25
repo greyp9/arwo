@@ -57,6 +57,6 @@ public class SHRequest {
     }
 
     public final String getTitlePath() {
-        return "[SSH] " + Value.join(Http.Token.COLON, getServer());
+        return Value.join(Http.Token.COLON, getServer());
     }
 }

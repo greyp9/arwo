@@ -70,6 +70,6 @@ public class SFTPRequest {
     }
 
     public final String getTitlePath() {
-        return "[SFTP] " + Value.join(Http.Token.COLON, getServer(), getPath());
+        return Value.join(Http.Token.COLON, getServer(), getPath());
     }
 }

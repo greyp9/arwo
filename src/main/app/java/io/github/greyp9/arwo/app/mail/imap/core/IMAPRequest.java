@@ -64,6 +64,6 @@ public class IMAPRequest {
     }
 
     public final String getTitlePath() {
-        return "[IMAP] " + Value.join(Http.Token.COLON, getServer());
+        return Value.join(Http.Token.COLON, getServer());
     }
 }

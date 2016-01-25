@@ -75,6 +75,6 @@ public class WebDAVRequest {
     }
 
     public final String getTitlePath() {
-        return "[WEBDAV] " + Value.join(Http.Token.COLON, getServer(), getPath());
+        return Value.join(Http.Token.COLON, getServer(), getPath());
     }
 }

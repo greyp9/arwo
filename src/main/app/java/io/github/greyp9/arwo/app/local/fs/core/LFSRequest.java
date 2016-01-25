@@ -59,6 +59,6 @@ public class LFSRequest {
     }
 
     public final String getTitlePath() {
-        return "[FS] " + Value.join(Http.Token.COLON, getPath());
+        return Value.join(Http.Token.COLON, getPath());
     }
 }

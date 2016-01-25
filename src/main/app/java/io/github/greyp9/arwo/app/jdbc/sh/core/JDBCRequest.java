@@ -57,6 +57,6 @@ public class JDBCRequest {
     }
 
     public final String getTitlePath() {
-        return "[JDBC] " + Value.join(Http.Token.COLON, getServer());
+        return Value.join(Http.Token.COLON, getServer());
     }
 }

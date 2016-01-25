@@ -51,6 +51,6 @@ public class SMTPRequest {
     }
 
     public final String getTitlePath() {
-        return "[SMTP] " + Value.join(Http.Token.COLON, getServer());
+        return Value.join(Http.Token.COLON, getServer());
     }
 }
