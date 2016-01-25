@@ -168,7 +168,6 @@ public final class App {
         public static final String DRIVER_CLASS = "driverClass";
         public static final String ENABLED = "enabled";
         public static final String HOST = "host";
-        public static final String JDBC_URL = "jdbcURL";
         public static final String NAME = "name";
         public static final String PORT = "port";
         public static final String PRIVATE_KEY = "privateKey";
@@ -179,6 +178,7 @@ public final class App {
         public static final String SHARE = "share";
         public static final String SQL = "sql";
         public static final String TERM = "term";
+        public static final String URL = "url";
         public static final String USER = "user";
         public static final String PASSWORD = "password";
     }

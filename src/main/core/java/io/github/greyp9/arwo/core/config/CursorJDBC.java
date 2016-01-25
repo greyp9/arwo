@@ -44,7 +44,7 @@ public class CursorJDBC {
     }
 
     public final String getURL() {
-        return cursor.getValue(cursor.getChildInstance(App.Settings.JDBC_URL));
+        return cursor.getValue(cursor.getChildInstance(App.Settings.URL));
     }
 
     public final String getUser() {

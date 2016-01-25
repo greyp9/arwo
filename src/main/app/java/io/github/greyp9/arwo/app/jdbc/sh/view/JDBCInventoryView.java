@@ -60,7 +60,7 @@ public class JDBCInventoryView {
                 new ColumnMetaData(App.Settings.NAME, Types.VARCHAR, true),
                 new ColumnMetaData(App.Settings.COMMENT, Types.VARCHAR),
                 new ColumnMetaData(App.Settings.DRIVER_CLASS, Types.VARCHAR),
-                new ColumnMetaData(App.Settings.JDBC_URL, Types.VARCHAR),
+                new ColumnMetaData(App.Settings.URL, Types.VARCHAR),
                 new ColumnMetaData(App.Settings.USER, Types.VARCHAR),
         };
         return new RowSetMetaData("server.jdbcServerType", columns);
