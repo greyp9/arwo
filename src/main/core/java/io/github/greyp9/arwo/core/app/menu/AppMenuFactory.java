@@ -47,13 +47,13 @@ public class AppMenuFactory implements MenuFactory {
     private static MenuItem createMenuBarHex(final String key) {
         final String subject = App.Target.USER_STATE;
         final String action = App.Action.HEX_VIEW_PARAM;
-        final MenuItem itemFirst = new MenuItem(widen(UTF16.ARROW_FIRST), subject, action, ViewState.Nav.FIRST);
-        final MenuItem itemPrev = new MenuItem(widen(UTF16.ARROW_LEFT), subject, action, ViewState.Nav.PREVIOUS);
-        final MenuItem itemNext = new MenuItem(widen(UTF16.ARROW_RIGHT), subject, action, ViewState.Nav.NEXT);
-        final MenuItem itemLast = new MenuItem(widen(UTF16.ARROW_LAST), subject, action, ViewState.Nav.LAST);
-        final MenuItem item16 = new MenuItem(widen(App.Hex.WIDTH_16), subject, action, App.Hex.WIDTH_16);
-        final MenuItem item32 = new MenuItem(widen(App.Hex.WIDTH_32), subject, action, App.Hex.WIDTH_32);
-        final MenuItem item64 = new MenuItem(widen(App.Hex.WIDTH_64), subject, action, App.Hex.WIDTH_64);
+        final MenuItem itemFirst = new MenuItem(UTF16.ARROW_FIRST, subject, action, ViewState.Nav.FIRST);
+        final MenuItem itemPrev = new MenuItem(UTF16.ARROW_LEFT, subject, action, ViewState.Nav.PREVIOUS);
+        final MenuItem itemNext = new MenuItem(UTF16.ARROW_RIGHT, subject, action, ViewState.Nav.NEXT);
+        final MenuItem itemLast = new MenuItem(UTF16.ARROW_LAST, subject, action, ViewState.Nav.LAST);
+        final MenuItem item16 = new MenuItem(App.Hex.WIDTH_16, subject, action, App.Hex.WIDTH_16);
+        final MenuItem item32 = new MenuItem(App.Hex.WIDTH_32, subject, action, App.Hex.WIDTH_32);
+        final MenuItem item64 = new MenuItem(App.Hex.WIDTH_64, subject, action, App.Hex.WIDTH_64);
         final MenuItem menuHex = new MenuItem(action, subject, action, key + "/viewHex",
                 itemFirst, itemPrev, itemNext, itemLast, item16, item32, item64);
         menuHex.setOpen(true);
@@ -148,10 +148,6 @@ public class AppMenuFactory implements MenuFactory {
         final MenuItem itemAddFavorite = new MenuItem(App.Action.ADD_FAV, App.Target.SESSION, App.Action.ADD_FAV);
         return new MenuItem(Const.FAVORITES, App.Target.USER_STATE, App.Action.MENU, key + "/favorites",
                 itemAddFavorite);
-    }
-
-    private static String widen(final String text) {  // bigger menu target
-        return String.format("[ %s ]", text);
     }
 
     public static class Const {

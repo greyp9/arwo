@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.table.html;
 
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.html.HtmlU;
@@ -68,27 +69,25 @@ public class TableFooterView {
     }
 
     private void addFooterPageRowTo(final Element tfoot, final Page page) {
-        final String tableID = table.getID();
-        final String submitID = context.getSubmitID();
+        final Bundle bundle = context.getBundle();
         // table context
         final Element tr = ElementU.addElement(tfoot, Html.TR);
         final Element th = ElementU.addElement(tr, Html.TH, null, NTV.create(
                 Html.COLSPAN, Integer.toString(table.getMetaData().size()), Html.CLASS, App.CSS.STATUS));
-        // first page UI widget
-        final SubmitToken tokenFirst = new SubmitToken(App.Target.VIEW_STATE, ViewState.Nav.FIRST, tableID);
-        HtmlU.addButton(th, UTF16.ARROW_FIRST, submitID, tokenFirst.toString(), ViewState.Toggle.RIBBON, null);
-        // previous page UI widget
-        final SubmitToken tokenPrev = new SubmitToken(App.Target.VIEW_STATE, ViewState.Nav.PREVIOUS, tableID);
-        HtmlU.addButton(th, UTF16.ARROW_LEFT, submitID, tokenPrev.toString(), ViewState.Toggle.RIBBON, null);
+        // navigation
+        addFooterControl(th, ViewState.Nav.FIRST, UTF16.ARROW_FIRST, bundle.getString("table.page.first"));
+        addFooterControl(th, ViewState.Nav.PREVIOUS, UTF16.ARROW_LEFT, bundle.getString("table.page.prev"));
         // text
-        final String text = context.getBundle().format("table.page.n.to.m.of.x",
+        final String text = bundle.format("table.page.n.to.m.of.x",
                 page.getFirstUI(), page.getLastUI(table.getRows()), table.getRows());
         ElementU.addElement(th, Html.SPAN, text);
-        // next page UI widget
-        final SubmitToken tokenNext = new SubmitToken(App.Target.VIEW_STATE, ViewState.Nav.NEXT, tableID);
-        HtmlU.addButton(th, UTF16.ARROW_RIGHT, submitID, tokenNext.toString(), ViewState.Toggle.RIBBON, null);
-        // last page UI widget
-        final SubmitToken tokenLast = new SubmitToken(App.Target.VIEW_STATE, ViewState.Nav.LAST, tableID);
-        HtmlU.addButton(th, UTF16.ARROW_LAST, submitID, tokenLast.toString(), ViewState.Toggle.RIBBON, null);
+        // navigation
+        addFooterControl(th, ViewState.Nav.NEXT, UTF16.ARROW_RIGHT, bundle.getString("table.page.next"));
+        addFooterControl(th, ViewState.Nav.LAST, UTF16.ARROW_LAST, bundle.getString("table.page.last"));
+    }
+
+    private void addFooterControl(final Element th, final String action, final String label, final String title) {
+        final SubmitToken token = new SubmitToken(App.Target.VIEW_STATE, action, table.getID());
+        HtmlU.addButton(th, label, context.getSubmitID(), token.toString(), ViewState.Toggle.RIBBON, title);
     }
 }
