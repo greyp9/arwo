@@ -22,18 +22,20 @@ public class ChoiceHtmlView {
 
     public final void addContentTo(final Element td) {
         final XedCursor cursor = viewInstance.getCursor();
-        final XsdBundle bundle = cursor.getXed().getXsdBundle();
+        final XsdBundle xsdBundle = cursor.getXed().getXsdBundle();
         final TypeInstance parentInstance = cursor.getTypeInstance();
         final TypeInstance typeInstance = viewInstance.getTypeInstance();
         final String name = typeInstance.getID(parentInstance);
         final String value = cursor.getValue(typeInstance);
+        final String title = xsdBundle.getDetail(cursor.getTypeInstance(), viewInstance.getTypeInstance());
+        ElementU.setAttribute(td, Html.TITLE, title);
         final Collection<TypeInstance> typeInstances =
                 viewInstance.getChoiceInstance().getTypeInstances().getTypeInstances();
         for (final TypeInstance typeInstanceIt : typeInstances) {
             final String nameIt = typeInstanceIt.getName();
-            final String labelIt = bundle.getLabel(parentInstance, typeInstanceIt);
-            final NameTypeValues attrs = NameTypeValuesU.create(
-                    Html.TYPE, Html.RADIO, Html.NAME, name, Html.VALUE, nameIt, Html.ACCESSKEY, Html.VALUE_1);
+            final String labelIt = xsdBundle.getLabel(parentInstance, typeInstanceIt);
+            final NameTypeValues attrs = NameTypeValuesU.create(Html.TYPE, Html.RADIO,
+                    Html.NAME, name, Html.VALUE, nameIt, /*Html.TITLE, title, */Html.ACCESSKEY, Html.VALUE_1);
             if (nameIt.equals(value)) {
                 attrs.add(NameTypeValue.U.create(Html.CHECKED, Html.CHECKED));
             }

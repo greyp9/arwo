@@ -18,8 +18,8 @@ public class CursorHtmlView extends HtmlView {
 
     @Override
     public final String addContentTo(final Element html) throws IOException {
-        final String context = new BreadcrumbsHtmlView(
-                cursorView.getBaseURI(), cursorView.getCursor()).addContentTo(html);
+        final String context = new BreadcrumbsHtmlView(cursorView.getBaseURI(),
+                cursorView.getCursor(), getRequest().getBundle()).addContentTo(html);
         final Object[] views = cursorView.getViews();
         for (final Object view : views) {
             if (view instanceof XedPropertyPageView) {

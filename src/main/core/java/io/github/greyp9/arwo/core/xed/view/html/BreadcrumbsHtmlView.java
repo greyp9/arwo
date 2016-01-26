@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.xed.view.html;
 
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.value.NTV;
@@ -19,12 +20,12 @@ import java.util.List;
 public class BreadcrumbsHtmlView {
     private final String baseURI;
     private final XedCursor cursor;
-    private final XsdBundle bundle;
+    private final Bundle bundle;
 
-    public BreadcrumbsHtmlView(final String baseURI, final XedCursor cursor) {
+    public BreadcrumbsHtmlView(final String baseURI, final XedCursor cursor, final Bundle bundle) {
         this.baseURI = baseURI;
         this.cursor = cursor;
-        this.bundle = cursor.getXed().getXsdBundle();
+        this.bundle = bundle;
     }
 
     public final String addContentTo(final Element html) {
@@ -33,16 +34,17 @@ public class BreadcrumbsHtmlView {
         final Element divMenu = ElementU.addElement(divMenus, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENU));
         ElementU.addElement(divMenu, Html.SPAN, UTF16.DOCUMENT_BRACKETS, NTV.create(Html.CLASS, App.CSS.MENU));
         final Collection<XedCursor> cursorBreadcrumbs = getBreadcrumbs();
+        final XsdBundle xsdBundle = cursor.getXed().getXsdBundle();
         for (final XedCursor cursorCrumb : cursorBreadcrumbs) {
             final XedCursor cursorParent = cursorCrumb.getParentConcrete();
             final TypeInstance instanceParent = ((cursorParent == null) ? null : cursorParent.getTypeInstance());
-            final String label = bundle.getLabel(instanceParent, cursorCrumb.getTypeInstance());
+            final String label = xsdBundle.getLabel(instanceParent, cursorCrumb.getTypeInstance());
             context = label;
             final String resource = baseURI + cursorCrumb.getURI();
             if (cursorParent != null) {
                 ElementU.addElement(divMenu, Html.SPAN, UTF16.LIST_EXPAND, NTV.create(Html.CLASS, App.CSS.MENU));
             }
-            addAnchorBreadcrumb(cursorCrumb, divMenu, Const.TITLE_BREADCRUMB, label, resource);
+            addAnchorBreadcrumb(cursorCrumb, divMenu, bundle.getString(Const.TITLE_BREADCRUMB), label, resource);
         }
         return context;
     }
@@ -68,6 +70,6 @@ public class BreadcrumbsHtmlView {
     }
 
     private static class Const {
-        private static final String TITLE_BREADCRUMB = "menu.navigate.document";
+        private static final String TITLE_BREADCRUMB = "menu.document.navigate.DETAIL";
     }
 }

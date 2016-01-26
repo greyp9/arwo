@@ -27,11 +27,13 @@ public class EnumHtmlView {
         final TypeInstance typeInstance = viewInstance.getTypeInstance();
         final String name = typeInstance.getID(parentInstance);
         final String value = cursor.getValue(typeInstance);
+        final String title = xsdBundle.getDetail(cursor.getTypeInstance(), viewInstance.getTypeInstance());
+        ElementU.setAttribute(td, Html.TITLE, title);
         final Collection<String> enumValues = typeInstance.getDataType().getRestrictions().getEnumValues();
         for (final String enumValue : enumValues) {
             final String labelIt = xsdBundle.getLabelEnum(parentInstance, typeInstance, enumValue);
-            final NameTypeValues attrs = NameTypeValuesU.create(
-                    Html.TYPE, Html.RADIO, Html.NAME, name, Html.VALUE, enumValue, Html.ACCESSKEY, Html.VALUE_1);
+            final NameTypeValues attrs = NameTypeValuesU.create(Html.TYPE, Html.RADIO,
+                    Html.NAME, name, Html.VALUE, enumValue, /*Html.TITLE, title, */Html.ACCESSKEY, Html.VALUE_1);
             if (enumValue.equals(value)) {
                 attrs.add(NameTypeValue.U.create(Html.CHECKED, Html.CHECKED));
             }
