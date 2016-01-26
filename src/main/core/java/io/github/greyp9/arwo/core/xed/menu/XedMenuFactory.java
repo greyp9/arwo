@@ -44,14 +44,14 @@ public class XedMenuFactory implements MenuFactory {
         // reload document from filesystem
         // save document (fs & zip revision)
         final MenuItem itemValidate = new MenuItem(App.Action.VALIDATE, App.Target.SESSION, App.Action.VALIDATE);
-        final MenuItem itemFill = new MenuItem(App.Action.FILL, App.Target.DOCUMENT, App.Action.FILL);
-        final MenuItem itemPrune = new MenuItem(App.Action.PRUNE, App.Target.DOCUMENT, App.Action.PRUNE);
+        //final MenuItem itemFill = new MenuItem(App.Action.FILL, App.Target.DOCUMENT, App.Action.FILL);
+        //final MenuItem itemPrune = new MenuItem(App.Action.PRUNE, App.Target.DOCUMENT, App.Action.PRUNE);
         final MenuItem itemPretty = new MenuItem(App.Action.PRETTY, App.Target.SESSION, App.Action.PRETTY);
         final MenuItem itemReload = new MenuItem(App.Action.RELOAD, App.Target.SESSION, App.Action.RELOAD);
         final MenuItem itemSave = new MenuItem(App.Action.SAVE, App.Target.SESSION, App.Action.SAVE);
         final MenuItem itemCommit = new MenuItem(App.Action.COMMIT, App.Target.USER_STATE, App.Action.COMMIT);
         return new MenuItem("document", App.Target.USER_STATE, App.Action.MENU,
-                key + "/document", itemValidate, itemFill, itemPrune, itemPretty, itemReload, itemSave, itemCommit);
+                key + "/document", itemValidate, /*itemFill, itemPrune, */itemPretty, itemReload, itemSave, itemCommit);
     }
 
     private static MenuItem createMenuView(final String key) {
@@ -63,9 +63,9 @@ public class XedMenuFactory implements MenuFactory {
         final MenuItem itemXml = new MenuItem("xml", App.Target.USER_STATE, "xml");
         final MenuItem itemXsd = new MenuItem("xsd", App.Target.USER_STATE, "xsd");
         final MenuItem itemRev = new MenuItem("rev", App.Target.USER_STATE, "rev");
-        final MenuItem itemLocale = new MenuItem("locale", App.Target.USER_STATE, "locale");
+        //final MenuItem itemLocale = new MenuItem("locale", App.Target.USER_STATE, "locale");
         return new MenuItem(App.Mode.VIEW, App.Target.USER_STATE, App.Action.MENU,
-                Value.join("/", key, App.Mode.VIEW), itemUI, itemXml, itemXsd, itemRev, itemLocale);
+                Value.join("/", key, App.Mode.VIEW), itemUI, itemXml, itemXsd, itemRev/*, itemLocale*/);
     }
 
     public static class Const {

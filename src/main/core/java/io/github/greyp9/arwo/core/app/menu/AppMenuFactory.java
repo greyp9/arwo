@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.menu.MenuItem;
 import io.github.greyp9.arwo.core.menu.factory.MenuFactory;
+import io.github.greyp9.arwo.core.table.state.ViewState;
 import io.github.greyp9.arwo.core.value.Value;
 
 // i18nf
@@ -46,13 +47,13 @@ public class AppMenuFactory implements MenuFactory {
     private static MenuItem createMenuBarHex(final String key) {
         final String subject = App.Target.USER_STATE;
         final String action = App.Action.HEX_VIEW_PARAM;
-        final MenuItem itemFirst = new MenuItem(widen(UTF16.ARROW_FIRST), subject, action, "first");
-        final MenuItem itemPrev = new MenuItem(widen(UTF16.ARROW_LEFT), subject, action, "prev");
-        final MenuItem itemNext = new MenuItem(widen(UTF16.ARROW_RIGHT), subject, action, "next");
-        final MenuItem itemLast = new MenuItem(widen(UTF16.ARROW_LAST), subject, action, "last");
-        final MenuItem item16 = new MenuItem(widen("16"), subject, action, "16");
-        final MenuItem item32 = new MenuItem(widen("32"), subject, action, "32");
-        final MenuItem item64 = new MenuItem(widen("64"), subject, action, "64");
+        final MenuItem itemFirst = new MenuItem(widen(UTF16.ARROW_FIRST), subject, action, ViewState.Nav.FIRST);
+        final MenuItem itemPrev = new MenuItem(widen(UTF16.ARROW_LEFT), subject, action, ViewState.Nav.PREVIOUS);
+        final MenuItem itemNext = new MenuItem(widen(UTF16.ARROW_RIGHT), subject, action, ViewState.Nav.NEXT);
+        final MenuItem itemLast = new MenuItem(widen(UTF16.ARROW_LAST), subject, action, ViewState.Nav.LAST);
+        final MenuItem item16 = new MenuItem(widen(App.Hex.WIDTH_16), subject, action, App.Hex.WIDTH_16);
+        final MenuItem item32 = new MenuItem(widen(App.Hex.WIDTH_32), subject, action, App.Hex.WIDTH_32);
+        final MenuItem item64 = new MenuItem(widen(App.Hex.WIDTH_64), subject, action, App.Hex.WIDTH_64);
         final MenuItem menuHex = new MenuItem(action, subject, action, key + "/viewHex",
                 itemFirst, itemPrev, itemNext, itemLast, item16, item32, item64);
         menuHex.setOpen(true);
@@ -122,22 +123,22 @@ public class AppMenuFactory implements MenuFactory {
     private static MenuItem createMenuFileSystem(final String key) {
         final String subject = App.Target.SESSION;
         final MenuItem itemCommand = new MenuItem(App.Action.COMMAND, subject, App.Action.COMMAND);
-        return new MenuItem("filesystem", App.Target.USER_STATE, App.Action.MENU, key + "/filesystem",
+        return new MenuItem(App.Action.FILESYSTEM, App.Target.USER_STATE, App.Action.MENU, key + "/filesystem",
                 itemCommand);
     }
 
     private static MenuItem createMenuCommand(final String key) {
         final String subject = App.Target.SESSION;
         final MenuItem itemFileSystem = new MenuItem(App.Action.FILESYSTEM, subject, App.Action.FILESYSTEM);
-        return new MenuItem("command", App.Target.USER_STATE, App.Action.MENU, key + "/command",
+        return new MenuItem(App.Action.COMMAND, App.Target.USER_STATE, App.Action.MENU, key + "/command",
                 itemFileSystem);
     }
 
     private static MenuItem createMenuSession(final String key) {
         final String subject = App.Target.USER_STATE;
         final MenuItem itemClear = new MenuItem(App.Action.CLEAR, subject, App.Action.CLEAR);
-        final MenuItem itemCronOn = new MenuItem("cronOn", subject, "cronOn");
-        final MenuItem itemCronOff = new MenuItem("cronOff", subject, "cronOff");
+        final MenuItem itemCronOn = new MenuItem(App.Action.CRON_ON, subject, App.Action.CRON_ON);
+        final MenuItem itemCronOff = new MenuItem(App.Action.CRON_OFF, subject, App.Action.CRON_OFF);
         final MenuItem itemReset = new MenuItem(App.Action.RESET, subject, App.Action.RESET);
         return new MenuItem("session", subject, App.Action.MENU, key + "/session",
                 itemClear, itemCronOn, itemCronOff, itemReset);

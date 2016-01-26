@@ -45,7 +45,7 @@ public class ScriptContext {
     }
 
     public final String getRequestPTY() {
-        return sshConnection.getTerm();
+        return requestPTY;
     }
 
     public final long getPollInterval() {

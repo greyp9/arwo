@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.html.HtmlU;
+import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.menu.MenuItem;
 import io.github.greyp9.arwo.core.menu.MenuSystem;
@@ -62,11 +63,12 @@ public class MenuView {
         if (home) {
             addHome(divMenu);
         }
-        final String key = Value.join(".", App.CSS.MENU, item.getName());
+        final String key = Value.join(Http.Token.DOT, App.CSS.MENU, item.getName());
+        final String title = bundle.getString(key + ".title");
         final String label = String.format("[%s]", bundle.getString(key, item.getName()));
         if (top) {
             final SubmitToken token = new SubmitToken(item.getSubject(), item.getAction(), item.getObject());
-            HtmlU.addButton(divMenu, label, menuSystem.getSubmitID(), token.toString(), App.CSS.MENU, null);
+            HtmlU.addButton(divMenu, label, menuSystem.getSubmitID(), token.toString(), App.CSS.MENU, title);
         } else {
             ElementU.addElement(divMenu, Html.SPAN, label, NTV.create(Html.CLASS, App.CSS.MENU));
         }
@@ -77,8 +79,9 @@ public class MenuView {
 
     private void addHome(final Element html) {
         final Element divNav = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.RIGHT));
+        final String title = bundle.getString("menu.home.title");
         final String label = String.format("[%s]", UTF16.HOME);
-        ElementU.addElement(divNav, Html.A, label, NTV.create(
+        ElementU.addElement(divNav, Html.A, label, NTV.create(Html.TITLE, title,
                 Html.CLASS, App.CSS.MENU, Html.HREF, httpRequest.getContextPath()));
     }
 
@@ -89,11 +92,12 @@ public class MenuView {
             itemOpen = ((itemIt.isOpen()) ? itemIt : itemOpen);
             final String parentName = (item.getName().equals(UTF16.MENU) ? null : item.getName());
             final String key = Value.join(".", App.CSS.MENU, parentName, itemIt.getName());
-            final String label = bundle.getString(key, itemIt.getName());
+            final String title = bundle.getString(key + ".title");
+            final String label = bundle.getString(key);
             final SubmitToken token = new SubmitToken(itemIt.getSubject(), itemIt.getAction(), itemIt.getObject());
             final String htmlClass = Value.join(Html.SPACE, App.CSS.MENU, App.CSS.MIN,
                     (itemIt.isOpen() ? App.CSS.ACTIVE : null));
-            HtmlU.addButton(divMenu, label, menuSystem.getSubmitID(), token.toString(), htmlClass, null);
+            HtmlU.addButton(divMenu, label, menuSystem.getSubmitID(), token.toString(), htmlClass, title);
         }
         if ((itemOpen != null) && (!itemOpen.getMenuItems().isEmpty())) {
             addMenu(html, itemOpen, false, false);

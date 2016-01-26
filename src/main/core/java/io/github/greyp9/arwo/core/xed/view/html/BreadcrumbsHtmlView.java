@@ -42,14 +42,14 @@ public class BreadcrumbsHtmlView {
             if (cursorParent != null) {
                 ElementU.addElement(divMenu, Html.SPAN, UTF16.LIST_EXPAND, NTV.create(Html.CLASS, App.CSS.MENU));
             }
-            addAnchorBreadcrumb(cursorCrumb, divMenu, label, resource);
+            addAnchorBreadcrumb(cursorCrumb, divMenu, Const.TITLE_BREADCRUMB, label, resource);
         }
         return context;
     }
 
-    private void addAnchorBreadcrumb(
-            final XedCursor cursorCrumb, final Element parent, final String label, final String resource) {
-        final NameTypeValues attrs = NTV.create(Html.CLASS, App.CSS.MENU, Html.HREF, resource);
+    private void addAnchorBreadcrumb(final XedCursor cursorCrumb, final Element parent,
+                                     final String title, final String label, final String resource) {
+        final NameTypeValues attrs = NTV.create(Html.CLASS, App.CSS.MENU, Html.TITLE, title, Html.HREF, resource);
         final Element anchor = ElementU.addElement(parent, Html.A, label, attrs);
         // highlight cursor position
         if (cursorCrumb.equals(cursor)) {
@@ -65,5 +65,9 @@ public class BreadcrumbsHtmlView {
             cursorCrumb = cursorCrumb.getParentConcrete();
         }
         return cursorCrumbs;
+    }
+
+    private static class Const {
+        private static final String TITLE_BREADCRUMB = "menu.navigate.document";
     }
 }

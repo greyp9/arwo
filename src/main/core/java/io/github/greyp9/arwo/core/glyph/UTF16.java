@@ -15,7 +15,7 @@ public final class UTF16 {
     public static final String CONNECTED = "\u2282\u2283";  // ⊂⊃
     public static final String DISCONNECTED = "\u2283\u2282";  // ⊃⊂
     public static final String DOCUMENT = "\u2637"; // "\u23cd";  // "\u2395";  // ⎕
-    public static final String FAVORITE = "\u2764";  // ❤
+    //public static final String FAVORITE = "\u2764";  // ❤
     public static final String GO_BACK = "\u232b";  // ⌫
     public static final String HOME = "\u23cf";  // "\u2302";  // ⌂⏏
     public static final String HOURGLASS = "\u231b";  // ⌛
@@ -32,7 +32,7 @@ public final class UTF16 {
     //public static final String STATUS_FAIL = "\u2718";
     //public static final String STATUS_OK = "\u2713";
     //public static final String SAVE = "\u26c1";
-    public static final String STOP = "\u25fc";
+    //public static final String STOP = "\u25fc";
 
     public static final String DOCUMENT_BRACKETS = String.format("[%s]", DOCUMENT);
 
@@ -44,7 +44,7 @@ public final class UTF16 {
 
     public static final String COLUMN_FILTER = String.format("[%s]", HOURGLASS);
     public static final String COLUMN_HIDE = String.format("[%s]", "X");
-    public static final String COLUMN_SORT = String.format("[%s%s]", ARROW_UP, ARROW_DOWN);
+    //public static final String COLUMN_SORT = String.format("[%s%s]", ARROW_UP, ARROW_DOWN);
 
     public static final String CREATE = "[+]";
     public static final String UPDATE = "[*]";
