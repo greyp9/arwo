@@ -32,7 +32,7 @@ public class AppHexView {
         httpRequest.getClass();
         // context menu
         final MenuView menuView = new MenuView(bundle, httpRequest, userState.getMenuSystem());
-        menuView.addContentTo(html, AppMenuFactory.Const.HEX, false, false);
+        menuView.addContentTo(html, AppMenuFactory.Const.HEX, false, false, Html.VALUE_6);
         // content
         final byte[] bytes = StreamU.read(metaFile.getBytes());
         userState.setPageViewHex(Page.Factory.fixPage(userState.getPageViewHex(), bytes.length));
