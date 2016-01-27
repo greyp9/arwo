@@ -30,8 +30,9 @@ public class ActionFactory {
         final ArrayList<ActionButton> actionButtons = new ArrayList<ActionButton>();
         for (final String action : actions) {
             final String key = Value.join(Http.Token.DOT, actionType, Html.ACTION, action);
+            final String title = bundle.getString(key + ".DETAIL", action);
             final String label = bundle.getString(key, action);
-            actionButtons.add(new ActionButton(label, null, targetType, action, cursorType, uri));
+            actionButtons.add(new ActionButton(title, label, null, targetType, action, cursorType, uri));
         }
         return new ActionButtons(submitID, bundle, isExpander, actionButtons);
     }

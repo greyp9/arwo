@@ -49,6 +49,8 @@ public class EnumHtmlView {
         final TypeInstance typeInstance = viewInstance.getTypeInstance();
         final String name = typeInstance.getID(parentInstance);
         final String value = cursor.getValue(typeInstance);
+        final String title = xsdBundle.getDetail(cursor.getTypeInstance(), viewInstance.getTypeInstance());
+        ElementU.setAttribute(td, Html.TITLE, title);
         final Collection<String> enumValues = typeInstance.getDataType().getRestrictions().getEnumValues();
         for (final String enumValue : enumValues) {
             final String labelIt = xsdBundle.getLabelEnumCompact(parentInstance, typeInstance, enumValue);

@@ -44,7 +44,7 @@ public class TableFilterStripView {
             final ActionFactory factory = new ActionFactory(
                     submitID, bundleXed, App.Target.VIEW_STATE, cursorType, null);
             final Collection<String> actions = CollectionU.toCollection(ViewState.Action.FILTER);
-            final ActionButtons buttons = factory.create(null, false, actions);
+            final ActionButtons buttons = factory.create(ViewState.Action.FILTER, false, actions);
             new PropertyStripHtmlView(filterView, buttons).addContentForm(html);
         }
     }

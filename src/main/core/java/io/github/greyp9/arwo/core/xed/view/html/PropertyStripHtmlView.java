@@ -97,6 +97,6 @@ public class PropertyStripHtmlView {
 
     private void addAction(final ActionButton button, final Element td) {
         final SubmitToken tokenAction = new SubmitToken(button.getSubject(), button.getAction(), button.getObject());
-        HtmlU.addButton(td, button.getLabel(), buttons.getSubmitID(), tokenAction.toString(), null, null);
+        HtmlU.addButton(td, button.getLabel(), buttons.getSubmitID(), tokenAction.toString(), null, button.getTitle());
     }
 }
