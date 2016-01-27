@@ -65,29 +65,33 @@ public class TableFooterView {
     }
 
     private void addFooterLinkTo(final Element span, final String text, final String href) {
-        ElementU.addElement(span, Html.A, text, NTV.create(Html.HREF, href, Html.ACCESSKEY, Html.VALUE_3));
+        ElementU.addElement(span, Html.A, text, NTV.create(Html.HREF, href, Html.ACCESSKEY, Html.VALUE_4));
     }
 
     private void addFooterPageRowTo(final Element tfoot, final Page page) {
         final Bundle bundle = context.getBundle();
+        final String htmlClass = ViewState.Const.COLUMNS;
         // table context
         final Element tr = ElementU.addElement(tfoot, Html.TR);
         final Element th = ElementU.addElement(tr, Html.TH, null, NTV.create(
                 Html.COLSPAN, Integer.toString(table.getMetaData().size()), Html.CLASS, App.CSS.STATUS));
         // navigation
-        addFooterControl(th, ViewState.Nav.FIRST, UTF16.ARROW_FIRST, bundle.getString("table.page.first"));
-        addFooterControl(th, ViewState.Nav.PREVIOUS, UTF16.ARROW_LEFT, bundle.getString("table.page.prev"));
+        addControl(th, ViewState.Nav.FIRST, UTF16.ARROW_FIRST, htmlClass, "table.page.first", Html.VALUE_4);
+        addControl(th, ViewState.Nav.PREVIOUS, UTF16.ARROW_LEFT, htmlClass, "table.page.prev", Html.VALUE_4);
         // text
         final String text = bundle.format("table.page.n.to.m.of.x",
                 page.getFirstUI(), page.getLastUI(table.getRows()), table.getRows());
         ElementU.addElement(th, Html.SPAN, text);
         // navigation
-        addFooterControl(th, ViewState.Nav.NEXT, UTF16.ARROW_RIGHT, bundle.getString("table.page.next"));
-        addFooterControl(th, ViewState.Nav.LAST, UTF16.ARROW_LAST, bundle.getString("table.page.last"));
+        addControl(th, ViewState.Nav.NEXT, UTF16.ARROW_RIGHT, htmlClass, "table.page.next", Html.VALUE_4);
+        addControl(th, ViewState.Nav.LAST, UTF16.ARROW_LAST, htmlClass, "table.page.last", Html.VALUE_4);
     }
 
-    private void addFooterControl(final Element th, final String action, final String label, final String title) {
+    @SuppressWarnings("PMD.UseObjectForClearerAPI")
+    private void addControl(final Element html, final String action, final String label,
+                            final String htmlClass, final String titleKey, final String accessKey) {
         final SubmitToken token = new SubmitToken(App.Target.VIEW_STATE, action, table.getID());
-        HtmlU.addButton(th, label, context.getSubmitID(), token.toString(), ViewState.Toggle.RIBBON, title);
+        final String title = context.getBundle().getString(titleKey);
+        HtmlU.addButton(html, label, context.getSubmitID(), token.toString(), htmlClass, title, accessKey);
     }
 }

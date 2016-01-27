@@ -72,6 +72,7 @@ public final class Html {
     public static final String VALUE_1 = "1";
     public static final String VALUE_2 = "2";
     public static final String VALUE_3 = "3";
+    public static final String VALUE_4 = "4";
 
     private Html() {
     }
