@@ -26,8 +26,6 @@
     <import file='${project.dir}/src/test/app/resources/ant/tomcat6/build.tomcat6.xml'/>
     <!-- library paths -->
     <property name='m2.dir' value='${user.home}/.m2/repository'/>
-    <!-- repo.maven.apache.org - ch.ethz.ganymed/ganymed-ssh2/262 -->
-    <property name='ganymed-jar' value='${m2.dir}/ch/ethz/ganymed/ganymed-ssh2/262/ganymed-ssh2-262.jar'/>
 
     <tstamp>
         <format property='timestamp' pattern='yyyy-MM-dd&apos;T&apos;HH:mm:ss&apos;Z&apos;' timezone='UTC'/>
@@ -50,7 +48,9 @@
         <include name='lib/servlet-api.jar'/>
     </fileset>
 
-    <fileset file='${ganymed-jar}' id='libs-ganymed'/>
+    <fileset dir='${m2.dir}' id='libs-ganymed'>
+        <include name='ch/ethz/ganymed/ganymed-ssh2/262/ganymed-ssh2-262.jar'/>
+    </fileset>
 
     <fileset dir='${m2.dir}' id='libs-jcifs'>
         <include name='jcifs/jcifs/1.3.17/jcifs-1.3.17.jar'/>
@@ -184,7 +184,6 @@
             <include name='io/github/greyp9/arwo/app/webdav/fs/cron/*Runnable.java'/>
             <!--table testing-->
             <include name='io/github/greyp9/arwo/app/apptest/fs/servlet/FileSystemServlet.java'/>
-
 
             <!--included in realm jar (process scope)-->
             <exclude name='io/github/greyp9/arwo/core/codec/b64/**/*.java'/>

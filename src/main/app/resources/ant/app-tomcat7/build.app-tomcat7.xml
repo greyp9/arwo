@@ -24,6 +24,8 @@
     <property name='artifact.dir' value='${target.dir}/app-tomcat7/artifact'/>
     <!-- tomcat image -->
     <import file='${project.dir}/src/test/app/resources/ant/tomcat7/build.tomcat7.xml'/>
+    <!-- library paths -->
+    <property name='m2.dir' value='${user.home}/.m2/repository'/>
 
     <tstamp>
         <format property='timestamp' pattern='yyyy-MM-dd&apos;T&apos;HH:mm:ss&apos;Z&apos;' timezone='UTC'/>
@@ -46,8 +48,35 @@
         <include name='lib/servlet-api.jar'/>
     </fileset>
 
+    <fileset dir='${m2.dir}' id='libs-ganymed'>
+        <include name='ch/ethz/ganymed/ganymed-ssh2/262/ganymed-ssh2-262.jar'/>
+    </fileset>
+
+    <fileset dir='${m2.dir}' id='libs-jcifs'>
+        <include name='jcifs/jcifs/1.3.17/jcifs-1.3.17.jar'/>
+    </fileset>
+
+    <fileset dir='${m2.dir}' id='libs-j-interop'>
+        <include name='org/glassfish/main/external/j-interop-repackaged/4.1/j-interop-repackaged-4.1.jar'/>
+    </fileset>
+
+    <fileset dir='${m2.dir}' id='libs-sardine'>
+        <include name='com/github/lookfirst/sardine/5.6/sardine-5.6.jar'/>
+        <include name='org/apache/httpcomponents/httpclient/4.4.1/httpclient-4.4.1.jar'/>
+        <include name='org/apache/httpcomponents/httpcore/4.4.1/httpcore-4.4.1.jar'/>
+    </fileset>
+
+    <fileset dir='${m2.dir}' id='libs-mail'>
+        <include name='com/sun/mail/javax.mail/1.5.4/javax.mail-1.5.4.jar'/>
+    </fileset>
+
     <path id='classpath-app'>
         <fileset refid='libs-servlet-api'/>
+        <fileset refid='libs-ganymed'/>
+        <fileset refid='libs-jcifs'/>
+        <fileset refid='libs-j-interop'/>
+        <fileset refid='libs-sardine'/>
+        <fileset refid='libs-mail'/>
     </path>
 
     <path id='classpath-tomcat7'>
@@ -98,6 +127,13 @@
         <mkdir dir='${classes.app.dir}'/>
         <depend destdir='${classes.app.dir}' srcdir='${src.core.dir}'/>
         <depend destdir='${classes.app.dir}' srcdir='${src.app.dir}'/>
+
+        <javac destdir='${classes.app.dir}' classpathref='classpath-app' includeantruntime='false' debug='on'>
+            <compilerarg value='-XDignore.symbol.file' description='stack-overflow-13855700'/>
+            <src path='${src.core.dir}'/>
+            <include name='io/github/greyp9/arwo/core/xml/priv/XmlPriv.java'/>
+        </javac>
+
         <javac destdir='${classes.app.dir}' classpathref='classpath-app' includeantruntime='false' debug='on'>
             <compilerarg value='-Xlint:all'/>
             <src path='${src.core.dir}'/>
@@ -105,8 +141,50 @@
             <src path='${src.app.dir}'/>
             <!--webapp initialization-->
             <include name='io/github/greyp9/arwo/app/exec/servlet/ExecutorServlet.java'/>
+            <include name='io/github/greyp9/arwo/app/daemon/connect/servlet/ConnectServlet.java'/>
+            <include name='io/github/greyp9/arwo/app/lifecycle/servlet/AppLifecycleServlet.java'/>
             <include name='io/github/greyp9/arwo/app/naming/servlet/NamingServlet.java'/>
             <include name='io/github/greyp9/arwo/app/realm/servlet/RealmServlet.java'/>
+            <!--app cron context-->
+            <include name='io/github/greyp9/arwo/app/cron/servlet/CronServlet.java'/>
+            <!--app dashboard-->
+            <include name='io/github/greyp9/arwo/app/dash/servlet/DashServlet.java'/>
+            <!--webapp settings-->
+            <include name='io/github/greyp9/arwo/app/xed/servlet/Xed1Servlet.java'/>
+            <!--ssh-->
+            <include name='io/github/greyp9/arwo/app/ssh/servlet/SFTPServlet.java'/>
+            <include name='io/github/greyp9/arwo/app/ssh/servlet/SHServlet.java'/>
+            <!--cifs-->
+            <include name='io/github/greyp9/arwo/app/cifs/servlet/CIFSServlet.java'/>
+            <!--interop-->
+            <include name='io/github/greyp9/arwo/app/interop/servlet/SHServlet.java'/>
+            <!--webdav-->
+            <include name='io/github/greyp9/arwo/app/webdav/servlet/WebDAVServlet.java'/>
+            <!--local-->
+            <include name='io/github/greyp9/arwo/app/local/servlet/LFSServlet.java'/>
+            <include name='io/github/greyp9/arwo/app/local/servlet/SHServlet.java'/>
+            <!--jdbc-->
+            <include name='io/github/greyp9/arwo/app/jdbc/servlet/JDBCServlet.java'/>
+            <!--mail-->
+            <include name='io/github/greyp9/arwo/app/mail/smtp/servlet/SMTPServlet.java'/>
+            <include name='io/github/greyp9/arwo/app/mail/imap/servlet/IMAPServlet.java'/>
+            <include name='io/github/greyp9/arwo/app/mail/pop3/servlet/POP3Servlet.java'/>
+            <!--cache-->
+            <include name='io/github/greyp9/arwo/app/cache/servlet/CacheServlet.java'/>
+            <!--cron-->
+            <include name='io/github/greyp9/arwo/core/cron/instance/*Runnable.java'/>
+            <!--cron-->
+            <include name='io/github/greyp9/arwo/app/cifs/fs/cron/*Runnable.java'/>
+            <include name='io/github/greyp9/arwo/app/interop/sh/cron/*Runnable.java'/>
+            <include name='io/github/greyp9/arwo/app/jdbc/sh/cron/*Runnable.java'/>
+            <include name='io/github/greyp9/arwo/app/local/sh/cron/*Runnable.java'/>
+            <include name='io/github/greyp9/arwo/app/mail/**/cron/*Runnable.java'/>
+            <include name='io/github/greyp9/arwo/app/ssh/sftp/cron/*Runnable.java'/>
+            <include name='io/github/greyp9/arwo/app/ssh/sh/cron/*Runnable.java'/>
+            <include name='io/github/greyp9/arwo/app/webdav/fs/cron/*Runnable.java'/>
+            <!--table testing-->
+            <include name='io/github/greyp9/arwo/app/apptest/fs/servlet/FileSystemServlet.java'/>
+
             <!--included in realm jar (process scope)-->
             <exclude name='io/github/greyp9/arwo/core/codec/b64/**/*.java'/>
             <exclude name='io/github/greyp9/arwo/core/codec/hash/secure/**/*.java'/>
@@ -118,12 +196,23 @@
         </exec>
     </target>
 
+    <target name='i18n'>
+        <property name='ant.i18n.dir' value='${project.dir}/src/test/app/resources/ant/pseudo-i18n'/>
+        <ant antfile='${ant.i18n.dir}/build.i18n.xml' dir='${ant.i18n.dir}'/>
+    </target>
+
+    <target name='i18n-clean'>
+        <property name='ant.i18n.dir' value='${project.dir}/src/test/app/resources/ant/pseudo-i18n'/>
+        <ant antfile='${ant.i18n.dir}/build.i18n.xml' dir='${ant.i18n.dir}' target='i18n-clean'/>
+    </target>
+
     <target name='jar-app' depends='compile-app'>
         <mkdir dir='${artifact.dir}'/>
         <jar destfile='${artifact.dir}/arwo.jar'>
             <fileset dir='${classes.app.dir}'>
                 <include name='**/*.class'/>
             </fileset>
+            <fileset dir='${project.dir}/src/main/core/resources/arwo-jar'/>
             <fileset dir='${project.dir}/src/main/app/resources/arwo-jar'/>
             <manifest>
                 <attribute name='Implementation-Build' value='${timestamp}'/>
@@ -135,7 +224,9 @@
     <target name='war-app'>
         <mkdir dir='${war.app.dir}'/>
         <copy todir='${war.app.dir}'>
-            <fileset dir='${project.dir}/src/main/app/resources/webapp/arwo-war'/>
+            <fileset dir='${project.dir}/src/main/app/resources/webapp/arwo-war'>
+                <exclude name='**/*.xcf'/>
+            </fileset>
             <fileset dir='${project.dir}/src/main/app/resources/webapp/arwo-war-tomcat7'/>
         </copy>
         <copy todir='${war.app.dir}/WEB-INF/lib' file='${artifact.dir}/arwo.jar'/>
@@ -149,7 +240,7 @@
         </war>
     </target>
 
-    <target name='main' depends='clean, jar-realm, jar-app, war-app'>
+    <target name='main' depends='clean, jar-realm, compile-app, i18n, jar-app, i18n-clean, war-app'>
         <echo message='project.dir: ${project.dir}'/>
     </target>
 
