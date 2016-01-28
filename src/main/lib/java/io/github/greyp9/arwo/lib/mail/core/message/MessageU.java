@@ -43,16 +43,16 @@ public final class MessageU {
 
     private static String toStringBody(final MimeMessage mimeMessage) throws IOException {
         String body;
-        String bodySafer = null;
+        String bodySafe = null;
         try {
             final Object content = mimeMessage.getContent();
             if (content instanceof String) {
-                bodySafer = (String) content;
+                bodySafe = (String) content;
             }
             final InputStream rawInputStream = mimeMessage.getRawInputStream();
             body = UTF8Codec.toString(StreamU.read(rawInputStream));
         } catch (MessagingException e) {
-            body = bodySafer;
+            body = bodySafe;
         }
         return body;
     }

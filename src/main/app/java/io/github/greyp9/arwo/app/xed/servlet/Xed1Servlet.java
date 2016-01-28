@@ -10,9 +10,6 @@ import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.naming.AppNaming;
 import io.github.greyp9.arwo.core.xed.handler.XedHandlerGet;
 import io.github.greyp9.arwo.core.xed.handler.XedHandlerPost;
-import io.github.greyp9.arwo.core.xed.request.XedRequest;
-import io.github.greyp9.arwo.core.xed.session.XedSession;
-import io.github.greyp9.arwo.core.xed.state.XedUserState;
 
 import javax.naming.Context;
 import javax.servlet.ServletConfig;
@@ -52,10 +49,7 @@ public class Xed1Servlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
         }
-        final XedUserState documentState = userState.getDocumentState();
-        final XedSession session = documentState.getSession(httpRequest.getServletPath());
-        final XedRequest xedRequest = new XedRequest(httpRequest, session, documentState);
-        final HttpResponse httpResponse = new XedHandlerGet(xedRequest).doGet();
+        final HttpResponse httpResponse = new XedHandlerGet(httpRequest, userState.getDocumentState()).doGetSafe();
         // send response
         final HttpResponse httpResponseGZ = HttpResponseGZipU.toHttpResponseGZip(httpRequest, httpResponse);
         ServletU.write(httpResponseGZ, response);
@@ -71,10 +65,7 @@ public class Xed1Servlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
         }
-        final XedUserState documentState = userState.getDocumentState();
-        final XedSession session = documentState.getSession(httpRequest.getServletPath());
-        final XedRequest xedRequest = new XedRequest(httpRequest, session, documentState);
-        final HttpResponse httpResponse = new XedHandlerPost(xedRequest).doPost();
+        final HttpResponse httpResponse = new XedHandlerPost(httpRequest, userState.getDocumentState()).doPostSafe();
         // send response
         ServletU.write(httpResponse, response);
     }
