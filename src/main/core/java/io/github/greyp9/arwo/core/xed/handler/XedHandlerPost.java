@@ -2,7 +2,6 @@ package io.github.greyp9.arwo.core.xed.handler;
 
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.app.App;
-import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
@@ -34,12 +33,12 @@ public class XedHandlerPost {
             httpResponse = doPost();
         } catch (IOException e) {
             documentState.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
-            httpResponse = HttpResponseU.to200(UTF8Codec.toBytes(e.getMessage()));
+            httpResponse = HttpResponseU.to500(e.getMessage());
         }
         return httpResponse;
     }
 
-    public final HttpResponse doPost() throws IOException {
+    private HttpResponse doPost() throws IOException {
         final byte[] entity = StreamU.read(httpRequest.getHttpRequest().getEntity());
         final NameTypeValues httpArguments = HttpArguments.toArguments(entity);
         final String submitID = documentState.getSubmitID();

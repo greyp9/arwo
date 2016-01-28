@@ -49,7 +49,7 @@ public class CronServlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
         }
-        final HttpResponse httpResponse = new CronHandlerGet(httpRequest, userState).doGet();
+        final HttpResponse httpResponse = new CronHandlerGet(httpRequest, userState).doGetSafe();
         // send response
         final HttpResponse httpResponseGZ = HttpResponseGZipU.toHttpResponseGZip(httpRequest, httpResponse);
         ServletU.write(httpResponseGZ, response);
@@ -65,7 +65,7 @@ public class CronServlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
         }
-        final HttpResponse httpResponse = new CronHandlerPost(httpRequest, userState).doPost();
+        final HttpResponse httpResponse = new CronHandlerPost(httpRequest, userState).doPostSafe();
         // send response
         ServletU.write(httpResponse, response);
     }

@@ -27,18 +27,18 @@ public class CIFSHandlerGet {
         this.userState = userState;
     }
 
-    public final HttpResponse doGet() throws IOException {
+    public final HttpResponse doGetSafe() throws IOException {
         HttpResponse httpResponse;
         try {
-            httpResponse = doGet2();
+            httpResponse = doGet();
         } catch (IOException e) {
             userState.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
-            httpResponse = HttpResponseU.to302(httpRequest.getBaseURI());
+            httpResponse = HttpResponseU.to500(e.getMessage());
         }
         return httpResponse;
     }
 
-    private HttpResponse doGet2() throws IOException {
+    private HttpResponse doGet() throws IOException {
         HttpResponse httpResponse;
         final String baseURI = httpRequest.getBaseURI();
         final String pathInfo = httpRequest.getPathInfo();
@@ -49,12 +49,12 @@ public class CIFSHandlerGet {
         } else if (Value.isEmpty(request.getServer())) {
             httpResponse = new CIFSInventoryXView(request, userState, null, App.Mode.VIEW).doGetResponse();
         } else {
-            httpResponse = doGet3();
+            httpResponse = doGet2();
         }
         return httpResponse;
     }
 
-    private HttpResponse doGet3() throws IOException {
+    private HttpResponse doGet2() throws IOException {
         HttpResponse httpResponse;
         final CIFSConnectionFactory factory = new CIFSConnectionFactory(
                 httpRequest, userState, request.getBundle(), request.getAlerts());

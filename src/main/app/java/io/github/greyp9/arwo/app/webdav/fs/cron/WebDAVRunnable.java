@@ -57,7 +57,7 @@ public class WebDAVRunnable extends CronRunnable {
             final HttpRequest httpRequest = getHttpRequest(resourceFull);
             final ServletHttpRequest httpRequest1 = getServletHttpRequest(httpRequest, pathInfo, principal);
             final WebDAVHandlerGet handler = new WebDAVHandlerGet(httpRequest1, userState);
-            putHttpResponse(handler.doGet(), filename, userState);
+            putHttpResponse(handler.doGetSafe(), filename, userState);
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         } finally {

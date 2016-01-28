@@ -15,12 +15,14 @@ public final class HttpResponseU {
     private HttpResponseU() {
     }
 
+/*
     public static HttpResponse to200(final byte[] entity) {
         final NameTypeValues headers = new NameTypeValues(
                 new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_PLAIN_UTF8),
                 new NameTypeValue(Http.Header.CONTENT_LENGTH, entity.length));
         return new HttpResponse(HttpURLConnection.HTTP_OK, headers, new ByteArrayInputStream(entity));
     }
+*/
 
     public static HttpResponse to200(final MetaFile metaFile) {
         final String lastModified = HttpDateU.toHttpZ(new Date(metaFile.getMetaData().getLastModified()));
@@ -39,17 +41,19 @@ public final class HttpResponseU {
     }
 
     public static HttpResponse to404() {
-        return toError(HttpURLConnection.HTTP_NOT_FOUND);
+        return toError(HttpURLConnection.HTTP_NOT_FOUND, null);
     }
 
-    public static HttpResponse to501() {
-        return toError(HttpURLConnection.HTTP_NOT_IMPLEMENTED);
+    public static HttpResponse to500(final String message) {
+        return toError(HttpURLConnection.HTTP_INTERNAL_ERROR, message);
     }
 
-    public static HttpResponse toError(final int statusCode) {
+    public static HttpResponse toError(final int statusCode, final String message) {
+        final String text = Integer.toString(statusCode) + Http.Token.CRLF + ((message == null) ? "" : message);
+        final byte[] entity = UTF8Codec.toBytes(text);
         final NameTypeValues headers = new NameTypeValues(
-                new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_PLAIN_UTF8));
-        final byte[] entity = UTF8Codec.toBytes(Integer.toString(statusCode));
+                new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_PLAIN_UTF8),
+                new NameTypeValue(Http.Header.CONTENT_LENGTH, entity.length));
         return new HttpResponse(statusCode, headers, new ByteArrayInputStream(entity));
     }
 }

@@ -44,7 +44,7 @@ public class SFTPResourceView {
             httpResponse = new SFTPSymlinkView(request, userState, resource).doGetResponse();
         } else {
             userState.getAlerts().add(new Alert(Alert.Severity.ERR, String.format("%d = lstat()", type)));
-            httpResponse = HttpResponseU.to501();
+            httpResponse = HttpResponseU.to404();
         }
         return httpResponse;
     }

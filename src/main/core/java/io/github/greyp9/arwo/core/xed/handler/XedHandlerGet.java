@@ -2,7 +2,6 @@ package io.github.greyp9.arwo.core.xed.handler;
 
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.app.App;
-import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.http.HttpResponse;
@@ -38,12 +37,12 @@ public class XedHandlerGet {
             httpResponse = doGet();
         } catch (IOException e) {
             documentState.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
-            httpResponse = HttpResponseU.to200(UTF8Codec.toBytes(e.getMessage()));
+            httpResponse = HttpResponseU.to500(e.getMessage());
         }
         return httpResponse;
     }
 
-    public final HttpResponse doGet() throws IOException {
+    private HttpResponse doGet() throws IOException {
         HttpResponse httpResponse;
         final XedSession session = documentState.getSession(httpRequest.getServletPath());
         final XedRequest request = new XedRequest(httpRequest, session, documentState);

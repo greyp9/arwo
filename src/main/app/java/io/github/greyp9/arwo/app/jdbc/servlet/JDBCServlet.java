@@ -49,7 +49,7 @@ public class JDBCServlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
         }
-        final HttpResponse httpResponse = new JDBCHandlerGet(httpRequest, userState).doGet();
+        final HttpResponse httpResponse = new JDBCHandlerGet(httpRequest, userState).doGetSafe();
         // send response
         final HttpResponse httpResponseGZ = HttpResponseGZipU.toHttpResponseGZip(httpRequest, httpResponse);
         ServletU.write(httpResponseGZ, response);
@@ -65,7 +65,7 @@ public class JDBCServlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
         }
-        final HttpResponse httpResponse = new JDBCHandlerPost(httpRequest, userState).doPost();
+        final HttpResponse httpResponse = new JDBCHandlerPost(httpRequest, userState).doPostSafe();
         // send response
         ServletU.write(httpResponse, response);
     }

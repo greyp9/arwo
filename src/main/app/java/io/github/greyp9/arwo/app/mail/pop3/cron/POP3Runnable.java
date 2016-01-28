@@ -58,7 +58,7 @@ public class POP3Runnable extends CronRunnable {
             final HttpRequest httpRequest = getHttpRequest(resourceFull);
             final ServletHttpRequest httpRequest1 = getServletHttpRequest(httpRequest, pathInfo, principal);
             final POP3HandlerGet handler = new POP3HandlerGet(httpRequest1, userState);
-            putHttpResponse(handler.doGet(), userState);
+            putHttpResponse(handler.doGetSafe(), userState);
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         } finally {

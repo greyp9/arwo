@@ -49,7 +49,7 @@ public class SHServlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
         }
-        final HttpResponse httpResponse = new SHHandlerGet(httpRequest, userState).doGet();
+        final HttpResponse httpResponse = new SHHandlerGet(httpRequest, userState).doGetSafe();
         // send response
         final HttpResponse httpResponseGZ = HttpResponseGZipU.toHttpResponseGZip(httpRequest, httpResponse);
         ServletU.write(httpResponseGZ, response);
@@ -65,7 +65,7 @@ public class SHServlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
         }
-        final HttpResponse httpResponse = new SHHandlerPost(httpRequest, userState).doPost();
+        final HttpResponse httpResponse = new SHHandlerPost(httpRequest, userState).doPostSafe();
         // send response
         ServletU.write(httpResponse, response);
     }

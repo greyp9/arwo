@@ -27,7 +27,18 @@ public class SFTPHandlerGet {
         this.userState = userState;
     }
 
-    public final HttpResponse doGet() throws IOException {
+    public final HttpResponse doGetSafe() throws IOException {
+        HttpResponse httpResponse;
+        try {
+            httpResponse = doGet();
+        } catch (IOException e) {
+            userState.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
+            httpResponse = HttpResponseU.to500(e.getMessage());
+        }
+        return httpResponse;
+    }
+
+    private HttpResponse doGet() throws IOException {
         HttpResponse httpResponse;
         try {
             httpResponse = doGet2();

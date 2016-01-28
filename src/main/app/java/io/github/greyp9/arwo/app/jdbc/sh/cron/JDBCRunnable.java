@@ -59,7 +59,7 @@ public class JDBCRunnable extends CronRunnable {
             final HttpRequest httpRequest = getHttpRequest(userState.getSubmitID(), pathInfo, sql);
             final ServletHttpRequest httpRequest1 = getServletHttpRequest(httpRequest, pathInfo, principal);
             final JDBCHandlerPost handlerPost = new JDBCHandlerPost(httpRequest1, userState);
-            putHttpResponse(handlerPost.doPost(), userState);
+            putHttpResponse(handlerPost.doPostSafe(), userState);
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         } finally {

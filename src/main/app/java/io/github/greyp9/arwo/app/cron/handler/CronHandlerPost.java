@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.app.cron.handler;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppText;
 import io.github.greyp9.arwo.core.bundle.Bundle;
@@ -29,7 +30,18 @@ public class CronHandlerPost {
         this.bundle = new Bundle(new AppText(locale).getBundleCore());
     }
 
-    public final HttpResponse doPost() throws IOException {
+    public final HttpResponse doPostSafe() throws IOException {
+        HttpResponse httpResponse;
+        try {
+            httpResponse = doPost();
+        } catch (IOException e) {
+            userState.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
+            httpResponse = HttpResponseU.to500(e.getMessage());
+        }
+        return httpResponse;
+    }
+
+    private HttpResponse doPost() throws IOException {
         // redirect location (identity by default)
         String location = httpRequest.getHttpRequest().getResource();
         final byte[] entity = StreamU.read(httpRequest.getHttpRequest().getEntity());

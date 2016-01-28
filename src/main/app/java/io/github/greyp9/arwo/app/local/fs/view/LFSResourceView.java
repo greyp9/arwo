@@ -36,7 +36,7 @@ public class LFSResourceView {
             httpResponse = new LFSFileView(request, userState, file).doGetResponse();
         } else {
             userState.getAlerts().add(new Alert(Alert.Severity.ERR, path));
-            httpResponse = HttpResponseU.to501();
+            httpResponse = HttpResponseU.to404();
         }
         return httpResponse;
     }

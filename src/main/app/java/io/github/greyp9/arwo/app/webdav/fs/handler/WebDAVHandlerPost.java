@@ -45,7 +45,18 @@ public class WebDAVHandlerPost {
         this.alerts = request.getAlerts();
     }
 
-    public final HttpResponse doPost() throws IOException {
+    public final HttpResponse doPostSafe() throws IOException {
+        HttpResponse httpResponse;
+        try {
+            httpResponse = doPost();
+        } catch (IOException e) {
+            userState.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
+            httpResponse = HttpResponseU.to500(e.getMessage());
+        }
+        return httpResponse;
+    }
+
+    private HttpResponse doPost() throws IOException {
         HttpResponse httpResponse;
         try {
             httpResponse = doPost2();

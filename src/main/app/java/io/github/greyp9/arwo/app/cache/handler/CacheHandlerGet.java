@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.app.cache.handler;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.http.Http;
@@ -23,7 +24,18 @@ public class CacheHandlerGet {
         this.userState = userState;
     }
 
-    public final HttpResponse doGet() throws IOException {
+    public final HttpResponse doGetSafe() throws IOException {
+        HttpResponse httpResponse;
+        try {
+            httpResponse = doGet();
+        } catch (IOException e) {
+            userState.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
+            httpResponse = HttpResponseU.to500(e.getMessage());
+        }
+        return httpResponse;
+    }
+
+    private HttpResponse doGet() throws IOException {
         HttpResponse httpResponse;
         final MetaFile metaFile = userState.getCacheBlob().getFile(httpRequest.getPathInfo());
         if (metaFile == null) {

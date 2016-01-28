@@ -40,7 +40,7 @@ public class CIFSResourceView {
             httpResponse = new CIFSFileView(request, userState, resource).doGetResponse();
         } else {
             userState.getAlerts().add(new Alert(Alert.Severity.ERR, String.format("%s = lstat()", smbFile.toString())));
-            httpResponse = HttpResponseU.to501();
+            httpResponse = HttpResponseU.to404();
         }
         return httpResponse;
     }

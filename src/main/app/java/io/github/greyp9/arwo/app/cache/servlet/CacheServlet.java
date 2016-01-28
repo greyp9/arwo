@@ -48,7 +48,7 @@ public class CacheServlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
         }
-        final HttpResponse httpResponse = new CacheHandlerGet(httpRequest, userState).doGet();
+        final HttpResponse httpResponse = new CacheHandlerGet(httpRequest, userState).doGetSafe();
         // send response
         final HttpResponse httpResponseGZ = HttpResponseGZipU.toHttpResponseGZip(httpRequest, httpResponse);
         ServletU.write(httpResponseGZ, response);

@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.app.apptest.fs.servlet;
 import io.github.greyp9.arwo.app.core.servlet.ServletU;
 import io.github.greyp9.arwo.app.core.state.AppState;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppHtml;
@@ -88,7 +89,7 @@ public class FileSystemServlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
         }
-        final HttpResponse httpResponse = new FileSystemHandlerGet(httpRequest, userState).doGet();
+        final HttpResponse httpResponse = new FileSystemHandlerGet(httpRequest, userState).doGetSafe();
         // send response
         final HttpResponse httpResponseGZ = HttpResponseGZipU.toHttpResponseGZip(httpRequest, httpResponse);
         ServletU.write(httpResponseGZ, response);
@@ -104,7 +105,7 @@ public class FileSystemServlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
         }
-        final HttpResponse httpResponse = new FileSystemHandlerPost(httpRequest, userState).doPost();
+        final HttpResponse httpResponse = new FileSystemHandlerPost(httpRequest, userState).doPostSafe();
         ServletU.write(httpResponse, response);
     }
 
@@ -117,8 +118,19 @@ public class FileSystemServlet extends javax.servlet.http.HttpServlet {
             this.userState = userState;
         }
 
+        public final HttpResponse doGetSafe() throws IOException {
+            HttpResponse httpResponse;
+            try {
+                httpResponse = doGet();
+            } catch (IOException e) {
+                userState.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
+                httpResponse = HttpResponseU.to500(e.getMessage());
+            }
+            return httpResponse;
+        }
+
         @SuppressWarnings("PMD.ConfusingTernary")
-        public final HttpResponse doGet() throws IOException {
+        private HttpResponse doGet() throws IOException {
             HttpResponse httpResponse;
             final String pathInfo = httpRequest.getPathInfo();
             final String query = httpRequest.getQuery();
@@ -210,7 +222,18 @@ public class FileSystemServlet extends javax.servlet.http.HttpServlet {
             this.userState = userState;
         }
 
-        public final HttpResponse doPost() throws IOException {
+        public final HttpResponse doPostSafe() throws IOException {
+            HttpResponse httpResponse;
+            try {
+                httpResponse = doPost();
+            } catch (IOException e) {
+                userState.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
+                httpResponse = HttpResponseU.to500(e.getMessage());
+            }
+            return httpResponse;
+        }
+
+        private HttpResponse doPost() throws IOException {
             final byte[] entity = StreamU.read(httpRequest.getHttpRequest().getEntity());
             final NameTypeValues nameTypeValues = HttpArguments.toArguments(entity);
             final String submitID = userState.getSubmitID();

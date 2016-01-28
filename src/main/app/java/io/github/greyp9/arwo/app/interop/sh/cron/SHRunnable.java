@@ -59,7 +59,7 @@ public class SHRunnable extends CronRunnable {
             final HttpRequest httpRequest = getHttpRequest(userState.getSubmitID(), pathInfo, command);
             final ServletHttpRequest httpRequest1 = getServletHttpRequest(httpRequest, pathInfo, principal);
             final SHHandlerPost handlerPost = new SHHandlerPost(httpRequest1, userState);
-            putHttpResponse(handlerPost.doPost(), userState);
+            putHttpResponse(handlerPost.doPostSafe(), userState);
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);
         } finally {
