@@ -4,7 +4,9 @@ import io.github.greyp9.arwo.core.url.URLCodec;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.JarURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
@@ -23,9 +25,19 @@ public final class ManifestU {
     }
 
     public static Manifest getManifest(final Class<?> c) throws IOException {
+        Manifest manifest;
         final URL url = c.getProtectionDomain().getCodeSource().getLocation();
-        final File file = URLCodec.toFile(url);
-        return (file.isFile() ? getManifest(file) : new Manifest());
+        if ("file".equals(url.getProtocol())) {  // i18n JRE
+            final File file = URLCodec.toFile(url);
+            manifest = (file.isFile() ? getManifest(file) : new Manifest());
+        } else if ("jar".equals(url.getProtocol())) {  // i18n JRE
+            final URLConnection urlConnection = url.openConnection();
+            final JarURLConnection jarURLConnection = (JarURLConnection) urlConnection;
+            manifest = jarURLConnection.getManifest();
+        } else {
+            manifest = new Manifest();
+        }
+        return manifest;
     }
 
     public static Manifest getManifest(final File file) throws IOException {
@@ -49,11 +61,15 @@ public final class ManifestU {
         return getAttribute(manifest, Const.VERSION);
     }
 
-    public static String getVersion(final Class<?> c) {
+    public static String getVersion2(final Class<?> c) {
         final Manifest manifest = getManifestSafe(c);
         return String.format("[v%s %s]",
                 getImplementationVersion(manifest),
                 getImplementationBuild(manifest));
+    }
+
+    public static String getVersion(final Class<?> c) {
+        return String.format("[v%s]", c.getPackage().getImplementationVersion());
     }
 
     private static class Const {
