@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.app.core.state.AppState;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.webdav.fs.handler.WebDAVHandlerGet;
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.cron.core.CronParams;
 import io.github.greyp9.arwo.core.cron.core.CronRunnable;
 import io.github.greyp9.arwo.core.date.DateX;
@@ -13,6 +14,7 @@ import io.github.greyp9.arwo.core.http.HttpRequest;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
+import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.naming.AppNaming;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.table.type.RowTyped;
@@ -69,11 +71,11 @@ public class WebDAVRunnable extends CronRunnable {
 
     private void putHttpResponse(
             final HttpResponse httpResponse, final String filename, final AppUserState userState) throws IOException {
-        // write out fetched file
-        final File userCronRoot = new File(userState.getUserRoot(), Const.CRON);
-        final File file = getParams().getFile(userCronRoot, filename);
-        final byte[] entity = StreamU.read(httpResponse.getEntity());
-        StreamU.writeMkdirs(file, entity);
+        if (!SystemU.isTrue()) {
+            // persist invocation results
+            final File file = getParams().getFile(userState.getUserRoot(), null);
+            StreamU.writeMkdirs(file, UTF8Codec.toBytes(httpResponse.toString()));
+        }
     }
 
     private ServletHttpRequest getServletHttpRequest(
