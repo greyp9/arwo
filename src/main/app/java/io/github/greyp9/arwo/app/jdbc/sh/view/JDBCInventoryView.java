@@ -42,9 +42,10 @@ public class JDBCInventoryView {
 
     public final void addContent(final Element html) throws IOException {
         final Xed xed = userState.getDocumentState().getSession(App.Servlet.SETTINGS).getXed();
+        final Xed xedX = userState.getXedFactory().getXedUI(xed, userState.getLocale());
         final RowSetMetaData metaData = createMetaData();
-        final RowSet rowSet = createRowSet(metaData, xed);
-        final Bundle bundle = xed.getBundle();
+        final RowSet rowSet = createRowSet(metaData, xedX);
+        final Bundle bundle = xedX.getBundle();
         final Locus locus = userState.getLocus();
         final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
         final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);

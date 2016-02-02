@@ -22,6 +22,7 @@ import io.github.greyp9.arwo.core.view.StatusBarView;
 import io.github.greyp9.arwo.core.xed.action.XedActionLocale;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
+import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
@@ -88,7 +89,9 @@ public abstract class JDBCView {
         // context title
         menuView.addTitle(html, title);
         // favorites (if toggled)
-        final XedNav nav = new XedNav(userState.getDocumentState().getSession(App.Servlet.FAVORITES).getXed());
+        final Xed xed = userState.getDocumentState().getSession(App.Servlet.FAVORITES).getXed();
+        final Xed xedX = userState.getXedFactory().getXedUI(xed, userState.getLocale());
+        final XedNav nav = new XedNav(xedX);
         final XedCursor cursorFavorites = nav.findX("/app:favorites/app:jdbcFavorites");  // i18n metadata
         final XedCursor cursorType = nav.find("jdbcFavorite", cursorFavorites);  // i18n metadata
         new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.COMMAND).addContentTo(html);
