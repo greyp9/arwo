@@ -18,6 +18,7 @@ import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewState;
+import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import io.github.greyp9.arwo.core.xed.session.XedEntry;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
 import io.github.greyp9.arwo.core.xed.state.XedUserState;
@@ -37,19 +38,22 @@ public class XedUnsavedView {
         this.userState = userState;
     }
 
-    public final void addContent(final Element html) throws IOException {
+    public final void addContent(final Element html, final boolean displayOnEmpty) throws IOException {
         final Locale locale = userState.getLocus().getLocale();
         final Bundle bundle = new Bundle(new AppText(locale).getBundleCore());
         final RowSetMetaData metaData = createMetaData();
         final RowSet rowSet = createRowSet(metaData);
-        final Locus locus = userState.getLocus();
-        final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
-        final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
-        TableU.addFooterStandard(table, bundle);
-        final TableContext tableContext = new TableContext(
-                viewState, userState.getSubmitID(), App.CSS.TABLE, bundle, locus);
-        final TableView tableView = new TableView(table, tableContext);
-        tableView.addContentTo(html);
+        if ((displayOnEmpty) || (rowSet.getRows() > 0)) {
+            final Locus locus = userState.getLocus();
+            final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
+            final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
+            TableU.addFooterStandard(table, bundle);
+            final XedActionFilter filter = new XedActionFilter(userState.getXedFactory(), userState.getLocale());
+            final TableContext tableContext = new TableContext(
+                    viewState, filter, userState.getSubmitID(), App.CSS.TABLE, bundle, locus);
+            final TableView tableView = new TableView(table, tableContext);
+            tableView.addContentTo(html);
+        }
     }
 
     private RowSetMetaData createMetaData() {

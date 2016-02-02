@@ -24,6 +24,6 @@ public class WebDAVConnectionsView {
     public final void addContent(final Element html) throws IOException {
         final String baseURI = PathU.toPath(httpRequest.getBaseURI(), offsetURI);
         final ConnectionCache cache = userState.getWebDAV().getCache();
-        new AppConnectionView(httpRequest, userState, cache, baseURI).addContentTo(html);
+        new AppConnectionView(httpRequest, userState, cache, baseURI).addContentTo(html, true);
     }
 }

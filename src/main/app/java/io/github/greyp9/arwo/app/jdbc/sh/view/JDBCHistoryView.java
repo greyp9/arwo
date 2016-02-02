@@ -24,6 +24,7 @@ import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewState;
+import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
@@ -54,8 +55,9 @@ public class JDBCHistoryView {
         final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
         final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
         TableU.addFooterStandard(table, bundle);
+        final XedActionFilter filter = new XedActionFilter(userState.getXedFactory(), userState.getLocale());
         final TableContext tableContext = new TableContext(
-                viewState, userState.getSubmitID(), App.CSS.TABLE, bundle, userState.getLocus());
+                viewState, filter, userState.getSubmitID(), App.CSS.TABLE, bundle, userState.getLocus());
         final TableView tableView = new TableView(table, tableContext);
         tableView.addContentTo(html);
         return null;

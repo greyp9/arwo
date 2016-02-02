@@ -24,6 +24,7 @@ import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewState;
 import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
 import io.github.greyp9.arwo.core.xed.state.XedUserState;
@@ -56,7 +57,8 @@ public class RevisionHtmlView extends HtmlView {
         final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
         final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
         TableU.addFooterStandard(table, bundle);
-        final TableContext tableContext = new TableContext(viewState, submitID, Html.TABLE, bundle, locus);
+        final XedActionFilter filter = new XedActionFilter(userState.getXedFactory(), userState.getLocale());
+        final TableContext tableContext = new TableContext(viewState, filter, submitID, Html.TABLE, bundle, locus);
         final TableView tableView = new TableView(table, tableContext);
         tableView.addContentTo(html);
         return bundle.getString("xed.revisionsType");

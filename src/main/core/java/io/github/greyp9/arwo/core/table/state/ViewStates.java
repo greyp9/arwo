@@ -17,11 +17,12 @@ import java.util.Map;
 import java.util.TreeMap;
 
 public class ViewStates {
-
     private final Map<String, ViewState> mapViewState;
+    private final XedActionFilter actionFilter;
 
-    public ViewStates() {
+    public ViewStates(final XedActionFilter actionFilter) {
         this.mapViewState = new TreeMap<String, ViewState>();
+        this.actionFilter = actionFilter;
     }
 
     public final ViewState getViewState(final RowSetMetaData metaData, final Bundle bundle, final Locus locus) {
@@ -54,7 +55,7 @@ public class ViewStates {
         } else if (ViewState.Action.SORT.equals(action)) {
             viewState.getSorts().add(token.getObject2());
         } else if (ViewState.Action.FILTER.equals(action)) {
-            viewState.getFilters().add(new XedActionFilter(null).getFilter(nameTypeValues));
+            viewState.getFilters().add(actionFilter.getFilter(nameTypeValues));
         } else if (ViewState.Action.HIDE.equals(action)) {
             viewState.getHiddenColumns().add(token.getObject2());
 

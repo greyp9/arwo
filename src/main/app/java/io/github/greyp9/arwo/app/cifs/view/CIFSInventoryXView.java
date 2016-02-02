@@ -24,7 +24,8 @@ public class CIFSInventoryXView extends CIFSView {
         final ServletHttpRequest httpRequest = getRequest().getHttpRequest();
         final AppUserState userState = getUserState();
         new CIFSInventoryView(httpRequest, userState, offsetURI).addContent(html);
-        new AppConnectionView(httpRequest, userState, userState.getCIFS().getCache(), offsetURI).addContentTo(html);
+        new AppConnectionView(httpRequest, userState, userState.getCIFS().getCache(), offsetURI).
+                addContentTo(html, true);
         return null;
     }
 }

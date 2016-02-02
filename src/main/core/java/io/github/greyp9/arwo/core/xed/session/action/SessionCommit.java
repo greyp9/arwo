@@ -10,9 +10,7 @@ import io.github.greyp9.arwo.core.file.meta.FileMetaData;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.file.zip.ZipAppender;
 import io.github.greyp9.arwo.core.http.Http;
-import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
-import io.github.greyp9.arwo.core.xed.action.XedActionCommit;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 
@@ -21,7 +19,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Date;
-import java.util.Locale;
 import java.util.Properties;
 
 public class SessionCommit {
@@ -35,7 +32,7 @@ public class SessionCommit {
         this.alerts = alerts;
     }
 
-    public final void commit(final NameTypeValues httpArguments, final Properties properties) throws IOException {
+    public final void commit(final String comment, final Properties properties) throws IOException {
         final File file = session.getFile();
         final File folder = file.getParentFile();
         // ensure parent folder for specified file path
@@ -44,7 +41,6 @@ public class SessionCommit {
         if (folder.exists() && (folder.isDirectory())) {
             // commit new revision
             try {
-                final String comment = new XedActionCommit(Locale.getDefault()).getComment(httpArguments);
                 commit(comment, file);
                 alert(Alert.Severity.INFO, "document.commit", Value.defaultOnEmpty(comment, null));
                 properties.setProperty(App.Action.COMMIT, Boolean.FALSE.toString());

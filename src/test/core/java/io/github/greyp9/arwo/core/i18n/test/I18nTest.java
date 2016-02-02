@@ -5,6 +5,8 @@ import io.github.greyp9.arwo.core.app.AppText;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.table.model.Table;
+import io.github.greyp9.arwo.core.xed.bundle.XsdBundle;
+import io.github.greyp9.arwo.core.xed.bundle.XsdBundles;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
@@ -33,7 +35,8 @@ public class I18nTest extends TestCase {
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final QName qname = QNameU.getQName("{urn:arwo:realm}realm");
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
-        final Xed xed = new Xed(document, xsdTypes, Locale.getDefault());
+        final XsdBundle xsdBundle = new XsdBundle(new XsdBundles(xsdTypes, Locale.getDefault()));
+        final Xed xed = new Xed(document, xsdTypes, xsdBundle);
         final ResourceBundle resourceBundle = xed.getRootBundle();
         Assert.assertTrue(resourceBundle.keySet().size() > 0);
         final Bundle bundle = new Bundle(resourceBundle);
@@ -46,7 +49,8 @@ public class I18nTest extends TestCase {
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final QName qname = QNameU.getQName("{urn:arwo:realm}realm");
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
-        final Xed xed = new Xed(document, xsdTypes, Locale.getDefault());
+        final XsdBundle xsdBundle = new XsdBundle(new XsdBundles(xsdTypes, Locale.getDefault()));
+        final Xed xed = new Xed(document, xsdTypes, xsdBundle);
         final ResourceBundle resourceBundleDocType = xed.getRootBundle();
         final Bundle bundle = new Bundle(resourceBundleDocType, resourceBundleCore);
         Assert.assertEquals("[{0} row(s)]", bundle.getString(Table.Const.FOOTER_SIZE));

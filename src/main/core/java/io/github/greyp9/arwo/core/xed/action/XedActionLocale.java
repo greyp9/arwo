@@ -5,6 +5,9 @@ import io.github.greyp9.arwo.core.action.ActionFactory;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
+import io.github.greyp9.arwo.core.xed.model.Xed;
+import io.github.greyp9.arwo.core.xed.model.XedFactory;
+import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
 import io.github.greyp9.arwo.core.xed.view.html.PropertyStripHtmlView;
 import org.w3c.dom.Element;
@@ -18,8 +21,8 @@ import java.util.Properties;
 public class XedActionLocale extends XedAction {
     private final Locale locale;
 
-    public XedActionLocale(final Locale locale) throws IOException {
-        super(App.Actions.QNAME_LOCALE, locale);
+    public XedActionLocale(final XedFactory factory, final Locale locale) throws IOException {
+        super(App.Actions.QNAME_LOCALE, factory, null);
         this.locale = locale;
     }
 
@@ -30,8 +33,9 @@ public class XedActionLocale extends XedAction {
             // model
             update(NameTypeValuesU.create("locale.localeType.locale", locale.getLanguage()));
             // view (form submit buttons)
-            final XedPropertyPageView pageView = new XedPropertyPageView(null, getCursor());
-            final Bundle bundle = this.getXed().getBundle();
+            final Xed xedUI = getXedUI(locale);
+            final XedPropertyPageView pageView = new XedPropertyPageView(null, new XedNav(xedUI).getRoot());
+            final Bundle bundle = xedUI.getBundle();
             final ActionFactory factory = new ActionFactory(
                     submitID, bundle, App.Target.USER_STATE, App.Action.LOCALE, null);
             final Collection<String> actions = new ArrayList<String>();

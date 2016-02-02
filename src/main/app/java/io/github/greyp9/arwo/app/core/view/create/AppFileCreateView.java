@@ -10,6 +10,8 @@ import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.util.CollectionU;
 import io.github.greyp9.arwo.core.xed.action.XedActionFileNew;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
+import io.github.greyp9.arwo.core.xed.model.Xed;
+import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
 import io.github.greyp9.arwo.core.xed.view.html.PropertyPageHtmlView;
@@ -30,8 +32,9 @@ public class AppFileCreateView {
 
     public final HttpResponse addContentTo(final Element html) throws IOException {
         // command input form (prep)
-        final XedActionFileNew action = new XedActionFileNew(userState.getLocus().getLocale());
-        final XedCursor cursor = action.getCursor();
+        final XedActionFileNew action = new XedActionFileNew(userState.getXedFactory());
+        final Xed xedUI = action.getXedUI(userState.getLocus().getLocale());
+        final XedCursor cursor = new XedNav(xedUI).getRoot();
         // command input form
         final Bundle bundle = cursor.getXed().getBundle();
         final QName qname = cursor.getTypeInstance().getQName();

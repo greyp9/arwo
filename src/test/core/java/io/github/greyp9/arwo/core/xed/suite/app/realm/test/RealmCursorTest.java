@@ -6,6 +6,8 @@ import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.xed.bundle.XsdBundle;
+import io.github.greyp9.arwo.core.xed.bundle.XsdBundles;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
@@ -43,7 +45,8 @@ public class RealmCursorTest extends TestCase {
         // generate document
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
         logger.finest(DocumentU.toString(document));
-        final Xed xed = new Xed(document, xsdTypes, Locale.getDefault());
+        final XsdBundle xsdBundle = new XsdBundle(new XsdBundles(xsdTypes, Locale.getDefault()));
+        final Xed xed = new Xed(document, xsdTypes, xsdBundle);
         // insert
         final XedCursor cursorRealm = new XedNav(xed).find(document.getDocumentElement());
         final Element principals = xed.getXPather().getElement("/realm:realm/realm:principals");

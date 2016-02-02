@@ -26,7 +26,7 @@ public class SHInventoryXView extends SHView {
         final AppUserState userState = getUserState();
         final History history = userState.getInterop().getHistory();
         new CIFSInventoryView(httpRequest, userState, "").addContent(html);
-        new AppConnectionView(httpRequest, userState, userState.getInterop().getCache(), "").addContentTo(html);
+        new AppConnectionView(httpRequest, userState, userState.getInterop().getCache(), "").addContentTo(html, true);
         new AppHistoryView("wshHistoryType", true, history, bundle, httpRequest, userState).addContentTo(html); // i18n
         return null;
     }

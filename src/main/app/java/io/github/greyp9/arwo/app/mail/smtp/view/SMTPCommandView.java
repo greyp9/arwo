@@ -11,6 +11,8 @@ import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.util.CollectionU;
 import io.github.greyp9.arwo.core.xed.action.XedActionMail;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
+import io.github.greyp9.arwo.core.xed.model.Xed;
+import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
 import io.github.greyp9.arwo.core.xed.view.html.PropertyPageHtmlView;
@@ -30,9 +32,10 @@ public class SMTPCommandView extends SMTPView {
         final ServletHttpRequest httpRequest = request.getHttpRequest();
         final AppUserState userState = request.getUserState();
         // command input form (prep)
-        final XedActionMail action = new XedActionMail(userState.getLocus().getLocale());
-        final Bundle bundle = action.getXed().getBundle();
-        final XedCursor cursor = action.getCursor();
+        final XedActionMail action = new XedActionMail(userState.getXedFactory());
+        final Xed xedUI = action.getXedUI(userState.getLocus().getLocale());
+        final XedCursor cursor = new XedNav(xedUI).getRoot();
+        final Bundle bundle = xedUI.getBundle();
         // command input form
         final String qname = cursor.getTypeInstance().getQName().toString();
         final String submitID = userState.getSubmitID();

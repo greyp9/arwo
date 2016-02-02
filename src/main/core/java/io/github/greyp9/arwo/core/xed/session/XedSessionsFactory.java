@@ -4,7 +4,6 @@ import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppFolder;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.lang.SystemU;
-import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.security.update.RealmTrigger;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
@@ -30,14 +29,14 @@ public class XedSessionsFactory {
         this.webappRoot = webappRoot;
     }
 
-    public final XedSessions getSessions(final Principal principal, final Locus locus) throws IOException {
+    public final XedSessions getSessions(final Principal principal) throws IOException {
         final XedEntries entries = new XedEntries();
         if (SystemU.isTrue()) {
             addEntryRealm(entries);
         }
         addEntryFavorites(entries, principal);
         addEntryConfig(entries, principal);
-        addEntriesConfig(entries, principal, locus);
+        addEntriesConfig(entries, principal);
         return new XedSessions(entries);
     }
 
@@ -68,16 +67,15 @@ public class XedSessionsFactory {
     }
 
     // documents defined in user settings
-    private void addEntriesConfig(
-            final XedEntries entries, final Principal principal, final Locus locus) throws IOException {
+    private void addEntriesConfig(final XedEntries entries, final Principal principal) throws IOException {
         final File userHome = AppFolder.getUserHome(webappRoot, principal);
         final File fileConfig = new File(userHome, "config/app.xml");
         if (fileConfig.exists()) {
             // load document model
             final URL urlAppXSD = ResourceU.resolve(App.Config.XSD);
-            final XsdTypes xsdTypes = new XsdTypes(urlAppXSD);
+            final XsdTypes xsdTypes = new XsdTypes(urlAppXSD, null, null);
             final Document document = DocumentU.toDocument(StreamU.read(fileConfig));
-            final Xed xed = new Xed(document, xsdTypes, locus.getLocale());
+            final Xed xed = new Xed(document, xsdTypes);
             // find configuration
             final XPather xpather = xed.getXPather();
             final XedNav nav = new XedNav(xed);

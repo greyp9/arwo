@@ -24,6 +24,6 @@ public class SSHConnectionsView {
     public final void addContent(final Element html) throws IOException {
         final String baseURI = PathU.toPath(httpRequest.getBaseURI(), offsetURI);
         final ConnectionCache cache = userState.getSSH().getCache();
-        new AppConnectionView(httpRequest, userState, cache, baseURI).addContentTo(html);
+        new AppConnectionView(httpRequest, userState, cache, baseURI).addContentTo(html, true);
     }
 }

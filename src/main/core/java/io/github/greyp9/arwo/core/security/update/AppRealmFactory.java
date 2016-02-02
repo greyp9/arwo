@@ -55,7 +55,7 @@ public final class AppRealmFactory {
 
     private static AppRealm toAppRealmValidated(final Document document) throws IOException {
         final URL url = ResourceU.resolve(App.Realm.XSD);
-        final XsdTypes xsdTypes = new XsdTypes(url);
+        final XsdTypes xsdTypes = new XsdTypes(url, null, null);
         final XPathContext context = xsdTypes.getContext();
         final XPather xpather = new XPather(document, context);
         final String name = xpather.getText("/realm:realm/@name");  // i18n xpath

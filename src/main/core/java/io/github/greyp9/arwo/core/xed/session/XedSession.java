@@ -2,10 +2,13 @@ package io.github.greyp9.arwo.core.xed.session;
 
 import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.xed.model.Xed;
+import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.core.xed.trigger.XedTrigger;
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Date;
+import java.util.Locale;
 
 public class XedSession {
     private final XedEntry entry;
@@ -22,6 +25,10 @@ public class XedSession {
 
     public final Xed getXed() {
         return xed;
+    }
+
+    public final Xed getXedUI(final XedFactory factory, final Locale locale) throws IOException {
+        return new Xed(xed.getDocument(), xed.getXsdTypes(), factory.getXsdBundle(xed.getXsdTypes(), locale));
     }
 
     public final File getFile() {

@@ -73,16 +73,16 @@ public abstract class HtmlView {
 
     private void addHeaderView(final Element html, final XedUserState userState) throws IOException {
         // context menu
-        final Bundle bundle = request.getSession().getXed().getBundle();
+        final Bundle bundle = request.getSession().getXedUI(request.getFactory(), request.getLocale()).getBundle();
         final ServletHttpRequest httpRequest = request.getHttpRequest();
         final MenuSystem menuSystem = request.getState().getMenuSystem();
         new MenuView(bundle, httpRequest, menuSystem).addContentTo(html, XedMenuFactory.Const.XED, true);
         // settings property strips
-        final Locale locale = userState.getLocus().getLocale();
+        final Locale locale = userState.getLocale();
         final String submitID = userState.getSubmitID();
         final Properties properties = userState.getProperties();
-        new XedActionLocale(locale).addContentTo(html, submitID, properties);
-        new XedActionCommit(locale).addContentTo(html, submitID, properties);
+        new XedActionLocale(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
+        new XedActionCommit(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
     }
 
     public abstract String addContentTo(final Element html) throws IOException;

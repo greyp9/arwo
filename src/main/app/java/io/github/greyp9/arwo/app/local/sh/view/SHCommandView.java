@@ -21,6 +21,8 @@ import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.action.XedActionCommand;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
+import io.github.greyp9.arwo.core.xed.model.Xed;
+import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.op.OpUpdate;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
@@ -31,6 +33,7 @@ import org.w3c.dom.Element;
 import java.io.IOException;
 import java.util.Properties;
 
+@SuppressWarnings("PMD.ExcessiveImports")
 public class SHCommandView extends SHView {
     private final SubsystemLocal local;
 
@@ -59,10 +62,11 @@ public class SHCommandView extends SHView {
         // command input form (prep)
         final String command = (script == null) ? properties.getProperty(App.Settings.COMMAND, "") : script.getText();
         properties.setProperty(App.Settings.COMMAND, command);
-        final XedActionCommand action = new XedActionCommand(userState.getLocus().getLocale());
-        final Bundle bundle = action.getXed().getBundle();
+        final XedActionCommand action = new XedActionCommand(userState.getXedFactory());
+        final Xed xedUI = action.getXedUI(userState.getLocale());
+        final XedCursor cursor = new XedNav(xedUI).getRoot();
+        final Bundle bundle = cursor.getXed().getBundle();
         final NameTypeValues ntv = NameTypeValuesU.create("command.commandType.command", command);
-        final XedCursor cursor = action.getCursor();
         final ValueInstance valueInstanceIn = ValueInstance.create(cursor.getTypeInstance(), ntv);
         new OpUpdate(null, action.getXed()).apply(cursor.getElement(), valueInstanceIn);
         // command input form

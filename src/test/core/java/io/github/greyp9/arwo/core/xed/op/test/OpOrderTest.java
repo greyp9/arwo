@@ -38,7 +38,7 @@ public class OpOrderTest extends TestCase {
         final QName qname = QNameU.getQName("{urn:arwo:order}container");
         final Document document = new DocumentFactory(typeDefinitions, false).generateEmpty(qname);
         logger.finest(DocumentU.toString(document));
-        final Xed xed = new Xed(document, xsdTypes, null);
+        final Xed xed = new Xed(document, xsdTypes);
         final Collection<String> validate0 = xed.validate();
         Assert.assertEquals("[]", validate0.toString());
         // scramble

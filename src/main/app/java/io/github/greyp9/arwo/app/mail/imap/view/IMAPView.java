@@ -103,8 +103,8 @@ public abstract class IMAPView {
         final Locale locale = userState.getLocus().getLocale();
         final String submitID = userState.getSubmitID();
         final Properties properties = userState.getProperties();
-        new XedActionLocale(locale).addContentTo(html, submitID, properties);
-        new XedActionTextFilter(locale).addContentTo(html, submitID, properties);
+        new XedActionLocale(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
+        new XedActionTextFilter(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
 
 
     }

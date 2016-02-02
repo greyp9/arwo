@@ -21,7 +21,6 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Date;
-import java.util.Locale;
 
 public class XedSessionFactory {
     private final XedEntry entry;
@@ -30,7 +29,7 @@ public class XedSessionFactory {
         this.entry = entry;
     }
 
-    public final XedSession create(final String qnameColon, final Locale locale) throws IOException {
+    public final XedSession create(final String qnameColon) throws IOException {
         final XedTrigger trigger = new XedTriggerFactory().createTrigger(entry.getTrigger());
         // normalize paths
         final String xmlPath = SystemU.resolve(entry.getXmlPath());
@@ -46,7 +45,7 @@ public class XedSessionFactory {
         final QName qname = xsdTypes.getQName(qnameColon);
         final Document document = (existsFile ? loadDocument(fileXml) : fabricateDocument(xsdTypes, qname));
         // fabricate session
-        final Xed xed = new Xed(document, xsdTypes, locale);
+        final Xed xed = new Xed(document, xsdTypes);
         // populate any missing content
         new OpFill().apply(new XedNav(xed).getRoot());
         // wrap document in editor session

@@ -10,6 +10,8 @@ import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.model.Xed;
+import io.github.greyp9.arwo.core.xed.model.XedFactory;
+import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
 import io.github.greyp9.arwo.core.xed.view.html.PropertyStripHtmlView;
 import io.github.greyp9.arwo.core.xpath.XPather;
@@ -21,9 +23,11 @@ import java.util.Locale;
 import java.util.Properties;
 
 public class XedActionTextFilter extends XedAction {
+    private final Locale locale;
 
-    public XedActionTextFilter(final Locale locale) throws IOException {
-        super(App.Actions.QNAME_TEXT_FILTER, locale);
+    public XedActionTextFilter(final XedFactory factory, final Locale locale) throws IOException {
+        super(App.Actions.QNAME_TEXT_FILTER, factory, null);
+        this.locale = locale;
     }
 
     public final void addContentTo(
@@ -31,8 +35,9 @@ public class XedActionTextFilter extends XedAction {
         final boolean isToggle = PropertiesU.isBoolean(properties, App.Action.TEXT_FILTER);
         if (isToggle) {
             // view (form submit buttons)
-            final XedPropertyPageView pageView = new XedPropertyPageView(null, getCursor());
-            final Bundle bundle = this.getXed().getBundle();
+            final Xed xedUI = getXedUI(locale);
+            final XedPropertyPageView pageView = new XedPropertyPageView(null, new XedNav(xedUI).getRoot());
+            final Bundle bundle = xedUI.getBundle();
             final ActionFactory factory = new ActionFactory(
                     submitID, bundle, App.Target.USER_STATE, App.Action.TEXT_FILTER, null);
             final Collection<String> actions = CollectionU.toCollection(App.Action.TEXT_FILTER);

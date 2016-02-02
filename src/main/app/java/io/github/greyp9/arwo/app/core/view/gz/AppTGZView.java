@@ -27,6 +27,7 @@ import io.github.greyp9.arwo.core.table.state.ViewState;
 import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import org.w3c.dom.Element;
 
 import java.io.ByteArrayInputStream;
@@ -58,8 +59,9 @@ public class AppTGZView {
         final String title = httpRequest.getURI();
         final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), title, title);
         TableU.addFooterStandard(table, bundle);
+        final XedActionFilter filter = new XedActionFilter(userState.getXedFactory(), userState.getLocale());
         final TableContext tableContext = new TableContext(
-                viewState, userState.getSubmitID(), App.CSS.TABLE, bundle, locus);
+                viewState, filter, userState.getSubmitID(), App.CSS.TABLE, bundle, locus);
         final TableView tableView = new TableView(table, tableContext);
         tableView.addContentTo(html);
         return (HttpResponse) rowSet.getProperties().get(Const.QUERY_ZIP_ENTRY);

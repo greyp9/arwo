@@ -56,7 +56,7 @@ public class SHQueueCommand {
         final AppUserState userState = request.getUserState();
         final String server = request.getServer();
         // queue command text for execution
-        final String command = new XedActionCommand(request.getLocale()).getCommand(httpArguments);
+        final String command = new XedActionCommand(userState.getXedFactory()).getCommand(httpArguments);
         final Script script = new Script(server, httpRequest.getDate(), command);
         userState.getSSH().getHistory().add(script);
         userState.getSSH().getProperties().setProperty(App.Settings.COMMAND, command);

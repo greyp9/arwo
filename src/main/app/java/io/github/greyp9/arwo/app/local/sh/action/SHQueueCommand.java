@@ -33,7 +33,7 @@ public class SHQueueCommand {
         final ServletHttpRequest httpRequest = request.getHttpRequest();
         final AppUserState userState = request.getUserState();
         // queue command text for execution
-        final String command = new XedActionCommand(request.getLocale()).getCommand(httpArguments);
+        final String command = new XedActionCommand(userState.getXedFactory()).getCommand(httpArguments);
         final String host = request.getHttpRequest().getHeader(Http.Header.HOST);
         final Script script = new Script(host, httpRequest.getDate(), command);
         userState.getLocal().getHistory().add(script);

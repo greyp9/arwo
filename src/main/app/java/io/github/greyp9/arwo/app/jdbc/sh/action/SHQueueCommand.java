@@ -55,7 +55,7 @@ public class SHQueueCommand {
         final AppUserState userState = request.getUserState();
         final String server = request.getServer();
         // queue command text for execution
-        final String sql = new XedActionSQL(request.getLocale()).getSQL(httpArguments);
+        final String sql = new XedActionSQL(userState.getXedFactory()).getSQL(httpArguments);
         final Query query = new Query(server, httpRequest.getDate().getTime(), sql);
         userState.getJDBC().getHistory().add(query);
         userState.getJDBC().getProperties().setProperty(App.Settings.SQL, sql);

@@ -5,9 +5,11 @@ import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.link.MetaLink;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.table.state.ViewStates;
+import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 
 public class ResultsContext {
     private final ViewStates viewStates;
+    private final XedActionFilter actionFilter;
     private final Locus locus;
     private final Bundle bundle;
     private final Alerts alerts;
@@ -16,6 +18,10 @@ public class ResultsContext {
 
     public final ViewStates getViewStates() {
         return viewStates;
+    }
+
+    public final XedActionFilter getFilter() {
+        return actionFilter;
     }
 
     public final Locus getLocus() {
@@ -38,9 +44,10 @@ public class ResultsContext {
         return metaLink;
     }
 
-    public ResultsContext(final ViewStates viewStates, final Locus locus, final Bundle bundle,
-                          final Alerts alerts, final String submitID, final MetaLink metaLink) {
+    public ResultsContext(final ViewStates viewStates, final XedActionFilter actionFilter, final Locus locus,
+                          final Bundle bundle, final Alerts alerts, final String submitID, final MetaLink metaLink) {
         this.viewStates = viewStates;
+        this.actionFilter = actionFilter;
         this.locus = locus;
         this.bundle = bundle;
         this.alerts = alerts;
@@ -49,6 +56,6 @@ public class ResultsContext {
     }
 
     public static ResultsContext createEmpty() {
-        return new ResultsContext(null, null, null, null, null, new MetaLink(null, null));
+        return new ResultsContext(null, null, null, null, null, null, new MetaLink(null, null));
     }
 }

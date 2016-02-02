@@ -19,6 +19,7 @@ import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewState;
+import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import org.w3c.dom.Element;
@@ -41,15 +42,17 @@ public class CIFSInventoryView {
 
     public final void addContent(final Element html) throws IOException {
         final Xed xed = userState.getDocumentState().getSession(App.Servlet.SETTINGS).getXed();
+        final Xed xedX = userState.getXedFactory().getXedUI(xed, userState.getLocale());
         final RowSetMetaData metaData = createMetaData();
-        final RowSet rowSet = createRowSet(metaData, xed);
-        final Bundle bundle = xed.getBundle();
+        final RowSet rowSet = createRowSet(metaData, xedX);
+        final Bundle bundle = xedX.getBundle();
         final Locus locus = userState.getLocus();
         final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
         final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
         TableU.addFooterStandard(table, bundle);
+        final XedActionFilter filter = new XedActionFilter(userState.getXedFactory(), userState.getLocale());
         final TableContext tableContext = new TableContext(
-                viewState, userState.getSubmitID(), App.CSS.TABLE, bundle, locus);
+                viewState, filter, userState.getSubmitID(), App.CSS.TABLE, bundle, locus);
         final TableView tableView = new TableView(table, tableContext);
         tableView.addContentTo(html);
     }

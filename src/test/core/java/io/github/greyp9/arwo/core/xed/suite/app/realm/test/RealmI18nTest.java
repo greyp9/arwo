@@ -4,6 +4,8 @@ import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.res.ResourceU;
+import io.github.greyp9.arwo.core.xed.bundle.XsdBundle;
+import io.github.greyp9.arwo.core.xed.bundle.XsdBundles;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
@@ -31,7 +33,8 @@ public class RealmI18nTest extends TestCase {
         final Document document = documentFactory.generateEmpty(App.Realm.QNAME);
         logger.finest(DocumentU.toString(document));
         // validate
-        final Xed xed = new Xed(document, xsdTypes, new Locale("ru"));
+        final XsdBundle xsdBundle = new XsdBundle(new XsdBundles(xsdTypes, new Locale("ru")));
+        final Xed xed = new Xed(document, xsdTypes, xsdBundle);
         final XedCursor cursor = new XedNav(xed).getRoot();
         final String pageText = new PropertyPageTextView(new XedPropertyPageView(null, cursor)).render();
         logger.finest(pageText);

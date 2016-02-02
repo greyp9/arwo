@@ -58,7 +58,7 @@ public class SessionRevision {
         // new session
         final byte[] xmlRevision = StreamU.read(metaFile.getBytes());
         final Document document = DocumentU.toDocument(xmlRevision);
-        final Xed xedNew = new Xed(document, xed.getXsdTypes(), xed.getLocale());
+        final Xed xedNew = new Xed(document, xed.getXsdTypes());
         final XedSession sessionNew = new XedSession(entry, xedNew, file, dateLoad, trigger);
         // replace
         sessions.putSession(contextPath, sessionNew);

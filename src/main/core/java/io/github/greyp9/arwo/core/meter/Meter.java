@@ -25,7 +25,7 @@ public class Meter {
 
     public Meter(final QName qname) throws IOException {
         final URL url = ResourceU.resolve(App.Meter.XSD);
-        final XsdTypes xsdTypes = new XsdTypes(url);
+        final XsdTypes xsdTypes = new XsdTypes(url, null, null);
         final DocumentFactory documentFactory = new DocumentFactory(xsdTypes.getTypeDefinitions());
         final Document document = documentFactory.generateEmpty(qname);
         this.xed = new Xed(document, xsdTypes);

@@ -20,7 +20,7 @@ public class IMAPInventoryXView extends IMAPView {
         final ServletHttpRequest httpRequest = getRequest().getHttpRequest();
         final AppUserState userState = getUserState();
         new IMAPInventoryView(httpRequest, userState, "").addContent(html);
-        new AppConnectionView(httpRequest, userState, userState.getMail().getCacheIMAP(), "").addContentTo(html);
+        new AppConnectionView(httpRequest, userState, userState.getMail().getCacheIMAP(), "").addContentTo(html, true);
         return null;
     }
 }

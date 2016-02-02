@@ -5,7 +5,10 @@ import io.github.greyp9.arwo.core.action.ActionFactory;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
+import io.github.greyp9.arwo.core.xed.model.XedFactory;
+import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
 import io.github.greyp9.arwo.core.xed.view.html.PropertyStripHtmlView;
 import org.w3c.dom.Element;
@@ -17,9 +20,11 @@ import java.util.Locale;
 import java.util.Properties;
 
 public class XedActionCommit extends XedAction {
+    private final Locale locale;
 
-    public XedActionCommit(final Locale locale) throws IOException {
-        super(App.Actions.QNAME_COMMIT, locale);
+    public XedActionCommit(final XedFactory factory, final Locale locale) throws IOException {
+        super(App.Actions.QNAME_COMMIT, factory, null);
+        this.locale = locale;
     }
 
     public final String getComment(final NameTypeValues nameTypeValues) throws IOException {
@@ -32,8 +37,10 @@ public class XedActionCommit extends XedAction {
         final boolean isToggle = Boolean.parseBoolean(properties.getProperty(App.Action.COMMIT));
         if (isToggle) {
             // view (form submit buttons)
-            final XedPropertyPageView pageView = new XedPropertyPageView(null, getCursor());
-            final Bundle bundle = this.getXed().getBundle();
+            final Xed xedUI = getXedUI(locale);
+            final XedCursor cursorUI = new XedNav(xedUI).getRoot();
+            final XedPropertyPageView pageView = new XedPropertyPageView(null, cursorUI);
+            final Bundle bundle = xedUI.getBundle();
             final ActionFactory factory = new ActionFactory(
                     submitID, bundle, App.Target.SESSION, App.Action.COMMIT, null);
             final Collection<String> actions = new ArrayList<String>();

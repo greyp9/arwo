@@ -41,7 +41,7 @@ public class SessionPretty {
         final Document documentNormal = DocumentU.toDocument(DocumentU.toXml(xed.getDocument()));
         final Document document = DocumentU.toDocument(DocumentU.toXmlPretty(documentNormal));
         // new session
-        final Xed xedNew = new Xed(document, xed.getXsdTypes(), xed.getLocale());
+        final Xed xedNew = new Xed(document, xed.getXsdTypes());
         final XedSession sessionNew = new XedSession(entry, xedNew, file, dateLoad, trigger);
         // replace
         sessions.putSession(contextPath, sessionNew);

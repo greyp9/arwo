@@ -6,6 +6,8 @@ import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.xed.bundle.XsdBundle;
+import io.github.greyp9.arwo.core.xed.bundle.XsdBundles;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
@@ -24,6 +26,7 @@ import org.w3c.dom.Element;
 import javax.xml.namespace.QName;
 import java.net.URL;
 import java.util.Collection;
+import java.util.Locale;
 import java.util.logging.Logger;
 
 public class Enum1CursorTest extends TestCase {
@@ -44,30 +47,32 @@ public class Enum1CursorTest extends TestCase {
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
         logger.finest("\n" + DocumentU.toString(document));
         final Xed xed = new Xed(document, xsdTypes);
+        final XsdBundle xsdBundle = new XsdBundle(new XsdBundles(xsdTypes, Locale.getDefault()));
+        final Xed xedUI = new Xed(xed.getDocument(), xed.getXsdTypes(), xsdBundle);
         // validate
         final Collection<String> messages0 = xed.validate();
         Assert.assertEquals("[]", messages0.toString());
         // navigate
         final Element folder = xed.getXPather().getElement("/e1:folder");
         Assert.assertNotNull(folder);
-        final XedCursor cursorFolder = new XedNav(xed).find(folder);
+        final XedCursor cursorFolder = new XedNav(xedUI).find(folder);
         Assert.assertNotNull(cursorFolder);
         Assert.assertEquals("/", cursorFolder.getURI());
         // insert
-        final XedCursor cursorFileType = new XedNav(xed).find("file", cursorFolder);
+        final XedCursor cursorFileType = new XedNav(xedUI).find("file", cursorFolder);
         Assert.assertNotNull(cursorFileType);
         Assert.assertEquals("/058a2/", cursorFileType.getURI());
         final NameTypeValues ntv1 = HttpArguments.toArguments("name=foo.txt&type=text&hidden=false");
         final ValueInstance value1 = ValueInstance.create(cursorFileType.getTypeInstance(), ntv1);
-        final Element file1 = xed.create(cursorFileType.getParent().getElement(), value1);
+        final Element file1 = xedUI.create(cursorFileType.getParent().getElement(), value1);
         Assert.assertNotNull(file1);
         // navigate
-        final XedCursor cursorFile1 = new XedNav(xed).find(file1);
+        final XedCursor cursorFile1 = new XedNav(xedUI).find(file1);
         Assert.assertNotNull(cursorFile1);
         Assert.assertEquals("/058a2/0f33b/", cursorFile1.getURI());
         // validate
         logger.finest("\n" + DocumentU.toString(document));
-        final Collection<String> messages1 = xed.validate();
+        final Collection<String> messages1 = xedUI.validate();
         Assert.assertEquals("[]", messages1.toString());
         // view
         final String renderFileType = new CursorTextView(new XedCursorView(cursorFileType)).render();

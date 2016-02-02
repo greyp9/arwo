@@ -22,6 +22,7 @@ import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewState;
 import io.github.greyp9.arwo.core.util.PropertiesU;
+import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import org.w3c.dom.Element;
 
 import java.io.File;
@@ -90,8 +91,9 @@ public class LFSFolderView extends LFSView {
         // render for response
         final Table table = new Table(rowSetStyled, viewState.getSorts(), viewState.getFilters(),
                 request.getTitlePath(), request.getTitlePath());
+        final XedActionFilter filter = new XedActionFilter(userState.getXedFactory(), userState.getLocale());
         final TableContext tableContext = new TableContext(
-                viewState, userState.getSubmitID(), App.CSS.TABLE, request.getBundle(), userState.getLocus());
+                viewState, filter, userState.getSubmitID(), App.CSS.TABLE, request.getBundle(), userState.getLocus());
         final TableView tableView = new TableView(table, tableContext);
         tableView.addContentTo(html);
         return null;

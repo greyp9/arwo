@@ -20,7 +20,7 @@ public class SMTPInventoryXView extends SMTPView {
         final ServletHttpRequest httpRequest = getRequest().getHttpRequest();
         final AppUserState userState = getUserState();
         new SMTPInventoryView(httpRequest, userState, "").addContent(html);
-        new AppConnectionView(httpRequest, userState, userState.getMail().getCacheSMTP(), "").addContentTo(html);
+        new AppConnectionView(httpRequest, userState, userState.getMail().getCacheSMTP(), "").addContentTo(html, true);
         return null;
     }
 }

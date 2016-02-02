@@ -6,8 +6,11 @@ import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
 import io.github.greyp9.arwo.core.xed.state.XedUserState;
+
+import java.util.Locale;
 
 public class XedRequest {
     private final ServletHttpRequest request;
@@ -42,6 +45,14 @@ public class XedRequest {
         this.state = state;
         this.bundle = new Bundle(new AppText(state.getLocus().getLocale()).getBundleCore());
         this.alerts = state.getAlerts();
+    }
+
+    public final XedFactory getFactory() {
+        return state.getXedFactory();
+    }
+
+    public final Locale getLocale() {
+        return state.getLocus().getLocale();
     }
 
     public final char[] getSecret() {

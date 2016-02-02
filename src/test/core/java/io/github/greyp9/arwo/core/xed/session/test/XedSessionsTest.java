@@ -10,7 +10,6 @@ import io.github.greyp9.arwo.core.xed.session.XedSessions;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
-import java.util.Locale;
 import java.util.logging.Logger;
 
 public class XedSessionsTest extends TestCase {
@@ -45,24 +44,24 @@ public class XedSessionsTest extends TestCase {
                 null, "/locale", App.Actions.QNAME_LOCALE, null, xsdPathActions, null, null);
         final XedEntries entries = new XedEntries(entryRealm, entryFilter, entryLocale);
         final XedSessions sessions = new XedSessions(entries);
-        final Locale locale = Locale.getDefault();
+        //final Locale locale = Locale.getDefault();
         if (SystemU.isTrue()) {
-            final XedSession sessionRealm = sessions.getSession("/users", locale);
+            final XedSession sessionRealm = sessions.getSession("/users");
             Assert.assertNotNull(sessionRealm);
             Assert.assertEquals(entryRealm, sessionRealm.getEntry());
         }
         if (SystemU.isTrue()) {
-            final XedSession sessionFilter = sessions.getSession("/filter", locale);
+            final XedSession sessionFilter = sessions.getSession("/filter");
             Assert.assertNotNull(sessionFilter);
             Assert.assertEquals(entryFilter, sessionFilter.getEntry());
         }
         if (SystemU.isTrue()) {
-            final XedSession sessionLocale = sessions.getSession("/locale", locale);
+            final XedSession sessionLocale = sessions.getSession("/locale");
             Assert.assertNotNull(sessionLocale);
             Assert.assertEquals(entryLocale, sessionLocale.getEntry());
         }
         if (SystemU.isTrue()) {
-            final XedSession sessionNull = sessions.getSession("/null", locale);
+            final XedSession sessionNull = sessions.getSession("/null");
             Assert.assertNull(sessionNull);
         }
     }

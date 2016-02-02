@@ -34,7 +34,7 @@ public class SMTPQueueMail {
         if (resource == null) {
             alerts.add(new Alert(Alert.Severity.WARN, bundle.format("SFTPHandlerPostMultipart.no.connect", server)));
         } else {
-            final Xed xed = new XedActionMail(null).update(httpArguments);
+            final Xed xed = new XedActionMail(request.getUserState().getXedFactory()).update(httpArguments);
             new SMTPDataSource(request, resource.getConnection()).sendMessage(xed);
         }
         return locationIn;

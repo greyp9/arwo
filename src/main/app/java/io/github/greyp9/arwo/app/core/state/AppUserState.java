@@ -45,8 +45,10 @@ import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.vm.exec.UserExecutor;
+import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
 import io.github.greyp9.arwo.core.xed.model.Xed;
+import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.core.xed.state.XedUserState;
 
 import java.io.File;
@@ -55,6 +57,7 @@ import java.security.Principal;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Locale;
 import java.util.Properties;
 
 @SuppressWarnings({ "PMD.ExcessiveImports", "PMD.GodClass", "PMD.TooManyFields", "PMD.CouplingBetweenObjects",
@@ -210,6 +213,14 @@ public class AppUserState {
         return documentState.getLocus();
     }
 
+    public final Locale getLocale() {
+        return documentState.getLocus().getLocale();
+    }
+
+    public final XedFactory getXedFactory() {
+        return documentState.getXedFactory();
+    }
+
     public final Xed getConfig() throws IOException {
         return documentState.getSession(App.Servlet.SETTINGS).getXed();
     }
@@ -229,10 +240,10 @@ public class AppUserState {
         this.interval = new Interval(date, null);
         this.userRoot = AppFolder.getUserHome(webappRoot, principal);
         this.submitID = submitID;
-        this.viewStates = new ViewStates();
         this.textFilters = new TextFilters();
         this.alerts = new Alerts();
         this.documentState = new XedUserState(webappRoot, principal, submitID, locus, alerts);
+        this.viewStates = new ViewStates(new XedActionFilter(documentState.getXedFactory(), null));
         this.userExecutor = new UserExecutor(principal, date, new File(SystemU.userHome()));
         this.deferredActions = new DeferredActions();
         this.cron = new SubsystemCron();
@@ -253,8 +264,10 @@ public class AppUserState {
         return new AppRequest(httpRequest, submitID, getLocus(), getBundle(), alerts);
     }
 
-    public final ResultsContext getResultsContext(final ServletHttpRequest httpRequest) {
-        return new ResultsContext(viewStates, getLocus(), getBundle(), alerts, submitID, getMetaLink(httpRequest));
+    public final ResultsContext getResultsContext(final ServletHttpRequest httpRequest) throws IOException {
+        final XedActionFilter filter = new XedActionFilter(getXedFactory(), getLocale());
+        final MetaLink metaLink = getMetaLink(httpRequest);
+        return new ResultsContext(viewStates, filter, getLocus(), getBundle(), alerts, submitID, metaLink);
     }
 
     public final MetaLink getMetaLink(final ServletHttpRequest httpRequest) {
@@ -295,7 +308,7 @@ public class AppUserState {
         } else if (App.Action.UPDATE_LOCALE.equals(action)) {
             documentState.applyLocale(httpArguments);
         } else if (App.Action.TEXT_FILTER.equals(action)) {
-            new XedActionTextFilter(getLocus().getLocale()).updateTextFilters(textFilters, httpArguments);
+            new XedActionTextFilter(getXedFactory(), getLocale()).updateTextFilters(textFilters, httpArguments);
         } else if (App.Action.CLEAR.equals(action)) {
             doClearCache();
         } else if (App.Action.MENU.equals(action)) {

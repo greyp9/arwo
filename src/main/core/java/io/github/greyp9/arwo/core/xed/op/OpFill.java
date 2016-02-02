@@ -22,7 +22,7 @@ public class OpFill {
         final DocumentFactory factory = new DocumentFactory(xsdTypes.getTypeDefinitions());
         final QName qname = cursor.getTypeInstance().getQName();
         final Document document = factory.generateEmpty(qname, cursor.getTypeInstance());
-        final Xed xedFill = new Xed(document, xsdTypes, cursor.getXed().getLocale());
+        final Xed xedFill = new Xed(document, xsdTypes);
         final XedNav nav = new XedNav(xedFill);
         final XedCursor cursorFill = nav.getRoot();
         apply(cursorFill, cursor);

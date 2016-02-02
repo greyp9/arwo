@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.core.table.filter.Filter;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.model.Xed;
+import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.core.xpath.XPather;
 
 import java.io.IOException;
@@ -12,8 +13,8 @@ import java.util.Locale;
 
 public class XedActionFilter extends XedAction {
 
-    public XedActionFilter(final Locale locale) throws IOException {
-        super(App.Actions.QNAME_FILTER, locale);
+    public XedActionFilter(final XedFactory factory, final Locale locale) throws IOException {
+        super(App.Actions.QNAME_FILTER, factory, locale);
     }
 
     public final Filter getFilter(final NameTypeValues nameTypeValues) throws IOException {

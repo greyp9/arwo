@@ -20,7 +20,7 @@ public class POP3InventoryXView extends POP3View {
         final ServletHttpRequest httpRequest = getRequest().getHttpRequest();
         final AppUserState userState = getUserState();
         new POP3InventoryView(httpRequest, userState, "").addContent(html);
-        new AppConnectionView(httpRequest, userState, userState.getMail().getCachePOP3(), "").addContentTo(html);
+        new AppConnectionView(httpRequest, userState, userState.getMail().getCachePOP3(), "").addContentTo(html, true);
         return null;
     }
 }

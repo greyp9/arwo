@@ -13,6 +13,7 @@ import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewState;
 import io.github.greyp9.arwo.core.table.state.ViewStates;
+import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.table.XedMetaDataFactory;
@@ -55,7 +56,8 @@ public class TableHtmlView {
         viewState.setPage(Page.Factory.fixPage(viewState.getPage(), rowSet.getRows()));
         final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
         addFooter(table, cursorTableType, bundle);
-        final TableContext context = new TableContext(viewState, submitID, App.CSS.TABLE, bundle, locus);
+        final XedActionFilter filter = new XedActionFilter(request.getFactory(), request.getLocale());
+        final TableContext context = new TableContext(viewState, filter, submitID, App.CSS.TABLE, bundle, locus);
         // render
         final TableView tableView = new TableView(table, context);
         tableView.addContentTo(html);

@@ -10,6 +10,7 @@ import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.resource.Pather;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
+import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
@@ -21,6 +22,7 @@ import io.github.greyp9.arwo.core.xed.view.xml.CursorXmlView;
 import io.github.greyp9.arwo.core.xed.view.xml.SessionXsdView;
 
 import java.io.IOException;
+import java.util.Locale;
 
 public class XedHandlerGet {
     private final ServletHttpRequest httpRequest;
@@ -83,7 +85,9 @@ public class XedHandlerGet {
     }
 
     private HttpResponse doGetUI(final XedRequest request, final String cursorURI) throws IOException {
-        final XedCursor cursor = new XedNav(request.getSession().getXed()).find(cursorURI);
+        final XedFactory factory = documentState.getXedFactory();
+        final Locale locale = documentState.getLocus().getLocale();
+        final XedCursor cursor = new XedNav(request.getSession().getXedUI(factory, locale)).find(cursorURI);
         return ((cursor == null) ? HttpResponseU.to302(PathU.toParent(httpRequest.getURI())) :
                 doGetUI(request, cursor));
     }

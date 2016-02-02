@@ -7,6 +7,8 @@ import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.xed.bundle.XsdBundle;
+import io.github.greyp9.arwo.core.xed.bundle.XsdBundles;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
@@ -53,7 +55,8 @@ public class RealmViewTest extends TestCase {
         final TypeInstance typeInstancePrincipal = typeInstancePrincipals.getInstance("principal");
         Assert.assertNotNull(typeInstancePrincipal);
         final Document document = new DocumentFactory(typeDefinitions, true).generateEmpty(qname);
-        final Xed xed = new Xed(document, xsdTypes, Locale.getDefault());
+        final XsdBundle xsdBundleDF = new XsdBundle(new XsdBundles(xsdTypes, Locale.getDefault()));
+        final Xed xed = new Xed(document, xsdTypes, xsdBundleDF);
         final Element elementPrincipal = xed.getXPather().getElement("/realm:realm/realm:principals/realm:principal");
         final XedCursor cursorPrincipal = new XedNav(xed).find(elementPrincipal);
         Assert.assertNotNull(cursorPrincipal);
@@ -68,7 +71,8 @@ public class RealmViewTest extends TestCase {
         logger.finest(itemNamesI18n.toString());
         Assert.assertEquals("[Name, Password, Roles]", itemNamesI18n.toString());
         // change locale
-        final Xed xedDE = new Xed(document, xsdTypes, Locale.GERMAN);
+        final XsdBundle xsdBundleDE = new XsdBundle(new XsdBundles(xsdTypes, Locale.GERMAN));
+        final Xed xedDE = new Xed(document, xsdTypes, xsdBundleDE);
         final XedCursor cursorPrincipalDE = new XedNav(xedDE).find(elementPrincipal);
         final XedCursorView viewDE = new XedCursorView(cursorPrincipalDE);
         final XedPropertyPageView pageViewDE = viewDE.getPageView();
@@ -89,7 +93,8 @@ public class RealmViewTest extends TestCase {
         final TypeInstance typeInstancePrincipal = typeInstancePrincipals.getInstance("principal");
         Assert.assertNotNull(typeInstancePrincipal);
         final Document document = new DocumentFactory(typeDefinitions, true).generateEmpty(qname);
-        final Xed xed = new Xed(document, xsdTypes, Locale.GERMAN);
+        final XsdBundle xsdBundleDE = new XsdBundle(new XsdBundles(xsdTypes, Locale.GERMAN));
+        final Xed xed = new Xed(document, xsdTypes, xsdBundleDE);
         final Element elementPrincipal = xed.getXPather().getElement("/realm:realm/realm:principals/realm:principal");
         final XedCursor cursorPrincipal = new XedNav(xed).find(elementPrincipal);
         Assert.assertNotNull(cursorPrincipal);
@@ -111,17 +116,19 @@ public class RealmViewTest extends TestCase {
         final QName qname = QNameU.getQName("{urn:arwo:realm}realm");
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
         final Xed xed = new Xed(document, xsdTypes);
+        final XsdBundle xsdBundle = new XsdBundle(new XsdBundles(xsdTypes, Locale.getDefault()));
+        final Xed xedUI = new Xed(xed.getDocument(), xed.getXsdTypes(), xsdBundle);
         // navigate
-        final XedCursor cursorPrincipalType = new XedNav(xed).find("/ecd28/7256d/8dc37/");
+        final XedCursor cursorPrincipalType = new XedNav(xedUI).find("/ecd28/7256d/8dc37/");
         final Element principals = cursorPrincipalType.getParent().getElement();
         // insert
         final NameTypeValues ntv1 = HttpArguments.toArguments("user=arwo&credential=arwo&roles=*");
         final ValueInstance value1 = ValueInstance.create(cursorPrincipalType.getTypeInstance(), ntv1);
-        final Element principal1 = xed.create(cursorPrincipalType.getParent().getElement(), value1);
+        final Element principal1 = xedUI.create(cursorPrincipalType.getParent().getElement(), value1);
         Assert.assertNotNull(principal1);
         // verify page
         if (SystemU.isTrue()) {
-            final XedCursor cursorPrincipal = new XedNav(xed).find(principal1);
+            final XedCursor cursorPrincipal = new XedNav(xedUI).find(principal1);
             final XedCursorView cursorView = new XedCursorView(cursorPrincipal);
             final XedPropertyPageView pageView = cursorView.getPageView();
             final String pageText = new PropertyPageTextView(pageView).render();
@@ -132,11 +139,11 @@ public class RealmViewTest extends TestCase {
         // insert
         final NameTypeValues ntv2 = HttpArguments.toArguments("user=arwo2&credential=arwo2&roles=**");
         final ValueInstance value2 = ValueInstance.create(cursorPrincipalType.getTypeInstance(), ntv2);
-        final Element principal2 = xed.create(cursorPrincipalType.getParent().getElement(), value2);
+        final Element principal2 = xedUI.create(cursorPrincipalType.getParent().getElement(), value2);
         Assert.assertNotNull(principal2);
         // verify page
         if (SystemU.isTrue()) {
-            final XedCursor cursorPrincipal = new XedNav(xed).find(principal2);
+            final XedCursor cursorPrincipal = new XedNav(xedUI).find(principal2);
             final XedCursorView view = new XedCursorView(cursorPrincipal);
             final XedPropertyPageView pageView = view.getPageView();
             final String pageText = new PropertyPageTextView(pageView).render();
@@ -154,7 +161,8 @@ public class RealmViewTest extends TestCase {
             Assert.assertEquals("8a2f0b93", CRCU.crc32String(UTF8Codec.toBytes(tableText)));
         }
         // change locale
-        final Xed xedDE = new Xed(document, xsdTypes, Locale.GERMAN);
+        final XsdBundle xsdBundleDE = new XsdBundle(new XsdBundles(xsdTypes, Locale.GERMAN));
+        final Xed xedDE = new Xed(document, xsdTypes, xsdBundleDE);
         // verify page
         if (SystemU.isTrue()) {
             final XedCursor cursorPrincipal = new XedNav(xedDE).find(principal1);

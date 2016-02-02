@@ -25,7 +25,7 @@ public class JDBCInventoryXView extends JDBCView {
         final Bundle bundle = getRequest().getBundle();
         final String baseURI = httpRequest.getBaseURI();
         new JDBCInventoryView(httpRequest, userState, "").addContent(html);
-        new AppConnectionView(httpRequest, userState, userState.getJDBC().getCache(), baseURI).addContentTo(html);
+        new AppConnectionView(httpRequest, userState, userState.getJDBC().getCache(), baseURI).addContentTo(html, true);
         new JDBCHistoryView("jdbcHistoryType", history, bundle, httpRequest, userState).addContentTo(html); // i18n meta
         return null;
     }

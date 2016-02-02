@@ -20,6 +20,7 @@ import java.util.Collection;
 public class XsdTypes {
     private final URL urlInitial;
     private final URL urlCatalog;
+    private final URL urlTransform;
     private final TypeDefinitions typeDefinitions;
     private final XPathContext context;
 
@@ -29,6 +30,10 @@ public class XsdTypes {
 
     public final URL getUrlCatalog() {
         return urlCatalog;
+    }
+
+    public final URL getUrlTransform() {
+        return urlTransform;
     }
 
     public final TypeDefinitions getTypeDefinitions() {
@@ -56,6 +61,7 @@ public class XsdTypes {
     public XsdTypes(final URL urlInitial, final URL urlCatalog, final URL urlTransform) throws IOException {
         this.urlInitial = urlInitial;
         this.urlCatalog = urlCatalog;
+        this.urlTransform = urlTransform;
         this.typeDefinitions = createTypeDefinitions(urlInitial, urlCatalog, urlTransform);
         this.context = createContext(typeDefinitions);
     }

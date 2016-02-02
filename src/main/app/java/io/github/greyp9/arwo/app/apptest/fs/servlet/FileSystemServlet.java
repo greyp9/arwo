@@ -38,6 +38,7 @@ import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewState;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import org.w3c.dom.Document;
@@ -174,7 +175,8 @@ public class FileSystemServlet extends javax.servlet.http.HttpServlet {
             final String submitID = userState.getSubmitID();
             final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
             TableU.addFooterStandard(table, bundle);
-            final TableContext context = new TableContext(viewState, submitID, App.CSS.TABLE, bundle, locus);
+            final XedActionFilter filter = new XedActionFilter(userState.getXedFactory(), locus.getLocale());
+            final TableContext context = new TableContext(viewState, filter, submitID, App.CSS.TABLE, bundle, locus);
             // render
             final TableView tableView = new TableView(table, context);
             tableView.addContentTo(html);

@@ -21,6 +21,8 @@ import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.xed.action.XedActionFileEdit;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
+import io.github.greyp9.arwo.core.xed.model.Xed;
+import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.op.OpUpdate;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
@@ -48,11 +50,12 @@ public class AppFileEditView {
         final byte[] bytes = StreamU.read(metaFile.getBytes());
         final String fileText = UTF8Codec.toString(bytes, charset);
         // command input form (prep)
-        final XedActionFileEdit action = new XedActionFileEdit(userState.getLocus().getLocale());
+        final XedActionFileEdit action = new XedActionFileEdit(userState.getXedFactory());
+        final Xed xedUI = action.getXedUI(userState.getLocus().getLocale());
+        final XedCursor cursor = new XedNav(xedUI).getRoot();
         final NameTypeValues ntv = NameTypeValuesU.create("fileEdit.fileEditType.file", fileText);
-        final XedCursor cursor = action.getCursor();
         final ValueInstance valueInstanceIn = ValueInstance.create(cursor.getTypeInstance(), ntv);
-        new OpUpdate(null, action.getXed()).apply(cursor.getElement(), valueInstanceIn);
+        new OpUpdate(null, xedUI).apply(cursor.getElement(), valueInstanceIn);
         // command input form
         final Bundle bundle = cursor.getXed().getBundle();
         final QName qname = cursor.getTypeInstance().getQName();

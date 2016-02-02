@@ -24,6 +24,7 @@ import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
 import org.w3c.dom.Element;
 
@@ -55,8 +56,9 @@ public class SSHConnectionView {
             final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
             final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
             TableU.addFooterStandard(table, bundle);
+            final XedActionFilter filter = new XedActionFilter(userState.getXedFactory(), userState.getLocale());
             final TableContext tableContext = new TableContext(
-                    viewState, userState.getSubmitID(), App.CSS.TABLE, bundle, userState.getLocus());
+                    viewState, filter, userState.getSubmitID(), App.CSS.TABLE, bundle, userState.getLocus());
             final TableView tableView = new TableView(table, tableContext);
             tableView.addContentTo(html);
         }

@@ -84,22 +84,22 @@ public class DashView {
         final Locale locale = userState.getLocus().getLocale();
         final String submitID = userState.getSubmitID();
         final Properties properties = userState.getProperties();
-        new XedActionLocale(locale).addContentTo(html, submitID, properties);
-        new XedActionTextFilter(locale).addContentTo(html, submitID, properties);
+        new XedActionLocale(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
+        new XedActionTextFilter(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
     }
 
     private HttpResponse addContentTo(final Element html) throws IOException {
         addPropertiesView(html);
-        new XedUnsavedView(httpRequest, userState).addContent(html);
-        new CronActiveView(userState.getCronService(), request, userState).addContent(html);
-        new AppConnectionView(httpRequest, userState, userState.getSSH().getCache(), null).addContentTo(html);
-        new AppConnectionView(httpRequest, userState, userState.getCIFS().getCache(), null).addContentTo(html);
-        new AppConnectionView(httpRequest, userState, userState.getInterop().getCache(), null).addContentTo(html);
-        new AppConnectionView(httpRequest, userState, userState.getWebDAV().getCache(), null).addContentTo(html);
-        new AppConnectionView(httpRequest, userState, userState.getJDBC().getCache(), null).addContentTo(html);
-        new AppConnectionView(httpRequest, userState, userState.getMail().getCacheSMTP(), null).addContentTo(html);
-        new AppConnectionView(httpRequest, userState, userState.getMail().getCacheIMAP(), null).addContentTo(html);
-        new AppConnectionView(httpRequest, userState, userState.getMail().getCachePOP3(), null).addContentTo(html);
+        new XedUnsavedView(httpRequest, userState).addContent(html, false);
+        new CronActiveView(userState.getCronService(), request, userState).addContent(html, false);
+        new AppConnectionView(httpRequest, userState, userState.getSSH().getCache()).addContentTo(html, false);
+        new AppConnectionView(httpRequest, userState, userState.getCIFS().getCache()).addContentTo(html, false);
+        new AppConnectionView(httpRequest, userState, userState.getInterop().getCache()).addContentTo(html, false);
+        new AppConnectionView(httpRequest, userState, userState.getWebDAV().getCache()).addContentTo(html, false);
+        new AppConnectionView(httpRequest, userState, userState.getJDBC().getCache()).addContentTo(html, false);
+        new AppConnectionView(httpRequest, userState, userState.getMail().getCacheSMTP()).addContentTo(html, false);
+        new AppConnectionView(httpRequest, userState, userState.getMail().getCacheIMAP()).addContentTo(html, false);
+        new AppConnectionView(httpRequest, userState, userState.getMail().getCachePOP3()).addContentTo(html, false);
         return null;
     }
 

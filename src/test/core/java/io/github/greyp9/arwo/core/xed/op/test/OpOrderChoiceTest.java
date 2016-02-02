@@ -38,7 +38,7 @@ public class OpOrderChoiceTest extends TestCase {
         final QName qname = QNameU.getQName("{urn:arwo:choice2}job");
         final Document document = new DocumentFactory(typeDefinitions, true).generateEmpty(qname);
         logger.finest(DocumentU.toString(document));
-        final Xed xed = new Xed(document, xsdTypes, null);
+        final Xed xed = new Xed(document, xsdTypes);
         final Collection<String> validate0 = xed.validate();
         Assert.assertEquals("[]", validate0.toString());
         // scramble

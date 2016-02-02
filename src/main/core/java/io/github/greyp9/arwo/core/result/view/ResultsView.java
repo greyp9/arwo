@@ -93,7 +93,7 @@ public class ResultsView {
         final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
         TableU.addFooterStandard(table, bundle);
         final TableContext tableContext = new TableContext(
-                viewState, context.getSubmitID(), App.CSS.TABLE, bundle, locus);
+                viewState, context.getFilter(), context.getSubmitID(), App.CSS.TABLE, bundle, locus);
         final TableView tableView = new TableView(table, tableContext);
         tableView.addContentTo(divR);
     }

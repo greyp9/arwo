@@ -24,6 +24,7 @@ import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewState;
+import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
@@ -36,6 +37,11 @@ public class AppConnectionView {
     private final String baseURI;
 
     public AppConnectionView(final ServletHttpRequest httpRequest, final AppUserState userState,
+                             final ConnectionCache cache) {
+        this(httpRequest, userState, cache, null);
+    }
+
+    public AppConnectionView(final ServletHttpRequest httpRequest, final AppUserState userState,
                              final ConnectionCache cache, final String baseURI) {
         this.request = userState.getAppRequest(httpRequest);
         this.userState = userState;
@@ -43,18 +49,22 @@ public class AppConnectionView {
         this.baseURI = baseURI;
     }
 
-    public final void addContentTo(final Element html) throws IOException {
+    public final void addContentTo(final Element html, final boolean displayOnEmpty) throws IOException {
         final RowSetMetaData metaData = createMetaData();
         final RowSet rowSet = createRowSet(metaData);
-        final Bundle bundle = request.getBundle();
-        final Locus locus = request.getLocus();
-        final String submitID = request.getSubmitID();
-        final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
-        final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
-        TableU.addFooterStandard(table, bundle);
-        final TableContext tableContext = new TableContext(viewState, submitID, App.CSS.TABLE, bundle, locus);
-        final TableView tableView = new TableView(table, tableContext);
-        tableView.addContentTo(html);
+        if ((displayOnEmpty) || (rowSet.getRows() > 0)) {
+            final Bundle bundle = request.getBundle();
+            final Locus locus = request.getLocus();
+            final String submitID = request.getSubmitID();
+            final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
+            final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
+            TableU.addFooterStandard(table, bundle);
+            final XedActionFilter filter = new XedActionFilter(userState.getXedFactory(), userState.getLocale());
+            final TableContext tableContext = new TableContext(
+                    viewState, filter, submitID, App.CSS.TABLE, bundle, locus);
+            final TableView tableView = new TableView(table, tableContext);
+            tableView.addContentTo(html);
+        }
     }
 
     private RowSetMetaData createMetaData() {

@@ -30,6 +30,7 @@ import io.github.greyp9.arwo.core.view.StatusBarView;
 import io.github.greyp9.arwo.core.xed.action.XedActionLocale;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
+import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xml.ElementU;
@@ -111,7 +112,9 @@ public abstract class WebDAVView {
         final Element divTitle = menuView.addTitle(html, title);
         addTextFiltersView(divTitle);
         // favorites (if toggled)
-        final XedNav nav = new XedNav(userState.getDocumentState().getSession(App.Servlet.FAVORITES).getXed());
+        final Xed xed = userState.getDocumentState().getSession(App.Servlet.FAVORITES).getXed();
+        final Xed xedX = userState.getXedFactory().getXedUI(xed, userState.getLocale());
+        final XedNav nav = new XedNav(xedX);
         final XedCursor cursorFavorites = nav.findX("/app:favorites/app:webdavFavorites");  // i18n xpath
         final XedCursor cursorType = nav.find("webdavFavorite", cursorFavorites);  // i18n xpath
         new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.FILESYSTEM).addContentTo(html);
@@ -119,8 +122,8 @@ public abstract class WebDAVView {
         final Locale locale = userState.getLocus().getLocale();
         final String submitID = userState.getSubmitID();
         final Properties properties = userState.getProperties();
-        new XedActionLocale(locale).addContentTo(html, submitID, properties);
-        new XedActionTextFilter(locale).addContentTo(html, submitID, properties);
+        new XedActionLocale(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
+        new XedActionTextFilter(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
         //new WebDAVConnectionView(httpRequest, userState, resource, bundle).addContent(html);
     }
 
