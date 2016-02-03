@@ -85,7 +85,7 @@ public class XedHandlerGet {
     }
 
     private HttpResponse doGetUI(final XedRequest request, final String cursorURI) throws IOException {
-        final XedFactory factory = documentState.getXedFactory();
+        final XedFactory factory = documentState.getFactory();
         final Locale locale = documentState.getLocus().getLocale();
         final XedCursor cursor = new XedNav(request.getSession().getXedUI(factory, locale)).find(cursorURI);
         return ((cursor == null) ? HttpResponseU.to302(PathU.toParent(httpRequest.getURI())) :

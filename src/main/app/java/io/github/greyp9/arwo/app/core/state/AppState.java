@@ -1,11 +1,14 @@
 package io.github.greyp9.arwo.app.core.state;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppFolder;
 import io.github.greyp9.arwo.core.cron.service.CronService;
 import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.date.HttpDateU;
 import io.github.greyp9.arwo.core.locus.Locus;
+import io.github.greyp9.arwo.core.res.ResourceU;
+import io.github.greyp9.arwo.core.xed.model.XedFactory;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,11 +19,13 @@ import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.logging.Logger;
 
 public class AppState {
     private final Date dateStart;
     private final String contextPath;
     private final CronService cronService;
+    private final XedFactory factory;
     private final Collection<AppUserState> userStates;
     private final AtomicReference<String> reference;
 
@@ -36,6 +41,10 @@ public class AppState {
         return cronService;
     }
 
+    public final XedFactory getFactory() {
+        return factory;
+    }
+
     public final AtomicReference<String> getReference() {
         return reference;
     }
@@ -44,6 +53,16 @@ public class AppState {
         this.dateStart = new Date();
         this.contextPath = contextPath;
         this.cronService = new CronService(contextPath);
+        this.factory = new XedFactory();
+        // cache system schemas
+        try {
+            this.factory.getXsdTypes(ResourceU.resolve(App.Realm.XSD), null, null);
+            this.factory.getXsdTypes(ResourceU.resolve(App.Config.XSD), null, null);
+            this.factory.getXsdTypes(ResourceU.resolve(App.Actions.XSD), null, null);
+            this.factory.getXsdTypes(ResourceU.resolve(App.Meter.XSD), null, null);
+        } catch (IOException e) {
+            Logger.getLogger(getClass().getName()).severe(e.getMessage());
+        }
         this.userStates = new ArrayList<AppUserState>();
         this.reference = new AtomicReference<String>();
     }

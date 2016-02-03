@@ -12,7 +12,6 @@ import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.menu.MenuSystem;
 import io.github.greyp9.arwo.core.menu.view.MenuView;
-import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.view.StatusBarView;
@@ -48,7 +47,7 @@ public abstract class HtmlView {
         final ServletHttpRequest httpRequest = request.getHttpRequest();
         final XedUserState userState = request.getState();
         // template html
-        final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(App.Html.UI)));
+        final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
         addHeaderView(body, userState);
         // cursor content
@@ -81,8 +80,8 @@ public abstract class HtmlView {
         final Locale locale = userState.getLocale();
         final String submitID = userState.getSubmitID();
         final Properties properties = userState.getProperties();
-        new XedActionLocale(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
-        new XedActionCommit(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
+        new XedActionLocale(userState.getFactory(), locale).addContentTo(html, submitID, properties);
+        new XedActionCommit(userState.getFactory(), locale).addContentTo(html, submitID, properties);
     }
 
     public abstract String addContentTo(final Element html) throws IOException;

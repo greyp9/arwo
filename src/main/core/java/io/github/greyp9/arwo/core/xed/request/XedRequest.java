@@ -48,7 +48,7 @@ public class XedRequest {
     }
 
     public final XedFactory getFactory() {
-        return state.getXedFactory();
+        return state.getFactory();
     }
 
     public final Locale getLocale() {

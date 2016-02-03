@@ -2,31 +2,29 @@ package io.github.greyp9.arwo.core.xed.session;
 
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppFolder;
-import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.security.update.RealmTrigger;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
+import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
-import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
-import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.security.Principal;
 import java.util.Collection;
 
 public class XedSessionsFactory {
     private final File webappRoot;
+    private final XedFactory factory;
 
-    public XedSessionsFactory(final File webappRoot) {
+    public XedSessionsFactory(final File webappRoot, final XedFactory factory) {
         this.webappRoot = webappRoot;
+        this.factory = factory;
     }
 
     public final XedSessions getSessions(final Principal principal) throws IOException {
@@ -36,8 +34,10 @@ public class XedSessionsFactory {
         }
         addEntryFavorites(entries, principal);
         addEntryConfig(entries, principal);
-        addEntriesConfig(entries, principal);
-        return new XedSessions(entries);
+        final XedSessions sessions = new XedSessions(entries, factory);
+        final Xed xed = sessions.getSession(App.Servlet.SETTINGS).getXed();
+        addEntriesConfig(entries, xed);
+        return sessions;
     }
 
     private void addEntryRealm(final XedEntries entries) throws IOException {
@@ -67,26 +67,17 @@ public class XedSessionsFactory {
     }
 
     // documents defined in user settings
-    private void addEntriesConfig(final XedEntries entries, final Principal principal) throws IOException {
-        final File userHome = AppFolder.getUserHome(webappRoot, principal);
-        final File fileConfig = new File(userHome, "config/app.xml");
-        if (fileConfig.exists()) {
-            // load document model
-            final URL urlAppXSD = ResourceU.resolve(App.Config.XSD);
-            final XsdTypes xsdTypes = new XsdTypes(urlAppXSD, null, null);
-            final Document document = DocumentU.toDocument(StreamU.read(fileConfig));
-            final Xed xed = new Xed(document, xsdTypes);
-            // find configuration
-            final XPather xpather = xed.getXPather();
-            final XedNav nav = new XedNav(xed);
-            final XedCursor cursorDocuments = nav.find(xpather.getElement("/app:app/app:documents"));  // i18n xpath
-            final TypeInstance typeDocument = cursorDocuments.getTypeInstance().getInstance("document");  // i18n xpath
-            final Collection<Element> elements = cursorDocuments.getChildren(typeDocument);
-            for (final Element element : elements) {
-                // load entry
-                final XedCursor cursorDocument = nav.find(element, cursorDocuments);
-                addEntry(entries, typeDocument, cursorDocument);
-            }
+    private void addEntriesConfig(final XedEntries entries, final Xed xed) throws IOException {
+        // find configuration
+        final XPather xpather = xed.getXPather();
+        final XedNav nav = new XedNav(xed);
+        final XedCursor cursorDocuments = nav.find(xpather.getElement("/app:app/app:documents"));  // i18n xpath
+        final TypeInstance typeDocument = cursorDocuments.getTypeInstance().getInstance("document");  // i18n xpath
+        final Collection<Element> elements = cursorDocuments.getChildren(typeDocument);
+        for (final Element element : elements) {
+            // load entry
+            final XedCursor cursorDocument = nav.find(element, cursorDocuments);
+            addEntry(entries, typeDocument, cursorDocument);
         }
     }
 

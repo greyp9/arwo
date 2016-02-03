@@ -57,7 +57,7 @@ public class RevisionHtmlView extends HtmlView {
         final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
         final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
         TableU.addFooterStandard(table, bundle);
-        final XedActionFilter filter = new XedActionFilter(userState.getXedFactory(), userState.getLocale());
+        final XedActionFilter filter = new XedActionFilter(userState.getFactory(), userState.getLocale());
         final TableContext tableContext = new TableContext(viewState, filter, submitID, Html.TABLE, bundle, locus);
         final TableView tableView = new TableView(table, tableContext);
         tableView.addContentTo(html);

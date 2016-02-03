@@ -13,7 +13,6 @@ import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.menu.view.MenuView;
-import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.view.StatusBarView;
@@ -43,7 +42,7 @@ public class CronView {
 
     public final HttpResponse doGetResponse() throws IOException {
         // template html
-        final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(App.Html.UI)));
+        final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
         // context-specific content
         final AppTitle title = AppTitle.Factory.getHostLabel(httpRequest, request.getBundle());

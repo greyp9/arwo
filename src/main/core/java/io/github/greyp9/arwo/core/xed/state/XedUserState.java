@@ -6,9 +6,11 @@ import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.config.Preferences;
 import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
+import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.locus.LocusFactory;
 import io.github.greyp9.arwo.core.menu.MenuSystem;
+import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.resource.Pather;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
@@ -34,6 +36,7 @@ import io.github.greyp9.arwo.core.xed.session.action.SessionRevision;
 import io.github.greyp9.arwo.core.xed.session.action.SessionSave;
 import io.github.greyp9.arwo.core.xed.session.action.SessionValidate;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
@@ -58,9 +61,11 @@ public class XedUserState {
     // menu system
     private final MenuSystem menuSystem;
     // configuration state
-    private final XedFactory xedFactory;
+    private final XedFactory factory;
     // document content clipboard
     private final XedClipboard clipboard;
+    // template xhtml
+    private final byte[] xhtml;
     // user region preferences
     private Locus locus;
 
@@ -92,12 +97,16 @@ public class XedUserState {
         return menuSystem;
     }
 
-    public final XedFactory getXedFactory() {
-        return xedFactory;
+    public final XedFactory getFactory() {
+        return factory;
     }
 
     public final XedClipboard getClipboard() {
         return clipboard;
+    }
+
+    public final ByteArrayInputStream getXHTML() {
+        return new ByteArrayInputStream(xhtml);
     }
 
     public final Locus getLocus() {
@@ -108,17 +117,19 @@ public class XedUserState {
         return locus.getLocale();
     }
 
-    public XedUserState(final File webappRoot, final Principal principal,
+    public XedUserState(final File webappRoot, final XedFactory factory, final Principal principal,
                         final String submitID, final Locus locus, final Alerts alerts) throws IOException {
         this.submitID = submitID;
-        this.xedFactory = new XedFactory();
-        this.viewStates = new ViewStates(new XedActionFilter(xedFactory, null));
+        this.factory = new XedFactory(factory);
+        final XedActionFilter filter = new XedActionFilter(factory, null);
+        this.viewStates = new ViewStates(filter);
         this.alerts = alerts;
-        this.sessions = new XedSessionsFactory(webappRoot).getSessions(principal);
+        this.sessions = new XedSessionsFactory(webappRoot, factory).getSessions(principal);
         this.locus = locus;
         this.properties = new Properties();
         this.menuSystem = new MenuSystem(submitID, new XedMenuFactory());
         this.clipboard = new XedClipboard();
+        this.xhtml = StreamU.read(ResourceU.resolve(App.Html.UI));
         applyLocale();
     }
 
@@ -178,7 +189,7 @@ public class XedUserState {
             new SessionSave(request, request.getBundle(), alerts).save();
         } else if (App.Action.COMMIT.equals(action)) {
             final Properties propertiesApply = request.getState().getProperties();
-            final String comment = new XedActionCommit(getXedFactory(), getLocale()).getComment(httpArguments);
+            final String comment = new XedActionCommit(factory, getLocale()).getComment(httpArguments);
             new SessionCommit(request.getSession(), request.getBundle(), alerts).commit(comment, propertiesApply);
         } else if (App.Action.LOAD_REVISION.equals(action)) {
             new SessionRevision(sessionsApply, request.getSession(), request.getBundle(), alerts).loadRevision(token);
@@ -189,7 +200,7 @@ public class XedUserState {
 
     public final void applyLocale(final NameTypeValues nameTypeValues) throws IOException {
         // apply to user state
-        final Xed actionLocale = new XedActionLocale(xedFactory, null).update(nameTypeValues);
+        final Xed actionLocale = new XedActionLocale(factory, null).update(nameTypeValues);
         final String localeID = actionLocale.getXPather().getText("/action:locale");  // i18n xpath
         locus = new LocusFactory().create(localeID, locus.getDateX());
     }

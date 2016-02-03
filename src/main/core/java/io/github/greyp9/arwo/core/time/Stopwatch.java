@@ -5,9 +5,11 @@ import java.util.Date;
 import java.util.List;
 
 public class Stopwatch {
+    private final String label;
     private final List<Date> dates;
 
-    public Stopwatch() {
+    public Stopwatch(final String label) {
+        this.label = label;
         this.dates = new ArrayList<Date>();
         lap();
     }
@@ -39,5 +41,15 @@ public class Stopwatch {
     public final long getLast() {
         final long[] laps = getLaps();
         return ((laps.length == 0) ? 0L : laps[laps.length - 1]);
+    }
+
+    public final String toString() {
+        final StringBuilder buffer = new StringBuilder();
+        buffer.append(String.format("[%s][%s]", label, getStart()));
+        final long[] laps = getLaps();
+        for (final long lap : laps) {
+            buffer.append(' ').append(lap);
+        }
+        return buffer.toString();
     }
 }

@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.xed.session.test;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.res.ResourceU;
+import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.core.xed.session.XedEntries;
 import io.github.greyp9.arwo.core.xed.session.XedEntry;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
@@ -43,7 +44,7 @@ public class XedSessionsTest extends TestCase {
         final XedEntry entryLocale = new XedEntry(
                 null, "/locale", App.Actions.QNAME_LOCALE, null, xsdPathActions, null, null);
         final XedEntries entries = new XedEntries(entryRealm, entryFilter, entryLocale);
-        final XedSessions sessions = new XedSessions(entries);
+        final XedSessions sessions = new XedSessions(entries, new XedFactory());
         //final Locale locale = Locale.getDefault();
         if (SystemU.isTrue()) {
             final XedSession sessionRealm = sessions.getSession("/users");

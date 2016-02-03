@@ -7,8 +7,7 @@ import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.url.URLCodec;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.model.Xed;
-import io.github.greyp9.arwo.core.xed.nav.XedNav;
-import io.github.greyp9.arwo.core.xed.op.OpFill;
+import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.core.xed.trigger.XedTrigger;
 import io.github.greyp9.arwo.core.xed.trigger.XedTriggerFactory;
 import io.github.greyp9.arwo.core.xml.DocumentU;
@@ -24,9 +23,11 @@ import java.util.Date;
 
 public class XedSessionFactory {
     private final XedEntry entry;
+    private final XedFactory factory;
 
-    public XedSessionFactory(final XedEntry entry) {
+    public XedSessionFactory(final XedEntry entry, final XedFactory factory) {
         this.entry = entry;
+        this.factory = factory;
     }
 
     public final XedSession create(final String qnameColon) throws IOException {
@@ -39,7 +40,8 @@ public class XedSessionFactory {
         final File fileXml = FileU.toFile(xmlPath);
         final URL urlXsd = URLCodec.toURL(xsdPath);
         final URL urlXslt = URLCodec.toURL(Value.isEmpty(xsltPath) ? null : xsltPath);
-        final XsdTypes xsdTypes = new XsdTypes(urlXsd, null, urlXslt);
+        //final XsdTypes xsdTypes = new XsdTypes(urlXsd, null, urlXslt);
+        final XsdTypes xsdTypes = factory.getXsdTypes(urlXsd, null, urlXslt);
         // load / fabricate document
         final boolean existsFile = ((fileXml != null) && (fileXml.exists()) && (fileXml.isFile()));
         final QName qname = xsdTypes.getQName(qnameColon);
@@ -47,7 +49,7 @@ public class XedSessionFactory {
         // fabricate session
         final Xed xed = new Xed(document, xsdTypes);
         // populate any missing content
-        new OpFill().apply(new XedNav(xed).getRoot());
+        //new OpFill().apply(new XedNav(xed).getRoot());
         // wrap document in editor session
         return new XedSession(entry, xed, fileXml, new Date(), trigger);
     }

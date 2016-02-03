@@ -26,6 +26,13 @@ public class XedFactory {
         this.xsdBundlesMap = new TreeMap<String, XsdBundle>();
     }
 
+    public XedFactory(final XedFactory factory) {
+        this();
+        for (final Map.Entry<String, XsdTypes> entry : factory.xsdTypesMap.entrySet()) {
+            this.xsdTypesMap.put(entry.getKey(), entry.getValue());
+        }
+    }
+
     public final Xed generateEmpty(final URL urlInitial, final QName qname, final Locale locale) throws IOException {
         final XsdTypes xsdTypes = getXsdTypes(urlInitial, null, null);
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
@@ -43,11 +50,11 @@ public class XedFactory {
             final String key = getTypesKey(urlInitial, urlCatalog, urlTransform);
             XsdTypes xsdTypes = xsdTypesMap.get(key);
             if (xsdTypes == null) {
-                final Stopwatch stopwatch = new Stopwatch();
+                final Stopwatch stopwatch = new Stopwatch(key);
                 xsdTypes = new XsdTypes(urlInitial, urlCatalog, urlTransform);
                 xsdTypesMap.put(key, xsdTypes);
                 stopwatch.lap();
-                logger.finest(String.format("[%s][%d]", key, stopwatch.getLast()));
+                logger.finest(stopwatch.toString());
             }
             return xsdTypes;
         }
@@ -58,11 +65,11 @@ public class XedFactory {
             final String key = getBundleKey(xsdTypes, locale);
             XsdBundle xsdBundle = xsdBundlesMap.get(key);
             if (xsdBundle == null) {
-                final Stopwatch stopwatch = new Stopwatch();
+                final Stopwatch stopwatch = new Stopwatch(key);
                 xsdBundle = new XsdBundle(new XsdBundles(xsdTypes, locale));
                 xsdBundlesMap.put(key, xsdBundle);
                 stopwatch.lap();
-                logger.finest(String.format("[%s][%d]", key, stopwatch.getLast()));
+                logger.finest(stopwatch.toString());
             }
             return xsdBundle;
         }

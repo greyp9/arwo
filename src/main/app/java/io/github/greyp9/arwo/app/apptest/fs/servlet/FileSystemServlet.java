@@ -23,7 +23,6 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.naming.AppNaming;
-import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.submit.SubmitTokenU;
@@ -149,7 +148,7 @@ public class FileSystemServlet extends javax.servlet.http.HttpServlet {
 
         private HttpResponse doGetHtml(final String pathInfo) throws IOException {
             // template html
-            final Document html = DocumentU.toDocument(StreamU.read(ResourceU.resolve(App.Html.UI)));
+            final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
             final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
             // cursor content
             addContentTo(pathInfo, body);

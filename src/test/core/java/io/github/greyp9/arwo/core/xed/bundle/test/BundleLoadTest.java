@@ -26,7 +26,7 @@ public class BundleLoadTest extends TestCase {
             final XedFactory factory0 = new XedFactory();
             final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
             final QName qname = QNameU.getQName("{urn:arwo:realm}realm");
-            final Stopwatch stopwatch = new Stopwatch();
+            final Stopwatch stopwatch = new Stopwatch(getClass().getSimpleName());
             final Xed xed = factory0.generateEmpty(urlInitial, qname, null);
             Assert.assertNotNull(xed);
             final long lap1 = stopwatch.lap();

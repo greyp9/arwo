@@ -7,7 +7,7 @@ import org.junit.Assert;
 public class StopwatchTest extends TestCase {
 
     public void testSimple() throws Exception {
-        Stopwatch stopwatch = new Stopwatch();
+        final Stopwatch stopwatch = new Stopwatch(getClass().getSimpleName());
         stopwatch.lap();
         stopwatch.lap();
         long last = stopwatch.getLast();

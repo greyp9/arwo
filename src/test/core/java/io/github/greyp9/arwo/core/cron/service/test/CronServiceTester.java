@@ -16,6 +16,7 @@ import io.github.greyp9.arwo.core.security.realm.AppPrincipal;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.vm.exec.ExecutorServiceFactory;
 import io.github.greyp9.arwo.core.vm.mutex.MutexU;
+import io.github.greyp9.arwo.core.xed.model.XedFactory;
 
 import java.io.IOException;
 import java.security.Principal;
@@ -84,7 +85,7 @@ public class CronServiceTester {
 
     private CronTabExecutor getCronTabExecutor(String authorization, Principal principal) throws IOException {
         final ExecutorService executorService = ExecutorServiceFactory.create(1, getClass().getSimpleName());
-        final Meter meter = new Meter(App.Meter.QNAME_CRON_JOBS);
+        final Meter meter = new Meter(App.Meter.QNAME_CRON_JOBS, new XedFactory());
         final RowSet rowSet = meter.getRowSet("{urn:xed:metric}cronJobsType", "job");
         return new CronTabExecutor(authorization, principal, executorService, getCronTab(), new Date(), rowSet);
     }

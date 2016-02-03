@@ -1,5 +1,7 @@
 package io.github.greyp9.arwo.core.xed.session;
 
+import io.github.greyp9.arwo.core.xed.model.XedFactory;
+
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
@@ -8,10 +10,12 @@ import java.util.TreeMap;
 public class XedSessions {
     private final XedEntries entries;
     private final Map<String, XedSession> sessions;
+    private final XedFactory factory;
 
-    public XedSessions(final XedEntries entries) {
+    public XedSessions(final XedEntries entries, final XedFactory factory) {
         this.entries = entries;
         this.sessions = new TreeMap<String, XedSession>();
+        this.factory = factory;
     }
 
     public final Collection<XedSession> getSessions() {
@@ -23,7 +27,7 @@ public class XedSessions {
         if (session == null) {
             final XedEntry entry = entries.get(contextPath);
             if (entry != null) {
-                session = new XedSessionFactory(entry).create(entry.getQName());
+                session = new XedSessionFactory(entry, factory).create(entry.getQName());
                 sessions.put(contextPath, session);
             }
         }

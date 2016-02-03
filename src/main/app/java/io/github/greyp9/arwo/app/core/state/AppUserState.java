@@ -51,6 +51,7 @@ import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.core.xed.state.XedUserState;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
@@ -218,7 +219,11 @@ public class AppUserState {
     }
 
     public final XedFactory getXedFactory() {
-        return documentState.getXedFactory();
+        return documentState.getFactory();
+    }
+
+    public final ByteArrayInputStream getXHTML() {
+        return documentState.getXHTML();
     }
 
     public final Xed getConfig() throws IOException {
@@ -242,11 +247,11 @@ public class AppUserState {
         this.submitID = submitID;
         this.textFilters = new TextFilters();
         this.alerts = new Alerts();
-        this.documentState = new XedUserState(webappRoot, principal, submitID, locus, alerts);
-        this.viewStates = new ViewStates(new XedActionFilter(documentState.getXedFactory(), null));
+        this.documentState = new XedUserState(webappRoot, appState.getFactory(), principal, submitID, locus, alerts);
+        this.viewStates = new ViewStates(new XedActionFilter(documentState.getFactory(), null));
         this.userExecutor = new UserExecutor(principal, date, new File(SystemU.userHome()));
         this.deferredActions = new DeferredActions();
-        this.cron = new SubsystemCron();
+        this.cron = new SubsystemCron(documentState.getFactory());
         this.local = new SubsystemLocal();
         this.ssh = new SubsystemSSH(alerts);
         this.jdbc = new SubsystemJDBC(alerts);
