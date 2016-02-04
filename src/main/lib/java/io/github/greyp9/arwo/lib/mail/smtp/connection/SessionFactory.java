@@ -35,15 +35,11 @@ public class SessionFactory {
         return Session.getInstance(propertiesSession);
     }
 
-    public final Transport getTransport(final Session session) throws IOException {
-        try {
-            final Transport transport = session.getTransport("smtp");  // i18n lib
-            transport.connect(cursorSMTP.getHost(), cursorSMTP.getPort(),
-                    cursorSMTP.getUser(), properties.getProperty(App.Settings.PASSWORD));  // i18n
-            return transport;
-        } catch (MessagingException e) {
-            throw new IOException(e);
-        }
+    public final Transport getTransport(final Session session) throws MessagingException {
+        final Transport transport = session.getTransport("smtp");  // i18n lib
+        transport.connect(cursorSMTP.getHost(), cursorSMTP.getPort(),
+                cursorSMTP.getUser(), properties.getProperty(App.Settings.PASSWORD));  // i18n
+        return transport;
     }
 
     private static void setCustomSocketFactory(

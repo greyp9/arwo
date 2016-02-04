@@ -198,7 +198,7 @@ public class TarVolume {
         final int blockSize = MathU.roundUp(length, Const.TAR_BLOCK_SIZE);
         final long skip = StreamU.skip(is, (blockSize - length));
         verifyExpectedActual((blockSize - length), skip);
-        return new MetaFile(metaData, new ByteArrayInputStream(bytes));
+        return new MetaFile(metaData, null, new ByteArrayInputStream(bytes));
     }
 
     private static void skipEntry(final InputStream is, final FileMetaData metaData) throws IOException {

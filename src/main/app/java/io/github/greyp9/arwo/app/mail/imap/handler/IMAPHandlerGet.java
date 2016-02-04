@@ -7,6 +7,8 @@ import io.github.greyp9.arwo.app.mail.imap.view.IMAPInventoryXView;
 import io.github.greyp9.arwo.app.mail.imap.view.IMAPMessageView;
 import io.github.greyp9.arwo.app.mail.imap.view.IMAPMessagesView;
 import io.github.greyp9.arwo.core.alert.Alert;
+import io.github.greyp9.arwo.core.alert.Alerts;
+import io.github.greyp9.arwo.core.alert.model.ExceptionModel;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
@@ -20,11 +22,15 @@ public class IMAPHandlerGet {
     private final IMAPRequest request;
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
+    //private final Bundle bundle;
+    private final Alerts alerts;
 
     public IMAPHandlerGet(final ServletHttpRequest httpRequest, final AppUserState userState) {
         this.request = new IMAPRequest(httpRequest, userState);
         this.httpRequest = httpRequest;
         this.userState = userState;
+        //this.bundle = request.getBundle();
+        this.alerts = request.getAlerts();
     }
 
     public final HttpResponse doGetSafe() throws IOException {
@@ -32,8 +38,8 @@ public class IMAPHandlerGet {
         try {
             httpResponse = doGet();
         } catch (IOException e) {
-            userState.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
-            httpResponse = HttpResponseU.to500(e.getMessage());
+            new ExceptionModel(alerts).service(new IOException(e), Alert.Severity.ERR);
+            httpResponse = HttpResponseU.to302(httpRequest.getBaseURI());
         }
         return httpResponse;
     }

@@ -13,7 +13,7 @@ public final class MetaFileFactory {
 
     public static MetaFile create(final String path, final long lastModified, final byte[] bytes) {
         final FileMetaData metaData = new FileMetaData(path, bytes.length, lastModified, false);
-        return new MetaFile(metaData, new ByteArrayInputStream(bytes));
+        return new MetaFile(metaData, null, new ByteArrayInputStream(bytes));
     }
 
     public static MetaFile create(final File file) throws IOException {
@@ -21,7 +21,7 @@ public final class MetaFileFactory {
         try {
             final FileMetaData metaData = new FileMetaData(
                     file.getAbsolutePath(), file.length(), file.lastModified(), file.isDirectory());
-            metaFile = new MetaFile(metaData, new ByteArrayInputStream(StreamU.read(file)));
+            metaFile = new MetaFile(metaData, null, new ByteArrayInputStream(StreamU.read(file)));
         } catch (IOException e) {
             metaFile = null;
         }

@@ -41,10 +41,9 @@ public class CacheHandlerGet {
         if (metaFile == null) {
             httpResponse = HttpResponseU.to404();
         } else {
-            final NameTypeValues headers = new NameTypeValues();
-            final String mimeTypeOverride = userState.getProperties().getProperty(App.Action.MIME_TYPE);
-            final String mimeType = Value.defaultOnEmpty(mimeTypeOverride, Http.Mime.TEXT_PLAIN_UTF8);
-            headers.add(new NameTypeValue(Http.Header.CONTENT_TYPE, mimeType));
+            final String mimeType = Value.defaultOnEmpty(metaFile.getContentType(),
+                    userState.getProperties().getProperty(App.Action.MIME_TYPE), Http.Mime.TEXT_PLAIN_UTF8);
+            final NameTypeValues headers = new NameTypeValues(new NameTypeValue(Http.Header.CONTENT_TYPE, mimeType));
             httpResponse = new HttpResponse(HttpURLConnection.HTTP_OK, headers, metaFile.getBytes());
         }
         return httpResponse;

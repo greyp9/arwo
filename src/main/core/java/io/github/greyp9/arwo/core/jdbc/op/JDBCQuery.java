@@ -131,7 +131,7 @@ public class JDBCQuery {
     private Object doBytes(final byte[] bytes, final String sqlType) throws SQLException, IOException {
         // cache blob locally
         final String resource = Http.Token.SLASH + Long.toHexString(CRCU.crc32(bytes));
-        cacheBlob.putFile(resource, new MetaFile(null, new ByteArrayInputStream(bytes)));
+        cacheBlob.putFile(resource, new MetaFile(null, null, new ByteArrayInputStream(bytes)));
         // insert link into result set
         final String title = String.format("%s [%sB]", sqlType, NumberScale.toString(bytes.length));
         final String href = cacheBlob.getEndpoint() + resource;

@@ -64,7 +64,8 @@ public class IMAPConnectionFactory implements ConnectionFactory {
         final KeyX keyPassword = XedKey.getKeyPBE(secret, instancePassword);
         final String passwordClear = ((password == null) ? null : keyPassword.unprotect(password));
         final String certificate = cursorIMAP.getCertificate();
-        final Store store = new StoreFactory(protocol, host, port, user, passwordClear, certificate).getStore();
+        final StoreFactory factory = new StoreFactory(protocol, host, port, user, passwordClear, certificate);
+        final Store store = factory.getStore(bundle, alerts, userState.getCacheBlob());
         final IMAPConnection connection = new IMAPConnection(store);
         return new IMAPConnectionResource(name, connection);
     }

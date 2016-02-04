@@ -64,7 +64,7 @@ public class LFSDataSource {
             new ExceptionModel(request.getAlerts()).service(e, Alert.Severity.ERR);
         }
         final FileMetaData metaData = new FileMetaData(path, bytes.length, lastModified, false);
-        return new MetaFile(metaData, new ByteArrayInputStream(bytes));
+        return new MetaFile(metaData, null, new ByteArrayInputStream(bytes));
     }
 
     public final void write(final byte[] bytes, final String folder, final String filename) throws IOException {

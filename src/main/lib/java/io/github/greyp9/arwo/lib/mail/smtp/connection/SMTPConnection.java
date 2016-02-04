@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.core.config.CursorSMTP;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.util.PropertiesX;
 
+import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Transport;
 import java.io.IOException;
@@ -35,6 +36,14 @@ public class SMTPConnection {
         propertiesX.setLong(App.Connection.MILLIS, 0L);
     }
 
+    public final String getHost() {
+        return cursorSMTP.getHost();
+    }
+
+    public final Integer getPort() {
+        return cursorSMTP.getPort();
+    }
+
     public final String getFrom() throws IOException {
         return cursorSMTP.getUser();
     }
@@ -43,7 +52,7 @@ public class SMTPConnection {
         return new SessionFactory(cursorSMTP, properties).getSession();
     }
 
-    public final Transport getTransport(final Session session) throws IOException {
+    public final Transport getTransport(final Session session) throws MessagingException {
         return new SessionFactory(cursorSMTP, properties).getTransport(session);
     }
 

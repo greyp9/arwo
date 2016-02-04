@@ -58,7 +58,7 @@ public class SessionCommit {
         final String folderName = DateX.toFilename(date);
         final String name = Value.join(Http.Token.SLASH, folderName, file.getName());
         final FileMetaData metaData = new FileMetaData(name, xml.length, date.getTime(), false);
-        final MetaFile metaFile = new MetaFile(metaData, new ByteArrayInputStream(xml));
+        final MetaFile metaFile = new MetaFile(metaData, null, new ByteArrayInputStream(xml));
         final File fileRevisions = new File(file.getParentFile(), file.getName() + ".zip");
         final ZipAppender zipAppender = new ZipAppender(fileRevisions);
         zipAppender.append(comment, metaFile);

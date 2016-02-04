@@ -3,10 +3,11 @@ package io.github.greyp9.arwo.app.mail.smtp.data;
 import io.github.greyp9.arwo.app.mail.smtp.core.SMTPRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
-import io.github.greyp9.arwo.core.alert.model.ExceptionModel;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.result.io.ResultsPersister;
+import io.github.greyp9.arwo.core.tls.alert.AlertCertificate;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xpath.XPather;
@@ -19,6 +20,7 @@ import javax.mail.Session;
 import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
+import javax.net.ssl.SSLException;
 import java.io.IOException;
 import java.util.Date;
 
@@ -27,12 +29,14 @@ public class SMTPDataSource {
     private final SMTPConnection connection;
     private final Bundle bundle;
     private final Alerts alerts;
+    private final ResourceCache cacheBlob;
 
     public SMTPDataSource(final SMTPRequest request, final SMTPConnection connection) {
         this.request = request;
         this.connection = connection;
         this.bundle = request.getBundle();
         this.alerts = request.getAlerts();
+        this.cacheBlob = request.getUserState().getCacheBlob();
     }
 
     public final void sendMessage(final Xed message) throws IOException {
@@ -64,7 +68,10 @@ public class SMTPDataSource {
             final byte[] bytes = UTF8Codec.toBytes(MessageU.toString(mimeMessage));
             new ResultsPersister(request.getUserState().getResultsContext(request.getHttpRequest())).write(bytes);
         } catch (MessagingException e) {
-            new ExceptionModel(alerts).service(new IOException(e), Alert.Severity.ERR);
+            final boolean enabled = (e.getCause() instanceof SSLException);
+            new AlertCertificate(bundle, alerts, cacheBlob).alert(
+                    enabled, connection.getHost(), connection.getPort(), Const.PROTOCOL);
+            throw new IOException(e);
         }
     }
 
@@ -73,5 +80,9 @@ public class SMTPDataSource {
         if (!Value.isEmpty(address)) {
             mimeMessage.setRecipient(type, new InternetAddress(address));
         }
+    }
+
+    private static class Const {
+        private static final String PROTOCOL = "TLS";  // i18n JRE
     }
 }

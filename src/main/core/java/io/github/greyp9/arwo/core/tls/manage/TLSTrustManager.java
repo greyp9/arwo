@@ -19,7 +19,7 @@ public class TLSTrustManager {
     }
 
     public TLSTrustManager(final X509Certificate[] certificates, final String algorithm) {
-        this.certificates = certificates.clone();
+        this.certificates = ((certificates == null) ? null : certificates.clone());
         this.algorithm = algorithm;
     }
 

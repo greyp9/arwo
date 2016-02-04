@@ -26,4 +26,9 @@ public class TLSContextFactory {
         final TLSTrustManager trustManager = new TLSTrustManager(new X509Certificate[] { certificate });
         return new TLSContext(null, trustManager, protocol);
     }
+
+    public final TLSContext createTrustAll(final String protocol) {
+        final TLSTrustManager trustManager = new TLSTrustManager(null);
+        return new TLSContext(null, trustManager, protocol);
+    }
 }

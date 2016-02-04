@@ -38,6 +38,8 @@ public final class Http {
         public static final String TEXT_PLAIN_UTF16 = "text/plain; charset='UTF-16'";
         public static final String TEXT_XML_UTF8 = "text/xml; charset='UTF-8'";
 
+        public static final String APP_CERT = "application/pkix-cert";
+
         public static final String FORM_URL_ENCODED = "application/x-www-form-urlencoded";
         public static final String FORM_MULTIPART = "multipart/form-data";
     }

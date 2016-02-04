@@ -64,7 +64,8 @@ public class POP3ConnectionFactory implements ConnectionFactory {
         final KeyX keyPassword = XedKey.getKeyPBE(secret, instancePassword);
         final String passwordClear = ((password == null) ? null : keyPassword.unprotect(password));
         final String certificate = cursorPOP3.getCertificate();
-        final Store store = new StoreFactory(protocol, host, port, user, passwordClear, certificate).getStore();
+        final StoreFactory factory = new StoreFactory(protocol, host, port, user, passwordClear, certificate);
+        final Store store = factory.getStore(bundle, alerts, userState.getCacheBlob());
         final POP3Connection connection = new POP3Connection(store);
         return new POP3ConnectionResource(name, connection);
     }

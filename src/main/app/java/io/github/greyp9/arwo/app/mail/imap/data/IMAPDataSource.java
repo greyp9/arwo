@@ -129,7 +129,7 @@ public class IMAPDataSource {
             folder.open(Folder.READ_ONLY);
             final Message message = folder.getMessage(NumberU.toInt(messageNumber, 0));
             final byte[] bytes = UTF8Codec.toBytes(MessageU.toString(message));
-            metaFile = new MetaFile(null, new ByteArrayInputStream(bytes));
+            metaFile = new MetaFile(null, null, new ByteArrayInputStream(bytes));
             folder.close(false);
         } catch (MessagingException e) {
             new ExceptionModel(alerts).service(new IOException(e), Alert.Severity.ERR);

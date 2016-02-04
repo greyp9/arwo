@@ -161,7 +161,7 @@ public class ZipVolume {
         final byte[] bytesEntry = StreamU.readPartial(is);
         final long length = bytesEntry.length;
         final FileMetaData metaData = new FileMetaData(zipEntry.getName(), length, zipEntry.getTime(), false);
-        return new MetaFile(metaData, new ByteArrayInputStream(bytesEntry));
+        return new MetaFile(metaData, null, new ByteArrayInputStream(bytesEntry));
     }
 
     private static ZipMetaData toZipMetaData(final ZipEntry zipEntry) {

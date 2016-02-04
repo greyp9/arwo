@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.app.mail.smtp.action.SMTPQueueMail;
 import io.github.greyp9.arwo.app.mail.smtp.core.SMTPRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
+import io.github.greyp9.arwo.core.alert.model.ExceptionModel;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.http.Http;
@@ -40,8 +41,8 @@ public class SMTPHandlerPost {
         try {
             httpResponse = doPost();
         } catch (IOException e) {
-            userState.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
-            httpResponse = HttpResponseU.to500(e.getMessage());
+            new ExceptionModel(alerts).service(new IOException(e), Alert.Severity.ERR);
+            httpResponse = HttpResponseU.to302(httpRequest.getBaseURI());
         }
         return httpResponse;
     }

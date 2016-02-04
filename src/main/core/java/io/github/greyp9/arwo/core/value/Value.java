@@ -21,6 +21,17 @@ public final class Value {
         return (!isEmpty(value));
     }
 
+    public static String defaultOnEmpty(final String... values) {
+        String value = null;
+        for (final String valueIt : values) {
+            if (!isEmpty(valueIt)) {
+                value = valueIt;
+                break;
+            }
+        }
+        return value;
+    }
+
     public static String defaultOnEmpty(final String value, final String defaultValue) {
         return (isEmpty(value) ? defaultValue : value);
     }

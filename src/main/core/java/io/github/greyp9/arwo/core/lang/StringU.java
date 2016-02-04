@@ -47,6 +47,16 @@ public final class StringU {
         return ((value == null) ? null : value.substring(0, Math.min(size, value.length())));
     }
 
+    public static String splitToWidth(final String input, final int width, final String separator) {
+        final StringBuilder buffer = new StringBuilder();
+        final int length = input.length();
+        for (int i = 0; (i < length); i += width) {
+            final int widthIt = Math.min(width, length - i);
+            buffer.append(input.substring(i, i + widthIt)).append(separator);
+        }
+        return buffer.toString();
+    }
+
     public static String[] tokenize(final String input, final String regex) {
         return input.split(regex);
     }

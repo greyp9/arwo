@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.app.mail.smtp.view;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.connect.AppConnectionView;
 import io.github.greyp9.arwo.app.mail.smtp.core.SMTPRequest;
+import io.github.greyp9.arwo.core.connect.ConnectionCache;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import org.w3c.dom.Element;
@@ -19,8 +20,10 @@ public class SMTPInventoryXView extends SMTPView {
     protected final HttpResponse addContentTo(final Element html) throws IOException {
         final ServletHttpRequest httpRequest = getRequest().getHttpRequest();
         final AppUserState userState = getUserState();
+        final String baseURI = httpRequest.getBaseURI();
+        final ConnectionCache cache = userState.getMail().getCacheSMTP();
         new SMTPInventoryView(httpRequest, userState, "").addContent(html);
-        new AppConnectionView(httpRequest, userState, userState.getMail().getCacheSMTP(), "").addContentTo(html, true);
+        new AppConnectionView(httpRequest, userState, cache, baseURI).addContentTo(html, true);
         return null;
     }
 }
