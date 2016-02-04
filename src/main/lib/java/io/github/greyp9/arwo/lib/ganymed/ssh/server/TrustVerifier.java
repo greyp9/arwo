@@ -5,13 +5,19 @@ import ch.ethz.ssh2.KnownHosts;
 import ch.ethz.ssh2.signature.RSASHA1Verify;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
+import io.github.greyp9.arwo.core.alert.write.AlertWriter;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.codec.b64.Base64Codec;
+import io.github.greyp9.arwo.core.file.meta.MetaFile;
+import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.hash.secure.HashU;
 import io.github.greyp9.arwo.core.hash.text.FingerPrint;
+import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.value.Value;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.KeyFactory;
@@ -40,10 +46,12 @@ public class TrustVerifier {
     public static class Alerter {
         private final Bundle bundle;
         private final Alerts alerts;
+        private final ResourceCache cacheBlob;
 
-        public Alerter(final Bundle bundle, final Alerts alerts) {
+        public Alerter(final Bundle bundle, final Alerts alerts, final ResourceCache cacheBlob) {
             this.bundle = bundle;
             this.alerts = alerts;
+            this.cacheBlob = cacheBlob;
         }
 
         public final void addAlertsStored(final ServerParams params, final Alert.Severity severity) throws IOException {
@@ -78,7 +86,13 @@ public class TrustVerifier {
                     FingerPrint.toHex(HashU.md5(publicKeyBytes)))));
             alerts.add(new Alert(severity, bundle.format("TrustVerifier.key.SHA1",
                     FingerPrint.toHex(HashU.sha1(publicKeyBytes)))));
-            alerts.add(new Alert(severity, Base64Codec.encode(publicKeyBytes)));
+            final byte[] bytes = UTF8Codec.toBytes(Base64Codec.encode(publicKeyBytes));
+            // cache blob
+            final String resource = Http.Token.SLASH + Long.toHexString(CRCU.crc32(bytes)) + ".pubkey";
+            cacheBlob.putFile(resource, new MetaFile(null, null, new ByteArrayInputStream(bytes)));
+            final String href = cacheBlob.getEndpoint() + resource;
+            new AlertWriter(bundle, alerts, severity).write("TrustVerifier.message", "TrustVerifier.download", href);
+            //alerts.add(new Alert(severity, Base64Codec.encode(publicKeyBytes)));
         }
 
         private RSAPublicKey getPublicKey(final byte[] publicKeyBytes) throws IOException {

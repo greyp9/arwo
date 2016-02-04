@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.codec.b64.Base64Codec;
 import io.github.greyp9.arwo.core.config.CursorSSH;
 import io.github.greyp9.arwo.core.connect.ConnectionFactory;
@@ -31,6 +32,7 @@ public class SSHConnectionFactory implements ConnectionFactory {
     private final AppUserState userState;
     private final Bundle bundle;
     private final Alerts alerts;
+    private final ResourceCache cacheBlob;
 
     public SSHConnectionFactory(final ServletHttpRequest httpRequest, final AppUserState userState,
                                 final Bundle bundle, final Alerts alerts) {
@@ -38,6 +40,7 @@ public class SSHConnectionFactory implements ConnectionFactory {
         this.userState = userState;
         this.bundle = bundle;
         this.alerts = alerts;
+        this.cacheBlob = userState.getCacheBlob();
     }
 
     @Override
@@ -76,7 +79,7 @@ public class SSHConnectionFactory implements ConnectionFactory {
         final ClientParams clientParams = new ClientParams(name, user, passwordClear, privateKeyClear);
         final Connection connection = new Connection(host, port);
         final ConnectionInfo connectionInfo = connection.connect();
-        new SSHAuthenticatorServer(bundle, alerts).authenticate(connectionInfo, serverParams);
+        new SSHAuthenticatorServer(bundle, alerts, cacheBlob).authenticate(connectionInfo, serverParams);
         new SSHAuthenticatorClient(bundle, alerts).authenticate(connection, clientParams);
         return new SSHConnectionResource(name, new SSHConnection(connection, term));
     }
