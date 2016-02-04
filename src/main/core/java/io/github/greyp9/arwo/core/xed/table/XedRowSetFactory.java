@@ -131,7 +131,7 @@ public class XedRowSetFactory {
             final Collection<TypeInstance> typeInstances = cursorIt.getTypeInstance().getInstances();
             for (final TypeInstance typeInstanceIt : typeInstances) {
                 final String name = bundle.getLabel(childInstance, typeInstanceIt);
-                final String value = cursorIt.getValue(typeInstanceIt);
+                final String value = typeInstanceIt.isMasked() ? Html.MASK : cursorIt.getValue(typeInstanceIt);
                 tokens.add(String.format("[%s=\"%s\"]", name, value));  // i18n internal
             }
         }
