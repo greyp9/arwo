@@ -61,7 +61,7 @@ write access to that directory.</p>
 <p>An override may be used to provide equivalent access, if needed.  If the Java system property "arwo.home" is
 present in the process, the value of this property will be used to access the filesystem.  If not present, $HOME will
 be used.</p>
-<h4>Debian 7 / Tomcat 8</h4>
+<h4>Debian 8 / Tomcat 8</h4>
 <p>Edit the file "/etc/default/tomcat8".  Add the setting "-Darwo.home=/var/cache/tomcat8" to the declaration of
 JAVA_OPTS.</p>
 <code>JAVA_OPTS="${JAVA_OPTS} -Darwo.home=/var/cache/tomcat8"</code>
