@@ -9,9 +9,11 @@ import io.github.greyp9.arwo.core.date.HttpDateU;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.xed.model.XedFactory;
+import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -54,17 +56,26 @@ public class AppState {
         this.contextPath = contextPath;
         this.cronService = new CronService(contextPath);
         this.factory = new XedFactory();
+        this.userStates = new ArrayList<AppUserState>();
+        this.reference = new AtomicReference<String>();
         // cache system schemas
         try {
-            this.factory.getXsdTypes(ResourceU.resolve(App.Realm.XSD), null, null);
-            this.factory.getXsdTypes(ResourceU.resolve(App.Config.XSD), null, null);
-            this.factory.getXsdTypes(ResourceU.resolve(App.Actions.XSD), null, null);
-            this.factory.getXsdTypes(ResourceU.resolve(App.Meter.XSD), null, null);
+            final URL[] urls = {
+                    ResourceU.resolve(App.Realm.XSD),
+                    ResourceU.resolve(App.Config.XSD),
+                    ResourceU.resolve(App.Actions.XSD),
+                    ResourceU.resolve(App.Meter.XSD),
+            };
+            final Locale[] locales = { Locale.ENGLISH };
+            for (final URL url : urls) {
+                for (final Locale locale : locales) {
+                    final XsdTypes xsdTypes = this.factory.getXsdTypes(url, null, null);
+                    factory.getXsdBundle(xsdTypes, locale);
+                }
+            }
         } catch (IOException e) {
             Logger.getLogger(getClass().getName()).severe(e.getMessage());
         }
-        this.userStates = new ArrayList<AppUserState>();
-        this.reference = new AtomicReference<String>();
     }
 
     public final Iterator<AppUserState> getIterator() {

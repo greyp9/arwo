@@ -28,8 +28,11 @@ public class XedFactory {
 
     public XedFactory(final XedFactory factory) {
         this();
-        for (final Map.Entry<String, XsdTypes> entry : factory.xsdTypesMap.entrySet()) {
-            this.xsdTypesMap.put(entry.getKey(), entry.getValue());
+        for (final Map.Entry<String, XsdTypes> entryT : factory.xsdTypesMap.entrySet()) {
+            this.xsdTypesMap.put(entryT.getKey(), entryT.getValue());
+        }
+        for (final Map.Entry<String, XsdBundle> entryB : factory.xsdBundlesMap.entrySet()) {
+            this.xsdBundlesMap.put(entryB.getKey(), entryB.getValue());
         }
     }
 
