@@ -100,8 +100,8 @@ public class CronActiveView {
     private void addRow(final RowSet rowSet, final CronTab cronTab, final CronJob cronJob) throws IOException {
         final Date dateRequest = request.getHttpRequest().getDate();
         final Date dateNext = cronJob.getDateNext(dateRequest, cronTab.getTZ(), DurationU.Const.ONE_DAY);
-        final String until = DurationU.duration(dateRequest, dateNext);
-        final boolean due = (!DurationU.Const.ONE_DAY.equals(until));
+        final String until = ((dateNext == null) ? null : DurationU.duration(dateRequest, dateNext));
+        final boolean due = ((until != null) && (!DurationU.Const.ONE_DAY.equals(until)));
         final SubmitToken tokenNow = new SubmitToken(
                 App.Target.USER_STATE, App.Action.CRON_NOW, cronTab.getName(), cronJob.getName());
         final InsertRow insertRow = new InsertRow(rowSet);
