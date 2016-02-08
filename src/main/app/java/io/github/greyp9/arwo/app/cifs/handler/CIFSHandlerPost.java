@@ -137,7 +137,7 @@ public class CIFSHandlerPost {
     private CIFSConnection getConnection() throws IOException {
         final CIFSConnectionFactory factory = new CIFSConnectionFactory(httpRequest, userState, bundle, alerts);
         final CIFSConnectionResource resource = (CIFSConnectionResource)
-                userState.getWebDAV().getCache().getResource(request.getServer(), factory);
+                userState.getCIFS().getCache().getResource(request.getServer(), factory);
         return resource.getConnection();
     }
 }

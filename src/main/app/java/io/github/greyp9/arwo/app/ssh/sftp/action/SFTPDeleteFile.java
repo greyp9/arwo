@@ -40,7 +40,7 @@ public class SFTPDeleteFile extends DeferredAction {
                 final SSHConnectionFactory factory = new SSHConnectionFactory(
                         httpRequest, userState, request.getBundle(), request.getAlerts());
                 final SSHConnectionResource resource = (SSHConnectionResource)
-                        userState.getWebDAV().getCache().getResource(request.getServer(), factory);
+                        userState.getSSH().getCache().getResource(request.getServer(), factory);
                 final SSHConnection connection = resource.getConnection();
                 final SFTPDataSource source = new SFTPDataSource(request, connection);
                 source.delete(request.getPath());
