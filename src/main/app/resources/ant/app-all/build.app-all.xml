@@ -1,0 +1,25 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<project name='arwo-app-all' default='main' basedir='.'>
+
+    <!-- application version -->
+    <propertyfile file='${user.home}/.arwo/version.properties' comment='version.properties'>
+        <entry key='arwo.build' type='int' operation='+' value='1' pattern='0'/>
+    </propertyfile>
+    <property file='${user.home}/.arwo/version.properties'/>
+    <fail unless='arwo.version'/>
+    <fail unless='arwo.build'/>
+    <tstamp>
+        <format property='timestamp' pattern='yyyy-MM-dd&apos;T&apos;HH:mm:ss&apos;Z&apos;' timezone='UTC'/>
+    </tstamp>
+    <property name='Implementation-Version' value='${arwo.version}.${arwo.build} ${timestamp}'/>
+    <property name='Specification-Version' value='${arwo.version}'/>
+    <echo message='Implementation-Version = ${Implementation-Version}'/>
+    <echo message='Specification-Version = ${Specification-Version}'/>
+
+    <target name='main'>
+        <ant antfile='../app-tomcat6/build.app-tomcat6.xml' dir='../app-tomcat6'/>
+        <ant antfile='../app-tomcat7/build.app-tomcat7.xml' dir='../app-tomcat7'/>
+        <ant antfile='../app-tomcat8/build.app-tomcat8.xml' dir='../app-tomcat8'/>
+    </target>
+
+</project>

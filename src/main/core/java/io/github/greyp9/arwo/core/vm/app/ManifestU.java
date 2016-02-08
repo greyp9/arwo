@@ -1,13 +1,5 @@
 package io.github.greyp9.arwo.core.vm.app;
 
-import io.github.greyp9.arwo.core.url.URLCodec;
-
-import java.io.File;
-import java.io.IOException;
-import java.net.JarURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
-import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
 public final class ManifestU {
@@ -16,6 +8,7 @@ public final class ManifestU {
     }
 
     @SuppressWarnings("PMD.OnlyOneReturn")
+/*
     public static Manifest getManifestSafe(final Class<?> c) {
         try {
             return getManifest(c);
@@ -48,6 +41,7 @@ public final class ManifestU {
             jarFile.close();
         }
     }
+*/
 
     public static String getAttribute(final Manifest manifest, final String name) {
         return manifest.getMainAttributes().getValue(name);
@@ -57,8 +51,9 @@ public final class ManifestU {
         return getAttribute(manifest, Const.BUILD);
     }
 
+/*
     public static String getImplementationVersion(final Manifest manifest) {
-        return getAttribute(manifest, Const.VERSION);
+        return getAttribute(manifest, Const.IMPL_VERSION);
     }
 
     public static String getVersion2(final Class<?> c) {
@@ -67,13 +62,19 @@ public final class ManifestU {
                 getImplementationVersion(manifest),
                 getImplementationBuild(manifest));
     }
+*/
 
-    public static String getVersion(final Class<?> c) {
+    public static String getImplementationVersion(final Class<?> c) {
         return String.format("[v%s]", c.getPackage().getImplementationVersion());
+    }
+
+    public static String getSpecificationVersion(final Class<?> c) {
+        return String.format("[v%s]", c.getPackage().getSpecificationVersion());
     }
 
     private static class Const {
         public static final String BUILD = "Implementation-Build";  // i18n JRE
-        public static final String VERSION = "Implementation-Version";  // i18n JRE
+        //public static final String IMPL_VERSION = "Implementation-Version";  // i18n JRE
+        //public static final String SPEC_VERSION = "Specification-Version";  // i18n JRE
     }
 }

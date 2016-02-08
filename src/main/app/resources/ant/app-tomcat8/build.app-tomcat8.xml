@@ -2,14 +2,21 @@
 <project name='arwo-app-tomcat8' default='main' basedir='.'>
 
     <!-- application version -->
+<!--
     <propertyfile file='${user.home}/.arwo/version.properties' comment='version.properties'>
         <entry key='arwo.build' type='int' operation='+' value='1' pattern='0'/>
     </propertyfile>
+-->
     <property file='${user.home}/.arwo/version.properties'/>
     <fail unless='arwo.version'/>
     <fail unless='arwo.build'/>
-    <property name='Implementation-Version' value='${arwo.version}.${arwo.build}'/>
+    <tstamp>
+        <format property='timestamp' pattern='yyyy-MM-dd&apos;T&apos;HH:mm:ss&apos;Z&apos;' timezone='UTC'/>
+    </tstamp>
+    <property name='Implementation-Version' value='${arwo.version}.${arwo.build} ${timestamp}'/>
+    <property name='Specification-Version' value='${arwo.version}'/>
     <echo message='Implementation-Version = ${Implementation-Version}'/>
+    <echo message='Specification-Version = ${Specification-Version}'/>
 
     <!--fixed-->
     <property name='project.dir' location='${basedir}/../../../../../..'/>
@@ -26,10 +33,6 @@
     <import file='${project.dir}/src/test/app/resources/ant/tomcat8/build.tomcat8.xml'/>
     <!-- library paths -->
     <property name='m2.dir' value='${user.home}/.m2/repository'/>
-
-    <tstamp>
-        <format property='timestamp' pattern='yyyy-MM-dd&apos;T&apos;HH:mm:ss&apos;Z&apos;' timezone='UTC'/>
-    </tstamp>
 
     <fail message='&quot;${project.dir}&quot; does not exist'>
         <condition>
@@ -118,8 +121,8 @@
                 <include name='**/*.class'/>
             </fileset>
             <manifest>
-                <attribute name='Implementation-Build' value='${timestamp}'/>
                 <attribute name='Implementation-Version' value='${Implementation-Version}'/>
+                <attribute name='Specification-Version' value='${Specification-Version}'/>
             </manifest>
         </jar>
     </target>
@@ -216,8 +219,8 @@
             <fileset dir='${project.dir}/src/main/core/resources/arwo-jar'/>
             <fileset dir='${project.dir}/src/main/app/resources/arwo-jar'/>
             <manifest>
-                <attribute name='Implementation-Build' value='${timestamp}'/>
                 <attribute name='Implementation-Version' value='${Implementation-Version}'/>
+                <attribute name='Specification-Version' value='${Specification-Version}'/>
             </manifest>
         </jar>
     </target>
@@ -238,10 +241,33 @@
             <fileset dir='${war.app.dir}'>
                 <include name='**/*.*'/>
             </fileset>
+            <manifest>
+                <attribute name='Implementation-Version' value='${Implementation-Version}'/>
+                <attribute name='Specification-Version' value='${Specification-Version}'/>
+            </manifest>
         </war>
     </target>
 
-    <target name='main' depends='clean, jar-realm, compile-app, i18n, jar-app, i18n-clean, war-app'>
+    <target name='dist'>
+        <mkdir dir='${target.dir}/dist'/>
+        <jar destfile='${target.dir}/dist/arwo-${arwo.version}-tomcat8.zip'>
+            <fileset dir='${artifact.dir}'>
+                <include name='arwo.war'/>
+                <include name='arwo-realm.jar'/>
+            </fileset>
+            <fileset dir='${project.dir}'>
+                <include name='CHANGELOG.md'/>
+                <include name='LICENSE'/>
+                <include name='README.md'/>
+            </fileset>
+            <manifest>
+                <attribute name='Implementation-Version' value='${Implementation-Version}'/>
+                <attribute name='Specification-Version' value='${Specification-Version}'/>
+            </manifest>
+        </jar>
+    </target>
+
+    <target name='main' depends='clean, jar-realm, compile-app, i18n, jar-app, i18n-clean, war-app, dist'>
         <echo message='project.dir: ${project.dir}'/>
     </target>
 
