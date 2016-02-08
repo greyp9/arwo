@@ -129,6 +129,8 @@ libraries may also work.</p>
 <p>If a feature is used without first placing the needed libraries in the Tomcat lib folder, an server exception is
 thrown.  Once this happens, the Tomcat process will not attempt to load the libraries again while it is running.  After
 copying the libraries into the Tomcat lib directory, the Tomcat process must be restarted.</p>
+<p>If, after placing a library in the Tomcat lib folder, an operation fails with a classloader exception, please
+restart Tomcat, and try the operation again.</p>
 </div>
 <div class='tile'>
 <h3>Permissions</h3>
