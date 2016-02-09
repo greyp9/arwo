@@ -226,7 +226,7 @@
 
     <target name='war-app'>
         <mkdir dir='${war.app.dir}'/>
-        <copy todir='${war.app.dir}'>
+        <copy todir='${war.app.dir}' overwrite='true'>
             <fileset dir='${project.dir}/src/main/app/resources/webapp/arwo-war'>
                 <exclude name='**/*.xcf'/>
             </fileset>
