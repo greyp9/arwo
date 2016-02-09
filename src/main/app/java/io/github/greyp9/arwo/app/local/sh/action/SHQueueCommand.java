@@ -9,6 +9,7 @@ import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
+import io.github.greyp9.arwo.core.io.script.History;
 import io.github.greyp9.arwo.core.io.script.Script;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.resource.PathU;
@@ -35,8 +36,10 @@ public class SHQueueCommand {
         // queue command text for execution
         final String command = new XedActionCommand(userState.getXedFactory()).getCommand(httpArguments);
         final String host = request.getHttpRequest().getHeader(Http.Header.HOST);
-        final Script script = new Script(host, httpRequest.getDate(), command);
-        userState.getLocal().getHistory().add(script);
+        final History history = userState.getLocal().getHistory();
+        final String id = history.getNewID(httpRequest.getDate());
+        final Script script = new Script(host, httpRequest.getDate(), id, command);
+        history.add(script);
         userState.getLocal().getProperties().setProperty(App.Settings.COMMAND, command);
         // runnable to execute commands
         final UserExecutor userExecutor = userState.getUserExecutor();

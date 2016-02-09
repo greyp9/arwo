@@ -134,7 +134,7 @@ public class SSHTest extends TestCase {
         final SSHConnection sshConnection = new SSHConnection(connection, "xterm");
         final ExecutorService executorStream = executor.getExecutorStream();
         final ResultsContext resultsContext = ResultsContext.createEmpty();
-        final Script script = new Script(null, new Date(), "ls /");
+        final Script script = new Script(null, new Date(), null, "ls /");
         final ScriptContext context = new ScriptContext(executorStream, resultsContext, sshConnection);
         final ScriptRunnable runnable = new ScriptRunnable(script, context);
         runnable.run();

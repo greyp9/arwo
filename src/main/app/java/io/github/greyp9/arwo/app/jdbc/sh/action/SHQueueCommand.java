@@ -13,6 +13,7 @@ import io.github.greyp9.arwo.core.connect.ConnectionCache;
 import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.jdbc.connection.JDBCConnection;
+import io.github.greyp9.arwo.core.jdbc.query.History;
 import io.github.greyp9.arwo.core.jdbc.query.Query;
 import io.github.greyp9.arwo.core.jdbc.runnable.QueryContext;
 import io.github.greyp9.arwo.core.jdbc.runnable.QueryRunnable;
@@ -56,8 +57,10 @@ public class SHQueueCommand {
         final String server = request.getServer();
         // queue command text for execution
         final String sql = new XedActionSQL(userState.getXedFactory()).getSQL(httpArguments);
-        final Query query = new Query(server, httpRequest.getDate().getTime(), sql);
-        userState.getJDBC().getHistory().add(query);
+        final History history = userState.getJDBC().getHistory();
+        final String id = history.getNewID(httpRequest.getDate());
+        final Query query = new Query(server, httpRequest.getDate().getTime(), id, sql);
+        history.add(query);
         userState.getJDBC().getProperties().setProperty(App.Settings.SQL, sql);
         // runnable to execute commands
         final UserExecutor userExecutor = userState.getUserExecutor();

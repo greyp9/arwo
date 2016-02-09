@@ -3,7 +3,6 @@ package io.github.greyp9.arwo.app.core.view.history;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
-import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
@@ -87,10 +86,9 @@ public class AppHistoryView {
     }
 
     private void createRow(final RowSet rowSet, final Script script) {
-        final DateX dateX = DateX.Factory.createURL();
         final boolean isStarted = (script.getStart() != null);
         final boolean isFinished = (script.getFinish() != null);
-        final String id = dateX.toString(script.getDate());
+        final String id = script.getID();
         final String href = includeContext ?
                 PathU.toDir(httpRequest.getBaseURI(), script.getContext(), id) :
                 PathU.toDir(httpRequest.getBaseURI(), id);

@@ -108,7 +108,7 @@ public class JdbcTest extends TestCase {
         final JDBCConnection jdbcConnection = new JDBCConnection(connection);
         final ExecutorService executor = ExecutorServiceFactory.create(
                 1, Value.join(Html.HYPHEN, getClass().getSimpleName(), principal.getName()));
-        final Query query = new Query(null, new Date().getTime(), sql);
+        final Query query = new Query(null, new Date().getTime(), null, sql);
         final QueryContext context = new QueryContext(
                 jdbcConnection, new ResourceCache(""), ResultsContext.createEmpty());
         executor.execute(new QueryRunnable(query, context));

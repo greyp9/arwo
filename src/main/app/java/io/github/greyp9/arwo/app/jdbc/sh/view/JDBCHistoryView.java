@@ -3,7 +3,6 @@ package io.github.greyp9.arwo.app.jdbc.sh.view;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
-import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.date.Interval;
 import io.github.greyp9.arwo.core.glyph.UTF16;
@@ -86,7 +85,6 @@ public class JDBCHistoryView {
     }
 
     private void createRow(final RowSet rowSet, final Query query) {
-        final DateX dateX = DateX.Factory.createURL();
         final Interval interval = query.getResults().getInterval();
         final Date dateStart = interval.getDateStart();
         final Date dateFinish = interval.getDateFinish();
@@ -94,7 +92,7 @@ public class JDBCHistoryView {
         final boolean isFinished = (dateFinish != null);
         final Long delay = DurationU.toMillis(DurationU.duration(query.getDate(), dateStart, httpRequest.getDate()));
         final Long elapsed = DurationU.toMillis(DurationU.duration(dateStart, dateFinish, httpRequest.getDate()));
-        final String id = dateX.toString(query.getDate());
+        final String id = query.getID();
         final String href = PathU.toDir(httpRequest.getBaseURI(), query.getContext(), id);
         final InsertRow insertRow = new InsertRow(rowSet);
         insertRow.setNextColumn(new TableViewLink(UTF16.SELECT, null, href));

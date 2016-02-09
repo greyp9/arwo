@@ -1,16 +1,20 @@
 package io.github.greyp9.arwo.core.io.script;
 
 import io.github.greyp9.arwo.core.date.DateX;
+import io.github.greyp9.arwo.core.http.Http;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Date;
 
 @SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
 public class History {
     private final Collection<Script> scripts;
+    private final DateX dateX;
 
     public History() {
         this.scripts = new ArrayList<Script>();
+        this.dateX = DateX.Factory.createURL();
     }
 
     public final synchronized Collection<Script> getHistory() {
@@ -21,15 +25,24 @@ public class History {
         scripts.add(script);
     }
 
-    public final synchronized Script find(final String idURL) {
+    public final synchronized Script find(final String id) {
         Script scriptFound = null;
-        final DateX dateX = DateX.Factory.createURL();
         for (final Script scriptIt : scripts) {
-            final String idIt = dateX.toString(scriptIt.getDate());
-            if (idIt.equals(idURL)) {
+            final String idIt = scriptIt.getID();
+            if (idIt.equals(id)) {
                 scriptFound = scriptIt;
             }
         }
         return scriptFound;
+    }
+
+    public final synchronized String getNewID(final Date date) {
+        final String idBase = dateX.toString(date);
+        int i = 0;
+        String id = idBase;
+        while (find(id) != null) {
+            id = (idBase + Http.Token.HYPHEN + (++i));
+        }
+        return id;
     }
 }

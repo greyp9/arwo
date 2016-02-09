@@ -11,6 +11,7 @@ import java.util.Properties;
 public class Query {
     private final String context;
     private final long date;
+    private final String id;
     private final String text;
     private final Properties properties;
     private final Results results;
@@ -22,6 +23,10 @@ public class Query {
 
     public final Date getDate() {
         return new Date(date);
+    }
+
+    public String getID() {
+        return id;
     }
 
     public final String getText() {
@@ -40,9 +45,10 @@ public class Query {
         return exception;
     }
 
-    public Query(final String context, final long date, final String text) {
+    public Query(final String context, final long date, final String id, final String text) {
         this.context = context;
         this.date = date;
+        this.id = id;
         this.text = text;
         this.properties = new Properties();
         this.results = new Results(text, new Interval(null, null));

@@ -18,6 +18,7 @@ import java.util.Properties;
 public class Script {
     private final String context;
     private final long date;
+    private final String id;
     private final String text;
     private final Properties properties;
     private final Collection<CommandToDo> commandsToDo;
@@ -32,6 +33,10 @@ public class Script {
         return new Date(date);
     }
 
+    public final String getID() {
+        return id;
+    }
+
     public final String getText() {
         return text;
     }
@@ -41,9 +46,10 @@ public class Script {
     }
 
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")
-    public Script(final String context, final Date date, final String text) throws IOException {
+    public Script(final String context, final Date date, final String id, final String text) throws IOException {
         this.context = context;
         this.date = date.getTime();
+        this.id = id;
         this.text = text;
         this.properties = new Properties();
         this.commandsToDo = new ArrayList<CommandToDo>();
