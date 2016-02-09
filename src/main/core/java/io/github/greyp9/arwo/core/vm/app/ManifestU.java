@@ -65,7 +65,7 @@ public final class ManifestU {
 */
 
     public static String getImplementationVersion(final Class<?> c) {
-        return String.format("[v%s]", c.getPackage().getImplementationVersion());
+        return String.format("[b%s]", c.getPackage().getImplementationVersion());
     }
 
     public static String getSpecificationVersion(final Class<?> c) {
