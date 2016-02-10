@@ -232,6 +232,9 @@
             </fileset>
             <fileset dir='${project.dir}/src/main/app/resources/webapp/arwo-war-tomcat6'/>
         </copy>
+        <concat destfile='${war.app.dir}/css/webapp.css' description='single webapp css file available'>
+            <fileset dir='${war.app.dir}/css' includes='*.css' excludes='webapp.css'/>
+        </concat>
         <copy todir='${war.app.dir}/WEB-INF/lib' file='${artifact.dir}/arwo.jar'/>
         <exec executable='tree' failifexecutionfails='false'>
             <arg value='${war.app.dir}'/>
