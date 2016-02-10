@@ -61,7 +61,8 @@ public class ElementFactory {
             throw new IllegalStateException(nameString);
         } else {
             final QName qname1 = QNameU.getQName(XsdAtomU.getTargetNamespace(element), name);
-            final TypeInstance typeInstance = new ConcreteTypeInstance(element, NodeType.element, qname1, dataType);
+            final TypeInstance typeInstance = new ConcreteTypeInstance(
+                    element, TypeInstance.NodeType.element, qname1, dataType);
             typeDefinitions.getElementTypes().put(nameString, typeInstance);
         }
     }

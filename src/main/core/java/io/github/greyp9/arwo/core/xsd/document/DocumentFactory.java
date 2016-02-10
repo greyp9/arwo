@@ -57,12 +57,13 @@ public class DocumentFactory {
         ElementU.setTextContent(element, instanceFactory.getDefaultValue(typeInstance));
         final DataType dataType = typeInstance.getDataType();
         for (final TypeInstance typeInstanceIt : dataType.getInstances()) {
-            final NodeType nodeType = typeInstanceIt.getNodeType();
-            if (NodeType.attribute.equals(nodeType)) {
+            final TypeInstance.NodeType nodeType = typeInstanceIt.getNodeType();
+            if (TypeInstance.NodeType.attribute.equals(nodeType)) {
                 addAttribute(element, typeInstanceIt);
-            } else if (NodeType.element.equals(nodeType)) {
+            } else if (TypeInstance.NodeType.element.equals(nodeType)) {
                 addElement(element, typeInstanceIt);
-            } else if (NodeType.choice.equals(nodeType) && (typeInstanceIt instanceof ChoiceTypeInstance)) {
+            } else if (TypeInstance.NodeType.choice.equals(nodeType) &&
+                    (typeInstanceIt instanceof ChoiceTypeInstance)) {
                 addChoice(element, (ChoiceTypeInstance) typeInstanceIt);
             } else {
                 throw new IllegalStateException(dataType.getQName().toString());
@@ -121,12 +122,12 @@ public class DocumentFactory {
 
     private void addAChoice(final Element element, final TypeInstance typeInstance) {
         // recurse
-        final NodeType nodeType = typeInstance.getNodeType();
-        if (NodeType.attribute.equals(nodeType)) {
+        final TypeInstance.NodeType nodeType = typeInstance.getNodeType();
+        if (TypeInstance.NodeType.attribute.equals(nodeType)) {
             addAttribute(element, typeInstance);
-        } else if (NodeType.element.equals(nodeType)) {
+        } else if (TypeInstance.NodeType.element.equals(nodeType)) {
             addElement(element, typeInstance);
-        } else if (NodeType.choice.equals(nodeType) && (typeInstance instanceof ChoiceTypeInstance)) {
+        } else if (TypeInstance.NodeType.choice.equals(nodeType) && (typeInstance instanceof ChoiceTypeInstance)) {
             addChoice(element, (ChoiceTypeInstance) typeInstance);
         } else {
             throw new IllegalStateException(typeInstance.getDataType().getQName().toString());

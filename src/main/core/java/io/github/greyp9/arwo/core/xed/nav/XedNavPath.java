@@ -61,12 +61,12 @@ public class XedNavPath {
     private XedCursor find(final String path, final XedCursor cursor, final XedCursor cursorType, final String token) {
         XedCursor cursorFind = null;
         final TypeInstance typeInstance = cursorType.getTypeInstance();
-        final NodeType nodeType = typeInstance.getNodeType();
-        if (NodeType.attribute.equals(nodeType)) {
+        final TypeInstance.NodeType nodeType = typeInstance.getNodeType();
+        if (TypeInstance.NodeType.attribute.equals(nodeType)) {
             cursorFind = findAttr(cursor, cursorType);
-        } else if (NodeType.element.equals(nodeType)) {
+        } else if (TypeInstance.NodeType.element.equals(nodeType)) {
             cursorFind = findElement(path, cursor, cursorType, token);
-        } else if (NodeType.choice.equals(nodeType)) {
+        } else if (TypeInstance.NodeType.choice.equals(nodeType)) {
             cursorFind = findChoice(path, cursor, cursorType, token);
         }
         return cursorFind;

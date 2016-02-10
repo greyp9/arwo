@@ -49,10 +49,10 @@ public class XedNavNode {
         final XedCursor cursorType = findTypeInstance(name, cursor);
         XedCursor cursorChild = null;
         final TypeInstance typeInstance = cursorType.getTypeInstance();
-        final NodeType nodeType = (typeInstance == null) ? null : typeInstance.getNodeType();
-        if (NodeType.attribute.equals(nodeType)) {
+        final TypeInstance.NodeType nodeType = (typeInstance == null) ? null : typeInstance.getNodeType();
+        if (TypeInstance.NodeType.attribute.equals(nodeType)) {
             cursorChild = findChildAttr(ElementU.getAttributeNode(element, name), cursor, cursorType);
-        } else if (NodeType.element.equals(nodeType)) {
+        } else if (TypeInstance.NodeType.element.equals(nodeType)) {
             cursorChild = findChildElement(ElementU.getChild(element, typeInstance.getQName()), cursor, cursorType);
         }
         return cursorChild;

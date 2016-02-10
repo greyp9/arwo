@@ -6,7 +6,6 @@ import io.github.greyp9.arwo.core.xsd.atom.XsdAtom;
 import io.github.greyp9.arwo.core.xsd.core.XsdTypeU;
 import io.github.greyp9.arwo.core.xsd.core.XsdU;
 import io.github.greyp9.arwo.core.xsd.data.DataType;
-import io.github.greyp9.arwo.core.xsd.data.NodeType;
 
 import javax.xml.namespace.QName;
 import java.util.Collection;
@@ -127,5 +126,9 @@ public abstract class TypeInstance {  // xsd:complexType, xsd:simpleType @ xsd:e
     public final String toString() {
         return String.format("[%s][%s][%s][%s]", nodeType, name, dataType,
                 ((extensionType == null) ? "" : extensionType));
+    }
+
+    public enum NodeType {
+        attribute, element, choice, baseType
     }
 }

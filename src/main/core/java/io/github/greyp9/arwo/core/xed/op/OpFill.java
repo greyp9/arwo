@@ -44,10 +44,10 @@ public class OpFill {
     }
 
     private void apply(final XedCursor cursorFill, final XedCursor cursor, final TypeInstance typeInstance) {
-        final NodeType nodeType = typeInstance.getNodeType();
-        if (NodeType.attribute.equals(nodeType)) {
+        final TypeInstance.NodeType nodeType = typeInstance.getNodeType();
+        if (TypeInstance.NodeType.attribute.equals(nodeType)) {
             applyAttribute(cursorFill, cursor, typeInstance);
-        } else if (NodeType.element.equals(nodeType)) {
+        } else if (TypeInstance.NodeType.element.equals(nodeType)) {
             applyElement(cursorFill, cursor, typeInstance);
         }
     }

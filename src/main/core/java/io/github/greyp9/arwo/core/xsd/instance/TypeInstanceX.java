@@ -40,7 +40,8 @@ public class TypeInstanceX {
         if ((baseTypeRoot != null) && (XsdU.NS_URI_XSD.equals(baseTypeRoot.getQName().getNamespaceURI()))) {
             final QName name = QNameU.getQName(typeInstance.getURI(), typeInstance.getName());
             //typeInstances.add(new ConcreteTypeInstance(null, NodeType.baseType, name, baseTypeRoot));  // WRONG
-            typeInstances.add(new ConcreteTypeInstance(null, NodeType.baseType, name, typeInstance.getDataType()));
+            typeInstances.add(new ConcreteTypeInstance(
+                    null, TypeInstance.NodeType.baseType, name, typeInstance.getDataType()));
         }
     }
 

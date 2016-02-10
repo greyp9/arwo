@@ -61,14 +61,14 @@ public class OpUpdate {
     }
 
     private void applyValue(final Element update, final TypeInstance typeInstance, final NameTypeValue nameTypeValue) {
-        final NodeType nodeType = typeInstance.getNodeType();
-        if (NodeType.baseType.equals(nodeType)) {
+        final TypeInstance.NodeType nodeType = typeInstance.getNodeType();
+        if (TypeInstance.NodeType.baseType.equals(nodeType)) {
             applyBaseType(update, nameTypeValue, typeInstance);
-        } else if (NodeType.attribute.equals(nodeType)) {
+        } else if (TypeInstance.NodeType.attribute.equals(nodeType)) {
             applyAttribute(update, nameTypeValue);
-        } else if (NodeType.element.equals(nodeType)) {
+        } else if (TypeInstance.NodeType.element.equals(nodeType)) {
             applyElement(update, nameTypeValue);
-        } else if (NodeType.choice.equals(nodeType) && (typeInstance instanceof ChoiceTypeInstance)) {
+        } else if (TypeInstance.NodeType.choice.equals(nodeType) && (typeInstance instanceof ChoiceTypeInstance)) {
             applyChoice(update, nameTypeValue, (ChoiceTypeInstance) typeInstance);
         }
     }

@@ -85,18 +85,18 @@ public class XedCursor {
     public final int getTypeCount(final TypeInstance childInstance) {
         int value = 0;
         final Element element = getElement();
-        final NodeType nodeType = (childInstance == null) ? null : childInstance.getNodeType();
+        final TypeInstance.NodeType nodeType = (childInstance == null) ? null : childInstance.getNodeType();
         if (element == null) {
             value = 0;
-        } else if (NodeType.attribute.equals(nodeType)) {
+        } else if (TypeInstance.NodeType.attribute.equals(nodeType)) {
             final Attr attr = ElementU.getAttributeNode(element, childInstance.getName());
             value = (attr == null) ? 0 : 1;
-        } else if (NodeType.element.equals(nodeType)) {
+        } else if (TypeInstance.NodeType.element.equals(nodeType)) {
             final Collection<Element> children = ElementU.getChildren(element, childInstance.getName());
             value = children.size();
-        } else if (NodeType.baseType.equals(nodeType)) {
+        } else if (TypeInstance.NodeType.baseType.equals(nodeType)) {
             value = 1;
-        } else if (NodeType.choice.equals(nodeType) && (childInstance instanceof ChoiceTypeInstance)) {
+        } else if (TypeInstance.NodeType.choice.equals(nodeType) && (childInstance instanceof ChoiceTypeInstance)) {
             value = 0;
         }
         return value;
@@ -105,14 +105,14 @@ public class XedCursor {
     public final String getValue(final TypeInstance childInstance) {
         String value = null;
         final Element element = getElement();
-        final NodeType nodeType = (childInstance == null) ? null : childInstance.getNodeType();
-        if (NodeType.attribute.equals(nodeType)) {
+        final TypeInstance.NodeType nodeType = (childInstance == null) ? null : childInstance.getNodeType();
+        if (TypeInstance.NodeType.attribute.equals(nodeType)) {
             value = ElementU.getAttribute(element, childInstance.getName());
-        } else if (NodeType.element.equals(nodeType)) {
+        } else if (TypeInstance.NodeType.element.equals(nodeType)) {
             value = ElementU.getTextContent(ElementU.getChild(element, childInstance.getQName()));
-        } else if (NodeType.baseType.equals(nodeType)) {
+        } else if (TypeInstance.NodeType.baseType.equals(nodeType)) {
             value = ElementU.getTextContent(element);
-        } else if (NodeType.choice.equals(nodeType) && (childInstance instanceof ChoiceTypeInstance)) {
+        } else if (TypeInstance.NodeType.choice.equals(nodeType) && (childInstance instanceof ChoiceTypeInstance)) {
             value = getValue(element, (ChoiceTypeInstance) childInstance);
         }
         return value;

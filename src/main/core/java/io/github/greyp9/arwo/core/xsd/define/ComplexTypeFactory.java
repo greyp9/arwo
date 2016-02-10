@@ -254,7 +254,7 @@ public class ComplexTypeFactory {
             addTypeInstance(atom, typeInstances, identity);
         } else if (anonInstance) {
             final String name = ElementU.getAttribute(atom.getElement(), XsdU.NAME);
-            addTypeInstanceAnonymous(NodeType.element, name, atom, typeInstances);
+            addTypeInstanceAnonymous(TypeInstance.NodeType.element, name, atom, typeInstances);
         } else {
             throw new IllegalStateException(atom.toString());
         }
@@ -294,7 +294,7 @@ public class ComplexTypeFactory {
         } else if (type != null) {
             addTypeInstance(atom, typeInstances, identity);
         } else {
-            addTypeInstanceAnonymous(NodeType.attribute, name, atom, typeInstances);
+            addTypeInstanceAnonymous(TypeInstance.NodeType.attribute, name, atom, typeInstances);
         }
     }
 
@@ -321,7 +321,7 @@ public class ComplexTypeFactory {
         final ElementFactory elementFactory = new ElementFactory(typeComponents, typeDefinitions);
         elementFactory.processElement(name, atomRef);
         // register type
-        final NodeType nodeType = NodeType.valueOf(atom.getElement().getLocalName());
+        final TypeInstance.NodeType nodeType = TypeInstance.NodeType.valueOf(atom.getElement().getLocalName());
         final QName qnameRef = QNameU.getQName(XsdAtomU.getTargetNamespace(atomRef), name);
         final TypeInstance typeInstance = new ConcreteTypeInstance(
                 atomRef, nodeType, qnameRef, dataTypeComplex, null, minOccurs, maxOccurs, use, defaultValue, identity);
@@ -351,7 +351,7 @@ public class ComplexTypeFactory {
         final String defaultValue = ElementU.getAttribute(atom.getElement(), XsdU.DEFAULT, defaultValueApp);
         final String fixedValue = ElementU.getAttribute(atom.getElement(), XsdU.FIXED, defaultValue);
         // add child type
-        final NodeType nodeType = NodeType.valueOf(atom.getElement().getLocalName());
+        final TypeInstance.NodeType nodeType = TypeInstance.NodeType.valueOf(atom.getElement().getLocalName());
         final QName qname1 = QNameU.getQName(XsdAtomU.getTargetNamespace(atom), name);
         final TypeInstance typeInstance = new ConcreteTypeInstance(
                 atom, nodeType, qname1, dataType, null, minOccurs, maxOccurs, use, fixedValue, identity);
@@ -359,8 +359,8 @@ public class ComplexTypeFactory {
     }
 
     @SuppressWarnings("PMD.ConfusingTernary")
-    private void addTypeInstanceAnonymous(
-            final NodeType nodeType, final String name, final XsdAtom atom, final TypeInstances typeInstances) {
+    private void addTypeInstanceAnonymous(final TypeInstance.NodeType nodeType, final String name, final XsdAtom atom,
+                                          final TypeInstances typeInstances) {
         final QName qname = QNameU.getQName(XsdAtomU.getTargetNamespace(atom), name);
         final Collection<XsdAtom> simpleType = atom.getChildren(XsdU.SIMPLE_TYPE);
         final Collection<XsdAtom> complexType = atom.getChildren(XsdU.COMPLEX_TYPE);
