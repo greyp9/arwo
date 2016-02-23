@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.app.ssh.sftp.view.SFTPInventoryView;
 import io.github.greyp9.arwo.app.ssh.sftp.view.SFTPResourceView;
 import io.github.greyp9.arwo.core.alert.Alert;
+import io.github.greyp9.arwo.core.alert.model.ExceptionModel;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
@@ -43,7 +44,8 @@ public class SFTPHandlerGet {
         try {
             httpResponse = doGet2();
         } catch (IOException e) {
-            userState.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
+            new ExceptionModel(userState.getAlerts()).service(e, Alert.Severity.ERR);
+            //userState.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
             httpResponse = HttpResponseU.to302(httpRequest.getBaseURI());
         }
         return httpResponse;
