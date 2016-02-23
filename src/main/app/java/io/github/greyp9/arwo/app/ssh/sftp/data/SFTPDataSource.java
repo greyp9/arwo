@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.app.ssh.sftp.data;
 
+import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.SCPClient;
 import ch.ethz.ssh2.SCPInputStream;
 import ch.ethz.ssh2.SCPOutputStream;
@@ -58,7 +59,8 @@ public class SFTPDataSource {
 
     public final SFTPv3FileAttributes lstat(final String path) throws IOException {
         SFTPv3FileAttributes attributes = null;
-        final SFTPv3Client client = new SFTPv3Client(connection.getConnection());
+        final Connection connectionSSH = connection.getConnection();
+        final SFTPv3Client client = new SFTPv3Client(connectionSSH);
         try {
             final Date date = new Date();
             attributes = client.lstat(path);
