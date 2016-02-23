@@ -19,6 +19,10 @@ public class XPather {
     private final Element element;
     private final NamespaceContext context;
 
+    public static XPather create(final Element element, final NamespaceContext context) {
+        return new XPather(element, context);
+    }
+
     public XPather(final Document document) {
         this(document.getDocumentElement(), null);
     }
@@ -45,6 +49,16 @@ public class XPather {
             final XPathExpression expression = getExpression(xpath, context);
             final Object o = (element == null) ? null : expression.evaluate(element, XPathConstants.STRING);
             return ((o instanceof String) ? (String) o : null);
+        } catch (XPathExpressionException e) {
+            throw new IOException(e);
+        }
+    }
+
+    public final String getTextAttr(final String xpath) throws IOException {
+        try {
+            final XPathExpression expression = getExpression(xpath, context);
+            final Object o = (element == null) ? null : expression.evaluate(element, XPathConstants.NODE);
+            return ((o instanceof Attr) ? ((Attr) o).getValue() : null);
         } catch (XPathExpressionException e) {
             throw new IOException(e);
         }

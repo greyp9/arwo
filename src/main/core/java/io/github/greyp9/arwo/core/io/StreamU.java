@@ -122,6 +122,12 @@ public final class StreamU {
         }
     }
 
+    public static byte[] readUntil(final InputStream is, final byte[] until) throws IOException {
+        final ByteArrayOutputStream bos = new ByteArrayOutputStream();
+        StreamU.readUntil(is, bos, until);
+        return bos.toByteArray();
+    }
+
     @SuppressWarnings("PMD.AssignmentInOperand")
     public static void readUntil(final InputStream is, final OutputStream os, final byte[] until) throws IOException {
         int count = 0;

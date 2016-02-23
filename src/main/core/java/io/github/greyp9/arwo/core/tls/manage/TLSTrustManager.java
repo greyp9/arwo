@@ -10,22 +10,28 @@ import java.security.KeyStore;
 import java.security.cert.X509Certificate;
 
 public class TLSTrustManager {
-    private final X509Certificate[] certificates;
+    private final KeyStore keyStore;
     private final String algorithm;
 
+    public TLSTrustManager(final KeyStore keyStore) {
+        this.keyStore = keyStore;
+        this.algorithm = TrustManagerFactory.getDefaultAlgorithm();
+    }
+
     @SuppressWarnings("PMD.UseVarargs")
-    public TLSTrustManager(final X509Certificate[] certificates) {
+    public TLSTrustManager(final X509Certificate[] certificates) throws GeneralSecurityException {
         this(certificates, TrustManagerFactory.getDefaultAlgorithm());
     }
 
-    public TLSTrustManager(final X509Certificate[] certificates, final String algorithm) {
-        this.certificates = ((certificates == null) ? null : certificates.clone());
+    public TLSTrustManager(
+            final X509Certificate[] certificates, final String algorithm) throws GeneralSecurityException {
+        this.keyStore = createKeyStore(certificates);
         this.algorithm = algorithm;
     }
 
     @SuppressWarnings("PMD.MethodReturnsInternalArray")
     public final TrustManager[] createTrustManagers() throws GeneralSecurityException {
-        return (certificates == null) ? createTrustManagersN() : createTrustManagersNN();
+        return (keyStore == null) ? createTrustManagersN() : createTrustManagersNN();
     }
 
     private TrustManager[] createTrustManagersN() throws GeneralSecurityException {
@@ -33,13 +39,12 @@ public class TLSTrustManager {
     }
 
     private TrustManager[] createTrustManagersNN() throws GeneralSecurityException {
-        final KeyStore keyStore = createKeyStore();
         final TrustManagerFactory factory = TrustManagerFactory.getInstance(algorithm);
         factory.init(keyStore);
         return factory.getTrustManagers();
     }
 
-    private KeyStore createKeyStore() throws GeneralSecurityException {
+    private static KeyStore createKeyStore(final X509Certificate[] certificates) throws GeneralSecurityException {
         KeyStore keyStore = null;
         if (certificates != null) {
             keyStore = createEmptyKeyStore();
@@ -50,7 +55,7 @@ public class TLSTrustManager {
         return keyStore;
     }
 
-    private KeyStore createEmptyKeyStore() throws GeneralSecurityException {
+    private static KeyStore createEmptyKeyStore() throws GeneralSecurityException {
         final KeyStore keyStore = KeyStore.getInstance(KeyStore.getDefaultType());
         try {
             keyStore.load(null, null);

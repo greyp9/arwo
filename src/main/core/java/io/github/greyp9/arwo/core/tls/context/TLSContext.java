@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.core.tls.manage.TLSTrustManager;
 
 import javax.net.ssl.KeyManager;
 import javax.net.ssl.SSLContext;
+import javax.net.ssl.SSLServerSocketFactory;
 import javax.net.ssl.SSLSocketFactory;
 import javax.net.ssl.TrustManager;
 import java.security.GeneralSecurityException;
@@ -30,12 +31,10 @@ public class TLSContext {
         return context.getSocketFactory();
     }
 
-/*
-    public SSLServerSocketFactory getServerSocketFactory() throws GeneralSecurityException {
+    public final SSLServerSocketFactory getServerSocketFactory() throws GeneralSecurityException {
         SSLContext context = getContext();
         return context.getServerSocketFactory();
     }
-*/
 
     public final SSLContext getContext() throws GeneralSecurityException {
         final SSLContext context = SSLContext.getInstance(protocol);

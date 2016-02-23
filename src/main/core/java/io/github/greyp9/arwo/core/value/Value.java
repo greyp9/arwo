@@ -48,6 +48,19 @@ public final class Value {
         return ((t == null) ? defaultValue : t);
     }
 
+/*
+    public static <T> T firstNonNull(final T... values) {
+        T value = null;
+        for (T valueIt : values) {
+            if (valueIt != null) {
+                value = valueIt;
+                break;
+            }
+        }
+        return value;
+    }
+*/
+
     public static String joinList(final String connector, final List<Object> values) {
         final Object[] valuesArray = values.toArray(new Object[values.size()]);
         return join(connector, valuesArray);

@@ -11,6 +11,10 @@ public final class DateU {
     private DateU() {
     }
 
+    public static Date now() {
+        return new Date();
+    }
+
     public static Date copy(final Date date) {
         return ((date == null) ? null : new Date(date.getTime()));
     }

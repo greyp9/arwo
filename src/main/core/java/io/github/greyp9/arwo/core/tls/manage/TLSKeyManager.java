@@ -12,11 +12,9 @@ public class TLSKeyManager {
     private final char[] passphrase;
     private final String algorithm;
 
-/*
-    public TLSKeyManager(KeyStore keyStore, char[] passphrase) {
+    public TLSKeyManager(final KeyStore keyStore, final char[] passphrase) {
         this(keyStore, passphrase, KeyManagerFactory.getDefaultAlgorithm());
     }
-*/
 
     public TLSKeyManager(final KeyStore keyStore, final char[] passphrase, final String algorithm) {
         this.keyStore = keyStore;

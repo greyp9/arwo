@@ -30,6 +30,13 @@ public final class Http {
         public static final String HOST = "Host";
         public static final String LAST_MODIFIED = "Last-Modified";
         public static final String LOCATION = "Location";
+        public static final String WWW_AUTHENTICATE = "WWW-Authenticate";
+    }
+
+    public static class Realm {
+        public static final String BASIC = "Basic";
+        public static final String BASIC_REALM = "Basic Realm=\"%s\"";
+        public static final String CERTIFICATE = "Certificate";
     }
 
     public static class Mime {
