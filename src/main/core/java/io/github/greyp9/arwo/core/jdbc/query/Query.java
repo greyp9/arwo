@@ -25,7 +25,7 @@ public class Query {
         return new Date(date);
     }
 
-    public String getID() {
+    public final String getID() {
         return id;
     }
 

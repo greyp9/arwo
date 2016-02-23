@@ -3,7 +3,6 @@ package io.github.greyp9.arwo.core.xed.nav;
 import io.github.greyp9.arwo.core.resource.Pather;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xml.ElementU;
-import io.github.greyp9.arwo.core.xsd.data.NodeType;
 import io.github.greyp9.arwo.core.xsd.instance.ChoiceTypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import org.w3c.dom.Attr;

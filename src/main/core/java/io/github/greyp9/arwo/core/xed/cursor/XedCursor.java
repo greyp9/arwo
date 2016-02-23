@@ -5,7 +5,6 @@ import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xml.ElementU;
-import io.github.greyp9.arwo.core.xsd.data.NodeType;
 import io.github.greyp9.arwo.core.xsd.instance.ChoiceTypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import org.w3c.dom.Attr;

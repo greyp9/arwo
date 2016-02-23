@@ -4,7 +4,6 @@ import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.core.XsdU;
 import io.github.greyp9.arwo.core.xsd.data.DataType;
 import io.github.greyp9.arwo.core.xsd.data.DataTypeU;
-import io.github.greyp9.arwo.core.xsd.data.NodeType;
 
 import javax.xml.namespace.QName;
 import java.util.ArrayList;
