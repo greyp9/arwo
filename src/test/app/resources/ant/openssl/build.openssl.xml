@@ -80,7 +80,7 @@
             <arg value='-in'/>
             <arg value='${ssl.dir}/client.cer'/>
         </exec>
-        <!-- generate truststore -->
+        <!-- generate PKCS12 truststore -->
         <exec executable='openssl'>
             <arg value='pkcs12'/>
             <arg value='-export'/>
@@ -91,6 +91,18 @@
             <arg value='-nokeys'/>
             <arg value='-in'/>
             <arg value='${ssl.dir}/client.cer'/>
+        </exec>
+        <!-- generate JKS truststore -->
+        <exec executable='keytool'>
+            <arg value='-import'/>
+            <arg value='-keystore'/>
+            <arg value='${ssl.dir}/trust.jks'/>
+            <arg value='-file'/>
+            <arg value='${ssl.dir}/client.cer'/>
+            <arg value='-alias'/>
+            <arg value='1'/>
+            <arg value='-storepasswd'/>
+            <arg value='arwo'/>
         </exec>
     </target>
 

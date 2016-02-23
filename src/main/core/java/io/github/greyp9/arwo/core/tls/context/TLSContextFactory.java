@@ -29,7 +29,7 @@ public class TLSContextFactory {
         return new TLSContext(null, trustManager, protocol);
     }
 
-    public final TLSContext createTrustAll(final String protocol) {
+    public final TLSContext createTrustAll(final String protocol) throws GeneralSecurityException {
         final TLSTrustManager trustManager = new TLSTrustManager((KeyStore) null);
         return new TLSContext(null, trustManager, protocol);
     }

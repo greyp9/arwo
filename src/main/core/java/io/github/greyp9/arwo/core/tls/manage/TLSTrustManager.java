@@ -8,13 +8,14 @@ import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.KeyStore;
 import java.security.cert.X509Certificate;
+import java.util.Enumeration;
 
 public class TLSTrustManager {
     private final KeyStore keyStore;
     private final String algorithm;
 
-    public TLSTrustManager(final KeyStore keyStore) {
-        this.keyStore = keyStore;
+    public TLSTrustManager(final KeyStore keyStore) throws GeneralSecurityException {
+        this.keyStore = createKeyStore(keyStore);
         this.algorithm = TrustManagerFactory.getDefaultAlgorithm();
     }
 
@@ -42,6 +43,20 @@ public class TLSTrustManager {
         final TrustManagerFactory factory = TrustManagerFactory.getInstance(algorithm);
         factory.init(keyStore);
         return factory.getTrustManagers();
+    }
+
+    private static KeyStore createKeyStore(final KeyStore keyStoreIn) throws GeneralSecurityException {
+        KeyStore keyStore = null;
+        if (keyStoreIn != null) {
+            keyStore = createEmptyKeyStore();
+            final Enumeration<String> aliases = keyStoreIn.aliases();
+            while (aliases.hasMoreElements()) {
+                final String alias = aliases.nextElement();
+                final X509Certificate certificate = (X509Certificate) keyStoreIn.getCertificate(alias);
+                keyStore.setCertificateEntry(certificate.getSubjectDN().getName(), certificate);
+            }
+        }
+        return keyStore;
     }
 
     private static KeyStore createKeyStore(final X509Certificate[] certificates) throws GeneralSecurityException {
