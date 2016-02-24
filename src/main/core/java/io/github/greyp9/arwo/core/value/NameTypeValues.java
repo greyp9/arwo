@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.value;
 
 import java.util.ArrayList;
+import java.util.Collection;
 
 public final class NameTypeValues extends ArrayList<NameTypeValue> {
     private static final long serialVersionUID = -1996418375827653958L;
@@ -35,6 +36,26 @@ public final class NameTypeValues extends ArrayList<NameTypeValue> {
     public String getValueIC(final String name) {
         final NameTypeValue nameTypeValue = getNameValueIC(name);
         return ((nameTypeValue == null) ? null : nameTypeValue.getValueS());
+    }
+
+    public Collection<String> getNames() {
+        final Collection<String> names = new ArrayList<String>();
+        for (final NameTypeValue nameTypeValueIt : this) {
+            if (!names.contains(nameTypeValueIt.getName())) {
+                names.add(nameTypeValueIt.getName());
+            }
+        }
+        return names;
+    }
+
+    public Collection<String> getValues(final String name) {
+        final Collection<String> values = new ArrayList<String>();
+        for (final NameTypeValue nameTypeValueIt : this) {
+            if (nameTypeValueIt.getName().equals(name)) {
+                values.add(nameTypeValueIt.getValueS());
+            }
+        }
+        return values;
     }
 
     public NameTypeValue getNameValue(final String name) {
