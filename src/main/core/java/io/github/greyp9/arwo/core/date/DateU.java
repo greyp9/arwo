@@ -42,7 +42,7 @@ public final class DateU {
     }
 
     public static Date fromSeconds(final Long seconds) {
-        return ((seconds == null) ? null : new Date(seconds * Const.ONE_SECOND_MILLIS));
+        return ((seconds == null) ? null : new Date(seconds * DurationU.Const.ONE_SECOND_MILLIS));
     }
 
     public static Date fromMillis(final Long millis) {
@@ -68,7 +68,5 @@ public final class DateU {
 
     public static class Const {
         public static final TimeZone TZ_GMT = TimeZone.getTimeZone("GMT");  // i18n JRE
-
-        public static final long ONE_SECOND_MILLIS = 1000L;
     }
 }

@@ -1,6 +1,6 @@
 package io.github.greyp9.arwo.core.security.update;
 
-import io.github.greyp9.arwo.core.date.DateU;
+import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.naming.AppNaming;
 import io.github.greyp9.arwo.core.security.realm.AppRealm;
 import io.github.greyp9.arwo.core.security.realm.AppRealmContainer;
@@ -34,7 +34,7 @@ public class RealmUpdateRunnable implements Runnable {
         boolean interrupted = false;
         Object o = AppNaming.lookup(context, AppRealmContainer.NAMING_CONTAINER);
         while ((!interrupted) && (!cancelled) && (o == null)) {
-            interrupted = ThreadU.sleepMillis(DateU.Const.ONE_SECOND_MILLIS);
+            interrupted = ThreadU.sleepMillis(DurationU.Const.ONE_SECOND_MILLIS);
             o = AppNaming.lookup(context, AppRealmContainer.NAMING_CONTAINER);
         }
         // update realm
