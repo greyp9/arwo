@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xsd.document;
 
+import io.github.greyp9.arwo.core.date.DateConvertU;
 import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.date.XsdDateU;
@@ -34,9 +35,9 @@ public class TypeInstanceFactory {  // NOPMD
         } else if (XsdTypeU.Const.BOOLEAN.equals(qname)) {
             value = Const.BOOLEAN_DEFAULT;
         } else if (XsdTypeU.Const.DATE.equals(qname)) {
-            value = DateU.toString(Const.DATE_DEFAULT, DateU.Const.TZ_GMT.getID(), XsdDateU.Const.DATE);
+            value = DateConvertU.toString(Const.DATE_DEFAULT, DateU.Const.TZ_GMT.getID(), XsdDateU.Const.DATE);
         } else if (XsdTypeU.Const.DATE_TIME.equals(qname)) {
-            value = DateU.toString(Const.DATE_DEFAULT, DateU.Const.TZ_GMT.getID(), XsdDateU.Const.DATETIME);
+            value = DateConvertU.toString(Const.DATE_DEFAULT, DateU.Const.TZ_GMT.getID(), XsdDateU.Const.DATETIME);
         } else if (XsdTypeU.Const.DECIMAL.equals(qname)) {
             value = Const.LONG_DEFAULT;
         } else if (XsdTypeU.Const.DURATION.equals(qname)) {
@@ -62,7 +63,7 @@ public class TypeInstanceFactory {  // NOPMD
         } else if (XsdTypeU.Const.STRING.equals(qname)) {
             value = Const.STRING_DEFAULT;
         } else if (XsdTypeU.Const.TIME.equals(qname)) {
-            value = DateU.toString(Const.DATE_DEFAULT, DateU.Const.TZ_GMT.getID(), XsdDateU.Const.TIME);
+            value = DateConvertU.toString(Const.DATE_DEFAULT, DateU.Const.TZ_GMT.getID(), XsdDateU.Const.TIME);
         } else if (XsdTypeU.Const.TOKEN.equals(qname)) {
             value = Const.STRING_DEFAULT;
         } else if (XsdTypeU.Const.UNSIGNED_BYTE.equals(qname)) {

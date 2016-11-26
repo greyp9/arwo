@@ -6,8 +6,10 @@ import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
+import io.github.greyp9.arwo.core.xed.transform.TransformContext;
 import io.github.greyp9.arwo.core.xed.transform.ValueInstanceTransform;
 import io.github.greyp9.arwo.core.xml.ElementU;
+import io.github.greyp9.arwo.core.xpath.XPather;
 import io.github.greyp9.arwo.core.xsd.core.XsdU;
 import io.github.greyp9.arwo.core.xsd.data.DataType;
 import io.github.greyp9.arwo.core.xsd.data.DataTypeU;
@@ -32,11 +34,13 @@ public class OpCreate {
     }
 
     public final Element apply(final Element element, final ValueInstance valueInstanceIn) throws IOException {
-        final ValueInstance valueInstance = new ValueInstanceTransform().transform(valueInstanceIn, secret);
-        final TypeInstance typeInstance = valueInstance.getTypeInstance();
-        final NameTypeValues nameTypeValues = valueInstance.getNameTypeValues();
+        final TypeInstance typeInstance = valueInstanceIn.getTypeInstance();
         final Element create = ElementU.addElementBeforeNS(
                 element, typeInstance.getName(), typeInstance.getURI(), null);
+        final XPather xpather = new XPather(create, xed.getXPather().getContext());
+        final TransformContext context = new TransformContext(secret, xpather);
+        final ValueInstance valueInstance = new ValueInstanceTransform(context).transform(valueInstanceIn);
+        final NameTypeValues nameTypeValues = valueInstance.getNameTypeValues();
         final Collection<TypeInstance> typeInstances = new TypeInstanceX(typeInstance).getPageInstances();
         for (final TypeInstance typeInstanceIt : typeInstances) {
             apply(create, typeInstance, typeInstanceIt, nameTypeValues);

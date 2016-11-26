@@ -4,8 +4,9 @@ import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.codec.b64.Base64Codec;
 import io.github.greyp9.arwo.core.hash.secure.HashU;
 import io.github.greyp9.arwo.core.xed.core.XedU;
+import io.github.greyp9.arwo.core.xed.transform.TransformContext;
+import io.github.greyp9.arwo.core.xpath.XPather;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
-import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
 
 public final class XedHash {
 
@@ -17,13 +18,16 @@ public final class XedHash {
     }
 
     public static String getHash(
-            final TypeInstance childInstance, final String value, final ValueInstance valueInstanceIn) {
-        final TypeInstance typeInstance = valueInstanceIn.getTypeInstance();
-        final String salt = childInstance.getDirective(XedU.SALT);
-        final TypeInstance typeInstanceSalt = ((salt == null) ? null : typeInstance.getInstance(salt));
-        final String id = ((typeInstanceSalt == null) ? null : typeInstanceSalt.getID(typeInstance));
-        final String input = ((typeInstanceSalt == null) ? value :
-                (value + valueInstanceIn.getNameTypeValues().getValue(id)));
-        return Base64Codec.encode(HashU.sha256(UTF8Codec.toBytes(input)));
+            final TypeInstance childInstance, final String value, final TransformContext context) {
+        final StringBuilder input = new StringBuilder(value);
+        final String xpathSalt = childInstance.getDirective(XedU.SALT);
+        final XPather xpather = (context == null) ? null : context.getXPather();
+        if ((xpathSalt != null) && (xpather != null)) {
+            final String salt = xpather.getText(xpathSalt, null);
+            if (salt != null) {
+                input.append(salt);
+            }
+        }
+        return Base64Codec.encode(HashU.sha256(UTF8Codec.toBytes(input.toString())));
     }
 }

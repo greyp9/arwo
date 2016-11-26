@@ -12,10 +12,12 @@ import java.util.Collection;
 public class ProtectHashTransform {
     private final ValueInstance valueInstanceIn;
     private final TypeInstance typeInstanceIn;
+    private final TransformContext context;
 
-    public ProtectHashTransform(final ValueInstance valueInstanceIn) {
+    public ProtectHashTransform(final ValueInstance valueInstanceIn, final TransformContext context) {
         this.valueInstanceIn = valueInstanceIn;
         this.typeInstanceIn = valueInstanceIn.getTypeInstance();
+        this.context = context;
     }
 
     public final ValueInstance transform() {
@@ -32,7 +34,7 @@ public class ProtectHashTransform {
         if ((XedHash.isHash(pageInstance)) && (nameTypeValue != null)) {
             valueInstance.getNameTypeValues().remove(nameTypeValue);
             if (!Html.MASK.equals(nameTypeValue.getValueS())) {
-                final String value = XedHash.getHash(pageInstance, nameTypeValue.getValueS(), valueInstance);
+                final String value = XedHash.getHash(pageInstance, nameTypeValue.getValueS(), context);
                 valueInstance.add(new NameTypeValue(nameTypeValue.getName(), value));
             }
         }

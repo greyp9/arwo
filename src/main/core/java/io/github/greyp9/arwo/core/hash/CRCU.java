@@ -13,7 +13,7 @@ public final class CRCU {
         return crc32(bytes, 0, bytes.length);
     }
 
-    public static long crc32(final byte[] bytes, int offset, int length) {
+    public static long crc32(final byte[] bytes, final int offset, final int length) {
         final CRC32 crc32 = new CRC32();
         crc32.update(bytes, offset, length);
         return crc32.getValue();

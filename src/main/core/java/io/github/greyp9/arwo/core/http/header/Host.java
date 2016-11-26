@@ -4,21 +4,21 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class Host {
-    private final String host;
+    private final String hostname;
     private final Integer port;
 
-    public String getHost() {
-        return host;
+    public final String getHost() {
+        return hostname;
     }
 
-    public Integer getPort() {
+    public final Integer getPort() {
         return port;
     }
 
     public Host(final String header) {
         final Matcher matcher = Const.PATTERN.matcher(header);
         if (matcher.matches()) {
-            this.host = matcher.group(Const.GROUP_HOST);
+            this.hostname = matcher.group(Const.GROUP_HOST);
             final String portS = matcher.group(Const.GROUP_PORT);
             this.port = ((portS == null) ? null : Integer.parseInt(portS));
         } else {
@@ -27,8 +27,8 @@ public class Host {
     }
 
     @Override
-    public String toString() {
-        return String.format("%s:%d", host, port);
+    public final String toString() {
+        return String.format("%s:%d", hostname, port);
     }
 
     private static class Const {

@@ -72,7 +72,7 @@ public final class DurationU {
                 "P((\\d+)Y)?((\\d+)M)?((\\d+)D)?" +  // i18n
                 "(T((\\d+)H)?((\\d+)M)?((\\d+)(\\.\\d{3})?S)?)?";
 
-        public static final long TENTH_SECOND_MILLIS = 100L;
+        public static final long HUNDRED_MILLIS = 100L;
         public static final long ONE_SECOND_MILLIS = 1000L;
         public static final long ONE_MINUTE_MILLIS = 60L * ONE_SECOND_MILLIS;
         public static final long ONE_HOUR_MILLIS = 60L * ONE_MINUTE_MILLIS;

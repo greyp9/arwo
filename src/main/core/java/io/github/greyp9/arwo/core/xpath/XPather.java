@@ -44,6 +44,16 @@ public class XPather {
         return context;
     }
 
+    public final String getText(final String xpath, final String textDefault) {
+        String text;
+        try {
+            text = getText(xpath);
+        } catch (IOException e) {
+            text = textDefault;
+        }
+        return text;
+    }
+
     public final String getText(final String xpath) throws IOException {
         try {
             final XPathExpression expression = getExpression(xpath, context);

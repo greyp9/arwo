@@ -5,8 +5,10 @@ import javax.naming.InitialContext;
 import javax.naming.NameAlreadyBoundException;
 import javax.naming.NameNotFoundException;
 import javax.naming.NamingException;
+import java.util.logging.Logger;
 
 public final class AppNaming {
+    private static final Logger LOGGER = Logger.getLogger(AppNaming.class.getName());
 
     private AppNaming() {
     }
@@ -15,7 +17,9 @@ public final class AppNaming {
     public static Context createSubcontext(final String name) {
         try {
             final InitialContext initialContext = new InitialContext();
-            return initialContext.createSubcontext(name);
+            final Context subcontext = initialContext.createSubcontext(name);
+            LOGGER.finest(String.format("createSubcontext()/%s/%s", name, subcontext));
+            return subcontext;
         } catch (NameAlreadyBoundException e) {
             return lookupSubcontext(name);
         } catch (NamingException e) {
@@ -53,7 +57,9 @@ public final class AppNaming {
     public static Context lookupSubcontext(final String name) {
         try {
             final InitialContext initialContext = new InitialContext();
-            return (Context) initialContext.lookup(name);
+            final Object lookup = initialContext.lookup(name);
+            LOGGER.finest(String.format("lookupSubcontext()/%s/%s", name, lookup));
+            return (Context) lookup;
         } catch (NamingException e) {
             throw new IllegalStateException(e);
         }

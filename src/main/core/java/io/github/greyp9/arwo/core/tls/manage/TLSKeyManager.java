@@ -12,6 +12,7 @@ public class TLSKeyManager {
     private final char[] passphrase;
     private final String algorithm;
 
+    @SuppressWarnings("PMD.UseVarargs")
     public TLSKeyManager(final KeyStore keyStore, final char[] passphrase) {
         this(keyStore, passphrase, KeyManagerFactory.getDefaultAlgorithm());
     }

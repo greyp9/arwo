@@ -44,7 +44,7 @@ public final class AppRealmFactory {
         }
     }
 
-    private static AppRealm toAppRealm(final byte[] xsd, final byte[] xml) throws IOException {
+    public static AppRealm toAppRealm(final byte[] xsd, final byte[] xml) throws IOException {
         final Validator validator = new Validator(xsd);
         final Collection<String> errors = validator.validate(xml);
         if (!errors.isEmpty()) {
@@ -59,13 +59,14 @@ public final class AppRealmFactory {
         final XPathContext context = xsdTypes.getContext();
         final XPather xpather = new XPather(document, context);
         final String name = xpather.getText("/realm:realm/@name");  // i18n xpath
+        final String salt = xpather.getText("/realm:realm/@salt");  // i18n xpath
         final Collection<AuthPrincipal> principals = new ArrayList<AuthPrincipal>();
         final List<Element> elements = xpather.getElements(
                 "/realm:realm/realm:principals/realm:principal"); // i18n xpath
         for (final Element element : elements) {
             principals.add(toAuthPrincipal(element, context));
         }
-        return new AppRealm(name, principals);
+        return new AppRealm(name, salt, principals);
     }
 
     private static AuthPrincipal toAuthPrincipal(final Element element, final XPathContext context) throws IOException {

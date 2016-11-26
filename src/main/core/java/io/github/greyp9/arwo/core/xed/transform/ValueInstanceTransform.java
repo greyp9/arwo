@@ -5,17 +5,17 @@ import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
 import java.io.IOException;
 
 public class ValueInstanceTransform {
+    private final TransformContext context;
 
-    public final ValueInstance transform(final ValueInstance valueInstance) throws IOException {
-        return transform(valueInstance, null);
+    public ValueInstanceTransform(final TransformContext context) {
+        this.context = context;
     }
 
-    @SuppressWarnings("PMD.UseVarargs")
-    public final ValueInstance transform(final ValueInstance valueInstance, final char[] secret) throws IOException {
+    public final ValueInstance transform(final ValueInstance valueInstance) throws IOException {
         final ValueInstance valueInstanceName = new NameTransform().transform(valueInstance);
         final ValueInstance valueInstanceForm = new FormTransform().transform(valueInstanceName);
-        final ValueInstance valueInstancePro1 = new ProtectHashTransform(valueInstanceForm).transform();
-        final ValueInstance valueInstancePro2 = new ProtectKeyTransform(valueInstancePro1, secret).transform();
+        final ValueInstance valueInstancePro1 = new ProtectHashTransform(valueInstanceForm, context).transform();
+        final ValueInstance valueInstancePro2 = new ProtectKeyTransform(valueInstancePro1, context).transform();
         valueInstancePro2.getClass();  // suppress inspect warning
         return valueInstancePro2;
     }

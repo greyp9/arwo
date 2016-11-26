@@ -1,7 +1,7 @@
 package io.github.greyp9.arwo.core.file.tar;
 
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
-import io.github.greyp9.arwo.core.date.DateU;
+import io.github.greyp9.arwo.core.date.DateConvertU;
 import io.github.greyp9.arwo.core.file.meta.FileMetaData;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.io.ByteU;
@@ -185,7 +185,7 @@ public class TarVolume {
         final String lastModifiedOctal = UTF8Codec.toString(
                 ByteU.extract(header, Const.OFF_DATE, Const.SZ_DATE)).trim();
         final long lastModifiedSecs = Long.parseLong(lastModifiedOctal, NumberU.Const.RADIX_OCTAL);
-        final long lastModified = DateU.fromSeconds(lastModifiedSecs).getTime();
+        final long lastModified = DateConvertU.fromSeconds(lastModifiedSecs).getTime();
         final boolean directory = (Const.TYPE_DIRECTORY == type);
         final String linkFileName = UTF8Codec.toString(ByteU.extract(header, Const.OFF_LINK, Const.SZ_LINK)).trim();
         return new TarMetaData(fileName, fileSize, lastModified, directory, linkFileName);

@@ -2,7 +2,6 @@ package io.github.greyp9.arwo.core.xed.transform;
 
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.jce.KeyX;
-import io.github.greyp9.arwo.core.lang.CharU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.xed.extension.XedKey;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
@@ -15,13 +14,13 @@ import java.util.Collection;
 public class ProtectKeyTransform {
     private final ValueInstance valueInstanceIn;
     private final TypeInstance typeInstanceIn;
-    private final char[] secret;
+    private final TransformContext context;
 
     @SuppressWarnings("PMD.UseVarargs")
-    public ProtectKeyTransform(final ValueInstance valueInstanceIn, final char[] secret) {
+    public ProtectKeyTransform(final ValueInstance valueInstanceIn, final TransformContext context) {
         this.valueInstanceIn = valueInstanceIn;
         this.typeInstanceIn = valueInstanceIn.getTypeInstance();
-        this.secret = CharU.copy(secret);
+        this.context = context;
     }
 
     public final ValueInstance transform() throws IOException {
@@ -38,7 +37,7 @@ public class ProtectKeyTransform {
         if ((XedKey.isKey(pageInstance)) && (nameTypeValue != null)) {
             valueInstance.getNameTypeValues().remove(nameTypeValue);
             if (!Html.MASK.equals(nameTypeValue.getValueS())) {
-                final KeyX key = XedKey.getKeyPBE(secret, pageInstance);
+                final KeyX key = XedKey.getKeyPBE(context.getSecret(), pageInstance);
                 final String value = key.protect(nameTypeValue.getValueS());
                 valueInstance.add(new NameTypeValue(nameTypeValue.getName(), value));
             }

@@ -18,12 +18,14 @@ import java.util.logging.Logger;
 
 public class AppRealm {
     private final String realmName;
+    private final String salt;
     private final Map<String, AuthPrincipal> principals;
     private final String defaultPassword;
     private final Date timestamp;
 
-    public AppRealm(final String realmName, final Collection<AuthPrincipal> principals) {
+    public AppRealm(final String realmName, final String salt, final Collection<AuthPrincipal> principals) {
         this.realmName = realmName;
+        this.salt = salt;
         this.principals = new TreeMap<String, AuthPrincipal>();
         for (final AuthPrincipal principal : principals) {
             this.principals.put(principal.getPrincipal().getName(), principal);
@@ -36,6 +38,10 @@ public class AppRealm {
 
     public final String getName() {
         return realmName;
+    }
+
+    public final String getSalt() {
+        return salt;
     }
 
     public final Date getTimestamp() {
@@ -77,11 +83,13 @@ public class AppRealm {
         if (principals.isEmpty()) {
             final AppPrincipal principal = new AppPrincipal(Const.PRINCIPAL_NAME,
                     Collections.singletonList(Const.ROLE_WILDCARD));
-            authPrincipal = new AuthPrincipal(principal, hashCredential(Const.PRINCIPAL_NAME, defaultPassword));
+            authPrincipal = new AuthPrincipal(principal, hashCredential(salt, defaultPassword));
+        } else if (name == null) {
+            authPrincipal = null;
         } else {
             authPrincipal = principals.get(name);
         }
-        final String credentialHash = hashCredential(name, credential);
+        final String credentialHash = hashCredential(salt, credential);
         final AppPrincipal principal = ((authPrincipal == null) ? null : authPrincipal.authenticate(credentialHash));
         return (principal == null) ? null : copy(principal);
     }
@@ -94,8 +102,8 @@ public class AppRealm {
                 Arrays.asList(Const.ROLE_WILDCARD, pubkeyBase64));
     }
 
-    private String hashCredential(final String name, final String credential) {
-        return Base64Codec.encode(HashU.sha256((credential + name).getBytes(Charset.forName("UTF-8"))));  // i18n in
+    public static String hashCredential(final String salt, final String credential) {
+        return Base64Codec.encode(HashU.sha256((credential + salt).getBytes(Charset.forName("UTF-8"))));  // i18n in
     }
 
     private AppPrincipal copy(final AppPrincipal principal) {

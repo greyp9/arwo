@@ -59,6 +59,7 @@ public class TLSTrustManager {
         return keyStore;
     }
 
+    @SuppressWarnings("PMD.UseVarargs")
     private static KeyStore createKeyStore(final X509Certificate[] certificates) throws GeneralSecurityException {
         KeyStore keyStore = null;
         if (certificates != null) {

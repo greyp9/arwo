@@ -32,7 +32,7 @@ public class TLSContext {
     }
 
     public final SSLServerSocketFactory getServerSocketFactory() throws GeneralSecurityException {
-        SSLContext context = getContext();
+        final SSLContext context = getContext();
         return context.getServerSocketFactory();
     }
 
