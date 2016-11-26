@@ -53,7 +53,7 @@ public class RealmCursorTest extends TestCase {
         final XedCursor cursorPrincipals = new XedNav(xed).find(principals);
         final XedCursor cursorPrincipalType = new XedNav(xed).find("principal", cursorPrincipals);
         // insert
-        final NameTypeValues ntv0 = HttpArguments.toArguments("name=Arwo");
+        final NameTypeValues ntv0 = HttpArguments.toArguments("name=Arwo&salt=Arwo-Salt");
         final ValueInstance value0 = ValueInstance.create(cursorRealm.getTypeInstance(), ntv0);
         final Element realm0 = xed.update(cursorRealm.getElement(), value0);
         Assert.assertNotNull(realm0);
@@ -73,7 +73,7 @@ public class RealmCursorTest extends TestCase {
         Assert.assertEquals("/", cursorRealm.getURI());
         final String renderRealm = new CursorTextView(new XedCursorView(cursorRealm)).render();
         logger.finest("Realm\n" + renderRealm);
-        Assert.assertEquals("1ceb05ff", CRCU.crc32String(UTF8Codec.toBytes(renderRealm)));
+        Assert.assertEquals("292a3c08", CRCU.crc32String(UTF8Codec.toBytes(renderRealm)));
         // view at principals type
         final XedCursor cursorPrincipalsType = new XedNav(xed).find("principals", cursorRealm);
         Assert.assertEquals("/ecd28/", cursorPrincipalsType.getURI());
@@ -89,18 +89,18 @@ public class RealmCursorTest extends TestCase {
         Assert.assertEquals("/ecd28/7256d/8dc37/", cursorPrincipalType.getURI());
         final String renderPrincipalType = new CursorTextView(new XedCursorView(cursorPrincipalType)).render();
         logger.finest("PrincipalType\n" + renderPrincipalType);
-        Assert.assertEquals("df8183e0", CRCU.crc32String(UTF8Codec.toBytes(renderPrincipalType)));
+        Assert.assertEquals("6588a1e4", CRCU.crc32String(UTF8Codec.toBytes(renderPrincipalType)));
         // view at principal1
         final XedCursor cursorPrincipal1 = new XedNav(xed).find(principal1);
         Assert.assertEquals("/ecd28/7256d/8dc37/c3dce/", cursorPrincipal1.getURI());
         final String renderPrincipal1 = new CursorTextView(new XedCursorView(cursorPrincipal1)).render();
         logger.finest("Principal\n" + renderPrincipal1);
-        Assert.assertEquals("86a27d51", CRCU.crc32String(UTF8Codec.toBytes(renderPrincipal1)));
+        Assert.assertEquals("4f44727f", CRCU.crc32String(UTF8Codec.toBytes(renderPrincipal1)));
         // view at principal2
         final XedCursor cursorPrincipal2 = new XedNav(xed).find(principal2);
         Assert.assertEquals("/ecd28/7256d/8dc37/b0d58/", cursorPrincipal2.getURI());
         final String renderPrincipal2 = new CursorTextView(new XedCursorView(cursorPrincipal2)).render();
         logger.finest("Principal\n" + renderPrincipal2);
-        Assert.assertEquals("89e82efb", CRCU.crc32String(UTF8Codec.toBytes(renderPrincipal2)));
+        Assert.assertEquals("9b0c5d75", CRCU.crc32String(UTF8Codec.toBytes(renderPrincipal2)));
     }
 }

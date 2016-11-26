@@ -134,7 +134,7 @@ public class RealmViewTest extends TestCase {
             final String pageText = new PropertyPageTextView(pageView).render();
             logger.finest(SystemU.eol() + pageText);
             Assert.assertEquals(178, pageText.length());
-            Assert.assertEquals("47f01598", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
+            Assert.assertEquals("b7ca26b2", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
         }
         // insert
         final NameTypeValues ntv2 = HttpArguments.toArguments("user=arwo2&credential=arwo2&roles=**");
@@ -149,7 +149,7 @@ public class RealmViewTest extends TestCase {
             final String pageText = new PropertyPageTextView(pageView).render();
             logger.finest(SystemU.eol() + pageText);
             Assert.assertEquals(178, pageText.length());
-            Assert.assertEquals("3e8f9f48", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
+            Assert.assertEquals("d707be74", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
         }
         // verify table
         if (SystemU.isTrue()) {
@@ -158,7 +158,7 @@ public class RealmViewTest extends TestCase {
             final String tableText = new TableTextView(tableView).render();
             logger.finest(SystemU.eol() + tableText);
             Assert.assertEquals(193, tableText.length());
-            Assert.assertEquals("8a2f0b93", CRCU.crc32String(UTF8Codec.toBytes(tableText)));
+            Assert.assertEquals("d3fa20e5", CRCU.crc32String(UTF8Codec.toBytes(tableText)));
         }
         // change locale
         final XsdBundle xsdBundleDE = new XsdBundle(new XsdBundles(xsdTypes, Locale.GERMAN));
@@ -171,7 +171,7 @@ public class RealmViewTest extends TestCase {
             final String pageText = new PropertyPageTextView(pageView).render();
             logger.finest(SystemU.eol() + pageText);
             Assert.assertEquals(178, pageText.length());
-            Assert.assertEquals("8077cbec", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
+            Assert.assertEquals("5b3c3809", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
         }
         // verify table
         if (SystemU.isTrue()) {
@@ -182,7 +182,7 @@ public class RealmViewTest extends TestCase {
             final String tableText = new TableTextView(tableView).render();
             logger.finest(SystemU.eol() + tableText);
             Assert.assertEquals(193, tableText.length());
-            Assert.assertEquals("382a1dcd", CRCU.crc32String(UTF8Codec.toBytes(tableText)));
+            Assert.assertEquals("61ff36bb", CRCU.crc32String(UTF8Codec.toBytes(tableText)));
         }
     }
 }

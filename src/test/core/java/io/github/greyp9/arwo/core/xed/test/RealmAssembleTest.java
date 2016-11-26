@@ -6,13 +6,16 @@ import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
+import io.github.greyp9.arwo.core.xed.extension.XedHash;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
+import io.github.greyp9.arwo.core.xed.transform.TransformContext;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xml.QNameU;
+import io.github.greyp9.arwo.core.xpath.XPather;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
+import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import io.github.greyp9.arwo.core.xsd.source.test.SchemaSourceAppTest;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
 import junit.framework.TestCase;
 import org.junit.Assert;
@@ -55,7 +58,15 @@ public class RealmAssembleTest extends TestCase {
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
         Assert.assertEquals(384, xml.length);
-        Assert.assertEquals("592e22ef", CRCU.crc32String(xml));
+        Assert.assertEquals("6e6b144e", CRCU.crc32String(xml));
+        // check hashes
+        final TypeInstance tiCredential = cursorPrincipalType.getChildInstance("credential");
+        final XPather xpather1 = new XPather(principal1, xed.getXPather().getContext());
+        final String hash1 = XedHash.getHash(tiCredential, "arwo", new TransformContext(null, xpather1));
+        Assert.assertEquals("1/LNHf3yHLrcgbvDIN9OBPTppq5rSWUa7kfTORfChr8=", hash1);
+        final XPather xpather2 = new XPather(principal2, xed.getXPather().getContext());
+        final String hash2 = XedHash.getHash(tiCredential, "arwo2", new TransformContext(null, xpather2));
+        Assert.assertEquals("i1Otk1K9L0SBdbqYUkno5UoEAjXd9iBKLPhCxPpy2o0=", hash2);
     }
 
     public void testCreateUpdate() throws Exception {
@@ -72,6 +83,12 @@ public class RealmAssembleTest extends TestCase {
         final ValueInstance value1 = ValueInstance.create(cursorPrincipalType.getTypeInstance(), ntv1);
         final Element principal1 = xed.create(cursorPrincipalType.getParent().getElement(), value1);
         Assert.assertNotNull(principal1);
+        // check hash
+        logger.finest(DocumentU.toString(document));
+        final TypeInstance tiCredential = cursorPrincipalType.getChildInstance("credential");
+        final XPather xpather1 = new XPather(principal1, xed.getXPather().getContext());
+        final String hash1 = XedHash.getHash(tiCredential, "arwo", new TransformContext(null, xpather1));
+        Assert.assertEquals("1/LNHf3yHLrcgbvDIN9OBPTppq5rSWUa7kfTORfChr8=", hash1);
         // update
         final XedCursor cursor1 = new XedNav(xed).find(principal1);
         final NameTypeValues ntv2 = HttpArguments.toArguments("user=arwo2&credential=arwo2&roles=**");
@@ -82,7 +99,11 @@ public class RealmAssembleTest extends TestCase {
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
         Assert.assertEquals(254, xml.length);
-        Assert.assertEquals("b77aca02", CRCU.crc32String(xml));
+        Assert.assertEquals("7487e72a", CRCU.crc32String(xml));
+        // check hash
+        final XPather xpather2 = new XPather(principal2, xed.getXPather().getContext());
+        final String hash2 = XedHash.getHash(tiCredential, "arwo2", new TransformContext(null, xpather2));
+        Assert.assertEquals("i1Otk1K9L0SBdbqYUkno5UoEAjXd9iBKLPhCxPpy2o0=", hash2);
     }
 
     public void testCreateDelete() throws Exception {

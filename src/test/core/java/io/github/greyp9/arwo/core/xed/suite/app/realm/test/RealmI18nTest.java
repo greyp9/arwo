@@ -25,6 +25,12 @@ import java.util.logging.Logger;
 public class RealmI18nTest extends TestCase {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+        //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
+    }
+
     public void testName() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
@@ -38,6 +44,6 @@ public class RealmI18nTest extends TestCase {
         final XedCursor cursor = new XedNav(xed).getRoot();
         final String pageText = new PropertyPageTextView(new XedPropertyPageView(null, cursor)).render();
         logger.finest(pageText);
-        Assert.assertEquals("b9a112c6", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
+        Assert.assertEquals("c3fb83e3", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
     }
 }

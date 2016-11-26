@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<realm name="Arwo" salt="arwo-salt" xmlns="urn:arwo:realm">
+ <principals>
+  <principal>
+   <user>arwo-name</user>
+   <credential>lSi8VXKeMAEv7Qd41GpW5oh5Gfwkq1qpKUB6kn/NARk=</credential>
+   <roles>*</roles>
+  </principal>
+ </principals>
+</realm>

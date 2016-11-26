@@ -14,9 +14,11 @@ import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.transform.ProtectHashTransform;
+import io.github.greyp9.arwo.core.xed.transform.TransformContext;
 import io.github.greyp9.arwo.core.xed.transform.ValueInstanceTransform;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xml.QNameU;
+import io.github.greyp9.arwo.core.xpath.XPather;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
@@ -24,6 +26,7 @@ import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
 import junit.framework.TestCase;
 import org.junit.Assert;
 import org.w3c.dom.Document;
+import org.w3c.dom.Element;
 
 import javax.xml.namespace.QName;
 import java.net.URL;
@@ -54,7 +57,7 @@ public class ValueInstanceTest extends TestCase {
         final ValueInstance valueInstance = ValueInstance.create(instanceFile, nameTypeValues);
         Assert.assertEquals(2, valueInstance.getNameTypeValues().size());
         // update value instance
-        ValueInstance valueInstanceTransform = new ValueInstanceTransform().transform(valueInstance);
+        ValueInstance valueInstanceTransform = new ValueInstanceTransform(null).transform(valueInstance);
         // check
         final NameTypeValues nameTypeValuesTransform = valueInstanceTransform.getNameTypeValues();
         Assert.assertEquals(3, nameTypeValuesTransform.size());
@@ -71,6 +74,7 @@ public class ValueInstanceTest extends TestCase {
         final QName qname = QNameU.getQName("{urn:arwo:realm}realm");
         // generate document
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
+        final Element element = document.getDocumentElement();
         logger.finest("\n" + DocumentU.toString(document));
         final Xed xed = new Xed(document, xsdTypes);
         // navigate in document
@@ -89,7 +93,9 @@ public class ValueInstanceTest extends TestCase {
                     "principal.principalType.roles", "*");
             final ValueInstance valueInstance = ValueInstance.create(instancePrincipal, ntv);
             Assert.assertEquals(3, valueInstance.getNameTypeValues().size());
-            ValueInstance valueInstanceX = new ProtectHashTransform(valueInstance).transform();
+            final XPather xpather = new XPather(element, xed.getXPather().getContext());
+            final TransformContext context = new TransformContext(null, xpather);
+            final ValueInstance valueInstanceX = new ProtectHashTransform(valueInstance, context).transform();
             final String hash = Base64Codec.encode(HashU.sha256(UTF8Codec.toBytes("appCredentialappUser")));
             final NameTypeValues nameTypeValuesX = valueInstanceX.getNameTypeValues();
             Assert.assertEquals(3, nameTypeValuesX.size());
@@ -105,7 +111,9 @@ public class ValueInstanceTest extends TestCase {
                     "principal.principalType.roles", "*");
             final ValueInstance valueInstance = ValueInstance.create(instancePrincipal, ntv);
             Assert.assertEquals(3, valueInstance.getNameTypeValues().size());
-            ValueInstance valueInstanceX = new ProtectHashTransform(valueInstance).transform();
+            final XPather xpather = new XPather(element, xed.getXPather().getContext());
+            final TransformContext context = new TransformContext(null, xpather);
+            final ValueInstance valueInstanceX = new ProtectHashTransform(valueInstance, context).transform();
             final NameTypeValues nameTypeValuesX = valueInstanceX.getNameTypeValues();
             Assert.assertEquals(2, nameTypeValuesX.size());
             Assert.assertEquals("appUser", nameTypeValuesX.getValue("principal.principalType.user"));

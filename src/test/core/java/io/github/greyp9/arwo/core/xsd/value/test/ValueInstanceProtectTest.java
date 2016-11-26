@@ -11,6 +11,7 @@ import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.transform.ProtectKeyTransform;
+import io.github.greyp9.arwo.core.xed.transform.TransformContext;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
@@ -54,7 +55,8 @@ public class ValueInstanceProtectTest extends TestCase {
         Assert.assertEquals(2, valueInstance.getNameTypeValues().size());
         // update value instance
         final char[] secret = "secret".toCharArray();
-        ValueInstance valueInstanceX = new ProtectKeyTransform(valueInstance, secret).transform();
+        final TransformContext context = new TransformContext(secret, null);
+        final ValueInstance valueInstanceX = new ProtectKeyTransform(valueInstance, context).transform();
         // check
         Assert.assertEquals(2, valueInstanceX.getNameTypeValues().size());
         final NameTypeValues ntvX = valueInstanceX.getNameTypeValues();
