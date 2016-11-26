@@ -1,6 +1,5 @@
 package io.github.greyp9.arwo.app.ssh.sftp.data;
 
-import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.SCPClient;
 import ch.ethz.ssh2.SCPInputStream;
 import ch.ethz.ssh2.SCPOutputStream;
@@ -12,7 +11,7 @@ import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.model.ExceptionModel;
 import io.github.greyp9.arwo.core.app.App;
-import io.github.greyp9.arwo.core.date.DateU;
+import io.github.greyp9.arwo.core.date.DateConvertU;
 import io.github.greyp9.arwo.core.file.meta.FileMetaData;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.http.Http;
@@ -59,8 +58,7 @@ public class SFTPDataSource {
 
     public final SFTPv3FileAttributes lstat(final String path) throws IOException {
         SFTPv3FileAttributes attributes = null;
-        final Connection connectionSSH = connection.getConnection();
-        final SFTPv3Client client = new SFTPv3Client(connectionSSH);
+        final SFTPv3Client client = new SFTPv3Client(connection.getConnection());
         try {
             final Date date = new Date();
             attributes = client.lstat(path);
@@ -223,8 +221,8 @@ public class SFTPDataSource {
         final SFTPv3FileAttributes attributes = lstat(path);
         nameTypeValues.add("sftpPropertiesType.attributes", attributes.getOctalPermissions());
         nameTypeValues.add("sftpPropertiesType.length", Long.toString(attributes.size));
-        nameTypeValues.add("sftpPropertiesType.mtime", DateU.fromSeconds(attributes.mtime));
-        nameTypeValues.add("sftpPropertiesType.atime", DateU.fromSeconds(attributes.atime));
+        nameTypeValues.add("sftpPropertiesType.mtime", DateConvertU.fromSeconds(attributes.mtime));
+        nameTypeValues.add("sftpPropertiesType.atime", DateConvertU.fromSeconds(attributes.atime));
         return nameTypeValues;
     }
 
@@ -234,7 +232,7 @@ public class SFTPDataSource {
         byte[] bytes = new byte[0];
         try {
             final SCPClient client = connection.getConnection().createSCPClient();
-            lastModified = DateU.fromSeconds(lstat(path).mtime).getTime();
+            lastModified = DateConvertU.fromSeconds(lstat(path).mtime).getTime();
             final Date date = new Date();
             bytes = read(client.get(path));
             connection.update(date);

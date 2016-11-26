@@ -21,7 +21,7 @@ import java.util.logging.Logger;
 
 @SuppressWarnings("PMD.TooManyMethods")
 public class Tomcat6AppRealm implements org.apache.catalina.Realm, AppRealmContainer {
-    private AppRealm appRealm = new AppRealm("", new ArrayList<AuthPrincipal>());
+    private AppRealm appRealm = new AppRealm("", "", new ArrayList<AuthPrincipal>());
     private StandardContext standardContext;
 
     @Override

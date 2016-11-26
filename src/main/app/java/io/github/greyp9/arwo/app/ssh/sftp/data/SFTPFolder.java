@@ -3,7 +3,7 @@ package io.github.greyp9.arwo.app.ssh.sftp.data;
 import ch.ethz.ssh2.SFTPv3DirectoryEntry;
 import ch.ethz.ssh2.SFTPv3FileAttributes;
 import io.github.greyp9.arwo.core.app.App;
-import io.github.greyp9.arwo.core.date.DateU;
+import io.github.greyp9.arwo.core.date.DateConvertU;
 import io.github.greyp9.arwo.core.file.FileX;
 import io.github.greyp9.arwo.core.lang.NumberU;
 import io.github.greyp9.arwo.core.table.insert.InsertRow;
@@ -77,7 +77,7 @@ public class SFTPFolder {
         insertRow.setNextColumn(type);
         insertRow.setNextColumn(folder);
         insertRow.setNextColumn(directoryEntry.filename);
-        insertRow.setNextColumn(DateU.fromSeconds(attributes.mtime));
+        insertRow.setNextColumn(DateConvertU.fromSeconds(attributes.mtime));
         insertRow.setNextColumn(extension);
         insertRow.setNextColumn(sshConnectionX.toNameUID(attributes.uid));
         insertRow.setNextColumn(sshConnectionX.toNameGID(attributes.gid));
