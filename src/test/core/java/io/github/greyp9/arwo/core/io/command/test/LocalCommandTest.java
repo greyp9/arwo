@@ -34,7 +34,7 @@ public class LocalCommandTest extends TestCase {
     }
 
     public void testSimpleCommandGood() throws Exception {
-        final Script script = new Script(null, new Date(), null, "ls");
+        final Script script = new Script(null, new Date(), null, "ls");  // "cmd /c dir"
         final Collection<Command> commandsPre = script.getCommands();
         Assert.assertEquals(1, commandsPre.size());
         final AppPrincipal principal = new AppPrincipal("root", CollectionU.toCollection("*"));
@@ -60,7 +60,7 @@ public class LocalCommandTest extends TestCase {
     }
 
     public void testSimpleCommandBad() throws Exception {
-        final Script script = new Script(null, new Date(), null, "lslsls");
+        final Script script = new Script(null, new Date(), null, "lslsls");  // "dirdirdir"
         final Collection<Command> commandsPre = script.getCommands();
         Assert.assertEquals(1, commandsPre.size());
         final AppPrincipal principal = new AppPrincipal("root", CollectionU.toCollection("*"));

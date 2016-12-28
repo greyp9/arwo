@@ -1,6 +1,6 @@
 package io.github.greyp9.arwo.core.app;
 
-import io.github.greyp9.arwo.core.lang.SystemU;
+import io.github.greyp9.arwo.core.lang.AppU;
 
 import java.io.File;
 import java.security.Principal;
@@ -11,7 +11,7 @@ public final class AppFolder {
     }
 
     private static File getArwoRoot() {
-        final File arwoHome = new File(SystemU.arwoHome());
+        final File arwoHome = new File(AppU.arwoHome());
         return new File(arwoHome, Const.FOLDER_SETTINGS);
     }
 

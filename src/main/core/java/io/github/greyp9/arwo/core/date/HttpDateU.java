@@ -44,10 +44,20 @@ public final class HttpDateU {
         return dateFormat.format(date);
     }
 
+    public static String toHttpZMilli(final Date date) {
+        return ((date == null) ? null : toHttpZMilliNotNull(date));
+    }
+
+    private static String toHttpZMilliNotNull(final Date date) {
+        final DateFormat dateFormat = DateU.getDateFormat(Const.HTTP_Z_MILLI, DateU.Const.TZ_GMT, true);
+        return dateFormat.format(date);
+    }
+
     public static class Const {
         private static final String HTTP = "EEE, dd MMM yyyy HH:mm:ss zzz";  // i18n internal
         private static final String HTTP_MILLI = "EEE, dd MMM yyyy HH:mm:ss.SSS zzz";  // i18n internal
         private static final String HTTP_Z = "EEE, dd MMM yyyy HH:mm:ss 'GMT'";  // i18n internal
+        private static final String HTTP_Z_MILLI = "EEE, dd MMM yyyy HH:mm:ss.SSS 'GMT'";  // i18n internal
 
         public static final String DEFAULT2 = HTTP;
         public static final String DEFAULT = HTTP_MILLI;

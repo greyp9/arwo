@@ -1,5 +1,8 @@
 package io.github.greyp9.arwo.core.file.zip.test;
 
+import io.github.greyp9.arwo.core.date.DateConvertU;
+import io.github.greyp9.arwo.core.date.DateU;
+import io.github.greyp9.arwo.core.date.XsdDateU;
 import io.github.greyp9.arwo.core.file.find.FindInFolderQuery;
 import io.github.greyp9.arwo.core.file.zip.ZipMetaData;
 import io.github.greyp9.arwo.core.file.zip.ZipVolume;
@@ -39,8 +42,8 @@ public class ZipVolumeTest extends TestCase {
         final ZipVolume zipVolume = new ZipVolume(file);
         final Collection<ZipMetaData> entries = zipVolume.getEntries();
         for (ZipMetaData metaData : entries) {
-            logger.finest(String.format(Const.PATTERN_ENTRY,
-                    metaData.getLength(), metaData.getLastModified(), metaData.getPath()));
+            logger.finest(String.format(Const.PATTERN_ENTRY, metaData.getLength(),
+                    XsdDateU.toXSDZMillis(DateConvertU.fromMillis(metaData.getLastModified())), metaData.getPath()));
         }
     }
 
