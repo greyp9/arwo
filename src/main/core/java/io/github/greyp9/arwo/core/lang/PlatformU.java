@@ -17,7 +17,7 @@ public class PlatformU {
         return (codeLocation.isFile() ? codeLocation.getParentFile() : codeLocation);
     }
 
-    private static File getCodeLocation(Class<?> c) throws URISyntaxException {
+    public static File getCodeLocation(Class<?> c) throws URISyntaxException {
         return new File(c.getProtectionDomain().getCodeSource().getLocation().toURI());
     }
 }

@@ -9,6 +9,10 @@ public final class SystemU {
         return Const.LINE_SEPARATOR;
     }
 
+    public static String userDir() {
+        return Const.USER_DIR;
+    }
+
     public static String userHome() {
         return Const.USER_HOME;
     }
@@ -41,6 +45,7 @@ public final class SystemU {
 
     private static class Const {
         private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+        private static final String USER_DIR = System.getProperty("user.dir");
         private static final String USER_HOME = System.getProperty("user.home");
         private static final String TEMP_DIR = System.getProperty("java.io.tmpdir");
     }
