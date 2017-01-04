@@ -32,8 +32,8 @@ import java.util.Date;
 public class LFSFolderView extends LFSView {
 
     public LFSFolderView(
-            final LFSRequest request, final AppUserState userState, final File file) {
-        super(request, userState, file);
+            final LFSRequest request, final AppUserState userState, final File folderBase, final File file) {
+        super(request, userState, folderBase, file);
     }
 
     @Override
@@ -103,7 +103,7 @@ public class LFSFolderView extends LFSView {
         RowSet rowSet;
         final LFSRequest request = getRequest();
         final AppUserState userState = getUserState();
-        final LFSDataSource source = new LFSDataSource(request, userState.getUserRoot());
+        final LFSDataSource source = new LFSDataSource(request, getFolderBase());
         final ResourceCache cache = userState.getCache();
         final String path = request.getPath();
         // if disconnected, resource will only be fetched if no cached copy is available

@@ -10,6 +10,7 @@
 
     <xsd:complexType name='appType'>
         <xsd:sequence>
+            <xsd:element name='folders' type='app:localFoldersType'/>
             <xsd:element name='sshServers' type='app:sshServersType'/>
             <xsd:element name='cifsServers' type='app:cifsServersType'/>
             <xsd:element name='webdavServers' type='app:webdavServersType'/>
@@ -20,6 +21,21 @@
             <xsd:element name='cron' type='app:cronType'/>
             <xsd:element name='documents' type='app:documentsType'/>
             <xsd:element name='preferences' type='app:preferencesType'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name='localFoldersType'>
+        <xsd:sequence>
+            <xsd:element name='folder' type='app:localFolderType' minOccurs='0' maxOccurs='unbounded'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name='localFolderType'>
+        <xsd:sequence>
+            <xsd:element name='name' type='xsd:string'/>
+            <xsd:element name='comment' type='xsd:string'/>
+            <xsd:element name='enabled' type='xsd:boolean'/>
+            <xsd:element name='folder' type='xsd:string'/>
         </xsd:sequence>
     </xsd:complexType>
 

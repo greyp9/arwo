@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.app.local.fs.action.LFSCreateFolder;
 import io.github.greyp9.arwo.app.local.fs.action.LFSSelectFavorite;
 import io.github.greyp9.arwo.app.local.fs.action.LFSUpdateFile;
 import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
+import io.github.greyp9.arwo.app.local.fs.resource.LFSResource;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.app.App;
@@ -25,6 +26,7 @@ import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
 
+import java.io.File;
 import java.io.IOException;
 
 public class LFSHandlerPost {
@@ -108,15 +110,16 @@ public class LFSHandlerPost {
     private String applySession(
             final SubmitToken token, final NameTypeValues httpArguments, final String locationIn) throws IOException {
         String location = locationIn;
+        final File folderBase = LFSResource.getFolderBase(request);
         final String message = request.getBundle().getString("alert.action.not.implemented");
         final String action = token.getAction();
         final String object = token.getObject();
         if (App.Action.FILE_CREATE.equals(action)) {
-            new LFSCreateFile(request).apply(httpArguments);
+            new LFSCreateFile(request, folderBase).apply(httpArguments);
         } else if (App.Action.FOLDER_CREATE.equals(action)) {
-            new LFSCreateFolder(request).apply(httpArguments);
+            new LFSCreateFolder(request, folderBase).apply(httpArguments);
         } else if (App.Action.FILE_UPDATE.equals(action)) {
-            new LFSUpdateFile(request).apply(httpArguments);
+            new LFSUpdateFile(request, folderBase).apply(httpArguments);
         } else if (App.Action.COMMAND.equals(action)) {
             location = PathU.toDir(httpRequest.getContextPath(), App.Servlet.LSH);
         } else if (App.Action.TOGGLE.equals(action)) {

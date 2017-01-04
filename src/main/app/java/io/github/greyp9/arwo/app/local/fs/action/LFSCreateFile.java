@@ -18,13 +18,13 @@ import java.io.IOException;
 
 public class LFSCreateFile {
     private final LFSRequest request;
-
+    private final File folderBase;
     private final Bundle bundle;
     private final Alerts alerts;
 
-    public LFSCreateFile(final LFSRequest request) {
+    public LFSCreateFile(final LFSRequest request, final File folderBase) {
         this.request = request;
-
+        this.folderBase = folderBase;
         this.bundle = request.getBundle();
         this.alerts = request.getAlerts();
     }
@@ -38,7 +38,7 @@ public class LFSCreateFile {
         final int length = ByteU.length(bytes);
         // put data to remote
         final FileX fileX = new FileX(Value.join("", request.getPath(), filename));
-        final LFSDataSource source = new LFSDataSource(request, request.getUserState().getUserRoot());
+        final LFSDataSource source = new LFSDataSource(request, folderBase);
         final File fileTarget = source.exists(fileX.getPath());
         if (fileTarget == null) {
             final String hash = HexCodec.encode(HashU.md5(bytes));

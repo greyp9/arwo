@@ -14,13 +14,13 @@ import java.io.IOException;
 
 public class LFSCreateFolder {
     private final LFSRequest request;
-
+    private final File folderBase;
     private final Bundle bundle;
     private final Alerts alerts;
 
-    public LFSCreateFolder(final LFSRequest request) {
+    public LFSCreateFolder(final LFSRequest request, final File folderBase) {
         this.request = request;
-
+        this.folderBase = folderBase;
         this.bundle = request.getBundle();
         this.alerts = request.getAlerts();
     }
@@ -29,7 +29,7 @@ public class LFSCreateFolder {
         final String filename = httpArguments.getValue("folderNew.folderNewType.filename");
         // send remote command
         final FileX fileX = new FileX(Value.join("", request.getPath(), filename));
-        final LFSDataSource source = new LFSDataSource(request, request.getUserState().getUserRoot());
+        final LFSDataSource source = new LFSDataSource(request, folderBase);
 
         final File folderTarget = source.exists(fileX.getPath());
         if (folderTarget == null) {

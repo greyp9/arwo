@@ -10,19 +10,22 @@ import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.value.Value;
 
+import java.io.File;
 import java.io.IOException;
 
 public class LFSDeleteFile extends DeferredAction {
     private final LFSRequest request;
+    private final File folderBase;
     private final AlertActions actions;
 
     public final AlertActions getActions() {
         return actions;
     }
 
-    public LFSDeleteFile(final LFSRequest request) {
+    public LFSDeleteFile(final LFSRequest request, final File folderBase) {
         super(Value.join(Http.Token.SLASH, Const.ID, request.getPath()));
         this.request = request;
+        this.folderBase = folderBase;
         this.actions = new AlertActions(getID(), Const.CANCEL, Const.CONFIRM);
     }
 
@@ -30,7 +33,7 @@ public class LFSDeleteFile extends DeferredAction {
     public final void doAction(final String option, final Bundle bundle, final Alerts alerts) {
         if (Const.CONFIRM.equals(option)) {
             try {
-                final LFSDataSource source = new LFSDataSource(request, request.getUserState().getUserRoot());
+                final LFSDataSource source = new LFSDataSource(request, folderBase);
                 source.delete(request.getPath());
                 final String message = bundle.format("WebDAVFileView.file.delete", request.getPath());
                 alerts.add(new Alert(Alert.Severity.INFO, message));

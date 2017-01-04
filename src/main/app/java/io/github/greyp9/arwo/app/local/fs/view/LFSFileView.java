@@ -46,8 +46,8 @@ import java.util.Date;
 @SuppressWarnings("PMD.ExcessiveImports")
 public class LFSFileView extends LFSView {
 
-    public LFSFileView(final LFSRequest request, final AppUserState userState, final File file) {
-        super(request, userState, file);
+    public LFSFileView(final LFSRequest request, final AppUserState userState, final File folderBase, final File file) {
+        super(request, userState, folderBase, file);
     }
 
     @Override
@@ -87,7 +87,7 @@ public class LFSFileView extends LFSView {
         } else if (isModeEdit) {
             httpResponse = new AppFileEditView(httpRequest, userState).addContentTo(html, metaFile, charset);
         } else if (isModeDelete) {
-            final LFSDeleteFile action = new LFSDeleteFile(getRequest());
+            final LFSDeleteFile action = new LFSDeleteFile(getRequest(), getFolderBase());
             userState.getDeferredActions().add(action);
             final String message = bundle.format("WebDAVFileView.file.delete.message", request.getPath());
             userState.getAlerts().add(new Alert(Alert.Severity.QUESTION, message, action.getActions()));
@@ -112,7 +112,7 @@ public class LFSFileView extends LFSView {
         MetaFile metaFile;
         final LFSRequest request = getRequest();
 
-        final LFSDataSource source = new LFSDataSource(request, getUserState().getUserRoot());
+        final LFSDataSource source = new LFSDataSource(request, getFolderBase());
         final ResourceCache cache = getUserState().getCache();
         final String path = request.getPath();
         // if disconnected, resource will only be fetched if no cached copy is available

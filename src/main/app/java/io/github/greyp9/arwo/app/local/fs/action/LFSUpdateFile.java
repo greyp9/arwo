@@ -11,15 +11,18 @@ import io.github.greyp9.arwo.core.hash.secure.HashU;
 import io.github.greyp9.arwo.core.io.ByteU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 
+import java.io.File;
 import java.io.IOException;
 
 public class LFSUpdateFile {
     private final LFSRequest request;
+    private final File folderBase;
     private final AppUserState userState;
 
 
-    public LFSUpdateFile(final LFSRequest request) {
+    public LFSUpdateFile(final LFSRequest request, final File folderBase) {
         this.request = request;
+        this.folderBase = folderBase;
         this.userState = request.getUserState();
 
     }
@@ -32,7 +35,7 @@ public class LFSUpdateFile {
         final int length = ByteU.length(bytes);
         // put data to remote
         final FileX file = new FileX(request.getPath());
-        final LFSDataSource source = new LFSDataSource(request, userState.getUserRoot());
+        final LFSDataSource source = new LFSDataSource(request, folderBase);
         source.write(bytes, file.getFolder(), file.getFilename());
         // info alert
         final String hash = HexCodec.encode(HashU.md5(bytes));

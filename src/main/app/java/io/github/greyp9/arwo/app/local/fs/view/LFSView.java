@@ -49,6 +49,7 @@ import java.util.Properties;
 @SuppressWarnings({ "PMD.AbstractNaming", "PMD.ExcessiveImports" })
 public abstract class LFSView {
     private final LFSRequest request;
+    private final File folderBase;
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
     private final Bundle bundle;
@@ -62,12 +63,17 @@ public abstract class LFSView {
         return userState;
     }
 
+    public File getFolderBase() {
+        return folderBase;
+    }
+
     public final File getFile() {
         return file;
     }
 
-    public LFSView(final LFSRequest request, final AppUserState userState, final File file) {
+    public LFSView(final LFSRequest request, final AppUserState userState, final File folderBase, final File file) {
         this.request = request;
+        this.folderBase = folderBase;
         this.httpRequest = request.getHttpRequest();
         this.userState = userState;
         this.bundle = request.getBundle();

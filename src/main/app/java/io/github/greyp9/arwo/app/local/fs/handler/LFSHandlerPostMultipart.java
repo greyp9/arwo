@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.app.local.fs.handler;
 
 import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
 import io.github.greyp9.arwo.app.local.fs.data.LFSDataSource;
+import io.github.greyp9.arwo.app.local.fs.resource.LFSResource;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.app.App;
@@ -16,6 +17,7 @@ import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.value.Value;
 
 import java.io.ByteArrayInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.util.Iterator;
 import java.util.Properties;
@@ -71,7 +73,8 @@ public class LFSHandlerPostMultipart {
                 "SFTPHandlerPostMultipart.file.source", filename)));
         // put data to remote
         final FileX fileX = new FileX(Value.join("", request.getPath(), filename));
-        final LFSDataSource source = new LFSDataSource(request, request.getUserState().getUserRoot());
+        final File folderBase = LFSResource.getFolderBase(request);
+        final LFSDataSource source = new LFSDataSource(request, folderBase);
         source.write(bytes, fileX.getFolder(), fileX.getFilename());
         // info alert
         final String hash = HexCodec.encode(HashU.md5(bytes));
