@@ -1,6 +1,8 @@
 package io.github.greyp9.arwo.app.core.state;
 
 import io.github.greyp9.arwo.app.core.action.ActionCacheClear;
+import io.github.greyp9.arwo.app.core.action.ActionRestart;
+import io.github.greyp9.arwo.app.core.action.ActionStop;
 import io.github.greyp9.arwo.app.core.subsystem.cifs.SubsystemCIFS;
 import io.github.greyp9.arwo.app.core.subsystem.cron.SubsystemCron;
 import io.github.greyp9.arwo.app.core.subsystem.dav.SubsystemWebDAV;
@@ -308,6 +310,10 @@ public class AppUserState {
             getClass();
         } else if (App.Action.RESET.equals(action)) {
             location = doLogOff(httpRequest);
+        } else if (App.Action.STOP.equals(action)) {
+            location = doStop(httpRequest);
+        } else if (App.Action.RESTART.equals(action)) {
+            location = doRestart(httpRequest);
         } else if (App.Action.CLOSE.equals(action)) {
             doClose(token);
         } else if (App.Action.UPDATE_LOCALE.equals(action)) {
@@ -355,17 +361,48 @@ public class AppUserState {
         }
     }
 
-    private String doLogOff(final ServletHttpRequest httpRequest) throws IOException {
-        String location = Http.Token.SLASH;
+    private boolean isUserState() throws IOException {
         final boolean isSSH = (!ssh.getCache().getResources().isEmpty());
         final boolean isWebDAV = (!webDAV.getCache().getResources().isEmpty());
         final boolean isDocument = documentState.isUnsavedState();
-        final boolean isState = (isSSH || isWebDAV || isDocument);
-        if (isState) {
+        return (isSSH || isWebDAV || isDocument);
+    }
+
+    private String doLogOff(final ServletHttpRequest httpRequest) throws IOException {
+        String location = Http.Token.SLASH;  // root URL for service
+        if (isUserState()) {
             alerts.add(new Alert(Alert.Severity.INFO, getBundle().getString("AppUserState.unsaved.state")));
             location = httpRequest.getContextPath() + App.Servlet.DASH;
         } else {
             appState.removeUserState(principal, httpRequest.getDate());
+        }
+        return location;
+    }
+
+    private String doStop(final ServletHttpRequest httpRequest) throws IOException {
+        String location = httpRequest.getURI();
+        if (isUserState()) {
+            alerts.add(new Alert(Alert.Severity.INFO, getBundle().getString("AppUserState.unsaved.state")));
+            location = httpRequest.getContextPath() + App.Servlet.DASH;
+        } else {
+            final ActionStop action = new ActionStop();
+            deferredActions.add(action);
+            final String message = getBundle().format("AppUserState.stop.message");
+            alerts.add(new Alert(Alert.Severity.QUESTION, message, null, null, action.getActions()));
+        }
+        return location;
+    }
+
+    private String doRestart(final ServletHttpRequest httpRequest) throws IOException {
+        String location = httpRequest.getURI();
+        if (isUserState()) {
+            alerts.add(new Alert(Alert.Severity.INFO, getBundle().getString("AppUserState.unsaved.state")));
+            location = httpRequest.getContextPath() + App.Servlet.DASH;
+        } else {
+            final ActionRestart action = new ActionRestart();
+            deferredActions.add(action);
+            final String message = getBundle().format("AppUserState.restart.message");
+            alerts.add(new Alert(Alert.Severity.QUESTION, message, null, null, action.getActions()));
         }
         return location;
     }
