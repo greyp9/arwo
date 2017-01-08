@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.app.local.fs.handler;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
 import io.github.greyp9.arwo.app.local.fs.resource.LFSResource;
+import io.github.greyp9.arwo.app.local.fs.view.LFSInventoryView;
 import io.github.greyp9.arwo.app.local.fs.view.LFSResourceView;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.app.App;
@@ -57,7 +58,7 @@ public class LFSHandlerGet {
         } else if (Value.isEmpty(request.getMode())) {
             httpResponse = HttpResponseU.to302(PathU.toDir(baseURI, App.Mode.VIEW));
         } else if (Value.isEmpty(request.getFolder())) {
-            httpResponse = HttpResponseU.to404();
+            httpResponse = new LFSInventoryView(request, userState, App.Mode.VIEW).doGetResponse();
         } else {
             httpResponse = doGet3();
         }

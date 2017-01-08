@@ -172,6 +172,7 @@ public final class App {
         public static final String COMMENT = "comment";
         public static final String DRIVER_CLASS = "driverClass";
         public static final String ENABLED = "enabled";
+        public static final String FOLDER = "folder";
         public static final String HOST = "host";
         public static final String NAME = "name";
         public static final String PORT = "port";
