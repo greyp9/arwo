@@ -41,6 +41,10 @@ public class XedEntry {
         return trigger;
     }
 
+    public XedEntry(final String contextPath, final XedEntry e) {
+        this(e.getTitle(), contextPath, e.getQName(), e.getXmlPath(), e.getXsdPath(), e.getXsltPath(), e.getTrigger());
+    }
+
     public XedEntry(final String title, final String contextPath, final QName qname,
                     final String xmlPath, final String xsdPath, final String xsltPath, final String trigger) {
         this(title, contextPath, QNameU.toStringColon(qname), xmlPath, xsdPath, xsltPath, trigger);

@@ -26,6 +26,7 @@ import io.github.greyp9.arwo.core.xed.menu.XedMenuFactory;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
+import io.github.greyp9.arwo.core.xed.session.XedEntry;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
 import io.github.greyp9.arwo.core.xed.session.XedSessions;
 import io.github.greyp9.arwo.core.xed.session.XedSessionsFactory;
@@ -87,6 +88,10 @@ public class XedUserState {
 
     public final XedSession getSession(final String contextPath) throws IOException {
         return sessions.getSession(contextPath);
+    }
+
+    public final XedSession getSession(final String contextPath, final XedEntry xedEntry) throws IOException {
+        return sessions.getSession(contextPath, xedEntry);
     }
 
     public final Properties getProperties() {

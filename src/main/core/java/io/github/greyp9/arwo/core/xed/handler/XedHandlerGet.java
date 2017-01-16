@@ -13,6 +13,7 @@ import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
+import io.github.greyp9.arwo.core.xed.session.XedEntry;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
 import io.github.greyp9.arwo.core.xed.state.XedUserState;
 import io.github.greyp9.arwo.core.xed.view.XedCursorView;
@@ -27,10 +28,13 @@ import java.util.Locale;
 public class XedHandlerGet {
     private final ServletHttpRequest httpRequest;
     private final XedUserState documentState;
+    private final XedEntry entryQ;
 
-    public XedHandlerGet(final ServletHttpRequest httpRequest, final XedUserState documentState) {
+    public XedHandlerGet(final ServletHttpRequest httpRequest,
+                         final XedUserState documentState, final XedEntry entryQ) {
         this.httpRequest = httpRequest;
         this.documentState = documentState;
+        this.entryQ = entryQ;
     }
 
     public final HttpResponse doGetSafe() throws IOException {
@@ -46,7 +50,7 @@ public class XedHandlerGet {
 
     private HttpResponse doGet() throws IOException {
         HttpResponse httpResponse;
-        final XedSession session = documentState.getSession(httpRequest.getServletPath());
+        final XedSession session = documentState.getSession(httpRequest.getServletPath(), entryQ);
         final XedRequest request = new XedRequest(httpRequest, session, documentState);
         final String pathInfo = httpRequest.getPathInfo();
         final String query = httpRequest.getQuery();

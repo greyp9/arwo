@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.core.app.AppFolder;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.security.update.RealmTrigger;
+import io.github.greyp9.arwo.core.xed.core.XedU;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.model.XedFactory;
@@ -82,12 +83,12 @@ public class XedSessionsFactory {
     }
 
     private void addEntry(final XedEntries entries, final TypeInstance typeDocument, final XedCursor cursorDocument) {
-        final String title = cursorDocument.getValue(typeDocument.getInstance("title"));  // i18n xpath
-        final String context = cursorDocument.getValue(typeDocument.getInstance("contextPath"));  // i18n xpath
-        final String qname = cursorDocument.getValue(typeDocument.getInstance("qname"));  // i18n xpath
-        final String xmlPath = cursorDocument.getValue(typeDocument.getInstance("xmlPath"));  // i18n xpath
-        final String xsdPath = cursorDocument.getValue(typeDocument.getInstance("xsdPath"));  // i18n xpath
-        final String xsltPath = cursorDocument.getValue(typeDocument.getInstance("xsltPath"));  // i18n xpath
+        final String title = cursorDocument.getValue(typeDocument.getInstance(XedU.Entry.TITLE));
+        final String context = cursorDocument.getValue(typeDocument.getInstance(XedU.Entry.CONTEXT));
+        final String qname = cursorDocument.getValue(typeDocument.getInstance(XedU.Entry.QNAME));
+        final String xmlPath = cursorDocument.getValue(typeDocument.getInstance(XedU.Entry.XML));
+        final String xsdPath = cursorDocument.getValue(typeDocument.getInstance(XedU.Entry.XSD));
+        final String xsltPath = cursorDocument.getValue(typeDocument.getInstance(XedU.Entry.XSLT));
         entries.add(new XedEntry(title, context, qname, xmlPath, xsdPath, xsltPath, null));
     }
 }

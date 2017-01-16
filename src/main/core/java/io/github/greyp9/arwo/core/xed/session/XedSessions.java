@@ -18,19 +18,39 @@ public class XedSessions {
         this.factory = factory;
     }
 
+    public final XedEntries getEntries() {
+        return entries;
+    }
+
     public final Collection<XedSession> getSessions() {
         return sessions.values();
     }
 
     public final XedSession getSession(final String contextPath) throws IOException {
-        XedSession session = sessions.get(contextPath);
-        if (session == null) {
-            final XedEntry entry = entries.get(contextPath);
-            if (entry != null) {
-                session = new XedSessionFactory(entry, factory).create(entry.getQName());
-                sessions.put(contextPath, session);
-            }
-        }
+        return getSession(contextPath, null);
+    }
+
+    public final XedSession getSession(final String contextPath, final XedEntry entryQ) throws IOException {
+        final XedSession session = sessions.get(contextPath);
+        return (session == null) ? createSession(contextPath, entryQ) : session;
+    }
+
+    private XedSession createSession(final String contextPath, final XedEntry entryQ) throws IOException {
+        final XedEntry entryR = entries.get(contextPath);
+        final boolean isUseQ = ((entryR == null) && (entryQ != null));
+        final XedEntry entry = (isUseQ ? registerEntry(contextPath, entryQ) : entryR);
+        return (entry == null) ? null : registerSession(contextPath, entry);
+    }
+
+    private XedEntry registerEntry(final String contextPath, final XedEntry entryQ) {
+        final XedEntry entry = new XedEntry(contextPath, entryQ);
+        entries.add(entry);
+        return entry;
+    }
+
+    private XedSession registerSession(final String contextPath, final XedEntry entry) throws IOException {
+        final XedSession session = new XedSessionFactory(entry, factory).create(entry.getQName());
+        sessions.put(contextPath, session);
         return session;
     }
 

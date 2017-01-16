@@ -8,8 +8,11 @@ import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.gz.HttpResponseGZipU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.naming.AppNaming;
+import io.github.greyp9.arwo.core.xed.core.XedU;
 import io.github.greyp9.arwo.core.xed.handler.XedHandlerGet;
 import io.github.greyp9.arwo.core.xed.handler.XedHandlerPost;
+import io.github.greyp9.arwo.core.xed.session.XedEntry;
+import io.github.greyp9.arwo.core.xed.state.XedUserState;
 
 import javax.naming.Context;
 import javax.servlet.ServletConfig;
@@ -22,6 +25,7 @@ public class Xed1Servlet extends javax.servlet.http.HttpServlet {
     private static final long serialVersionUID = 781645253051571036L;
 
     private transient AppState appState;
+    private transient XedEntry xedEntry;
 
     @Override
     public final void init(final ServletConfig config) throws ServletException {
@@ -29,6 +33,12 @@ public class Xed1Servlet extends javax.servlet.http.HttpServlet {
         final Context context = AppNaming.lookupSubcontext(getServletContext().getContextPath());
         synchronized (this) {
             this.appState = (AppState) AppNaming.lookup(context, App.Naming.APP_STATE);
+            final String qname = getInitParameter(XedU.Entry.QNAME);
+            final String xmlPath = getInitParameter(XedU.Entry.XML);
+            final String xsdPath = getInitParameter(XedU.Entry.XSD);
+            final String xsltPath = getInitParameter(XedU.Entry.XSLT);  // optional
+            final String trigger = getInitParameter(XedU.Entry.TRIGGER);  // optional
+            this.xedEntry = new XedEntry(null, null, qname, xmlPath, xsdPath, xsltPath, trigger);
         }
     }
 
@@ -37,6 +47,7 @@ public class Xed1Servlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             this.appState = null;
         }
+        super.destroy();
     }
 
     @Override
@@ -46,10 +57,13 @@ public class Xed1Servlet extends javax.servlet.http.HttpServlet {
         final ServletHttpRequest httpRequest = ServletU.read(request);
         // process request
         AppUserState userState;
+        XedEntry entry;
         synchronized (this) {
             userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
+            entry = xedEntry;
         }
-        final HttpResponse httpResponse = new XedHandlerGet(httpRequest, userState.getDocumentState()).doGetSafe();
+        final XedUserState documentState = userState.getDocumentState();
+        final HttpResponse httpResponse = new XedHandlerGet(httpRequest, documentState, entry).doGetSafe();
         // send response
         final HttpResponse httpResponseGZ = HttpResponseGZipU.toHttpResponseGZip(httpRequest, httpResponse);
         ServletU.write(httpResponseGZ, response);
@@ -65,7 +79,8 @@ public class Xed1Servlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
         }
-        final HttpResponse httpResponse = new XedHandlerPost(httpRequest, userState.getDocumentState()).doPostSafe();
+        final XedUserState documentState = userState.getDocumentState();
+        final HttpResponse httpResponse = new XedHandlerPost(httpRequest, documentState).doPostSafe();
         // send response
         ServletU.write(httpResponse, response);
     }

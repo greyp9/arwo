@@ -15,9 +15,11 @@ public class Bundle {
     public final String getString(final String key) {
         String value = key;
         for (final ResourceBundle resourceBundle : resourceBundles) {
-            if (resourceBundle.containsKey(key)) {
-                value = resourceBundle.getString(key);
-                break;
+            if (resourceBundle != null) {
+                if (resourceBundle.containsKey(key)) {
+                    value = resourceBundle.getString(key);
+                    break;
+                }
             }
         }
         return value;

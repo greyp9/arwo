@@ -26,4 +26,14 @@ public final class XedU {
 
     private XedU() {
     }
+
+    public static class Entry {
+        public static final String TITLE = "title";
+        public static final String CONTEXT = "context";
+        public static final String QNAME = "qname";
+        public static final String XML = "xml";
+        public static final String XSD = "xsd";
+        public static final String XSLT = "xslt";
+        public static final String TRIGGER = "trigger";
+    }
 }

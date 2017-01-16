@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.file.FileU;
 import io.github.greyp9.arwo.core.io.StreamU;
+import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
 import io.github.greyp9.arwo.core.xed.trigger.XedTrigger;
@@ -33,7 +34,8 @@ public class SessionSave {
         final Document documentNormal = DocumentU.toDocument(DocumentU.toXml(document));
         final byte[] xmlPretty = DocumentU.toXmlPretty(documentNormal);
         final File file = session.getFile();
-        final File folder = file.getParentFile();
+        final File folderParent = file.getParentFile();
+        final File folder = ((folderParent == null) ? new File(SystemU.userDir()) : folderParent);
         // ensure parent folder for specified file path
         FileU.ensureFolders(folder);
         // commit
