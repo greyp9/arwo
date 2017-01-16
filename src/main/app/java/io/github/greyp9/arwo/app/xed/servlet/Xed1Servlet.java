@@ -33,12 +33,13 @@ public class Xed1Servlet extends javax.servlet.http.HttpServlet {
         final Context context = AppNaming.lookupSubcontext(getServletContext().getContextPath());
         synchronized (this) {
             this.appState = (AppState) AppNaming.lookup(context, App.Naming.APP_STATE);
+            final String title = getInitParameter(XedU.Entry.TITLE);  // optional
             final String qname = getInitParameter(XedU.Entry.QNAME);
             final String xmlPath = getInitParameter(XedU.Entry.XML);
             final String xsdPath = getInitParameter(XedU.Entry.XSD);
             final String xsltPath = getInitParameter(XedU.Entry.XSLT);  // optional
             final String trigger = getInitParameter(XedU.Entry.TRIGGER);  // optional
-            this.xedEntry = new XedEntry(null, null, qname, xmlPath, xsdPath, xsltPath, trigger);
+            this.xedEntry = new XedEntry(title, null, qname, xmlPath, xsdPath, xsltPath, trigger);
         }
     }
 
