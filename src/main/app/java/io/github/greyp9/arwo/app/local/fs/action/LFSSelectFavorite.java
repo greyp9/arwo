@@ -25,8 +25,8 @@ public class LFSSelectFavorite {
         final XedSession session = documentState.getSession(App.Servlet.FAVORITES);
         final XedNav nav = new XedNav(session.getXed());
         final XedCursor cursor = nav.find(uri);
-
+        final String folder = cursor.getValue(cursor.getChildInstance(App.Settings.FOLDER));
         final String resource = cursor.getValue(cursor.getChildInstance(App.Settings.RESOURCE));
-        return String.format("%s%s", request.getBaseURIMode(), resource);
+        return String.format("%s/%s%s", request.getBaseURIMode(), folder, resource);
     }
 }

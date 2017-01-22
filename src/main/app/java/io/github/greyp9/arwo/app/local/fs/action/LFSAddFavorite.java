@@ -27,7 +27,7 @@ public class LFSAddFavorite {
     }
 
     public final String doAction() throws IOException {
-
+        final String folder = request.getFolder();
         final String resource = request.getPath();
         final String comment = XsdDateU.toXSDZ(request.getHttpRequest().getDate());
         final boolean isData = Value.isData(resource);
@@ -39,7 +39,7 @@ public class LFSAddFavorite {
             final XedCursor cursorFavorites = nav.findX("/app:favorites/app:lfsFavorites");  // i18n xpath
             final TypeInstance typeInstance = cursorFavorites.getChildInstance("lfsFavorite");  // i18n xpath
             final NameTypeValues ntv = NameTypeValuesU.create(
-
+                    "lfsFavorite.lfsFavoriteType.folder", folder,
                     "lfsFavorite.lfsFavoriteType.resource", resource,
                     "lfsFavorite.lfsFavoriteType.comment", comment);
             final ValueInstance valueInstance = ValueInstance.create(typeInstance, ntv);
