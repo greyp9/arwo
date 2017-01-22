@@ -47,7 +47,8 @@ public class TypeInstanceX {
     private static void addChildTypes(
             final Collection<TypeInstance> typeInstances, final TypeInstance typeInstance, final String hide) {
         for (final TypeInstance typeInstanceIt : typeInstance.getInstances()) {
-            final boolean hideType = Boolean.parseBoolean(typeInstanceIt.getDirective(hide));
+            final String directive = typeInstanceIt.getDirective(hide);
+            final boolean hideType = Boolean.parseBoolean(directive);
             if (!hideType) {
                 typeInstances.add(typeInstanceIt);
             }
