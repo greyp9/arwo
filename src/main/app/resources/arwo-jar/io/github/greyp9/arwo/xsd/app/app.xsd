@@ -209,7 +209,7 @@
 
     <xsd:complexType name="cronJobType">
         <xsd:choice>
-            <!--<xsd:element name='arguments' type='app:cronArgumentsJobType'/>-->
+            <xsd:element name='arguments' type='app:cronArgumentsJobType'/>
             <xsd:element name='sleep' type='app:cronSleepJobType'/>
             <xsd:element name='lsh' type='app:cronLshJobType'/>
             <xsd:element name='ssh' type='app:cronSshJobType'/>
