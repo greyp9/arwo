@@ -8,6 +8,10 @@ import java.util.regex.Pattern;
 public class WildcardFileFilter implements FileFilter {
     private final Pattern pattern;
 
+    public WildcardFileFilter(final Pattern pattern) {
+        this.pattern = pattern;
+    }
+
     public WildcardFileFilter(final String pattern) {
         this.pattern = toPattern(pattern);
     }

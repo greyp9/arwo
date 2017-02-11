@@ -7,11 +7,19 @@ import java.io.FileFilter;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.TreeSet;
+import java.util.regex.Pattern;
 
 public class FindInFolderQuery {
     private final FileFilter filterFile;
     private final FileFilter filterFolder;
     private final Collection<File> found;
+
+    public FindInFolderQuery(final File folder, final Pattern pattern, final boolean recurse) {
+        this.filterFile = new WildcardFileFilter(pattern);
+        this.filterFolder = (recurse ? new IsDirectoryFilter() : null);
+        this.found = new TreeSet<File>();
+        findFiles(folder);
+    }
 
     public FindInFolderQuery(final File folder, final String pattern, final boolean recurse) {
         this.filterFile = new WildcardFileFilter(pattern);
