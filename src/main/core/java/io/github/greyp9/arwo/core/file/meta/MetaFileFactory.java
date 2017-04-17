@@ -16,11 +16,19 @@ public final class MetaFileFactory {
         return new MetaFile(metaData, null, new ByteArrayInputStream(bytes));
     }
 
-    public static MetaFile create(final File file) throws IOException {
+    public static MetaFile createPath(final File file) throws IOException {
+        return createCommon(file, file.getAbsolutePath());
+    }
+
+    public static MetaFile createName(final File file) throws IOException {
+        return createCommon(file, file.getName());
+    }
+
+    private static MetaFile createCommon(final File file, final String path) throws IOException {
         MetaFile metaFile;
         try {
             final FileMetaData metaData = new FileMetaData(
-                    file.getAbsolutePath(), file.length(), file.lastModified(), file.isDirectory());
+                    path, file.length(), file.lastModified(), file.isDirectory());
             metaFile = new MetaFile(metaData, null, new ByteArrayInputStream(StreamU.read(file)));
         } catch (IOException e) {
             metaFile = null;

@@ -37,8 +37,13 @@ public class DateX {
         return date;
     }
 
+    public static String toFilenameMM(final Date date) {
+        final DateX dateX = Factory.createFilenameMM();
+        return ((date == null) ? null : dateX.toString(date));
+    }
+
     public static String toFilename(final Date date) {
-        final DateX dateX = Factory.createFilename();
+        final DateX dateX = Factory.createFilenameMilli();
         return ((date == null) ? null : dateX.toString(date));
     }
 
@@ -62,7 +67,11 @@ public class DateX {
             return new DateX(Const.XSD_UTC_MILLI, DateU.Const.TZ_GMT);
         }
 
-        public static DateX createFilename() {
+        public static DateX createFilenameMM() {
+            return new DateX(Const.FILE_UTC, DateU.Const.TZ_GMT);
+        }
+
+        public static DateX createFilenameMilli() {
             return new DateX(Const.FILE_UTC_MILLI, DateU.Const.TZ_GMT);
         }
 
@@ -76,6 +85,7 @@ public class DateX {
         private static final String HTTP = "EEE, dd MMM yyyy HH:mm:ss zzz";  // i18n internal
         private static final String XSD_UTC = "yyyy-MM-dd'T'HH:mm:ss'Z'";  // i18n internal
         private static final String XSD_UTC_MILLI = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";  // i18n internal
+        private static final String FILE_UTC = "yyyy-MM-dd'T'HH-mm'Z'";  // i18n internal
         private static final String FILE_UTC_MILLI = "yyyy-MM-dd'T'HH-mm-ss-SSS'Z'";  // i18n internal
     }
 }

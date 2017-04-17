@@ -108,7 +108,7 @@ public class RevisionHtmlView extends HtmlView {
 
     private void createRowFile(final RowSet rowSet, final File file) throws IOException {
         final String labelOnDisk = bundle.getString("xed.revisionsType.diskRevision");
-        final MetaFile metaFile = MetaFileFactory.create(file);
+        final MetaFile metaFile = MetaFileFactory.createPath(file);
         if (metaFile != null) {
             final FileMetaData metaData = metaFile.getMetaData();
             final byte[] bytes = StreamU.read(metaFile.getBytes());

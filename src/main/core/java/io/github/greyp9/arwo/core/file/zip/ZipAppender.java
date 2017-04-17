@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.file.zip;
 import io.github.greyp9.arwo.core.file.FileU;
 import io.github.greyp9.arwo.core.file.meta.FileMetaData;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
+import io.github.greyp9.arwo.core.file.meta.MetaFileFactory;
 import io.github.greyp9.arwo.core.io.StreamU;
 
 import java.io.File;
@@ -21,6 +22,26 @@ public class ZipAppender {
     }
 
     public final boolean append(final String comment, final MetaFile... files) throws IOException {
+        boolean success = false;
+        final File fileZipNew = new File(fileZip.getParentFile(), fileZip.getName() + ".new.zip");
+        try {
+            final FileOutputStream fileOutputStream = new FileOutputStream(fileZipNew, false);
+            final ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
+            addExistingEntries(zipOutputStream, fileZip);
+            addNewEntries(zipOutputStream, comment, files);
+            zipOutputStream.finish();
+            zipOutputStream.close();
+            fileOutputStream.close();
+            success = fileZipNew.renameTo(fileZip);
+        } finally {
+            if (fileZipNew.exists()) {
+                success |= FileU.delete(fileZipNew);
+            }
+        }
+        return success;
+    }
+
+    public final boolean append(final String comment, final File... files) throws IOException {
         boolean success = false;
         final File fileZipNew = new File(fileZip.getParentFile(), fileZip.getName() + ".new.zip");
         try {
@@ -69,6 +90,14 @@ public class ZipAppender {
             final ZipOutputStream zipOutputStream, final String comment, final MetaFile... files) throws IOException {
         for (final MetaFile file : files) {
             addNewEntry(zipOutputStream, comment, file);
+        }
+    }
+
+    private static void addNewEntries(
+            final ZipOutputStream zipOutputStream, final String comment, final File... files) throws IOException {
+        for (final File file : files) {
+            final MetaFile metaFile = MetaFileFactory.createName(file);
+            addNewEntry(zipOutputStream, comment, metaFile);
         }
     }
 
