@@ -28,7 +28,9 @@ public class ZipArchiveTest extends TestCase {
         logger.info("" + files.size());
         // group files
         FileGrouper fileGrouper = new FileGrouper("PT1H");
-        fileGrouper.add(files.toArray(new File[files.size()]));
+        for (File file : files) {
+            fileGrouper.add(file);
+        }
         // results
         final Map<Date, Collection<File>> groupings = fileGrouper.getGroupings();
         for (final Map.Entry<Date, Collection<File>> entry : groupings.entrySet()) {
