@@ -47,6 +47,16 @@ public class DateX {
         return ((date == null) ? null : dateX.toString(date));
     }
 
+    public static Date fromFilenameMM(final String date) {
+        final DateX dateX = Factory.createFilenameMM();
+        return ((date == null) ? null : dateX.toDate(date));
+    }
+
+    public static Date fromFilename(final String date) {
+        final DateX dateX = Factory.createFilenameMilli();
+        return ((date == null) ? null : dateX.toDate(date));
+    }
+
     public static final class Factory {
         private Factory() {
         }

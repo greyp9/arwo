@@ -105,9 +105,13 @@ public final class StreamU {
     }
 
     public static void write(final File file, final byte[] bytes) throws IOException {
+        write(file, bytes, 0, bytes.length);
+    }
+
+    public static void write(final File file, final byte[] bytes, int offset, int length) throws IOException {
         final BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(file));
         try {
-            os.write(bytes);
+            os.write(bytes, offset, length);
         } finally {
             os.close();
         }

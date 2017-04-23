@@ -9,6 +9,7 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.Enumeration;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
@@ -19,6 +20,26 @@ public class ZipAppender {
 
     public ZipAppender(final File fileZip) {
         this.fileZip = fileZip;
+    }
+
+    public final boolean appendZips(final String comment, final File... files) throws IOException {
+        boolean success = false;
+        final File fileZipNew = new File(fileZip.getParentFile(), fileZip.getName() + ".new.zip");
+        try {
+            final FileOutputStream fileOutputStream = new FileOutputStream(fileZipNew, false);
+            final ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
+            addExistingEntries(zipOutputStream, fileZip);
+            addNewEntriesZip(zipOutputStream, comment, files);
+            zipOutputStream.finish();
+            zipOutputStream.close();
+            fileOutputStream.close();
+            success = fileZipNew.renameTo(fileZip);
+        } finally {
+            if (fileZipNew.exists()) {
+                success |= FileU.delete(fileZipNew);
+            }
+        }
+        return success;
     }
 
     public final boolean append(final String comment, final MetaFile... files) throws IOException {
@@ -86,6 +107,13 @@ public class ZipAppender {
         }
     }
 
+    private static void addNewEntriesZip(
+            final ZipOutputStream zipOutputStream, final String comment, final File... files) throws IOException {
+        for (final File file : files) {
+            addNewEntryZip(zipOutputStream, comment, file);
+        }
+    }
+
     private static void addNewEntries(
             final ZipOutputStream zipOutputStream, final String comment, final MetaFile... files) throws IOException {
         for (final MetaFile file : files) {
@@ -98,6 +126,21 @@ public class ZipAppender {
         for (final File file : files) {
             final MetaFile metaFile = MetaFileFactory.createName(file);
             addNewEntry(zipOutputStream, comment, metaFile);
+        }
+    }
+
+    private static void addNewEntryZip(
+            final ZipOutputStream zipOutputStream, final String comment, final File file) throws IOException {
+        final ZipFile zipFile = new ZipFile(file);
+        try {
+            final Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
+            while (zipEntries.hasMoreElements()) {
+                final ZipEntry zipEntry = zipEntries.nextElement();
+                final InputStream is = zipFile.getInputStream(zipEntry);
+                addNewEntry(zipOutputStream, comment, ZipVolume.toMetaFile(zipEntry, is));
+            }
+        } finally {
+            zipFile.close();
         }
     }
 

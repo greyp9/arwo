@@ -156,7 +156,7 @@ public class ZipVolume {
 
     // utilities
 
-    private static MetaFile toMetaFile(final ZipEntry zipEntry, final InputStream is) throws IOException {
+    public static MetaFile toMetaFile(final ZipEntry zipEntry, final InputStream is) throws IOException {
         // skip ZipEntry header (which may contain inaccurate info) by reading stream
         final byte[] bytesEntry = StreamU.readPartial(is);
         final long length = bytesEntry.length;
