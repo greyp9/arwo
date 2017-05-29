@@ -78,6 +78,7 @@ public class AppMenuFactory implements MenuFactory {
 
     private static MenuItem createMenuView(final String key) {
         final String properties = App.Action.PROPERTIES;
+        final String textExpr = App.Action.TEXT_EXPRESSION;
         final String textFilter = App.Action.TEXT_FILTER;
         //final MenuItem itemViewFind = new MenuItem(find, App.Target.USER_STATE, App.Action.TOGGLE, App.Action.FIND);
         final MenuItem itemView = new MenuItem(App.Mode.VIEW, App.Target.USER_STATE, App.Mode.VIEW);
@@ -87,10 +88,12 @@ public class AppMenuFactory implements MenuFactory {
         final MenuItem itemViewHex = new MenuItem(App.Mode.VIEW_HEX, App.Target.USER_STATE, App.Mode.VIEW_HEX);
         final MenuItem itemViewR = new MenuItem(App.Mode.VIEW_R, App.Target.USER_STATE, App.Mode.VIEW_R);
         final MenuItem itemProps = new MenuItem(properties, App.Target.USER_STATE, App.Action.TOGGLE, properties);
+        final MenuItem itemExpr = new MenuItem(textExpr, App.Target.USER_STATE, App.Action.TOGGLE, textExpr);
         final MenuItem itemFilter = new MenuItem(textFilter, App.Target.USER_STATE, App.Action.TOGGLE, textFilter);
         return new MenuItem(App.Mode.VIEW, App.Target.USER_STATE, App.Action.MENU, Value.join("/", key, App.Mode.VIEW),
                 createMenuViewMime(key), createMenuViewCharset(key), /*itemViewFind,*/
-                itemView, itemViewGZ, itemViewZIP, itemViewTGZ, itemViewHex, itemViewR, itemProps, itemFilter);
+                itemView, itemViewGZ, itemViewZIP, itemViewTGZ, itemViewHex, itemViewR,
+                itemProps, itemExpr, itemFilter);
     }
 
     private static MenuItem createMenuViewMime(final String key) {

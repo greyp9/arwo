@@ -29,6 +29,7 @@ public final class App {
         public static final QName QNAME_LOCALE = new QName(URI_ACTION, "locale", PREFIX_ACTION);
         public static final QName QNAME_MAIL = new QName(URI_ACTION, "mail", PREFIX_ACTION);
         public static final QName QNAME_SQL = new QName(URI_ACTION, "sql", PREFIX_ACTION);
+        public static final QName QNAME_TEXT_EXPRESSION = new QName(URI_ACTION, "textExpression", PREFIX_ACTION);
         public static final QName QNAME_TEXT_FILTER = new QName(URI_ACTION, "textFilter", PREFIX_ACTION);
 
         public static final String SUBMIT_COMMAND = "[session][command][{urn:arwo:action}command][command]";
@@ -222,6 +223,7 @@ public final class App {
         public static final String VALIDATE = "validate";
         public static final String LOCALE = "locale";
         public static final String UPDATE_LOCALE = "updateLocale";
+        public static final String TEXT_EXPRESSION = "textExpression";
         public static final String TEXT_FILTER = "textFilter";
         public static final String FILE_UPDATE = "fileUpdate";
         public static final String FILE_CREATE = "fileCreate";

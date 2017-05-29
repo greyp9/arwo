@@ -26,6 +26,7 @@ import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.view.StatusBarView;
 import io.github.greyp9.arwo.core.xed.action.XedActionLocale;
+import io.github.greyp9.arwo.core.xed.action.XedActionTextExpression;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
@@ -71,6 +72,7 @@ public abstract class LFSView {
         return file;
     }
 
+    @SuppressWarnings("WeakerAccess")
     public LFSView(final LFSRequest request, final AppUserState userState, final File folderBase, final File file) {
         this.request = request;
         this.folderBase = folderBase;
@@ -127,16 +129,23 @@ public abstract class LFSView {
         final String submitID = userState.getSubmitID();
         final Properties properties = userState.getProperties();
         new XedActionLocale(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
+        new XedActionTextExpression(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
         new XedActionTextFilter(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
     }
 
     private void addTextFiltersView(final Element html) {
-        final TextFilters textFilters = userState.getTextFilters();
-        if (textFilters.isData()) {
-            final Collection<String> tokens = new ArrayList<String>();
+        final TextFilters textFilters = userState.getTextFilters(getRequest().getContext());
+        boolean isIncludes = !textFilters.getIncludes().isEmpty();
+        boolean isExcludes = !textFilters.getExcludes().isEmpty();
+        boolean isExpression = !textFilters.getExpressions().isEmpty();
+        final Collection<String> tokens = new ArrayList<String>();
+        if (isExpression) {
+            for (final String expression : textFilters.getExpressions()) {
+                tokens.add("" + expression);
+            }
+        } else if (isIncludes || isExcludes) {
             // label
             tokens.add(bundle.getString("menu.view.textFilter"));
-            // filter display
             final String patternInclude = bundle.getString("SFTPView.include");
             for (final String include : textFilters.getIncludes()) {
                 tokens.add(MessageFormat.format(patternInclude, include));
@@ -145,11 +154,11 @@ public abstract class LFSView {
             for (final String exclude : textFilters.getExcludes()) {
                 tokens.add(MessageFormat.format(patternExclude, exclude));
             }
-            // render
-            final Element divToolbar = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENU));
-            for (final String token : tokens) {
-                ElementU.addElement(divToolbar, Html.SPAN, token, NTV.create(Html.CLASS, App.CSS.MENU));
-            }
+        }
+        // render
+        final Element divToolbar = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENU));
+        for (final String token : tokens) {
+            ElementU.addElement(divToolbar, Html.SPAN, token, NTV.create(Html.CLASS, App.CSS.MENU));
         }
     }
 

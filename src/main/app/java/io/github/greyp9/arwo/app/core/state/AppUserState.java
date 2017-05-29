@@ -48,6 +48,7 @@ import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.vm.exec.UserExecutor;
 import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
+import io.github.greyp9.arwo.core.xed.action.XedActionTextExpression;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.model.XedFactory;
@@ -61,7 +62,9 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Map;
 import java.util.Properties;
+import java.util.TreeMap;
 
 @SuppressWarnings({ "PMD.ExcessiveImports", "PMD.GodClass", "PMD.TooManyFields", "PMD.CouplingBetweenObjects",
         "PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity", "PMD.ModifiedCyclomaticComplexity" })
@@ -86,7 +89,7 @@ public class AppUserState {
     // user alerts
     private final Alerts alerts;
     // text filters (for file display)
-    private final TextFilters textFilters;
+    private final Map<String, TextFilters> textFilters;
     // actions to be confirms
     private final DeferredActions deferredActions;
     // widget subsystems
@@ -157,6 +160,15 @@ public class AppUserState {
     }
 
     public final TextFilters getTextFilters() {
+        return getTextFilters("");
+    }
+
+    public final TextFilters getTextFilters(String context) {
+        TextFilters textFilters = this.textFilters.get(context);
+        if (textFilters == null) {
+            textFilters = new TextFilters();
+            this.textFilters.put(context, textFilters);
+        }
         return textFilters;
     }
 
@@ -247,7 +259,8 @@ public class AppUserState {
         this.interval = new Interval(date, null);
         this.userRoot = AppFolder.getUserHome(webappRoot, principal);
         this.submitID = submitID;
-        this.textFilters = new TextFilters();
+        this.textFilters = new TreeMap<String, TextFilters>();
+        //this.textFilters.put("", new TextFilters());
         this.alerts = new Alerts();
         this.documentState = new XedUserState(webappRoot, appState.getFactory(), principal, submitID, locus, alerts);
         this.viewStates = new ViewStates(new XedActionFilter(documentState.getFactory(), null));
@@ -294,6 +307,11 @@ public class AppUserState {
 
     public final String applyPost(final SubmitToken token, final NameTypeValues httpArguments,
                                   final ServletHttpRequest httpRequest) throws IOException {
+        return applyPost(token, httpArguments, httpRequest, "");
+    }
+
+    public final String applyPost(final SubmitToken token, final NameTypeValues httpArguments,
+                                  final ServletHttpRequest httpRequest, final String context) throws IOException {
         httpArguments.getClass();
         // from HTTP POST form arguments...
         String location = httpRequest.getURI();
@@ -318,7 +336,11 @@ public class AppUserState {
             doClose(token);
         } else if (App.Action.UPDATE_LOCALE.equals(action)) {
             documentState.applyLocale(httpArguments);
+        } else if (App.Action.TEXT_EXPRESSION.equals(action)) {
+            final TextFilters textFilters = getTextFilters(context);
+            new XedActionTextExpression(getXedFactory(), getLocale()).updateTextFilters(textFilters, httpArguments);
         } else if (App.Action.TEXT_FILTER.equals(action)) {
+            final TextFilters textFilters = getTextFilters(context);
             new XedActionTextFilter(getXedFactory(), getLocale()).updateTextFilters(textFilters, httpArguments);
         } else if (App.Action.CLEAR.equals(action)) {
             doClearCache();
@@ -455,8 +477,10 @@ public class AppUserState {
     }
 
     private String toView(final ServletHttpRequest httpRequest, final String action) {
-        final String pathInfoNewView = new Pather(httpRequest.getPathInfo()).getRight();
-        return httpRequest.getBaseURI() + PathU.toPath("", action) + pathInfoNewView;
+        final Pather patherPathInfo = new Pather(httpRequest.getPathInfo());
+        final Pather patherContext = new Pather(patherPathInfo.getRight());
+        final String pathInfoNewView = patherContext.getRight();
+        return httpRequest.getBaseURI() + PathU.toPath("", Http.Token.HYPHEN, action) + pathInfoNewView;
     }
 
     private void doCronOff(final ServletHttpRequest httpRequest) throws IOException {

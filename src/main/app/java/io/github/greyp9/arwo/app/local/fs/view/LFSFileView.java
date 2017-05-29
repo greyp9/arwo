@@ -46,6 +46,7 @@ import java.util.Date;
 @SuppressWarnings("PMD.ExcessiveImports")
 public class LFSFileView extends LFSView {
 
+    @SuppressWarnings("WeakerAccess")
     public LFSFileView(final LFSRequest request, final AppUserState userState, final File folderBase, final File file) {
         super(request, userState, folderBase, file);
     }
@@ -128,14 +129,14 @@ public class LFSFileView extends LFSView {
         return metaFile;
     }
 
-    public final HttpResponse doGetFile(
+    private HttpResponse doGetFile(
             final MetaFile file, final String charset, final boolean isGZ) throws IOException {
         byte[] bytes = getBytes(file, isGZ);
         final String path = file.getMetaData().getPath();
         final String lastModified = HttpDateU.toHttpZ(new Date(file.getMetaData().getLastModified()));
         final NameTypeValues headers = new NameTypeValues(new NameTypeValue(Http.Header.LAST_MODIFIED, lastModified));
-        final TextFilters textFilters = getUserState().getTextFilters();
-        if ((textFilters.getIncludes().isEmpty()) && (textFilters.getExcludes().isEmpty())) {
+        final TextFilters textFilters = getUserState().getTextFilters(getRequest().getContext());
+        if (!textFilters.isData()) { // ((textFilters.getIncludes().isEmpty()) && (textFilters.getExcludes().isEmpty())) {
             final Preferences preferences = new Preferences(getUserState().getConfig());
             final String mimeTypeOverride = getUserState().getProperties().getProperty(App.Action.MIME_TYPE);
             final String mimeTypePrefs = Value.defaultOnNull(mimeTypeOverride, preferences.getMIMEType(path));
@@ -143,10 +144,10 @@ public class LFSFileView extends LFSView {
             headers.add(new NameTypeValue(Http.Header.CONTENT_TYPE, mimeType));
         } else if (UTF8Codec.Const.UTF16.equals(charset)) {
             headers.add(new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_PLAIN_UTF16));
-            bytes = doTextFilter(bytes, charset);
+            bytes = doTextFilter(bytes, charset, textFilters);
         } else {
             headers.add(new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_PLAIN_UTF8));
-            bytes = doTextFilter(bytes, charset);
+            bytes = doTextFilter(bytes, charset, textFilters);
         }
         // optionally persist fetched results
         new ResultsPersister(getUserState().getResultsContext(getRequest().getHttpRequest())).write(bytes);
@@ -166,7 +167,8 @@ public class LFSFileView extends LFSView {
         return bytes;
     }
 
-    private byte[] doTextFilter(final byte[] bytes, final String charset) throws IOException {
-        return new TextLineFilter(getUserState().getTextFilters()).doFilter(bytes, charset);
+    private byte[] doTextFilter(
+            final byte[] bytes, final String charset, final TextFilters textFilters) throws IOException {
+        return new TextLineFilter(textFilters).doFilter(bytes, charset);
     }
 }

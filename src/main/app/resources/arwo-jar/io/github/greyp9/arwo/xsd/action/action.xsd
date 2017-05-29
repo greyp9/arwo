@@ -80,6 +80,14 @@
         </xsd:sequence>
     </xsd:complexType>
 
+    <xsd:element name='textExpression' type='action:textExpressionType'/>
+
+    <xsd:complexType name='textExpressionType'>
+        <xsd:sequence>
+            <xsd:element name='expression' type='xsd:string'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
     <xsd:element name='command' type='action:commandType'/>
 
     <xsd:complexType name='commandType'>
