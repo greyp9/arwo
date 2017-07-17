@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.app.local.fs.data;
 
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.file.FileX;
+import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.lang.NumberU;
 import io.github.greyp9.arwo.core.table.insert.InsertRow;
 import io.github.greyp9.arwo.core.table.metadata.ColumnMetaData;
@@ -56,7 +57,8 @@ public class LFSFolder {
     private static void loadRow(final RowSet rowSet, final File folderBase, final File file) {
         final String path = file.getAbsolutePath();
         final String pathFolder = path.replace(folderBase.getAbsolutePath(), "")
-                .replace(file.getName(), "").replace("//", "/");
+                .replace(file.getName(), "")
+                .replace(Http.Token.SLASH + Http.Token.SLASH, Http.Token.SLASH);
         // prep
         final boolean isDirectory = file.isDirectory();
         final Integer type = (isDirectory ? App.FS.S_IFDIR : App.FS.S_IFREG);
