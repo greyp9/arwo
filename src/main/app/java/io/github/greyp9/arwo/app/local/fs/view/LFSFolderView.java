@@ -78,9 +78,7 @@ public class LFSFolderView extends LFSView {
         } else {
             viewState.getHiddenColumns().add("folder");  // i18n metadata
         }
-        final RowSet rowSetRaw = (findMode ?
-                getRowSetRawFind(metaData, viewState) :
-                getRowSetRaw(metaData, viewState));
+        final RowSet rowSetRaw =  getRowSetRaw(metaData, viewState, findMode);
         final RowSet rowSetStyled = new LFSFolderStyled(request, rowSetRaw).getRowSet();
         // optionally persist fetched results
         final Results results = new Results(request.getHttpRequest().getURI(),
@@ -99,7 +97,8 @@ public class LFSFolderView extends LFSView {
         return null;
     }
 
-    private RowSet getRowSetRaw(final RowSetMetaData metaData, final ViewState viewState) throws IOException {
+    private RowSet getRowSetRaw(
+            final RowSetMetaData metaData, final ViewState viewState, boolean recurse) throws IOException {
         RowSet rowSet;
         final LFSRequest request = getRequest();
         final AppUserState userState = getUserState();
@@ -108,20 +107,16 @@ public class LFSFolderView extends LFSView {
         final String path = request.getPath();
         // if disconnected, resource will only be fetched if no cached copy is available
         if (viewState.isConnected()) {
-            final File[] files = source.listFiles(path);
-            rowSet = new LFSFolder(null, files, metaData, true).getRowSet();
+            final File[] files = source.listFiles(path, recurse);
+            rowSet = new LFSFolder(getFolderBase(), files, metaData, true).getRowSet();
             cache.putRowSet(path, rowSet);
         } else if (cache.containsRowSet(path)) {
             rowSet = cache.getRowSet(path);
         } else {
-            final File[] files = source.listFiles(path);
-            rowSet = new LFSFolder(null, files, metaData, true).getRowSet();
+            final File[] files = source.listFiles(path, recurse);
+            rowSet = new LFSFolder(getFolderBase(), files, metaData, true).getRowSet();
             cache.putRowSet(path, rowSet);
         }
         return rowSet;
-    }
-
-    private RowSet getRowSetRawFind(final RowSetMetaData metaData, final ViewState viewState) throws IOException {
-        return getRowSetRaw(metaData, viewState);
     }
 }

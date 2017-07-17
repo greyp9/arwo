@@ -156,6 +156,7 @@ public final class App {
         public static final String CREATE_D = "createD";
         public static final String EDIT = "edit";
         public static final String DELETE = "delete";
+        public static final String FIND = "find";
         public static final String VIEW = "view";
         public static final String VIEW_GZ = "viewGZ";
         public static final String VIEW_ZIP = "viewZIP";

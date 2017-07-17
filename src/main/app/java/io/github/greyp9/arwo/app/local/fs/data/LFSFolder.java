@@ -22,7 +22,7 @@ public class LFSFolder {
         return rowSet;
     }
 
-    public LFSFolder(final String folder, final File[] files,
+    public LFSFolder(final File folderBase, final File[] files,
                      final RowSetMetaData metaData, final boolean sort) {
         // "native" sort, in case none supplied by user
         final Sorts sorts = (sort ? new Sorts(new Sort("type", true), new Sort("name", true)) : null);  // i18n metadata
@@ -35,7 +35,7 @@ public class LFSFolder {
             } else if ("..".equals(file.getName())) {
                 file.getClass();
             } else {
-                loadRow(rowSet, folder, file);
+                loadRow(rowSet, folderBase, file);
             }
         }
         rowSet.updateOrdinals(0);
@@ -53,7 +53,10 @@ public class LFSFolder {
         return new RowSetMetaData("lfsFolderType", columns);  // i18n metadata
     }
 
-    public static void loadRow(final RowSet rowSet, final String folder, final File file) {
+    private static void loadRow(final RowSet rowSet, final File folderBase, final File file) {
+        final String path = file.getAbsolutePath();
+        final String pathFolder = path.replace(folderBase.getAbsolutePath(), "")
+                .replace(file.getName(), "").replace("//", "/");
         // prep
         final boolean isDirectory = file.isDirectory();
         final Integer type = (isDirectory ? App.FS.S_IFDIR : App.FS.S_IFREG);
@@ -61,7 +64,7 @@ public class LFSFolder {
         // populate columns
         final InsertRow insertRow = new InsertRow(rowSet);
         insertRow.setNextColumn(type);
-        insertRow.setNextColumn(folder);
+        insertRow.setNextColumn(pathFolder);
         insertRow.setNextColumn(file.getName());
         insertRow.setNextColumn(new Date(file.lastModified()));
         insertRow.setNextColumn(extension);

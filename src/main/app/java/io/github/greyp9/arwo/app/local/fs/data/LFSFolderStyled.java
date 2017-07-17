@@ -87,7 +87,7 @@ public class LFSFolderStyled {
                 request.getHttpRequest().getHttpRequest().getResource());
         final String filename = (fullPath ? name : URLCodec.encode(name));
         final String suffix = (isDirectory ? Http.Token.SLASH : "");
-        return Value.join("", folderURI, folder, filename, suffix);
+        return Value.join("", folderURI, filename, suffix);
     }
 
     private static void addFooter(final RowSet rowSet, final Bundle bundle) {

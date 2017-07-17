@@ -12,6 +12,8 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.Collection;
+import java.util.TreeSet;
 
 public class LFSDataSource {
     private final LFSRequest request;
@@ -26,8 +28,20 @@ public class LFSDataSource {
         return new File(folderRoot, path);
     }
 
-    public final File[] listFiles(final String path) {
-        return FileU.listFiles(new File(folderRoot, path));
+    public final File[] listFiles(final String path, boolean recurse) {
+        final Collection<File> files = new TreeSet<File>();
+        listFilesR(new File(folderRoot, path), files, recurse);
+        return files.toArray(new File[files.size()]);
+    }
+
+    private void listFilesR(final File folder, Collection<File> filesAll, boolean recurse) {
+        final File[] files = FileU.listFiles(folder);
+        for (File file : files) {
+            filesAll.add(file);
+            if (recurse && file.isDirectory()) {
+                listFilesR(file, filesAll, true);
+            }
+        }
     }
 
     public final void createDirectory(final String path) throws IOException {
