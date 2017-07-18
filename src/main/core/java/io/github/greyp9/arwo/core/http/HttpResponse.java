@@ -10,6 +10,10 @@ public class HttpResponse {
     private final NameTypeValues headers;
     private final ByteArrayInputStream entity;
 
+    public HttpResponse(final int statusCode, final NameTypeValues headers, final byte[] entity) {
+        this(statusCode, headers, ((entity == null) ? null : new ByteArrayInputStream(entity)));
+    }
+
     public HttpResponse(final int statusCode, final NameTypeValues headers, final ByteArrayInputStream entity) {
         this.statusCode = statusCode;
         this.headers = Value.defaultOnNull(headers, new NameTypeValues());

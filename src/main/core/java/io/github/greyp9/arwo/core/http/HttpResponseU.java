@@ -37,7 +37,7 @@ public final class HttpResponseU {
 
     public static HttpResponse to302(final String location) {
         final NameTypeValues headers = new NameTypeValues(new NameTypeValue(Http.Header.LOCATION, location));
-        return new HttpResponse(HttpURLConnection.HTTP_MOVED_TEMP, headers, null);
+        return new HttpResponse(HttpURLConnection.HTTP_MOVED_TEMP, headers, (byte[]) null);
     }
 
     public static HttpResponse to404() {
