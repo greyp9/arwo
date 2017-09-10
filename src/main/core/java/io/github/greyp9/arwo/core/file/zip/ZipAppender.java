@@ -11,15 +11,20 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Enumeration;
+import java.util.Map;
+import java.util.TreeMap;
+import java.util.logging.Logger;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipFile;
 import java.util.zip.ZipOutputStream;
 
 public class ZipAppender {
     private final File fileZip;
+    private final Map<String, FileMetaData> entriesProcessed;
 
     public ZipAppender(final File fileZip) {
         this.fileZip = fileZip;
+        this.entriesProcessed = new TreeMap<String, FileMetaData>();
     }
 
     public final boolean appendZips(final String comment, final File... files) throws IOException {
@@ -28,8 +33,9 @@ public class ZipAppender {
         try {
             final FileOutputStream fileOutputStream = new FileOutputStream(fileZipNew, false);
             final ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
-            addExistingEntries(zipOutputStream, fileZip);
-            addNewEntriesZip(zipOutputStream, comment, files);
+            // heuristic is to always favor newer content, so add new data to zip first
+            addNewEntriesZip(zipOutputStream, comment, entriesProcessed, files);
+            addExistingEntries(zipOutputStream, entriesProcessed, fileZip);
             zipOutputStream.finish();
             zipOutputStream.close();
             fileOutputStream.close();
@@ -48,8 +54,9 @@ public class ZipAppender {
         try {
             final FileOutputStream fileOutputStream = new FileOutputStream(fileZipNew, false);
             final ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
-            addExistingEntries(zipOutputStream, fileZip);
+            // heuristic is to always favor newer content, so add new data to zip first
             addNewEntries(zipOutputStream, comment, files);
+            addExistingEntries(zipOutputStream, entriesProcessed, fileZip);
             zipOutputStream.finish();
             zipOutputStream.close();
             fileOutputStream.close();
@@ -68,8 +75,9 @@ public class ZipAppender {
         try {
             final FileOutputStream fileOutputStream = new FileOutputStream(fileZipNew, false);
             final ZipOutputStream zipOutputStream = new ZipOutputStream(fileOutputStream);
-            addExistingEntries(zipOutputStream, fileZip);
-            addNewEntries(zipOutputStream, comment, files);
+            // heuristic is to always favor newer content, so add new data to zip first
+            addNewEntries(zipOutputStream, comment, entriesProcessed, files);
+            addExistingEntries(zipOutputStream, entriesProcessed, fileZip);
             zipOutputStream.finish();
             zipOutputStream.close();
             fileOutputStream.close();
@@ -83,11 +91,12 @@ public class ZipAppender {
     }
 
     private static void addExistingEntries(
-            final ZipOutputStream zipOutputStream, final File fileZip) throws IOException {
+            final ZipOutputStream zipOutputStream, Map<String, FileMetaData> entriesProcessed, final File fileZip)
+            throws IOException {
         if (fileZip.exists()) {
             final ZipFile zipFile = new ZipFile(fileZip);
             try {
-                addExistingEntries(zipOutputStream, zipFile);
+                addExistingEntries(zipOutputStream, entriesProcessed, zipFile);
             } finally {
                 zipFile.close();
             }
@@ -95,22 +104,26 @@ public class ZipAppender {
     }
 
     private static void addExistingEntries(
-            final ZipOutputStream zipOutputStream, final ZipFile zipFile) throws IOException {
+            final ZipOutputStream zipOutputStream, Map<String, FileMetaData> entriesProcessed, final ZipFile zipFile)
+            throws IOException {
         final Enumeration<? extends ZipEntry> entries = zipFile.entries();
         while (entries.hasMoreElements()) {
             final ZipEntry zipEntryIn = entries.nextElement();
             //final ZipEntry zipEntryOut = new ZipEntry(zipEntryIn);
-            final byte[] bytes = StreamU.read(zipFile.getInputStream(zipEntryIn));
-            zipOutputStream.putNextEntry(zipEntryIn);
-            zipOutputStream.write(bytes);
-            zipOutputStream.closeEntry();
+            if (!entriesProcessed.containsKey(zipEntryIn.getName())) {
+                final byte[] bytes = StreamU.read(zipFile.getInputStream(zipEntryIn));
+                zipOutputStream.putNextEntry(zipEntryIn);
+                zipOutputStream.write(bytes);
+                zipOutputStream.closeEntry();
+            }
         }
     }
 
     private static void addNewEntriesZip(
-            final ZipOutputStream zipOutputStream, final String comment, final File... files) throws IOException {
+            final ZipOutputStream zipOutputStream, final String comment,
+            Map<String, FileMetaData> entriesProcessed, final File... files) throws IOException {
         for (final File file : files) {
-            addNewEntryZip(zipOutputStream, comment, file);
+            addNewEntryZip(zipOutputStream, comment, entriesProcessed, file);
         }
     }
 
@@ -122,22 +135,31 @@ public class ZipAppender {
     }
 
     private static void addNewEntries(
-            final ZipOutputStream zipOutputStream, final String comment, final File... files) throws IOException {
+            final ZipOutputStream zipOutputStream, final String comment,
+            final Map<String, FileMetaData> entriesProcessed, final File... files) throws IOException {
         for (final File file : files) {
             final MetaFile metaFile = MetaFileFactory.createName(file);
-            addNewEntry(zipOutputStream, comment, metaFile);
+            if (!entriesProcessed.containsKey(metaFile.getMetaData().getPath())) {
+                entriesProcessed.put(metaFile.getMetaData().getPath(), metaFile.getMetaData());
+                addNewEntry(zipOutputStream, comment, metaFile);
+            }
         }
     }
 
     private static void addNewEntryZip(
-            final ZipOutputStream zipOutputStream, final String comment, final File file) throws IOException {
+            final ZipOutputStream zipOutputStream, final String comment,
+            Map<String, FileMetaData> entriesProcessed, final File file) throws IOException {
         final ZipFile zipFile = new ZipFile(file);
         try {
             final Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();
             while (zipEntries.hasMoreElements()) {
                 final ZipEntry zipEntry = zipEntries.nextElement();
-                final InputStream is = zipFile.getInputStream(zipEntry);
-                addNewEntry(zipOutputStream, comment, ZipVolume.toMetaFile(zipEntry, is));
+                if (!entriesProcessed.containsKey(zipEntry.getName())) {
+                    final InputStream is = zipFile.getInputStream(zipEntry);
+                    final MetaFile metaFile = ZipVolume.toMetaFile(zipEntry, is);
+                    entriesProcessed.put(metaFile.getMetaData().getPath(), metaFile.getMetaData());
+                    addNewEntry(zipOutputStream, comment, metaFile);
+                }
             }
         } finally {
             zipFile.close();
@@ -146,14 +168,21 @@ public class ZipAppender {
 
     private static void addNewEntry(
             final ZipOutputStream zipOutputStream, final String comment, final MetaFile file) throws IOException {
-        final FileMetaData metaData = file.getMetaData();
-        final ZipEntry zipEntry = new ZipEntry(metaData.getPath());
-        final byte[] bytes = StreamU.read(file.getBytes());
-        zipEntry.setSize(metaData.getLength());
-        zipEntry.setTime(metaData.getLastModified());
-        zipEntry.setComment(comment);
-        zipOutputStream.putNextEntry(zipEntry);
-        zipOutputStream.write(bytes);
-        zipOutputStream.closeEntry();
+        try {
+            final FileMetaData metaData = file.getMetaData();
+            final ZipEntry zipEntry = new ZipEntry(metaData.getPath());
+            final byte[] bytes = StreamU.read(file.getBytes());
+            zipEntry.setSize(metaData.getLength());
+            zipEntry.setTime(metaData.getLastModified());
+            zipEntry.setComment(comment);
+            zipOutputStream.putNextEntry(zipEntry);
+            zipOutputStream.write(bytes);
+            zipOutputStream.closeEntry();
+        } catch (IOException e) {
+            final String classname = ZipAppender.class.getName();
+            Logger.getLogger(classname).throwing(classname, null, e);
+        }
+
     }
+
 }

@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
 import io.github.greyp9.arwo.app.local.fs.data.LFSDataSource;
 import io.github.greyp9.arwo.core.alert.Alert;
+import io.github.greyp9.arwo.core.file.FileU;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
@@ -29,9 +30,12 @@ public class LFSResourceView {
         final File file = source.getFile(path);
         final boolean isFolder = file.isDirectory();
         final boolean isFile = file.isFile();
+        final boolean isLink = FileU.isLink(file);
         if ((isFolder) && (!path.endsWith(Http.Token.SLASH))) {
             // folder path in application should end with slash
             httpResponse = HttpResponseU.to302(PathU.toDir(request.getHttpRequest().getURI()));
+        } else if (isLink) {
+            httpResponse = new LFSSymlinkView(request, userState, folderBase, file).doGetResponse();
         } else if (isFolder) {
             httpResponse = new LFSFolderView(request, userState, folderBase, file).doGetResponse();
         } else if (isFile) {

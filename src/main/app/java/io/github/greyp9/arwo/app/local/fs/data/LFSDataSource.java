@@ -62,6 +62,17 @@ public class LFSDataSource {
         FileU.delete(file);
     }
 
+    public final File[] lsSymlink(final String path) {
+        final Collection<File> files = new TreeSet<File>();
+        File fileIt = new File(path);
+        files.add(fileIt);
+        while ((fileIt != null) && (FileU.isLink(fileIt))) {
+            fileIt = FileU.getCanonicalFile(fileIt);
+            files.add(fileIt);
+        }
+        return files.toArray(new File[files.size()]);
+    }
+
     public final File exists(final String path) {
         final File file = new File(folderRoot, path);
         return (file.exists() ? file : null);

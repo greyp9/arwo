@@ -12,6 +12,7 @@ public final class App {
 
     public static class Application {
         public static final String NAME = Application.class.getName();
+        public static final String LOOKUP = "application";
         public static final String QUIT = "q";
     }
 
@@ -55,6 +56,7 @@ public final class App {
         public static final String SFTP = "/sftp";
         public static final String SMTP = "/smtp";
         public static final String SSH = "/ssh";
+        public static final String VIS = "/vis";
         public static final String WEBDAV = "/webdav";
         public static final String WSH = "/wsh";
 
@@ -162,6 +164,8 @@ public final class App {
         public static final String VIEW_ZIP = "viewZIP";
         public static final String VIEW_TGZ = "viewTGZ";
         public static final String VIEW_HEX = "viewHex";
+        public static final String VIEW_HTML = "viewHtml";
+        public static final String VIEW_TEXT = "viewText";
         public static final String VIEW_R = "viewR";
     }
 
@@ -235,6 +239,7 @@ public final class App {
         public static final String FILESYSTEM = "filesystem";
         public static final String FIND = "find";
         public static final String HEX_VIEW_PARAM = "hexViewParam";
+        public static final String NAV_PARAM = "navParam";
         public static final String PROPERTIES = "properties";
         public static final String MIME_TYPE = "mimeType";
         public static final String CHARSET = "charset";

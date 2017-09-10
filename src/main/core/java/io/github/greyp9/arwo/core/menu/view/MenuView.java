@@ -35,17 +35,22 @@ public class MenuView {
     }
 
     public final Element addContentTo(final Element html, final String type, final boolean home) throws IOException {
-        return addContentTo(html, type, home, true, null);
+        return addContentTo(html, type, null, home, true, null);
     }
 
-    public final Element addContentTo(final Element html, final String type, final boolean home,
+    public final Element addContentTo(final Element html, final String type, final String object2, final boolean home,
                                       final boolean top, final String accessKey) throws IOException {
-        final MenuItem menuItem = menuSystem.get(httpRequest.getServletPath(), type);
+        return addContentTo(html, type, object2, home, top, accessKey, null);
+    }
+
+    public final Element addContentTo(final Element html, final String type, final String object2, final boolean home,
+                                      final boolean top, final String accessKey, final String text) throws IOException {
+        final MenuItem menuItem = menuSystem.get(httpRequest.getServletPath(), type, object2);
         final Element divMenus = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENUS));
         final NameTypeValues attrs = NTV.create(Html.METHOD, Html.POST, Html.ACTION, Html.EMPTY);
         final Element form = ElementU.addElement(divMenus, Html.FORM, null, attrs);
         final Element divForm = ElementU.addElement(form, Html.DIV);
-        addMenu(divForm, menuItem, home, top, accessKey);
+        addMenu(divForm, menuItem, home, top, accessKey, text);
         return divMenus;
     }
 
@@ -58,7 +63,7 @@ public class MenuView {
     }
 
     private void addMenu(final Element html, final MenuItem item, final boolean home,
-                         final boolean top, final String accessKey) {
+                         final boolean top, final String accessKey, final String text) {
         final Element divMenu = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENU));
         if (home) {
             addHome(divMenu);
@@ -67,13 +72,17 @@ public class MenuView {
         final String title = bundle.getString(key + ".DETAIL");
         final String label = String.format("[%s]", bundle.getString(key, item.getName()));
         if (top) {
-            final SubmitToken token = new SubmitToken(item.getSubject(), item.getAction(), item.getObject());
+            final SubmitToken token = new SubmitToken(item.getSubject(), item.getAction(), item.getObject(), item.getObject2());
             HtmlU.addButton(divMenu, label, menuSystem.getSubmitID(), token.toString(), App.CSS.MENU, title, accessKey);
         } else {
             ElementU.addElement(divMenu, Html.SPAN, label, NTV.create(Html.CLASS, App.CSS.MENU));
         }
         if (item.isOpen()) {
             addMenuItems(html, divMenu, item, accessKey);
+        }
+        if (text != null) {
+            final Element divRight = ElementU.addElement(divMenu, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.RIGHT));
+            ElementU.addElement(divRight, Html.SPAN, text, NTV.create(Html.CLASS, App.CSS.MENU));
         }
     }
 
@@ -94,13 +103,13 @@ public class MenuView {
             final String key = Value.join(".", App.CSS.MENU, parentName, itemIt.getName());
             final String title = bundle.getString(key + ".DETAIL");
             final String label = bundle.getString(key);
-            final SubmitToken token = new SubmitToken(itemIt.getSubject(), itemIt.getAction(), itemIt.getObject());
+            final SubmitToken token = new SubmitToken(itemIt.getSubject(), itemIt.getAction(), itemIt.getObject(), itemIt.getObject2());
             final String htmlClass = Value.join(Html.SPACE, App.CSS.MENU, App.CSS.MIN,
                     (itemIt.isOpen() ? App.CSS.ACTIVE : null));
             HtmlU.addButton(divMenu, label, menuSystem.getSubmitID(), token.toString(), htmlClass, title, accessKey);
         }
         if ((itemOpen != null) && (!itemOpen.getMenuItems().isEmpty())) {
-            addMenu(html, itemOpen, false, false, accessKey);
+            addMenu(html, itemOpen, false, false, accessKey, null);
         }
     }
 }

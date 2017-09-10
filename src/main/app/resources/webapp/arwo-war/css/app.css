@@ -102,3 +102,43 @@ div.extra
 }
 
 /* END RESULTS */
+
+/* START HISTOGRAM */
+
+div.histogram
+{
+background-color: #ButtonFace;
+border: thin solid ThreeDShadow;
+padding: 0.5em 1em;
+}
+
+div.histogram h1
+{
+margin: 0; padding: 0;
+}
+
+td.histogram
+{
+height: 0.5em;
+width: 0.75em;
+border: thin solid ThreeDShadow;
+}
+
+td.r0 { background-color: #ffffff }
+td.r1 { background-color: #ffeeee }
+td.r2 { background-color: #ffdddd }
+td.r3 { background-color: #ffcccc }
+td.r4 { background-color: #ffbbbb }
+td.r5 { background-color: #ffaaaa }
+td.r6 { background-color: #ff9999 }
+td.r7 { background-color: #ff8888 }
+td.r8 { background-color: #ff7777 }
+td.r9 { background-color: #ff6666 }
+td.r10 { background-color: #ff5555 }
+td.r11 { background-color: #ff4444 }
+td.r12 { background-color: #ff3333 }
+td.r13 { background-color: #ff2222 }
+td.r14 { background-color: #ff1111 }
+td.r15 { background-color: #ff0000 }
+
+/* END HISTOGRAM */

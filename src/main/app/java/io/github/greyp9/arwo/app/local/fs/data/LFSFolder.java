@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.app.local.fs.data;
 
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.file.FileU;
 import io.github.greyp9.arwo.core.file.FileX;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.lang.NumberU;
@@ -23,7 +24,7 @@ public class LFSFolder {
         return rowSet;
     }
 
-    public LFSFolder(final File folderBase, final File[] files,
+    public LFSFolder(final File folderBase, final String folderOffset, final File[] files,
                      final RowSetMetaData metaData, final boolean sort) {
         // "native" sort, in case none supplied by user
         final Sorts sorts = (sort ? new Sorts(new Sort("type", true), new Sort("name", true)) : null);  // i18n metadata
@@ -36,7 +37,7 @@ public class LFSFolder {
             } else if ("..".equals(file.getName())) {
                 file.getClass();
             } else {
-                loadRow(rowSet, folderBase, file);
+                loadRow(rowSet, folderBase, folderOffset, file);
             }
         }
         rowSet.updateOrdinals(0);
@@ -54,20 +55,24 @@ public class LFSFolder {
         return new RowSetMetaData("lfsFolderType", columns);  // i18n metadata
     }
 
-    private static void loadRow(final RowSet rowSet, final File folderBase, final File file) {
+    private static void loadRow(
+            final RowSet rowSet, final File folderBase, final String folderOffset, final File file) {
         final String path = file.getAbsolutePath();
-        final String pathFolder = path.replace(folderBase.getAbsolutePath(), "")
-                .replace(file.getName(), "")
+        String pathFolder = path.replace(folderBase.getAbsolutePath(), "")
+                .replace(folderOffset, "")
                 .replace(Http.Token.SLASH + Http.Token.SLASH, Http.Token.SLASH);
+        pathFolder = (pathFolder.endsWith(file.getName()) ?
+                pathFolder.substring(0, pathFolder.length() - file.getName().length()) : pathFolder);
         // prep
+        final boolean isLink = FileU.isLink(file);
         final boolean isDirectory = file.isDirectory();
-        final Integer type = (isDirectory ? App.FS.S_IFDIR : App.FS.S_IFREG);
+        final Integer type = (isLink ? App.FS.S_IFLNK : (isDirectory ? App.FS.S_IFDIR : App.FS.S_IFREG));
         final String extension = (isDirectory ? null : new FileX(file.getName()).getExtension());
         // populate columns
         final InsertRow insertRow = new InsertRow(rowSet);
         insertRow.setNextColumn(type);
         insertRow.setNextColumn(pathFolder);
-        insertRow.setNextColumn(file.getName());
+        insertRow.setNextColumn(isLink ? file.getAbsolutePath() : file.getName());
         insertRow.setNextColumn(new Date(file.lastModified()));
         insertRow.setNextColumn(extension);
         insertRow.setNextColumn(file.length());

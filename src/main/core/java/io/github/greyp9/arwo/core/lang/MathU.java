@@ -9,6 +9,10 @@ public final class MathU {
         return Math.max(Math.min(value, max), min);
     }
 
+    public static long bound(final long min, final long value, final long max) {
+        return Math.max(Math.min(value, max), min);
+    }
+
     public static int roundUp(final int value, final int blockSize) {
         final int mod = value % blockSize;
         final int extra = ((mod == 0) ? 0 : (blockSize - mod));
@@ -19,5 +23,13 @@ public final class MathU {
         final long mod = value % blockSize;
         final long extra = ((mod == 0) ? 0 : (blockSize - mod));
         return (value + extra);
+    }
+
+    public static int log(final long value, final int base) {
+        int l = 0;
+        for (long i = value; (i >= base); i /= base) {
+            ++l;
+        }
+        return l;
     }
 }

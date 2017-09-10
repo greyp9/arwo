@@ -46,4 +46,12 @@ public class MenuItem extends ActionItem {
         Collections.addAll(this.menuItems, menuItems);
         this.open = false;
     }
+
+    public MenuItem(final String name, final String subject,
+                    final String action, final String object, String object2, final MenuItem... menuItems) {
+        super(name, subject, action, object, object2);
+        this.menuItems = new ArrayList<MenuItem>();
+        Collections.addAll(this.menuItems, menuItems);
+        this.open = false;
+    }
 }

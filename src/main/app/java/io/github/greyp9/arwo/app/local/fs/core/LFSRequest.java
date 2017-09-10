@@ -55,6 +55,10 @@ public class LFSRequest {
         return appRequest.getHttpRequest().getBaseURI() + patherContext.getLeft() + patherMode.getLeft();
     }
 
+    public final String getBaseURIFolder() {
+        return getBaseURIMode() + patherFolder.getLeft();
+    }
+
     public final String getContext() {
         return patherContext.getLeftToken();
     }

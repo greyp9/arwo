@@ -25,10 +25,14 @@ public class MenuSystem {
     }
 
     public final MenuItem get(final String id, final String type) {
-        final String key = Value.join(Http.Token.SLASH, id, type);
+        return get(id, type, null);
+    }
+
+    public final MenuItem get(final String id, final String type, final String object2) {
+        final String key = Value.join(Http.Token.SLASH, id, type, object2);
         //menus.clear();  // menu dev hook, always create menus
         if (!menus.containsKey(key)) {
-            menus.put(key, factory.create(id, type));
+            menus.put(key, factory.create(id, type, object2));
         }
         return menus.get(key);
     }

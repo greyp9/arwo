@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.file.meta;
 
+import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.io.StreamU;
 
 import java.io.ByteArrayInputStream;
@@ -27,9 +28,10 @@ public final class MetaFileFactory {
     private static MetaFile createCommon(final File file, final String path) throws IOException {
         MetaFile metaFile;
         try {
+            final byte[] bytes = StreamU.read(file);
             final FileMetaData metaData = new FileMetaData(
-                    path, file.length(), file.lastModified(), file.isDirectory());
-            metaFile = new MetaFile(metaData, null, new ByteArrayInputStream(StreamU.read(file)));
+                    path, file.length(), file.lastModified(), CRCU.crc32(bytes), file.isDirectory());
+            metaFile = new MetaFile(metaData, null, new ByteArrayInputStream(bytes));
         } catch (IOException e) {
             metaFile = null;
         }

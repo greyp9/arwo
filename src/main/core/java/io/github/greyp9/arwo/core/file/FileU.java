@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.core.file;
 
 import java.io.File;
 import java.io.FileFilter;
+import java.io.IOException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,5 +55,34 @@ public final class FileU {
 
     public static boolean delete(final File file) {
         return file.delete();
+    }
+
+    public static boolean isLink(final File file) {
+        final Logger logger = Logger.getLogger(FileU.class.getName());
+        boolean isLink = false;
+        try {
+            final File parentFile = file.getParentFile();
+            final File folderCanonical = (parentFile == null) ? null : parentFile.getCanonicalFile();
+            final File fileCanonical = (parentFile == null) ? null : new File(folderCanonical, file.getName());
+            final File fileCanonicalC = (fileCanonical == null) ? null : fileCanonical.getCanonicalFile();
+            final File fileCanonicalA = (fileCanonical == null) ? null : fileCanonical.getAbsoluteFile();
+            isLink = (fileCanonical != null) && (!fileCanonicalC.equals(fileCanonicalA));
+        } catch (IOException e) {
+            logger.severe(e.getMessage());
+        }
+        return isLink;
+    }
+
+    public static File getCanonicalFile(final File file) {
+        final Logger logger = Logger.getLogger(FileU.class.getName());
+        File fileCanonical = null;
+        try {
+            final File folderCanonical = file.getParentFile().getCanonicalFile();
+            fileCanonical = new File(folderCanonical, file.getName()).getCanonicalFile();
+        } catch (IOException e) {
+            logger.severe(e.getMessage());
+
+        }
+        return fileCanonical;
     }
 }

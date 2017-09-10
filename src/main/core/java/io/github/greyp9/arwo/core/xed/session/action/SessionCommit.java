@@ -10,6 +10,7 @@ import io.github.greyp9.arwo.core.file.meta.FileMetaData;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.file.zip.ZipAppender;
 import io.github.greyp9.arwo.core.http.Http;
+import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
 import io.github.greyp9.arwo.core.xml.DocumentU;
@@ -34,7 +35,8 @@ public class SessionCommit {
 
     public final void commit(final String comment, final Properties properties) throws IOException {
         final File file = session.getFile();
-        final File folder = file.getParentFile();
+        final File folderParent = file.getParentFile();
+        final File folder = ((folderParent == null) ? new File(SystemU.userDir()) : folderParent);  // SessionSave pattern
         // ensure parent folder for specified file path
         FileU.ensureFolders(folder);
         // commit

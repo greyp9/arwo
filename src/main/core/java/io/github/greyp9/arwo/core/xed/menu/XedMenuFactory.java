@@ -11,7 +11,7 @@ import io.github.greyp9.arwo.core.value.Value;
 public class XedMenuFactory implements MenuFactory {
 
     @Override
-    public final MenuItem create(final String id, final String type) {
+    public final MenuItem create(final String id, final String type, final String object2) {
         MenuItem menuItem;
         final String key = Value.join(Http.Token.SLASH, id, type);
         if (Const.XED.equals(type)) {

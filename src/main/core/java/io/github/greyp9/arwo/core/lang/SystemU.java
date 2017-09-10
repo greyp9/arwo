@@ -9,6 +9,10 @@ public final class SystemU {
         return Const.LINE_SEPARATOR;
     }
 
+    public static String osName() {
+        return Const.OS_NAME;
+    }
+
     public static String userDir() {
         return Const.USER_DIR;
     }
@@ -23,6 +27,14 @@ public final class SystemU {
 
     public static boolean isTrue() {
         return (!System.getProperties().isEmpty());
+    }
+
+    public static boolean isWindows() {
+        return (Const.OS_NAME.contains(Const.WINDOWS));
+    }
+
+    public static boolean isLinux() {
+        return (Const.OS_NAME.contains(Const.LINUX));
     }
 
     public static String resolve(final String path) {
@@ -45,8 +57,12 @@ public final class SystemU {
 
     private static class Const {
         private static final String LINE_SEPARATOR = System.getProperty("line.separator");
+        private static final String OS_NAME = System.getProperty("os.name");
         private static final String USER_DIR = System.getProperty("user.dir");
         private static final String USER_HOME = System.getProperty("user.home");
         private static final String TEMP_DIR = System.getProperty("java.io.tmpdir");
+
+        private static final String LINUX = "Linux";
+        private static final String WINDOWS = "Windows";
     }
 }

@@ -4,6 +4,7 @@ div.notifications
 {
 border: thin solid ThreeDShadow;
 background-color: InfoBackground;
+color: InfoText;
 padding: 0.25em 0.5em;
 margin: 0 0 1em 0;
 font: menu;

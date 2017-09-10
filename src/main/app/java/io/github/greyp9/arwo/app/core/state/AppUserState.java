@@ -44,6 +44,7 @@ import io.github.greyp9.arwo.core.table.state.ViewState;
 import io.github.greyp9.arwo.core.table.state.ViewStates;
 import io.github.greyp9.arwo.core.text.filter.TextFilters;
 import io.github.greyp9.arwo.core.util.PropertiesU;
+import io.github.greyp9.arwo.core.util.PropertiesX;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.vm.exec.UserExecutor;
@@ -106,6 +107,9 @@ public class AppUserState {
 
     // binary viewer state (hex rendering)
     private Page pageViewHex;
+
+    // visualization view state
+    private Page pageVisualization;
 
     public final CronService getCronService() {
         return appState.getCronService();
@@ -220,6 +224,10 @@ public class AppUserState {
         this.pageViewHex = pageViewHex;
     }
 
+    public final Page getPageVisualization() {
+        return pageVisualization;
+    }
+
     public final Bundle getBundle() {
         return new Bundle(new AppText(getLocus().getLocale()).getBundleCore());
     }
@@ -278,6 +286,7 @@ public class AppUserState {
         this.cache = new ResourceCache(null);
         this.cacheBlob = new ResourceCache(appState.getContextPath() + App.Servlet.CACHE);
         this.pageViewHex = Page.Factory.initPage(Const.PAGE_HEX_VIEW, new Properties());
+        this.pageVisualization = Page.Factory.initPage(Const.PAGE_VISUALIZATION, new Properties());
     }
 
     public final AppRequest getAppRequest(final ServletHttpRequest httpRequest) {
@@ -319,7 +328,7 @@ public class AppUserState {
         final String object = token.getObject();
         final String object2 = token.getObject2();
         final Collection<String> views = Arrays.asList(
-                App.Mode.CREATE_F, App.Mode.CREATE_D, App.Mode.EDIT, App.Mode.DELETE, App.Mode.VIEW,
+                App.Mode.CREATE_F, App.Mode.CREATE_D, App.Mode.EDIT, App.Mode.DELETE, App.Mode.FIND, App.Mode.VIEW,
                 App.Mode.VIEW_GZ, App.Mode.VIEW_ZIP, App.Mode.VIEW_TGZ, App.Mode.VIEW_HEX, App.Mode.VIEW_R);
         final Properties properties = documentState.getProperties();
         final Bundle bundle = getBundle();
@@ -354,6 +363,8 @@ public class AppUserState {
             getProperties().setProperty(App.Action.CHARSET, object);
         } else if (App.Action.HEX_VIEW_PARAM.equals(action)) {
             updateHexViewParam(object);
+        } else if (App.Action.NAV_PARAM.equals(action)) {
+            updateNavParam(object, object2);
         } else if (views.contains(action)) {
             location = toView(httpRequest, action);
         } else if (App.Action.CRON_OFF.equals(action)) {
@@ -476,6 +487,23 @@ public class AppUserState {
         }
     }
 
+    private void updateNavParam(final String object, final String object2) {
+        final PropertiesX properties = new PropertiesX(pageVisualization.getProperties());
+        if (ViewState.Nav.FIRST.equals(object)) {
+            properties.setLong(object2, 0L);
+            pageVisualization = Page.Factory.firstPage(pageVisualization);
+        } else if (ViewState.Nav.PREVIOUS.equals(object)) {
+            properties.addLong(object2, -1L);
+            pageVisualization = Page.Factory.prevPage(pageVisualization);
+        } else if (ViewState.Nav.NEXT.equals(object)) {
+            properties.addLong(object2, 1L);
+            pageVisualization = Page.Factory.nextPage(pageVisualization);
+        } else if (ViewState.Nav.LAST.equals(object)) {
+            properties.setLong(object2, Long.MAX_VALUE);
+            pageVisualization = Page.Factory.lastPage(pageVisualization);
+        }
+    }
+
     private String toView(final ServletHttpRequest httpRequest, final String action) {
         final Pather patherPathInfo = new Pather(httpRequest.getPathInfo());
         final Pather patherContext = new Pather(patherPathInfo.getRight());
@@ -508,5 +536,6 @@ public class AppUserState {
 
     private static class Const {
         private static final int PAGE_HEX_VIEW = 4096;
+        private static final int PAGE_VISUALIZATION = 1;
     }
 }

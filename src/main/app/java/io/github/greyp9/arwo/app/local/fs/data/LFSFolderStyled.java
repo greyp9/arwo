@@ -18,6 +18,7 @@ import io.github.greyp9.arwo.core.value.Value;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
+import java.util.Properties;
 
 public class LFSFolderStyled {
     private final LFSRequest request;
@@ -30,25 +31,29 @@ public class LFSFolderStyled {
     public LFSFolderStyled(final LFSRequest request, final RowSet rowSetRaw) throws UnsupportedEncodingException {
         this.request = request;
         this.rowSet = new RowSet(rowSetRaw.getMetaData(), null, null);
+        final Properties rsProperties = rowSetRaw.getProperties();
+        boolean isSymlinkRowSet = Boolean.parseBoolean(rsProperties.getProperty(Integer.toString(App.FS.S_IFLNK)));
         final Iterator<Row> iterator = rowSetRaw.iterator();
         while (iterator.hasNext()) {
-            loadRow(this.rowSet, iterator.next());
+            loadRow(this.rowSet, isSymlinkRowSet, iterator.next());
         }
-        this.rowSet.getProperties().putAll(rowSetRaw.getProperties());
+        this.rowSet.getProperties().putAll(rsProperties);
         addFooter(this.rowSet, request.getBundle());
     }
 
-    private void loadRow(final RowSet rowSetStyled, final Row rowRaw) throws UnsupportedEncodingException {
+    private void loadRow(final RowSet rowSetStyled, final boolean isSymlinkRowSet, final Row rowRaw)
+            throws UnsupportedEncodingException {
         // input
         final RowSetMetaData metaData = rowSetStyled.getMetaData();
         final Integer type = rowRaw.getInteger(metaData.getIndex("type"));  // i18n metadata
         final String folder = rowRaw.getString(metaData.getIndex("folder"));  // i18n metadata
         final String name = rowRaw.getString(metaData.getIndex("name"));  // i18n metadata
         // processing
+        //final boolean isLink = (App.FS.S_IFLNK == NumberU.toInt(type, 0));
         final boolean isDirectory = (App.FS.S_IFDIR == NumberU.toInt(type, 0));
         // output
         final InsertRow insertRow = new InsertRow(rowSetStyled);
-        insertRow.setNextColumn(getTypeStyled(type, folder, name, isDirectory));
+        insertRow.setNextColumn(getTypeStyled(type, folder, name, isSymlinkRowSet, isDirectory));
         insertRow.setNextColumn(folder);
         insertRow.setNextColumn(name);
         insertRow.setNextColumn(rowRaw.getColumn(metaData.getIndex("mtime")));  // i18n metadata
@@ -58,9 +63,10 @@ public class LFSFolderStyled {
     }
 
     private Object getTypeStyled(final Integer type, final String folder, final String name,
-                                 final boolean isDirectory) throws UnsupportedEncodingException {
+                                 final boolean isSymlinkRowSet, final boolean isDirectory)
+            throws UnsupportedEncodingException {
         final String text = toTypeText(type);
-        final String href = toHref(request, folder, name, isDirectory);
+        final String href = toHref(request, folder, name, isSymlinkRowSet, isDirectory);
         return new TableViewLink(text, null, href);
     }
 
@@ -81,10 +87,14 @@ public class LFSFolderStyled {
     }
 
     private static String toHref(final LFSRequest request, final String folder, final String name,
-                                 final boolean isDirectory) throws UnsupportedEncodingException {
+                                 final boolean isSymlinkRowSet, final boolean isDirectory)
+            throws UnsupportedEncodingException {
         final boolean fullPath = name.contains(Http.Token.SLASH);  // in case of load from symlink context
-        final String folderURI = (fullPath ? request.getBaseURIMode() :
+        String folderURI = (fullPath ? request.getBaseURIFolder() :
                 request.getHttpRequest().getHttpRequest().getResource());
+        if (isSymlinkRowSet) {
+            folderURI = folderURI.replace(request.getPath(), "");
+        }
         final String filename = (fullPath ? name : URLCodec.encode(name));
         final String suffix = (isDirectory ? Http.Token.SLASH : "");
         final String hrefRaw = Value.join("", folderURI, folder, filename, suffix);

@@ -30,17 +30,21 @@ public class AppHexView {
     public final HttpResponse addContentTo(
             final Element html, final MetaFile metaFile, final Bundle bundle) throws IOException {
         httpRequest.getClass();
-        // context menu
-        final MenuView menuView = new MenuView(bundle, httpRequest, userState.getMenuSystem());
-        menuView.addContentTo(html, AppMenuFactory.Const.HEX, false, false, Html.VALUE_6);
-        // content
+        // setup
         final byte[] bytes = StreamU.read(metaFile.getBytes());
         userState.setPageViewHex(Page.Factory.fixPage(userState.getPageViewHex(), bytes.length));
         final Page page = userState.getPageViewHex();
+        final int start = page.getPosition();
+        final int finish = Math.min(start + page.getCount(), bytes.length);
+        // context menu
+        final String position = bundle.format("table.page.n.to.m.of.x", start, finish, bytes.length);
+        final MenuView menuView = new MenuView(bundle, httpRequest, userState.getMenuSystem());
+        menuView.addContentTo(html, AppMenuFactory.Const.HEX, null, false, false, Html.VALUE_6, position);
+        // content
         final int lineWidth = NumberU.toInt(
                 page.getProperties().getProperty(App.Action.HEX_VIEW_PARAM), NumberU.Const.RADIX_HEX);
         final HexRenderer renderer = new HexRenderer(lineWidth);
-        final String text = renderer.render(bytes, page.getPosition(), page.getPosition() + page.getCount());
+        final String text = renderer.render(bytes, start, finish);
         ElementU.addElement(html, Html.PRE, text);
         return null;
     }

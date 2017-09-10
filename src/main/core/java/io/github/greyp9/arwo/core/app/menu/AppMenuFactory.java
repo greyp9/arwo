@@ -14,7 +14,7 @@ import io.github.greyp9.arwo.core.value.Value;
 public class AppMenuFactory implements MenuFactory {
 
     @Override
-    public final MenuItem create(final String id, final String type) {
+    public final MenuItem create(final String id, final String type, final String object2) {
         MenuItem menuItem;
         final String key = Value.join(Http.Token.SLASH, id, type);
         if (Const.DASHBOARD.equals(type)) {
@@ -23,8 +23,12 @@ public class AppMenuFactory implements MenuFactory {
             menuItem = createMenuBarFileSystem(key);
         } else if (Const.HEX.equals(type)) {
             menuItem = createMenuBarHex(key);
+        } else if (Const.NAV.equals(type)) {
+            menuItem = createMenuBarNavPages(key, object2);
         } else if (Const.COMMAND.equals(type)) {
             menuItem = createMenuBarCommand(key);
+        } else if (Const.VISUALIZATION.equals(type)) {
+            menuItem = createMenuBarVis(key);
         } else {
             menuItem = new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU);
         }
@@ -60,9 +64,28 @@ public class AppMenuFactory implements MenuFactory {
         return menuHex;
     }
 
+    private static MenuItem createMenuBarNavPages(final String key, final String object2) {
+        final String subject = App.Target.USER_STATE;
+        final String action = App.Action.NAV_PARAM;
+        final MenuItem itemFirst = new MenuItem(UTF16.ARROW_FIRST, subject, action, ViewState.Nav.FIRST, object2);
+        final MenuItem itemPrev = new MenuItem(UTF16.ARROW_LEFT, subject, action, ViewState.Nav.PREVIOUS, object2);
+        final MenuItem itemNext = new MenuItem(UTF16.ARROW_RIGHT, subject, action, ViewState.Nav.NEXT, object2);
+        final MenuItem itemLast = new MenuItem(UTF16.ARROW_LAST, subject, action, ViewState.Nav.LAST, object2);
+        final MenuItem menu = new MenuItem(action, subject, action, key + "/navPage", (String) null,
+                itemFirst, itemPrev, itemNext, itemLast);
+        menu.setOpen(true);
+        return menu;
+    }
+
     private static MenuItem createMenuBarCommand(final String key) {
         final MenuItem[] menuItems = new MenuItem[] {
                 createMenuConnection(key), createMenuCommand(key), createMenuSession(key), createMenuFavorites(key) };
+        return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
+    }
+
+    private static MenuItem createMenuBarVis(final String key) {
+        final MenuItem[] menuItems = new MenuItem[] {
+                createMenuViewVis(key), createMenuSession(key) };
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
     }
 
@@ -80,7 +103,7 @@ public class AppMenuFactory implements MenuFactory {
         final String properties = App.Action.PROPERTIES;
         final String textExpr = App.Action.TEXT_EXPRESSION;
         final String textFilter = App.Action.TEXT_FILTER;
-        final MenuItem itemViewFind = new MenuItem(App.Mode.FIND, App.Target.USER_STATE, App.Action.TOGGLE, App.Action.FIND);
+        final MenuItem itemViewFind = new MenuItem(App.Mode.FIND, App.Target.USER_STATE, App.Mode.FIND);
         final MenuItem itemView = new MenuItem(App.Mode.VIEW, App.Target.USER_STATE, App.Mode.VIEW);
         final MenuItem itemViewGZ = new MenuItem(App.Mode.VIEW_GZ, App.Target.USER_STATE, App.Mode.VIEW_GZ);
         final MenuItem itemViewZIP = new MenuItem(App.Mode.VIEW_ZIP, App.Target.USER_STATE, App.Mode.VIEW_ZIP);
@@ -114,6 +137,19 @@ public class AppMenuFactory implements MenuFactory {
         final MenuItem itemUTF16 = new MenuItem(UTF8Codec.Const.UTF16, subject, action, UTF8Codec.Const.UTF16);
         return new MenuItem("viewCharset", subject, App.Action.MENU, key + "/viewCharset",
                 itemUTF8, itemUTF16);
+    }
+
+    private static MenuItem createMenuViewVis(final String key) {
+        final String subject = App.Target.SESSION;
+        final String action = App.Action.SELECT;
+        final MenuItem itemViewHtml = new MenuItem(App.Mode.VIEW_HTML, subject, action, App.Mode.VIEW_HTML);
+        final MenuItem itemViewText = new MenuItem(App.Mode.VIEW_TEXT, subject, action, App.Mode.VIEW_TEXT);
+
+        final MenuItem itemViewLog2 = new MenuItem("log2", subject, action, "log2");
+        final MenuItem itemViewLog3 = new MenuItem("log3", subject, action, "log3");
+
+        return new MenuItem("viewVis", App.Target.USER_STATE, App.Action.MENU, key + "/viewVis",
+                itemViewHtml, itemViewText, itemViewLog2, itemViewLog3);
     }
 
     private static MenuItem createMenuConnection(final String key) {
@@ -159,7 +195,9 @@ public class AppMenuFactory implements MenuFactory {
         public static final String DASHBOARD = "dash";
         public static final String FILESYSTEM = "fs";
         public static final String HEX = "hex";
+        public static final String NAV = "nav";
         public static final String COMMAND = "cmd";
+        public static final String VISUALIZATION = "vis";
 
         public static final String FAVORITES = "favorites";
     }

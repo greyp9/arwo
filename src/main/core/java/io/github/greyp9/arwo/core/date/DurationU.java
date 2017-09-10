@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.date;
 
+import io.github.greyp9.arwo.core.lang.NumberU;
 import io.github.greyp9.arwo.core.value.Value;
 
 import java.util.Calendar;
@@ -18,6 +19,10 @@ public final class DurationU {
         final Date dateZ = ((dateFinish == null) ? dateIfNotFinished : dateFinish);
         final boolean isValue = ((dateStart != null) && (dateZ != null));
         return (isValue ? (dateZ.getTime() - dateStart.getTime()) : null);
+    }
+
+    public static long toMillisP(final String duration) {
+        return NumberU.toLong(toMillis(duration), 0L);
     }
 
     public static Long toMillis(final String duration) {

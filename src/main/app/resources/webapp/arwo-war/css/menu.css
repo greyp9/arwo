@@ -72,6 +72,7 @@ margin: 0 0.25em;
 span.textFilter
 {
 background-color: InfoBackground;
+color: InfoText;
 font: Menu;
 font-weight: bold;
 padding: 3px 5px;

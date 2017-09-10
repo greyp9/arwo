@@ -21,7 +21,6 @@ import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewState;
-import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import org.w3c.dom.Element;
 
@@ -72,13 +71,13 @@ public class LFSFolderView extends LFSView {
         final RowSetMetaData metaData = LFSFolder.createMetaData();
         final Locus locus = userState.getLocus();
         final ViewState viewState = userState.getViewStates().getViewState(metaData, request.getBundle(), locus);
-        final boolean findMode = PropertiesU.isBoolean(userState.getProperties(), App.Action.FIND);
+        final boolean findMode = App.Action.FIND.equals(request.getMode());
         if (findMode) {
             viewState.getHiddenColumns().remove("folder");  // i18n metadata
         } else {
             viewState.getHiddenColumns().add("folder");  // i18n metadata
         }
-        final RowSet rowSetRaw =  getRowSetRaw(metaData, viewState, findMode);
+        final RowSet rowSetRaw = getRowSetRaw(metaData, viewState, findMode);
         final RowSet rowSetStyled = new LFSFolderStyled(request, rowSetRaw).getRowSet();
         // optionally persist fetched results
         final Results results = new Results(request.getHttpRequest().getURI(),
@@ -108,13 +107,13 @@ public class LFSFolderView extends LFSView {
         // if disconnected, resource will only be fetched if no cached copy is available
         if (viewState.isConnected()) {
             final File[] files = source.listFiles(path, recurse);
-            rowSet = new LFSFolder(getFolderBase(), files, metaData, true).getRowSet();
+            rowSet = new LFSFolder(getFolderBase(), path, files, metaData, true).getRowSet();
             cache.putRowSet(path, rowSet);
         } else if (cache.containsRowSet(path)) {
             rowSet = cache.getRowSet(path);
         } else {
             final File[] files = source.listFiles(path, recurse);
-            rowSet = new LFSFolder(getFolderBase(), files, metaData, true).getRowSet();
+            rowSet = new LFSFolder(getFolderBase(), path, files, metaData, true).getRowSet();
             cache.putRowSet(path, rowSet);
         }
         return rowSet;

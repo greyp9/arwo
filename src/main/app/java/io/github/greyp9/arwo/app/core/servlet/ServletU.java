@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
@@ -14,6 +15,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.Date;
 import java.util.Enumeration;
+import java.util.Properties;
 
 public final class ServletU {
 
@@ -51,6 +53,18 @@ public final class ServletU {
         final String servletPath = request.getServletPath();
         final String pathInfo = request.getPathInfo();
         return new ServletHttpRequest(httpRequest, date, principal, contextPath, servletPath, pathInfo);
+    }
+
+    public static ServletHttpRequest read(final HttpServletRequest request, final HttpServlet servlet) throws IOException {
+        final ServletHttpRequest servletHttpRequest = read(request);
+        // include servlet initParams in request
+        final Properties initParams = servletHttpRequest.getInitParams();
+        final Enumeration<?> initParameterNames = servlet.getInitParameterNames();
+        while (initParameterNames.hasMoreElements()) {
+            final String name = (String) initParameterNames.nextElement();
+            initParams.setProperty(name, servlet.getInitParameter(name));
+        }
+        return servletHttpRequest;
     }
 
     public static void write(final HttpResponse httpResponse, final HttpServletResponse response) throws IOException {

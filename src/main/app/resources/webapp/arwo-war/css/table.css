@@ -126,7 +126,7 @@ tfoot.table tr a
 tfoot.table tr button
 {
 background-color: InfoBackground;
-color: ButtonText;
+color: InfoText;
 font: Menu;
 font-size: inherit;
 font-weight: bold;

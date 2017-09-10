@@ -64,7 +64,7 @@ public class SMTPHandlerPost {
     }
 
     private void doPostContentTypeUnknown(final String contentType) throws IOException {
-        alerts.add(new Alert(Alert.Severity.ERR, bundle.format("SFTPHandlerPost.type.unknown", contentType)));
+        alerts.add(new Alert(Alert.Severity.ERR, bundle.format("ArwoHandlerPost.type.unknown", contentType)));
     }
 
     private String doPostFormURLEncoded(final String locationIn) throws IOException {
