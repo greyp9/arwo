@@ -68,7 +68,7 @@ public final class AppNaming {
     @SuppressWarnings("PMD.OnlyOneReturn")
     public static Object lookup(final Context context, final String name) {
         try {
-            return context.lookup(name);
+            return ((context == null) ? null : context.lookup(name));
         } catch (NameNotFoundException e) {
             return null;
         } catch (NamingException e) {
