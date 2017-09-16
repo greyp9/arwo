@@ -3,7 +3,6 @@ package io.github.greyp9.arwo.app.local.fs.data;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.file.FileU;
 import io.github.greyp9.arwo.core.file.FileX;
-import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.lang.NumberU;
 import io.github.greyp9.arwo.core.table.insert.InsertRow;
 import io.github.greyp9.arwo.core.table.metadata.ColumnMetaData;
@@ -57,10 +56,11 @@ public class LFSFolder {
 
     private static void loadRow(
             final RowSet rowSet, final File folderBase, final String folderOffset, final File file) {
-        final String path = file.getAbsolutePath();
-        String pathFolder = path.replace(folderBase.getAbsolutePath(), "")
-                .replace(folderOffset, "")
-                .replace(Http.Token.SLASH + Http.Token.SLASH, Http.Token.SLASH);
+        final String pathFile = file.getAbsolutePath();
+        final String pathBase = folderBase.getAbsolutePath();
+        final String pathOffset = pathFile.substring(pathBase.length());
+        String pathFolder = pathOffset.substring(folderOffset.length());
+        //String pathFolder = pathOffsetFolder.replace(Http.Token.SLASH + Http.Token.SLASH, Http.Token.SLASH);
         pathFolder = (pathFolder.endsWith(file.getName()) ?
                 pathFolder.substring(0, pathFolder.length() - file.getName().length()) : pathFolder);
         // prep
