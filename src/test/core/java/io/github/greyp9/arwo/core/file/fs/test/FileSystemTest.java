@@ -49,4 +49,20 @@ public class FileSystemTest extends TestCase {
             logger.info(file.getAbsolutePath());
         }
     }
+
+    public void testEnumerateFolder() throws Exception {
+        final String[] folderPaths = {
+                SystemU.userHome(),
+                SystemU.tempDir(),
+        };
+        for (String folderPath : folderPaths) {
+            final File folder = new File(folderPath);
+            Assert.assertTrue(folder.exists());
+            final File[] files = FileU.listFiles(folder);
+            for (File file : files) {
+                logger.info(file.getAbsolutePath());
+                Assert.assertTrue(file.exists());
+            }
+        }
+    }
 }
