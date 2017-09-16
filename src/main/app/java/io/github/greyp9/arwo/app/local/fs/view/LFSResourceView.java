@@ -31,6 +31,7 @@ public class LFSResourceView {
         final boolean isFolder = file.isDirectory();
         final boolean isFile = file.isFile();
         final boolean isLink = FileU.isLink(file);
+        final boolean exists = file.exists();
         if ((isFolder) && (!path.endsWith(Http.Token.SLASH))) {
             // folder path in application should end with slash
             httpResponse = HttpResponseU.to302(PathU.toDir(request.getHttpRequest().getURI()));
@@ -40,6 +41,9 @@ public class LFSResourceView {
             httpResponse = new LFSFolderView(request, userState, folderBase, file).doGetResponse();
         } else if (isFile) {
             httpResponse = new LFSFileView(request, userState, folderBase, file).doGetResponse();
+        } else if (exists) {
+            userState.getAlerts().add(new Alert(Alert.Severity.ERR, path));
+            httpResponse = HttpResponseU.to302(PathU.toParent(request.getHttpRequest().getURI()));
         } else {
             userState.getAlerts().add(new Alert(Alert.Severity.ERR, path));
             httpResponse = HttpResponseU.to404();

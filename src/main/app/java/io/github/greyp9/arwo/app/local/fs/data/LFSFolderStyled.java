@@ -97,7 +97,7 @@ public class LFSFolderStyled {
         }
         final String filename = (fullPath ? name : URLCodec.encode(name));
         final String suffix = (isDirectory ? Http.Token.SLASH : "");
-        final String hrefRaw = Value.join("", folderURI, folder, filename, suffix);
+        final String hrefRaw = Value.join("", folderURI, URLCodec.encodePath(folder), filename, suffix);
         return hrefRaw.replace(Http.Token.SLASH + Http.Token.SLASH, Http.Token.SLASH);
     }
 
