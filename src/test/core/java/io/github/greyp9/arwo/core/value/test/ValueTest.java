@@ -14,6 +14,6 @@ public class ValueTest extends TestCase {
         tokens.add("a");
         tokens.add("b");
         tokens.add("c");
-        Assert.assertEquals("a b c", Value.joinList(" ", tokens));
+        Assert.assertEquals("a b c", Value.join(" ", tokens));
     }
 }
