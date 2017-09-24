@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.app.local.fs.data;
 import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.file.FileX;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.lang.NumberU;
@@ -95,9 +96,10 @@ public class LFSFolderStyled {
         if (isSymlinkRowSet) {
             folderURI = folderURI.replace(request.getPath(), "");
         }
+        final String folderNormalized = URLCodec.encodePath(new FileX(folder).getPath());
         final String filename = (fullPath ? name : URLCodec.encode(name));
         final String suffix = (isDirectory ? Http.Token.SLASH : "");
-        final String hrefRaw = Value.join("", folderURI, URLCodec.encodePath(folder), filename, suffix);
+        final String hrefRaw = Value.join("", folderURI, folderNormalized, filename, suffix);
         return hrefRaw.replace(Http.Token.SLASH + Http.Token.SLASH, Http.Token.SLASH);
     }
 
