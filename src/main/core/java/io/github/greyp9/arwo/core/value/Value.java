@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.value;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
 
@@ -61,7 +62,7 @@ public final class Value {
     }
 */
 
-    public static String joinList(final String connector, final List<Object> values) {
+    public static String join(final String connector, final Collection<Object> values) {
         final Object[] valuesArray = values.toArray(new Object[values.size()]);
         return join(connector, valuesArray);
     }

@@ -126,6 +126,17 @@ public final class StreamU {
         }
     }
 
+    public static void writeFully(final InputStream is, final OutputStream os) throws IOException {
+        final BufferedInputStream bis = new BufferedInputStream(is);
+        final BufferedOutputStream bos = new BufferedOutputStream(os);
+        int data;
+        while ((data = bis.read()) >= 0) {
+            bos.write(data);
+        }
+        bos.close();
+        bis.close();
+    }
+
     public static byte[] readUntil(final InputStream is, final byte[] until) throws IOException {
         final ByteArrayOutputStream bos = new ByteArrayOutputStream();
         StreamU.readUntil(is, bos, until);

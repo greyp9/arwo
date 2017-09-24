@@ -51,7 +51,8 @@ public final class NameTypeValues extends ArrayList<NameTypeValue> {
     public Collection<String> getValues(final String name) {
         final Collection<String> values = new ArrayList<String>();
         for (final NameTypeValue nameTypeValueIt : this) {
-            if (nameTypeValueIt.getName().equals(name)) {
+            final String nameIt = nameTypeValueIt.getName();
+            if ((nameIt != null) && (nameIt.equals(name))) {
                 values.add(nameTypeValueIt.getValueS());
             }
         }
@@ -61,7 +62,8 @@ public final class NameTypeValues extends ArrayList<NameTypeValue> {
     public NameTypeValue getNameValue(final String name) {
         NameTypeValue nameTypeValue = null;
         for (final NameTypeValue nameTypeValueIt : this) {
-            if (nameTypeValueIt.getName().equals(name)) {
+            final String nameIt = nameTypeValueIt.getName();
+            if ((nameIt != null) && (nameIt.equals(name))) {
                 nameTypeValue = nameTypeValueIt;
                 break;
             }
@@ -72,7 +74,8 @@ public final class NameTypeValues extends ArrayList<NameTypeValue> {
     public NameTypeValue getNameValueIC(final String name) {
         NameTypeValue nameTypeValue = null;
         for (final NameTypeValue nameTypeValueIt : this) {
-            if (nameTypeValueIt.getName().equalsIgnoreCase(name)) {
+            final String nameIt = nameTypeValueIt.getName();
+            if ((nameIt != null) && (nameIt.equalsIgnoreCase(name))) {
                 nameTypeValue = nameTypeValueIt;
                 break;
             }

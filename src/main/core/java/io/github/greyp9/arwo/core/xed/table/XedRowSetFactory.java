@@ -136,6 +136,6 @@ public class XedRowSetFactory {
             }
         }
         // render
-        return Value.joinList(Html.SPACE, tokens);
+        return Value.join(Html.SPACE, tokens);
     }
 }
