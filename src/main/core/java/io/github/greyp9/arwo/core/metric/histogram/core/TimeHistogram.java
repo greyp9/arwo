@@ -124,6 +124,7 @@ public class TimeHistogram implements Disposable {
                 System.arraycopy(buckets, cursor, buckets, 0, length - cursor);
                 Arrays.fill(buckets, length - cursor, length, 0);
             }
+            new TimeHistogramSerializer(this, new File(SystemU.userDir())).save();
         }
     }
 
