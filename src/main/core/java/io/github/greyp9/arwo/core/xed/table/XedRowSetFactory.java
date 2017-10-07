@@ -118,7 +118,7 @@ public class XedRowSetFactory {
     }
 
     private String getChoiceText(final XedCursor cursor, final TypeInstance childInstance) {
-        final List<Object> tokens = new ArrayList<Object>();
+        final List<String> tokens = new ArrayList<String>();
         // choice instance name
         final TypeInstance parentInstance = cursor.getTypeInstance();
         final XsdBundle bundle = cursor.getXed().getXsdBundle();
@@ -136,6 +136,6 @@ public class XedRowSetFactory {
             }
         }
         // render
-        return Value.join(Html.SPACE, tokens);
+        return Value.joinCollection(Html.SPACE, tokens);
     }
 }

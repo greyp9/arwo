@@ -50,7 +50,7 @@ public class HttpClient {
     private static void setHeaders(final HttpURLConnection connection, final HttpRequest httpRequest) {
         final NameTypeValues headers = httpRequest.getHeaders();
         for (String name : headers.getNames()) {
-            final String value = Value.join(Http.Token.COMMA, headers.getValues(name));
+            final String value = Value.joinCollection(Http.Token.COMMA, headers.getValues(name));
             connection.setRequestProperty(name, value);
         }
     }

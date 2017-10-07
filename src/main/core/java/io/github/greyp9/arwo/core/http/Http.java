@@ -23,6 +23,7 @@ public final class Http {
     }
 
     public static class Header {
+        public static final String ACCEPT = "Accept";
         public static final String ACCEPT_ENCODING = "Accept-Encoding";
         public static final String AUTHORIZATION = "Authorization";
         public static final String CONTENT_ENCODING = "Content-Encoding";
@@ -32,6 +33,7 @@ public final class Http {
         public static final String HOST = "Host";
         public static final String LAST_MODIFIED = "Last-Modified";
         public static final String LOCATION = "Location";
+        public static final String USER_AGENT = "User-Agent";
         public static final String WWW_AUTHENTICATE = "WWW-Authenticate";
     }
 

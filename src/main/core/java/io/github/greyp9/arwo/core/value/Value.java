@@ -62,7 +62,7 @@ public final class Value {
     }
 */
 
-    public static String join(final String connector, final Collection<Object> values) {
+    public static String joinCollection(final String connector, final Collection<String> values) {
         final Object[] valuesArray = values.toArray(new Object[values.size()]);
         return join(connector, valuesArray);
     }

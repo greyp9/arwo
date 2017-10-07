@@ -21,7 +21,7 @@ public final class HttpResponseGZipU {
             final ServletHttpRequest httpRequest, final HttpResponse httpResponseIn) throws IOException {
         HttpResponse httpResponse = httpResponseIn;
         final String acceptEncoding = httpRequest.getHeader(Http.Header.ACCEPT_ENCODING);
-        if (acceptEncoding.contains(Http.Header.GZIP) && httpResponse.isEntity()) {
+        if ((acceptEncoding != null) && acceptEncoding.contains(Http.Header.GZIP) && httpResponse.isEntity()) {
             final byte[] entity = StreamU.read(httpResponse.getEntity());
             final byte[] entityGZip = new GZipCodec().encode(entity);
             final int statusCode = httpResponse.getStatusCode();

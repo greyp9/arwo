@@ -29,7 +29,7 @@ public class SessionValidate {
             alerts.add(new Alert(Alert.Severity.INFO, message));
         } else {
             final String message = bundle.getString("document.validate.errors");
-            final String detail = Value.join(Http.Token.CRLF, new ArrayList<Object>(messages));
+            final String detail = Value.joinCollection(Http.Token.CRLF, new ArrayList<String>(messages));
             alerts.add(new Alert(Alert.Severity.WARN, message, detail));
         }
     }
