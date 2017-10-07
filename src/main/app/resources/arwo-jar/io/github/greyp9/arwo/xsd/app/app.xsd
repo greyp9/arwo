@@ -202,6 +202,7 @@
             <xsd:element name='cronJob' type='app:cronJobType' minOccurs='0' maxOccurs='unbounded'/>
         </xsd:sequence>
         <xsd:attribute name='name' type='xsd:string'/>
+        <xsd:attribute name='comment' type='xsd:string'/>
         <xsd:attribute name='enabled' type='xsd:boolean'/>
         <xsd:attribute name='threads' type='xsd:unsignedShort'/>
         <xsd:attribute name='tz' type='xsd:string'/>
@@ -227,6 +228,7 @@
 
     <xsd:attributeGroup name="cronJobAttributes">
         <xsd:attribute name='name' type='xsd:string'/>
+        <xsd:attribute name='comment' type='xsd:string'/>
         <xsd:attribute name='enabled' type='xsd:boolean'/>
         <xsd:attribute name='cron' type='xsd:string'/>
     </xsd:attributeGroup>
