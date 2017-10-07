@@ -30,7 +30,7 @@ public class ViewStates {
         return viewState.normalize(metaData, bundle, locus);
     }
 
-    private ViewState getViewState(final String id) {
+    public final ViewState getViewState(final String id) {
         final boolean exists = mapViewState.containsKey(id);
         return (exists) ? mapViewState.get(id) : addViewState(mapViewState, id);
     }

@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.codec.hex.HexCodec;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.hash.secure.HashU;
+import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.locus.Locus;
@@ -54,8 +55,8 @@ public class AppPropertiesView {
 
     public static RowSetMetaData createMetaData(final String tableID) {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData("name", Types.VARCHAR, true),  // i18n metadata
-                new ColumnMetaData("value", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData(Html.NAME, Types.VARCHAR, true),  // i18n metadata
+                new ColumnMetaData(Html.VALUE, Types.VARCHAR),  // i18n metadata
         };
         return new RowSetMetaData(tableID, columns);
     }
