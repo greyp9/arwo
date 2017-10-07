@@ -34,6 +34,8 @@ public class CIFSServlet extends javax.servlet.http.HttpServlet {
         }
         // library initialization requirement
         try {
+            // do not override default protocol handlers; add smb only
+            System.setProperty("java.protocol.handler.pkgs", "sun.net.www.protocol");
             jcifs.Config.registerSmbURLHandler();
         } catch (NoClassDefFoundError e) {
             Logger.getLogger(getClass().getName()).log(Level.SEVERE, e.getMessage(), e);

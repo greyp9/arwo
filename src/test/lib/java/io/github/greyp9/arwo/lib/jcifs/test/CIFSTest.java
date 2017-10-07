@@ -23,6 +23,7 @@ public class CIFSTest extends TestCase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
+        System.setProperty("java.protocol.handler.pkgs", "sun.net.www.protocol");
         jcifs.Config.registerSmbURLHandler();
     }
 
