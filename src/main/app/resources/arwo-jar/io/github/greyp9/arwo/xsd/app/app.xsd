@@ -429,12 +429,14 @@
     <xsd:complexType name="lshFavoriteType">
         <xsd:attribute name='command' type='xsd:string'/>
         <xsd:attribute name='comment' type='xsd:string'/>
+        <xsd:attribute name='enabled' type='xsd:boolean'/>
     </xsd:complexType>
 
     <xsd:complexType name="lfsFavoriteType">
         <xsd:attribute name='folder' type='xsd:string'/>
         <xsd:attribute name='resource' type='xsd:string'/>
         <xsd:attribute name='comment' type='xsd:string'/>
+        <xsd:attribute name='enabled' type='xsd:boolean'/>
     </xsd:complexType>
 
     <xsd:complexType name="sshFavoriteType">

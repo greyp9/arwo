@@ -75,7 +75,8 @@ public class AppFavoriteView {
     }
 
     private RowSetMetaData createMetaData() {
-        final RowSetMetaData metaData = new XedMetaDataFactory().create(cursorType.getTypeInstance(), false);
+        final RowSetMetaData metaDataEnabled = new XedMetaDataFactory().create(cursorType.getTypeInstance(), false);
+        final RowSetMetaData metaData = RowSetMetaDataU.removeColumn(metaDataEnabled, App.Settings.ENABLED);
         final ColumnMetaData columnAction = new ColumnMetaData(App.Action.SELECT, Types.VARCHAR, false);
         return RowSetMetaDataU.addLeft(metaData, columnAction);
     }
@@ -88,7 +89,10 @@ public class AppFavoriteView {
         final Collection<Element> children = parentConcrete.getChildren(typeInstance);
         for (final Element child : children) {
             final XedCursor childCursor = nav.find(child, parentConcrete);
-            createRow(rowSet, metaData, childCursor);
+            final TypeInstance instanceEnabled = childCursor.getTypeInstance().getInstance(App.Settings.ENABLED);
+            if (Boolean.parseBoolean(childCursor.getValue(instanceEnabled))) {
+                createRow(rowSet, metaData, childCursor);
+            }
         }
         return rowSet;
     }
@@ -101,6 +105,7 @@ public class AppFavoriteView {
             if (columnMetaData.getName().equals(App.Action.SELECT)) {
                 final SubmitToken token = new SubmitToken(App.Target.SESSION, App.Action.SELECT_FAV, item.getURI());
                 insertRow.setNextColumn(new TableViewButton(UTF16.SELECT, userState.getSubmitID(), token.toString()));
+            //} else if (!columnMetaData.getName().equals(App.Settings.ENABLED)) {
             } else {
                 final TypeInstance typeInstance = item.getTypeInstance().getInstance(columnMetaData.getName());
                 insertRow.setNextColumn(item.getValue(typeInstance));

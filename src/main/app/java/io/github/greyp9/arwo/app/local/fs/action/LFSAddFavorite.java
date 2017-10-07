@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.date.XsdDateU;
+import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.value.Value;
@@ -41,7 +42,8 @@ public class LFSAddFavorite {
             final NameTypeValues ntv = NameTypeValuesU.create(
                     "lfsFavorite.lfsFavoriteType.folder", folder,
                     "lfsFavorite.lfsFavoriteType.resource", resource,
-                    "lfsFavorite.lfsFavoriteType.comment", comment);
+                    "lfsFavorite.lfsFavoriteType.comment", comment,
+                    "lfsFavorite.lfsFavoriteType.enabled", Html.ON);
             final ValueInstance valueInstance = ValueInstance.create(typeInstance, ntv);
             new OpCreate(null, session.getXed()).apply(cursorFavorites.getElement(), valueInstance);
             final XedRequest xedRequest = new XedRequest(request.getHttpRequest(), session, documentState);

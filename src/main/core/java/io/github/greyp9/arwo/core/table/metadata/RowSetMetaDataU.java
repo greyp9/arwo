@@ -16,4 +16,15 @@ public final class RowSetMetaDataU {
         }
         return new RowSetMetaData(metaData.getID(), columns.toArray(new ColumnMetaData[columns.size()]));
     }
+
+    public static RowSetMetaData removeColumn(final RowSetMetaData metaData, final String name) {
+        final ArrayList<ColumnMetaData> columns = new ArrayList<ColumnMetaData>();
+        for (final Iterator<ColumnMetaData> it = metaData.iterator(); it.hasNext(); it.getClass()) {
+            final ColumnMetaData columnMetaData = it.next();
+            if (!columnMetaData.getName().equals(name)) {
+                columns.add(columnMetaData);
+            }
+        }
+        return new RowSetMetaData(metaData.getID(), columns.toArray(new ColumnMetaData[columns.size()]));
+    }
 }
