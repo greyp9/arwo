@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.metric.histogram.core;
 
 import io.github.greyp9.arwo.core.date.DateU;
+import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.date.XsdDateU;
 import io.github.greyp9.arwo.core.io.StreamU;
@@ -66,24 +67,27 @@ public class TimeHistogramSerializer {
         }
     }
 
-    public void save() {
+    public void save(final Date date) {
         try {
-            StreamU.write(getFile(), serializeData());
+            StreamU.writeMkdirs(getFile(date), serializeData());
         } catch (IOException e) {
             logger.severe(e.getMessage());
         }
     }
 
-    public void load() {
+    public void load(final Date date) {
         try {
-            deserializeData(StreamU.read(getFile()));
+            deserializeData(StreamU.read(getFile(date)));
         } catch (IOException e) {
             logger.severe(e.getMessage());
         }
     }
 
-    private File getFile() {
-        return new File(folder, String.format("%s.xml", histogram.getName()));
+    private File getFile(final Date date) {
+        final String filename = (date == null) ?
+                String.format("%s.xml", histogram.getName()) :
+                String.format("%s.%s.xml", histogram.getName(), DateX.toFilenameMM(date));
+        return new File(folder, filename);
     }
 
     public static class Const {

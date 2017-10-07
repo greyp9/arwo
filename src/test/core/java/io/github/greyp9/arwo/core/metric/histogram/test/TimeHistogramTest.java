@@ -24,7 +24,7 @@ public class TimeHistogramTest extends TestCase {
         Date date = XsdDateU.fromXSDZ("2000-01-01T00:00:00Z");
         long durationCell = DurationU.toMillisP("P1D");
         long durationPage = DurationU.toMillisP("P31D");
-        TimeHistogram histogram = new TimeHistogram(null, date,
+        TimeHistogram histogram = new TimeHistogram(null, ".", date,
                 durationCell, durationPage, durationPage, durationPage, durationPage, durationPage);
         logger.info(histogram.toString());
         for (int a = 0; (a < 3); ++a) {
@@ -51,7 +51,7 @@ public class TimeHistogramTest extends TestCase {
         long durationCell = DurationU.toMillisP("P1D");
         long durationPage = DurationU.toMillisP("P7D");
         long durationPages = DurationU.toMillisP("P91D");
-        TimeHistogram histogram = new TimeHistogram(null, date,
+        TimeHistogram histogram = new TimeHistogram(null, ".", date,
                 durationCell, durationCell, durationPage, durationPage, durationPage, durationPages);
         logger.info(histogram.toString());
         for (int a = 0; (a < 91); ++a) {
@@ -70,7 +70,7 @@ public class TimeHistogramTest extends TestCase {
     }
 
     public void testCreate() throws Exception {
-        TimeHistogram histogram = new TimeHistogram("foo", "PT1M", "PT15M", "PT1H", "PT6H", "P1D", "P5D");
+        TimeHistogram histogram = new TimeHistogram("foo", ".", "PT1M", "PT15M", "PT1H", "PT6H", "P1D", "P5D");
         Assert.assertEquals(DurationU.toMillisP(DurationU.Const.ONE_MINUTE), histogram.getDurationCell());
         Assert.assertEquals(15 * DurationU.toMillisP(DurationU.Const.ONE_MINUTE), histogram.getDurationWord());
         Assert.assertEquals(DurationU.toMillisP(DurationU.Const.ONE_HOUR), histogram.getDurationLine());
@@ -80,7 +80,7 @@ public class TimeHistogramTest extends TestCase {
     }
 
     public void testNormalizeAdvance() throws Exception {
-        final TimeHistogram histogram = new TimeHistogram("foo", "PT1M", "PT15M", "PT1H", "PT1H", "PT1H", "PT2H");
+        final TimeHistogram histogram = new TimeHistogram("foo", ".", "PT1M", "PT15M", "PT1H", "PT1H", "PT1H", "PT2H");
         logger.info(histogram.toString());
         final Date dateStart = DateU.floor(new Date(), "PT1H");
         final Date dateEnd = DurationU.add(dateStart, DateU.Const.TZ_GMT, "P1D");
@@ -97,7 +97,7 @@ public class TimeHistogramTest extends TestCase {
     }
 
     public void testSerialize() throws Exception {
-        final TimeHistogram histogram = new TimeHistogram("foo", "PT1M", "PT1M", "PT5M", "PT5M", "PT5M", "PT10M");
+        final TimeHistogram histogram = new TimeHistogram("foo", ".", "PT1M", "PT1M", "PT5M", "PT5M", "PT5M", "PT10M");
         logger.info(histogram.toString());
         final Date floor = DateU.floor(new Date(), "PT5M");
         final Date plusPT1M = DurationU.add(floor, DateU.Const.TZ_GMT, "PT1M");
@@ -107,7 +107,8 @@ public class TimeHistogramTest extends TestCase {
         final TimeHistogramSerializer serializer = new TimeHistogramSerializer(histogram, null);
         final byte[] bytes = serializer.serializeData();
         // deserialize
-        final TimeHistogram histogramCodec = new TimeHistogram("foo", "PT1M", "PT1M", "PT5M", "PT5M", "PT5M", "PT10M");
+        final TimeHistogram histogramCodec = new TimeHistogram(
+                "foo", ".", "PT1M", "PT1M", "PT5M", "PT5M", "PT5M", "PT10M");
         final TimeHistogramSerializer deserializer = new TimeHistogramSerializer(histogramCodec, null);
         deserializer.deserializeData(bytes);
         // check data
