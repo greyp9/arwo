@@ -10,10 +10,10 @@ import java.util.List;
 public class ValueTest extends TestCase {
 
     public void testJoin() throws Exception {
-        List<Object> tokens = new ArrayList<Object>();
+        List<String> tokens = new ArrayList<String>();
         tokens.add("a");
         tokens.add("b");
         tokens.add("c");
-        Assert.assertEquals("a b c", Value.join(" ", tokens));
+        Assert.assertEquals("a b c", Value.joinCollection(" ", tokens));
     }
 }

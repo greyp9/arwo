@@ -3,8 +3,10 @@ package io.github.greyp9.arwo.core.httpclient.test;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpRequest;
 import io.github.greyp9.arwo.core.http.HttpResponse;
+import io.github.greyp9.arwo.core.httpclient.HttpClientU;
 import io.github.greyp9.arwo.core.httpclient.HttpsClient;
 import io.github.greyp9.arwo.core.tls.client.CertificateClient;
+import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import junit.framework.TestCase;
 import org.junit.Assert;
@@ -23,7 +25,7 @@ public class HttpsClientTest extends TestCase {
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
 
-    public void testHttpGet() throws Exception {
+    public void testHttpsGet() throws Exception {
         final URL url = new URL("https://localhost:8443/");
         final CertificateClient client = new CertificateClient("TLS");
         final Collection<X509Certificate> certificates = client.getCertificateChain(url);
@@ -38,5 +40,29 @@ public class HttpsClientTest extends TestCase {
         Assert.assertFalse(valuesAuthenticate.isEmpty());
         Assert.assertEquals(1, valuesAuthenticate.size());
         Assert.assertTrue(valuesAuthenticate.iterator().next().contains(Http.Realm.BASIC));
+    }
+
+    public void testHttpsGetAuth() throws Exception {
+        final URL url = new URL("https://localhost:8443/");
+        final CertificateClient client = new CertificateClient("TLS");
+        final Collection<X509Certificate> certificates = client.getCertificateChain(url);
+        final X509Certificate certificate = certificates.iterator().next();
+        final String basicAuth = HttpClientU.toBasicAuth("arwo", "arwo".toCharArray());
+        final NameTypeValues headersRequest = NTV.create(Http.Header.AUTHORIZATION, basicAuth);
+        final HttpRequest httpRequest = new HttpRequest(Http.Method.GET, "/", null, headersRequest, null);
+        final HttpsClient httpsClient = new HttpsClient(certificate, false);
+        final HttpResponse httpResponse = httpsClient.doRequest(url, httpRequest);
+        Assert.assertEquals(HttpURLConnection.HTTP_OK, httpResponse.getStatusCode());
+        final NameTypeValues headersResponse = httpResponse.getHeaders();
+        final Collection<String> valuesContentType = headersResponse.getValues(Http.Header.CONTENT_TYPE);
+        Assert.assertFalse(valuesContentType.isEmpty());
+        Assert.assertEquals(1, valuesContentType.size());
+        Assert.assertTrue(valuesContentType.iterator().next().contains(Http.Mime.TEXT_HTML_UTF8));
+    }
+
+    public void testBasicAuthorization() throws Exception {
+        final String basicAuth = HttpClientU.toBasicAuth("arwo", "arwo".toCharArray());
+        Assert.assertEquals("Basic YXJ3bzphcndv", basicAuth);
+
     }
 }
