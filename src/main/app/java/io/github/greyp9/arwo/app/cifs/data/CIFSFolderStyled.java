@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.app.cifs.data;
 import io.github.greyp9.arwo.app.cifs.core.CIFSRequest;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.file.type.FileTypeU;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.lang.NumberU;
@@ -94,13 +95,17 @@ public class CIFSFolderStyled {
     @SuppressWarnings("PMD.NPathComplexity")
     private static String toHref(final CIFSRequest request, final String folder, final String name,
                                  final boolean isDirectory) throws UnsupportedEncodingException {
+        // path components
         final boolean fullPath = !SystemU.isTrue();  // name.contains(Http.Token.SLASH);
         final String folderURI = (fullPath ? request.getBaseURIServer() :
                 request.getHttpRequest().getHttpRequest().getResource());
         final String nameDisplay = (isDirectory ? name.substring(0, name.length() - Http.Token.SLASH.length()) : name);
         final String filename = (fullPath ? name : URLCodec.encode(nameDisplay));
         final String suffix = (isDirectory ? Http.Token.SLASH : "");
-        return Value.join("", folderURI, folder, filename, suffix);
+        // zip link
+        final String zipLinkSuffix = FileTypeU.isZip(name) ? "!/" : "";
+        // assemble
+        return Value.join("", folderURI, folder, filename, suffix, zipLinkSuffix);
     }
 
     private static void addFooter(final RowSet rowSet, final Bundle bundle) {

@@ -29,11 +29,14 @@ public class SFTPResourceView {
     public final HttpResponse doGetResource(final String path) throws IOException {
         HttpResponse httpResponse;
         final SFTPDataSource source = new SFTPDataSource(request, resource.getConnection());
-        final Integer type = SFTPFolder.toType(source.lstat(path));
+        final boolean isFolderPath = path.endsWith(Http.Token.SLASH);
+        final boolean isZipPath = path.contains("!/");
+        final String path2 = (isZipPath ? path.substring(0, path.indexOf("!/")) : path);
+        final Integer type = SFTPFolder.toType(source.lstat(path2));
         final boolean isFolder = type.equals(App.FS.S_IFDIR);
         final boolean isFile = type.equals(App.FS.S_IFREG);
         final boolean isLink = type.equals(App.FS.S_IFLNK);
-        if ((isFolder) && (!path.endsWith(Http.Token.SLASH))) {
+        if ((isFolder) && (!isFolderPath)) {
             // folder path in application should end with slash
             httpResponse = HttpResponseU.to302(PathU.toDir(request.getHttpRequest().getURI()));
         } else if (isFolder) {

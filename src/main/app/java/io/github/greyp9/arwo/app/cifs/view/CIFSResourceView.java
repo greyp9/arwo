@@ -28,10 +28,13 @@ public class CIFSResourceView {
     public final HttpResponse doGetResource(final String path) throws IOException {
         HttpResponse httpResponse;
         final CIFSDataSource source = new CIFSDataSource(request, resource.getConnection());
-        final SmbFile smbFile = source.lstat(path);
+        final boolean isFolderPath = path.endsWith(Http.Token.SLASH);
+        final boolean isZipPath = path.contains("!/");
+        final String path2 = (isZipPath ? path.substring(0, path.indexOf("!/")) : path);
+        final SmbFile smbFile = source.lstat(path2);
         final boolean isFolder = smbFile.isDirectory();
         final boolean isFile = smbFile.isFile();
-        if ((isFolder) && (!path.endsWith(Http.Token.SLASH))) {
+        if ((isFolder) && (!isFolderPath)) {
             // folder path in application should end with slash
             httpResponse = HttpResponseU.to302(PathU.toDir(request.getHttpRequest().getURI()));
         } else if (isFolder) {

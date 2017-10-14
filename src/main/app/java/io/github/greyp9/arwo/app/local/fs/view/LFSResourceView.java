@@ -27,12 +27,16 @@ public class LFSResourceView {
     public final HttpResponse doGetResource(final String path) throws IOException {
         HttpResponse httpResponse;
         final LFSDataSource source = new LFSDataSource(request, folderBase);
-        final File file = source.getFile(path);
+        final boolean isFolderPath = path.endsWith(Http.Token.SLASH);
+        final boolean isZipPath = path.contains("!/");
+        final File file = isZipPath ?
+                source.getFile(path.substring(0, path.indexOf("!/"))) :
+                source.getFile(path);
         final boolean isFolder = file.isDirectory();
         final boolean isFile = file.isFile();
         final boolean isLink = FileU.isLink(file);
         final boolean exists = file.exists();
-        if ((isFolder) && (!path.endsWith(Http.Token.SLASH))) {
+        if (isFolder && (!isFolderPath)) {
             // folder path in application should end with slash
             httpResponse = HttpResponseU.to302(PathU.toDir(request.getHttpRequest().getURI()));
         } else if (isLink) {

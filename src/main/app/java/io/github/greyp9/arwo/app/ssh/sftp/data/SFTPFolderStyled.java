@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.app.ssh.sftp.data;
 import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.file.type.FileTypeU;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.lang.NumberU;
@@ -85,12 +86,17 @@ public class SFTPFolderStyled {
 
     private static String toHref(final SFTPRequest request, final String folder, final String name,
                                  final boolean isDirectory) throws UnsupportedEncodingException {
+        // handle symlink
         final boolean fullPath = name.contains(Http.Token.SLASH);  // in case of load from symlink context
+        // path components
         final String folderURI = (fullPath ? request.getBaseURIServer() :
                 request.getHttpRequest().getHttpRequest().getResource());
         final String filename = (fullPath ? name : URLCodec.encode(name));
         final String suffix = (isDirectory ? Http.Token.SLASH : "");
-        return Value.join("", folderURI, folder, filename, suffix);
+        // zip link
+        final String zipLinkSuffix = FileTypeU.isZip(name) ? "!/" : "";
+        // assemble
+        return Value.join("", folderURI, folder, filename, suffix, zipLinkSuffix);
     }
 
     private static void addFooter(final RowSet rowSet, final Bundle bundle) {

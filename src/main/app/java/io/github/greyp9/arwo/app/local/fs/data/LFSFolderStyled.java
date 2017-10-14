@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.file.FileX;
+import io.github.greyp9.arwo.core.file.type.FileTypeU;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.lang.NumberU;
@@ -90,16 +91,21 @@ public class LFSFolderStyled {
     private static String toHref(final LFSRequest request, final String folder, final String name,
                                  final boolean isSymlinkRowSet, final boolean isDirectory)
             throws UnsupportedEncodingException {
+        // handle symlink
         final boolean fullPath = name.contains(Http.Token.SLASH);  // in case of load from symlink context
         String folderURI = (fullPath ? request.getBaseURIFolder() :
                 request.getHttpRequest().getHttpRequest().getResource());
         if (isSymlinkRowSet) {
             folderURI = folderURI.replace(request.getPath(), "");
         }
+        // path components
         final String folderNormalized = URLCodec.encodePath(new FileX(folder).getPath());
         final String filename = (fullPath ? name : URLCodec.encode(name));
         final String suffix = (isDirectory ? Http.Token.SLASH : "");
-        final String hrefRaw = Value.join("", folderURI, folderNormalized, filename, suffix);
+        // zip link
+        final String zipLinkSuffix = FileTypeU.isZip(name) ? "!/" : "";
+        // assemble
+        final String hrefRaw = Value.join("", folderURI, folderNormalized, filename, suffix, zipLinkSuffix);
         return hrefRaw.replace(Http.Token.SLASH + Http.Token.SLASH, Http.Token.SLASH);
     }
 

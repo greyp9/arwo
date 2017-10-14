@@ -44,11 +44,11 @@ public class AppZipView {
     private final String zipEntry;
 
 
-    public AppZipView(final ServletHttpRequest httpRequest, final AppUserState userState) {
+    public AppZipView(final String zipEntry, final ServletHttpRequest httpRequest, final AppUserState userState) {
         this.httpRequest = httpRequest;
         this.userState = userState;
         final NameTypeValues query = HttpArguments.toArguments(httpRequest.getHttpRequest().getQuery());
-        this.zipEntry = query.getValue(Const.QUERY_ZIP_ENTRY);
+        this.zipEntry = (zipEntry == null) ? query.getValue(Const.QUERY_ZIP_ENTRY) : zipEntry;
     }
 
     public final HttpResponse addContentTo(
@@ -102,7 +102,8 @@ public class AppZipView {
     }
 
     private void createRow(final ZipMetaData metaData, final RowSet rowSet) {
-        final String href = String.format("?%s=%s", Const.QUERY_ZIP_ENTRY, metaData.getPath());
+        //final String href = String.format("?%s=%s", Const.QUERY_ZIP_ENTRY, metaData.getPath());
+        final String href = String.format("%s", metaData.getPath());
         final long crc = metaData.getCrc();
         final boolean isDataCRC = ((crc != -1) && (crc != 0));
         final String crcText = (isDataCRC ? NumberU.toHex((int) crc) : null);

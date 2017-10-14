@@ -96,7 +96,9 @@ public class SFTPFileView extends SFTPView {
         } else if (isProperties) {
             httpResponse = null;
         } else if (isModeZIP) {
-            httpResponse = new AppZipView(httpRequest, userState).addContentTo(html, metaFile, bundle);
+            final String path = request.getPath();
+            final String pathEntry = path.contains("!/") ? path.substring(path.indexOf("!/") + 2) : null;
+            httpResponse = new AppZipView(pathEntry, httpRequest, userState).addContentTo(html, metaFile, bundle);
         } else if (isModeTGZ) {
             httpResponse = new AppTGZView(httpRequest, userState).addContentTo(html, metaFile, bundle);
         } else if (isHex) {
@@ -115,7 +117,9 @@ public class SFTPFileView extends SFTPView {
         final SSHConnectionResource resource = getResource();
         final SFTPDataSource source = new SFTPDataSource(request, resource.getConnection());
         final ResourceCache cache = getUserState().getCache();
-        final String path = request.getPath();
+        final String pathRaw = request.getPath();
+        final String path = pathRaw.contains("!/") ?
+                pathRaw.substring(0, pathRaw.indexOf("!/")) : pathRaw;
         // if disconnected, resource will only be fetched if no cached copy is available
         if (viewState.isConnected()) {
             metaFile = source.read(path);
