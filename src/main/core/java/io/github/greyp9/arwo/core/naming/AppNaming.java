@@ -1,10 +1,14 @@
 package io.github.greyp9.arwo.core.naming;
 
+import javax.naming.Binding;
 import javax.naming.Context;
 import javax.naming.InitialContext;
 import javax.naming.NameAlreadyBoundException;
 import javax.naming.NameNotFoundException;
+import javax.naming.NamingEnumeration;
 import javax.naming.NamingException;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.logging.Logger;
 
 public final class AppNaming {
@@ -52,6 +56,20 @@ public final class AppNaming {
         } catch (NamingException e) {
             throw new IllegalStateException(e);
         }
+    }
+
+    public static Collection<Binding> listBindings(final Context context, final String name) {
+        final Collection<Binding> bindings = new ArrayList<Binding>();
+        try {
+            final NamingEnumeration<Binding> enumeration = context.listBindings(name);
+            while (enumeration.hasMore()) {
+                bindings.add(enumeration.next());
+            }
+            enumeration.close();
+        } catch (NamingException e) {
+            throw new IllegalStateException(e);
+        }
+        return bindings;
     }
 
     public static Context lookupSubcontext(final String name) {
