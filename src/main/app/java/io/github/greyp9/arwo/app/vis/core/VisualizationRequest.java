@@ -11,6 +11,8 @@ public class VisualizationRequest {
     private final AppUserState userState;
     private final Pather patherContext;
     private final Pather patherMode;
+    private final Pather patherPage;
+    private final Pather patherScale;
 
     public final AppRequest getAppRequest() {
         return appRequest;
@@ -27,8 +29,10 @@ public class VisualizationRequest {
     public VisualizationRequest(final ServletHttpRequest httpRequest, final AppUserState userState) {
         this.appRequest = userState.getAppRequest(httpRequest);
         this.userState = userState;
-        this.patherContext = new Pather(httpRequest.getPathInfo());
-        this.patherMode = new Pather(patherContext.getRight());
+        this.patherContext = new Pather(httpRequest.getPathInfo());  // "/irby:servlet/irby:init-param/@name"
+        this.patherMode = new Pather(patherContext.getRight());  // html, text
+        this.patherPage = new Pather(patherMode.getRight());  // 2000-01-01T00-00Z
+        this.patherScale = new Pather(patherPage.getRight());  // 2, 3
     }
 
     public final String getContext() {
@@ -39,8 +43,16 @@ public class VisualizationRequest {
         return patherMode.getLeftToken();
     }
 
+    public final String getPage() {
+        return patherPage.getLeftToken();
+    }
+
+    public final String getScale() {
+        return patherScale.getLeftToken();
+    }
+
     public final String getPath() {
-        final String path = patherMode.getRight();
+        final String path = patherScale.getRight();
         return Value.defaultOnNull(path, "");
     }
 }

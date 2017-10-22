@@ -65,7 +65,7 @@ public class AppMenuFactory implements MenuFactory {
     }
 
     private static MenuItem createMenuBarNavPages(final String key, final String object2) {
-        final String subject = App.Target.USER_STATE;
+        final String subject = App.Target.SESSION;
         final String action = App.Action.NAV_PARAM;
         final MenuItem itemFirst = new MenuItem(UTF16.ARROW_FIRST, subject, action, ViewState.Nav.FIRST, object2);
         final MenuItem itemPrev = new MenuItem(UTF16.ARROW_LEFT, subject, action, ViewState.Nav.PREVIOUS, object2);
@@ -144,12 +144,12 @@ public class AppMenuFactory implements MenuFactory {
         final String action = App.Action.SELECT;
         final MenuItem itemViewHtml = new MenuItem(App.Mode.VIEW_HTML, subject, action, App.Mode.VIEW_HTML);
         final MenuItem itemViewText = new MenuItem(App.Mode.VIEW_TEXT, subject, action, App.Mode.VIEW_TEXT);
-
+        final MenuItem itemViewFile = new MenuItem(App.Mode.VIEW, subject, action, App.Mode.VIEW);
         final MenuItem itemViewLog2 = new MenuItem("log2", subject, action, "log2");
         final MenuItem itemViewLog3 = new MenuItem("log3", subject, action, "log3");
 
         return new MenuItem("viewVis", App.Target.USER_STATE, App.Action.MENU, key + "/viewVis",
-                itemViewHtml, itemViewText, itemViewLog2, itemViewLog3);
+                itemViewHtml, itemViewText, itemViewFile, itemViewLog2, itemViewLog3);
     }
 
     private static MenuItem createMenuConnection(final String key) {

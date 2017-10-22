@@ -98,19 +98,28 @@ public class VisualizationHandlerPost {
 
     private String applySession(
             final SubmitToken token, final NameTypeValues httpArguments, final String locationIn) throws IOException {
+        // source context
         httpArguments.getClass();
+        final String baseURI = httpRequest.getBaseURI();
+        final String context = request.getContext();
+        final String mode = request.getMode();
+        final String page = request.getPage();
+        final String scale = request.getScale();
+        // operate on input token
         String location = locationIn;
         final String message = bundle.getString("alert.action.not.implemented");
         final String action = token.getAction();
         final String object = token.getObject();
         if (App.Action.SELECT.equals(action) && App.Mode.VIEW_HTML.equals(object)) {
-            location = PathU.toDir(httpRequest.getContextPath(), httpRequest.getServletPath(), request.getContext());
+            location = PathU.toDir(baseURI, context, Html.HTML, page, scale);
         } else if (App.Action.SELECT.equals(action) && App.Mode.VIEW_TEXT.equals(object)) {
-            location = PathU.toDir(httpRequest.getContextPath(), httpRequest.getServletPath(), request.getContext(), Html.TEXT);
+            location = PathU.toDir(baseURI, context, Html.TEXT, page, scale);
+        } else if (App.Action.SELECT.equals(action) && App.Mode.VIEW.equals(object)) {
+            location = PathU.toDir(baseURI, context, Html.FILE);
         } else if (App.Action.SELECT.equals(action) && "log2".equals(object)) {
-            userState.getProperties().setProperty(httpRequest.getBaseURI(), Integer.toString(2));
+            location = PathU.toDir(baseURI, context, mode, page, Integer.toString(2));
         } else if (App.Action.SELECT.equals(action) && "log3".equals(object)) {
-            userState.getProperties().setProperty(httpRequest.getBaseURI(), Integer.toString(3));
+            location = PathU.toDir(baseURI, context, mode, page, Integer.toString(3));
         } else {
             alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }

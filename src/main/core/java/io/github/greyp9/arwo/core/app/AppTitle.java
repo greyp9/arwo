@@ -46,7 +46,7 @@ public class AppTitle {
         }
 
         private static String getLabel(final ServletHttpRequest httpRequest, final Bundle bundle) {
-            final String key = Value.join(Http.Token.DOT, Html.HTML_TOKEN, Html.TITLE, httpRequest.getServletPath());
+            final String key = Value.join(Http.Token.DOT, Html.HTML, Html.TITLE, httpRequest.getServletPath());
             return bundle.getString(key);
         }
     }

@@ -32,7 +32,7 @@ public class TimeHistogram implements Disposable {
     public TimeHistogram(String name, String folder,
                          String durationCell, String durationWord, String durationLine,
                          String durationParagraph, String durationPage, String durationPages) {
-        this(name, folder, null,
+        this(name, folder, DateU.floor(new Date(), DurationU.toMillisP(durationPage)),
                 DurationU.toMillisP(durationCell), DurationU.toMillisP(durationWord),
                 DurationU.toMillisP(durationLine), DurationU.toMillisP(durationParagraph),
                 DurationU.toMillisP(durationPage), DurationU.toMillisP(durationPages));
@@ -52,7 +52,7 @@ public class TimeHistogram implements Disposable {
         this.durationPage = durationPage;
         this.durationPages = durationPages;
         // recover data from previous application invocation
-        new TimeHistogramSerializer(this, new File(folder)).load(null);
+        new TimeHistogramSerializer(this, new File(folder)).load(dateStart);
     }
 
     public TimeHistogram(final TimeHistogram histogram, final Date dateStart, final int pos, final int len) {
@@ -111,6 +111,14 @@ public class TimeHistogram implements Disposable {
         return durationParagraph;
     }
 
+    public long getDurationPage() {
+        return durationPage;
+    }
+
+    public long getDurationPages() {
+        return durationPages;
+    }
+
     public int getWordSize() {
         return (int) (durationWord / durationCell);
     }
@@ -148,7 +156,7 @@ public class TimeHistogram implements Disposable {
             // adjust date
             final long durationIt = cursor * getDurationCell();
             dateStart.setTime(new Date(dateStart.getTime() + durationIt).getTime());
-            new TimeHistogramSerializer(this, new File(folder)).save(null);
+            new TimeHistogramSerializer(this, new File(folder)).save(dateStart);
         }
     }
 
@@ -200,7 +208,7 @@ public class TimeHistogram implements Disposable {
             //for (int page = 0; (page < pageCount); ++page) {
             //    logger.info(name + "\n" + new TimeHistogramText(this, name, page).getText());
             //}
-            new TimeHistogramSerializer(this, new File(folder)).save(null);
+            new TimeHistogramSerializer(this, new File(folder)).save(dateStart);
         }
     }
 }

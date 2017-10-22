@@ -14,6 +14,7 @@ import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
+import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.menu.view.MenuView;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
@@ -32,12 +33,14 @@ public abstract class VisualizationView {
     protected final VisualizationRequest request;
     protected final AppUserState userState;
     protected final Bundle bundle;
+    protected final Locus locus;
 
     public VisualizationView(ServletHttpRequest httpRequest, VisualizationRequest request, AppUserState userState) {
         this.httpRequest = httpRequest;
         this.request = request;
         this.userState = userState;
         this.bundle = request.getAppRequest().getBundle();
+        this.locus = request.getAppRequest().getLocus();
     }
 
     public HttpResponse doGetResponse() throws IOException {
