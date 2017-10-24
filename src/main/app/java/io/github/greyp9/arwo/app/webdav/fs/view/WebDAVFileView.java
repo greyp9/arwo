@@ -96,7 +96,9 @@ public class WebDAVFileView extends WebDAVView {
         } else if (isProperties) {
             httpResponse = null;
         } else if (isModeZIP) {
-            httpResponse = new AppZipView(httpRequest, userState).addContentTo(html, metaFile, bundle);
+            final String path = request.getPath();
+            final String pathEntry = path.contains("!/") ? path.substring(path.indexOf("!/") + 2) : null;
+            httpResponse = new AppZipView(pathEntry, httpRequest, userState).addContentTo(html, metaFile, bundle);
         } else if (isModeTGZ) {
             httpResponse = new AppTGZView(httpRequest, userState).addContentTo(html, metaFile, bundle);
         } else if (isHex) {
