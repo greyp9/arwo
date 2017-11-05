@@ -47,9 +47,10 @@ public class DependencyResolver {
     }
 
     private void addDependenciesResource(Collection<Dependency> dependencies, Element entry) throws IOException {
-        final String resource = ElementU.getAttribute(entry, "resource");
+        final String src = ElementU.getAttribute(entry, "src");
+        final String dest = ElementU.getAttribute(entry, "dest");
         final String md5 = ElementU.getAttribute(entry, "md5");
         final String sha1 = ElementU.getAttribute(entry, "sha1");
-        dependencies.add(new Dependency(resource, md5, sha1));
+        dependencies.add(new Dependency(src, dest, md5, sha1));
     }
 }

@@ -20,13 +20,13 @@ public class DependenciesTest {
                 "io.github.greyp9.arwo.app.ssh.servlet.SFTPServlet");
         Assert.assertEquals(1, dependenciesSFTP.size());
         final Dependency dependencySFTP = dependenciesSFTP.iterator().next();
-        Assert.assertTrue(dependencySFTP.getResource().contains("ganymed-ssh2-262.jar"));
+        Assert.assertTrue(dependencySFTP.getSrc().contains("ganymed-ssh2-262.jar"));
         // sh
         final Collection<Dependency> dependenciesSH = resolver.resolveDependencies(
                 "io.github.greyp9.arwo.app.ssh.servlet.SHServlet");
         Assert.assertEquals(1, dependenciesSH.size());
         final Dependency dependencySH = dependenciesSH.iterator().next();
-        Assert.assertTrue(dependencySH.getResource().contains("ganymed-ssh2-262.jar"));
+        Assert.assertTrue(dependencySH.getSrc().contains("ganymed-ssh2-262.jar"));
         // conglomerate
         final Collection<Dependency> dependencies = new TreeSet<Dependency>();
         dependencies.addAll(dependenciesSFTP);
