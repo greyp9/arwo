@@ -3,7 +3,9 @@ package io.github.greyp9.arwo.app.vis.view;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.vis.core.VisualizationRequest;
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.date.DateX;
+import io.github.greyp9.arwo.core.date.HttpDateU;
 import io.github.greyp9.arwo.core.file.find.FindInFolderQuery;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
@@ -58,24 +60,25 @@ public class VisualizationHistoryView extends VisualizationView {
     }
 
     private RowSet createRowSet(final RowSetMetaData metaData) throws IOException {
+        final DateX dateX = new DateX(HttpDateU.Const.DEFAULT, DateU.Const.TZ_GMT);
         final File folder = new File(histogram.getFolder());
         final String pattern = String.format("%s.*.xml", histogram.getName());
         final FindInFolderQuery query = new FindInFolderQuery(folder, pattern, false);
         final RowSet rowSet = new RowSet(metaData, null, null);
         for (final File file : query.getFound()) {
-            addRow(rowSet, file);
+            addRow(rowSet, file, dateX);
         }
         return rowSet;
     }
 
-    private void addRow(final RowSet rowSet, final File file) {
+    private void addRow(final RowSet rowSet, final File file, final DateX dateX) {
         final String dateString = file.getName().replace(histogram.getName() + ".", "").replace(".xml", "");
         final Date date = DateX.fromFilenameMM(dateString);
         final String href = PathU.toDir(httpRequest.getBaseURI(), request.getContext(), Html.HTML, dateString);
         final TableViewLink link = new TableViewLink(UTF16.ICON_FILE, null, href);
         final InsertRow insertRow = new InsertRow(rowSet);
         insertRow.setNextColumn(link);
-        insertRow.setNextColumn(date);
+        insertRow.setNextColumn(dateX.toString(date));
         insertRow.setNextColumn(file.length());
         rowSet.add(insertRow.getRow());
     }
