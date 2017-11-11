@@ -89,6 +89,14 @@ public final class Value {
         return valuesList;
     }
 
+    public static String wrap(final String beginAndEnd, final String value) {
+        return wrap(beginAndEnd, beginAndEnd, value);
+    }
+
+    public static String wrap(final String begin, final String end, final String value) {
+        return begin + value + end;
+    }
+
 /*
     public static String normalize(String value, int width, String delimiter) {
         StringBuilder buffer = new StringBuilder();

@@ -17,6 +17,7 @@ public final class Http {
         public static final String QUOTE = "\"";
         public static final String SEMICOLON = ";";
         public static final String SLASH = "/";
+        public static final String SPACE = " ";
         public static final String DOT = ".";
         public static final String CRLF = "\r\n";
         public static final String LF = "\n";
