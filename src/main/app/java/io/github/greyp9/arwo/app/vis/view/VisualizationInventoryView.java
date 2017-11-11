@@ -47,6 +47,9 @@ public class VisualizationInventoryView extends VisualizationView {
         return null;
     }
 
+    protected void addMenuNav(final Element html) {
+    }
+
     private RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
                 new ColumnMetaData(App.Action.SELECT, Types.VARCHAR),

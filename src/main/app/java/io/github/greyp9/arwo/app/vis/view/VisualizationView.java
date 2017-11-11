@@ -72,9 +72,12 @@ public abstract class VisualizationView {
     private void addHeaderView(final Element html, final AppTitle title) throws IOException {
         // context menu
         final MenuView menuView = new MenuView(bundle, httpRequest, userState.getMenuSystem());
-        menuView.addContentTo(html, AppMenuFactory.Const.VISUALIZATION, true);
+        final Element divMenus = menuView.addContentTo(html, AppMenuFactory.Const.VISUALIZATION, true);
+        addMenuNav(divMenus);
         menuView.addTitle(html, title);
     }
 
     protected abstract HttpResponse addContentTo(Element html) throws IOException;
+
+    protected abstract void addMenuNav(Element html);
 }

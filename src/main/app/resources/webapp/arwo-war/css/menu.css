@@ -63,7 +63,7 @@ a.active
 padding: 3px 5px;
 }
 
-button.min
+a.min, button.min
 {
 min-width: 4em;
 margin: 0 0.25em;

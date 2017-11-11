@@ -50,6 +50,9 @@ public class VisualizationHistoryView extends VisualizationView {
         return null;
     }
 
+    protected void addMenuNav(final Element html) {
+    }
+
     private RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
                 new ColumnMetaData("link", Types.VARCHAR),  // i18n metadata
