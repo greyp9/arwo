@@ -53,13 +53,15 @@ public class VisualizationEntryView extends VisualizationView {
 
     protected void addMenuNav(final Element html) {
         final Date date = DateX.fromFilenameMM(request.getPage());
-        final long durationPage = histogram.getDurationPage();
-        final Element divMenu = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENU));
-        ElementU.addElement(divMenu, Html.SPAN, "[Navigate]", NTV.create(Html.CLASS, App.CSS.MENU));
-        addMenuEntryNav(divMenu, UTF16.ARROW_FIRST, date, durationPage * -7);
-        addMenuEntryNav(divMenu, UTF16.ARROW_LEFT, date, durationPage * -1);
-        addMenuEntryNav(divMenu, UTF16.ARROW_RIGHT, date, durationPage);
-        addMenuEntryNav(divMenu, UTF16.ARROW_LAST, date, durationPage * 7);
+        if (date != null) {
+            final long durationPage = histogram.getDurationPage();
+            final Element divMenu = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENU));
+            ElementU.addElement(divMenu, Html.SPAN, "[Navigate]", NTV.create(Html.CLASS, App.CSS.MENU));
+            addMenuEntryNav(divMenu, UTF16.ARROW_FIRST, date, durationPage * -7);
+            addMenuEntryNav(divMenu, UTF16.ARROW_LEFT, date, durationPage * -1);
+            addMenuEntryNav(divMenu, UTF16.ARROW_RIGHT, date, durationPage);
+            addMenuEntryNav(divMenu, UTF16.ARROW_LAST, date, durationPage * 7);
+        }
     }
 
     private void addMenuEntryNav(final Element divMenu, final String text, final Date date, final long offset) {
