@@ -112,6 +112,9 @@ public class TableBodyView {
         if (tooBig) {
             final String textDisplay = text.substring(0, Const.MAX_WIDTH_DISPLAY) + UTF16.ELLIPSIS;
             ElementU.addElement(tr, Html.TD, textDisplay, NameTypeValuesU.create(Html.TITLE, text));
+        } else if (value instanceof Date) {
+            final String duration = DurationU.duration((Date) value, context.getDate(), 2);
+            ElementU.addElement(tr, Html.TD, text, NameTypeValuesU.create(Html.TITLE, duration));
         } else {
             final Element td = ElementU.addElement(tr, Html.TD, text, NameTypeValuesU.create());
             addStyle(td, value);

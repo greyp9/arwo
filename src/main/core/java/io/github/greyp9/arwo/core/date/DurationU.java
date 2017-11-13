@@ -32,29 +32,37 @@ public final class DurationU {
     }
 
     public static Date add(final Date date, final TimeZone tz, final String durationIn) {
+        return add(date, tz, durationIn, 1);
+    }
+
+    public static Date subtract(final Date date, final TimeZone tz, final String durationIn) {
+        return add(date, tz, durationIn, -1);
+    }
+
+    private static Date add(final Date date, final TimeZone tz, final String durationIn, int sign) {
         final String duration = Value.defaultOnNull(durationIn, "");
         final Calendar calendar = Calendar.getInstance(tz);
         calendar.setTime(date);
         final Matcher matcher = Pattern.compile(Const.PATTERN_DURATION).matcher(duration);
         if (matcher.matches()) {
-            add(calendar, matcher.group(Const.GROUP_YEAR), Calendar.YEAR);
-            add(calendar, matcher.group(Const.GROUP_MONTH), Calendar.MONTH);
-            add(calendar, matcher.group(Const.GROUP_DAY_MONTH), Calendar.DAY_OF_MONTH);
-            add(calendar, matcher.group(Const.GROUP_HOUR_DAY), Calendar.HOUR_OF_DAY);
-            add(calendar, matcher.group(Const.GROUP_MINUTE), Calendar.MINUTE);
-            add(calendar, matcher.group(Const.GROUP_SECOND), Calendar.SECOND);
-            add(calendar, matcher.group(Const.GROUP_MILLIS), Calendar.MILLISECOND);
+            add(calendar, matcher.group(Const.GROUP_YEAR), Calendar.YEAR, sign);
+            add(calendar, matcher.group(Const.GROUP_MONTH), Calendar.MONTH, sign);
+            add(calendar, matcher.group(Const.GROUP_DAY_MONTH), Calendar.DAY_OF_MONTH, sign);
+            add(calendar, matcher.group(Const.GROUP_HOUR_DAY), Calendar.HOUR_OF_DAY, sign);
+            add(calendar, matcher.group(Const.GROUP_MINUTE), Calendar.MINUTE, sign);
+            add(calendar, matcher.group(Const.GROUP_SECOND), Calendar.SECOND, sign);
+            add(calendar, matcher.group(Const.GROUP_MILLIS), Calendar.MILLISECOND, sign);
         }
         return calendar.getTime();
     }
 
-    private static void add(final Calendar calendar, final String value, final int field) {
+    private static void add(final Calendar calendar, final String value, final int field, final int sign) {
         if (value == null) {
             calendar.getClass();
         } else if (field == Calendar.MILLISECOND) {
-            calendar.add(field, Integer.parseInt(value.substring(1)));
+            calendar.add(field, sign * Integer.parseInt(value.substring(1)));
         } else {
-            calendar.add(field, Integer.parseInt(value));
+            calendar.add(field, sign * Integer.parseInt(value));
         }
     }
 
@@ -99,33 +107,61 @@ public final class DurationU {
         public static final String ZERO_SECONDS = "PT0S";  // i18n internal
     }
 
+/*
     public static String durationXSDZ(final String dateEarlierXSDZ, final String dateLaterXSDZ) {
         final Date dateEarlier = XsdDateU.fromXSDZ(dateEarlierXSDZ);
         final Date dateLater = XsdDateU.fromXSDZ(dateLaterXSDZ);
         return duration(dateEarlier, dateLater);
     }
+*/
 
     public static String duration(final Date dateEarlier, final Date dateLater, final Date dateLaterDefault) {
         final Date dateLaterIt = Value.defaultOnNull(dateLater, dateLaterDefault);
         final boolean isValue = ((dateEarlier != null) && (dateLaterIt != null));
-        return (isValue ? duration(dateEarlier, dateLaterIt) : null);
+        return (isValue ? duration(dateEarlier, dateLaterIt, Integer.MAX_VALUE) : null);
     }
 
     public static String duration(final Date dateEarlier, final Date dateLater) {
-        return duration(dateEarlier, dateLater, DateU.Const.TZ_GMT);
+        return duration(dateEarlier, dateLater, Integer.MAX_VALUE);
     }
 
-    public static String duration(final Date dateEarlier, final Date dateLater, final TimeZone tz) {
+    public static String duration(final Date dateEarlier, final Date dateLater, final int significant) {
+        return dateEarlier.after(dateLater) ?
+                duration(dateLater, dateEarlier, DateU.Const.TZ_GMT, significant) :
+                duration(dateEarlier, dateLater, DateU.Const.TZ_GMT, significant);
+    }
+
+    public static String duration(final Date dateEarlier, final Date dateLater,
+                                  final TimeZone tz, final int significant) {
         final Calendar calendar = Calendar.getInstance(tz);
         calendar.setTime(dateEarlier);
-        final int years = duration(calendar, Calendar.YEAR, dateLater);
-        final int months = duration(calendar, Calendar.MONTH, dateLater);
-        final int days = duration(calendar, Calendar.DAY_OF_MONTH, dateLater);
-        final int hours = duration(calendar, Calendar.HOUR_OF_DAY, dateLater);
-        final int minutes = duration(calendar, Calendar.MINUTE, dateLater);
-        final int seconds = duration(calendar, Calendar.SECOND, dateLater);
-        final int millis = duration(calendar, Calendar.MILLISECOND, dateLater);
-        return toDuration(years, months, days, hours, minutes, seconds, millis);
+        final long[] atomsD = new long[COUNT_VALUES];
+        int i = -1;
+        atomsD[++i] = duration(calendar, Calendar.YEAR, dateLater);
+        atomsD[++i] = duration(calendar, Calendar.MONTH, dateLater);
+        atomsD[++i] = duration(calendar, Calendar.DAY_OF_MONTH, dateLater);
+        atomsD[++i] = duration(calendar, Calendar.HOUR_OF_DAY, dateLater);
+        atomsD[++i] = duration(calendar, Calendar.MINUTE, dateLater);
+        atomsD[++i] = duration(calendar, Calendar.SECOND, dateLater);
+        atomsD[++i] = duration(calendar, Calendar.MILLISECOND, dateLater);
+        final long[] atomsDS = durationSignificant(significant, atomsD);
+        i = -1;
+        return toDuration(atomsDS[++i], atomsDS[++i], atomsDS[++i],
+                atomsDS[++i], atomsDS[++i], atomsDS[++i], atomsDS[++i]);
+    }
+
+    private static final int COUNT_VALUES = 7;
+
+    /**
+     * Zero out all of the fields after the number of significant digits.
+     */
+    private static long[] durationSignificant(final int significant, final long... values) {
+        int count = 0;
+        for (int i = 0; (i < values.length); ++i) {
+            values[i] = (count >= significant) ? 0 : values[i];
+            count += (values[i] == 0) ? 0 : 1;
+        }
+        return values;
     }
 
     private static int duration(final Calendar calendar, final int field, final Date dateLater) {
