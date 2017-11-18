@@ -57,7 +57,7 @@ public class LFSFolder {
     private static void loadRow(
             final RowSet rowSet, final File folderBase, final String folderOffset, final File file) {
         final String pathFile = file.getAbsolutePath();
-        final String pathBase = folderBase.getPath().isEmpty() ? "" : folderBase.getAbsolutePath();
+        final String pathBase = folderBase.getPath().isEmpty() ? "" : folderBase.getPath();
         final String pathOffset = pathFile.substring(pathBase.length());
         String pathFolder = pathOffset.substring(folderOffset.length());
         //String pathFolder = pathOffsetFolder.replace(Http.Token.SLASH + Http.Token.SLASH, Http.Token.SLASH);
