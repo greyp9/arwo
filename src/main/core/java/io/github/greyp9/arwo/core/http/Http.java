@@ -30,6 +30,7 @@ public final class Http {
         public static final String CONTENT_ENCODING = "Content-Encoding";
         public static final String CONTENT_LENGTH = "Content-Length";
         public static final String CONTENT_TYPE = "Content-Type";
+        public static final String EXPIRES = "Expires";
         public static final String GZIP = "gzip";
         public static final String HOST = "Host";
         public static final String LAST_MODIFIED = "Last-Modified";
