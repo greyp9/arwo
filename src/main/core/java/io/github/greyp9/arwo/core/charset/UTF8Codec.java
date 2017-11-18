@@ -16,11 +16,7 @@ public final class UTF8Codec {
     }
 
     public static byte[] toBytes(final String string) {
-        try {
-            return ((string == null) ? null : string.getBytes(Const.UTF8));
-        } catch (UnsupportedEncodingException e) {
-            throw new IllegalArgumentException(e);
-        }
+        return toBytes(string, Const.UTF8);
     }
 
     public static String toString(final byte[] bytes, final String charset) {
