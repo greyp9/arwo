@@ -18,6 +18,7 @@ public final class Html {
     public static final String CLASS = "class";
     public static final String COLS = "cols";
     public static final String COLSPAN = "colspan";
+    public static final String CONTENT = "content";
     public static final String DISABLED = "disabled";
     public static final String DIV = "div";
     public static final String ENCTYPE = "enctype";
@@ -27,11 +28,13 @@ public final class Html {
     public static final String H1 = "h1";
     public static final String HREF = "href";
     public static final String HTML = "html";
+    public static final String HTTP_EQUIV = "http-equiv";
     public static final String HYPHEN = "-";
     public static final String ID = "id";
     public static final String IMG = "img";
     public static final String INPUT = "input";
     public static final String LI = "li";
+    public static final String META = "meta";
     public static final String METHOD = "method";
     public static final String NAME = "name";
     public static final String ON = "on";
@@ -79,6 +82,7 @@ public final class Html {
     }
 
     public static class XPath {
+        public static final String HEAD = "/html/head";
         public static final String BODY = "/html/body";
     }
 }

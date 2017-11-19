@@ -49,6 +49,7 @@ import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.vm.exec.UserExecutor;
 import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
+import io.github.greyp9.arwo.core.xed.action.XedActionRefresh;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextExpression;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
 import io.github.greyp9.arwo.core.xed.model.Xed;
@@ -353,6 +354,8 @@ public class AppUserState {
             new XedActionTextFilter(getXedFactory(), getLocale()).updateTextFilters(textFilters, httpArguments);
         } else if (App.Action.CLEAR.equals(action)) {
             doClearCache();
+        } else if (App.Action.REFRESH.equals(action)) {
+            PropertiesU.toggleBoolean(properties, action);
         } else if (App.Action.MENU.equals(action)) {
             menuSystem.toggle(object);
         } else if (App.Action.TOGGLE.equals(action)) {
@@ -361,6 +364,9 @@ public class AppUserState {
             PropertiesU.setProperty(properties, action, Value.defaultOnEmpty(object, null));
         } else if (App.Action.CHARSET.equals(action)) {
             getProperties().setProperty(App.Action.CHARSET, object);
+        } else if (App.Action.UPDATE.equals(action) && App.Action.REFRESH.equals(object)) {
+            final String interval = new XedActionRefresh(getXedFactory(), getLocale()).getInterval(httpArguments);
+            getProperties().setProperty(XedActionRefresh.Const.KEY, interval);
         } else if (App.Action.HEX_VIEW_PARAM.equals(action)) {
             updateHexViewParam(object);
         } else if (App.Action.NAV_PARAM.equals(action)) {

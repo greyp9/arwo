@@ -26,6 +26,7 @@ import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.view.StatusBarView;
 import io.github.greyp9.arwo.core.xed.action.XedActionLocale;
+import io.github.greyp9.arwo.core.xed.action.XedActionRefresh;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextExpression;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
@@ -86,6 +87,7 @@ public abstract class LFSView {
         // template html
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
+        addMetaRefresh(html.getDocumentElement());
         // context-specific content
         final String modeKey = Value.join(Http.Token.DOT, App.Action.MENU, App.Mode.VIEW, request.getMode());
         final AppTitle title = AppTitle.Factory.getResourceLabel(
@@ -109,6 +111,15 @@ public abstract class LFSView {
         return httpResponse;
     }
 
+    private void addMetaRefresh(final Element html) throws IOException {
+        final String refresh = userState.getProperties().getProperty(XedActionRefresh.Const.KEY);
+        if (!Value.isEmpty(refresh)) {
+            final Element head = new XPather(html, null).getElement(Html.XPath.HEAD);
+            ElementU.addElement(head, Html.META, null, NTV.create(
+                    Html.HTTP_EQUIV, App.Action.REFRESH, Html.CONTENT, refresh));
+        }
+    }
+
     private void addHeaderView(final Element html, final AppTitle title) throws IOException {
         // context menu
         final MenuView menuView = new MenuView(bundle, httpRequest, userState.getMenuSystem());
@@ -129,6 +140,7 @@ public abstract class LFSView {
         final String submitID = userState.getSubmitID();
         final Properties properties = userState.getProperties();
         new XedActionLocale(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
+        new XedActionRefresh(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
         new XedActionTextExpression(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
         new XedActionTextFilter(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
     }

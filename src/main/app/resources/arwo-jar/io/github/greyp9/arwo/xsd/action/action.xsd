@@ -88,6 +88,14 @@
         </xsd:sequence>
     </xsd:complexType>
 
+    <xsd:element name='refresh' type='action:refreshType'/>
+
+    <xsd:complexType name='refreshType'>
+        <xsd:sequence>
+            <xsd:element name='interval' type='xsd:unsignedShort'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
     <xsd:element name='command' type='action:commandType'/>
 
     <xsd:complexType name='commandType'>
