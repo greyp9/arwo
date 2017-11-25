@@ -79,26 +79,30 @@ public class AppRealm {
     }
 
     private AppPrincipal authenticate(final String name, final String credential) {
-        AuthPrincipal authPrincipal;
+        // translate request into a principal to test
+        final AppPrincipal principalIn = ((name == null) ? null : new AppPrincipal(name, false, null));
+        final String credentialIn = hashCredential(salt, credential);
+        // find the resident principal matching the request
+        AuthPrincipal principalAuth;
         if (principals.isEmpty()) {
-            final AppPrincipal principal = new AppPrincipal(Const.PRINCIPAL_NAME,
+            final AppPrincipal principal = new AppPrincipal(Const.PRINCIPAL_NAME, true,
                     Collections.singletonList(Const.ROLE_WILDCARD));
-            authPrincipal = new AuthPrincipal(principal, hashCredential(salt, defaultPassword));
+            principalAuth = new AuthPrincipal(principal, hashCredential(salt, defaultPassword));
         } else if (name == null) {
-            authPrincipal = null;
+            principalAuth = null;
         } else {
-            authPrincipal = principals.get(name);
+            principalAuth = principals.get(name);
         }
-        final String credentialHash = hashCredential(salt, credential);
-        final AppPrincipal principal = ((authPrincipal == null) ? null : authPrincipal.authenticate(credentialHash));
-        return (principal == null) ? null : copy(principal);
+        // test expected credential against actual credential
+        final AppPrincipal principal = ((principalAuth == null) ? null : principalAuth.authenticate(credentialIn));
+        return (principal == null) ? principalIn : copy(principal);
     }
 
     @SuppressWarnings("PMD.UseVarargs")
     private AppPrincipal authenticate(final X509Certificate[] certificates) {
         final X509Certificate certificate = certificates[0];
         final String pubkeyBase64 = Base64Codec.encode(certificate.getPublicKey().getEncoded());
-        return new AppPrincipal(certificate.getSubjectDN().getName(),
+        return new AppPrincipal(certificate.getSubjectDN().getName(), false,
                 Arrays.asList(Const.ROLE_WILDCARD, pubkeyBase64));
     }
 
@@ -107,7 +111,7 @@ public class AppRealm {
     }
 
     private AppPrincipal copy(final AppPrincipal principal) {
-        return new AppPrincipal(principal.getName(), principal.getRoles());
+        return new AppPrincipal(principal.getName(), principal.isAuthenticated(), principal.getRoles());
     }
 
     private String generatePassword() {

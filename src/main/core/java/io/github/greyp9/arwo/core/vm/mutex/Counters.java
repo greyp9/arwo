@@ -36,6 +36,12 @@ public final class Counters {
         }
     }
 
+    public Counter remove(final String name) {
+        synchronized (entries) {
+            return entries.remove(name);
+        }
+    }
+
     public static class Counter implements Comparable<Counter> {
         private final String name;
         private int value;
