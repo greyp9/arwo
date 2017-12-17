@@ -15,6 +15,7 @@ import io.github.greyp9.arwo.core.io.script.Script;
 import io.github.greyp9.arwo.core.io.script.write.ScriptWriter;
 import io.github.greyp9.arwo.core.lang.StringU;
 import io.github.greyp9.arwo.core.locus.Locus;
+import io.github.greyp9.arwo.core.vm.exec.ThreadPoolU;
 import io.github.greyp9.arwo.core.vm.mutex.MutexU;
 import io.github.greyp9.arwo.core.vm.process.ProcessU;
 import io.github.greyp9.arwo.core.vm.thread.ThreadU;
@@ -24,6 +25,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
 import java.util.concurrent.ExecutorService;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @SuppressWarnings("PMD.DoNotUseThreads")
@@ -45,6 +47,7 @@ public class ScriptRunnable implements Runnable {
         final File file = context.getFile();
         final String href = context.getHref();
         try {
+            checkThreadPool(context.getExecutorStream());
             logger.entering(getClass().getName(), Runnable.class.getName());
             script.start();
             runInner();
@@ -61,6 +64,13 @@ public class ScriptRunnable implements Runnable {
         } finally {
             logger.exiting(getClass().getName(), Runnable.class.getName());
         }
+    }
+
+    private void checkThreadPool(final ExecutorService executorService) {
+        // need 3 new threads for streams
+        final boolean isAvailable = ThreadPoolU.isAvailablePool(executorService, 3);
+        final Level level = isAvailable ? Level.FINE : Level.WARNING;
+        logger.log(level, ThreadPoolU.getTelemetry(executorService));
     }
 
     @SuppressWarnings("PMD.AssignmentInOperand")
