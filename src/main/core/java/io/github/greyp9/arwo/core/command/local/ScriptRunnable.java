@@ -13,8 +13,10 @@ import io.github.greyp9.arwo.core.io.runnable.InputStreamRunnable;
 import io.github.greyp9.arwo.core.io.runnable.OutputStreamRunnable;
 import io.github.greyp9.arwo.core.io.script.Script;
 import io.github.greyp9.arwo.core.io.script.write.ScriptWriter;
-import io.github.greyp9.arwo.core.lang.StringU;
+import io.github.greyp9.arwo.core.lang.ShellU;
+import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.locus.Locus;
+import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.vm.exec.ThreadPoolU;
 import io.github.greyp9.arwo.core.vm.mutex.MutexU;
 import io.github.greyp9.arwo.core.vm.process.ProcessU;
@@ -24,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.Arrays;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -68,7 +71,7 @@ public class ScriptRunnable implements Runnable {
 
     private void checkThreadPool(final ExecutorService executorService) {
         // need 3 new threads for streams
-        final boolean isAvailable = ThreadPoolU.isAvailablePool(executorService, 3);
+        final boolean isAvailable = ThreadPoolU.isAvailablePool(executorService, 3);  // UserExecutor.N_THREAD_STREAMS
         final Level level = isAvailable ? Level.FINE : Level.WARNING;
         logger.log(level, ThreadPoolU.getTelemetry(executorService));
     }
@@ -83,11 +86,13 @@ public class ScriptRunnable implements Runnable {
     }
 
     private void runCommand(final CommandToDo commandToDo) throws IOException {
-        final File dir = context.getUserDir();
+        final File dir = Value.defaultOnNull(context.getUserDir(), new File(SystemU.userDir()));
         CommandWork commandWork = script.startCommand(commandToDo, UTF8Codec.Const.UTF8, FileU.fromFile(dir));
         Integer exitValue = null;
         try {
-            final String[] commandArray = StringU.tokenize(commandWork.getStdin(), StringU.Const.WHITESPACE);
+            final String[] commandArray = ShellU.toCommandArray(commandWork.getStdin());
+            logger.info(String.format("COMMAND:[%s], USERDIR=[%s]",
+                    Arrays.asList(commandArray).toString(), dir.getAbsolutePath()));
             final Runtime runtime = Runtime.getRuntime();
             final Process process = runtime.exec(commandArray, null, dir);
             final Integer processId = ProcessU.getProcessId(process);

@@ -46,12 +46,15 @@ public class ScriptContext {
         return pollInterval;
     }
 
-    public ScriptContext(final ExecutorService executorStream, final ResultsContext resultsContext) {
-        this(executorStream, resultsContext, Const.POLL_INTERVAL, null);
+    public ScriptContext(
+            final ExecutorService executorStream, final ResultsContext resultsContext,
+            final File userDir) {
+        this(executorStream, resultsContext, Const.POLL_INTERVAL, userDir);
     }
 
-    public ScriptContext(final ExecutorService executorStream, final ResultsContext resultsContext,
-                         final long pollInterval, final File userDir) {
+    public ScriptContext(
+            final ExecutorService executorStream, final ResultsContext resultsContext,
+            final long pollInterval, final File userDir) {
         this.executorStream = executorStream;
         this.resultsContext = resultsContext;
         this.pollInterval = pollInterval;
