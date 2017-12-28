@@ -32,8 +32,8 @@ margin: 0;
 border: 0;
 padding: 2px;
 display: inline-block;
-background-color: ButtonFace;
-color: ButtonText;
+background-color: inherit;
+color: inherit;
 font: menu;
 text-decoration: none;
 }
