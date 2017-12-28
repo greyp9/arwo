@@ -10,6 +10,7 @@ import io.github.greyp9.arwo.core.app.AppHtml;
 import io.github.greyp9.arwo.core.app.AppTitle;
 import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.config.Preferences;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.html.upload.FileUpload;
@@ -100,7 +101,9 @@ public abstract class LFSView {
             new AlertsView(displayAlerts, userState.getAlerts(), userState.getLocus(), userState.getBundle(),
                     userState.getSubmitID()).addContentTo(body);
             new StatusBarView(httpRequest, userState.getLocus()).addContentTo(body);
-            new AppHtml(httpRequest).fixup(html, title);
+            final Preferences preferences = new Preferences(getUserState().getConfig());
+            final String iconColor = Value.defaultOnEmpty(preferences.getIconColor(), "black");
+            new AppHtml(httpRequest).fixup(html, title, iconColor);
             // package into response
             final byte[] entity = DocumentU.toXHtml(html);
             final NameTypeValue contentType = new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_HTML_UTF8);
@@ -181,9 +184,8 @@ public abstract class LFSView {
         }
     }
 
-    private NameTypeValues getFileProperties() throws IOException {
+    private NameTypeValues getFileProperties() {
         return new NameTypeValues();
-
     }
 
     protected abstract HttpResponse addContentTo(Element html) throws IOException;

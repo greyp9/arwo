@@ -51,6 +51,11 @@ public class Preferences {
         return cursorLocal.getValue(cursorLocal.getChildInstance("language"));
     }
 
+    public final String getIconColor() {
+        final XedCursor cursorLocal = new XedNav(cursor.getXed()).findChild("ui", cursor);
+        return cursorLocal.getValue(cursorLocal.getChildInstance("shortcut"));
+    }
+
     private static class Const {
         private static final String PREFERENCES = "/app:app/app:preferences";
         private static final String MIME_TYPES = PREFERENCES + "/app:mimeTypes";

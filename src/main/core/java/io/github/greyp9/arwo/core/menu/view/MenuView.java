@@ -57,7 +57,7 @@ public class MenuView {
     public final Element addTitle(final Element html, final AppTitle title) throws IOException {
         final Element divMenus = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENUS));
         final Element div = ElementU.addElement(divMenus, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.PAGE_TITLE));
-        ElementU.addElement(div, Html.IMG, null, NTV.create(Html.SRC, "${CONTEXT}/res/ico/app-blue.ico", Html.ALT, ""));
+        ElementU.addElement(div, Html.IMG, null, NTV.create(Html.SRC, "${CONTEXT}/res/ico/app-black.ico", Html.ALT, ""));
         ElementU.addElement(div, Html.SPAN, title.getText());
         return divMenus;
     }
