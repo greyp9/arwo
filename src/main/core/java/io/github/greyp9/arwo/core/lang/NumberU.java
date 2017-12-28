@@ -17,7 +17,7 @@ public final class NumberU {
     }
 
     @SuppressWarnings("PMD.OnlyOneReturn")
-    public static Integer toInt(final String s, final int defaultInt) {
+    public static int toInt(final String s, final int defaultInt) {
         try {
             final Number number = ((s == null) ? defaultInt : NumberFormat.getInstance().parse(s));
             return number.intValue();

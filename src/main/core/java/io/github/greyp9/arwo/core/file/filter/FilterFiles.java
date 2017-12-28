@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.file.filter;
 
 import io.github.greyp9.arwo.core.date.DurationU;
+import io.github.greyp9.arwo.core.file.FileU;
 import io.github.greyp9.arwo.core.lang.NumberU;
 
 import java.io.File;
@@ -19,5 +20,12 @@ public class FilterFiles {
             }
         }
         files.removeAll(filesToRemove);
+    }
+
+    public static void byOldest(final Collection<File> files, final int countRemove) {
+        final int filesToRetain = Math.max(0, (files.size() - countRemove));
+        while (files.size() > filesToRetain) {
+            files.remove(FileU.getNewest(files));
+        }
     }
 }

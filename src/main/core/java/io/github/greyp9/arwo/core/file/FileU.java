@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.file;
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -88,5 +89,17 @@ public final class FileU {
 
     public static File getCanonicalFolder(final File folder) throws IOException {
         return folder.getCanonicalFile();
+    }
+
+    public static File getNewest(final Collection<File> files) {
+        File fileNewest = null;
+        for (final File file : files) {
+            if (fileNewest == null) {
+                fileNewest = file;
+            } else {
+                fileNewest = ((file.lastModified() > fileNewest.lastModified()) ? file : fileNewest);
+            }
+        }
+        return fileNewest;
     }
 }
