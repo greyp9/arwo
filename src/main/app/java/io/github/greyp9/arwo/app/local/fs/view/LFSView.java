@@ -103,7 +103,8 @@ public abstract class LFSView {
             new StatusBarView(httpRequest, userState.getLocus()).addContentTo(body);
             final Preferences preferences = new Preferences(getUserState().getConfig());
             final String iconColor = Value.defaultOnEmpty(preferences.getIconColor(), "black");
-            new AppHtml(httpRequest).fixup(html, title, iconColor);
+            final String theme = Value.defaultOnEmpty(preferences.getTheme(), "default");
+            new AppHtml(httpRequest).fixup(html, title, iconColor, theme);
             // package into response
             final byte[] entity = DocumentU.toXHtml(html);
             final NameTypeValue contentType = new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_HTML_UTF8);

@@ -56,6 +56,11 @@ public class Preferences {
         return cursorLocal.getValue(cursorLocal.getChildInstance("shortcut"));
     }
 
+    public final String getTheme() {
+        final XedCursor cursorLocal = new XedNav(cursor.getXed()).findChild("ui", cursor);
+        return cursorLocal.getValue(cursorLocal.getChildInstance("theme"));
+    }
+
     private static class Const {
         private static final String PREFERENCES = "/app:app/app:preferences";
         private static final String MIME_TYPES = PREFERENCES + "/app:mimeTypes";

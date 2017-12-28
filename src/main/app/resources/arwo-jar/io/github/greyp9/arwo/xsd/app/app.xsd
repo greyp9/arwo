@@ -365,6 +365,7 @@
     <xsd:complexType name='uiType'>
         <xsd:sequence>
             <xsd:element name='shortcut' type='app:iconColorType'/>
+            <xsd:element name='theme' type='app:themeType'/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -382,6 +383,14 @@
             <xsd:enumeration value='purple'/>
             <xsd:enumeration value='red'/>
             <xsd:enumeration value='yellow'/>
+        </xsd:restriction>
+    </xsd:simpleType>
+
+    <xsd:simpleType name='themeType'>
+        <xsd:restriction base='xsd:string'>
+            <xsd:enumeration value='default'/>
+            <xsd:enumeration value='firefox'/>
+            <xsd:enumeration value='chrome'/>
         </xsd:restriction>
     </xsd:simpleType>
 

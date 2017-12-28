@@ -3,7 +3,7 @@
 div.dialog
 {
 border: thin solid ThreeDShadow;
-background-color: window;
+background-color: Window;
 margin: 0 0 1em 0;
 }
 

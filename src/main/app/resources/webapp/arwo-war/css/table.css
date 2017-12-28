@@ -3,7 +3,7 @@
 div.table
 {
 border: thin solid ThreeDShadow;  /* table-100-percent-width */
-background-color: window;
+background-color: Window;
 margin: 0 0 1em 0;
 }
 

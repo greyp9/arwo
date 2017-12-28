@@ -19,12 +19,13 @@ public class AppHtml {
     }
 
     public final void fixup(final Document xhtml, final AppTitle appTitle) throws IOException {
-        fixup(xhtml, appTitle, "black");
+        fixup(xhtml, appTitle, "black", "default");
     }
 
-    public final void fixup(final Document xhtml, final AppTitle appTitle, String iconColor) throws IOException {
+    public final void fixup(final Document xhtml, final AppTitle appTitle,
+                            final String iconColor, final String theme) throws IOException {
         fixupTitle(xhtml, appTitle);
-        fixupContext(xhtml, iconColor);
+        fixupContext(xhtml, iconColor, theme);
     }
 
     private void fixupTitle(final Document xhtml, final AppTitle appTitle) throws IOException {
@@ -32,16 +33,25 @@ public class AppHtml {
         ElementU.setTextContent(title, appTitle.getText());
     }
 
-    private void fixupContext(final Document xhtml, final String iconColor) throws IOException {
+    private void fixupContext(final Document xhtml, final String iconColor, final String theme) throws IOException {
         final XPather xpather = new XPather(xhtml);
-        final String[] xpaths = {"//@href", "//@src"};  // i18n xpath
+        final String[] xpaths = { "//@href", "//@src" };  // i18n xpath
         for (final String xpath : xpaths) {
             final List<Attr> attrs = xpather.getAttributes(xpath);
             for (final Attr attr : attrs) {
                 //attr.setValue(attr.getValue().replace("${CONTEXT}/css", "/css-static"));  // css dev hook
                 attr.setValue(attr.getValue().replace("${CONTEXT}", httpRequest.getContextPath()));  // i18n internal
-                if (attr.getValue().contains("app-black.ico")) {
-                    attr.setValue(attr.getValue().replace("black", iconColor.toLowerCase(Locale.getDefault())));
+                final String value = attr.getValue();
+                // custom icon
+                if (value.contains("app-black.ico")) {
+                    attr.setValue(value.replace("black", iconColor.toLowerCase(Locale.getDefault())));
+                // custom css
+                } else if (value.contains("webapp.css")) {
+                    if ("firefox".equals(theme)) {
+                        attr.setValue(value.replace("webapp.css", "webapp.moz.css"));
+                    } else if ("chrome".equals(theme)) {
+                        attr.setValue(value.replace("webapp.css", "webapp.crm.css"));
+                    }
                 }
             }
         }
