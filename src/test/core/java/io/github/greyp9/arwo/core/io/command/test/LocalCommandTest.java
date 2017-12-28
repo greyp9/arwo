@@ -39,7 +39,8 @@ public class LocalCommandTest extends TestCase {
         Assert.assertEquals(1, commandsPre.size());
         final AppPrincipal principal = new AppPrincipal("root", CollectionU.toCollection("*"));
         final UserExecutor executor = new UserExecutor(principal, new Date(), null);
-        final ScriptContext context = new ScriptContext(executor.getExecutorStream(), ResultsContext.createEmpty());
+        final ScriptContext context = new ScriptContext(
+                executor.getExecutorStream(), ResultsContext.createEmpty(), null);
         final ScriptRunnable scriptRunnable = new ScriptRunnable(script, context);
         scriptRunnable.run();
         final Collection<Command> commands = script.getCommands();
@@ -65,7 +66,8 @@ public class LocalCommandTest extends TestCase {
         Assert.assertEquals(1, commandsPre.size());
         final AppPrincipal principal = new AppPrincipal("root", CollectionU.toCollection("*"));
         final UserExecutor executor = new UserExecutor(principal, new Date(), null);
-        final ScriptContext context = new ScriptContext(executor.getExecutorStream(), ResultsContext.createEmpty());
+        final ScriptContext context = new ScriptContext(
+                executor.getExecutorStream(), ResultsContext.createEmpty(), null);
         final ScriptRunnable scriptRunnable = new ScriptRunnable(script, context);
         scriptRunnable.run();
         final Collection<Command> commands = script.getCommands();
