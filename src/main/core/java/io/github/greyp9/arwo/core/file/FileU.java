@@ -85,4 +85,8 @@ public final class FileU {
         }
         return fileCanonical;
     }
+
+    public static File getCanonicalFolder(final File folder) throws IOException {
+        return folder.getCanonicalFile();
+    }
 }

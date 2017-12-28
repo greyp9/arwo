@@ -93,19 +93,16 @@ public class LFSFolderStyled {
             throws UnsupportedEncodingException {
         // handle symlink
         final boolean fullPath = name.contains(Http.Token.SLASH);  // in case of load from symlink context
-        String folderURI = (fullPath ? request.getBaseURIFolder() :
-                request.getHttpRequest().getHttpRequest().getResource());
-        if (isSymlinkRowSet) {
-            folderURI = folderURI.replace(request.getPath(), "");
-        }
+        String folderURI = request.getBaseURIFolder();
         // path components
-        final String folderNormalized = URLCodec.encodePath(new FileX(folder).getPath());
+        final String folderNormalized = (fullPath ? "" : URLCodec.encodePath(new FileX(folder).getPath()));
         final String filename = (fullPath ? name : URLCodec.encode(name));
         final String suffix = (isDirectory ? Http.Token.SLASH : "");
         // zip link
         final String zipLinkSuffix = FileTypeU.isZip(name) ? "!/" : "";
         // assemble
-        final String hrefRaw = Value.join("", folderURI, folderNormalized, filename, suffix, zipLinkSuffix);
+        final String hrefRaw = Value.join(
+                "", folderURI, Http.Token.SLASH, folderNormalized, filename, suffix, zipLinkSuffix);
         return hrefRaw.replace(Http.Token.SLASH + Http.Token.SLASH, Http.Token.SLASH);
     }
 

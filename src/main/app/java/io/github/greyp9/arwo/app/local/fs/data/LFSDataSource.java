@@ -28,13 +28,14 @@ public class LFSDataSource {
         return new File(folderRoot, path);
     }
 
-    public final File[] listFiles(final String path, boolean recurse) {
+    public final File[] listFiles(final String path, boolean recurse) throws IOException {
         final Collection<File> files = new TreeSet<File>();
-        listFilesR(new File(folderRoot, path), files, recurse);
+        final File folder = FileU.getCanonicalFolder(new File(folderRoot, path));
+        listFilesR(folder, files, recurse);
         return files.toArray(new File[files.size()]);
     }
 
-    private void listFilesR(final File folder, Collection<File> filesAll, boolean recurse) {
+    private void listFilesR(final File folder, Collection<File> filesAll, boolean recurse) throws IOException {
         final File[] files = FileU.listFiles(folder);
         for (File file : files) {
             filesAll.add(file);
