@@ -12,17 +12,35 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
+import java.net.Proxy;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 import java.util.Map;
 
 public class HttpClient {
+    private final Proxy proxy;
+
+    public HttpClient() {
+        this(null);
+    }
+
+    public HttpClient(final Proxy proxy) {
+        this.proxy = proxy;
+    }
+
+    protected Proxy getProxy() {
+        return proxy;
+    }
+
+    protected URLConnection getConnection(final URL url) throws IOException {
+        return ((proxy == null) ? url.openConnection() : url.openConnection(proxy));
+    }
 
     public HttpResponse doRequest(
             final URL url, final HttpRequest httpRequest) throws IOException {
         final URL urlRequest = toURL(url, httpRequest);
-        final HttpURLConnection connection = (HttpURLConnection) urlRequest.openConnection();
-        return doRequest(connection, httpRequest);
+        return doRequest((HttpURLConnection) getConnection(urlRequest), httpRequest);
     }
 
     public final HttpResponse doRequest(
