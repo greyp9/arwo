@@ -21,7 +21,9 @@ public class HttpsClient extends HttpClient {
     public HttpsClient(final X509Certificate certificate, final boolean verifyHostnames)
             throws GeneralSecurityException {
         super();
-        final TLSContext context = new TLSContextFactory().create(certificate, "TLS");
+        final TLSContext context = ((certificate == null) ?
+                new TLSContext(null, null, "TLS") :  // default trust store
+                new TLSContextFactory().create(certificate, "TLS"));  // custom trust store
         connectionFactory = new TrustExplicitConnectionFactory(context);
         hostnameVerifier = (verifyHostnames ? null : new TrustAllHostnameVerifier());
     }
