@@ -1,5 +1,7 @@
 package io.github.greyp9.arwo.core.file;
 
+import io.github.greyp9.arwo.core.value.Value;
+
 import java.io.File;
 import java.io.FileFilter;
 import java.io.IOException;
@@ -48,6 +50,17 @@ public final class FileU {
 
     public static File toFile(final String path) {
         return ((path == null) ? null : new File(path));
+    }
+
+    public static File toFileIfExists(final String path) {
+        File file = null;
+        if (!Value.isEmpty(path)) {
+            final File filePath = new File(path);
+            if (filePath.exists()) {
+                file = filePath;
+            }
+        }
+        return file;
     }
 
     public static String fromFile(final File file) {
