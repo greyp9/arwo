@@ -13,15 +13,19 @@ import java.io.IOException;
 public class LFSResource {
 
     public static File getFolderBase(final LFSRequest request) throws IOException {
+        final File folderBase;
         final XedSession session = request.getUserState().getDocumentState().getSession(App.Servlet.SETTINGS);
         final String name = request.getFolder();
         final CursorFolder cursorFolder = new CursorFolder(session.getXed(), name);
         if (Value.isEmpty(name)) {
-            throw new IOException(request.getAppRequest().getHttpRequest().getURI());
+            folderBase = null;
+            //throw new IOException(request.getAppRequest().getHttpRequest().getURI());
         } else if (cursorFolder.getCursor() == null) {
-            throw new IOException(request.getAppRequest().getHttpRequest().getURI());
+            folderBase = null;
+            //throw new IOException(request.getAppRequest().getHttpRequest().getURI());
         } else {
-            return FileU.getCanonicalFolder(new File(cursorFolder.getFolder()));
+            folderBase = FileU.getCanonicalFolder(new File(cursorFolder.getFolder()));
         }
+        return folderBase;
     }
 }
