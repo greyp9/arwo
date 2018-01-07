@@ -105,8 +105,13 @@ public class RowSet {
     }
 
     private boolean matchesFilter(final Filter filter, final Row row) {
-        final int index = metaData.getIndex(filter.getName());
-        return ((index < 0) || (filter.matches(comparator.getCellComparator(), row.getColumn(index))));
+        // io.github.greyp9.arwo.core.table.filter.Filters.normalize()
+        // io.github.greyp9.arwo.core.table.row.RowSet.matchesFilter()
+        // find native column name for input
+        final int columnIndex = metaData.getIndex(filter.getName());
+        //final String nameMetaData = metaData.getName(columnIndex);
+        //final String name = ((nameMetaData == null) ? filter.getName() : nameMetaData);
+        return ((columnIndex < 0) || (filter.matches(comparator.getCellComparator(), row.getColumn(columnIndex))));
     }
 
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")

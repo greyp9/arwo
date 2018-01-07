@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.page.Page;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
+import io.github.greyp9.arwo.core.table.filter.Filter;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
@@ -15,6 +16,7 @@ import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.regex.PatternSyntaxException;
 
 public class ViewStates {
     private final Map<String, ViewState> mapViewState;
@@ -55,7 +57,7 @@ public class ViewStates {
         } else if (ViewState.Action.SORT.equals(action)) {
             viewState.getSorts().add(token.getObject2());
         } else if (ViewState.Action.FILTER.equals(action)) {
-            viewState.getFilters().add(actionFilter.getFilter(nameTypeValues));
+            applyFilter(token, nameTypeValues, bundle, viewState, alerts);
         } else if (ViewState.Action.HIDE.equals(action)) {
             viewState.getHiddenColumns().add(token.getObject2());
 
@@ -82,6 +84,22 @@ public class ViewStates {
             viewState.setPage(Page.Factory.lastPage(viewState.getPage()));
         } else {
             alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
+        }
+    }
+
+    private void applyFilter(final SubmitToken token, final NameTypeValues nameTypeValues, final Bundle bundle,
+                             final ViewState viewState, final Alerts alerts) throws IOException {
+        try {
+            Filter filter = actionFilter.getFilter(nameTypeValues);
+            final String baseline = ViewState.Toggle.BASELINE;
+            final String i18nKey = Value.join(Http.Token.DOT, token.getObject(), baseline);
+            final String i18nValue = bundle.getString(i18nKey);
+            if (filter.getName().equals(i18nValue)) {
+                filter = new Filter(filter.getIndex(), baseline, filter.getOperator(), filter.getValue());
+            }
+            viewState.getFilters().add(filter);
+        } catch (PatternSyntaxException e) {
+            alerts.add(new Alert(Alert.Severity.WARN, e.getMessage(), token.toString()));
         }
     }
 

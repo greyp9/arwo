@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.table.compare;
 
 import io.github.greyp9.arwo.core.lang.CompareU;
+import io.github.greyp9.arwo.core.table.baseline.BaselineValue;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -24,6 +25,8 @@ public class CellComparator implements Serializable, java.util.Comparator<Object
             compare = CompareU.compare((Long) left, (Long) right);
         } else if ((left instanceof Date) && ((right instanceof Date))) {
             compare = CompareU.compare((Date) left, (Date) right);
+        } else if (left instanceof BaselineValue) {
+            compare = compare(((BaselineValue) left).getNew(), right);
         } else {
             compare = left.toString().compareTo(right.toString());
         }

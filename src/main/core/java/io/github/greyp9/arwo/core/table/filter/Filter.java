@@ -2,17 +2,21 @@ package io.github.greyp9.arwo.core.table.filter;
 
 import io.github.greyp9.arwo.core.table.compare.CellComparator;
 
+import java.util.regex.Pattern;
+
 public class Filter {
     private final int index;
     private final String name;
     private final Operator operator;
     private final Object value;
+    private final Pattern valuePattern;
 
     public Filter(final int index, final String name, final Operator operator, final Object value) {
         this.index = index;
         this.name = name;
         this.operator = operator;
         this.value = value;
+        this.valuePattern = ((Operator.REGEX == operator) ? Pattern.compile(value.toString()) : null);
     }
 
     public final int getIndex() {
@@ -53,6 +57,9 @@ public class Filter {
             case GEQ:
                 matches = (compare >= 0);
                 break;
+            case REGEX:
+                matches = valuePattern.matcher(valueToMatch.toString()).matches();
+                break;
             default:
                 break;
         }
@@ -69,6 +76,6 @@ public class Filter {
     }
 
     public enum Operator {
-        EQ, LT, GT, NEQ, LEQ, GEQ
+        EQ, LT, GT, NEQ, LEQ, GEQ, REGEX, X
     }
 }

@@ -22,6 +22,8 @@
             <xsd:enumeration value='GT'/>
             <xsd:enumeration value='LEQ'/>
             <xsd:enumeration value='GEQ'/>
+            <xsd:enumeration value='REGEX'/>
+            <xsd:enumeration value='X'/>
         </xsd:restriction>
     </xsd:simpleType>
 

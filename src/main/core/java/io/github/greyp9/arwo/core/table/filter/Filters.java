@@ -42,7 +42,7 @@ public class Filters {
 
     public final void normalize(final RowSetMetaData metaData, final Locus locus) {
         for (final Filter filterNew : listFilterNew) {
-            if (filterNew.getOperator() == null) {
+            if (filterNew.getOperator() == Filter.Operator.X) {
                 listFilter.clear();
             } else {
                 add(listFilter, normalize(metaData, locus, filterNew));
@@ -58,9 +58,12 @@ public class Filters {
     }
 
     private Filter normalize(final RowSetMetaData metaData, final Locus locus, final Filter filter) {
+        // io.github.greyp9.arwo.core.table.filter.Filters.normalize()
+        // io.github.greyp9.arwo.core.table.row.RowSet.matchesFilter()
         // find native column name for input
         final int columnIndex = metaData.getIndex(filter.getName());
-        final String name = metaData.getName(columnIndex);
+        final String nameMetaData = metaData.getName(columnIndex);
+        final String name = ((nameMetaData == null) ? filter.getName() : nameMetaData);
         // find native column value for input
         final String value = Value.defaultOnEmpty(filter.getValue().toString(), null);
         // convert strings to native column type
