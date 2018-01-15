@@ -3,8 +3,10 @@ package io.github.greyp9.arwo.app.local.fs.view;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.editor.AppFileEditView;
 import io.github.greyp9.arwo.app.core.view.gz.AppTGZView;
+import io.github.greyp9.arwo.app.core.view.head.AppHeadView;
 import io.github.greyp9.arwo.app.core.view.hex.AppHexView;
 import io.github.greyp9.arwo.app.core.view.rs.AppResultsView;
+import io.github.greyp9.arwo.app.core.view.tail.AppTailView;
 import io.github.greyp9.arwo.app.core.view.zip.AppZipView;
 import io.github.greyp9.arwo.app.local.fs.action.LFSDeleteFile;
 import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
@@ -70,6 +72,8 @@ public class LFSFileView extends LFSView {
         final boolean isModeCreate = (isModeCreateF || isModeCreateD);
         final boolean isModeEdit = App.Mode.EDIT.equals(mode);
         final boolean isModeDelete = App.Mode.DELETE.equals(mode);
+        final boolean isModeHead = App.Mode.VIEW_HEAD.equals(mode);
+        final boolean isModeTail = App.Mode.VIEW_TAIL.equals(mode);
         // resource interpret (gzip deflated content expected)
         final boolean isModeGZ = App.Mode.VIEW_GZ.equals(mode);
         final boolean isModeZIP = App.Mode.VIEW_ZIP.equals(mode);
@@ -101,6 +105,10 @@ public class LFSFileView extends LFSView {
             httpResponse = new AppZipView(pathEntry, httpRequest, userState).addContentTo(html, metaFile, bundle);
         } else if (isModeTGZ) {
             httpResponse = new AppTGZView(httpRequest, userState).addContentTo(html, metaFile, bundle);
+        } else if (isModeHead) {
+            httpResponse = new AppHeadView(httpRequest, userState).addContentTo(html, metaFile, bundle);
+        } else if (isModeTail) {
+            httpResponse = new AppTailView(httpRequest, userState).addContentTo(html, metaFile, bundle);
         } else if (isHex) {
             httpResponse = new AppHexView(httpRequest, userState).addContentTo(html, metaFile, bundle);
         } else if (isResults) {

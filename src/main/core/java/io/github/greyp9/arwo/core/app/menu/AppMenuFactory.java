@@ -43,8 +43,8 @@ public class AppMenuFactory implements MenuFactory {
 
     private static MenuItem createMenuBarFileSystem(final String key) {
         final MenuItem[] menuItems = new MenuItem[] {
-                createMenuFile(key), createMenuView(key), createMenuConnection(key), createMenuFileSystem(key),
-                createMenuSession(key), createMenuFavorites(key) };
+                createMenuFile(key), createMenuEdit(key), createMenuView(key), createMenuConnection(key),
+                createMenuFileSystem(key), createMenuSession(key), createMenuFavorites(key) };
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
     }
 
@@ -99,24 +99,30 @@ public class AppMenuFactory implements MenuFactory {
                 itemFileNew, itemFolderNew, itemFileEdit, itemFileUpload, itemFileDelete);
     }
 
-    private static MenuItem createMenuView(final String key) {
+    private static MenuItem createMenuEdit(final String key) {
         final String properties = App.Action.PROPERTIES;
         final String textExpr = App.Action.TEXT_EXPRESSION;
         final String textFilter = App.Action.TEXT_FILTER;
         final MenuItem itemViewFind = new MenuItem(App.Mode.FIND, App.Target.USER_STATE, App.Mode.FIND);
+        final MenuItem itemProps = new MenuItem(properties, App.Target.USER_STATE, App.Action.TOGGLE, properties);
+        final MenuItem itemExpr = new MenuItem(textExpr, App.Target.USER_STATE, App.Action.TOGGLE, textExpr);
+        final MenuItem itemFilter = new MenuItem(textFilter, App.Target.USER_STATE, App.Action.TOGGLE, textFilter);
+        return new MenuItem(App.Mode.EDIT, App.Target.USER_STATE, App.Action.MENU, Value.join("/", key, App.Mode.EDIT),
+                createMenuViewMime(key), createMenuViewCharset(key), itemViewFind,
+                itemProps, itemExpr, itemFilter);
+    }
+
+    private static MenuItem createMenuView(final String key) {
         final MenuItem itemView = new MenuItem(App.Mode.VIEW, App.Target.USER_STATE, App.Mode.VIEW);
+        final MenuItem itemViewHead = new MenuItem(App.Mode.VIEW_HEAD, App.Target.USER_STATE, App.Mode.VIEW_HEAD);
+        final MenuItem itemViewTail = new MenuItem(App.Mode.VIEW_TAIL, App.Target.USER_STATE, App.Mode.VIEW_TAIL);
         final MenuItem itemViewGZ = new MenuItem(App.Mode.VIEW_GZ, App.Target.USER_STATE, App.Mode.VIEW_GZ);
         final MenuItem itemViewZIP = new MenuItem(App.Mode.VIEW_ZIP, App.Target.USER_STATE, App.Mode.VIEW_ZIP);
         final MenuItem itemViewTGZ = new MenuItem(App.Mode.VIEW_TGZ, App.Target.USER_STATE, App.Mode.VIEW_TGZ);
         final MenuItem itemViewHex = new MenuItem(App.Mode.VIEW_HEX, App.Target.USER_STATE, App.Mode.VIEW_HEX);
         final MenuItem itemViewR = new MenuItem(App.Mode.VIEW_R, App.Target.USER_STATE, App.Mode.VIEW_R);
-        final MenuItem itemProps = new MenuItem(properties, App.Target.USER_STATE, App.Action.TOGGLE, properties);
-        final MenuItem itemExpr = new MenuItem(textExpr, App.Target.USER_STATE, App.Action.TOGGLE, textExpr);
-        final MenuItem itemFilter = new MenuItem(textFilter, App.Target.USER_STATE, App.Action.TOGGLE, textFilter);
         return new MenuItem(App.Mode.VIEW, App.Target.USER_STATE, App.Action.MENU, Value.join("/", key, App.Mode.VIEW),
-                createMenuViewMime(key), createMenuViewCharset(key), itemViewFind,
-                itemView, itemViewGZ, itemViewZIP, itemViewTGZ, itemViewHex, itemViewR,
-                itemProps, itemExpr, itemFilter);
+                itemView, itemViewHead, itemViewTail, itemViewGZ, itemViewZIP, itemViewTGZ, itemViewHex, itemViewR);
     }
 
     private static MenuItem createMenuViewMime(final String key) {

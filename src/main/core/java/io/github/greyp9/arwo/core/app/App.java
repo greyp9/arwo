@@ -161,6 +161,8 @@ public final class App {
         public static final String DELETE = "delete";
         public static final String FIND = "find";
         public static final String VIEW = "view";
+        public static final String VIEW_HEAD = "viewHead";
+        public static final String VIEW_TAIL = "viewTail";
         public static final String VIEW_GZ = "viewGZ";
         public static final String VIEW_ZIP = "viewZIP";
         public static final String VIEW_TGZ = "viewTGZ";
