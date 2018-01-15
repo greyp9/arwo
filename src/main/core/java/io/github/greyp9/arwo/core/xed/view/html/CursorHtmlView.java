@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.xed.view.html;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.view.XedCursorView;
 import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
@@ -28,6 +29,8 @@ public class CursorHtmlView extends HtmlView {
                 addTable(html, (XedTableView) view);
             }
         }
+        // reveal should only operate on one response
+        getRequest().getState().getProperties().remove(App.Action.REVEAL);
         return context;
     }
 

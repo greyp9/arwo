@@ -155,7 +155,8 @@ public class XedUserState {
         String location = request.getHttpRequest().getURI();
         final String action = token.getAction();
         final String object = token.getObject();
-        final Collection<String> views = Arrays.asList(App.Action.UI, App.Action.XML, App.Action.XSD, App.Action.REV);
+        final Collection<String> views = Arrays.asList(
+                App.Action.UI, App.Action.XML, App.Action.XSD, App.Action.REVISIONS);
         final String message = request.getBundle().getString("alert.action.not.implemented");
         if (action == null) {
             getClass();
@@ -166,6 +167,8 @@ public class XedUserState {
         } else if (App.Action.LOCALE.equals(action)) {
             PropertiesU.toggleBoolean(properties, action);
         } else if (App.Action.COMMIT.equals(action)) {
+            PropertiesU.toggleBoolean(properties, action);
+        } else if (App.Action.REVEAL.equals(action)) {
             PropertiesU.toggleBoolean(properties, action);
         } else if (views.contains(action)) {
             location = toView(request.getHttpRequest(), action);

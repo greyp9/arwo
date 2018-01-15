@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.jce;
 
 import io.github.greyp9.arwo.core.io.ByteU;
+import io.github.greyp9.arwo.core.value.Value;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
@@ -18,7 +19,7 @@ public class KeyCodec {
     }
 
     public final byte[] encode(final byte[] bytes) throws GeneralSecurityException {
-        return (isSymmetric() ? encodeSymmetric(bytes) : encodeAsymmetric(bytes));
+        return (Value.isEmpty(bytes) ? bytes : (isSymmetric() ? encodeSymmetric(bytes) : encodeAsymmetric(bytes)));
     }
 
     private boolean isSymmetric() {
@@ -41,7 +42,7 @@ public class KeyCodec {
     }
 
     public final byte[] decode(final byte[] bytes) throws GeneralSecurityException {
-        return ((bytes.length == 0) ? bytes : (isSymmetric() ? decodeSymmetric(bytes) : decodeAsymmetric(bytes)));
+        return (Value.isEmpty(bytes) ? bytes : (isSymmetric() ? decodeSymmetric(bytes) : decodeAsymmetric(bytes)));
     }
 
     private byte[] decodeSymmetric(final byte[] bytes) throws GeneralSecurityException {

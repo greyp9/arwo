@@ -254,7 +254,8 @@ public final class App {
         public static final String UI = "ui";
         public static final String XML = "xml";
         public static final String XSD = "xsd";
-        public static final String REV = "rev";
+        public static final String REVISIONS = "revisions";
+        public static final String REVEAL = "reveal";
 
         public static final String CREATE = "create";
         public static final String UPDATE = "update";

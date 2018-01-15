@@ -222,6 +222,11 @@ public final class ElementU {
         }
     }
 
+    public static void addElementNullable(final Element parent, final String name, final Object text) {
+        final Element child = addElement(parent, name);
+        setTextContentNullable(child, text);
+    }
+
     public static Element addElement(final Element parent, final String name, final Object text) {
         return addElement(parent, name, text, NameTypeValuesU.create());
     }

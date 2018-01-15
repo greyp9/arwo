@@ -72,7 +72,7 @@ public class XedHandlerGet {
             httpResponse = doGetXML(request, pather.getRight());
         } else if (App.Action.XSD.equals(pather.getLeftToken())) {
             httpResponse = new SessionXsdView(request.getSession()).doGetXSD();
-        } else if (App.Action.REV.equals(pather.getLeftToken())) {
+        } else if (App.Action.REVISIONS.equals(pather.getLeftToken())) {
             httpResponse = new RevisionHtmlView(request).doGetHtml();
         } else if (App.Action.UI.equals(pather.getLeftToken())) {
             httpResponse = doGetUI(request, pather.getRight());

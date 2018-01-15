@@ -3,16 +3,21 @@ package io.github.greyp9.arwo.core.xed.view.html;
 import io.github.greyp9.arwo.core.action.ActionButton;
 import io.github.greyp9.arwo.core.action.ActionButtons;
 import io.github.greyp9.arwo.core.action.ActionFactory;
+import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.html.HtmlU;
+import io.github.greyp9.arwo.core.jce.KeyX;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
+import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NTV;
+import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.bundle.XsdBundle;
 import io.github.greyp9.arwo.core.xed.core.XedU;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
+import io.github.greyp9.arwo.core.xed.extension.XedKey;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
 import io.github.greyp9.arwo.core.xed.view.html.type.BooleanHtmlView;
@@ -34,6 +39,7 @@ import io.github.greyp9.arwo.core.xml.ElementU;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Properties;
@@ -115,32 +121,45 @@ public class PropertyPageHtmlView {
         }
     }
 
-    private void addViewInstanceValueDrillDown(final ViewInstanceDrillDown viewInstance, final Element tr) {
-        new DrillDownHtmlView(viewInstance).addContentTo(tr);
+    private void addViewInstanceValueDrillDown(final ViewInstanceDrillDown viewInstance, final Element td) {
+        new DrillDownHtmlView(viewInstance).addContentTo(td);
     }
 
-    private void addViewInstanceValueBoolean(final ViewInstanceBoolean viewInstance, final Element tr) {
-        new BooleanHtmlView(viewInstance).addContentTo(tr);
+    private void addViewInstanceValueBoolean(final ViewInstanceBoolean viewInstance, final Element td) {
+        new BooleanHtmlView(viewInstance).addContentTo(td);
     }
 
-    private void addViewInstanceValueEnum(final ViewInstanceEnum viewInstance, final Element tr) {
-        new EnumHtmlView(viewInstance).addContentTo(tr);
+    private void addViewInstanceValueEnum(final ViewInstanceEnum viewInstance, final Element td) {
+        new EnumHtmlView(viewInstance).addContentTo(td);
     }
 
-    private void addViewInstanceValueChoice(final ViewInstanceChoice viewInstance, final Element tr) {
-        new ChoiceHtmlView(viewInstance).addContentTo(tr);
+    private void addViewInstanceValueChoice(final ViewInstanceChoice viewInstance, final Element td) {
+        new ChoiceHtmlView(viewInstance).addContentTo(td);
     }
 
-    private void addViewInstanceValueTextArea(final ViewInstanceTextArea viewInstance, final Element tr) {
-        new TextAreaHtmlView(viewInstance).addContentTo(tr);
+    private void addViewInstanceValueTextArea(final ViewInstanceTextArea viewInstance, final Element td) {
+        new TextAreaHtmlView(viewInstance).addContentTo(td);
     }
 
-    private void addViewInstanceValueTextMasked(final ViewInstanceTextMasked viewInstance, final Element tr) {
-        new TextMaskedHtmlView(viewInstance).addContentTo(tr);
+    private void addViewInstanceValueTextMasked(final ViewInstanceTextMasked viewInstance, final Element td) {
+        new TextMaskedHtmlView(viewInstance).addContentTo(td);
+        if (PropertiesU.isBoolean(request.getState().getProperties(), App.Action.REVEAL)) {
+            revealViewInstanceValueTextMasked(viewInstance, td);
+        }
     }
 
-    private void addViewInstanceValueText(final ViewInstanceText viewInstance, final Element tr) {
-        new TextHtmlView(viewInstance).addContentTo(tr);
+    private void revealViewInstanceValueTextMasked(final ViewInstance viewInstance, final Element td) {
+        try {
+            final KeyX key = XedKey.getKeyPBE(request.getSecret(), viewInstance.getTypeInstance());
+            final String clear = key.unprotect(viewInstance.getValue());
+            ElementU.addElementNullable(td, Html.SPAN, Value.defaultOnEmpty(clear, null));
+        } catch (IOException e) {
+            request.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
+        }
+    }
+
+    private void addViewInstanceValueText(final ViewInstanceText viewInstance, final Element td) {
+        new TextHtmlView(viewInstance).addContentTo(td);
     }
 
     @SuppressWarnings("PMD.AvoidInstantiatingObjectsInLoops")

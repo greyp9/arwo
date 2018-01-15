@@ -59,13 +59,14 @@ public class XedMenuFactory implements MenuFactory {
         // view document schema
         // view document xsd types
         // view document revisions
-        final MenuItem itemUI = new MenuItem("ui", App.Target.USER_STATE, "ui");
-        final MenuItem itemXml = new MenuItem("xml", App.Target.USER_STATE, "xml");
-        final MenuItem itemXsd = new MenuItem("xsd", App.Target.USER_STATE, "xsd");
-        final MenuItem itemRev = new MenuItem("rev", App.Target.USER_STATE, "rev");
+        final MenuItem itemUI = new MenuItem(App.Action.UI, App.Target.USER_STATE, App.Action.UI);
+        final MenuItem itemXml = new MenuItem(App.Action.XML, App.Target.USER_STATE, App.Action.XML);
+        final MenuItem itemXsd = new MenuItem(App.Action.XSD, App.Target.USER_STATE, App.Action.XSD);
+        final MenuItem itemRevisions = new MenuItem(App.Action.REVISIONS, App.Target.USER_STATE, App.Action.REVISIONS);
+        final MenuItem itemReveal = new MenuItem(App.Action.REVEAL, App.Target.USER_STATE, App.Action.REVEAL);
         //final MenuItem itemLocale = new MenuItem("locale", App.Target.USER_STATE, "locale");
         return new MenuItem(App.Mode.VIEW, App.Target.USER_STATE, App.Action.MENU,
-                Value.join("/", key, App.Mode.VIEW), itemUI, itemXml, itemXsd, itemRev/*, itemLocale*/);
+                Value.join("/", key, App.Mode.VIEW), itemUI, itemXml, itemXsd, itemRevisions, itemReveal);
     }
 
     public static class Const {
