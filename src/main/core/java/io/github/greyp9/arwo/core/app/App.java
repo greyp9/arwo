@@ -241,6 +241,7 @@ public final class App {
         public static final String SQL = "sql";
         public static final String MAIL = "mail";
         public static final String FILESYSTEM = "filesystem";
+        public static final String USE_CACHE = "useCache";
         public static final String FIND = "find";
         public static final String HEX_VIEW_PARAM = "hexViewParam";
         public static final String NAV_PARAM = "navParam";

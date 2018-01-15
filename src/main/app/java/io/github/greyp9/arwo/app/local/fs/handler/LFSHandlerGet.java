@@ -74,6 +74,7 @@ public class LFSHandlerGet {
             httpResponse = HttpResponseU.to302(PathU.toDir(httpRequest.getBaseURI(), App.Mode.VIEW));
         } else {
             httpResponse = new LFSResourceView(request, userState, folderBase).doGetResource(request.getPath());
+            userState.getProperties().remove(App.Action.USE_CACHE);
         }
         return httpResponse;
     }
