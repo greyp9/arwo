@@ -7,12 +7,14 @@ import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
 import io.github.greyp9.arwo.app.local.fs.data.LFSDataSource;
 import io.github.greyp9.arwo.app.local.fs.data.LFSFolder;
 import io.github.greyp9.arwo.app.local.fs.data.LFSFolderStyled;
+import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.date.Interval;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.locus.Locus;
+import io.github.greyp9.arwo.core.page.Page;
 import io.github.greyp9.arwo.core.result.io.ResultsPersister;
 import io.github.greyp9.arwo.core.result.op.Results;
 import io.github.greyp9.arwo.core.table.html.TableView;
@@ -21,6 +23,7 @@ import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewState;
+import io.github.greyp9.arwo.core.table.state.ViewStates;
 import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import org.w3c.dom.Element;
 
@@ -78,6 +81,13 @@ public class LFSFolderView extends LFSView {
             viewState.getHiddenColumns().add("folder");  // i18n metadata
         }
         final RowSet rowSetRaw = getRowSetRaw(metaData, viewState, findMode);
+        // protect against unexpected large result set
+        boolean isLargeRowSet = (rowSetRaw.getRows() > ViewStates.Const.PAGE_SIZE_TABLE);
+        if ((isLargeRowSet) && (viewState.getPage() == null) && (viewState.isAutoPage())) {
+            viewState.setPage(Page.Factory.togglePage(viewState.getPage(), ViewStates.Const.PAGE_SIZE_TABLE));
+            userState.getAlerts().add(new Alert(Alert.Severity.INFO, getBundle().getString("table.autopage")));
+            viewState.setAutoPage(false);
+        }
         final RowSet rowSetStyled = new LFSFolderStyled(request, rowSetRaw).getRowSet();
         // optionally persist fetched results
         final Results results = new Results(request.getHttpRequest().getURI(),

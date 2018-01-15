@@ -29,6 +29,7 @@ public class ViewState {
     private boolean activeBaseline;
     private String filterColumn;
     private Page page;
+    private boolean autoPage;
 
     public ViewState(final String name) {
         this.name = name;
@@ -43,6 +44,7 @@ public class ViewState {
         this.activeBaseline = false;
         this.filterColumn = null;
         this.page = null;
+        this.autoPage = true;
     }
 
     public final String getName() {
@@ -106,6 +108,14 @@ public class ViewState {
         this.page = page;
     }
 
+    public boolean isAutoPage() {
+        return autoPage;
+    }
+
+    public void setAutoPage(boolean autoPage) {
+        this.autoPage = autoPage;
+    }
+
     public final String getFilterColumn() {
         return filterColumn;
     }
@@ -133,6 +143,7 @@ public class ViewState {
         activeBaseline = false;
         filterColumn = null;
         page = null;
+        autoPage = true;
     }
 
 

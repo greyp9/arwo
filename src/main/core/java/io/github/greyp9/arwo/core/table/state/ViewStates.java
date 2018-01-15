@@ -103,7 +103,7 @@ public class ViewStates {
         }
     }
 
-    private static class Const {
-        private static final int PAGE_SIZE_TABLE = 30;
+    public static class Const {
+        public static final int PAGE_SIZE_TABLE = 30;
     }
 }

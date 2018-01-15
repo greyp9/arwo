@@ -70,6 +70,10 @@ public abstract class LFSView {
         return folderBase;
     }
 
+    public Bundle getBundle() {
+        return bundle;
+    }
+
     public final File getFile() {
         return file;
     }
