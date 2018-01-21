@@ -26,6 +26,7 @@ public final class UTF16 {
     public static final String LIST_EXPAND = "\u226b";
     public static final String MENU = "\u2630";  // "\u2261"
     public static final String NBSP = "\u00a0";
+    public static final String PARENT = "\u21b6";  // "\u21b0"
     public static final String PAUSE = "\u25ae\u25ae";
     public static final String PLAY = "\u25b6";
     public static final String SELECT = "\u261b";

@@ -245,6 +245,7 @@ public final class App {
         public static final String FIND = "find";
         public static final String HEX_VIEW_PARAM = "hexViewParam";
         public static final String NAV_PARAM = "navParam";
+        public static final String NAV_PARENT = "navParent";
         public static final String PROPERTIES = "properties";
         public static final String MIME_TYPE = "mimeType";
         public static final String CHARSET = "charset";

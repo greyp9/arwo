@@ -382,6 +382,8 @@ public class AppUserState {
         } else if (App.Action.ALERT.equals(action)) {
             alerts.remove(object2);
             deferredActions.apply(object, object2, bundle, alerts);
+        } else if (App.Action.NAV_PARENT.equals(action)) {
+            location = httpRequest.getURI() + "..";
         } else {
             alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }
