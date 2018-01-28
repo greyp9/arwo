@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.vm.props;
 
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import org.w3c.dom.Document;
@@ -22,7 +23,7 @@ public class SysPropsU {
             final String key = entry.getKey().toString();
             final String value = entry.getValue().toString();
             if (!skip.contains(key)) {
-                ElementU.addElement(element, key, value);
+                ElementU.addElement(element, "entry", value, NTV.create("key", key));
             }
         }
         return DocumentU.toXml(document);

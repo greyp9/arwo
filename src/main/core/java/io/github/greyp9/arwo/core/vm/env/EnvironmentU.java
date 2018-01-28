@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.vm.env;
 
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import org.w3c.dom.Document;
@@ -21,7 +22,7 @@ public class EnvironmentU {
             final String key = entry.getKey();
             final String value = entry.getValue();
             if (!skip.contains(key)) {
-                ElementU.addElement(element, key, value);
+                ElementU.addElement(element, "entry", value, NTV.create("key", key));
             }
         }
         return DocumentU.toXml(document);
