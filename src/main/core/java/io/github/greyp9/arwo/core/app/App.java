@@ -187,6 +187,7 @@ public final class App {
         public static final String PORT = "port";
         public static final String PRIVATE_KEY = "privateKey";
         public static final String PROTOCOL = "protocol";
+        public static final String PROXY = "proxy";
         public static final String PUBLIC_KEY = "publicKey";
         public static final String RESOURCE = "resource";
         public static final String SERVER = "server";

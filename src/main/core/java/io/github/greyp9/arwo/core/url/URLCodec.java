@@ -65,6 +65,14 @@ public final class URLCodec {
         return ((file == null) ? null : file.toURI().toURL());  // NOPMD
     }
 
+    public static URI toURI(final String path) throws IOException {
+        try {
+            return ((path == null) ? null : new URI(path));
+        } catch (URISyntaxException e) {
+            throw new IOException(e);
+        }
+    }
+
     public static String toExternalForm(final URL url) {
         return ((url == null) ? null : url.toExternalForm());
     }

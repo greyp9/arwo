@@ -52,6 +52,7 @@
             <xsd:element name='enabled' type='xsd:boolean'/>
             <xsd:element name='host' type='xsd:string'/>
             <xsd:element name='port' type='xsd:string'/>
+            <xsd:element name='proxy' type='xsd:string'/>
             <xsd:element name='term' type='xsd:string'/>
             <xsd:element name='user' type='xsd:string'/>
             <xsd:choice>

@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.app.ssh.connection;
 
 import ch.ethz.ssh2.Connection;
 import ch.ethz.ssh2.ConnectionInfo;
+import ch.ethz.ssh2.HTTPProxyData;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
@@ -16,6 +17,7 @@ import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.jce.KeyX;
 import io.github.greyp9.arwo.core.lang.NumberU;
+import io.github.greyp9.arwo.core.url.URLCodec;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.extension.XedKey;
@@ -26,6 +28,8 @@ import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
 import io.github.greyp9.arwo.lib.ganymed.ssh.server.ServerParams;
 
 import java.io.IOException;
+import java.net.URI;
+import java.util.logging.Logger;
 
 public class SSHConnectionFactory implements ConnectionFactory {
     private final ServletHttpRequest httpRequest;
@@ -62,6 +66,9 @@ public class SSHConnectionFactory implements ConnectionFactory {
     private SSHConnectionResource getConnection(final String name, final CursorSSH cursorSSH) throws IOException {
         final String host = cursorSSH.getHost();
         final Integer port = NumberU.toInt(cursorSSH.getPort(), 22);
+        final String proxy = cursorSSH.getProxy();
+        Logger.getLogger(getClass().getName()).info(proxy);
+        final URI uriProxy = Value.isEmpty(proxy) ? null : URLCodec.toURI(proxy);
         final String term = Value.defaultOnEmpty(cursorSSH.getTerm(), null);
         final String user = cursorSSH.getUser();
         final String password = cursorSSH.getPassword();
@@ -77,7 +84,9 @@ public class SSHConnectionFactory implements ConnectionFactory {
         final byte[] publicKey = Base64Codec.decode(cursorSSH.getPublicKey());
         final ServerParams serverParams = new ServerParams(name, host, algorithm, publicKey);
         final ClientParams clientParams = new ClientParams(name, user, passwordClear, privateKeyClear);
-        final Connection connection = new Connection(host, port);
+        final HTTPProxyData proxyData = ((uriProxy == null) ? null :
+                new HTTPProxyData(uriProxy.getHost(), uriProxy.getPort()));
+        final Connection connection = new Connection(host, port, proxyData);
         final ConnectionInfo connectionInfo = connection.connect();
         new SSHAuthenticatorServer(bundle, alerts, cacheBlob).authenticate(connectionInfo, serverParams);
         new SSHAuthenticatorClient(bundle, alerts).authenticate(connection, clientParams);
