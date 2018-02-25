@@ -10,6 +10,7 @@ import io.github.greyp9.arwo.app.local.fs.data.LFSFolderStyled;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
+import io.github.greyp9.arwo.core.config.Preferences;
 import io.github.greyp9.arwo.core.date.Interval;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
@@ -23,7 +24,6 @@ import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewState;
-import io.github.greyp9.arwo.core.table.state.ViewStates;
 import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import org.w3c.dom.Element;
@@ -83,9 +83,10 @@ public class LFSFolderView extends LFSView {
         }
         final RowSet rowSetRaw = getRowSetRaw(metaData, viewState, findMode);
         // protect against unexpected large result set
-        boolean isLargeRowSet = (rowSetRaw.getRows() > ViewStates.Const.PAGE_SIZE_TABLE);
+        final int pageSize = new Preferences(getUserState().getConfig()).getTablePageSize();
+        boolean isLargeRowSet = (rowSetRaw.getRows() > pageSize);
         if ((isLargeRowSet) && (viewState.getPage() == null) && (viewState.isAutoPage())) {
-            viewState.setPage(Page.Factory.togglePage(viewState.getPage(), ViewStates.Const.PAGE_SIZE_TABLE));
+            viewState.setPage(Page.Factory.togglePage(viewState.getPage(), pageSize));
             userState.getAlerts().add(new Alert(Alert.Severity.INFO, getBundle().getString("table.autopage")));
             viewState.setAutoPage(false);
         }

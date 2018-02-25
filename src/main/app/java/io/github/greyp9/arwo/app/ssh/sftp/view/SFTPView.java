@@ -69,6 +69,10 @@ public abstract class SFTPView {
         return resource;
     }
 
+    public Bundle getBundle() {
+        return bundle;
+    }
+
     public SFTPView(final SFTPRequest request, final AppUserState userState, final SSHConnectionResource resource) {
         this.request = request;
         this.httpRequest = request.getHttpRequest();

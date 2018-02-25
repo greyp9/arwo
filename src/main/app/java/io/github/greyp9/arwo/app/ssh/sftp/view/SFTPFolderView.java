@@ -9,12 +9,15 @@ import io.github.greyp9.arwo.app.ssh.sftp.core.SFTPRequest;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPDataSource;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolder;
 import io.github.greyp9.arwo.app.ssh.sftp.data.SFTPFolderStyled;
+import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
+import io.github.greyp9.arwo.core.config.Preferences;
 import io.github.greyp9.arwo.core.date.Interval;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.locus.Locus;
+import io.github.greyp9.arwo.core.page.Page;
 import io.github.greyp9.arwo.core.result.io.ResultsPersister;
 import io.github.greyp9.arwo.core.result.op.Results;
 import io.github.greyp9.arwo.core.table.html.TableView;
@@ -90,6 +93,14 @@ public class SFTPFolderView extends SFTPView {
         final RowSet rowSetRaw = (findMode ?
                 getRowSetRawFind(metaData, viewState) :
                 getRowSetRaw(metaData, viewState));
+        // protect against unexpected large result set
+        final int pageSize = new Preferences(getUserState().getConfig()).getTablePageSize();
+        boolean isLargeRowSet = (rowSetRaw.getRows() > pageSize);
+        if ((isLargeRowSet) && (viewState.getPage() == null) && (viewState.isAutoPage())) {
+            viewState.setPage(Page.Factory.togglePage(viewState.getPage(), pageSize));
+            userState.getAlerts().add(new Alert(Alert.Severity.INFO, getBundle().getString("table.autopage")));
+            viewState.setAutoPage(false);
+        }
         final RowSet rowSetStyled = new SFTPFolderStyled(request, rowSetRaw).getRowSet();
         // optionally persist fetched results
         final Results results = new Results(request.getHttpRequest().getURI(),

@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.table.state;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.config.Preferences;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.page.Page;
@@ -12,6 +13,7 @@ import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
+import io.github.greyp9.arwo.core.xed.model.Xed;
 
 import java.io.IOException;
 import java.util.Map;
@@ -21,10 +23,12 @@ import java.util.regex.PatternSyntaxException;
 public class ViewStates {
     private final Map<String, ViewState> mapViewState;
     private final XedActionFilter actionFilter;
+    private final Xed config;
 
-    public ViewStates(final XedActionFilter actionFilter) {
+    public ViewStates(final XedActionFilter actionFilter, final Xed config) {
         this.mapViewState = new TreeMap<String, ViewState>();
         this.actionFilter = actionFilter;
+        this.config = config;
     }
 
     public final ViewState getViewState(final RowSetMetaData metaData, final Bundle bundle, final Locus locus) {
@@ -73,7 +77,8 @@ public class ViewStates {
         } else if (ViewState.Toggle.FILTERS.equals(action)) {
             viewState.setFilterColumn(Value.join(Http.Token.DOT, token.getObject(), token.getObject2()));
         } else if (ViewState.Toggle.PAGE.equals(action)) {
-            viewState.setPage(Page.Factory.togglePage(viewState.getPage(), Const.PAGE_SIZE_TABLE));
+            final Preferences preferences = new Preferences(config);
+            viewState.setPage(Page.Factory.togglePage(viewState.getPage(), preferences.getTablePageSize()));
         } else if (ViewState.Nav.FIRST.equals(action)) {
             viewState.setPage(Page.Factory.firstPage(viewState.getPage()));
         } else if (ViewState.Nav.PREVIOUS.equals(action)) {
@@ -101,9 +106,5 @@ public class ViewStates {
         } catch (PatternSyntaxException e) {
             alerts.add(new Alert(Alert.Severity.WARN, e.getMessage(), token.toString()));
         }
-    }
-
-    public static class Const {
-        public static final int PAGE_SIZE_TABLE = 30;
     }
 }

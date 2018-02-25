@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.config;
 
 import io.github.greyp9.arwo.core.file.FileX;
+import io.github.greyp9.arwo.core.lang.NumberU;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
@@ -51,6 +52,11 @@ public class Preferences {
         return cursorLocal.getValue(cursorLocal.getChildInstance("language"));
     }
 
+    public final int getTablePageSize() {
+        final XedCursor cursorTable = new XedNav(cursor.getXed()).findChild("table", cursor);
+        return NumberU.toInt(cursorTable.getValue(cursorTable.getChildInstance("pageSize")), Const.PAGE_SIZE_TABLE);
+    }
+
     public final String getIconColor() {
         final XedCursor cursorLocal = new XedNav(cursor.getXed()).findChild("ui", cursor);
         return cursorLocal.getValue(cursorLocal.getChildInstance("shortcut"));
@@ -69,5 +75,6 @@ public class Preferences {
         //private static final String TZ = LOCALIZATION + "/app:tz";
         //private static final String DATE_FORMAT = LOCALIZATION + "/app:dateFormat";
         //private static final String LANGUAGE = LOCALIZATION + "/app:language";
+        private static final int PAGE_SIZE_TABLE = 30;
     }
 }

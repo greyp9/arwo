@@ -74,6 +74,10 @@ public class XedUserState {
         return submitID;
     }
 
+    public final Xed getConfig() throws IOException {
+        return getSession(App.Servlet.SETTINGS).getXed();
+    }
+
     public final ViewStates getViewStates() {
         return viewStates;
     }
@@ -126,10 +130,10 @@ public class XedUserState {
                         final String submitID, final Locus locus, final Alerts alerts) throws IOException {
         this.submitID = submitID;
         this.factory = new XedFactory(factory);
-        final XedActionFilter filter = new XedActionFilter(factory, null);
-        this.viewStates = new ViewStates(filter);
-        this.alerts = alerts;
         this.sessions = new XedSessionsFactory(webappRoot, factory).getSessions(principal);
+        final XedActionFilter filter = new XedActionFilter(factory, null);
+        this.viewStates = new ViewStates(filter, getConfig());
+        this.alerts = alerts;
         this.locus = locus;
         this.properties = new Properties();
         this.menuSystem = new MenuSystem(submitID, new XedMenuFactory());

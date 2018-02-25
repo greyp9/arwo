@@ -326,6 +326,7 @@
         <xsd:sequence>
             <xsd:element name='mimeTypes' type='app:mimeTypesType'/>
             <xsd:element name='localization' type='app:localizationType'/>
+            <xsd:element name='table' type='app:tableType'/>
             <xsd:element name='ui' type='app:uiType'/>
         </xsd:sequence>
     </xsd:complexType>
@@ -362,6 +363,12 @@
             <xsd:enumeration value='JA'/>
         </xsd:restriction>
     </xsd:simpleType>
+
+    <xsd:complexType name='tableType'>
+        <xsd:sequence>
+            <xsd:element name='pageSize' type='xsd:unsignedShort'/>
+        </xsd:sequence>
+    </xsd:complexType>
 
     <xsd:complexType name='uiType'>
         <xsd:sequence>

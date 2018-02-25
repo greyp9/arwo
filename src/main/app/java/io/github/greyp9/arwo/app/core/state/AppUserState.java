@@ -250,7 +250,7 @@ public class AppUserState {
     }
 
     public final Xed getConfig() throws IOException {
-        return documentState.getSession(App.Servlet.SETTINGS).getXed();
+        return documentState.getConfig();
     }
 
     public final Properties getProperties() {
@@ -272,7 +272,7 @@ public class AppUserState {
         //this.textFilters.put("", new TextFilters());
         this.alerts = new Alerts();
         this.documentState = new XedUserState(webappRoot, appState.getFactory(), principal, submitID, locus, alerts);
-        this.viewStates = new ViewStates(new XedActionFilter(documentState.getFactory(), null));
+        this.viewStates = new ViewStates(new XedActionFilter(documentState.getFactory(), null), getConfig());
         this.userExecutor = new UserExecutor(principal, date, new File(SystemU.userHome()));
         this.deferredActions = new DeferredActions();
         this.cron = new SubsystemCron(documentState.getFactory());
