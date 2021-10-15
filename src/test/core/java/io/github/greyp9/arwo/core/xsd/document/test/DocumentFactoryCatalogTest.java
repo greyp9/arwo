@@ -17,8 +17,10 @@ import io.github.greyp9.arwo.core.xsd.structure.test.SchemaStructureAppTest;
 import io.github.greyp9.arwo.core.xsd.type.TypeComponents;
 import io.github.greyp9.arwo.core.xsd.type.TypeComponentsFactory;
 import io.github.greyp9.arwo.core.xsd.type.test.SchemaTypeAppTest;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.w3c.dom.Document;
 
 import java.io.File;
@@ -30,15 +32,16 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class DocumentFactoryCatalogTest extends TestCase {
+public class DocumentFactoryCatalogTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
 
+    @Test
+    @Ignore
     public void testSchemaCatalogs() throws Exception {
         File fileProperties = new File(SystemU.userHome(), ".arwo/test.properties.xml");
         Assert.assertTrue(fileProperties.exists());

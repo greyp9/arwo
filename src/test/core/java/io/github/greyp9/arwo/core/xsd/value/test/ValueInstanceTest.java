@@ -62,9 +62,9 @@ public class ValueInstanceTest extends TestCase {
         final NameTypeValues nameTypeValuesTransform = valueInstanceTransform.getNameTypeValues();
         Assert.assertEquals(3, nameTypeValuesTransform.size());
         Assert.assertNull(nameTypeValuesTransform.getNameValue("name"));
-        Assert.assertEquals("foo.txt", nameTypeValuesTransform.getValue("fileEdit.fileEditType.name"));
-        Assert.assertEquals("text", nameTypeValuesTransform.getValue("fileEdit.fileEditType.type"));
-        Assert.assertEquals("false", nameTypeValuesTransform.getValue("fileEdit.fileEditType.hidden"));
+        Assert.assertEquals("foo.txt", nameTypeValuesTransform.getValue("file.fileType.name"));
+        Assert.assertEquals("text", nameTypeValuesTransform.getValue("file.fileType.type"));
+        Assert.assertEquals("false", nameTypeValuesTransform.getValue("file.fileType.hidden"));
     }
 
     public void testTransformProtectHash() throws Exception {
@@ -96,7 +96,7 @@ public class ValueInstanceTest extends TestCase {
             final XPather xpather = new XPather(element, xed.getXPather().getContext());
             final TransformContext context = new TransformContext(null, xpather);
             final ValueInstance valueInstanceX = new ProtectHashTransform(valueInstance, context).transform();
-            final String hash = Base64Codec.encode(HashU.sha256(UTF8Codec.toBytes("appCredentialappUser")));
+            final String hash = Base64Codec.encode(HashU.sha256(UTF8Codec.toBytes("appCredential")));
             final NameTypeValues nameTypeValuesX = valueInstanceX.getNameTypeValues();
             Assert.assertEquals(3, nameTypeValuesX.size());
             Assert.assertEquals("appUser", nameTypeValuesX.getValue("principal.principalType.user"));

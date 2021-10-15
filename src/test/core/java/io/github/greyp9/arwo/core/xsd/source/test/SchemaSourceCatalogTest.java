@@ -7,8 +7,10 @@ import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.xsd.atom.SchemaAtom;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollection;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollectionFactory;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,15 +20,16 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-public class SchemaSourceCatalogTest extends TestCase {
+public class SchemaSourceCatalogTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         //io.github.greyp9.arwo.core.logging.LoggerU.adjustShort(Logger.getLogger(""));
     }
 
+    @Test
+    @Ignore
     public void testSchemaCatalogs() throws Exception {
         File fileProperties = new File(SystemU.userHome(), ".arwo/test.properties.xml");
         Assert.assertTrue(fileProperties.exists());

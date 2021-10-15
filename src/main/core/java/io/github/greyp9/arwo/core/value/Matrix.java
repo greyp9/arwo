@@ -113,7 +113,9 @@ public class Matrix {
         }
 
         private static String renderCell(final int width, final Object value) {
-            final String format = (value instanceof Number) ? ("%" + width + "s") : ("%-" + width + "s");
+            final String widthFormat = (width == 0) ? "" : ("" + width);
+            final String format = ((value instanceof Number) || (value == null))
+                    ? ("%" + widthFormat + "s") : ("%-" + widthFormat + "s");
             return String.format(format, Value.defaultOnNull(value, ""));
         }
 

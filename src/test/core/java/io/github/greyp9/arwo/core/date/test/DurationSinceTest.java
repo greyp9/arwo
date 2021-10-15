@@ -20,10 +20,10 @@ public class DurationSinceTest extends TestCase {
 
     public void testDurationSinceThirtyDays() throws Exception {
         final Date date = new Date();
-        final long elapsed = DurationU.Const.ONE_DAY_MILLIS * 30;
+        final long elapsed = DurationU.Const.ONE_DAY_MILLIS * 28;
         final Date dateBefore = new Date(date.getTime() - elapsed);
         final String duration = DurationU.duration(dateBefore, date);
-        Assert.assertEquals("P30D", duration);
+        Assert.assertEquals("P28D", duration);
     }
 
     public void testDurationSubtractP1Y() throws Exception {

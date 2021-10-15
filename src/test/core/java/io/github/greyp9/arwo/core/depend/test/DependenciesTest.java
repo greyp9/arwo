@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.depend.test;
 import io.github.greyp9.arwo.core.depend.Dependency;
 import io.github.greyp9.arwo.core.depend.DependencyResolver;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import java.util.Collection;
@@ -12,6 +13,7 @@ public class DependenciesTest {
     //private final Logger logger = Logger.getLogger(getClass().getName());
 
     @Test
+    @Ignore
     public void testResolveDependencyGanymed() throws Exception {
         final DependencyResolver resolver = new DependencyResolver(
                 "io/github/greyp9/irby/core/depend/dependencies.xml");

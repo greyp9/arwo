@@ -66,7 +66,7 @@ public class Choice1CursorTest extends TestCase {
         Assert.assertEquals("/2d467/", cursorJobType.getURI());
         final String renderJobType = new CursorTextView(new XedCursorView(cursorJobType)).render();
         logger.finest("JobType\n" + renderJobType);
-        Assert.assertEquals("314a83a3", CRCU.crc32String(UTF8Codec.toBytes(renderJobType)));
+        Assert.assertEquals("d5331ee5", CRCU.crc32String(UTF8Codec.toBytes(renderJobType)));
         // insert
         final NameTypeValues ntv1 = HttpArguments.toArguments(
                 "jobName=job1&jobEnabled=true&taskA/taskB/taskC=taskA");
@@ -94,7 +94,7 @@ public class Choice1CursorTest extends TestCase {
         // view at JobType2
         final String renderJobType2 = new CursorTextView(new XedCursorView(cursorJobType)).render();
         logger.finest("JobType\n" + renderJobType2);
-        Assert.assertEquals("4b0d6155", CRCU.crc32String(UTF8Codec.toBytes(renderJobType2)));
+        Assert.assertEquals("ecb2cf83", CRCU.crc32String(UTF8Codec.toBytes(renderJobType2)));
         // view at Job
         final XedCursor cursorJob1 = new XedNav(xedUI).find(job1);
         Assert.assertEquals("/2d467/0ca19/", cursorJob1.getURI());

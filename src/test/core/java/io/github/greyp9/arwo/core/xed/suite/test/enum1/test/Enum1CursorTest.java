@@ -77,7 +77,7 @@ public class Enum1CursorTest extends TestCase {
         // view
         final String renderFileType = new CursorTextView(new XedCursorView(cursorFileType)).render();
         logger.finest("FileType\n" + renderFileType);
-        Assert.assertEquals("dc3bd89f", CRCU.crc32String(UTF8Codec.toBytes(renderFileType)));
+        Assert.assertEquals("3c2f337d", CRCU.crc32String(UTF8Codec.toBytes(renderFileType)));
         // view
         final String renderFile = new CursorTextView(new XedCursorView(cursorFile1)).render();
         logger.finest("File\n" + renderFile);

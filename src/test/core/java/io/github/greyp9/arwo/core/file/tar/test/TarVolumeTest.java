@@ -5,7 +5,9 @@ import io.github.greyp9.arwo.core.file.tar.TarMetaData;
 import io.github.greyp9.arwo.core.file.tar.TarVolume;
 import io.github.greyp9.arwo.core.lang.StringU;
 import io.github.greyp9.arwo.core.lang.SystemU;
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,15 +17,16 @@ import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class TarVolumeTest extends TestCase {
+public class TarVolumeTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         //io.github.greyp9.arwo.core.logging.LoggerU.adjustShort(Logger.getLogger(""));
     }
 
+    @Test
+    @Ignore
     public void testFindIterateArchives() throws Exception {
         File root = new File(SystemU.resolve("~/Downloads"));
         Collection<File> files = new TreeSet<File>();

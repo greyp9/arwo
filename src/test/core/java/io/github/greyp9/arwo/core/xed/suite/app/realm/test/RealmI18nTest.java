@@ -44,6 +44,6 @@ public class RealmI18nTest extends TestCase {
         final XedCursor cursor = new XedNav(xed).getRoot();
         final String pageText = new PropertyPageTextView(new XedPropertyPageView(null, cursor)).render();
         logger.finest(pageText);
-        Assert.assertEquals("c3fb83e3", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
+        Assert.assertEquals("c6124a28", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
     }
 }

@@ -8,11 +8,14 @@ import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogramSerializer;
 import junit.framework.TestCase;
 import org.junit.Assert;
 
+import java.io.File;
 import java.util.Date;
 import java.util.logging.Logger;
 
 public class TimeHistogramTest extends TestCase {
     private final Logger logger = Logger.getLogger(getClass().getName());
+
+    private final File folderClass = new File(String.format("./target/%s", getClass().getSimpleName()));
 
     @Override
     public void setUp() throws Exception {
@@ -20,11 +23,12 @@ public class TimeHistogramTest extends TestCase {
         io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
 
-    public void testCreateSimple() throws Exception {
+    public void testCreateSimple() {
         Date date = XsdDateU.fromXSDZ("2000-01-01T00:00:00Z");
         long durationCell = DurationU.toMillisP("P1D");
         long durationPage = DurationU.toMillisP("P31D");
-        TimeHistogram histogram = new TimeHistogram(null, ".", date,
+        final File folder = new File(folderClass, "create-simple");
+        TimeHistogram histogram = new TimeHistogram(null, folder.getPath(), date,
                 durationCell, durationPage, durationPage, durationPage, durationPage, durationPage);
         logger.info(histogram.toString());
         for (int a = 0; (a < 3); ++a) {
@@ -46,12 +50,13 @@ public class TimeHistogramTest extends TestCase {
         }
     }
 
-    public void testAdvance() throws Exception {
+    public void testAdvance() {
         Date date = XsdDateU.fromXSDZ("2000-01-01T00:00:00Z");
         long durationCell = DurationU.toMillisP("P1D");
         long durationPage = DurationU.toMillisP("P7D");
         long durationPages = DurationU.toMillisP("P91D");
-        TimeHistogram histogram = new TimeHistogram(null, ".", date,
+        final File folder = new File(folderClass, "advance");
+        TimeHistogram histogram = new TimeHistogram(null, folder.getPath(), date,
                 durationCell, durationCell, durationPage, durationPage, durationPage, durationPages);
         logger.info(histogram.toString());
         for (int a = 0; (a < 91); ++a) {
@@ -69,8 +74,9 @@ public class TimeHistogramTest extends TestCase {
         }
     }
 
-    public void testCreate() throws Exception {
-        TimeHistogram histogram = new TimeHistogram("foo", ".", "PT1M", "PT15M", "PT1H", "PT6H", "P1D", "P5D");
+    public void testCreate() {
+        final File folder = new File(folderClass, "create");
+        TimeHistogram histogram = new TimeHistogram("foo", folder.getPath(), "PT1M", "PT15M", "PT1H", "PT6H", "P1D", "P5D");
         Assert.assertEquals(DurationU.toMillisP(DurationU.Const.ONE_MINUTE), histogram.getDurationCell());
         Assert.assertEquals(15 * DurationU.toMillisP(DurationU.Const.ONE_MINUTE), histogram.getDurationWord());
         Assert.assertEquals(DurationU.toMillisP(DurationU.Const.ONE_HOUR), histogram.getDurationLine());
@@ -79,8 +85,9 @@ public class TimeHistogramTest extends TestCase {
         Assert.assertEquals(1440 * 5, histogram.getPageSize() * histogram.getPageCount());
     }
 
-    public void testNormalizeAdvance() throws Exception {
-        final TimeHistogram histogram = new TimeHistogram("foo", ".", "PT1M", "PT15M", "PT1H", "PT1H", "PT1H", "PT2H");
+    public void testNormalizeAdvance() {
+        final File folder = new File(folderClass, "normalize-advance");
+        final TimeHistogram histogram = new TimeHistogram("foo", folder.getPath(), "PT1M", "PT15M", "PT1H", "PT1H", "PT1H", "PT2H");
         logger.info(histogram.toString());
         final Date dateStart = DateU.floor(new Date(), "PT1H");
         final Date dateEnd = DurationU.add(dateStart, DateU.Const.TZ_GMT, "P1D");
@@ -96,8 +103,9 @@ public class TimeHistogramTest extends TestCase {
         }
     }
 
-    public void testSerialize() throws Exception {
-        final TimeHistogram histogram = new TimeHistogram("foo", ".", "PT1M", "PT1M", "PT5M", "PT5M", "PT5M", "PT10M");
+    public void testSerialize() {
+        final File folder = new File(folderClass, "serialize");
+        final TimeHistogram histogram = new TimeHistogram("foo", folder.getPath(), "PT1M", "PT1M", "PT5M", "PT5M", "PT5M", "PT10M");
         logger.info(histogram.toString());
         final Date floor = DateU.floor(new Date(), "PT5M");
         final Date plusPT1M = DurationU.add(floor, DateU.Const.TZ_GMT, "PT1M");

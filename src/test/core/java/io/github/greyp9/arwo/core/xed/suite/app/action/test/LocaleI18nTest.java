@@ -38,6 +38,6 @@ public class LocaleI18nTest extends TestCase {
         final XedCursor cursor = new XedNav(xed).getRoot();
         final String pageText = new PropertyPageTextView(new XedPropertyPageView(null, cursor)).render();
         logger.finest(pageText);
-        Assert.assertEquals("0e07d15d", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
+        Assert.assertEquals("599e073f", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
     }
 }

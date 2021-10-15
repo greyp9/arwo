@@ -47,7 +47,8 @@ public class AppRealmTest extends TestCase {
         Assert.assertNull("user should not authenticate", appPrincipal2);
         // authenticate
         final AppPrincipal appPrincipal3 = appRealm.authenticate(credential, name);
-        Assert.assertNull("user should not authenticate", appPrincipal3);
+        Assert.assertFalse("user should not authenticate", appPrincipal3.isAuthenticated());
+        Assert.assertEquals(0, appPrincipal3.getRoles().size());
         // authenticate
         final AppPrincipal appPrincipal4 = appRealm.authenticate(name, credential);
         Assert.assertNotNull("user should authenticate", appPrincipal4);
@@ -80,7 +81,8 @@ public class AppRealmTest extends TestCase {
         Assert.assertNull("user should not authenticate", appPrincipal2);
         // authenticate
         final AppPrincipal appPrincipal3 = appRealm.authenticate(credential, name);
-        Assert.assertNull("user should not authenticate", appPrincipal3);
+        Assert.assertFalse("user should not authenticate", appPrincipal3.isAuthenticated());
+        Assert.assertEquals(0, appPrincipal3.getRoles().size());
         // authenticate
         final AppPrincipal appPrincipal4 = appRealm.authenticate(name, credential);
         Assert.assertNotNull("user should authenticate", appPrincipal4);

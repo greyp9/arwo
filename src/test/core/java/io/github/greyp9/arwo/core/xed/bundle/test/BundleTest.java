@@ -7,14 +7,17 @@ import io.github.greyp9.arwo.core.xed.bundle.XsdBundles;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Ignore;
+import org.junit.Test;
 
 import java.net.URL;
 import java.util.Locale;
 import java.util.logging.Logger;
 
-public class BundleTest extends TestCase {
+public class BundleTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @Test
     public void testLoadDefaultLocale() throws Exception {
         final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
@@ -27,6 +30,8 @@ public class BundleTest extends TestCase {
         Assert.assertEquals("Realm Name", bundle.getString("realm.realmType.name"));
     }
 
+    @Test
+    @Ignore
     public void testLoadDE() throws Exception {
         final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
@@ -39,6 +44,8 @@ public class BundleTest extends TestCase {
         Assert.assertEquals("Re\u00e4lm N\u00e4me", bundle.getString("realm.realmType.name"));
     }
 
+    @Test
+    @Ignore
     public void testLoadJP() throws Exception {
         final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);

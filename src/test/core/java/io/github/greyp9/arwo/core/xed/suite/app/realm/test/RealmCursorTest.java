@@ -89,7 +89,7 @@ public class RealmCursorTest extends TestCase {
         Assert.assertEquals("/ecd28/7256d/8dc37/", cursorPrincipalType.getURI());
         final String renderPrincipalType = new CursorTextView(new XedCursorView(cursorPrincipalType)).render();
         logger.finest("PrincipalType\n" + renderPrincipalType);
-        Assert.assertEquals("6588a1e4", CRCU.crc32String(UTF8Codec.toBytes(renderPrincipalType)));
+        Assert.assertEquals("97f3bd05", CRCU.crc32String(UTF8Codec.toBytes(renderPrincipalType)));
         // view at principal1
         final XedCursor cursorPrincipal1 = new XedNav(xed).find(principal1);
         Assert.assertEquals("/ecd28/7256d/8dc37/c3dce/", cursorPrincipal1.getURI());
