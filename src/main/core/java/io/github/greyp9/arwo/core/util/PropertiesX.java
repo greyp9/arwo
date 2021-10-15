@@ -10,6 +10,10 @@ public class PropertiesX {
         this.properties = properties;
     }
 
+    public Properties getProperties() {
+        return properties;
+    }
+
     public final long getLong(final String key) {
         return getLong(key, 0L);
     }
