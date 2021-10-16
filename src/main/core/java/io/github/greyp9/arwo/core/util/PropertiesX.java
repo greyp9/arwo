@@ -10,7 +10,7 @@ public class PropertiesX {
         this.properties = properties;
     }
 
-    public Properties getProperties() {
+    public final Properties getProperties() {
         return properties;
     }
 

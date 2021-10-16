@@ -84,16 +84,16 @@ public class XedHandlerGet {
 
     private HttpResponse doGetXML(final XedRequest request, final String cursorURI) throws IOException {
         final XedCursor cursor = new XedNav(request.getSession().getXed()).find(cursorURI);
-        return ((cursor == null) ? HttpResponseU.to302(PathU.toParent(httpRequest.getURI())) :
-                new CursorXmlView(cursor).doGetXML());
+        return ((cursor == null) ? HttpResponseU.to302(PathU.toParent(httpRequest.getURI()))
+                : new CursorXmlView(cursor).doGetXML());
     }
 
     private HttpResponse doGetUI(final XedRequest request, final String cursorURI) throws IOException {
         final XedFactory factory = documentState.getFactory();
         final Locale locale = documentState.getLocus().getLocale();
         final XedCursor cursor = new XedNav(request.getSession().getXedUI(factory, locale)).find(cursorURI);
-        return ((cursor == null) ? HttpResponseU.to302(PathU.toParent(httpRequest.getURI())) :
-                doGetUI(request, cursor));
+        return ((cursor == null) ? HttpResponseU.to302(PathU.toParent(httpRequest.getURI()))
+                : doGetUI(request, cursor));
     }
 
     private HttpResponse doGetUI(final XedRequest request, final XedCursor cursor) throws IOException {

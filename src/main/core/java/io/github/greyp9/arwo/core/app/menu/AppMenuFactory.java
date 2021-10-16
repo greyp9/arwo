@@ -43,8 +43,8 @@ public class AppMenuFactory implements MenuFactory {
 
     private static MenuItem createMenuBarFileSystem(final String key) {
         final MenuItem itemParent = new MenuItem(App.Action.NAV_PARENT, App.Target.USER_STATE, App.Action.NAV_PARENT);
-        final MenuItem[] menuItems = new MenuItem[] { itemParent,
-                createMenuFile(key), createMenuEdit(key), createMenuView(key), createMenuConnection(key),
+        final MenuItem[] menuItems = new MenuItem[] {
+                itemParent, createMenuFile(key), createMenuEdit(key), createMenuView(key), createMenuConnection(key),
                 createMenuFileSystem(key), createMenuSession(key), createMenuFavorites(key) };
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
     }

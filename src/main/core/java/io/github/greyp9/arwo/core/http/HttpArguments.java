@@ -18,8 +18,8 @@ public final class HttpArguments {
 
     public static NameTypeValues toArguments(final String queryString) {
         final NameTypeValues nameTypeValues = new NameTypeValues();
-        final String[] queryTokens = ((queryString == null) ?
-                new String[0] : queryString.split(Http.Token.BACKSLASH + Http.Token.AMP));
+        final String[] queryTokens = ((queryString == null)
+                ? new String[0] : queryString.split(Http.Token.BACKSLASH + Http.Token.AMP));
         for (final String queryToken : queryTokens) {
             if (queryToken.length() > 0) {
                 final String queryTokenDecoded = URLCodec.decodeSafe(queryToken);

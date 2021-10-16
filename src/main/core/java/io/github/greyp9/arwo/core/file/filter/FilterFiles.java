@@ -9,7 +9,10 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-public class FilterFiles {
+public final class FilterFiles {
+
+    private FilterFiles() {
+    }
 
     public static void byAgeMin(final Collection<File> files, final Date date, final String ageMin) {
         final long lastModifiedMax = date.getTime() - NumberU.toLong(DurationU.toMillis(ageMin), 0);

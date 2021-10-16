@@ -10,7 +10,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class FileGrouper {
+public final class FileGrouper {
     private final Long intervalMillis;
     private final Map<Date, Collection<File>> groupings;
 

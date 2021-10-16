@@ -69,9 +69,9 @@ public class ViewInstanceFactory {
             viewInstance = new ViewInstanceDrillDown(baseURI, cursor, typeInstance);
         }
         if (viewInstance == null) {
-            viewInstance = (typeInstance.isMasked() ?
-                    new ViewInstanceTextMasked(cursor, typeInstance) :
-                    new ViewInstanceText(cursor, typeInstance));
+            viewInstance = (typeInstance.isMasked()
+                    ? new ViewInstanceTextMasked(cursor, typeInstance)
+                    : new ViewInstanceText(cursor, typeInstance));
         }
         return viewInstance;
     }

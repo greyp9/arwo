@@ -6,7 +6,10 @@ import io.github.greyp9.arwo.core.value.Value;
 import java.io.File;
 import java.util.Date;
 
-public class FilenameFactory {
+public final class FilenameFactory {
+
+    private FilenameFactory() {
+    }
 
     public static File getUnused(final String pattern, final Date date) {
         final File filePattern = new File(pattern);

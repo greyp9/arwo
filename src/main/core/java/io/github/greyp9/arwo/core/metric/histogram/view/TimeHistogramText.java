@@ -12,18 +12,18 @@ import org.w3c.dom.Element;
 
 import java.util.Date;
 
-public class TimeHistogramText {
+public final class TimeHistogramText {
     private final TimeHistogram histogram;
     private final String label;
     private final int page;
 
-    public TimeHistogramText(TimeHistogram histogram, String label, int page) {
+    public TimeHistogramText(final TimeHistogram histogram, final String label, final int page) {
         this.histogram = histogram;
         this.label = label;
         this.page = page;
     }
 
-    public void addContentTo(Element html) {
+    public void addContentTo(final Element html) {
         final Element div = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, "histogram"));
         ElementU.addElement(div, Html.H1, label);
         ElementU.addElement(div, Html.PRE, getText());

@@ -35,8 +35,8 @@ public final class AppRealmFactory {
             final byte[] xsd = StreamU.read(ResourceU.resolve(App.Realm.XSD));
             final File webappRoot = AppFolder.getWebappRoot(contextPath);
             final File realmFile = new File(webappRoot, "root/realm.xml");
-            final byte[] xml = (realmFile.exists()) ? StreamU.read(realmFile) :
-                    StreamU.read(ResourceU.resolve(App.Realm.XML_EMPTY));
+            final byte[] xml = (realmFile.exists())
+                    ? StreamU.read(realmFile) : StreamU.read(ResourceU.resolve(App.Realm.XML_EMPTY));
             Logger.getLogger(AppRealmFactory.class.getName()).log(Level.OFF, realmFile.getPath());
             return AppRealmFactory.toAppRealm(xsd, xml);
         } catch (IOException e) {

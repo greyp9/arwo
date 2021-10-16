@@ -40,7 +40,7 @@ public class TableContext {
         return locus;
     }
 
-    public Date getDate() {
+    public final Date getDate() {
         return date;
     }
 

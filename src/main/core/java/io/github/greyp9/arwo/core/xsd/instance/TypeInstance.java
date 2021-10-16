@@ -63,7 +63,7 @@ public abstract class TypeInstance {  // xsd:complexType, xsd:simpleType @ xsd:e
 
     public abstract Collection<TypeInstance> getInstances();
 
-    public abstract TypeInstance getInstance(final String nameIn);
+    public abstract TypeInstance getInstance(String nameIn);
 
     @SuppressWarnings("unused")
     public final DataType getExtensionType() {

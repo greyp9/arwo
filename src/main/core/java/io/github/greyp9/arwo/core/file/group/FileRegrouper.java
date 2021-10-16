@@ -11,7 +11,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class FileRegrouper {
+public final class FileRegrouper {
     private final Long intervalMillis;
     private final Map<Date, Collection<File>> groupings;
 

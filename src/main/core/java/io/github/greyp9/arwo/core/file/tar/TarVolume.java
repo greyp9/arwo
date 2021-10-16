@@ -178,8 +178,8 @@ public class TarVolume {
     }
 
     private static TarMetaData getNextEntry(final byte type, final String fileNameIn, final byte[] header) {
-        final String fileName = (fileNameIn == null) ?
-                UTF8Codec.toString(ByteU.extract(header, Const.OFF_NAME, Const.SZ_NAME)).trim() : fileNameIn;
+        final String fileName = (fileNameIn == null)
+                ? UTF8Codec.toString(ByteU.extract(header, Const.OFF_NAME, Const.SZ_NAME)).trim() : fileNameIn;
         final String fileSizeOctal = UTF8Codec.toString(ByteU.extract(header, Const.OFF_SIZE, Const.SZ_SIZE)).trim();
         final long fileSize = Long.parseLong(fileSizeOctal, NumberU.Const.RADIX_OCTAL);
         final String lastModifiedOctal = UTF8Codec.toString(

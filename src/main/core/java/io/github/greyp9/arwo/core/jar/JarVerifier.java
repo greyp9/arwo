@@ -16,15 +16,15 @@ public final class JarVerifier {
 
     private final Certificate certificate;
 
-    public JarVerifier(Class<?> c) {
+    public JarVerifier(final Class<?> c) {
         this(c.getProtectionDomain().getCodeSource().getCertificates());
     }
 
-    private JarVerifier(Certificate[] certificates) {
+    private JarVerifier(final Certificate[] certificates) {
         this.certificate = ((certificates == null) ? null : certificates[0]);
     }
 
-    public void verify(JarFile jarFile) throws IOException, GeneralSecurityException {
+    public void verify(final JarFile jarFile) throws IOException, GeneralSecurityException {
         final Enumeration<? extends JarEntry> entries = jarFile.entries();
         while (entries.hasMoreElements()) {
             verify(jarFile, entries.nextElement());
@@ -32,7 +32,7 @@ public final class JarVerifier {
         logger.info(jarFile.getName());
     }
 
-    private void verify(JarFile jarFile, JarEntry entry) throws IOException, GeneralSecurityException {
+    private void verify(final JarFile jarFile, final JarEntry entry) throws IOException, GeneralSecurityException {
         // check the integrity of the entry
         StreamU.read(jarFile.getInputStream(entry));
         // check the entry signer against the baseline code signer

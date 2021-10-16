@@ -12,7 +12,10 @@ import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
 
-public class SysPropsU {
+public final class SysPropsU {
+
+    private SysPropsU() {
+    }
 
     public static byte[] getProps(final Collection<String> skip) throws IOException {
         final String uri = App.Config.QNAME_APP.getNamespaceURI();

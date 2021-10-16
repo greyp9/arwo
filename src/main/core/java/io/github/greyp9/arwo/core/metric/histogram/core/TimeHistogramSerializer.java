@@ -16,7 +16,7 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.logging.Logger;
 
-public class TimeHistogramSerializer {
+public final class TimeHistogramSerializer {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
     private final TimeHistogram histogram;
@@ -45,7 +45,7 @@ public class TimeHistogramSerializer {
         return bytes;
     }
 
-    public void deserializeData(byte[] bytes) {
+    public void deserializeData(final byte[] bytes) {
         try {
             Date dateIt = null;
             final String duration = DurationU.durationXSD(histogram.getDurationCell());
@@ -84,9 +84,9 @@ public class TimeHistogramSerializer {
     }
 
     private File getFile(final Date date) {
-        final String filename = (date == null) ?
-                String.format("%s.xml", histogram.getName()) :
-                String.format("%s.%s.xml", histogram.getName(), DateX.toFilenameMM(date));
+        final String filename = (date == null)
+                ? String.format("%s.xml", histogram.getName())
+                : String.format("%s.%s.xml", histogram.getName(), DateX.toFilenameMM(date));
         return new File(folder, filename);
     }
 

@@ -6,6 +6,9 @@ import io.github.greyp9.arwo.core.http.Http;
 
 public final class HttpClientU {
 
+    private HttpClientU() {
+    }
+
     public static String toBasicAuth(final String basicAuthBase64) {
         return String.format("%s %s", Http.Realm.BASIC, basicAuthBase64);
     }

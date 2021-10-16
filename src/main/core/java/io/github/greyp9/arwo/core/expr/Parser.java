@@ -1,10 +1,10 @@
 package io.github.greyp9.arwo.core.expr;
 
-public class Parser {
+public final class Parser {
     private final String expression;
     private int cursor;
 
-    public Parser(String expression) {
+    public Parser(final String expression) {
         this.expression = expression.trim();
         this.cursor = 0;
     }
@@ -52,7 +52,7 @@ public class Parser {
         return token;
     }
 
-    private Token getNextTokenDelimited(char c) {
+    private Token getNextTokenDelimited(final char c) {
         int cursorStart = cursor;
         while (expression.charAt(cursor) != c) {
             ++cursor;

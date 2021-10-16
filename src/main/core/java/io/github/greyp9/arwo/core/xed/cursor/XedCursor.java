@@ -140,8 +140,8 @@ public class XedCursor {
     }
 
     public final String getURI() {
-        return ((parent == null) ? Http.Token.SLASH :
-                (parent.getURI() + getID(typeInstance, ordinal) + Http.Token.SLASH));
+        return ((parent == null) ? Http.Token.SLASH
+                : (parent.getURI() + getID(typeInstance, ordinal) + Http.Token.SLASH));
     }
 
     private static class Const {

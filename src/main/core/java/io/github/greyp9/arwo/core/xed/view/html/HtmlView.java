@@ -60,9 +60,9 @@ public abstract class HtmlView {
                 userState.getSubmitID()).addContentTo(body);
         new StatusBarView(httpRequest, userState.getLocus()).addContentTo(body);
         final String sessionLabel = request.getSession().getEntry().getTitle();
-        final AppTitle title = (sessionLabel == null) ?
-                AppTitle.Factory.getHostLabel(httpRequest, request.getBundle(), context) :
-                AppTitle.Factory.getHostLabel(httpRequest, sessionLabel, context);
+        final AppTitle title = (sessionLabel == null)
+                ? AppTitle.Factory.getHostLabel(httpRequest, request.getBundle(), context)
+                : AppTitle.Factory.getHostLabel(httpRequest, sessionLabel, context);
         final Preferences preferences = new Preferences(request.getState().getSession(App.Servlet.SETTINGS).getXed());
         final String iconColor = Value.defaultOnEmpty(preferences.getIconColor(), "black");
         final String theme = Value.defaultOnEmpty(preferences.getTheme(), "default");
@@ -89,5 +89,5 @@ public abstract class HtmlView {
         new XedActionCommit(userState.getFactory(), locale).addContentTo(html, submitID, properties);
     }
 
-    public abstract String addContentTo(final Element html) throws IOException;
+    public abstract String addContentTo(Element html) throws IOException;
 }

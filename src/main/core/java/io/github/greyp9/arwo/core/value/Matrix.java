@@ -17,11 +17,11 @@ public class Matrix {
         this.values = new Object[rows][columns];
     }
 
-    public int getRows() {
+    public final int getRows() {
         return rows;
     }
 
-    public int getColumns() {
+    public final int getColumns() {
         return columns;
     }
 
@@ -41,7 +41,7 @@ public class Matrix {
         return new Renderer(this, spacer, Integer.MAX_VALUE).render();
     }
 
-    public final String render(final String spacer, int linesPerParagraph) {
+    public final String render(final String spacer, final int linesPerParagraph) {
         return new Renderer(this, spacer, linesPerParagraph).render();
     }
 
@@ -53,13 +53,13 @@ public class Matrix {
         private final int widthCRL;
         private final int[] widths;
 
-        public Renderer(Matrix matrix, String spacer, int linesPerParagraph) {
+        Renderer(final Matrix matrix, final String spacer, final int linesPerParagraph) {
             this.matrix = matrix;
             this.spacer = spacer;
             this.linesPerParagraph = linesPerParagraph;
             this.widthRCL = getWidthRowColumnHeaders();
             this.widthCRL = getWidthColumnRowHeaders();
-            this.widths = getWidths();
+            this.widths = getWidths(matrix);
         }
 
         public final String render() {
@@ -135,7 +135,7 @@ public class Matrix {
             return width;
         }
 
-        private int[] getWidths() {
+        private static int[] getWidths(final Matrix matrix) {
             final int[] widths = new int[matrix.getColumns()];
             // initialize to width of column label
             for (int column = 0; (column < matrix.getColumns()); ++column) {

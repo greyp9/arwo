@@ -16,7 +16,7 @@ public class TextFilters {
         return excludes;
     }
 
-    public Collection<String> getExpressions() {
+    public final Collection<String> getExpressions() {
         return expressions;
     }
 

@@ -1,13 +1,13 @@
 package io.github.greyp9.arwo.core.expr;
 
-public class Tree {
+public final class Tree {
     private final Node root;
 
     public Node getRoot() {
         return root;
     }
 
-    public Tree(Node root) {
+    public Tree(final Node root) {
         this.root = root;
     }
 
@@ -15,7 +15,7 @@ public class Tree {
         return evaluate(root, value);
     }
 
-    private static boolean evaluate(Node node, String text) {
+    private static boolean evaluate(final Node node, final String text) {
         boolean evaluate = false;
         if (node instanceof Operand) {
             evaluate = evaluate((Operand) node, text);
@@ -25,9 +25,10 @@ public class Tree {
         return evaluate;
     }
 
-    private static boolean evaluate(Operator operator, final String text) {
+    private static boolean evaluate(final Operator operator, final String text) {
         boolean evaluate = false;
-        final Node left = operator.getLeft(), right = operator.getRight();
+        final Node left = operator.getLeft();
+        final Node right = operator.getRight();
         final String op = operator.getValue();
         if (Token.Const.AND.equalsIgnoreCase(op)) {
             evaluate = evaluate(left, text) && evaluate(right, text);
@@ -39,7 +40,7 @@ public class Tree {
         return evaluate;
     }
 
-    private static boolean evaluate(Operand operand, final String text) {
+    private static boolean evaluate(final Operand operand, final String text) {
         return text.contains(operand.getValue());
     }
 }

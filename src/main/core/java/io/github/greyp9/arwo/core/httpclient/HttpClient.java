@@ -29,14 +29,30 @@ public class HttpClient {
         this.proxy = proxy;
     }
 
-    protected Proxy getProxy() {
+    protected final Proxy getProxy() {
         return proxy;
     }
 
+    /**
+     * Open a connection to the specified {@link URL}.  The previously specified {@link Proxy} (if any) should
+     * be used to obtain the connection.
+     *
+     * @param url the resource to be opened
+     * @return a {@link URLConnection} providing access to the underlying resource
+     * @throws IOException on connection failure
+     */
     protected URLConnection getConnection(final URL url) throws IOException {
         return ((proxy == null) ? url.openConnection() : url.openConnection(proxy));
     }
 
+    /**
+     * Perform a synchronous request to query for the resource associated with the specified {@link URL}.
+     *
+     * @param url the resource to be opened
+     * @param httpRequest the parameters associated with the resource request
+     * @return an {@link HttpResponse} with the result of the resource request
+     * @throws IOException on connection failure; on IO failure
+     */
     public HttpResponse doRequest(
             final URL url, final HttpRequest httpRequest) throws IOException {
         final URL urlRequest = toURL(url, httpRequest);

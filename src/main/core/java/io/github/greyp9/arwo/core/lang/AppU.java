@@ -2,7 +2,7 @@ package io.github.greyp9.arwo.core.lang;
 
 import io.github.greyp9.arwo.core.value.Value;
 
-public class AppU {
+public final class AppU {
 
     private AppU() {
     }

@@ -39,7 +39,7 @@ public final class DurationU {
         return add(date, tz, durationIn, -1);
     }
 
-    private static Date add(final Date date, final TimeZone tz, final String durationIn, int sign) {
+    private static Date add(final Date date, final TimeZone tz, final String durationIn, final int sign) {
         final String duration = Value.defaultOnNull(durationIn, "");
         final Calendar calendar = Calendar.getInstance(tz);
         calendar.setTime(date);
@@ -81,9 +81,9 @@ public final class DurationU {
 
     public static class Const {
         @SuppressWarnings("PMD.AddEmptyString")
-        private static final String PATTERN_DURATION = "" +
-                "P((\\d+)Y)?((\\d+)M)?((\\d+)D)?" +  // i18n
-                "(T((\\d+)H)?((\\d+)M)?((\\d+)(\\.\\d{3})?S)?)?";
+        private static final String PATTERN_DURATION = ""
+                + "P((\\d+)Y)?((\\d+)M)?((\\d+)D)?"  // i18n
+                + "(T((\\d+)H)?((\\d+)M)?((\\d+)(\\.\\d{3})?S)?)?";
 
         public static final long TEN_MILLIS = 10L;
         public static final long HUNDRED_MILLIS = 100L;
@@ -126,9 +126,9 @@ public final class DurationU {
     }
 
     public static String duration(final Date dateEarlier, final Date dateLater, final int significant) {
-        return dateEarlier.after(dateLater) ?
-                duration(dateLater, dateEarlier, DateU.Const.TZ_GMT, significant) :
-                duration(dateEarlier, dateLater, DateU.Const.TZ_GMT, significant);
+        return dateEarlier.after(dateLater)
+                ? duration(dateLater, dateEarlier, DateU.Const.TZ_GMT, significant)
+                : duration(dateEarlier, dateLater, DateU.Const.TZ_GMT, significant);
     }
 
     public static String duration(final Date dateEarlier, final Date dateLater,

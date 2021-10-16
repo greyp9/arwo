@@ -20,17 +20,17 @@ public final class QNameU {
     public static QName getQNameColon(final String qname) {
         final Pattern pattern = Pattern.compile("(.*):(.+)");
         final Matcher matcher = pattern.matcher(qname);
-        return ((matcher.matches()) ?
-                new QName(XsdU.NS_URI_NULL, matcher.group(2), matcher.group(1)) :
-                new QName(XsdU.NS_URI_NULL, matcher.group(2), XsdU.NS_PREFIX_NULL));
+        return ((matcher.matches())
+                ? new QName(XsdU.NS_URI_NULL, matcher.group(2), matcher.group(1))
+                : new QName(XsdU.NS_URI_NULL, matcher.group(2), XsdU.NS_PREFIX_NULL));
     }
 
     public static QName getQName(final String qNameToString) {
         final Pattern pattern = Pattern.compile("\\{(.*)\\}(.+)");
         final Matcher matcher = pattern.matcher(qNameToString);
-        return ((matcher.matches()) ?
-                new QName(matcher.group(1), matcher.group(2)) :
-                new QName(XsdU.NS_URI_NULL, qNameToString));
+        return ((matcher.matches())
+                ? new QName(matcher.group(1), matcher.group(2))
+                : new QName(XsdU.NS_URI_NULL, qNameToString));
     }
 
     public static QName getQName(final Element element) {

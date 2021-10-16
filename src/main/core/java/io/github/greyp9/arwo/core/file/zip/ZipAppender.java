@@ -91,8 +91,8 @@ public class ZipAppender {
     }
 
     private static void addExistingEntries(
-            final ZipOutputStream zipOutputStream, Map<String, FileMetaData> entriesProcessed, final File fileZip)
-            throws IOException {
+            final ZipOutputStream zipOutputStream, final Map<String, FileMetaData> entriesProcessed,
+            final File fileZip) throws IOException {
         if (fileZip.exists()) {
             final ZipFile zipFile = new ZipFile(fileZip);
             try {
@@ -104,8 +104,8 @@ public class ZipAppender {
     }
 
     private static void addExistingEntries(
-            final ZipOutputStream zipOutputStream, Map<String, FileMetaData> entriesProcessed, final ZipFile zipFile)
-            throws IOException {
+            final ZipOutputStream zipOutputStream, final Map<String, FileMetaData> entriesProcessed,
+            final ZipFile zipFile) throws IOException {
         final Enumeration<? extends ZipEntry> entries = zipFile.entries();
         while (entries.hasMoreElements()) {
             final ZipEntry zipEntryIn = entries.nextElement();
@@ -121,7 +121,7 @@ public class ZipAppender {
 
     private static void addNewEntriesZip(
             final ZipOutputStream zipOutputStream, final String comment,
-            Map<String, FileMetaData> entriesProcessed, final File... files) throws IOException {
+            final Map<String, FileMetaData> entriesProcessed, final File... files) throws IOException {
         for (final File file : files) {
             addNewEntryZip(zipOutputStream, comment, entriesProcessed, file);
         }
@@ -148,7 +148,7 @@ public class ZipAppender {
 
     private static void addNewEntryZip(
             final ZipOutputStream zipOutputStream, final String comment,
-            Map<String, FileMetaData> entriesProcessed, final File file) throws IOException {
+            final Map<String, FileMetaData> entriesProcessed, final File file) throws IOException {
         final ZipFile zipFile = new ZipFile(file);
         try {
             final Enumeration<? extends ZipEntry> zipEntries = zipFile.entries();

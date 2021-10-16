@@ -13,7 +13,7 @@ import org.w3c.dom.Element;
 
 import java.util.Date;
 
-public class TimeHistogramDiv {
+public final class TimeHistogramDiv {
     private final TimeHistogram histogram;
     private final String label;
     private final int position;
@@ -22,7 +22,7 @@ public class TimeHistogramDiv {
     private final int cellsPerWord;
     private final int scale;
 
-    public TimeHistogramDiv(TimeHistogram histogram, String label, int position, int scale) {
+    public TimeHistogramDiv(final TimeHistogram histogram, final String label, final int position, final int scale) {
         this.histogram = histogram;
         this.label = label;
         this.position = position;
@@ -32,7 +32,7 @@ public class TimeHistogramDiv {
         this.scale = scale;
     }
 
-    public void addContentTo(Element html) {
+    public void addContentTo(final Element html) {
         final Element div = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, "histogram"));
         ElementU.addElement(div, Html.H1, label);
         final Element table = ElementU.addElement(div, Html.TABLE, null, NTV.create());
@@ -40,7 +40,7 @@ public class TimeHistogramDiv {
         addContentTRs(table);
     }
 
-    private void addContentTRHead(Element table) {
+    private void addContentTRHead(final Element table) {
         final Element tr = ElementU.addElement(table, Html.TR, null, NTV.create());
         for (int i = 0; (i < cellsPerLine); i += cellsPerWord) {
             ElementU.addElement(tr, Html.TD, UTF16.NBSP);
@@ -50,7 +50,7 @@ public class TimeHistogramDiv {
         }
     }
 
-    private void addContentTRs(Element table) {
+    private void addContentTRs(final Element table) {
         final int cursorStart = position * histogram.getPageSize();
         final int cursorEnd = cursorStart + histogram.getPageSize();
         final Date dateStart = histogram.getDateStart();
@@ -77,8 +77,9 @@ public class TimeHistogramDiv {
                 int index = i + j;
                 if (index < length) {
                     // render cell data
-                    long l = (long) buckets[index];
-                    int colorShade = MathU.bound(0, MathU.log(l, scale), 15);
+                    final long l = (long) buckets[index];
+                    final int maxShade = 15;
+                    final int colorShade = MathU.bound(0, MathU.log(l, scale), maxShade);
                     final String cssClass = String.format("histogram r%d", colorShade);
                     final String title = ((l == 0L) ? null : Long.toString(l));
                     ElementU.addElement(tr, Html.TD, UTF16.NBSP, NTV.create(Html.CLASS, cssClass, Html.TITLE, title));

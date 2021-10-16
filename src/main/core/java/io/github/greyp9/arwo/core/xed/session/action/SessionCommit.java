@@ -36,7 +36,8 @@ public class SessionCommit {
     public final void commit(final String comment, final Properties properties) throws IOException {
         final File file = session.getFile();
         final File folderParent = file.getParentFile();
-        final File folder = ((folderParent == null) ? new File(SystemU.userDir()) : folderParent);  // SessionSave pattern
+        final File folder = ((folderParent == null)
+                ? new File(SystemU.userDir()) : folderParent);  // SessionSave pattern
         // ensure parent folder for specified file path
         FileU.ensureFolders(folder);
         // commit
@@ -50,7 +51,8 @@ public class SessionCommit {
                 alert(Alert.Severity.ERR, "document.commit.error", e.getMessage());
             }
         } else {
-            alert(Alert.Severity.ERR, "document.commit.error", new FileNotFoundException(file.getPath()).getMessage());
+            alert(Alert.Severity.ERR, "document.commit.error",
+                    new FileNotFoundException(file.getPath()).getMessage());
         }
     }
 

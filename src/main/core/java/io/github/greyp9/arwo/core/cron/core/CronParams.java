@@ -57,9 +57,9 @@ public class CronParams {
         final File folderTab = new File(folder, cronTab.getName());
         final File folderJob = new File(folderTab, cronJob.getName());
         final String dateString = DateX.toFilename(date);
-        final String filenameCron = ((filename == null) ?
-                String.format("cron-%s.txt", dateString) :
-                String.format("cron-%s.%s", dateString, filename));
+        final String filenameCron = ((filename == null)
+                ? String.format("cron-%s.txt", dateString)
+                : String.format("cron-%s.%s", dateString, filename));
         return new File(folderJob, filenameCron);
     }
 

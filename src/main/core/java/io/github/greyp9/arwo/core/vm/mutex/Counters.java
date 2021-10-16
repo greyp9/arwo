@@ -23,7 +23,7 @@ public final class Counters {
         }
     }
 
-    public Counter add(final String name, int amount) {
+    public Counter add(final String name, final int amount) {
         synchronized (entries) {
             Counter counter = entries.get(name);
             if (counter == null) {
@@ -42,7 +42,7 @@ public final class Counters {
         }
     }
 
-    public static class Counter implements Comparable<Counter> {
+    public static final class Counter implements Comparable<Counter> {
         private final String name;
         private int value;
 
@@ -54,17 +54,17 @@ public final class Counters {
             return value;
         }
 
-        public Counter(String name, int value) {
+        public Counter(final String name, final int value) {
             this.name = name;
             this.value = value;
         }
 
-        public void add(final int value) {
-            this.value += value;
+        public void add(final int addValue) {
+            this.value += addValue;
         }
 
         @Override
-        public int compareTo(Counter o) {
+        public int compareTo(final Counter o) {
             return name.compareTo(o.getName());
         }
     }

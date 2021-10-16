@@ -9,7 +9,7 @@ import java.io.File;
 import java.util.Arrays;
 import java.util.Date;
 
-public class TimeHistogram implements Disposable {
+public final class TimeHistogram implements Disposable {
     private final String name;
     private final String folder;
     private final int length;
@@ -25,21 +25,25 @@ public class TimeHistogram implements Disposable {
     private final double[] buckets;
 
     // for instantiation via reflection
-    public TimeHistogram(String... params) {
+    @SuppressWarnings("checkstyle:magicnumber")
+    public TimeHistogram(final String... params) {
         this(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7]);
     }
 
-    public TimeHistogram(String name, String folder,
-                         String durationCell, String durationWord, String durationLine,
-                         String durationParagraph, String durationPage, String durationPages) {
+    @SuppressWarnings("checkstyle:parameternumber")
+    public TimeHistogram(final String name, final String folder,
+                         final String durationCell, final String durationWord, final String durationLine,
+                         final String durationParagraph, final String durationPage, final String durationPages) {
         this(name, folder, DateU.floor(new Date(), DurationU.toMillisP(durationPage)),
                 DurationU.toMillisP(durationCell), DurationU.toMillisP(durationWord),
                 DurationU.toMillisP(durationLine), DurationU.toMillisP(durationParagraph),
                 DurationU.toMillisP(durationPage), DurationU.toMillisP(durationPages));
     }
 
-    public TimeHistogram(String name, String folder, Date dateStart, long durationCell, long durationWord, long durationLine,
-                         long durationParagraph, long durationPage, long durationPages) {
+    @SuppressWarnings("checkstyle:parameternumber")
+    public TimeHistogram(final String name, final String folder, final Date dateStart, final long durationCell,
+                         final long durationWord, final long durationLine, final long durationParagraph,
+                         final long durationPage, final long durationPages) {
         this.name = name;
         this.folder = folder;
         this.length = (int) (durationPages / durationCell);
@@ -139,7 +143,7 @@ public class TimeHistogram implements Disposable {
         return (int) (durationPages / durationPage);
     }
 
-    public void advance(int cursor) {
+    public void advance(final int cursor) {
         synchronized (this) {
             // adjust bucket data
             if (cursor < 0) {
@@ -160,7 +164,7 @@ public class TimeHistogram implements Disposable {
         }
     }
 
-    public void add(final Date date, double amount) {
+    public void add(final Date date, final double amount) {
         synchronized (this) {
             final long offset = date.getTime() - dateStart.getTime();
             final int i = (int) (offset / durationCell);
@@ -189,7 +193,7 @@ public class TimeHistogram implements Disposable {
         }
     }
 
-    public double[] getBuckets(int pos, int len) {
+    public double[] getBuckets(final int pos, final int len) {
         double[] bucketsCopy = new double[len];
         synchronized (this) {
             System.arraycopy(buckets, pos, bucketsCopy, 0, len);

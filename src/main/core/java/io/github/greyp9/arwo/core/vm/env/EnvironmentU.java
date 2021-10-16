@@ -11,7 +11,10 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Map;
 
-public class EnvironmentU {
+public final class EnvironmentU {
+
+    private EnvironmentU() {
+    }
 
     public static byte[] getEnv(final Collection<String> skip) throws IOException {
         final String uri = App.Config.QNAME_APP.getNamespaceURI();

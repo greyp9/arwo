@@ -61,8 +61,8 @@ public class DocumentFactory {
                 addAttribute(element, typeInstanceIt);
             } else if (TypeInstance.NodeType.element.equals(nodeType)) {
                 addElement(element, typeInstanceIt);
-            } else if (TypeInstance.NodeType.choice.equals(nodeType) &&
-                    (typeInstanceIt instanceof ChoiceTypeInstance)) {
+            } else if (TypeInstance.NodeType.choice.equals(nodeType)
+                    && (typeInstanceIt instanceof ChoiceTypeInstance)) {
                 addChoice(element, (ChoiceTypeInstance) typeInstanceIt);
             } else {
                 throw new IllegalStateException(dataType.getQName().toString());

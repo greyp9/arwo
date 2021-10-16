@@ -57,7 +57,8 @@ public class MenuView {
     public final Element addTitle(final Element html, final AppTitle title) throws IOException {
         final Element divMenus = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENUS));
         final Element div = ElementU.addElement(divMenus, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.PAGE_TITLE));
-        ElementU.addElement(div, Html.IMG, null, NTV.create(Html.SRC, "${CONTEXT}/res/ico/app-black.ico", Html.ALT, ""));
+        ElementU.addElement(div, Html.IMG, null,
+                NTV.create(Html.SRC, "${CONTEXT}/res/ico/app-black.ico", Html.ALT, ""));
         ElementU.addElement(div, Html.SPAN, title.getText());
         return divMenus;
     }
@@ -72,7 +73,8 @@ public class MenuView {
         final String title = bundle.getString(key + ".DETAIL");
         final String label = String.format("[%s]", bundle.getString(key, item.getName()));
         if (top) {
-            final SubmitToken token = new SubmitToken(item.getSubject(), item.getAction(), item.getObject(), item.getObject2());
+            final SubmitToken token = new SubmitToken(
+                    item.getSubject(), item.getAction(), item.getObject(), item.getObject2());
             HtmlU.addButton(divMenu, label, menuSystem.getSubmitID(), token.toString(), App.CSS.MENU, title, accessKey);
         } else {
             ElementU.addElement(divMenu, Html.SPAN, label, NTV.create(Html.CLASS, App.CSS.MENU));
@@ -81,7 +83,8 @@ public class MenuView {
             addMenuItems(html, divMenu, item, accessKey);
         }
         if (text != null) {
-            final Element divRight = ElementU.addElement(divMenu, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.RIGHT));
+            final Element divRight = ElementU.addElement(divMenu, Html.DIV, null,
+                    NTV.create(Html.CLASS, App.CSS.RIGHT));
             ElementU.addElement(divRight, Html.SPAN, text, NTV.create(Html.CLASS, App.CSS.MENU));
         }
     }
@@ -103,7 +106,8 @@ public class MenuView {
             final String key = Value.join(".", App.CSS.MENU, parentName, itemIt.getName());
             final String title = bundle.getString(key + ".DETAIL");
             final String label = bundle.getString(key);
-            final SubmitToken token = new SubmitToken(itemIt.getSubject(), itemIt.getAction(), itemIt.getObject(), itemIt.getObject2());
+            final SubmitToken token = new SubmitToken(
+                    itemIt.getSubject(), itemIt.getAction(), itemIt.getObject(), itemIt.getObject2());
             final String htmlClass = Value.join(Html.SPACE, App.CSS.MENU, App.CSS.MIN,
                     (itemIt.isOpen() ? App.CSS.ACTIVE : null));
             HtmlU.addButton(divMenu, label, menuSystem.getSubmitID(), token.toString(), htmlClass, title, accessKey);

@@ -14,7 +14,7 @@ public final class DataPersist {
     private final File folder;
     private final String extension;
 
-    public DataPersist(File folder, String extension) {
+    public DataPersist(final File folder, final String extension) {
         this.folder = folder;
         this.extension = extension;
     }

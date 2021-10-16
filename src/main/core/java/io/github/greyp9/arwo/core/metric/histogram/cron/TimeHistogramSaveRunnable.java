@@ -12,7 +12,7 @@ import java.util.Date;
 import java.util.logging.Logger;
 
 @SuppressWarnings("unused")
-public class TimeHistogramSaveRunnable implements Runnable {
+public final class TimeHistogramSaveRunnable implements Runnable {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
     private final String name;

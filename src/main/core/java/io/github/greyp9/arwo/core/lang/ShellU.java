@@ -5,6 +5,9 @@ import java.util.List;
 
 public final class ShellU {
 
+    private ShellU() {
+    }
+
     public static String[] toCommandArray(final String stdin) {
         final List<String> commandArray = new ArrayList<String>();
         if (SystemU.isLinux()) {

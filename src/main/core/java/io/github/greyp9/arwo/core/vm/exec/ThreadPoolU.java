@@ -3,7 +3,10 @@ package io.github.greyp9.arwo.core.vm.exec;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.ThreadPoolExecutor;
 
-public class ThreadPoolU {
+public final class ThreadPoolU {
+
+    private ThreadPoolU() {
+    }
 
     public static String getTelemetry(final ExecutorService executorService) {
         final StringBuilder buffer = new StringBuilder();

@@ -19,7 +19,7 @@ public class FileMetaData {
         return lastModified;
     }
 
-    public long getCrc() {
+    public final long getCrc() {
         return crc;
     }
 

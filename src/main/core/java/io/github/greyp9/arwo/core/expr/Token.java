@@ -1,6 +1,6 @@
 package io.github.greyp9.arwo.core.expr;
 
-public class Token {
+public final class Token {
     private final String value;
     private final TokenType type;
 
@@ -12,7 +12,7 @@ public class Token {
         return type;
     }
 
-    public Token(String value, TokenType type) {
+    public Token(final String value, final TokenType type) {
         this.value = value;
         this.type = type;
     }

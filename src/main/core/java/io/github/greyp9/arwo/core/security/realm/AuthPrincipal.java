@@ -14,8 +14,8 @@ public class AuthPrincipal {
     }
 
     public final AppPrincipal authenticate(final Object credentialIn) {
-        final boolean authenticated = (credentialIn == null) ?
-                (this.credential == null) : credentialIn.equals(this.credential);
+        final boolean authenticated = (credentialIn == null)
+                ? (this.credential == null) : credentialIn.equals(this.credential);
         return (authenticated ? principal : null);
     }
 }

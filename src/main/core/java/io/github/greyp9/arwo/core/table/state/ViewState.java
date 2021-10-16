@@ -108,11 +108,11 @@ public class ViewState {
         this.page = page;
     }
 
-    public boolean isAutoPage() {
+    public final boolean isAutoPage() {
         return autoPage;
     }
 
-    public void setAutoPage(boolean autoPage) {
+    public final void setAutoPage(final boolean autoPage) {
         this.autoPage = autoPage;
     }
 

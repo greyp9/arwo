@@ -37,7 +37,8 @@ public class DependencyResolver {
         return dependencies;
     }
 
-    private void addDependenciesBinding(Collection<Dependency> dependencies, Element entry) throws IOException {
+    private void addDependenciesBinding(final Collection<Dependency> dependencies,
+                                        final Element entry) throws IOException {
         final String remoteId = ElementU.getAttribute(entry, "remoteId");
         final String xpath = String.format("/irby:dependencies/irby:resource/irby:entry[@remoteId='%s']", remoteId);
         final List<Element> remoteEntries = xpather.getElements(xpath);
@@ -46,7 +47,7 @@ public class DependencyResolver {
         }
     }
 
-    private void addDependenciesResource(Collection<Dependency> dependencies, Element entry) throws IOException {
+    private void addDependenciesResource(final Collection<Dependency> dependencies, final Element entry) {
         final String src = ElementU.getAttribute(entry, "src");
         final String dest = ElementU.getAttribute(entry, "dest");
         final String md5 = ElementU.getAttribute(entry, "md5");

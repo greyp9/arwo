@@ -4,15 +4,15 @@ public abstract class Node {
     private final Node left;
     private final Node right;
 
-    public Node getLeft() {
+    public final Node getLeft() {
         return left;
     }
 
-    public Node getRight() {
+    public final Node getRight() {
         return right;
     }
 
-    public Node(Node left, Node right) {
+    public Node(final Node left, final Node right) {
         this.left = left;
         this.right = right;
     }

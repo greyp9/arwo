@@ -6,6 +6,9 @@ import java.net.URL;
 
 public final class ProxyU {
 
+    private ProxyU() {
+    }
+
     public static Proxy toHttpProxy(final URL url) {
         return (url == null) ? null : toHttpProxyNN(url);
     }
