@@ -17,7 +17,7 @@ public class FilterFilesTest extends TestCase {
     public void testByAgeMin() throws Exception {
         final Date date = new Date();
         final File folderTemp = new File(SystemU.tempDir());
-        final Collection<File> found = new FindInFolderQuery(folderTemp, "*", true).getFound();
+        final Collection<File> found = new FindInFolderQuery(folderTemp, "*", false).getFound();
         int minutes = 1;
         while (true) {
             final Collection<File> foundCopy = new ArrayList<File>(found);
