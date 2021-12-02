@@ -3,11 +3,11 @@ package io.github.greyp9.arwo.core.tls.context.test;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpRequest;
 import io.github.greyp9.arwo.core.http.HttpResponse;
-import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.httpclient.HttpsClient;
 import io.github.greyp9.arwo.core.tls.client.CertificateClient;
 import io.github.greyp9.arwo.core.value.NTV;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.Test;
 
 import javax.net.ssl.SSLHandshakeException;
@@ -42,6 +42,7 @@ public class TLSContextTest {
      * Test failure to connect to server using self signed certificate.
      */
     @Test
+    @Ignore("test requires TLS-enabled server running on 8443")
     public void testDefaultTrustNegative() throws IOException, GeneralSecurityException {
         final URL url = new URL("https://localhost:8443/");
         logger.finest(url.toExternalForm());
@@ -63,6 +64,7 @@ public class TLSContextTest {
      * Test access to custom SSL context, which redefines the trusted server certificate.
      */
     @Test
+    @Ignore("test requires TLS-enabled server running on 8443")
     public void testExplicitTrust() throws GeneralSecurityException, IOException {
         // acquire trusted certificate
         final URL url = new URL("https://localhost:8443/");
@@ -83,6 +85,7 @@ public class TLSContextTest {
      * Test usage of custom SSL context, where accessed server does not present expected certificate.
      */
     @Test
+    @Ignore("test requires TLS-enabled server running on 8443")
     public void testExplicitTrustNegative() throws GeneralSecurityException, IOException {
         // acquire trusted certificate
         final URL urlTrust = new URL("https://localhost:8443/");

@@ -26,9 +26,10 @@ public class ZipVolumeTest extends TestCase {
 
     public void testFindIterateArchives() throws Exception {
         File root = new File(SystemU.resolve("~/Downloads"));
-        Collection<File> files = new FindInFolderQuery(root, "*.zip", true).getFound();
+        Collection<File> files = new FindInFolderQuery(root, "*.zip", false).getFound();
         logger.info("" + files.size());
         for (File file : files) {
+            logger.info("" + file.getPath());
             checkFile(file);
         }
     }
