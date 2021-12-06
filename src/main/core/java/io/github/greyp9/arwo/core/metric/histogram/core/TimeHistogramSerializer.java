@@ -79,14 +79,15 @@ public final class TimeHistogramSerializer {
         try {
             deserializeData(StreamU.read(getFile(date)));
         } catch (IOException e) {
-            logger.severe(e.getMessage());
+            logger.fine(e.getMessage());  // there may not be a backing file; this is ok
         }
     }
 
     private File getFile(final Date date) {
+        final String name = (histogram.getMetric() == null) ? histogram.getName() : histogram.getMetric();
         final String filename = (date == null)
-                ? String.format("%s.xml", histogram.getName())
-                : String.format("%s.%s.xml", histogram.getName(), DateX.toFilenameMM(date));
+                ? String.format("%s.xml", name)
+                : String.format("%s.%s.xml", name, DateX.toFilenameMM(date));
         return new File(folder, filename);
     }
 

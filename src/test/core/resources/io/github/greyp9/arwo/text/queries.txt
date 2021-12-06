@@ -1,0 +1,4 @@
+''' errors
+("WARN" or "ERROR")
+
+'''

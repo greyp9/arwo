@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.file.find.FindInFolderQuery;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpArguments;
@@ -13,13 +14,22 @@ import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
+import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogram;
+import io.github.greyp9.arwo.core.naming.AppNaming;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.submit.SubmitTokenU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 
+import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.TreeSet;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class VisualizationHandlerPost {
     private final VisualizationRequest request;
@@ -63,7 +73,7 @@ public class VisualizationHandlerPost {
         return HttpResponseU.to302(location);
     }
 
-    private void doPostContentTypeUnknown(final String contentType) throws IOException {
+    private void doPostContentTypeUnknown(final String contentType) {
         alerts.add(new Alert(Alert.Severity.ERR, bundle.format("ArwoHandlerPost.type.unknown", contentType)));
     }
 
@@ -97,11 +107,12 @@ public class VisualizationHandlerPost {
     }
 
     private String applySession(
-            final SubmitToken token, final NameTypeValues httpArguments, final String locationIn) throws IOException {
-        // source context
+            final SubmitToken token, final NameTypeValues httpArguments, final String locationIn) {
+        //noinspection ResultOfMethodCallIgnored
         httpArguments.getClass();
         final String baseURI = httpRequest.getBaseURI();
         final String context = request.getContext();
+        final String metric = request.getMetric();
         final String mode = request.getMode();
         final String page = request.getPage();
         final String scale = request.getScale();
@@ -111,18 +122,53 @@ public class VisualizationHandlerPost {
         final String action = token.getAction();
         final String object = token.getObject();
         if (App.Action.SELECT.equals(action) && App.Mode.VIEW_HTML.equals(object)) {
-            location = PathU.toDir(baseURI, context, Html.HTML, page, scale);
+            location = PathU.toDir(baseURI, context, metric, Html.HTML, page, scale);
         } else if (App.Action.SELECT.equals(action) && App.Mode.VIEW_TEXT.equals(object)) {
-            location = PathU.toDir(baseURI, context, Html.TEXT, page, scale);
+            location = PathU.toDir(baseURI, context, metric, Html.TEXT, page, scale);
         } else if (App.Action.SELECT.equals(action) && App.Mode.VIEW.equals(object)) {
-            location = PathU.toDir(baseURI, context, Html.FILE);
+            location = PathU.toDir(baseURI, context, metric, Html.FILE);
+        } else if (App.Action.SELECT.equals(action) && "log1.5".equals(object)) {
+            location = PathU.toDir(baseURI, context, metric, mode, page, "1.5");
         } else if (App.Action.SELECT.equals(action) && "log2".equals(object)) {
-            location = PathU.toDir(baseURI, context, mode, page, Integer.toString(2));
+            location = PathU.toDir(baseURI, context, metric, mode, page, Integer.toString(2));
         } else if (App.Action.SELECT.equals(action) && "log3".equals(object)) {
-            location = PathU.toDir(baseURI, context, mode, page, Integer.toString(3));
+            location = PathU.toDir(baseURI, context, metric, mode, page, Integer.toString(3));
+        } else if (App.Action.SELECT.equals(action) && "navMetricPrev".equals(object)) {
+            location = PathU.toDir(baseURI, context, iterateMetric(context, metric, -1), mode, page, scale);
+        } else if (App.Action.SELECT.equals(action) && "navMetricNext".equals(object)) {
+            location = PathU.toDir(baseURI, context, iterateMetric(context, metric, 1), mode, page, scale);
         } else {
             alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }
         return location;
+    }
+
+    private String iterateMetric(final String context, final String metric, final int value) {
+        String toMetric = metric;
+        final List<String> metrics = getMetrics(context);
+        if (!metrics.isEmpty()) {
+            final int indexOf = metrics.indexOf(metric);
+            if (indexOf >= 0) {
+                toMetric = metrics.get((indexOf + value + metrics.size()) % metrics.size());
+            } else {
+                toMetric = metrics.get(0);
+            }
+        }
+        return toMetric;
+    }
+
+    private List<String> getMetrics(final String context) {
+        final Pattern patternMetricName = Pattern.compile("(.*)\\.(.*)\\.xml");  // filename pattern is known
+        final TimeHistogram histogram = (TimeHistogram) AppNaming.lookup(App.Application.LOOKUP, context);
+        final File folder = new File(histogram.getFolder());
+        final Collection<String> metrics = new TreeSet<>();
+        for (final File file : new FindInFolderQuery(folder, "*.xml", false).getFound()) {
+            final Matcher matcher = patternMetricName.matcher(file.getName());
+            if (matcher.matches()) {
+                metrics.add(matcher.group(1));  // extract the metric name from the filename
+            }
+            metrics.remove(context);  // ignore the default filename for the context
+        }
+        return new ArrayList<>(metrics);
     }
 }

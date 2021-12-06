@@ -32,4 +32,12 @@ public final class MathU {
         }
         return l;
     }
+
+    public static int log(final long value, final float base) {
+        int l = 0;
+        for (double i = value; (i >= base); i /= base) {
+            ++l;
+        }
+        return l;
+    }
 }

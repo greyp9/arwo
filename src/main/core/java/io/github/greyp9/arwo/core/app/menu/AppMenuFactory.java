@@ -149,14 +149,18 @@ public class AppMenuFactory implements MenuFactory {
     private static MenuItem createMenuViewVis(final String key) {
         final String subject = App.Target.SESSION;
         final String action = App.Action.SELECT;
+        final MenuItem itemMetricPrev = new MenuItem("navMetricPrev", subject, action, "navMetricPrev");
+        final MenuItem itemMetricNext = new MenuItem("navMetricNext", subject, action, "navMetricNext");
         final MenuItem itemViewHtml = new MenuItem(App.Mode.VIEW_HTML, subject, action, App.Mode.VIEW_HTML);
         final MenuItem itemViewText = new MenuItem(App.Mode.VIEW_TEXT, subject, action, App.Mode.VIEW_TEXT);
         final MenuItem itemViewFile = new MenuItem(App.Mode.VIEW, subject, action, App.Mode.VIEW);
+        final MenuItem itemViewLog15 = new MenuItem("log1.5", subject, action, "log1.5");
         final MenuItem itemViewLog2 = new MenuItem("log2", subject, action, "log2");
         final MenuItem itemViewLog3 = new MenuItem("log3", subject, action, "log3");
 
         return new MenuItem("viewVis", App.Target.USER_STATE, App.Action.MENU, key + "/viewVis",
-                itemViewHtml, itemViewText, itemViewFile, itemViewLog2, itemViewLog3);
+                itemMetricPrev, itemMetricNext, itemViewHtml, itemViewText, itemViewFile,
+                itemViewLog15, itemViewLog2, itemViewLog3);
     }
 
     private static MenuItem createMenuConnection(final String key) {

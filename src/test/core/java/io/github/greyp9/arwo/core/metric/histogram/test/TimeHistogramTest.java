@@ -28,7 +28,7 @@ public class TimeHistogramTest extends TestCase {
         long durationCell = DurationU.toMillisP("P1D");
         long durationPage = DurationU.toMillisP("P31D");
         final File folder = new File(folderClass, "create-simple");
-        TimeHistogram histogram = new TimeHistogram(null, folder.getPath(), date,
+        TimeHistogram histogram = new TimeHistogram(null, null, folder.getPath(), date,
                 durationCell, durationPage, durationPage, durationPage, durationPage, durationPage);
         logger.info(histogram.toString());
         for (int a = 0; (a < 3); ++a) {
@@ -56,7 +56,7 @@ public class TimeHistogramTest extends TestCase {
         long durationPage = DurationU.toMillisP("P7D");
         long durationPages = DurationU.toMillisP("P91D");
         final File folder = new File(folderClass, "advance");
-        TimeHistogram histogram = new TimeHistogram(null, folder.getPath(), date,
+        TimeHistogram histogram = new TimeHistogram(null, null, folder.getPath(), date,
                 durationCell, durationCell, durationPage, durationPage, durationPage, durationPages);
         logger.info(histogram.toString());
         for (int a = 0; (a < 91); ++a) {

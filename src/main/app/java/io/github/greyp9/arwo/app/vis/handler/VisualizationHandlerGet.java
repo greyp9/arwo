@@ -59,7 +59,7 @@ public class VisualizationHandlerGet {
         } else if (Value.isEmpty(request.getContext())) {
             httpResponse = new VisualizationInventoryView(httpRequest, request, userState).doGetResponse();
         } else if (Value.isEmpty(request.getMode())) {
-            httpResponse = HttpResponseU.to302(PathU.toDir(baseURI, request.getContext(), Html.HTML));
+            httpResponse = HttpResponseU.to302(PathU.toDir(baseURI, request.getContext(), "-", Html.HTML));
         } else {
             httpResponse = doGet2();
         }

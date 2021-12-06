@@ -26,6 +26,15 @@ public final class NumberU {
         }
     }
 
+    public static float toFloat(final String s, final float defaultFloat) {
+        try {
+            final Number number = ((s == null) ? defaultFloat : NumberFormat.getInstance().parse(s));
+            return number.floatValue();
+        } catch (ParseException e) {
+            return defaultFloat;
+        }
+    }
+
     @SuppressWarnings("PMD.OnlyOneReturn")
     public static Long toLong(final String s, final long defaultLong) {
         try {

@@ -11,6 +11,7 @@ import java.util.Date;
 
 public final class TimeHistogram implements Disposable {
     private final String name;
+    private final String metric;
     private final String folder;
     private final int length;
 
@@ -27,24 +28,25 @@ public final class TimeHistogram implements Disposable {
     // for instantiation via reflection
     @SuppressWarnings("checkstyle:magicnumber")
     public TimeHistogram(final String... params) {
-        this(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7]);
+        this(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8]);
     }
 
     @SuppressWarnings("checkstyle:parameternumber")
-    public TimeHistogram(final String name, final String folder,
+    public TimeHistogram(final String name, final String metric, final String folder,
                          final String durationCell, final String durationWord, final String durationLine,
                          final String durationParagraph, final String durationPage, final String durationPages) {
-        this(name, folder, DateU.floor(new Date(), DurationU.toMillisP(durationPage)),
+        this(name, metric, folder, DateU.floor(new Date(), DurationU.toMillisP(durationPage)),
                 DurationU.toMillisP(durationCell), DurationU.toMillisP(durationWord),
                 DurationU.toMillisP(durationLine), DurationU.toMillisP(durationParagraph),
                 DurationU.toMillisP(durationPage), DurationU.toMillisP(durationPages));
     }
 
     @SuppressWarnings("checkstyle:parameternumber")
-    public TimeHistogram(final String name, final String folder, final Date dateStart, final long durationCell,
-                         final long durationWord, final long durationLine, final long durationParagraph,
-                         final long durationPage, final long durationPages) {
+    public TimeHistogram(final String name, final String metric, final String folder, final Date dateStart,
+                         final long durationCell, final long durationWord, final long durationLine,
+                         final long durationParagraph, final long durationPage, final long durationPages) {
         this.name = name;
+        this.metric = metric;
         this.folder = folder;
         this.length = (int) (durationPages / durationCell);
         this.dateStart = ((dateStart == null) ? DateU.floor(new Date(), durationPage) : dateStart);
@@ -61,6 +63,7 @@ public final class TimeHistogram implements Disposable {
 
     public TimeHistogram(final TimeHistogram histogram, final Date dateStart, final int pos, final int len) {
         this.name = histogram.getName();
+        this.metric = histogram.getMetric();
         this.folder = histogram.getFolder();
         this.length = len;
         this.dateStart = DateU.copy(dateStart);
@@ -77,6 +80,10 @@ public final class TimeHistogram implements Disposable {
 
     public String getName() {
         return name;
+    }
+
+    public String getMetric() {
+        return metric;
     }
 
     public String getFolder() {

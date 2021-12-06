@@ -40,11 +40,11 @@ public class VisualizationEntryView extends VisualizationView {
             httpResponse = HttpResponseU.to404();
         } else if (Value.isEmpty(request.getPage())) {
             final Date date = DateU.floor(httpRequest.getDate(), histogram.getDurationPage());
-            httpResponse = HttpResponseU.to302(PathU.toDir(httpRequest.getBaseURI(),
-                    request.getContext(), request.getMode(), DateX.toFilenameMM(date)));
+            httpResponse = HttpResponseU.to302(PathU.toDir(httpRequest.getBaseURI(), request.getContext(),
+                    request.getMetric(), request.getMode(), DateX.toFilenameMM(date)));
         } else if (Value.isEmpty(request.getScale())) {
-            httpResponse = HttpResponseU.to302(PathU.toDir(httpRequest.getBaseURI(),
-                    request.getContext(), request.getMode(), request.getPage(), Integer.toString(2)));
+            httpResponse = HttpResponseU.to302(PathU.toDir(httpRequest.getBaseURI(), request.getContext(),
+                    request.getMetric(), request.getMode(), request.getPage(), Integer.toString(2)));
         } else {
             addContentToSwitch(html);
         }
@@ -72,15 +72,16 @@ public class VisualizationEntryView extends VisualizationView {
         ElementU.addElement(divMenu, Html.A, textPad, NTV.create(Html.CLASS, cssClass, Html.HREF, hrefTo));
     }
 
-    private void addContentToSwitch(Element html) throws IOException {
+    private void addContentToSwitch(Element html) {
         final Date date = DateU.floor(httpRequest.getDate(), histogram.getDurationPage());
         final Date dateQ = DateX.fromFilenameMM(request.getPage());
-        if (date.equals(dateQ)) {
+        if (("-".equals(request.getMetric())) && (date.equals(dateQ))) {
             // add content of active page
             addContentHistogram(html, histogram);
         } else {
             // add content of archived page
-            final TimeHistogram histogramQ = new TimeHistogram(histogram.getName(), histogram.getFolder(), dateQ,
+            final TimeHistogram histogramQ = new TimeHistogram(
+                    histogram.getName(), request.getMetric(), histogram.getFolder(), dateQ,
                     histogram.getDurationCell(), histogram.getDurationWord(), histogram.getDurationLine(),
                     histogram.getDurationParagraph(), histogram.getDurationPage(), histogram.getDurationPages());
             new TimeHistogramSerializer(histogramQ, new File(histogramQ.getFolder())).load(dateQ);
@@ -88,9 +89,8 @@ public class VisualizationEntryView extends VisualizationView {
         }
     }
 
-    protected void addContentHistogram(Element html, final TimeHistogram histogram)
-            throws IOException {
-        final String name = histogram.getName();
+    protected void addContentHistogram(Element html, final TimeHistogram histogram) {
+        final String label = Value.defaultOnNull(histogram.getMetric(), histogram.getName());
 /*
         PropertiesX properties = new PropertiesX(userState.getPageVisualization().getProperties());
         long page = MathU.bound(0L, properties.getLong(name), histogram.getPageCount() - 1);
@@ -103,11 +103,11 @@ public class VisualizationEntryView extends VisualizationView {
         menuView.addContentTo(html, AppMenuFactory.Const.NAV, name, false, true, null, position + " " + i);
 */
         // data view
-        final int scale = NumberU.toInt(request.getScale(), 2);
+        final float scale = NumberU.toFloat(request.getScale(), 2.0f);
         if (Html.TEXT.equals(request.getMode())) {
-            new TimeHistogramText(histogram, name, 0).addContentTo(html);
+            new TimeHistogramText(histogram, label, 0).addContentTo(html);
         } else {
-            new TimeHistogramDiv(histogram, name, 0, scale).addContentTo(html);
+            new TimeHistogramDiv(histogram, label, 0, scale).addContentTo(html);
         }
     }
 }

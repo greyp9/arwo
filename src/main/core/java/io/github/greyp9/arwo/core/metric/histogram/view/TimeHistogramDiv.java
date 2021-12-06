@@ -20,9 +20,9 @@ public final class TimeHistogramDiv {
     private final int linesPerParagraph;
     private final int cellsPerLine;
     private final int cellsPerWord;
-    private final int scale;
+    private final float scale;
 
-    public TimeHistogramDiv(final TimeHistogram histogram, final String label, final int position, final int scale) {
+    public TimeHistogramDiv(final TimeHistogram histogram, final String label, final int position, final float scale) {
         this.histogram = histogram;
         this.label = label;
         this.position = position;
