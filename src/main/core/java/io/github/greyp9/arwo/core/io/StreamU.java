@@ -108,9 +108,18 @@ public final class StreamU {
         write(file, bytes, 0, bytes.length);
     }
 
+    public static void write(final File file, final byte[] bytes, final boolean append) throws IOException {
+        write(file, bytes, 0, bytes.length, append);
+    }
+
     public static void write(final File file, final byte[] bytes,
                              final int offset, final int length) throws IOException {
-        final BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(file));
+        write(file, bytes, offset, length, false);
+    }
+
+    public static void write(final File file, final byte[] bytes,
+                             final int offset, final int length, final boolean append) throws IOException {
+        final BufferedOutputStream os = new BufferedOutputStream(new FileOutputStream(file, append));
         try {
             os.write(bytes, offset, length);
         } finally {

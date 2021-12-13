@@ -2,12 +2,11 @@ package io.github.greyp9.arwo.core.metric.histogram.core;
 
 import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.date.DurationU;
-import io.github.greyp9.arwo.core.lang.NumberU;
 import io.github.greyp9.arwo.core.lifecycle.core.Disposable;
 
-import java.io.File;
-import java.util.Arrays;
 import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
 
 public final class TimeHistogram implements Disposable {
     private final String name;
@@ -22,8 +21,8 @@ public final class TimeHistogram implements Disposable {
     private final long durationPage;
     private final long durationPages;
 
-    private final Date dateStart;
-    private final double[] buckets;
+    private Date dateStart;
+    private final Map<Date, TimeHistogramPage> pages;
 
     // for instantiation via reflection
     @SuppressWarnings("checkstyle:magicnumber")
@@ -48,9 +47,9 @@ public final class TimeHistogram implements Disposable {
         this.name = name;
         this.metric = metric;
         this.folder = folder;
-        this.length = (int) (durationPages / durationCell);
-        this.dateStart = ((dateStart == null) ? DateU.floor(new Date(), durationPage) : dateStart);
-        this.buckets = new double[length];
+        this.length = (int) (durationPage / durationCell);
+        this.dateStart = ((dateStart == null) ? DateU.floor(new Date(), durationPage) : DateU.copy(dateStart));
+        this.pages = new TreeMap<>();
         this.durationCell = durationCell;
         this.durationWord = durationWord;
         this.durationLine = durationLine;
@@ -58,9 +57,10 @@ public final class TimeHistogram implements Disposable {
         this.durationPage = durationPage;
         this.durationPages = durationPages;
         // recover data from previous application invocation
-        new TimeHistogramSerializer(this, new File(folder)).load(dateStart);
+        //new TimeHistogramSerializer(this, new File(folder)).load(dateStart);
     }
 
+/*
     public TimeHistogram(final TimeHistogram histogram, final Date dateStart, final int pos, final int len) {
         this.name = histogram.getName();
         this.metric = histogram.getMetric();
@@ -77,6 +77,7 @@ public final class TimeHistogram implements Disposable {
         this.durationPage = histogram.durationPage;
         this.durationPages = histogram.durationPages;
     }
+*/
 
     public String getName() {
         return name;
@@ -100,9 +101,9 @@ public final class TimeHistogram implements Disposable {
         }
     }
 
-    public void setDateStart(final Date date) {
+    public Map<Date, TimeHistogramPage> getHistogramPages() {
         synchronized (this) {
-            dateStart.setTime(date.getTime());
+            return pages;
         }
     }
 
@@ -150,62 +151,21 @@ public final class TimeHistogram implements Disposable {
         return (int) (durationPages / durationPage);
     }
 
-    public void advance(final int cursor) {
-        synchronized (this) {
-            // adjust bucket data
-            if (cursor < 0) {
-                System.arraycopy(buckets, 0, buckets, (-1 * cursor), length + cursor);
-                Arrays.fill(buckets, 0, (-1 * cursor), 0);
-            } else {
-                // archive records that have been aged out
-                TimeHistogram histogramDiscard = new TimeHistogram(this, dateStart, 0, cursor);
-                new TimeHistogramSerializer(histogramDiscard, new File(folder)).save(dateStart);
-                // normalize data slots
-                System.arraycopy(buckets, cursor, buckets, 0, length - cursor);
-                Arrays.fill(buckets, length - cursor, length, 0);
-            }
-            // adjust date
-            final long durationIt = cursor * getDurationCell();
-            dateStart.setTime(new Date(dateStart.getTime() + durationIt).getTime());
-            new TimeHistogramSerializer(this, new File(folder)).save(dateStart);
-        }
-    }
-
     public void add(final Date date, final double amount) {
         synchronized (this) {
-            final long offset = date.getTime() - dateStart.getTime();
-            final int i = (int) (offset / durationCell);
-            if (NumberU.inBounds(i, 0, length - 1)) {
-                buckets[i] += amount;
-            }
-        }
-    }
-
-    public void normalize(final Date date) {
-        synchronized (this) {
-            //final Logger logger = Logger.getLogger(getClass().getName());
-            while (true) {
-                final long offset = date.getTime() - dateStart.getTime();
-                final int i = (int) (offset / durationCell);
-                if (i < 0) {
-                    //logger.info("\n" + new TimeHistogramText(this, getName(), (getPageCount() - 1)).getText());
-                    advance(-1 * getPageSize());
-                } else if (i >= length) {
-                    //logger.info("\n" + new TimeHistogramText(this, getName(), 0).getText());
-                    advance(getPageSize());
-                } else {
-                    break;
-                }
-            }
+            dateStart = DateU.floor(date, durationPage);
+            final TimeHistogramPage page = pages.computeIfAbsent(dateStart,
+                    p -> new TimeHistogramPage(dateStart, durationCell, length));
+            page.add(date, amount);
         }
     }
 
     public double[] getBuckets(final int pos, final int len) {
-        double[] bucketsCopy = new double[len];
         synchronized (this) {
-            System.arraycopy(buckets, pos, bucketsCopy, 0, len);
+            final TimeHistogramPage page = pages.computeIfAbsent(dateStart,
+                    p -> new TimeHistogramPage(dateStart, durationCell, length));
+            return page.getBuckets(pos, len);
         }
-        return bucketsCopy;
     }
 
     /**
@@ -213,13 +173,5 @@ public final class TimeHistogram implements Disposable {
      */
     @Override
     public void dispose() {
-        //final Logger logger = Logger.getLogger(getClass().getName());
-        synchronized (this) {
-            //int pageCount = (int) (durationPages / durationPage);
-            //for (int page = 0; (page < pageCount); ++page) {
-            //    logger.info(name + "\n" + new TimeHistogramText(this, name, page).getText());
-            //}
-            new TimeHistogramSerializer(this, new File(folder)).save(dateStart);
-        }
     }
 }

@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Map;
 import java.util.logging.Logger;
 
 public final class TimeHistogramSerializer {
@@ -56,7 +57,7 @@ public final class TimeHistogramSerializer {
                 final String text = elementIt.getTextContent();
                 if (Const.DATE.equals(elementIt.getLocalName())) {
                     dateIt = XsdDateU.fromXSDZ(text);
-                    histogram.setDateStart(dateIt);
+                    //histogram.setDateStart(dateIt);
                 } else if (Const.BUCKET.equals(elementIt.getLocalName())) {
                     histogram.add(dateIt, Double.parseDouble(text));
                     dateIt = DurationU.add(dateIt, DateU.Const.TZ_GMT, duration);
@@ -64,6 +65,14 @@ public final class TimeHistogramSerializer {
             }
         } catch (IOException e) {
             logger.severe(e.getMessage());
+        }
+    }
+
+    public void update() {
+        final Map<Date, TimeHistogramPage> histogramPages = histogram.getHistogramPages();
+        for (Date date : histogramPages.keySet()) {
+            load(date);
+            save(date);
         }
     }
 
