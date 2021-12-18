@@ -2,8 +2,9 @@ package io.github.greyp9.arwo.lib.mail.test;
 
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.util.PropertiesU;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.Test;
 
 import javax.mail.Folder;
 import javax.mail.Message;
@@ -11,16 +12,16 @@ import javax.mail.MessagingException;
 import javax.mail.Session;
 import javax.mail.Store;
 import java.io.File;
-import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-public class IMAPTest extends TestCase {
+public class IMAPTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @Test
     public void testServerConnectivity() throws Exception {
         File fileProperties = new File(SystemU.userHome(), ".arwo/test.properties.xml");
-        Assert.assertTrue(fileProperties.exists());
+        Assume.assumeTrue(fileProperties.exists());
         Properties properties = PropertiesU.loadFromXml(fileProperties.toURI().toURL());
         logger.info("" + properties.size());
         Assert.assertTrue(properties.size() > 0);
@@ -34,7 +35,7 @@ public class IMAPTest extends TestCase {
         }
     }
 
-    private void doTestConnectivityServer(String server, Properties properties) throws IOException, MessagingException {
+    private void doTestConnectivityServer(String server, Properties properties) throws MessagingException {
         String protocol = properties.getProperty(String.format("%s.%s.protocol", Const.IMAP_SERVER, server));
         String host = properties.getProperty(String.format("%s.%s.host", Const.IMAP_SERVER, server));
         String port = properties.getProperty(String.format("%s.%s.port", Const.IMAP_SERVER, server));
@@ -45,7 +46,7 @@ public class IMAPTest extends TestCase {
     }
 
     private void doTestConnectivityServer(String protocol, String host, String port,
-                                          String user, String pass) throws IOException, MessagingException {
+                                          String user, String pass) throws MessagingException {
         Properties properties = new Properties();
         //properties.setProperty("mail.debug", "true");
         properties.setProperty("mail.store.protocol", protocol);

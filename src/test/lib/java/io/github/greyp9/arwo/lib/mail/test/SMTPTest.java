@@ -2,8 +2,9 @@ package io.github.greyp9.arwo.lib.mail.test;
 
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.util.PropertiesU;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.Test;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -12,17 +13,17 @@ import javax.mail.Transport;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.io.File;
-import java.io.IOException;
 import java.util.Date;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-public class SMTPTest extends TestCase {
+public class SMTPTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @Test
     public void testServerConnectivity() throws Exception {
         File fileProperties = new File(SystemU.userHome(), ".arwo/test.properties.xml");
-        Assert.assertTrue(fileProperties.exists());
+        Assume.assumeTrue(fileProperties.exists());
         Properties properties = PropertiesU.loadFromXml(fileProperties.toURI().toURL());
         logger.info("" + properties.size());
         Assert.assertTrue(properties.size() > 0);
@@ -36,7 +37,7 @@ public class SMTPTest extends TestCase {
         }
     }
 
-    private void doTestConnectivityServer(String server, Properties properties) throws IOException, MessagingException {
+    private void doTestConnectivityServer(String server, Properties properties) throws MessagingException {
         String protocol = properties.getProperty(String.format("%s.%s.protocol", Const.SMTP_SERVER, server));
         String host = properties.getProperty(String.format("%s.%s.host", Const.SMTP_SERVER, server));
         String port = properties.getProperty(String.format("%s.%s.port", Const.SMTP_SERVER, server));

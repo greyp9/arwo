@@ -24,7 +24,7 @@ public class InteropConnection {
         this.dateOpen = new Date().getTime();
         this.properties = new Properties();
         properties.setProperty(App.Settings.HOST, host);
-        properties.setProperty(App.Settings.USER , user);
+        properties.setProperty(App.Settings.USER, user);
         properties.setProperty(App.Settings.PASSWORD, password);
         this.propertiesX = new PropertiesX(properties);
         propertiesX.setLong(App.Connection.DATE_LAST, dateOpen);

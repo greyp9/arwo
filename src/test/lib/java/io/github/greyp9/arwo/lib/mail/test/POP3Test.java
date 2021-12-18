@@ -2,21 +2,22 @@ package io.github.greyp9.arwo.lib.mail.test;
 
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.util.PropertiesU;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.Test;
 
 import javax.mail.*;
 import java.io.File;
-import java.io.IOException;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-public class POP3Test extends TestCase {
+public class POP3Test {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @Test
     public void testServerConnectivity() throws Exception {
         File fileProperties = new File(SystemU.userHome(), ".arwo/test.properties.xml");
-        Assert.assertTrue(fileProperties.exists());
+        Assume.assumeTrue(fileProperties.exists());
         Properties properties = PropertiesU.loadFromXml(fileProperties.toURI().toURL());
         logger.info("" + properties.size());
         Assert.assertTrue(properties.size() > 0);
@@ -30,7 +31,7 @@ public class POP3Test extends TestCase {
         }
     }
 
-    private void doTestConnectivityServer(String server, Properties properties) throws IOException, MessagingException {
+    private void doTestConnectivityServer(String server, Properties properties) throws MessagingException {
         String protocol = properties.getProperty(String.format("%s.%s.protocol", Const.POP3_SERVER, server));
         String host = properties.getProperty(String.format("%s.%s.host", Const.POP3_SERVER, server));
         String port = properties.getProperty(String.format("%s.%s.port", Const.POP3_SERVER, server));
@@ -41,7 +42,7 @@ public class POP3Test extends TestCase {
     }
 
     private void doTestConnectivityServer(String protocol, String host, String port,
-                                          String user, String pass) throws IOException, MessagingException {
+                                          String user, String pass) throws MessagingException {
         Properties properties = new Properties();
         //properties.setProperty("mail.debug", "true");
         properties.setProperty("mail.store.protocol", protocol);

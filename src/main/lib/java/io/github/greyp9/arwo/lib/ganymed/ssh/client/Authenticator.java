@@ -26,9 +26,9 @@ public class Authenticator {
     public final void authenticate(final String serverName, final Connection connection) throws IOException {
         alerts.add(new Alert(Alert.Severity.INFO, bundle.format("Authenticator.attempt", serverName)));
         final String user = clientParams.getUser();
-        final boolean authenticated = (authenticatePublicKey(user, connection) ||
-                authenticateInteractive(user, connection) ||
-                authenticatePassword(user, connection));
+        final boolean authenticated = (authenticatePublicKey(user, connection)
+                || authenticateInteractive(user, connection)
+                || authenticatePassword(user, connection));
         final boolean authComplete = connection.isAuthenticationComplete();
         final String messageKey = (authComplete ? "Authenticator.success" : "Authenticator.failure");
         alerts.add(new Alert(AlertU.toInfoWarn(authenticated), bundle.format(messageKey, serverName)));
@@ -46,8 +46,8 @@ public class Authenticator {
         if ((!authenticated) && (methodPublicKey) && (isPrivateKey)) {
             final char[] privateKey = clientParams.getPrivateKey().toCharArray();
             authenticated = connection.authenticateWithPublicKey(user, privateKey, null);
-            final String message = bundle.getString(authenticated ?
-                    "Authenticator.publicKey.success" : "Authenticator.publicKey.failure");
+            final String message = bundle.getString(authenticated
+                    ? "Authenticator.publicKey.success" : "Authenticator.publicKey.failure");
             alerts.add(new Alert(AlertU.toInfoWarn(authenticated), message));
         }
         return authenticated;
@@ -62,8 +62,8 @@ public class Authenticator {
             properties.setProperty("//Password: ", new String(clientParams.getPassword().toCharArray()));  // i18n in
             final InteractiveCallback callback = new InteractiveCallbackImpl(properties);
             authenticated = connection.authenticateWithKeyboardInteractive(user, callback);
-            final String message = bundle.getString(authenticated ?
-                    "Authenticator.keyboardInteractive.success" : "Authenticator.keyboardInteractive.failure");
+            final String message = bundle.getString(authenticated
+                    ? "Authenticator.keyboardInteractive.success" : "Authenticator.keyboardInteractive.failure");
             alerts.add(new Alert(AlertU.toInfoWarn(authenticated), message));
         }
         return authenticated;
@@ -75,8 +75,8 @@ public class Authenticator {
         final boolean isPassword = (!Value.isEmpty(clientParams.getPassword()));
         if ((!authenticated) && (methodPassword) && (isPassword)) {
             authenticated = connection.authenticateWithPassword(user, clientParams.getPassword());
-            final String message = bundle.getString(authenticated ?
-                    "Authenticator.password.success" : "Authenticator.password.failure");
+            final String message = bundle.getString(authenticated
+                    ? "Authenticator.password.success" : "Authenticator.password.failure");
             alerts.add(new Alert(AlertU.toInfoWarn(authenticated), message));
         }
         return authenticated;

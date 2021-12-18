@@ -4,7 +4,7 @@ import io.github.greyp9.arwo.core.lang.NumberU;
 
 import java.util.Date;
 
-public class TimeHistogramPage {
+public final class TimeHistogramPage {
     private final Date dateStart;
     private final long durationCell;
     private final double[] buckets;

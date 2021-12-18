@@ -13,8 +13,10 @@ import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.url.URLCodec;
 import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.lib.sardine.webdav.connection.SardineFactory;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,18 +27,18 @@ import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class SardineTest extends TestCase {
+public class SardineTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
 
+    @Test
     public void testServerConnectivity() throws Exception {
         File fileProperties = new File(SystemU.userHome(), ".arwo/test.properties.xml");
-        Assert.assertTrue(fileProperties.exists());
+        Assume.assumeTrue(fileProperties.exists());
         Properties properties = PropertiesU.loadFromXml(fileProperties.toURI().toURL());
         logger.info("" + properties.size());
         Assert.assertTrue(properties.size() > 0);
@@ -102,7 +104,7 @@ public class SardineTest extends TestCase {
         }
     }
 
-    private void read(URL url, DavResource resource, Sardine connection) throws IOException {
+    private void read(URL url, DavResource resource, Sardine connection) {
         //logger.info(String.format("READ:[%s]", resource.toString()));
         logger.info(String.format("READ:[%s]", url.toExternalForm()));
         try {

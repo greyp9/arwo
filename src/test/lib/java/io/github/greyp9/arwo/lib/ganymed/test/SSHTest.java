@@ -18,8 +18,9 @@ import io.github.greyp9.arwo.lib.ganymed.ssh.command.runnable.ScriptRunnable;
 import io.github.greyp9.arwo.lib.ganymed.ssh.command.runnable.ScriptX;
 import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
 import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnectionX;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -32,12 +33,13 @@ import java.util.Properties;
 import java.util.concurrent.ExecutorService;
 import java.util.logging.Logger;
 
-public class SSHTest extends TestCase {
+public class SSHTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @Test
     public void testServerConnectivity() throws Exception {
         File fileProperties = new File(SystemU.userHome(), ".arwo/test.properties.xml");
-        Assert.assertTrue(fileProperties.exists());
+        Assume.assumeTrue(fileProperties.exists());
         Properties properties = PropertiesU.loadFromXml(fileProperties.toURI().toURL());
         logger.info("" + properties.size());
         Assert.assertTrue(properties.size() > 0);
