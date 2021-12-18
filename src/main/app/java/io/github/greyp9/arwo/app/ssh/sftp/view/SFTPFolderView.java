@@ -90,9 +90,9 @@ public class SFTPFolderView extends SFTPView {
         } else {
             viewState.getHiddenColumns().add("folder");  // i18n metadata
         }
-        final RowSet rowSetRaw = (findMode ?
-                getRowSetRawFind(metaData, viewState) :
-                getRowSetRaw(metaData, viewState));
+        final RowSet rowSetRaw = (findMode
+                ? getRowSetRawFind(metaData, viewState)
+                : getRowSetRaw(metaData, viewState));
         // protect against unexpected large result set
         final int pageSize = new Preferences(getUserState().getConfig()).getTablePageSize();
         boolean isLargeRowSet = (rowSetRaw.getRows() > pageSize);

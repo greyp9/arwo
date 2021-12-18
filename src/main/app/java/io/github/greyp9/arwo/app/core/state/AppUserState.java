@@ -168,13 +168,13 @@ public class AppUserState {
         return getTextFilters("");
     }
 
-    public final TextFilters getTextFilters(String context) {
-        TextFilters textFilters = this.textFilters.get(context);
-        if (textFilters == null) {
-            textFilters = new TextFilters();
-            this.textFilters.put(context, textFilters);
+    public final TextFilters getTextFilters(final String context) {
+        TextFilters textFiltersOp = textFilters.get(context);
+        if (textFiltersOp == null) {
+            textFiltersOp = new TextFilters();
+            textFilters.put(context, textFiltersOp);
         }
-        return textFilters;
+        return textFiltersOp;
     }
 
     public final DeferredActions getDeferredActions() {
@@ -347,11 +347,11 @@ public class AppUserState {
         } else if (App.Action.UPDATE_LOCALE.equals(action)) {
             documentState.applyLocale(httpArguments);
         } else if (App.Action.TEXT_EXPRESSION.equals(action)) {
-            final TextFilters textFilters = getTextFilters(context);
-            new XedActionTextExpression(getXedFactory(), getLocale()).updateTextFilters(textFilters, httpArguments);
+            final TextFilters textFiltersOp = getTextFilters(context);
+            new XedActionTextExpression(getXedFactory(), getLocale()).updateTextFilters(textFiltersOp, httpArguments);
         } else if (App.Action.TEXT_FILTER.equals(action)) {
-            final TextFilters textFilters = getTextFilters(context);
-            new XedActionTextFilter(getXedFactory(), getLocale()).updateTextFilters(textFilters, httpArguments);
+            final TextFilters textFiltersOp = getTextFilters(context);
+            new XedActionTextFilter(getXedFactory(), getLocale()).updateTextFilters(textFiltersOp, httpArguments);
         } else if (App.Action.CLEAR.equals(action)) {
             doClearCache();
         } else if (App.Action.REFRESH.equals(action)) {
@@ -365,8 +365,8 @@ public class AppUserState {
         } else if (App.Action.CHARSET.equals(action)) {
             getProperties().setProperty(App.Action.CHARSET, object);
         } else if (App.Action.UPDATE.equals(action) && App.Action.REFRESH.equals(object)) {
-            final String interval = new XedActionRefresh(getXedFactory(), getLocale()).getInterval(httpArguments);
-            getProperties().setProperty(XedActionRefresh.Const.KEY, interval);
+            final String intervalOp = new XedActionRefresh(getXedFactory(), getLocale()).getInterval(httpArguments);
+            getProperties().setProperty(XedActionRefresh.Const.KEY, intervalOp);
         } else if (App.Action.HEX_VIEW_PARAM.equals(action)) {
             updateHexViewParam(object);
         } else if (App.Action.NAV_PARAM.equals(action)) {

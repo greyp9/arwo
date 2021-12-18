@@ -58,8 +58,8 @@ public class EnvHandlerGet {
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
         // context-specific content
-        final AppRequest request = userState.getAppRequest(httpRequest);
-        final AppTitle title = AppTitle.Factory.getHostLabel(httpRequest, request.getBundle());
+        final AppRequest requestOp = userState.getAppRequest(httpRequest);
+        final AppTitle title = AppTitle.Factory.getHostLabel(httpRequest, requestOp.getBundle());
         addHeaderView(body, title);
         // content
         addContentReqHdr(body);

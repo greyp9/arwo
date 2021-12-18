@@ -66,11 +66,11 @@ public abstract class LFSView {
         return userState;
     }
 
-    public File getFolderBase() {
+    public final File getFolderBase() {
         return folderBase;
     }
 
-    public Bundle getBundle() {
+    public final Bundle getBundle() {
         return bundle;
     }
 
@@ -158,7 +158,7 @@ public abstract class LFSView {
         boolean isIncludes = !textFilters.getIncludes().isEmpty();
         boolean isExcludes = !textFilters.getExcludes().isEmpty();
         boolean isExpression = !textFilters.getExpressions().isEmpty();
-        final Collection<String> tokens = new ArrayList<String>();
+        final Collection<String> tokens = new ArrayList<>();
         if (isExpression) {
             for (final String expression : textFilters.getExpressions()) {
                 tokens.add("" + expression);
@@ -193,5 +193,12 @@ public abstract class LFSView {
         return new NameTypeValues();
     }
 
+    /**
+     * Insert content into HTML page appropriate to the context of the subclass.
+     *
+     * @param html the wrapper HTML document
+     * @return the http response containing the formatted content to be served to the requestor
+     * @throws IOException on failures accessing requested resources
+     */
     protected abstract HttpResponse addContentTo(Element html) throws IOException;
 }

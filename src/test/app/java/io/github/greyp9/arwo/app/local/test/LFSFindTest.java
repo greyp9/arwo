@@ -23,8 +23,10 @@ import io.github.greyp9.arwo.core.util.CollectionU;
 import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Ignore;
+import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -39,15 +41,16 @@ import java.util.List;
 import java.util.Locale;
 import java.util.logging.Logger;
 
-public class LFSFindTest extends TestCase {
+public class LFSFindTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         io.github.greyp9.arwo.core.logging.LoggerU.adjustShort(Logger.getLogger(""));
     }
 
+    @Test
+    @Ignore
     public void testFolders() throws Exception {
         // setup application context
         final String contextPath = "/arwo";
@@ -64,7 +67,7 @@ public class LFSFindTest extends TestCase {
         Assert.assertNotNull(userState);
         // iterate through lfs context roots
         final Stopwatch stopwatch = new Stopwatch(null);
-        final Collection<String> resources = new ArrayList<String>();
+        final Collection<String> resources = new ArrayList<>();
         resources.add("/arwo/lfs/-/find/tmp/");
         int foldersScanned = 0;
         while (!resources.isEmpty()) {
@@ -90,7 +93,7 @@ public class LFSFindTest extends TestCase {
             final Document document = DocumentU.toDocument(responseBytes);
             final XPather pather = new XPather(document);
             // query HTML for resourceHrefs
-            final Collection<String> resourcesThisFolder = new ArrayList<String>();
+            final Collection<String> resourcesThisFolder = new ArrayList<>();
             final List<Element> elements = pather.getElements(
                     "/html/body/div[@class='table']//table[@class='table']//tbody[@class='table']/tr/td[1]/a");
             for (Element element : elements) {

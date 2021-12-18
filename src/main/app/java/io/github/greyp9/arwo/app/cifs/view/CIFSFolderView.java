@@ -82,9 +82,9 @@ public class CIFSFolderView extends CIFSView {
         } else {
             viewState.getHiddenColumns().add("folder");  // i18n metadata
         }
-        final RowSet rowSetRaw = (findMode ?
-                getRowSetRawFind(metaData, viewState) :
-                getRowSetRaw(metaData, viewState));
+        final RowSet rowSetRaw = (findMode
+                ? getRowSetRawFind(metaData, viewState)
+                : getRowSetRaw(metaData, viewState));
         final RowSet rowSetStyled = new CIFSFolderStyled(request, rowSetRaw).getRowSet();
         // optionally persist fetched results
         final Results results = new Results(request.getHttpRequest().getURI(),

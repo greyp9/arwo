@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.app.vis.view;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.vis.core.VisualizationRequest;
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.date.HttpDateU;
@@ -11,6 +12,7 @@ import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
+import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogram;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
@@ -29,7 +31,7 @@ import java.io.IOException;
 import java.sql.Types;
 import java.util.Date;
 
-public class VisualizationHistoryView extends VisualizationView {
+public final class VisualizationHistoryView extends VisualizationView {
     private final TimeHistogram histogram;
 
     public VisualizationHistoryView(final ServletHttpRequest httpRequest, final VisualizationRequest request,
@@ -39,6 +41,9 @@ public class VisualizationHistoryView extends VisualizationView {
     }
 
     protected HttpResponse addContentTo(final Element html) throws IOException {
+        final AppUserState userState = getUserState();
+        final Bundle bundle = getBundle();
+        final Locus locus = getLocus();
         final RowSetMetaData metaData = createMetaData();
         final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
         final RowSet rowSet = createRowSet(metaData);
@@ -75,6 +80,8 @@ public class VisualizationHistoryView extends VisualizationView {
     }
 
     private void addRow(final RowSet rowSet, final File file, final DateX dateX) {
+        final ServletHttpRequest httpRequest = getHttpRequest();
+        final VisualizationRequest request = getRequest();
         final String dateString = file.getName().replace(histogram.getName() + ".", "").replace(".xml", "");
         final Date date = DateX.fromFilenameMM(dateString);
         final String href = PathU.toDir(httpRequest.getBaseURI(), request.getContext(), Html.HTML, dateString);

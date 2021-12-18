@@ -10,7 +10,14 @@ import io.github.greyp9.arwo.core.xed.session.XedSession;
 import java.io.File;
 import java.io.IOException;
 
-public class LFSResource {
+public final class LFSResource {
+
+    /**
+     * Constructor.
+     * http://checkstyle.sourceforge.net/config_design.html#FinalClass
+     */
+    private LFSResource() {
+    }
 
     public static File getFolderBase(final LFSRequest request) throws IOException {
         final File folderBase;

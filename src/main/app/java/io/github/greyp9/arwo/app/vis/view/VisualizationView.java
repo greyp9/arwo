@@ -31,13 +31,14 @@ import java.io.IOException;
 import java.net.HttpURLConnection;
 
 public abstract class VisualizationView {
-    protected final ServletHttpRequest httpRequest;
-    protected final VisualizationRequest request;
-    protected final AppUserState userState;
-    protected final Bundle bundle;
-    protected final Locus locus;
+    private final ServletHttpRequest httpRequest;
+    private final VisualizationRequest request;
+    private final AppUserState userState;
+    private final Bundle bundle;
+    private final Locus locus;
 
-    public VisualizationView(ServletHttpRequest httpRequest, VisualizationRequest request, AppUserState userState) {
+    public VisualizationView(final ServletHttpRequest httpRequest,
+                             final VisualizationRequest request, final AppUserState userState) {
         this.httpRequest = httpRequest;
         this.request = request;
         this.userState = userState;
@@ -45,7 +46,27 @@ public abstract class VisualizationView {
         this.locus = request.getAppRequest().getLocus();
     }
 
-    public HttpResponse doGetResponse() throws IOException {
+    public final ServletHttpRequest getHttpRequest() {
+        return httpRequest;
+    }
+
+    public final VisualizationRequest getRequest() {
+        return request;
+    }
+
+    public final AppUserState getUserState() {
+        return userState;
+    }
+
+    public final Bundle getBundle() {
+        return bundle;
+    }
+
+    public final Locus getLocus() {
+        return locus;
+    }
+
+    public final HttpResponse doGetResponse() throws IOException {
         // template html
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
@@ -82,6 +103,13 @@ public abstract class VisualizationView {
         menuView.addTitle(html, title);
     }
 
+    /**
+     * Insert content into HTML page appropriate to the context of the subclass.
+     *
+     * @param html the wrapper HTML document
+     * @return the http response containing the formatted content to be served to the requestor
+     * @throws IOException on failures accessing requested resources
+     */
     protected abstract HttpResponse addContentTo(Element html) throws IOException;
 
     protected abstract void addMenuNav(Element html);

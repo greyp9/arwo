@@ -69,7 +69,7 @@ public abstract class SFTPView {
         return resource;
     }
 
-    public Bundle getBundle() {
+    public final Bundle getBundle() {
         return bundle;
     }
 
@@ -138,7 +138,7 @@ public abstract class SFTPView {
     private void addTextFiltersView(final Element html) {
         final TextFilters textFilters = userState.getTextFilters();
         if (textFilters.isData()) {
-            final Collection<String> tokens = new ArrayList<String>();
+            final Collection<String> tokens = new ArrayList<>();
             // label
             tokens.add(bundle.getString("menu.view.textFilter"));
             // filter display

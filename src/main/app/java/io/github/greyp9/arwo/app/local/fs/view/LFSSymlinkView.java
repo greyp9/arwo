@@ -21,14 +21,15 @@ import org.w3c.dom.Element;
 import java.io.File;
 import java.io.IOException;
 
-public class LFSSymlinkView extends LFSView {
+public final class LFSSymlinkView extends LFSView {
 
-    public LFSSymlinkView(LFSRequest request, AppUserState userState, File folderBase, File file) {
+    public LFSSymlinkView(final LFSRequest request, final AppUserState userState,
+                          final File folderBase, final File file) {
         super(request, userState, folderBase, file);
     }
 
     @Override
-    protected HttpResponse addContentTo(Element html) throws IOException {
+    protected HttpResponse addContentTo(final Element html) throws IOException {
         final RowSetMetaData metaData = LFSFolder.createMetaData();
         final Locus locus = getUserState().getLocus();
         final ViewStates viewStates = getUserState().getViewStates();
@@ -47,7 +48,7 @@ public class LFSSymlinkView extends LFSView {
         return null;
     }
 
-    private RowSet createRowSetRaw(final RowSetMetaData metaData) throws IOException {
+    private RowSet createRowSetRaw(final RowSetMetaData metaData) {
         final String path = getRequest().getPath();
         final LFSDataSource source = new LFSDataSource(getRequest(), getFolderBase());
         final File[] files = source.lsSymlink(path);

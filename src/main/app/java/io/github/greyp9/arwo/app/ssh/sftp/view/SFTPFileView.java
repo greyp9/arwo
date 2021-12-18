@@ -118,8 +118,8 @@ public class SFTPFileView extends SFTPView {
         final SFTPDataSource source = new SFTPDataSource(request, resource.getConnection());
         final ResourceCache cache = getUserState().getCache();
         final String pathRaw = request.getPath();
-        final String path = pathRaw.contains("!/") ?
-                pathRaw.substring(0, pathRaw.indexOf("!/")) : pathRaw;
+        final String path = pathRaw.contains("!/")
+                ? pathRaw.substring(0, pathRaw.indexOf("!/")) : pathRaw;
         // if disconnected, resource will only be fetched if no cached copy is available
         if (viewState.isConnected()) {
             metaFile = source.read(path);

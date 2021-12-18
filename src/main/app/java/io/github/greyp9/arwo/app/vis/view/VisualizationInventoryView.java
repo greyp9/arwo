@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.app.vis.view;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.vis.core.VisualizationRequest;
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
@@ -26,14 +27,16 @@ import java.sql.Types;
 import java.util.Map;
 import java.util.Properties;
 
-public class VisualizationInventoryView extends VisualizationView {
+public final class VisualizationInventoryView extends VisualizationView {
 
     public VisualizationInventoryView(
-            ServletHttpRequest httpRequest, VisualizationRequest request, AppUserState userState) {
+            final ServletHttpRequest httpRequest, final VisualizationRequest request, final AppUserState userState) {
         super(httpRequest, request, userState);
     }
 
-    protected HttpResponse addContentTo(Element html) throws IOException {
+    protected HttpResponse addContentTo(final Element html) throws IOException {
+        final AppUserState userState = getUserState();
+        final Bundle bundle = getBundle();
         final RowSetMetaData metaData = createMetaData();
         final RowSet rowSet = createRowSet(metaData);
         final Locus locus = userState.getLocus();
@@ -58,7 +61,8 @@ public class VisualizationInventoryView extends VisualizationView {
         return new RowSetMetaData("vis.visualizationType", columns);
     }
 
-    private RowSet createRowSet(final RowSetMetaData metaData) throws IOException {
+    private RowSet createRowSet(final RowSetMetaData metaData) {
+        final ServletHttpRequest httpRequest = getHttpRequest();
         final RowSet rowSet = new RowSet(metaData, null, null);
         // available visualizations are declared in init-params of servlet
         final Properties initParams = httpRequest.getInitParams();
@@ -73,6 +77,7 @@ public class VisualizationInventoryView extends VisualizationView {
     }
 
     private void createRow(final RowSet rowSet, final String key) {
+        final ServletHttpRequest httpRequest = getHttpRequest();
         final String href = PathU.toDir(httpRequest.getBaseURI(), key);
         final InsertRow insertRow = new InsertRow(rowSet);
         insertRow.setNextColumn(new TableViewLink(UTF16.SELECT, null, href));

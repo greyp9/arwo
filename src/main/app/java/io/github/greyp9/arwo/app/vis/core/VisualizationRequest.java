@@ -30,7 +30,7 @@ public class VisualizationRequest {
     public VisualizationRequest(final ServletHttpRequest httpRequest, final AppUserState userState) {
         this.appRequest = userState.getAppRequest(httpRequest);
         this.userState = userState;
-        this.patherContext = new Pather(httpRequest.getPathInfo());  // "/irby:servlet/irby:init-param/@name" histogram-tchile
+        this.patherContext = new Pather(httpRequest.getPathInfo());  // "/irby:servlet/irby:init-param/@name"
         this.patherMetric = new Pather(patherContext.getRight());  //
         this.patherMode = new Pather(patherMetric.getRight());  // html, text
         this.patherPage = new Pather(patherMode.getRight());  // 2000-01-01T00-00Z

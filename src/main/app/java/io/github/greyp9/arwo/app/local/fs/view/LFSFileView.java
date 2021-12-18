@@ -126,8 +126,8 @@ public class LFSFileView extends LFSView {
         final LFSDataSource source = new LFSDataSource(request, getFolderBase());
         final ResourceCache cache = getUserState().getCache();
         final String pathRaw = request.getPath();
-        final String path = pathRaw.contains("!/") ?
-                pathRaw.substring(0, pathRaw.indexOf("!/")) : pathRaw;
+        final String path = pathRaw.contains("!/")
+                ? pathRaw.substring(0, pathRaw.indexOf("!/")) : pathRaw;
         // if disconnected, resource will only be fetched if no cached copy is available
         if (viewState.isConnected()) {
             metaFile = source.read(path);
@@ -148,7 +148,8 @@ public class LFSFileView extends LFSView {
         final String lastModified = HttpDateU.toHttpZ(new Date(file.getMetaData().getLastModified()));
         final NameTypeValues headers = new NameTypeValues(new NameTypeValue(Http.Header.LAST_MODIFIED, lastModified));
         final TextFilters textFilters = getUserState().getTextFilters(getRequest().getContext());
-        if (!textFilters.isData()) { // ((textFilters.getIncludes().isEmpty()) && (textFilters.getExcludes().isEmpty())) {
+        // if ((textFilters.getIncludes().isEmpty()) && (textFilters.getExcludes().isEmpty())) {
+        if (!textFilters.isData()) {
             final Preferences preferences = new Preferences(getUserState().getConfig());
             final String mimeTypeOverride = getUserState().getProperties().getProperty(App.Action.MIME_TYPE);
             final String mimeTypePrefs = Value.defaultOnNull(mimeTypeOverride, preferences.getMIMEType(path));

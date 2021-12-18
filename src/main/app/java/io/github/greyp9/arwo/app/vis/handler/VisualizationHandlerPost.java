@@ -38,7 +38,7 @@ public class VisualizationHandlerPost {
     private final Bundle bundle;
     private final Alerts alerts;
 
-    public VisualizationHandlerPost(ServletHttpRequest httpRequest, AppUserState userState) {
+    public VisualizationHandlerPost(final ServletHttpRequest httpRequest, final AppUserState userState) {
         this.request = new VisualizationRequest(httpRequest, userState);
         this.httpRequest = httpRequest;
         this.userState = userState;
@@ -132,7 +132,8 @@ public class VisualizationHandlerPost {
         } else if (App.Action.SELECT.equals(action) && "log2".equals(object)) {
             location = PathU.toDir(baseURI, context, metric, mode, page, Integer.toString(2));
         } else if (App.Action.SELECT.equals(action) && "log3".equals(object)) {
-            location = PathU.toDir(baseURI, context, metric, mode, page, Integer.toString(3));
+            final int log = 3;
+            location = PathU.toDir(baseURI, context, metric, mode, page, Integer.toString(log));
         } else if (App.Action.SELECT.equals(action) && "navMetricPrev".equals(object)) {
             location = PathU.toDir(baseURI, context, iterateMetric(context, metric, -1), mode, page, scale);
         } else if (App.Action.SELECT.equals(action) && "navMetricNext".equals(object)) {

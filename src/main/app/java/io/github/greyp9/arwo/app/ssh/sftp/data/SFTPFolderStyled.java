@@ -89,8 +89,8 @@ public class SFTPFolderStyled {
         // handle symlink
         final boolean fullPath = name.contains(Http.Token.SLASH);  // in case of load from symlink context
         // path components
-        final String folderURI = (fullPath ? request.getBaseURIServer() :
-                request.getHttpRequest().getHttpRequest().getResource());
+        final String folderURI = (fullPath ? request.getBaseURIServer()
+                : request.getHttpRequest().getHttpRequest().getResource());
         final String filename = (fullPath ? name : URLCodec.encode(name));
         final String suffix = (isDirectory ? Http.Token.SLASH : "");
         // zip link

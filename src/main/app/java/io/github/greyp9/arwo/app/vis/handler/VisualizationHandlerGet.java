@@ -27,7 +27,7 @@ public class VisualizationHandlerGet {
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
 
-    public VisualizationHandlerGet(ServletHttpRequest httpRequest, AppUserState userState) {
+    public VisualizationHandlerGet(final ServletHttpRequest httpRequest, final AppUserState userState) {
         this.request = new VisualizationRequest(httpRequest, userState);
         this.httpRequest = httpRequest;
         this.userState = userState;

@@ -89,9 +89,9 @@ public class AppHistoryView {
         final boolean isStarted = (script.getStart() != null);
         final boolean isFinished = (script.getFinish() != null);
         final String id = script.getID();
-        final String href = includeContext ?
-                PathU.toDir(httpRequest.getBaseURI(), script.getContext(), id) :
-                PathU.toDir(httpRequest.getBaseURI(), id);
+        final String href = includeContext
+                ? PathU.toDir(httpRequest.getBaseURI(), script.getContext(), id)
+                : PathU.toDir(httpRequest.getBaseURI(), id);
         final InsertRow insertRow = new InsertRow(rowSet);
         insertRow.setNextColumn(new TableViewLink(UTF16.SELECT, null, href));
         insertRow.setNextColumn(script.getContext());

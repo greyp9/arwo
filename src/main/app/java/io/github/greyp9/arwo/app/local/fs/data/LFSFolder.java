@@ -15,6 +15,7 @@ import io.github.greyp9.arwo.core.util.PropertiesX;
 import java.io.File;
 import java.sql.Types;
 import java.util.Date;
+import java.util.logging.Logger;
 
 public class LFSFolder {
     private final RowSet rowSet;
@@ -56,6 +57,7 @@ public class LFSFolder {
 
     private static void loadRow(
             final RowSet rowSet, final File folderBase, final String folderOffset, final File file) {
+        Logger.getLogger(LFSFolder.class.getName()).finest(folderOffset);
         final String pathFileIt = file.getAbsolutePath();
         final String pathOffset = pathFileIt.substring(folderBase.getAbsolutePath().length());
         final String pathFolder = pathOffset.substring(0, pathOffset.length() - file.getName().length());

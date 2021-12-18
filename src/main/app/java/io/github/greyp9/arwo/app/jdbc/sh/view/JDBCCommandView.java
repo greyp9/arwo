@@ -49,9 +49,9 @@ public class JDBCCommandView extends JDBCView {
         final Query query = jdbc.getHistory().find(queryID);
         // if command id is not in the list of cached commands, redirect to clear command id from URL
         final boolean badReference = ((!Value.isEmpty(queryID)) && (query == null));
-        return (badReference ?
-                HttpResponseU.to302(PathU.toDir(request.getHttpRequest().getBaseURI(), request.getServer())) :
-                addContentTo(html, query));
+        return (badReference
+                ? HttpResponseU.to302(PathU.toDir(request.getHttpRequest().getBaseURI(), request.getServer()))
+                : addContentTo(html, query));
     }
 
     private HttpResponse addContentTo(final Element html, final Query query) throws IOException {

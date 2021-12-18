@@ -97,8 +97,8 @@ public class CIFSFolderStyled {
                                  final boolean isDirectory) throws UnsupportedEncodingException {
         // path components
         final boolean fullPath = !SystemU.isTrue();  // name.contains(Http.Token.SLASH);
-        final String folderURI = (fullPath ? request.getBaseURIServer() :
-                request.getHttpRequest().getHttpRequest().getResource());
+        final String folderURI = (fullPath ? request.getBaseURIServer()
+                : request.getHttpRequest().getHttpRequest().getResource());
         final String nameDisplay = (isDirectory ? name.substring(0, name.length() - Http.Token.SLASH.length()) : name);
         final String filename = (fullPath ? name : URLCodec.encode(nameDisplay));
         final String suffix = (isDirectory ? Http.Token.SLASH : "");

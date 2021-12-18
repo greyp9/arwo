@@ -61,8 +61,8 @@ public class POP3FoldersStyled {
     private Object getType(final Row rowRaw, final RowSetMetaData metaData) {
         final int type = NumberU.toInt(rowRaw.getInteger(metaData.getIndex("type")), 0);  // i18n metadata
         final boolean canOpen = ((type % 2) != 0);
-        return bundle.getString(canOpen ?
-                "IMAPFoldersStyled.folderType.canOpen" :
-                "IMAPFoldersStyled.folderType.cannotOpen", Integer.toString(type));
+        return bundle.getString(canOpen
+                ? "IMAPFoldersStyled.folderType.canOpen"
+                : "IMAPFoldersStyled.folderType.cannotOpen", Integer.toString(type));
     }
 }

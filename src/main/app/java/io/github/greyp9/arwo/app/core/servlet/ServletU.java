@@ -55,7 +55,8 @@ public final class ServletU {
         return new ServletHttpRequest(httpRequest, date, principal, contextPath, servletPath, pathInfo);
     }
 
-    public static ServletHttpRequest read(final HttpServletRequest request, final HttpServlet servlet) throws IOException {
+    public static ServletHttpRequest read(
+            final HttpServletRequest request, final HttpServlet servlet) throws IOException {
         final ServletHttpRequest servletHttpRequest = read(request);
         // include servlet initParams in request
         final Properties initParams = servletHttpRequest.getInitParams();

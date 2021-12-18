@@ -84,8 +84,8 @@ public class SSHConnectionFactory implements ConnectionFactory {
         final byte[] publicKey = Base64Codec.decode(cursorSSH.getPublicKey());
         final ServerParams serverParams = new ServerParams(name, host, algorithm, publicKey);
         final ClientParams clientParams = new ClientParams(name, user, passwordClear, privateKeyClear);
-        final HTTPProxyData proxyData = ((uriProxy == null) ? null :
-                new HTTPProxyData(uriProxy.getHost(), uriProxy.getPort()));
+        final HTTPProxyData proxyData = ((uriProxy == null) ? null
+                : new HTTPProxyData(uriProxy.getHost(), uriProxy.getPort()));
         final Connection connection = new Connection(host, port, proxyData);
         final ConnectionInfo connectionInfo = connection.connect();
         new SSHAuthenticatorServer(bundle, alerts, cacheBlob).authenticate(connectionInfo, serverParams);

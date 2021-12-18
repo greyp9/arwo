@@ -29,9 +29,9 @@ public class LFSResourceView {
         final LFSDataSource source = new LFSDataSource(request, folderBase);
         final boolean isFolderPath = path.endsWith(Http.Token.SLASH);
         final boolean isZipPath = path.contains("!/");
-        final File file = isZipPath ?
-                source.getFile(path.substring(0, path.indexOf("!/"))) :
-                source.getFile(path);
+        final File file = isZipPath
+                ? source.getFile(path.substring(0, path.indexOf("!/")))
+                : source.getFile(path);
         final boolean isFolder = file.isDirectory();
         final boolean isFile = file.isFile();
         final boolean isLink = FileU.isLink(file);

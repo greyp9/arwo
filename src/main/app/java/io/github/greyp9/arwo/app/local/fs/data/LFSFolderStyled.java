@@ -21,6 +21,7 @@ import io.github.greyp9.arwo.core.value.Value;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class LFSFolderStyled {
     private final LFSRequest request;
@@ -91,6 +92,7 @@ public class LFSFolderStyled {
     private static String toHref(final LFSRequest request, final String folder, final String name,
                                  final boolean isSymlinkRowSet, final boolean isDirectory)
             throws UnsupportedEncodingException {
+        Logger.getLogger(LFSFolderStyled.class.getName()).finest("" + isSymlinkRowSet);
         // handle symlink
         final boolean fullPath = name.contains(Http.Token.SLASH);  // in case of load from symlink context
         String folderURI = request.getBaseURIFolder();

@@ -49,9 +49,9 @@ public class SHCommandView extends SHView {
         final Script script = ssh.getHistory().find(scriptID);
         // if command id is not in the list of cached commands, redirect to clear command id from URL
         final boolean badReference = ((!Value.isEmpty(scriptID)) && (script == null));
-        return (badReference ?
-                HttpResponseU.to302(PathU.toDir(request.getHttpRequest().getBaseURI(), request.getServer())) :
-                addContentTo(html, script));
+        return (badReference
+                ? HttpResponseU.to302(PathU.toDir(request.getHttpRequest().getBaseURI(), request.getServer()))
+                : addContentTo(html, script));
     }
 
     private HttpResponse addContentTo(final Element html, final Script script) throws IOException {

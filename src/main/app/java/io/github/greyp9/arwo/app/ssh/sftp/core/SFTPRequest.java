@@ -42,8 +42,8 @@ public class SFTPRequest {
     }
 
     public SFTPRequest(final ServletHttpRequest httpRequest, final AppUserState userState) {
-        this.appRequest = ((userState == null) ?
-                new AppRequest(httpRequest, null, null, null, null) : userState.getAppRequest(httpRequest));
+        this.appRequest = ((userState == null)
+                ? new AppRequest(httpRequest, null, null, null, null) : userState.getAppRequest(httpRequest));
         this.userState = userState;
         this.patherMode = new Pather(httpRequest.getPathInfo());
         this.patherServer = new Pather(patherMode.getRight());

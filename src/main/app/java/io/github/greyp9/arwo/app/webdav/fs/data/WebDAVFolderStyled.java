@@ -87,8 +87,8 @@ public class WebDAVFolderStyled {
     private static String toHref(final WebDAVRequest request, final String folder, final String name,
                                  final boolean isDirectory) throws UnsupportedEncodingException {
         final boolean fullPath = name.contains(Http.Token.SLASH);
-        final String folderURI = (fullPath ? request.getBaseURIServer() :
-                request.getHttpRequest().getHttpRequest().getResource());
+        final String folderURI = (fullPath ? request.getBaseURIServer()
+                : request.getHttpRequest().getHttpRequest().getResource());
 
         final String filename = (fullPath ? name : URLCodec.encode(name));
         final String suffix = (isDirectory ? Http.Token.SLASH : "");

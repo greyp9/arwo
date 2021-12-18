@@ -28,14 +28,14 @@ public class LFSDataSource {
         return new File(folderRoot, path);
     }
 
-    public final File[] listFiles(final String path, boolean recurse) throws IOException {
-        final Collection<File> files = new TreeSet<File>();
+    public final File[] listFiles(final String path, final boolean recurse) throws IOException {
+        final Collection<File> files = new TreeSet<>();
         final File folder = FileU.getCanonicalFolder(new File(folderRoot, path));
         listFilesR(folder, files, recurse);
         return files.toArray(new File[files.size()]);
     }
 
-    private void listFilesR(final File folder, Collection<File> filesAll, boolean recurse) throws IOException {
+    private void listFilesR(final File folder, final Collection<File> filesAll, final boolean recurse) {
         final File[] files = FileU.listFiles(folder);
         for (File file : files) {
             filesAll.add(file);
@@ -45,7 +45,7 @@ public class LFSDataSource {
         }
     }
 
-    public final void createDirectory(final String path) throws IOException {
+    public final void createDirectory(final String path) {
         FileU.ensureFolder(new File(folderRoot, path));
     }
 
@@ -64,7 +64,7 @@ public class LFSDataSource {
     }
 
     public final File[] lsSymlink(final String path) {
-        final Collection<File> files = new TreeSet<File>();
+        final Collection<File> files = new TreeSet<>();
         File fileIt = new File(path);
         files.add(fileIt);
         while ((fileIt != null) && (FileU.isLink(fileIt))) {

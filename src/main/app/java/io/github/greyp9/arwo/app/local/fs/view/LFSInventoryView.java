@@ -43,6 +43,7 @@ public class LFSInventoryView extends LFSView {
         this.offsetURI = offsetURI;
     }
 
+    @Override
     protected final HttpResponse addContentTo(final Element html) throws IOException {
         final Xed xed = userState.getDocumentState().getSession(App.Servlet.SETTINGS).getXed();
         final Xed xedX = userState.getXedFactory().getXedUI(xed, userState.getLocale());

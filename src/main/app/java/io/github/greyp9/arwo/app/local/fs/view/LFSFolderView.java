@@ -109,7 +109,7 @@ public class LFSFolderView extends LFSView {
     }
 
     private RowSet getRowSetRaw(
-            final RowSetMetaData metaData, final ViewState viewState, boolean recurse) throws IOException {
+            final RowSetMetaData metaData, final ViewState viewState, final boolean recurse) throws IOException {
         RowSet rowSet;
         final LFSRequest request = getRequest();
         final AppUserState userState = getUserState();
