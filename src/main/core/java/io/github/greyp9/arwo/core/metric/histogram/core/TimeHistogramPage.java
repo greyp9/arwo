@@ -32,4 +32,8 @@ public final class TimeHistogramPage {
         System.arraycopy(buckets, pos, bucketsCopy, 0, len);
         return bucketsCopy;
     }
+
+    public int getPageSize() {
+        return buckets.length;
+    }
 }

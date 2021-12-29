@@ -16,15 +16,18 @@ import java.util.Date;
 public final class TimeHistogramDiv {
     private final TimeHistogram histogram;
     private final String label;
+    private final Date date;
     private final int position;
     private final int linesPerParagraph;
     private final int cellsPerLine;
     private final int cellsPerWord;
     private final float scale;
 
-    public TimeHistogramDiv(final TimeHistogram histogram, final String label, final int position, final float scale) {
+    public TimeHistogramDiv(final TimeHistogram histogram, final String label,
+                            final Date date, final int position, final float scale) {
         this.histogram = histogram;
         this.label = label;
+        this.date = date;
         this.position = position;
         this.linesPerParagraph = histogram.getParagraphSize();
         this.cellsPerLine = histogram.getLineSize();
@@ -53,12 +56,11 @@ public final class TimeHistogramDiv {
     private void addContentTRs(final Element table) {
         final int cursorStart = position * histogram.getPageSize();
         final int cursorEnd = cursorStart + histogram.getPageSize();
-        final Date dateStart = histogram.getDateStart();
-        final double[] buckets = histogram.getBuckets(cursorStart, (cursorEnd - cursorStart));
+        final double[] buckets = histogram.getBuckets(date, cursorStart, (cursorEnd - cursorStart));
         final long interval = histogram.getDurationCell();
         final long length = buckets.length;
         final String durationToPage = DurationU.durationXSD(interval * cursorStart);
-        final Date dateStartPage = DurationU.add(dateStart, DateU.Const.TZ_GMT, durationToPage);
+        final Date dateStartPage = DurationU.add(date, DateU.Const.TZ_GMT, durationToPage);
         // paragraph divider state (for readability)
         int lineInParagraph = 0;
         // iterate through rows

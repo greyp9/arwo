@@ -13,7 +13,7 @@ import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.lang.NumberU;
 import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogram;
-import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogramSerializer;
+import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogramSerializerFS;
 import io.github.greyp9.arwo.core.metric.histogram.view.TimeHistogramDiv;
 import io.github.greyp9.arwo.core.metric.histogram.view.TimeHistogramText;
 import io.github.greyp9.arwo.core.resource.PathU;
@@ -22,7 +22,6 @@ import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import org.w3c.dom.Element;
 
-import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 
@@ -82,21 +81,21 @@ public final class VisualizationEntryView extends VisualizationView {
         final VisualizationRequest request = getRequest();
         final Date date = DateU.floor(httpRequest.getDate(), histogram.getDurationPage());
         final Date dateQ = DateX.fromFilenameMM(request.getPage());
-        if (("-".equals(request.getMetric())) && (date.equals(dateQ))) {
+        if ((Value.equal(request.getContext(), request.getMetric())) && (date.equals(dateQ))) {
             // add content of active page
-            addContentHistogram(html, histogram);
+            addContentHistogram(html, histogram, dateQ);
         } else {
             // add content of archived page
             final TimeHistogram histogramQ = new TimeHistogram(
-                    histogram.getName(), request.getMetric(), histogram.getFolder(), dateQ,
+                    histogram.getName(), request.getMetric(), histogram.getFolder(),
                     histogram.getDurationCell(), histogram.getDurationWord(), histogram.getDurationLine(),
                     histogram.getDurationParagraph(), histogram.getDurationPage(), histogram.getDurationPages());
-            new TimeHistogramSerializer(histogramQ, new File(histogramQ.getFolder())).load(dateQ);
-            addContentHistogram(html, histogramQ);
+            new TimeHistogramSerializerFS().load(histogramQ, dateQ);
+            addContentHistogram(html, histogramQ, dateQ);
         }
     }
 
-    private void addContentHistogram(final Element html, final TimeHistogram histogramOp) {
+    private void addContentHistogram(final Element html, final TimeHistogram histogramOp, final Date dateOp) {
         final VisualizationRequest request = getRequest();
         final String label = Value.defaultOnNull(histogramOp.getMetric(), histogramOp.getName());
 /*
@@ -113,9 +112,9 @@ public final class VisualizationEntryView extends VisualizationView {
         // data view
         final float scale = NumberU.toFloat(request.getScale(), 2.0f);
         if (Html.TEXT.equals(request.getMode())) {
-            new TimeHistogramText(histogramOp, label, 0).addContentTo(html);
+            new TimeHistogramText(histogramOp, label, dateOp, 0).addContentTo(html);
         } else {
-            new TimeHistogramDiv(histogramOp, label, 0, scale).addContentTo(html);
+            new TimeHistogramDiv(histogramOp, label, dateOp, 0, scale).addContentTo(html);
         }
     }
 }

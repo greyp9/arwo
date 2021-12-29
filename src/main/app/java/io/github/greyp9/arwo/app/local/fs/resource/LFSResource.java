@@ -14,7 +14,7 @@ public final class LFSResource {
 
     /**
      * Constructor.
-     * http://checkstyle.sourceforge.net/config_design.html#FinalClass
+     * https://checkstyle.sourceforge.io/config_design.html#HideUtilityClassConstructor
      */
     private LFSResource() {
     }

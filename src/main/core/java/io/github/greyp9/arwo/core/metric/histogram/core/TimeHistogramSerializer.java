@@ -4,7 +4,6 @@ import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.date.XsdDateU;
-import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import org.w3c.dom.Document;
@@ -14,25 +13,16 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
-import java.util.Map;
 import java.util.logging.Logger;
 
-public final class TimeHistogramSerializer {
+public abstract class TimeHistogramSerializer {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    private final TimeHistogram histogram;
-    private final File folder;
-
-    public TimeHistogramSerializer(final TimeHistogram histogram, final File folder) {
-        this.histogram = histogram;
-        this.folder = folder;
-    }
-
-    public byte[] serializeData() {
+    public final byte[] toBytes(final TimeHistogramPage page) {
         byte[] bytes = null;
         try {
-            final Date dateStart = histogram.getDateStart();
-            final double[] buckets = histogram.getBuckets(0, histogram.getLength());
+            final Date dateStart = page.getDateStart();
+            final double[] buckets = page.getBuckets(0, page.getPageSize());
             final Document document = DocumentU.createDocument(Const.ROOT, Const.URI);
             final Element element = document.getDocumentElement();
             ElementU.addElement(element, Const.DATE, XsdDateU.toXSDZ(dateStart));
@@ -46,7 +36,7 @@ public final class TimeHistogramSerializer {
         return bytes;
     }
 
-    public void deserializeData(final byte[] bytes) {
+    public final void toHistogram(final TimeHistogram histogram, final byte[] bytes) {
         try {
             Date dateIt = null;
             final String duration = DurationU.durationXSD(histogram.getDurationCell());
@@ -68,36 +58,28 @@ public final class TimeHistogramSerializer {
         }
     }
 
-    public void update() {
-        final Map<Date, TimeHistogramPage> histogramPages = histogram.getHistogramPages();
-        for (Date date : histogramPages.keySet()) {
-            load(date);
-            save(date);
-        }
+    /**
+     * Merge in-memory data with persisted data.
+     *
+     * @param histogram the container for histogram data to be updated
+     */
+    public final void update(final TimeHistogram histogram) {
+        histogram.getHistogramPages().keySet().forEach(date -> {
+            load(histogram, date);
+            save(histogram, date);
+        });
     }
 
-    public void save(final Date date) {
-        try {
-            StreamU.writeMkdirs(getFile(date), serializeData());
-        } catch (IOException e) {
-            logger.severe(e.getMessage());
-        }
-    }
+    public abstract void save(TimeHistogram histogram, Date date);
 
-    public void load(final Date date) {
-        try {
-            deserializeData(StreamU.read(getFile(date)));
-        } catch (IOException e) {
-            logger.fine(e.getMessage());  // there may not be a backing file; this is ok
-        }
-    }
+    public abstract void load(TimeHistogram histogram, Date date);
 
-    private File getFile(final Date date) {
+    public final String getFile(final TimeHistogram histogram, final Date date) {
         final String name = (histogram.getMetric() == null) ? histogram.getName() : histogram.getMetric();
         final String filename = (date == null)
                 ? String.format("%s.xml", name)
                 : String.format("%s.%s.xml", name, DateX.toFilenameMM(date));
-        return new File(folder, filename);
+        return new File(histogram.getFolder(), filename).getPath();
     }
 
     public static class Const {

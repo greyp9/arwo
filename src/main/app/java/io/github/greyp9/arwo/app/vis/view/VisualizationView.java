@@ -107,7 +107,7 @@ public abstract class VisualizationView {
      * Insert content into HTML page appropriate to the context of the subclass.
      *
      * @param html the wrapper HTML document
-     * @return the http response containing the formatted content to be served to the requestor
+     * @return the http response containing the formatted content to be served to the requester
      * @throws IOException on failures accessing requested resources
      */
     protected abstract HttpResponse addContentTo(Element html) throws IOException;

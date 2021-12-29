@@ -1,12 +1,11 @@
 package io.github.greyp9.arwo.core.metric.histogram.cron;
 
 import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogram;
-import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogramSerializer;
+import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogramSerializerFS;
 import io.github.greyp9.arwo.core.naming.AppNaming;
 
 import javax.naming.Binding;
 import javax.naming.Context;
-import java.io.File;
 import java.util.Collection;
 import java.util.Date;
 import java.util.logging.Logger;
@@ -51,6 +50,7 @@ public final class TimeHistogramSaveRunnable implements Runnable {
     }
 
     private void save(final TimeHistogram histogram) {
-        new TimeHistogramSerializer(histogram, new File(histogram.getFolder())).save(histogram.getDateStart());
+        histogram.expireCache(date);
+        new TimeHistogramSerializerFS().save(histogram, date);
     }
 }

@@ -5,14 +5,15 @@ import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.lifecycle.core.Disposable;
 
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 public final class TimeHistogram implements Disposable {
     private final String name;
     private final String metric;
     private final String folder;
-    private final int length;
 
     private final long durationCell;
     private final long durationWord;
@@ -21,7 +22,6 @@ public final class TimeHistogram implements Disposable {
     private final long durationPage;
     private final long durationPages;
 
-    private Date dateStart;
     private final Map<Date, TimeHistogramPage> pages;
 
     // for instantiation via reflection
@@ -34,21 +34,19 @@ public final class TimeHistogram implements Disposable {
     public TimeHistogram(final String name, final String metric, final String folder,
                          final String durationCell, final String durationWord, final String durationLine,
                          final String durationParagraph, final String durationPage, final String durationPages) {
-        this(name, metric, folder, DateU.floor(new Date(), DurationU.toMillisP(durationPage)),
+        this(name, metric, folder,
                 DurationU.toMillisP(durationCell), DurationU.toMillisP(durationWord),
                 DurationU.toMillisP(durationLine), DurationU.toMillisP(durationParagraph),
                 DurationU.toMillisP(durationPage), DurationU.toMillisP(durationPages));
     }
 
     @SuppressWarnings("checkstyle:parameternumber")
-    public TimeHistogram(final String name, final String metric, final String folder, final Date dateStart,
+    public TimeHistogram(final String name, final String metric, final String folder,
                          final long durationCell, final long durationWord, final long durationLine,
                          final long durationParagraph, final long durationPage, final long durationPages) {
         this.name = name;
         this.metric = metric;
         this.folder = folder;
-        this.length = (int) (durationPage / durationCell);
-        this.dateStart = ((dateStart == null) ? DateU.floor(new Date(), durationPage) : DateU.copy(dateStart));
         this.pages = new TreeMap<>();
         this.durationCell = durationCell;
         this.durationWord = durationWord;
@@ -59,25 +57,6 @@ public final class TimeHistogram implements Disposable {
         // recover data from previous application invocation
         //new TimeHistogramSerializer(this, new File(folder)).load(dateStart);
     }
-
-/*
-    public TimeHistogram(final TimeHistogram histogram, final Date dateStart, final int pos, final int len) {
-        this.name = histogram.getName();
-        this.metric = histogram.getMetric();
-        this.folder = histogram.getFolder();
-        this.length = len;
-        this.dateStart = DateU.copy(dateStart);
-        this.buckets = new double[length];
-        final double[] bucketsIn = histogram.getBuckets(pos, len);
-        System.arraycopy(bucketsIn, 0, this.buckets, 0, len);
-        this.durationCell = histogram.durationCell;
-        this.durationWord = histogram.durationWord;
-        this.durationLine = histogram.durationLine;
-        this.durationParagraph = histogram.durationParagraph;
-        this.durationPage = histogram.durationPage;
-        this.durationPages = histogram.durationPages;
-    }
-*/
 
     public String getName() {
         return name;
@@ -91,19 +70,15 @@ public final class TimeHistogram implements Disposable {
         return folder;
     }
 
-    public int getLength() {
-        return length;
-    }
-
-    public Date getDateStart() {
-        synchronized (this) {
-            return dateStart;
-        }
-    }
-
     public Map<Date, TimeHistogramPage> getHistogramPages() {
         synchronized (this) {
             return pages;
+        }
+    }
+
+    public TimeHistogramPage getHistogramPage(final Date date) {
+        synchronized (this) {
+            return pages.get(date);
         }
     }
 
@@ -153,17 +128,28 @@ public final class TimeHistogram implements Disposable {
 
     public void add(final Date date, final double amount) {
         synchronized (this) {
-            dateStart = DateU.floor(date, durationPage);
+            final Date dateStart = DateU.floor(date, durationPage);
             final TimeHistogramPage page = pages.computeIfAbsent(dateStart,
-                    p -> new TimeHistogramPage(dateStart, durationCell, length));
+                    p -> new TimeHistogramPage(dateStart, durationCell, getPageSize()));
             page.add(date, amount);
         }
     }
 
-    public double[] getBuckets(final int pos, final int len) {
+    public void expireCache(final Date date) {
         synchronized (this) {
+            final Date dateStart = DateU.floor(date, durationPage);
+            final List<Date> dates = pages.keySet().stream().filter(
+                    dateIt -> !dateIt.equals(dateStart)).collect(Collectors.toList());
+            dates.forEach(dateIt -> new TimeHistogramSerializerFS().save(this, dateIt));
+            dates.forEach(pages::remove);
+        }
+    }
+
+    public double[] getBuckets(final Date date, final int pos, final int len) {
+        synchronized (this) {
+            final Date dateStart = DateU.floor(date, durationPage);
             final TimeHistogramPage page = pages.computeIfAbsent(dateStart,
-                    p -> new TimeHistogramPage(dateStart, durationCell, length));
+                    p -> new TimeHistogramPage(dateStart, durationCell, getPageSize()));
             return page.getBuckets(pos, len);
         }
     }

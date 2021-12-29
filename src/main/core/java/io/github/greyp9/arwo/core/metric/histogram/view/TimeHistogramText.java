@@ -15,11 +15,13 @@ import java.util.Date;
 public final class TimeHistogramText {
     private final TimeHistogram histogram;
     private final String label;
+    private final Date date;
     private final int page;
 
-    public TimeHistogramText(final TimeHistogram histogram, final String label, final int page) {
+    public TimeHistogramText(final TimeHistogram histogram, final String label, final Date date, final int page) {
         this.histogram = histogram;
         this.label = label;
+        this.date = date;
         this.page = page;
     }
 
@@ -31,13 +33,12 @@ public final class TimeHistogramText {
 
     public String getText() {
         // setup
-        final Date dateStart = histogram.getDateStart();
         final long durationCell = histogram.getDurationCell();
         // find starting place of requested data
         final int cursorStart = page * histogram.getPageSize();
         final String durationToStartPage = DurationU.durationXSD(durationCell * cursorStart);
-        final Date dateStartPage = DurationU.add(dateStart, DateU.Const.TZ_GMT, durationToStartPage);
-        final double[] buckets = histogram.getBuckets(cursorStart, histogram.getPageSize());
+        final Date dateStartPage = DurationU.add(date, DateU.Const.TZ_GMT, durationToStartPage);
+        final double[] buckets = histogram.getBuckets(date, cursorStart, histogram.getPageSize());
         // setup container for requested data
         final int columnsData = histogram.getLineSize();
         final int rowsData = (histogram.getPageSize() / histogram.getLineSize());
