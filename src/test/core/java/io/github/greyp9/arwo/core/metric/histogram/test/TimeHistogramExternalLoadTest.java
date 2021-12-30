@@ -25,12 +25,12 @@ public class TimeHistogramExternalLoadTest {
         final long durationCell = DurationU.toMillisP("PT1S");
         final long durationPage = DurationU.toMillisP("PT10S");
         final long range = durationPage / 2;
-        final TimeHistogram histogram = new TimeHistogram(null, metric, null, date,
+        final TimeHistogram histogram = new TimeHistogram(null, metric, null,
                 durationCell, durationPage, durationPage, durationPage, durationPage, durationPage);
         for (long offset = 0L; (offset < range); offset += durationCell) {
              histogram.add(new Date(date.getTime() + offset), offset);
         }
-        final double[] buckets = histogram.getBuckets(0, histogram.getLength());
+        final double[] buckets = histogram.getBuckets(date, 0, histogram.getPageSize());
         Assert.assertEquals(4_000, buckets[4], 0.1d);
     }
 
@@ -41,13 +41,14 @@ public class TimeHistogramExternalLoadTest {
         final long durationCell = DurationU.toMillisP("PT1S");
         final long durationPage = DurationU.toMillisP("PT10S");
         final long range = durationPage * 2;
-        final TimeHistogram histogram = new TimeHistogram(null, metric, null, date,
+        final TimeHistogram histogram = new TimeHistogram(null, metric, null,
                 durationCell, durationPage, durationPage, durationPage, durationPage, durationPage);
         for (long offset = 0L; (offset < range); offset += durationCell) {
             final Date dateIt = new Date(date.getTime() + offset);
             histogram.add(dateIt, offset);
         }
-        final double[] buckets = histogram.getBuckets(0, histogram.getLength());
+        final Date dateNextPage = new Date(date.getTime() + durationPage);
+        final double[] buckets = histogram.getBuckets(dateNextPage, 0, histogram.getPageSize());
         Assert.assertEquals(14_000, buckets[4], 0.1d);
     }
 }

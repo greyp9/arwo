@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogram;
 import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogramPage;
 import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogramSerializer;
+import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogramSerializerFS;
 import org.junit.AfterClass;
 import org.junit.Assert;
 import org.junit.BeforeClass;
@@ -42,14 +43,14 @@ public class TimeHistogramSerializerTest {
         final Date date = XsdDateU.fromXSDZ("2000-01-01T00:00:00Z");
         final long durationCell = DurationU.toMillisP("PT5S");
         final long durationPage = DurationU.toMillisP("PT1M");
-        final TimeHistogram histogramFoo = new TimeHistogram("foo", null, folderTest.getPath(), date,
+        final TimeHistogram histogramFoo = new TimeHistogram("foo", null, folderTest.getPath(),
                 durationCell, durationPage, durationPage, durationPage, durationPage, durationPage);
         for (long offset = 0L; (offset < durationPage); offset += durationCell) {
             final Date dateIt = new Date(date.getTime() + offset);
             histogramFoo.add(dateIt, (double) (offset / durationCell));
         }
-        final TimeHistogramSerializer serializer = new TimeHistogramSerializer(histogramFoo, folderTest);
-        serializer.save(date);
+        final TimeHistogramSerializer serializer = new TimeHistogramSerializerFS();
+        serializer.save(histogramFoo, date);
         Assert.assertTrue(new File(folderTest, "foo.2000-01-01T00-00Z.xml").exists());
     }
 
@@ -59,11 +60,11 @@ public class TimeHistogramSerializerTest {
         final long durationCell = DurationU.toMillisP("PT5S");
         final long durationPage = DurationU.toMillisP("PT1M");
         final int dataPoints = (int) (durationPage / durationCell);
-        final TimeHistogram histogramFoo = new TimeHistogram("foo", null, folderTest.getPath(), date,
+        final TimeHistogram histogramFoo = new TimeHistogram("foo", null, folderTest.getPath(),
                 durationCell, durationPage, durationPage, durationPage, durationPage, durationPage);
-        final TimeHistogramSerializer serializer = new TimeHistogramSerializer(histogramFoo, folderTest);
-        serializer.load(date);
-        final double[] buckets = histogramFoo.getBuckets(0, dataPoints);
+        final TimeHistogramSerializer serializer = new TimeHistogramSerializerFS();
+        serializer.load(histogramFoo, date);
+        final double[] buckets = histogramFoo.getBuckets(date, 0, dataPoints);
         for (int i = 0; (i < dataPoints); ++i) {
             Assert.assertEquals(buckets[i], i, 0.01);
         }
@@ -74,15 +75,15 @@ public class TimeHistogramSerializerTest {
         final Date date = XsdDateU.fromXSDZ("2000-01-01T00:00:00Z");
         final long durationCell = DurationU.toMillisP("PT5S");
         final long durationPage = DurationU.toMillisP("PT1M");
-        final TimeHistogram histogramFoo = new TimeHistogram("foo", null, folderTest.getPath(), date,
+        final TimeHistogram histogramFoo = new TimeHistogram("foo", null, folderTest.getPath(),
                 durationCell, durationPage, durationPage, durationPage, durationPage, durationPage);
-        final TimeHistogramSerializer serializer = new TimeHistogramSerializer(histogramFoo, folderTest);
-        serializer.load(date);
+        final TimeHistogramSerializer serializer = new TimeHistogramSerializerFS();
+        serializer.load(histogramFoo, date);
         for (long offset = 0L; (offset < durationPage); offset += durationCell) {
             final Date dateIt = new Date(date.getTime() + offset);
             histogramFoo.add(dateIt, (double) ((durationPage - offset) / durationCell));
         }
-        serializer.save(date);
+        serializer.save(histogramFoo, date);
     }
 
     @Test
@@ -91,11 +92,11 @@ public class TimeHistogramSerializerTest {
         final long durationCell = DurationU.toMillisP("PT5S");
         final long durationPage = DurationU.toMillisP("PT1M");
         final int dataPoints = (int) (durationPage / durationCell);
-        final TimeHistogram histogramFoo = new TimeHistogram("foo", null, folderTest.getPath(), date,
+        final TimeHistogram histogramFoo = new TimeHistogram("foo", null, folderTest.getPath(),
                 durationCell, durationPage, durationPage, durationPage, durationPage, durationPage);
-        final TimeHistogramSerializer serializer = new TimeHistogramSerializer(histogramFoo, folderTest);
-        serializer.load(date);
-        final double[] buckets = histogramFoo.getBuckets(0, dataPoints);
+        final TimeHistogramSerializer serializer = new TimeHistogramSerializerFS();
+        serializer.load(histogramFoo, date);
+        final double[] buckets = histogramFoo.getBuckets(date, 0, dataPoints);
         for (int i = 0; (i < dataPoints); ++i) {
             Assert.assertEquals(buckets[i], 12, 0.01);
         }
@@ -106,15 +107,15 @@ public class TimeHistogramSerializerTest {
         final Date date = XsdDateU.fromXSDZ("2000-01-02T00:00:00Z");
         final long durationCell = DurationU.toMillisP("PT5S");
         final long durationPage = DurationU.toMillisP("PT1M");
-        final TimeHistogram histogramFoo = new TimeHistogram("foo", null, folderTest.getPath(), date,
+        final TimeHistogram histogramFoo = new TimeHistogram("foo", null, folderTest.getPath(),
                 durationCell, durationPage, durationPage, durationPage, durationPage, durationPage);
         for (long offset = 0L; (offset < durationPage); offset += durationCell) {
             final Date dateIt = new Date(date.getTime() + offset);
             histogramFoo.add(dateIt, (double) (offset / durationCell));
             histogramFoo.add(dateIt, (double) ((durationPage - offset) / durationCell));
         }
-        final TimeHistogramSerializer serializer = new TimeHistogramSerializer(histogramFoo, folderTest);
-        serializer.save(date);
+        final TimeHistogramSerializer serializer = new TimeHistogramSerializerFS();
+        serializer.save(histogramFoo, date);
         Assert.assertTrue(new File(folderTest, "foo.2000-01-02T00-00Z.xml").exists());
         Assert.assertEquals(2, new FindInFolderQuery(folderTest, "foo.*.xml", false).getFound().size());
     }
@@ -123,7 +124,7 @@ public class TimeHistogramSerializerTest {
     public void testSerializer6_UpdateMultipleHistogram() {
         final long durationCell = DurationU.toMillisP("PT5S");
         final long durationPage = DurationU.toMillisP("PT1M");
-        final TimeHistogram histogramFoo = new TimeHistogram("foo", null, folderTest.getPath(), null,
+        final TimeHistogram histogramFoo = new TimeHistogram("foo", null, folderTest.getPath(),
                 durationCell, durationPage, durationPage, durationPage, durationPage, durationPage);
         final Date date1 = XsdDateU.fromXSDZ("2000-01-01T00:00:00Z");
         for (long offset = 0L; (offset < durationPage); offset += durationCell) {
@@ -135,22 +136,22 @@ public class TimeHistogramSerializerTest {
             final Date dateIt = new Date(date2.getTime() + offset);
             histogramFoo.add(dateIt, (double) ((2 * offset) / durationCell));
         }
-        final TimeHistogramSerializer serializer = new TimeHistogramSerializer(histogramFoo, folderTest);
-        serializer.update();
+        final TimeHistogramSerializer serializer = new TimeHistogramSerializerFS();
+        serializer.update(histogramFoo);
     }
 
     @Test
     public void testSerializer7_VerifyState() {
         final long durationCell = DurationU.toMillisP("PT5S");
         final long durationPage = DurationU.toMillisP("PT1M");
-        final TimeHistogram histogramFoo = new TimeHistogram("foo", null, folderTest.getPath(), null,
+        final TimeHistogram histogramFoo = new TimeHistogram("foo", null, folderTest.getPath(),
                 durationCell, durationPage, durationPage, durationPage, durationPage, durationPage);
         Assert.assertEquals(2, new FindInFolderQuery(folderTest, "foo.*.xml", false).getFound().size());
-        final TimeHistogramSerializer serializer = new TimeHistogramSerializer(histogramFoo, folderTest);
+        final TimeHistogramSerializer serializer = new TimeHistogramSerializerFS();
         final Date date1 = XsdDateU.fromXSDZ("2000-01-01T00:00:00Z");
         final Date date2 = XsdDateU.fromXSDZ("2000-01-02T00:00:00Z");
-        serializer.load(date1);
-        serializer.load(date2);
+        serializer.load(histogramFoo, date1);
+        serializer.load(histogramFoo, date2);
         final Map<Date, TimeHistogramPage> histogramPages = histogramFoo.getHistogramPages();
         Assert.assertTrue(histogramPages.containsKey(date1));
         Assert.assertTrue(histogramPages.containsKey(date2));

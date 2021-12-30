@@ -5,36 +5,39 @@ import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.date.XsdDateU;
 import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogram;
 import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogramSerializer;
-import junit.framework.TestCase;
+import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogramSerializerMem;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.util.Date;
+import java.util.TreeMap;
 import java.util.logging.Logger;
 
-public class TimeHistogramTest extends TestCase {
+public class TimeHistogramTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
     private final File folderClass = new File(String.format("./target/%s", getClass().getSimpleName()));
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
 
+    @Test
     public void testCreateSimple() {
         long durationCell = DurationU.toMillisP("P1D");
         long durationPage = DurationU.toMillisP("P31D");
         Date date = DateU.floor(XsdDateU.fromXSDZ("2000-01-01T00:00:00Z"), durationPage);
-        TimeHistogram histogram = new TimeHistogram(null, null, null, date,
+        TimeHistogram histogram = new TimeHistogram(null, null, null,
                 durationCell, durationPage, durationPage, durationPage, durationPage, durationPage);
         logger.info(histogram.toString());
         for (int a = 0; (a < 3); ++a) {
             final Date dateIt = DurationU.add(date, DateU.Const.TZ_GMT, String.format("P%dD", a));
             histogram.add(dateIt, 1);
         }
-        final double[] buckets = histogram.getBuckets(0, histogram.getLength());
+        final double[] buckets = histogram.getBuckets(date, 0, histogram.getPageSize());
         Assert.assertEquals(31, buckets.length);
         for (int i = 0; (i < 3); ++i) {
             Assert.assertEquals(1L, (long) buckets[i]);
@@ -42,29 +45,29 @@ public class TimeHistogramTest extends TestCase {
         for (int j = 3; (j < 31); ++j) {
             Assert.assertEquals(0L, (long) buckets[j]);
         }
-/*
-        histogram.advance(7);
-        final double[] buckets2 = histogram.getBuckets(0, histogram.getLength());
-        for (int j = 0; (j < 31); ++j) {
+        final int pos = 7;
+        final int len = histogram.getPageSize() - pos;
+        final double[] buckets2 = histogram.getBuckets(date, pos, len);
+        for (int j = 0; (j < len); ++j) {
             Assert.assertEquals(0L, (long) buckets2[j]);
         }
-*/
     }
 
+    @Test
     public void testAdvance() {
-        Date date = XsdDateU.fromXSDZ("2000-01-01T00:00:00Z");
         long durationCell = DurationU.toMillisP("P1D");
         long durationPage = DurationU.toMillisP("P7D");
+        Date date = DateU.floor(XsdDateU.fromXSDZ("2000-01-01T00:00:00Z"), durationPage);
         long durationPages = DurationU.toMillisP("P91D");
         final File folder = new File(folderClass, "advance");
-        TimeHistogram histogram = new TimeHistogram(null, null, folder.getPath(), date,
+        TimeHistogram histogram = new TimeHistogram(null, null, folder.getPath(),
                 durationCell, durationCell, durationPage, durationPage, durationPage, durationPages);
-        logger.info(histogram.toString());
+        logger.fine(histogram.toString());
         for (int a = 0; (a < 91); ++a) {
             final Date dateIt = DurationU.add(date, DateU.Const.TZ_GMT, String.format("P%dD", a));
             histogram.add(dateIt, a);
         }
-/*
+/* old concept "advance()" no longer implemented
         histogram.advance(7);
         Assert.assertEquals("2000-01-08T00:00:00Z", XsdDateU.toXSDZ(histogram.getDateStart()));
         final double[] buckets = histogram.getBuckets(0, histogram.getLength());
@@ -77,6 +80,7 @@ public class TimeHistogramTest extends TestCase {
 */
     }
 
+    @Test
     public void testCreate() {
         final File folder = new File(folderClass, "create");
         TimeHistogram histogram = new TimeHistogram("foo", null, folder.getPath(), "PT1M", "PT15M", "PT1H", "PT6H", "P1D", "P5D");
@@ -88,6 +92,7 @@ public class TimeHistogramTest extends TestCase {
         Assert.assertEquals(1440 * 5, histogram.getPageSize() * histogram.getPageCount());
     }
 
+    @Test
     public void testNormalizeAdvance() {
         final File folder = new File(folderClass, "normalize-advance");
         final TimeHistogram histogram = new TimeHistogram("foo", null, folder.getPath(), "PT1M", "PT15M", "PT1H", "PT1H", "PT1H", "PT2H");
@@ -96,7 +101,7 @@ public class TimeHistogramTest extends TestCase {
         final Date dateEnd = DurationU.add(dateStart, DateU.Const.TZ_GMT, "P1D");
         final long durationIt = DurationU.toMillisP("PT1M");
         Date date = DateU.copy(dateStart);
-/*
+/* old concept "normalize()" no longer implemented
         while (date.before(dateEnd)) {
             date.setTime(new Date(date.getTime() + durationIt).getTime());
             histogram.normalize(date);
@@ -108,6 +113,7 @@ public class TimeHistogramTest extends TestCase {
 */
     }
 
+    @Test
     public void testSerialize() {
         final File folder = new File(folderClass, "serialize");
         final TimeHistogram histogram = new TimeHistogram(
@@ -118,18 +124,18 @@ public class TimeHistogramTest extends TestCase {
         histogram.add(floor, 1);
         histogram.add(plusPT1M, 2);
         // serialize
-        final TimeHistogramSerializer serializer = new TimeHistogramSerializer(histogram, null);
-        final byte[] bytes = serializer.serializeData();
+        final TreeMap<String, byte[]> store = new TreeMap<>();
+        final TimeHistogramSerializer serializer = new TimeHistogramSerializerMem(store);
+        final byte[] bytes = serializer.toBytes(histogram.getHistogramPage(floor));
         // deserialize
         final TimeHistogram histogramCodec = new TimeHistogram(
                 "foo", null, ".", "PT1M", "PT1M", "PT5M", "PT5M", "PT5M", "PT10M");
-        final TimeHistogramSerializer deserializer = new TimeHistogramSerializer(histogramCodec, null);
-        deserializer.deserializeData(bytes);
+        final TimeHistogramSerializer deserializer = new TimeHistogramSerializerMem(store);
+        deserializer.toHistogram(histogramCodec, bytes);
         // check data
-        final double[] buckets = histogramCodec.getBuckets(0, histogramCodec.getLength());
+        final double[] buckets = histogramCodec.getBuckets(floor, 0, histogramCodec.getPageSize());
         final int length = buckets.length;
         Assert.assertEquals(5, buckets.length);
-        Assert.assertEquals(floor, histogramCodec.getDateStart());  // floor of page size
         Assert.assertEquals(1, (int) buckets[0]);
         Assert.assertEquals(2, (int) buckets[1]);
         for (int i = 2; (i < length); ++i) {

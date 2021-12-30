@@ -6,13 +6,11 @@ import io.github.greyp9.arwo.core.file.find.FindInFolderQuery;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogram;
-import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogramSerializer;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.text.filter.TextFilters;
 import io.github.greyp9.arwo.core.text.filter.TextLineFilter;
 import io.github.greyp9.arwo.core.text.line.LineU;
 import org.junit.Assume;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -31,7 +29,6 @@ public class LogLineFilterTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
     @Test
-    @Ignore
     public void testTextLineFilter_Simple() throws IOException {
         final String folderOut = System.getProperty("folderOut");
         final String tzid = System.getProperty("tzid");  // "America/New_York"
@@ -88,13 +85,13 @@ public class LogLineFilterTest {
                             final Matcher matcher = pattern.matcher(line);
                             if (matcher.matches()) {
                                 final Date timestamp = dateX.toDate(matcher.group(1));
-                                histogram.normalize(timestamp);
+                                //histogram.normalize(timestamp);
                                 histogram.add(timestamp, 1);
                             }
                         }
                         // output filtered data
-                        final Date dateStartHistogram = histogram.getDateStart();
-                        new TimeHistogramSerializer(histogram, new File(folderOut)).save(dateStartHistogram);
+                        //final Date dateStartHistogram = histogram.getDateStart();
+                        //new TimeHistogramSerializer(histogram, new File(folderOut)).save(dateStartHistogram);
                         //StreamU.write(new File(folderOut, String.format("%s.log", textQuery.getTitle())), bytesOut);
                     }
                 }
