@@ -27,7 +27,7 @@ public final class TimeHistogram implements Disposable {
     // for instantiation via reflection
     @SuppressWarnings("checkstyle:magicnumber")
     public TimeHistogram(final String... params) {
-        this(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8]);
+        this(params[0], null, params[1], params[2], params[3], params[4], params[5], params[6], params[7]);
     }
 
     @SuppressWarnings("checkstyle:parameternumber")
