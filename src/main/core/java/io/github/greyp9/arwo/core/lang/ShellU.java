@@ -16,6 +16,9 @@ public final class ShellU {
         } else if (SystemU.isWindows()) {
             commandArray.add("cmd");
             commandArray.add("/C");
+        } else if (SystemU.isMac()) {
+            commandArray.add("/bin/zsh");
+            commandArray.add("-c");
         }
         commandArray.add(stdin);
         return commandArray.toArray(new String[commandArray.size()]);

@@ -41,6 +41,10 @@ public final class SystemU {
         return (Const.OS_NAME.contains(Const.LINUX));
     }
 
+    public static boolean isMac() {
+        return (Const.OS_NAME.contains(Const.MAC));
+    }
+
     public static String resolve(final String path) {
         return ((path == null) ? null : path.replace("~", userHome()));  // i18n internal
     }
@@ -69,5 +73,6 @@ public final class SystemU {
 
         private static final String LINUX = "Linux";
         private static final String WINDOWS = "Windows";
+        private static final String MAC = "Mac";
     }
 }
