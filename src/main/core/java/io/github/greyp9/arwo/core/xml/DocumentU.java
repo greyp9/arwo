@@ -55,15 +55,6 @@ public final class DocumentU {
         }
     }
 
-    @SuppressWarnings({"PMD.OnlyOneReturn", "PMD.AvoidCatchingThrowable"})
-    public static byte[] toXmlPretty(final Document document) throws IOException {
-        try {
-            return io.github.greyp9.arwo.core.xml.priv.XmlPriv.toXmlPretty(document);
-        } catch (Throwable e) {
-            return io.github.greyp9.arwo.core.xml.ls.XmlLS.toXmlPretty(document);
-        }
-    }
-
     public static byte[] toXHtml(final Document document) throws IOException {
         return (document == null) ? null : toXHtmlNN(document);
     }
@@ -100,9 +91,7 @@ public final class DocumentU {
             builderFactory.setNamespaceAware(true);
             final DocumentBuilder builder = builderFactory.newDocumentBuilder();
             return builder.parse(new ByteArrayInputStream(xml));
-        } catch (ParserConfigurationException e) {
-            throw new IOException(e);
-        } catch (SAXException e) {
+        } catch (ParserConfigurationException | SAXException e) {
             throw new IOException(e);
         }
     }

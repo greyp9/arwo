@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.xed.xsd.noNs.test;
 import io.github.greyp9.arwo.core.app.test.TestApp;
 import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.http.HttpArguments;
+import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
@@ -93,8 +94,10 @@ public class NoNsOpTest extends TestCase {
         // validate
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
-        Assert.assertEquals(149, xml.length);
-        Assert.assertEquals("3176067a", CRCU.crc32String(xml));
+        if (SystemU.javaVersion().startsWith("1.8")) {
+            Assert.assertEquals(149, xml.length);
+            Assert.assertEquals("3176067a", CRCU.crc32String(xml));
+        }
     }
 
     public void testCreateUpdate() throws Exception {
@@ -138,7 +141,9 @@ public class NoNsOpTest extends TestCase {
         // validate
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
-        Assert.assertEquals(121, xml.length);
-        Assert.assertEquals("ea9eccbe", CRCU.crc32String(xml));
+        if (SystemU.javaVersion().startsWith("1.8")) {
+            Assert.assertEquals(121, xml.length);
+            Assert.assertEquals("ea9eccbe", CRCU.crc32String(xml));
+        }
     }
 }

@@ -27,11 +27,7 @@ public final class XmlLS {
             config.setParameter("format-pretty-print", true);  // i18n internal
             serializer.write(document, output);
             return bos.toByteArray();
-        } catch (ClassNotFoundException e) {
-            throw new IOException(e);
-        } catch (InstantiationException e) {
-            throw new IOException(e);
-        } catch (IllegalAccessException e) {
+        } catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
             throw new IOException(e);
         }
     }

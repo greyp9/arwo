@@ -10,11 +10,11 @@ import io.github.greyp9.arwo.core.xpath.XPather;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import io.github.greyp9.arwo.core.xsd.source.test.SchemaSourceAppTest;
 import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitions;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -22,15 +22,15 @@ import javax.xml.namespace.QName;
 import java.net.URL;
 import java.util.logging.Logger;
 
-public class RealmTest extends TestCase {
+public class RealmTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
 
+    @Test
     public void testCreate() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
@@ -58,6 +58,7 @@ public class RealmTest extends TestCase {
         Assert.assertEquals("arwo2", xpather.getText("/realm:realm/realm:principals/realm:principal[2]/realm:user"));
     }
 
+    @Test
     public void testUpdate() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
@@ -91,6 +92,7 @@ public class RealmTest extends TestCase {
         Assert.assertEquals("***", xpather.getText("/realm:realm/realm:principals/realm:principal[1]/realm:roles"));
     }
 
+    @Test
     public void testDelete() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(App.Realm.XSD);

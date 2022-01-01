@@ -13,6 +13,10 @@ public final class SystemU {
         return Const.OS_NAME;
     }
 
+    public static String javaVersion() {
+        return Const.JAVA_VERSION;
+    }
+
     public static String userDir() {
         return Const.USER_DIR;
     }
@@ -56,6 +60,7 @@ public final class SystemU {
     }
 
     private static class Const {
+        private static final String JAVA_VERSION = System.getProperty("java.version");
         private static final String LINE_SEPARATOR = System.getProperty("line.separator");
         private static final String OS_NAME = System.getProperty("os.name");
         private static final String USER_DIR = System.getProperty("user.dir");

@@ -11,28 +11,30 @@ import io.github.greyp9.arwo.core.security.realm.AppPrincipal;
 import io.github.greyp9.arwo.core.util.CollectionU;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.vm.exec.UserExecutor;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.Collection;
 import java.util.Date;
 import java.util.logging.Logger;
 
-public class LocalCommandTest extends TestCase {
+public class LocalCommandTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
 
+    @Test
     public void testPreProcess() throws Exception {
         final Script script = new Script(null, new Date(), null, "ls\npwd\ndf\n");
         final Collection<Command> commands = script.getCommands();
         Assert.assertEquals(3, commands.size());
     }
 
+    @Test
     public void testSimpleCommandGood() throws Exception {
         final Script script = new Script(null, new Date(), null, "ls");  // "cmd /c dir"
         final Collection<Command> commandsPre = script.getCommands();
@@ -60,6 +62,7 @@ public class LocalCommandTest extends TestCase {
         }
     }
 
+    @Test
     public void testSimpleCommandBad() throws Exception {
         final Script script = new Script(null, new Date(), null, "lslsls");  // "dirdirdir"
         final Collection<Command> commandsPre = script.getCommands();

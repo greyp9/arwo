@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.xed.test;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.http.HttpArguments;
+import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
@@ -17,8 +18,10 @@ import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Assume;
+import org.junit.Before;
+import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -26,15 +29,15 @@ import javax.xml.namespace.QName;
 import java.net.URL;
 import java.util.logging.Logger;
 
-public class RealmAssembleTest extends TestCase {
+public class RealmAssembleTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
 
+    @Test
     public void testCreate2() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
@@ -57,6 +60,7 @@ public class RealmAssembleTest extends TestCase {
         // validate
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
+        Assume.assumeTrue(SystemU.javaVersion().startsWith("1.8"));
         Assert.assertEquals(384, xml.length);
         Assert.assertEquals("6e6b144e", CRCU.crc32String(xml));
         // check hashes
@@ -69,6 +73,7 @@ public class RealmAssembleTest extends TestCase {
         Assert.assertEquals("i1Otk1K9L0SBdbqYUkno5UoEAjXd9iBKLPhCxPpy2o0=", hash2);
     }
 
+    @Test
     public void testCreateUpdate() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
@@ -98,6 +103,7 @@ public class RealmAssembleTest extends TestCase {
         // validate
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
+        Assume.assumeTrue(SystemU.javaVersion().startsWith("1.8"));
         Assert.assertEquals(254, xml.length);
         Assert.assertEquals("7487e72a", CRCU.crc32String(xml));
         // check hash
@@ -106,6 +112,7 @@ public class RealmAssembleTest extends TestCase {
         Assert.assertEquals("i1Otk1K9L0SBdbqYUkno5UoEAjXd9iBKLPhCxPpy2o0=", hash2);
     }
 
+    @Test
     public void testCreateDelete() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
@@ -127,6 +134,7 @@ public class RealmAssembleTest extends TestCase {
         // validate
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
+        Assume.assumeTrue(SystemU.javaVersion().startsWith("1.8"));
         Assert.assertEquals(109, xml.length);
         Assert.assertEquals("0093040f", CRCU.crc32String(xml));
     }

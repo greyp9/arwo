@@ -9,6 +9,7 @@ import io.github.greyp9.arwo.core.xed.session.XedSession;
 import io.github.greyp9.arwo.core.xed.session.XedSessions;
 import io.github.greyp9.arwo.core.xed.trigger.XedTrigger;
 import io.github.greyp9.arwo.core.xml.DocumentU;
+import io.github.greyp9.arwo.core.xml.pretty.DocumentPrettyU;
 import org.w3c.dom.Document;
 
 import java.io.File;
@@ -39,7 +40,7 @@ public class SessionPretty {
         final XedTrigger trigger = session.getTrigger();
         // do this step to fix namespaces for new elements (something in JRE?)
         final Document documentNormal = DocumentU.toDocument(DocumentU.toXml(xed.getDocument()));
-        final Document document = DocumentU.toDocument(DocumentU.toXmlPretty(documentNormal));
+        final Document document = DocumentU.toDocument(DocumentPrettyU.toXmlPretty(documentNormal));
         // new session
         final Xed xedNew = new Xed(document, xed.getXsdTypes());
         final XedSession sessionNew = new XedSession(entry, xedNew, file, dateLoad, trigger);

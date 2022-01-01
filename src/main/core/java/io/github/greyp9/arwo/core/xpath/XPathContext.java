@@ -15,8 +15,8 @@ public class XPathContext implements javax.xml.namespace.NamespaceContext {
     }
 
     public XPathContext() {
-        this.prefixToURI = new TreeMap<String, String>();
-        this.uriToPrefix = new TreeMap<String, String>();
+        this.prefixToURI = new TreeMap<>();
+        this.uriToPrefix = new TreeMap<>();
     }
 
     public final int size() {
@@ -33,7 +33,7 @@ public class XPathContext implements javax.xml.namespace.NamespaceContext {
         return (prefix == null) ? XsdU.NS_PREFIX_NULL : prefix;
     }
 
-    public final Iterator<Object> getPrefixes(final String namespaceURI) {
+    public final Iterator<String> getPrefixes(final String namespaceURI) {
         throw new UnsupportedOperationException(getClass().getName());
     }
 

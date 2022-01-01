@@ -13,7 +13,7 @@ import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
-import io.github.greyp9.arwo.core.xml.DocumentU;
+import io.github.greyp9.arwo.core.xml.pretty.DocumentPrettyU;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -57,7 +57,7 @@ public class SessionCommit {
     }
 
     private void commit(final String comment, final File file) throws IOException {
-        final byte[] xml = DocumentU.toXmlPretty(session.getXed().getDocument());
+        final byte[] xml = DocumentPrettyU.toXmlPretty(session.getXed().getDocument());
         final Date date = new Date();
         final String folderName = DateX.toFilename(date);
         final String name = Value.join(Http.Token.SLASH, folderName, file.getName());

@@ -12,7 +12,8 @@ public final class ProcessU {
 
     public static Integer getProcessId(final Process process) {
         final boolean isUNIXProcess = process.getClass().getName().equals("java.lang.UNIXProcess");
-        return (isUNIXProcess ? getProcessIdUNIX(process) : null);
+        final boolean isProcessImpl = process.getClass().getName().equals("java.lang.ProcessImpl");
+        return ((isUNIXProcess || isProcessImpl) ? getProcessIdUNIX(process) : null);
     }
 
     private static Integer getProcessIdUNIX(final Process process) {
@@ -33,9 +34,7 @@ public final class ProcessU {
                 final Field field = process.getClass().getDeclaredField("pid");  // i18n internal
                 field.setAccessible(true);
                 processId = ((Integer) field.get(process));
-            } catch (IllegalAccessException e) {
-                Logger.getLogger(getClass().getName()).warning(e.getMessage());
-            } catch (NoSuchFieldException e) {
+            } catch (IllegalAccessException | NoSuchFieldException e) {
                 Logger.getLogger(getClass().getName()).warning(e.getMessage());
             }
             return processId;

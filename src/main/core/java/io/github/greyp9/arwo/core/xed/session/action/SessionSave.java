@@ -10,6 +10,7 @@ import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
 import io.github.greyp9.arwo.core.xed.trigger.XedTrigger;
 import io.github.greyp9.arwo.core.xml.DocumentU;
+import io.github.greyp9.arwo.core.xml.pretty.DocumentPrettyU;
 import org.w3c.dom.Document;
 
 import java.io.File;
@@ -32,7 +33,7 @@ public class SessionSave {
     public final void save() throws IOException {
         final Document document = session.getXed().getDocument();
         final Document documentNormal = DocumentU.toDocument(DocumentU.toXml(document));
-        final byte[] xmlPretty = DocumentU.toXmlPretty(documentNormal);
+        final byte[] xmlPretty = DocumentPrettyU.toXmlPretty(documentNormal);
         final File file = session.getFile();
         final File folderParent = file.getParentFile();
         final File folder = ((folderParent == null) ? new File(SystemU.userDir()) : folderParent);

@@ -28,7 +28,7 @@ import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
 import io.github.greyp9.arwo.core.xed.state.XedUserState;
-import io.github.greyp9.arwo.core.xml.DocumentU;
+import io.github.greyp9.arwo.core.xml.pretty.DocumentPrettyU;
 import org.w3c.dom.Element;
 
 import java.io.File;
@@ -124,7 +124,7 @@ public class RevisionHtmlView extends HtmlView {
 
     private void createRowSession(final RowSet rowSet, final XedSession session) throws IOException {
         final String labelInMemory = bundle.getString("xed.revisionsType.memRevision");
-        final byte[] bytes = DocumentU.toXmlPretty(session.getXed().getDocument());
+        final byte[] bytes = DocumentPrettyU.toXmlPretty(session.getXed().getDocument());
         final Date date = Value.defaultOnNull(session.getDateModify(), session.getDateLoad());
         final InsertRow insertRow = new InsertRow(rowSet);
         insertRow.setNextColumn(new TableViewButton(labelInMemory, null, null));
