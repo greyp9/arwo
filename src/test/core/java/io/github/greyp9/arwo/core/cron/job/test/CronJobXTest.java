@@ -7,15 +7,16 @@ import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xpath.XPather;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.util.List;
 
-public class CronJobXTest extends TestCase {
+public class CronJobXTest {
 
+    @Test
     public void testJobX() throws Exception {
         final Document document = DocumentU.toDocument(StreamU.read(ResourceU.resolve(Const.XML)));
         final List<Element> elements = new XPather(document).getElements("/cronTab/cronJob");

@@ -1,14 +1,15 @@
 package io.github.greyp9.arwo.core.value.test;
 
 import io.github.greyp9.arwo.core.value.Value;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class ValueTest extends TestCase {
+public class ValueTest {
 
+    @Test
     public void testJoin() throws Exception {
         List<String> tokens = new ArrayList<String>();
         tokens.add("a");

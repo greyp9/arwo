@@ -1,11 +1,12 @@
 package io.github.greyp9.arwo.core.number.test;
 
 import io.github.greyp9.arwo.core.number.NumberScale;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 
-public class NumberScaleTest extends TestCase {
+public class NumberScaleTest {
 
+    @Test
     public void testSomeNumbers() throws Exception {
         Assert.assertEquals("0", NumberScale.toString(0L));
         Assert.assertEquals("1", NumberScale.toString(1L));

@@ -1,14 +1,15 @@
 package io.github.greyp9.arwo.core.log.test;
 
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.logging.Handler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-public class LoggerTest extends TestCase {
+public class LoggerTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @Test
     public void testHierarchy() throws Exception {
         logger.info("BEGIN");
         // iterate through hierarchy from current logger
@@ -25,6 +26,7 @@ public class LoggerTest extends TestCase {
         logger.info("END");
     }
 
+    @Test
     public void testLevels() throws Exception {
         logger.finest("finest");
         logger.finer("finer");
@@ -35,6 +37,7 @@ public class LoggerTest extends TestCase {
         logger.severe("severe");
     }
 
+    @Test
     public void testHandlers() throws Exception {
         final Handler[] handlers = logger.getHandlers();
         for (Handler handler : handlers) {

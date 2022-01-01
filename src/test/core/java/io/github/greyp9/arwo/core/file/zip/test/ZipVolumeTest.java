@@ -7,7 +7,8 @@ import io.github.greyp9.arwo.core.file.zip.ZipMetaData;
 import io.github.greyp9.arwo.core.file.zip.ZipVolume;
 import io.github.greyp9.arwo.core.lang.StringU;
 import io.github.greyp9.arwo.core.lang.SystemU;
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -15,15 +16,15 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.logging.Logger;
 
-public class ZipVolumeTest extends TestCase {
+public class ZipVolumeTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         //io.github.greyp9.arwo.core.logging.LoggerU.adjustShort(Logger.getLogger(""));
     }
 
+    @Test
     public void testFindIterateArchives() throws Exception {
         File root = new File(SystemU.resolve("~/Downloads"));
         Collection<File> files = new FindInFolderQuery(root, "*.zip", false).getFound();

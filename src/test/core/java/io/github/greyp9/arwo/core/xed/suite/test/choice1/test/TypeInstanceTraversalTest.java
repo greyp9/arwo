@@ -6,23 +6,24 @@ import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstanceTraversal;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import javax.xml.namespace.QName;
 import java.net.URL;
 import java.util.List;
 import java.util.logging.Logger;
 
-public class TypeInstanceTraversalTest extends TestCase {
+public class TypeInstanceTraversalTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
 
+    @Test
     public void testChoice1TraversalJobsToJob() throws Exception {
         final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_CHOICE1);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
@@ -42,6 +43,7 @@ public class TypeInstanceTraversalTest extends TestCase {
         logger.finest(listEnhancedJob.toString());
     }
 
+    @Test
     public void testChoice1TraversalJobToTaskA() throws Exception {
         final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_CHOICE1);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
@@ -58,6 +60,7 @@ public class TypeInstanceTraversalTest extends TestCase {
         logger.finest(listTaskA.toString());
     }
 
+    @Test
     public void testChoice1TraversalJobToTaskC() throws Exception {
         final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_CHOICE1);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);

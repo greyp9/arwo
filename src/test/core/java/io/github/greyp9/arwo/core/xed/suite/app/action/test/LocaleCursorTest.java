@@ -16,23 +16,24 @@ import io.github.greyp9.arwo.core.xsd.data.DataTypeRestrictions;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.w3c.dom.Document;
 
 import java.net.URL;
 import java.util.Locale;
 import java.util.logging.Logger;
 
-public class LocaleCursorTest extends TestCase {
+public class LocaleCursorTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
 
+    @Test
     public void testLocaleText() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(App.Actions.XSD);

@@ -11,22 +11,24 @@ import io.github.greyp9.arwo.core.table.row.Row;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.sort.Sort;
 import io.github.greyp9.arwo.core.table.sort.Sorts;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 import java.sql.Types;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class TableTest extends TestCase {
+public class TableTest {
 
+    @Test
     public void testTableLoadUserHome() throws Exception {
         final File folderHome = FileU.toFile(SystemU.userHome());
         final File[] files = FileU.listFiles(folderHome);
         Assert.assertTrue(files.length > 0);
     }
 
+    @Test
     public void testLoad() throws Exception {
         final RowSet rowSet = createRowSet(null, null);
         Assert.assertEquals(3, rowSet.getRows());
@@ -35,6 +37,7 @@ public class TableTest extends TestCase {
         Assert.assertEquals(Integer.valueOf(1), rowFirst.getInteger(1));
     }
 
+    @Test
     public void testSort() throws Exception {
         final Sort sort = new Sort("letter", false);
         final Sorts sorts = new Sorts(sort);
@@ -45,6 +48,7 @@ public class TableTest extends TestCase {
         Assert.assertEquals(Integer.valueOf(3), row1.getInteger(1));
     }
 
+    @Test
     public void testFilter() throws Exception {
         final Filter filter = new Filter(0, "letter", Filter.Operator.EQ, "b");
         final Filters filters = new Filters(filter);
@@ -55,6 +59,7 @@ public class TableTest extends TestCase {
         Assert.assertEquals(Integer.valueOf(2), row1.getInteger(1));
     }
 
+    @Test
     public void testSortAndFilter() throws Exception {
         final Sort sort = new Sort("letter", false);
         final Sorts sorts = new Sorts(sort);

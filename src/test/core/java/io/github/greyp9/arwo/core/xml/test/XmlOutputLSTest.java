@@ -6,8 +6,8 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.xml.DocumentU;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 import org.w3c.dom.DOMConfiguration;
 import org.w3c.dom.DOMStringList;
 import org.w3c.dom.Document;
@@ -20,9 +20,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.logging.Logger;
 
-public class XmlOutputLSTest extends TestCase {
+public class XmlOutputLSTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @Test
     public void testOutputXML() throws Exception {
         // start with known ugly xml
         final byte[] xmlUgly = StreamU.read(ResourceU.resolve(Const.XML));

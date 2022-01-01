@@ -1,13 +1,14 @@
 package io.github.greyp9.arwo.core.vm.mutex.test;
 
 import io.github.greyp9.arwo.core.vm.mutex.Counters;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 
-public class CountersTest extends TestCase {
+public class CountersTest {
     //final Logger logger = Logger.getLogger(getClass().getName());
 
-    public void testCountersAdd() throws Exception {
+    @Test
+    public void testCountersAdd() {
         final Counters counters = new Counters();
         Assert.assertEquals(0, counters.size());
         final Counters.Counter a = counters.add("A", 1);
@@ -18,7 +19,8 @@ public class CountersTest extends TestCase {
         Assert.assertEquals(1, a1);
     }
 
-    public void testCountersAddAdd() throws Exception {
+    @Test
+    public void testCountersAddAdd() {
         final Counters counters = new Counters();
         Assert.assertEquals(0, counters.size());
         counters.add("A", 1);
@@ -28,7 +30,8 @@ public class CountersTest extends TestCase {
         Assert.assertEquals(2, a);
     }
 
-    public void testCountersAddAB() throws Exception {
+    @Test
+    public void testCountersAddAB() {
         final Counters counters = new Counters();
         Assert.assertEquals(0, counters.size());
         counters.add("A", 1);

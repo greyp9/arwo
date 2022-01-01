@@ -1,15 +1,16 @@
 package io.github.greyp9.arwo.core.i18n.test;
 
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class PseudoTest extends TestCase {
+public class PseudoTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @Test
     public void testUnicodeSequenceHandling() throws Exception {
         final String input = "\\ud83c\\uddfa\\ud83c\\uddf8 EN";
         logger.finest(input);
@@ -21,6 +22,7 @@ public class PseudoTest extends TestCase {
         Assert.assertEquals("\\ud83c", group);
     }
 
+    @Test
     public void testUnicodeSequenceHandlingAlt() throws Exception {
         final String input = "\\ud83c\\uddfa\\ud83c\\uddf8 EN";
         logger.finest(input);

@@ -18,8 +18,8 @@ import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 import org.w3c.dom.Document;
 
 import javax.crypto.SecretKey;
@@ -28,9 +28,10 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.logging.Logger;
 
-public class ValueInstanceProtectTest extends TestCase {
+public class ValueInstanceProtectTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @Test
     public void testTransformProtect() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_PROTECT);
@@ -70,6 +71,7 @@ public class ValueInstanceProtectTest extends TestCase {
         Assert.assertEquals("password", plaintext);
     }
 
+    @Test
     public void testProtect() throws Exception {
         final char[] secret = "secret".toCharArray();
         final byte[] salt = Base64Codec.decode("AAECAwQFBgc=");

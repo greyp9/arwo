@@ -2,14 +2,15 @@ package io.github.greyp9.arwo.core.cron.job.test;
 
 import io.github.greyp9.arwo.core.cron.job.CronJob;
 import io.github.greyp9.arwo.core.date.XsdDateU;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.Date;
 import java.util.TimeZone;
 
-public class CronJobTest extends TestCase {
+public class CronJobTest {
 
+    @Test
     public void testJob() throws Exception {
         final CronJob cronJob = new CronJob(null, true, "* * * * * ping localhost", null);
         Assert.assertNotNull(cronJob);
@@ -17,6 +18,7 @@ public class CronJobTest extends TestCase {
         Assert.assertEquals("ping localhost", cronJob.getCommand());
     }
 
+    @Test
     public void testMatrix() throws Exception {
         for (final String[] row : Const.MATRIX) {
             // setup

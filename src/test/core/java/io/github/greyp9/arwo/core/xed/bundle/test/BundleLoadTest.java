@@ -9,8 +9,8 @@ import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 
 import javax.xml.namespace.QName;
 import java.io.IOException;
@@ -18,9 +18,10 @@ import java.net.URL;
 import java.util.Locale;
 import java.util.logging.Logger;
 
-public class BundleLoadTest extends TestCase {
+public class BundleLoadTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @Test
     public void testLoadFactory() throws Exception {
         for (int j = 0; (j < 3); ++j) {
             final XedFactory factory0 = new XedFactory();
@@ -40,6 +41,7 @@ public class BundleLoadTest extends TestCase {
         }
     }
 
+    @Test
     public void testLoadDefaultLocale() throws Exception {
         for (int i = 0; (i < 2); ++i) {
             Bundle bundle = getBundle();

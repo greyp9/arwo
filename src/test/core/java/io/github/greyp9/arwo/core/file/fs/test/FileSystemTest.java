@@ -2,17 +2,18 @@ package io.github.greyp9.arwo.core.file.fs.test;
 
 import io.github.greyp9.arwo.core.file.FileU;
 import io.github.greyp9.arwo.core.lang.SystemU;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 import java.util.Collection;
 import java.util.TreeSet;
 import java.util.logging.Logger;
 
-public class FileSystemTest extends TestCase {
+public class FileSystemTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @Test
     public void testFileAttributesLinux() throws Exception {
         if (SystemU.isLinux()) {
             File fileBashHistory = new File(SystemU.resolve("~/.bash_history"));
@@ -33,6 +34,7 @@ public class FileSystemTest extends TestCase {
         }
     }
 
+    @Test
     public void testSymlinkLinux() throws Exception {
         File fileIt = new File("/usr/bin/java");
         Assert.assertTrue(FileU.isLink(fileIt));
@@ -50,6 +52,7 @@ public class FileSystemTest extends TestCase {
         }
     }
 
+    @Test
     public void testEnumerateFolder() throws Exception {
         final String[] folderPaths = {
                 SystemU.userHome(),

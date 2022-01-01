@@ -5,15 +5,16 @@ import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.res.ResourceU;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 
 import java.security.cert.X509Certificate;
 import java.util.logging.Logger;
 
-public class CertificateTest extends TestCase {
+public class CertificateTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @Test
     public void testCodec() throws Exception {
         for (String resource : Const.RESOURCES) {
             final byte[] bytesOriginal = StreamU.read(ResourceU.resolve(resource));

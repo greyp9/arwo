@@ -2,13 +2,14 @@ package io.github.greyp9.arwo.core.date.test;
 
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.date.XsdDateU;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.Date;
 
-public class DurationResolutionTest extends TestCase {
+public class DurationResolutionTest {
 
+    @Test
     public void testDurationSignificant() throws Exception {
         final Date dateBefore = XsdDateU.fromXSDZ("2000-01-01T00:00:00.000Z");
         final Date dateAfter = XsdDateU.fromXSDZ("2001-02-02T01:01:01.001Z");

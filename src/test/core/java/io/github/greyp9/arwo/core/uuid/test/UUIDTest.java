@@ -1,19 +1,20 @@
 package io.github.greyp9.arwo.core.uuid.test;
 
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.UUID;
 import java.util.logging.Logger;
 
-public class UUIDTest extends TestCase {
+public class UUIDTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         //io.github.greyp9.arwo.core.logging.LoggerU.adjustTiny(Logger.getLogger(""));
     }
 
+    @Test
     public void testGenerateUUID() throws Exception {
         for (int i = 0; (i < 6); ++i) {
             logger.info(UUID.randomUUID().toString());

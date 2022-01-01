@@ -23,8 +23,8 @@ import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -33,9 +33,10 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.logging.Logger;
 
-public class ValueInstanceTest extends TestCase {
+public class ValueInstanceTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @Test
     public void testTransformNameForm() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_ENUM1);
@@ -67,6 +68,7 @@ public class ValueInstanceTest extends TestCase {
         Assert.assertEquals("false", nameTypeValuesTransform.getValue("file.fileType.hidden"));
     }
 
+    @Test
     public void testTransformProtectHash() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(App.Realm.XSD);

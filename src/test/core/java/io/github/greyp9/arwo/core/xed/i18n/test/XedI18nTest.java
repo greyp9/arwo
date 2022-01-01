@@ -10,8 +10,8 @@ import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitions;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 import org.w3c.dom.Document;
 
 import javax.xml.namespace.QName;
@@ -19,8 +19,9 @@ import java.net.URL;
 import java.util.Locale;
 import java.util.ResourceBundle;
 
-public class XedI18nTest extends TestCase {
+public class XedI18nTest {
 
+    @Test
     public void testRealm() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(App.Realm.XSD);

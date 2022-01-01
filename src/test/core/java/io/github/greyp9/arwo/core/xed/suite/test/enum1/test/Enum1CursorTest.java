@@ -18,8 +18,9 @@ import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -29,15 +30,15 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.logging.Logger;
 
-public class Enum1CursorTest extends TestCase {
+public class Enum1CursorTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
 
+    @Test
     public void testEnum() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_ENUM1);

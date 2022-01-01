@@ -13,8 +13,8 @@ import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitions;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -27,9 +27,10 @@ import java.util.List;
 import java.util.Random;
 import java.util.logging.Logger;
 
-public class OpOrderChoiceTest extends TestCase {
+public class OpOrderChoiceTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @Test
     public void testOrderConcrete() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_CHOICE2);

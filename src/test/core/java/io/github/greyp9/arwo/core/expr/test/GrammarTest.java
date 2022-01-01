@@ -4,10 +4,10 @@ import io.github.greyp9.arwo.core.expr.Grammar;
 import io.github.greyp9.arwo.core.expr.Node;
 import io.github.greyp9.arwo.core.expr.Operand;
 import io.github.greyp9.arwo.core.expr.Tree;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 
-public class GrammarTest extends TestCase {
+public class GrammarTest {
 
     private void checkTree(Tree tree) {
         Assert.assertNotNull(tree);
@@ -23,42 +23,49 @@ public class GrammarTest extends TestCase {
         Assert.assertTrue(tree.evaluate("AB"));
     }
 
+    @Test
     public void testGrammar1() throws Exception {
         final Grammar grammar = new Grammar("A");
         final Tree tree = grammar.createTree();
         checkTree(tree);
     }
 
+    @Test
     public void testGrammar2() throws Exception {
         final Grammar grammar = new Grammar("'A'");
         final Tree tree = grammar.createTree();
         checkTree(tree);
     }
 
+    @Test
     public void testGrammar3() throws Exception {
         final Grammar grammar = new Grammar("\"A\"");
         final Tree tree = grammar.createTree();
         checkTree(tree);
     }
 
+    @Test
     public void testGrammar4() throws Exception {
         final Grammar grammar = new Grammar("(A)");
         final Tree tree = grammar.createTree();
         checkTree(tree);
     }
 
+    @Test
     public void testGrammar5() throws Exception {
         final Grammar grammar = new Grammar("('A')");
         final Tree tree = grammar.createTree();
         checkTree(tree);
     }
 
+    @Test
     public void testGrammar6() throws Exception {
         final Grammar grammar = new Grammar("(\"A\")");
         final Tree tree = grammar.createTree();
         checkTree(tree);
     }
 
+    @Test
     public void testGrammarAND1() throws Exception {
         final Grammar grammar = new Grammar("A AND B");
         final Tree tree = grammar.createTree();
@@ -67,6 +74,7 @@ public class GrammarTest extends TestCase {
         Assert.assertTrue(tree.evaluate("AB"));
     }
 
+    @Test
     public void testGrammarAND2() throws Exception {
         final Grammar grammar = new Grammar("(A AND B)");
         final Tree tree = grammar.createTree();
@@ -75,6 +83,7 @@ public class GrammarTest extends TestCase {
         Assert.assertTrue(tree.evaluate("AB"));
     }
 
+    @Test
     public void testGrammarOR1() throws Exception {
         final Grammar grammar = new Grammar("A OR B");
         final Tree tree = grammar.createTree();
@@ -83,6 +92,7 @@ public class GrammarTest extends TestCase {
         Assert.assertTrue(tree.evaluate("AB"));
     }
 
+    @Test
     public void testGrammarOR2() throws Exception {
         final Grammar grammar = new Grammar("(A OR B)");
         final Tree tree = grammar.createTree();
@@ -91,6 +101,7 @@ public class GrammarTest extends TestCase {
         Assert.assertTrue(tree.evaluate("AB"));
     }
 
+    @Test
     public void testGrammarNOT1() throws Exception {
         final Grammar grammar = new Grammar("NOT A");
         final Tree tree = grammar.createTree();
@@ -98,6 +109,7 @@ public class GrammarTest extends TestCase {
         Assert.assertTrue(tree.evaluate("B"));
     }
 
+    @Test
     public void testGrammarNOT2() throws Exception {
         final Grammar grammar = new Grammar("(NOT A)");
         final Tree tree = grammar.createTree();
@@ -105,6 +117,7 @@ public class GrammarTest extends TestCase {
         Assert.assertTrue(tree.evaluate("B"));
     }
 
+    @Test
     public void testGrammarInvalid1() throws Exception {
         final Grammar grammar = new Grammar("('A' 'OR' 'B')");
         try {

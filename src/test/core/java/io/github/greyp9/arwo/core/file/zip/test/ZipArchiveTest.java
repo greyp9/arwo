@@ -7,7 +7,7 @@ import io.github.greyp9.arwo.core.file.find.FindInFolderQuery;
 import io.github.greyp9.arwo.core.file.group.FileGrouper;
 import io.github.greyp9.arwo.core.file.zip.ZipAppender;
 import io.github.greyp9.arwo.core.lang.SystemU;
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.io.File;
 import java.util.Collection;
@@ -15,9 +15,10 @@ import java.util.Date;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class ZipArchiveTest extends TestCase {
+public class ZipArchiveTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @Test
     public void testCategorize() throws Exception {
         boolean isEnabledCreateZip = System.getProperties().isEmpty();
         final String comment = XsdDateU.toXSDZMillis(new Date());

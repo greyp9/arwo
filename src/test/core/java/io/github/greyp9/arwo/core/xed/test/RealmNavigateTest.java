@@ -15,8 +15,9 @@ import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -24,15 +25,15 @@ import javax.xml.namespace.QName;
 import java.net.URL;
 import java.util.logging.Logger;
 
-public class RealmNavigateTest extends TestCase {
+public class RealmNavigateTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
 
+    @Test
     public void testNavigateDocument() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(App.Realm.XSD);

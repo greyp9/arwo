@@ -8,20 +8,21 @@ import io.github.greyp9.arwo.core.xed.session.XedEntries;
 import io.github.greyp9.arwo.core.xed.session.XedEntry;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
 import io.github.greyp9.arwo.core.xed.session.XedSessions;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.logging.Logger;
 
-public class XedSessionsTest extends TestCase {
+public class XedSessionsTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
 
+    @Test
     public void testEntries() throws Exception {
         XedEntry entryRealm = new XedEntry(
                 null, "/users", App.Realm.QNAME, null, App.Realm.XSD, null, null);
@@ -34,6 +35,7 @@ public class XedSessionsTest extends TestCase {
         Assert.assertEquals(entryLocale, entries.get("/locale"));
     }
 
+    @Test
     public void testSessions() throws Exception {
         final String xsdPathRealm = ResourceU.resolve(App.Realm.XSD).toExternalForm();
         final String xsdPathActions = ResourceU.resolve(App.Actions.XSD).toExternalForm();

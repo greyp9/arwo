@@ -4,19 +4,20 @@ import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.httpclient.HttpClientU;
 import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
-import junit.framework.TestCase;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.util.logging.Logger;
 
-public class NameTypeValuesTest extends TestCase {
+public class NameTypeValuesTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
 
+    @Test
     public void testUseForHeaders() throws Exception {
         final String basicAuth = HttpClientU.toBasicAuth("test", "test".toCharArray());
         final NameTypeValues headers = NTV.create(

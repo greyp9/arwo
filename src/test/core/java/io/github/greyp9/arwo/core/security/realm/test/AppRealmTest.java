@@ -8,28 +8,30 @@ import io.github.greyp9.arwo.core.security.realm.AppPrincipal;
 import io.github.greyp9.arwo.core.security.realm.AppRealm;
 import io.github.greyp9.arwo.core.security.realm.AuthPrincipal;
 import io.github.greyp9.arwo.core.security.update.AppRealmFactory;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 
-public class AppRealmTest extends TestCase {
+public class AppRealmTest {
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(java.util.logging.Logger.getLogger(""));
     }
 
+    @Test
     public void testHashCredential() throws Exception {
         final String salt = "arwo-salt", credential = "arwo-credential";
         final String credentialHash = AppRealm.hashCredential(salt, credential);
         Assert.assertEquals("expectedHash", "lSi8VXKeMAEv7Qd41GpW5oh5Gfwkq1qpKUB6kn/NARk=", credentialHash);
     }
 
+    @Test
     public void testAppRealmFromScratch() throws Exception {
         // setup realm
         final String realmName = getClass().getSimpleName();
@@ -58,6 +60,7 @@ public class AppRealmTest extends TestCase {
         Assert.assertTrue("user should authorize", userInRoleRead);
     }
 
+    @Test
     public void testAppRealmFromDocument() throws Exception {
         // realm schema
         final URL urlInitial = ResourceU.resolve(App.Realm.XSD);

@@ -1,13 +1,14 @@
 package io.github.greyp9.arwo.core.url.test;
 
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 
 import java.net.URI;
 import java.net.URL;
 
-public class UrlProtocolTest extends TestCase {
+public class UrlProtocolTest {
 
+    @Test
     public void testProtocolHttps() throws Exception {
         final URL url = new URL("https://root@localhost:8443/hello/world/?a=1&b=2#ref");
         Assert.assertEquals("https", url.getProtocol());
@@ -21,6 +22,7 @@ public class UrlProtocolTest extends TestCase {
         Assert.assertEquals("ref", url.getRef());
     }
 
+    @Test
     public void testProtocolProxy() throws Exception {
         final URI uri = new URI("proxy://root@localhost:8443/");
         Assert.assertEquals("proxy", uri.getScheme());

@@ -4,15 +4,16 @@ import io.github.greyp9.arwo.core.cron.job.CronJob;
 import io.github.greyp9.arwo.core.cron.tab.CronTab;
 import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.date.XsdDateU;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
-public class CronTabTest extends TestCase {
+public class CronTabTest {
 
+    @Test
     public void testTabFrequent() throws Exception {
         final Collection<CronJob> jobs = new ArrayList<CronJob>();
         jobs.add(new CronJob("every-minute", true, "* * * * * ls", null));
@@ -28,6 +29,7 @@ public class CronTabTest extends TestCase {
         Assert.assertEquals(1, cronTab.getJobsReady(dateNext).size());
     }
 
+    @Test
     public void testTabInfrequent() throws Exception {
         final Collection<CronJob> jobs = new ArrayList<CronJob>();
         jobs.add(new CronJob("every-day", true, "0 12 * * * ls", null));

@@ -4,11 +4,12 @@ import io.github.greyp9.arwo.core.expr.Node;
 import io.github.greyp9.arwo.core.expr.Operand;
 import io.github.greyp9.arwo.core.expr.Operator;
 import io.github.greyp9.arwo.core.expr.Tree;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 
-public class ExpressionTest extends TestCase {
+public class ExpressionTest {
 
+    @Test
     public void testSimple() throws Exception {
         final Node nodeA = new Operand("A");
         final Node nodeB = new Operand("B");
@@ -16,6 +17,7 @@ public class ExpressionTest extends TestCase {
         Assert.assertEquals("(A OR B)", node.render());
     }
 
+    @Test
     public void testComplex() throws Exception {
         final Node nodeA = new Operand("A");
         final Node nodeB = new Operand("B");
@@ -27,6 +29,7 @@ public class ExpressionTest extends TestCase {
         Assert.assertEquals("((A OR B) AND (C OR D))", node.render());
     }
 
+    @Test
     public void testEvaluateOrSimple() throws Exception {
         final Node nodeA = new Operand("A");
         final Node nodeB = new Operand("B");
@@ -37,6 +40,7 @@ public class ExpressionTest extends TestCase {
         Assert.assertFalse(tree.evaluate("C"));
     }
 
+    @Test
     public void testEvaluateAndSimple() throws Exception {
         final Node nodeA = new Operand("A");
         final Node nodeB = new Operand("B");
@@ -48,6 +52,7 @@ public class ExpressionTest extends TestCase {
         Assert.assertTrue(tree.evaluate("AB"));
     }
 
+    @Test
     public void testEvaluateNotSimple() throws Exception {
         final Node nodeA = new Operand("A");
         final Node nodeNotA = new Operator(null, nodeA, "NOT");
@@ -56,6 +61,7 @@ public class ExpressionTest extends TestCase {
         Assert.assertTrue(tree.evaluate("B"));
     }
 
+    @Test
     public void testEvaluateComplex() throws Exception {
         final Node nodeA = new Operand("A");
         final Node nodeB = new Operand("B");

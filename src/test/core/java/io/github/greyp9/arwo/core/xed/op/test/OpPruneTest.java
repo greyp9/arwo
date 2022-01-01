@@ -9,17 +9,18 @@ import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.net.URL;
 import java.util.logging.Logger;
 
-public class OpPruneTest extends TestCase {
+public class OpPruneTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @Test
     public void testPruneRealm() throws Exception {
         // init
         final Document document = DocumentU.createDocumentSafe(App.Realm.QNAME);

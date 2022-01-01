@@ -6,22 +6,23 @@ import io.github.greyp9.arwo.core.url.URLCodec;
 import io.github.greyp9.arwo.core.xsd.atom.SchemaAtom;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollection;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollectionFactory;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 
 import java.net.URL;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class SchemaSourceAppTest extends TestCase {
+public class SchemaSourceAppTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         //io.github.greyp9.arwo.core.logging.LoggerU.adjustShort(Logger.getLogger(""));
     }
 
+    @Test
     public void testAssembleSchemaCollection() throws Exception {
         for (String xsd : TestApp.Resources.XSD_ARRAY) {
             URL urlInitial = ResourceU.resolve(xsd);
@@ -43,6 +44,7 @@ public class SchemaSourceAppTest extends TestCase {
         }
     }
 
+    @Test
     public void testNoCatalog() throws Exception {
         for (final String xsd : TestApp.Resources.XSD_ARRAY) {
             final URL urlInitial = ResourceU.resolve(xsd);

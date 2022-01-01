@@ -3,13 +3,14 @@ package io.github.greyp9.arwo.core.value.test;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.value.Matrix;
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.util.logging.Logger;
 
-public class MatrixTest extends TestCase {
+public class MatrixTest {
     Logger logger = Logger.getLogger(getClass().getName());
 
+    @Test
     public void testMatrix() throws Exception {
         final int rows = 3, columns = 3;
         final Matrix matrix = new Matrix(rows, columns);
@@ -23,6 +24,7 @@ public class MatrixTest extends TestCase {
         logger.info(CRCU.crc32String(UTF8Codec.toBytes(render)) + "/" + render.length());
     }
 
+    @Test
     public void testMatrixX() throws Exception {
         final int rows = 3, columns = 3;
         final Matrix matrix = new Matrix(rows, columns);
@@ -36,6 +38,7 @@ public class MatrixTest extends TestCase {
         logger.info(CRCU.crc32String(UTF8Codec.toBytes(render)) + "/" + render.length());
     }
 
+    @Test
     public void testMatrixXColumnHeaders() throws Exception {
         final int rows = 3, columns = 3;
         final Matrix matrix = new Matrix(rows, columns);

@@ -3,8 +3,8 @@ package io.github.greyp9.arwo.core.i18n.test;
 import io.github.greyp9.arwo.core.i18n.PseudoI18n;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.url.URLCodec;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 import java.net.URL;
@@ -12,9 +12,10 @@ import java.util.Locale;
 import java.util.ResourceBundle;
 import java.util.logging.Logger;
 
-public class Pseudo2Test extends TestCase {
+public class Pseudo2Test {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @Test
     public void testPartialHandling() throws Exception {
         final URL url = ResourceU.resolve("io/github/greyp9/arwo/properties/i18n/test.properties");
         Assert.assertNotNull(url);

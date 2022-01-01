@@ -7,16 +7,17 @@ import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.op.OpFill;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 import org.w3c.dom.Document;
 
 import java.net.URL;
 import java.util.logging.Logger;
 
-public class OpFillTest extends TestCase {
+public class OpFillTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @Test
     public void testFillRealm() throws Exception {
         // init
         final Document document = DocumentU.createDocumentSafe(App.Realm.QNAME);

@@ -8,7 +8,7 @@ import io.github.greyp9.arwo.core.file.find.FindInFolderQuery;
 import io.github.greyp9.arwo.core.file.group.FileRegrouper;
 import io.github.greyp9.arwo.core.file.zip.ZipAppender;
 import io.github.greyp9.arwo.core.lang.SystemU;
-import junit.framework.TestCase;
+import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +17,7 @@ import java.util.Date;
 import java.util.Map;
 import java.util.logging.Logger;
 
-public class ZipArchiveZTest extends TestCase {
+public class ZipArchiveZTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
     private void doGrouping(Date dateEntry, final Collection<File> grouping) throws IOException {
@@ -40,6 +40,7 @@ public class ZipArchiveZTest extends TestCase {
         }
     }
 
+    @Test
     public void testCategorize() throws Exception {
         final FileRegrouper fileRegrouper = new FileRegrouper(DurationU.Const.ONE_HOUR);
         final File filePath = new File(SystemU.tempDir());

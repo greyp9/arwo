@@ -10,8 +10,8 @@ import io.github.greyp9.arwo.core.file.zip.ZipMetaData;
 import io.github.greyp9.arwo.core.file.zip.ZipVolume;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.lang.SystemU;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -19,8 +19,9 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 
-public class ZipAppenderTest extends TestCase {
+public class ZipAppenderTest {
 
+    @Test
     public void testCreate() throws Exception {
         // setup
         final Date date = DateU.floor(new Date(), "PT2S");  // time resolution recorded in zip

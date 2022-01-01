@@ -6,15 +6,16 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.xml.DocumentU;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 import org.w3c.dom.Document;
 
 import java.util.logging.Logger;
 
-public class XmlOutputTest extends TestCase {
+public class XmlOutputTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @Test
     public void testOutputXML() throws Exception {
         // start with known ugly xml
         final byte[] xmlUgly = StreamU.read(ResourceU.resolve(Const.XML));

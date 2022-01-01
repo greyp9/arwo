@@ -19,8 +19,9 @@ import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Before;
+import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -30,15 +31,15 @@ import java.util.Collection;
 import java.util.Locale;
 import java.util.logging.Logger;
 
-public class Choice1CursorTest extends TestCase {
+public class Choice1CursorTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Override
+    @Before
     public void setUp() throws Exception {
-        super.setUp();
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
 
+    @Test
     public void testChoice() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_CHOICE1);
@@ -119,6 +120,7 @@ public class Choice1CursorTest extends TestCase {
         Assert.assertEquals("/2d467/0ca19/3a1a0/20111/d7ab5/", cursorTaskA.getURI());
     }
 
+    @Test
     public void testChoiceExisting() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_CHOICE1);
@@ -152,6 +154,7 @@ public class Choice1CursorTest extends TestCase {
         logger.finest("\n" + DocumentU.toString(document));
     }
 
+    @Test
     public void testChoiceUpdateExisting() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_CHOICE1);

@@ -16,8 +16,8 @@ import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -25,9 +25,10 @@ import javax.xml.namespace.QName;
 import java.net.URL;
 import java.util.logging.Logger;
 
-public class ClipboardTest extends TestCase {
+public class ClipboardTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @Test
     public void testClipboardRealm() throws Exception {
         // load model
         final URL urlInitial = ResourceU.resolve(App.Realm.XSD);

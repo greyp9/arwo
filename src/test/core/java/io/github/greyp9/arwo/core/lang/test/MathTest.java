@@ -1,11 +1,12 @@
 package io.github.greyp9.arwo.core.lang.test;
 
 import io.github.greyp9.arwo.core.lang.MathU;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 
-public class MathTest extends TestCase {
+public class MathTest {
 
+    @Test
     public void testLogBase2() throws Exception {
         Assert.assertEquals(0, MathU.log(1L, 2));
         Assert.assertEquals(1, MathU.log(2L, 2));
@@ -25,6 +26,7 @@ public class MathTest extends TestCase {
         Assert.assertEquals(7, MathU.log(255L, 2));
     }
 
+    @Test
     public void testLogBase3() throws Exception {
         Assert.assertEquals(0, MathU.log(1L, 3));
         Assert.assertEquals(1, MathU.log(3L, 3));

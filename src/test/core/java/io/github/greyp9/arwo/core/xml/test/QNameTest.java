@@ -4,17 +4,18 @@ import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 
 import javax.xml.namespace.QName;
 import java.net.URL;
 import java.util.logging.Logger;
 
-public class QNameTest extends TestCase {
+public class QNameTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    public void testQNameColon() throws Exception {
+    @Test
+    public void testQNameColon() {
         final String qnameString = "a:b";
         final QName qname = QNameU.getQNameColon(qnameString);
         Assert.assertNotNull(qname);
@@ -24,7 +25,8 @@ public class QNameTest extends TestCase {
         logger.finest(qname.toString());
     }
 
-    public void testQNameToString() throws Exception {
+    @Test
+    public void testQNameToString() {
         final String qnameString = "{a}b";
         final QName qname = QNameU.getQName(qnameString);
         Assert.assertNotNull(qname);
@@ -34,6 +36,7 @@ public class QNameTest extends TestCase {
         logger.finest(qname.toString());
     }
 
+    @Test
     public void testQNameContext() throws Exception {
         final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);

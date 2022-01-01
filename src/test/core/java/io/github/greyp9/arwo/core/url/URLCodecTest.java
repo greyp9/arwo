@@ -1,8 +1,8 @@
 package io.github.greyp9.arwo.core.url;
 
 import io.github.greyp9.arwo.core.vm.app.ManifestU;
-import junit.framework.TestCase;
 import org.junit.Assert;
+import org.junit.Test;
 
 import java.io.File;
 import java.net.JarURLConnection;
@@ -11,8 +11,9 @@ import java.net.URLConnection;
 import java.util.jar.JarFile;
 import java.util.jar.Manifest;
 
-public class URLCodecTest extends TestCase {
+public class URLCodecTest {
 
+    @Test
     public void testEncodePath() throws Exception {
         final String pathA = "/a b/c d/e f.txt";
         final String pathEncoded = URLCodec.encodePath(pathA);
