@@ -9,7 +9,11 @@ import org.w3c.dom.Element;
 
 import java.io.IOException;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 public final class EnvironmentU {
 
@@ -17,6 +21,7 @@ public final class EnvironmentU {
     }
 
     public static byte[] getEnv(final Collection<String> skip) throws IOException {
+        final List<Pattern> skipPatterns = skip.stream().map(Pattern::compile).collect(Collectors.toList());
         final String uri = App.Config.QNAME_APP.getNamespaceURI();
         final Document document = DocumentU.createDocument("sysenv", uri);
         final Element element = document.getDocumentElement();
@@ -24,7 +29,9 @@ public final class EnvironmentU {
         for (final Map.Entry<String, String> entry : environment.entrySet()) {
             final String key = entry.getKey();
             final String value = entry.getValue();
-            if (!skip.contains(key)) {
+            final Matcher matcher = skipPatterns.stream().map(p -> p.matcher(key))
+                    .filter(Matcher::matches).findAny().orElse(null);
+            if (matcher == null) {
                 ElementU.addElement(element, "entry", value, NTV.create("key", key));
             }
         }
