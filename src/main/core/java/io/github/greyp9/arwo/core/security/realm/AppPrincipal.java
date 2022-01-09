@@ -15,7 +15,7 @@ public final class AppPrincipal implements java.security.Principal {
     public AppPrincipal(final String name, final boolean authenticated, final Collection<String> roles) {
         this.name = name;
         this.authenticated = authenticated;
-        this.roles = new ArrayList<String>();
+        this.roles = new ArrayList<>();
         if (roles != null) {
             this.roles.addAll(roles);
         }

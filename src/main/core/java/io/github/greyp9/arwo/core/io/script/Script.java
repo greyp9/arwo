@@ -101,7 +101,7 @@ public class Script {
 
     public final synchronized CommandWork startCommand(
             final CommandToDo command, final String charset, final String dir) {
-        final CommandWork commandWork = new CommandWork(dir, command.getStdin(), charset, new Date(), null);
+        final CommandWork commandWork = new CommandWork(dir, command.getStdin(), charset, getID(), new Date(), null);
         commandsToDo.remove(command);
         commandsWork.add(commandWork);
         return commandWork;

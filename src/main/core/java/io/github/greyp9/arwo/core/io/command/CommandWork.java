@@ -8,6 +8,7 @@ import java.util.Date;
 public class CommandWork extends Command {
     private final String dir;
     private final String stdin;
+    private final String name;
     private final long dateStart;
     private final Integer pid;
     private final ByteBuffer byteBufferStdin;
@@ -42,6 +43,10 @@ public class CommandWork extends Command {
         }
     }
 
+    public final String getName() {
+        return name;
+    }
+
     @Override
     public final Date getStart() {
         return new Date(dateStart);
@@ -74,11 +79,12 @@ public class CommandWork extends Command {
         return byteBufferStderr;
     }
 
-    public CommandWork(
-            final String dir, final String stdin, final String charset, final Date dateStart, final Integer pid) {
+    public CommandWork(final String dir, final String stdin, final String charset,
+                       final String name, final Date dateStart, final Integer pid) {
         super();
         this.dir = dir;
         this.stdin = stdin;
+        this.name = name;
         this.dateStart = dateStart.getTime();
         this.pid = pid;
         this.byteBufferStdin = new ByteBuffer(charset);
@@ -90,6 +96,7 @@ public class CommandWork extends Command {
         super();
         this.stdin = command.getStdin();
         this.dir = command.getDir();
+        this.name = command.getName();
         this.dateStart = command.getStart().getTime();
         this.pid = pid;
         this.byteBufferStdin = command.getByteBufferStdin();

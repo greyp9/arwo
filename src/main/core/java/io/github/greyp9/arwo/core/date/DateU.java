@@ -27,6 +27,10 @@ public final class DateU {
         return (left.before(right) ? left : right);
     }
 
+    public static Date ceiling(final Date date, final String interval) {
+        return DurationU.add(floor(date, interval), Const.TZ_GMT, interval);
+    }
+
     public static Date floor(final Date date, final String interval) {
         final Date datePlus = DurationU.add(date, Const.TZ_GMT, interval);
         final long durationMillis = datePlus.getTime() - date.getTime();

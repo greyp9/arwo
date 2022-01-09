@@ -13,7 +13,7 @@ public class History {
     private final DateX dateX;
 
     public History() {
-        this.scripts = new ArrayList<Script>();
+        this.scripts = new ArrayList<>();
         this.dateX = DateX.Factory.createURL();
     }
 
@@ -23,6 +23,10 @@ public class History {
 
     public final synchronized void add(final Script script) {
         scripts.add(script);
+    }
+
+    public final synchronized void remove(final Script script) {
+        scripts.remove(script);
     }
 
     public final synchronized Script find(final String id) {

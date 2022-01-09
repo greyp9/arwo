@@ -17,7 +17,6 @@ import io.github.greyp9.arwo.core.lang.ShellU;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.value.Value;
-import io.github.greyp9.arwo.core.vm.exec.ThreadPoolU;
 import io.github.greyp9.arwo.core.vm.mutex.MutexU;
 import io.github.greyp9.arwo.core.vm.process.ProcessU;
 import io.github.greyp9.arwo.core.vm.thread.ThreadU;
@@ -26,9 +25,10 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 import java.util.concurrent.ExecutorService;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @SuppressWarnings("PMD.DoNotUseThreads")
@@ -36,10 +36,16 @@ public class ScriptRunnable implements Runnable {
     private final Logger logger = Logger.getLogger(getClass().getName());
     private final Script script;
     private final ScriptContext context;
+    private Collection<CommandWork> commands;
+
+    public final void setCommands(final Collection<CommandWork> commands) {
+        this.commands = commands;
+    }
 
     public ScriptRunnable(final Script script, final ScriptContext context) {
         this.script = script;
         this.context = context;
+        this.commands = new ArrayList<>();
     }
 
     @Override
@@ -50,7 +56,7 @@ public class ScriptRunnable implements Runnable {
         final File file = context.getFile();
         final String href = context.getHref();
         try {
-            checkThreadPool(context.getExecutorStream());
+            //checkThreadPool(context.getExecutorStream());
             logger.entering(getClass().getName(), Runnable.class.getName());
             script.start();
             runInner();
@@ -69,12 +75,14 @@ public class ScriptRunnable implements Runnable {
         }
     }
 
+/*
     private void checkThreadPool(final ExecutorService executorService) {
         // need 3 new threads for streams
         final boolean isAvailable = ThreadPoolU.isAvailablePool(executorService, 3);  // UserExecutor.N_THREAD_STREAMS
         final Level level = isAvailable ? Level.FINE : Level.WARNING;
         logger.log(level, ThreadPoolU.getTelemetry(executorService));
     }
+*/
 
     @SuppressWarnings("PMD.AssignmentInOperand")
     private void runInner() throws IOException {
@@ -97,7 +105,15 @@ public class ScriptRunnable implements Runnable {
             final Process process = runtime.exec(commandArray, null, dir);
             final Integer processId = ProcessU.getProcessId(process);
             commandWork = script.updateCommand(commandWork, processId);
-            exitValue = monitorCommand(commandWork, process);
+
+            // IN PROGRESS COMMANDS ARE AVAILABLE TO CHECK PROGRESS
+            try {
+                commands.add(commandWork);
+                exitValue = monitorCommand(commandWork, process);
+            } finally {
+                commands.remove(commandWork);
+            }
+
         } catch (IOException e) {
             commandWork.getByteBufferStderr().addString(e.getMessage());
         } finally {

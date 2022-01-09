@@ -6,6 +6,8 @@
     <artifactId>arwo</artifactId>
     <version>0.0.1</version>
     <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <checkstyle.version>8.45.1</checkstyle.version>
         <pmd.version>6.38.0</pmd.version>

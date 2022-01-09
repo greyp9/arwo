@@ -12,8 +12,9 @@ public final class ThreadPoolU {
         final StringBuilder buffer = new StringBuilder();
         if (executorService instanceof ThreadPoolExecutor) {
             final ThreadPoolExecutor tpe = (ThreadPoolExecutor) executorService;
-            buffer.append(String.format("%s,TASKS=%d,ACTIVE=%d,MAX=%d,QUEUED=%d", tpe.getClass().getSimpleName(),
-                    tpe.getTaskCount(), tpe.getActiveCount(), tpe.getMaximumPoolSize(), tpe.getQueue().size()));
+            buffer.append(String.format("%s,MAX=%d,TASKS=%d,COMPLETED=%d,ACTIVE=%d,QUEUED=%d",
+                    tpe.getClass().getSimpleName(), tpe.getMaximumPoolSize(), tpe.getTaskCount(),
+                    tpe.getCompletedTaskCount(), tpe.getActiveCount(), tpe.getQueue().size()));
         }
         return buffer.toString();
     }
