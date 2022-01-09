@@ -17,6 +17,7 @@ import io.github.greyp9.arwo.core.lang.ShellU;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.core.vm.exec.ThreadPoolU;
 import io.github.greyp9.arwo.core.vm.mutex.MutexU;
 import io.github.greyp9.arwo.core.vm.process.ProcessU;
 import io.github.greyp9.arwo.core.vm.thread.ThreadU;
@@ -29,6 +30,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.concurrent.ExecutorService;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 @SuppressWarnings("PMD.DoNotUseThreads")
@@ -56,7 +58,7 @@ public class ScriptRunnable implements Runnable {
         final File file = context.getFile();
         final String href = context.getHref();
         try {
-            //checkThreadPool(context.getExecutorStream());
+            checkThreadPool(context.getExecutorStream());
             logger.entering(getClass().getName(), Runnable.class.getName());
             script.start();
             runInner();
@@ -75,14 +77,15 @@ public class ScriptRunnable implements Runnable {
         }
     }
 
-/*
-    private void checkThreadPool(final ExecutorService executorService) {
-        // need 3 new threads for streams
-        final boolean isAvailable = ThreadPoolU.isAvailablePool(executorService, 3);  // UserExecutor.N_THREAD_STREAMS
+    private void checkThreadPool(final ExecutorService executorService) throws IOException {
+        // need 3 available threads for streams (stdin, stdout, stderr)
+        final boolean isAvailable = ThreadPoolU.isAvailablePool(executorService, Const.N_THREAD_STREAMS);
         final Level level = isAvailable ? Level.FINE : Level.WARNING;
         logger.log(level, ThreadPoolU.getTelemetry(executorService));
+        if (!isAvailable) {
+            throw new IOException(new IllegalStateException("insufficient threads available"));
+        }
     }
-*/
 
     @SuppressWarnings("PMD.AssignmentInOperand")
     private void runInner() throws IOException {
@@ -163,5 +166,9 @@ public class ScriptRunnable implements Runnable {
         } catch (IllegalThreadStateException e) {
             return null;
         }
+    }
+
+    private static class Const {
+        private static final int N_THREAD_STREAMS = 3;
     }
 }
