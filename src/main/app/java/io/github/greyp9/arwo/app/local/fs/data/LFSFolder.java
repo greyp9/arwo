@@ -45,7 +45,7 @@ public class LFSFolder {
 
     public static RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData("type", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("type", Types.DATALINK),  // i18n metadata
                 new ColumnMetaData("folder", Types.VARCHAR, true),  // i18n metadata
                 new ColumnMetaData("name", Types.VARCHAR, true),  // i18n metadata
                 new ColumnMetaData("mtime", Types.TIMESTAMP),  // i18n metadata

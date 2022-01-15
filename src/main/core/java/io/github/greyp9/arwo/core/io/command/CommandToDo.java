@@ -45,8 +45,8 @@ public class CommandToDo extends Command {
         return null;
     }
 
-    public CommandToDo(final String stdin) {
-        super();
+    public CommandToDo(final Date dateScheduled, final String stdin) {
+        super(dateScheduled);
         this.stdin = stdin;
     }
 }

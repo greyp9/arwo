@@ -4,6 +4,7 @@ import java.util.Date;
 
 @SuppressWarnings("PMD.AbstractNaming")
 public abstract class Command {
+    private final Date dateScheduled;
 
     public abstract String getDir();
 
@@ -20,6 +21,14 @@ public abstract class Command {
     public abstract Integer getPID();
 
     public abstract Integer getExitValue();
+
+    public Command(final Date dateScheduled) {
+        this.dateScheduled = dateScheduled;
+    }
+
+    public final Date getScheduled() {
+        return dateScheduled;
+    }
 
     public final Long getElapsed(final Date date) {
         final Date dateA = getStart();

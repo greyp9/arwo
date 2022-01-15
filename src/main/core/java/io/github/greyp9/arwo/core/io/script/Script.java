@@ -57,7 +57,7 @@ public class Script {
         this.commandsDone = new ArrayList<CommandDone>();
         final Collection<String> stdinLines = LineU.toLines(text);
         for (final String stdin : stdinLines) {
-            commandsToDo.add(new CommandToDo(stdin));
+            commandsToDo.add(new CommandToDo(date, stdin));
         }
     }
 
@@ -101,7 +101,8 @@ public class Script {
 
     public final synchronized CommandWork startCommand(
             final CommandToDo command, final String charset, final String dir) {
-        final CommandWork commandWork = new CommandWork(dir, command.getStdin(), charset, getID(), new Date(), null);
+        final CommandWork commandWork = new CommandWork(
+                dir, command.getStdin(), charset, getID(), command.getScheduled(), new Date(), null);
         commandsToDo.remove(command);
         commandsWork.add(commandWork);
         return commandWork;

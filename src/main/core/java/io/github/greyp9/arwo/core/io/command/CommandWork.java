@@ -80,8 +80,8 @@ public class CommandWork extends Command {
     }
 
     public CommandWork(final String dir, final String stdin, final String charset,
-                       final String name, final Date dateStart, final Integer pid) {
-        super();
+                       final String name, final Date dateScheduled, final Date dateStart, final Integer pid) {
+        super(dateScheduled);
         this.dir = dir;
         this.stdin = stdin;
         this.name = name;
@@ -93,7 +93,7 @@ public class CommandWork extends Command {
     }
 
     public CommandWork(final CommandWork command, final Integer pid) {
-        super();
+        super(command.getScheduled());
         this.stdin = command.getStdin();
         this.dir = command.getDir();
         this.name = command.getName();

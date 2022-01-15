@@ -82,6 +82,14 @@
         </xsd:sequence>
     </xsd:complexType>
 
+    <xsd:element name='standby' type='action:standbyType'/>
+
+    <xsd:complexType name='standbyType'>
+        <xsd:sequence>
+            <xsd:element name='duration' type='xsd:string'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
     <xsd:element name='textExpression' type='action:textExpressionType'/>
 
     <xsd:complexType name='textExpressionType'>

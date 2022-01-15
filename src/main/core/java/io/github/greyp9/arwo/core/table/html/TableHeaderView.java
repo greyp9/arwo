@@ -10,6 +10,7 @@ import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.table.core.TableU;
 import io.github.greyp9.arwo.core.table.filter.Filter;
 import io.github.greyp9.arwo.core.table.filter.Filters;
+import io.github.greyp9.arwo.core.table.metadata.ColumnMetaData;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
 import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
@@ -159,7 +160,10 @@ public class TableHeaderView {
             final SubmitToken token = new SubmitToken(App.Target.VIEW_STATE, ViewState.Action.SORT, tableID, name);
             addControl(th, text, token, null, "table.column.sort.DETAIL", Html.VALUE_3);
         } else {
-            ElementU.addElement(tr, Html.TH, text, NTV.create(Html.CLASS, ViewState.Const.COLUMNS));
+            final ColumnMetaData columnMetaData = metaData.getColumnMetaData(i);
+            final String style = Value.join(Html.SPACE, ViewState.Const.COLUMNS,
+                    TableU.toCSS(columnMetaData.getType(), null));
+            ElementU.addElement(tr, Html.TH, text, NTV.create(Html.CLASS, style));
         }
     }
 

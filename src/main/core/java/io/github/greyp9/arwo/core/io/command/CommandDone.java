@@ -54,7 +54,7 @@ public class CommandDone extends Command {
 
     public CommandDone(final CommandWork command, final String stdout, final String stderr,
                        final Date dateFinish, final Integer exitValue) {
-        super();
+        super(command.getScheduled());
         this.dir = command.getDir();
         this.stdin = command.getStdin();
         this.stdout = stdout;

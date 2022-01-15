@@ -80,6 +80,19 @@ font-size: medium;
 font-weight: bold;
 }
 
+th.text,
+td.text
+{
+text-align: left;
+}
+
+th.link,
+td.link
+{
+text-align: center;
+}
+
+th.number,
 td.number
 {
 text-align: right;

@@ -129,6 +129,7 @@ public final class App {
         public static final String LABEL = "label";
         public static final String LEFT = "left";
         public static final String LEVEL = "level";
+        public static final String LINK = "link";
         public static final String MENU = "menu";
         public static final String MENUS = "menus";
         public static final String MIN = "min";
