@@ -12,7 +12,8 @@ public class ValueInstanceTransform {
     }
 
     public final ValueInstance transform(final ValueInstance valueInstance) throws IOException {
-        final ValueInstance valueInstanceName = new NameTransform().transform(valueInstance);
+        final ValueInstance valueInstanceDefault = new DefaultTransform().transform(valueInstance);
+        final ValueInstance valueInstanceName = new NameTransform().transform(valueInstanceDefault);
         final ValueInstance valueInstanceForm = new FormTransform().transform(valueInstanceName);
         final ValueInstance valueInstancePro1 = new ProtectHashTransform(valueInstanceForm, context).transform();
         final ValueInstance valueInstancePro2 = new ProtectKeyTransform(valueInstancePro1, context).transform();

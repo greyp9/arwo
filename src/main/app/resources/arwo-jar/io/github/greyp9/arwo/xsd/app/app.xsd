@@ -470,7 +470,7 @@
     <xsd:complexType name="lshFavoriteType">
         <xsd:attribute name='command' type='xsd:string'/>
         <xsd:attribute name='comment' type='xsd:string'/>
-        <xsd:attribute name='enabled' type='xsd:boolean'/>
+        <xsd:attribute name='enabled' type='xsd:boolean' default='true'/>
     </xsd:complexType>
 
     <xsd:complexType name="lfsFavoriteType">
