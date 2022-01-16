@@ -4,11 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>io.github.greyp9</groupId>
     <artifactId>arwo</artifactId>
-    <version>0.0.1</version>
+    <version>0.2.0-SNAPSHOT</version>
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
         <checkstyle.version>8.45.1</checkstyle.version>
         <pmd.version>6.38.0</pmd.version>
     </properties>
@@ -142,10 +143,54 @@
                     </execution>
                 </executions>
             </plugin>
+<!-- alternate means of token replacement
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>replacer</artifactId>
+                <version>1.5.3</version>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <file>target/classes/arwo-war/index.html</file>
+                    <replacements>
+                        <replacement>
+                            <token>SPECIFICATION_VERSION</token>
+                            <value>${project.version}</value>
+                        </replacement>
+                        <replacement>
+                            <token>IMPLEMENTATION_VERSION</token>
+                            <value>${project.version}</value>
+                        </replacement>
+                    </replacements>
+                </configuration>
+            </plugin>
+-->
             <plugin>
                 <artifactId>maven-antrun-plugin</artifactId>
                 <version>1.8</version>
                 <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <tasks>
+                                <replace token="SPECIFICATION_VERSION" value="${project.version}" dir="target/classes">
+                                    <include name="arwo-war/index.html"/>
+                                </replace>
+                                <replace token="IMPLEMENTATION_VERSION" value="${maven.build.timestamp}" dir="target/classes">
+                                    <include name="arwo-war/index.html"/>
+                                </replace>
+                            </tasks>
+                        </configuration>
+                    </execution>
                     <execution>
                         <id>make-css</id>
                         <phase>compile</phase>
