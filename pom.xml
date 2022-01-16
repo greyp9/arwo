@@ -221,6 +221,7 @@
                 <directory>src/main/app/resources/webapp</directory>
                 <includes>
                     <include>arwo-war/ico/*.ico</include>
+                    <include>arwo-war/*.html</include>
                 </includes>
             </resource>
         </resources>
