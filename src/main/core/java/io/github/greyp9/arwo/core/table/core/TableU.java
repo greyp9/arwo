@@ -25,6 +25,8 @@ public final class TableU {
             align = App.CSS.TEXT;
         } else if (type == Types.TIMESTAMP) {
             align = App.CSS.TEXT;
+        } else if (type == Types.BOOLEAN) {
+            align = App.CSS.TEXT;
         } else {
             align = null;
         }

@@ -59,7 +59,7 @@ public class JDBCInventoryView {
 
     private RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData(App.Action.SELECT, Types.VARCHAR),
+                new ColumnMetaData(App.Action.SELECT, Types.DATALINK),
                 new ColumnMetaData(App.Settings.NAME, Types.VARCHAR, true),
                 new ColumnMetaData(App.Settings.COMMENT, Types.VARCHAR),
                 new ColumnMetaData(App.Settings.DRIVER_CLASS, Types.VARCHAR),

@@ -55,7 +55,7 @@ public final class VisualizationInventoryView extends VisualizationView {
 
     private RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[] {
-                new ColumnMetaData(App.Action.SELECT, Types.VARCHAR),
+                new ColumnMetaData(App.Action.SELECT, Types.DATALINK),
                 new ColumnMetaData(App.Settings.NAME, Types.VARCHAR, true),
         };
         return new RowSetMetaData("vis.visualizationType", columns);
