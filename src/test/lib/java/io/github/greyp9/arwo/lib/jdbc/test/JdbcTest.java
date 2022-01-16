@@ -63,7 +63,7 @@ public class JdbcTest {
         }
     }
 
-    private void doTestConnectivityServer(String server, Properties properties)
+    private void doTestConnectivityServer(final String server, final Properties properties)
             throws IOException, ClassNotFoundException, SQLException, InstantiationException, IllegalAccessException {
         String driver = properties.getProperty(String.format("%s.%s.driver", Const.JDBC_SERVER, server));
         String url = properties.getProperty(String.format("%s.%s.url", Const.JDBC_SERVER, server));
@@ -73,8 +73,8 @@ public class JdbcTest {
         doTestConnectivityServer(driver, url, user, pass, server, properties);
     }
 
-    private void doTestConnectivityServer(
-            String driverClassName, String url, String user, String pass, String server, Properties propertiesTest)
+    private void doTestConnectivityServer(final String driverClassName, final String url, final String user,
+                                          final String pass, final String server, final Properties propertiesTest)
             throws IOException, ClassNotFoundException, IllegalAccessException, InstantiationException, SQLException {
         Class<?> driverClass = Class.forName(driverClassName);
         Properties properties = new Properties();
@@ -93,7 +93,8 @@ public class JdbcTest {
         connection.close();
     }
 
-    private void doTestConnectivityServer(Connection connection, String sql) throws IOException, SQLException {
+    private void doTestConnectivityServer(final Connection connection,
+                                          final String sql) throws IOException, SQLException {
         logger.info(sql);
         Statement statement = connection.createStatement();
         try {
@@ -103,7 +104,8 @@ public class JdbcTest {
         }
     }
 
-    private void doTestConnectivityServerExecutor(Connection connection, String sql) throws IOException, SQLException {
+    private void doTestConnectivityServerExecutor(final Connection connection,
+                                                  final String sql) throws IOException, SQLException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(os, true, UTF8Codec.Const.UTF8);
         final AppPrincipal principal = new AppPrincipal("root", CollectionU.toCollection("*"));
@@ -126,7 +128,8 @@ public class JdbcTest {
         }
     }
 
-    private void doTestConnectivityServer(Statement statement, String sql) throws IOException, SQLException {
+    private void doTestConnectivityServer(final Statement statement,
+                                          final String sql) throws IOException, SQLException {
         boolean moreResults = true;
         boolean isResultSet = statement.execute(sql);
         while (moreResults) {
@@ -135,7 +138,7 @@ public class JdbcTest {
         }
     }
 
-    private boolean getResultSet(Statement statement) throws IOException, SQLException {
+    private boolean getResultSet(final Statement statement) throws IOException, SQLException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(os, true, UTF8Codec.Const.UTF8);
         ResultSet resultSet = statement.getResultSet();
@@ -169,7 +172,7 @@ public class JdbcTest {
         return true;
     }
 
-    private boolean getUpdateCount(Statement statement) throws SQLException {
+    private boolean getUpdateCount(final Statement statement) throws SQLException {
         int updateCount = statement.getUpdateCount();
         boolean isUpdateCount = (updateCount != -1);
         if (isUpdateCount) {

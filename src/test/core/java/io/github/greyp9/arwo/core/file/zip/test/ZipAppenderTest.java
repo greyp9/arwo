@@ -47,12 +47,13 @@ public class ZipAppenderTest {
             final boolean success = zipAppender.append("2", metaFileB, metaFileC);
             Assert.assertTrue(success);
         }
-        validateFile(fileTemp, 3, metaFileA, metaFileB);
-        validateBytes(fileTemp, 3, metaFileA, metaFileB);
+        final int sizeExpected = 3;
+        validateFile(fileTemp, sizeExpected, metaFileA, metaFileB);
+        validateBytes(fileTemp, sizeExpected, metaFileA, metaFileB);
     }
 
-    private static void validateFile(
-            File fileTemp, int size, MetaFile metaFileA, MetaFile metaFileB) throws IOException {
+    private static void validateFile(final File fileTemp, final int size,
+                                     final MetaFile metaFileA, final MetaFile metaFileB) throws IOException {
         final ZipVolume zipVolume = new ZipVolume(fileTemp);
         final MetaFile metaFileNull = zipVolume.getEntry(null);
         Assert.assertNull(metaFileNull);
@@ -79,8 +80,8 @@ public class ZipAppenderTest {
         }
     }
 
-    private static void validateBytes(
-            File fileTemp, int size, MetaFile metaFileA, MetaFile metaFileB) throws IOException {
+    private static void validateBytes(final File fileTemp, final int size,
+                                      final MetaFile metaFileA, final MetaFile metaFileB) throws IOException {
         final byte[] bytesTemp = StreamU.read(fileTemp);
         final ZipVolume zipVolume = new ZipVolume(new ByteArrayInputStream(bytesTemp));
         final MetaFile metaFileNull = zipVolume.getEntry(null);

@@ -29,7 +29,7 @@ public class ScanI18n {
 
     private final Collection<String> strings = new TreeSet<String>();
 
-    private void scan(String folderPath) throws IOException {
+    private void scan(final String folderPath) throws IOException {
         io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
 
         File folder = new File(folderPath);
@@ -45,7 +45,7 @@ public class ScanI18n {
         logger.info(String.format("[%d]", strings.size()));
     }
 
-    private void scanFile(File file) throws IOException {
+    private void scanFile(final File file) throws IOException {
         String source = UTF8Codec.toString(StreamU.read(file));
         if (source.contains("i18nf")) {
             return;
@@ -62,7 +62,7 @@ public class ScanI18n {
         }
     }
 
-    private void scanLine(File file, String line) {
+    private void scanLine(final File file, final String line) {
         boolean ok = true;
         if (line.contains("i18n")) {
             return;
@@ -98,7 +98,7 @@ public class ScanI18n {
     }
 */
 
-    private boolean scanLiteralString(String line, int start, String s) {
+    private boolean scanLiteralString(final String line, final int start, final String s) {
         boolean ok = false;
         if (s.equals("")) {
             ok = true;

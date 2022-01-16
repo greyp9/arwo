@@ -31,7 +31,8 @@ public class TableTest {
     @Test
     public void testLoad() throws Exception {
         final RowSet rowSet = createRowSet(null, null);
-        Assert.assertEquals(3, rowSet.getRows());
+        final int sizeExpected = 3;
+        Assert.assertEquals(sizeExpected, rowSet.getRows());
         final Row rowFirst = rowSet.iterator().next();
         Assert.assertEquals("a", rowFirst.getString(0));
         Assert.assertEquals(Integer.valueOf(1), rowFirst.getInteger(1));
@@ -41,11 +42,12 @@ public class TableTest {
     public void testSort() throws Exception {
         final Sort sort = new Sort("letter", false);
         final Sorts sorts = new Sorts(sort);
+        final int sizeExpected = 3;
         final RowSet rowSet = createRowSet(sorts, null);
-        Assert.assertEquals(3, rowSet.getRows());
+        Assert.assertEquals(sizeExpected, rowSet.getRows());
         final Row row1 = rowSet.iterator().next();
         Assert.assertEquals("c", row1.getString(0));
-        Assert.assertEquals(Integer.valueOf(3), row1.getInteger(1));
+        Assert.assertEquals(Integer.valueOf(sizeExpected), row1.getInteger(1));
     }
 
     @Test
@@ -76,19 +78,20 @@ public class TableTest {
         Assert.assertEquals(Integer.valueOf(1), row2.getInteger(1));
     }
 
-    private static RowSet createRowSet(Sorts sorts, Filters filters) throws Exception {
+    private static RowSet createRowSet(final Sorts sorts, final Filters filters) throws Exception {
         final ArrayList<ColumnMetaData> columns = new ArrayList<ColumnMetaData>();
         columns.add(new ColumnMetaData("letter", Types.VARCHAR));
         columns.add(new ColumnMetaData("number", Types.VARCHAR));
         final RowSetMetaData metaData = new RowSetMetaData("id", columns.toArray(new ColumnMetaData[columns.size()]));
         final RowSet rowSet = new RowSet(metaData, sorts, filters);
-        insertRow(rowSet, "a", 1);
-        insertRow(rowSet, "b", 2);
-        insertRow(rowSet, "c", 3);
+        int value = 0;
+        insertRow(rowSet, "a", ++value);
+        insertRow(rowSet, "b", ++value);
+        insertRow(rowSet, "c", ++value);
         return rowSet;
     }
 
-    private static void insertRow(RowSet rowSet, String letter, int number) {
+    private static void insertRow(final RowSet rowSet, final String letter, final int number) {
         final InsertRow insertRow = new InsertRow(rowSet);
         insertRow.setNextColumn(letter);
         insertRow.setNextColumn(number);

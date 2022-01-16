@@ -66,7 +66,8 @@ public class TypeInstanceValueTest {
         }
     }
 
-    private void doTestFilter(TypeInstance typeInstanceFilter, TypeDefinitions typeDefinitions) throws IOException {
+    private void doTestFilter(final TypeInstance typeInstanceFilter,
+                              final TypeDefinitions typeDefinitions) throws IOException {
         // testing handling of base types
         final TypeInstance typeInstance = typeInstanceFilter.getInstance("filter-name");
         Assert.assertNotNull(typeInstance);
@@ -93,7 +94,8 @@ public class TypeInstanceValueTest {
         logger.log(Level.FINEST, DocumentU.toString(document));
     }
 
-    private void doTestFilterMapping(TypeInstance typeInstanceFM, TypeDefinitions typeDefinitions) throws IOException {
+    private void doTestFilterMapping(final TypeInstance typeInstanceFM,
+                                     final TypeDefinitions typeDefinitions) throws IOException {
         // testing handling of base types
         final TypeInstance typeInstance = typeInstanceFM.getInstance("dispatcher");
         Assert.assertNotNull(typeInstance);

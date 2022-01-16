@@ -4,10 +4,11 @@ import io.github.greyp9.arwo.core.lang.MathU;
 import org.junit.Assert;
 import org.junit.Test;
 
+@SuppressWarnings("checkstyle:magicnumber")
 public class MathTest {
 
     @Test
-    public void testLogBase2() throws Exception {
+    public void testLogBase2() {
         Assert.assertEquals(0, MathU.log(1L, 2));
         Assert.assertEquals(1, MathU.log(2L, 2));
         Assert.assertEquals(2, MathU.log(4L, 2));
@@ -27,7 +28,7 @@ public class MathTest {
     }
 
     @Test
-    public void testLogBase3() throws Exception {
+    public void testLogBase3() {
         Assert.assertEquals(0, MathU.log(1L, 3));
         Assert.assertEquals(1, MathU.log(3L, 3));
         Assert.assertEquals(2, MathU.log(9L, 3));

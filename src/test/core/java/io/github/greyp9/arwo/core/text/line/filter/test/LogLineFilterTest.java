@@ -103,7 +103,7 @@ public class LogLineFilterTest {
         private final String title;
         private final TextLineFilter filter;
 
-        public TextQuery(String title, TextLineFilter filter) {
+        TextQuery(final String title, final TextLineFilter filter) {
             this.title = title;
             this.filter = filter;
         }

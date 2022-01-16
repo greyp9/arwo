@@ -5,7 +5,6 @@ import io.github.greyp9.arwo.core.date.XsdDateU;
 import io.github.greyp9.arwo.core.file.find.FindInFolderQuery;
 import io.github.greyp9.arwo.core.file.zip.ZipMetaData;
 import io.github.greyp9.arwo.core.file.zip.ZipVolume;
-import io.github.greyp9.arwo.core.lang.StringU;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import org.junit.Before;
 import org.junit.Test;
@@ -35,11 +34,11 @@ public class ZipVolumeTest {
         }
     }
 
-    private void checkFile(File file) throws IOException {
-        logger.finest(StringU.create(80, "-"));
+    private void checkFile(final File file) throws IOException {
+        //logger.finest(StringU.create(80, "-"));
         logger.finest(String.format(Const.PATTERN_ENTRY,
                 file.length(), new Date(file.lastModified()), file.getAbsolutePath()));
-        logger.finest(StringU.create(40, "-"));
+        //logger.finest(StringU.create(40, "-"));
         final ZipVolume zipVolume = new ZipVolume(file);
         final Collection<ZipMetaData> entries = zipVolume.getEntries();
         for (ZipMetaData metaData : entries) {

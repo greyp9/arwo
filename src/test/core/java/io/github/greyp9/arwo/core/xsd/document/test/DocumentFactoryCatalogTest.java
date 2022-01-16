@@ -58,7 +58,7 @@ public class DocumentFactoryCatalogTest {
         }
     }
 
-    private void doTestSchemaCatalog(String catalog, Properties properties) throws IOException {
+    private void doTestSchemaCatalog(final String catalog, final Properties properties) throws IOException {
         int errors = 0;
         // test settings
         String catalogURL = properties.getProperty(String.format("xsd.catalog.%s.url", catalog));
@@ -83,7 +83,7 @@ public class DocumentFactoryCatalogTest {
         logger.info(String.format("ERRORS/%d", errors));
     }
 
-    private int doTestSchema(URL urlCatalog, URL urlXslt, URL urlInitial) throws IOException {
+    private int doTestSchema(final URL urlCatalog, final URL urlXslt, final URL urlInitial) throws IOException {
         int errors = 0;
         // resolve schema collection for this initial schema
         SchemaCollectionFactory schemaCollectionFactory = new SchemaCollectionFactory(urlCatalog, urlXslt);

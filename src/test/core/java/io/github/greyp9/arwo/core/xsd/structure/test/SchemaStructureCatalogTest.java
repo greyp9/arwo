@@ -49,7 +49,7 @@ public class SchemaStructureCatalogTest {
         }
     }
 
-    private void doTestSchemaCatalog(String catalog, Properties properties) throws IOException {
+    private void doTestSchemaCatalog(final String catalog, final Properties properties) throws IOException {
         String catalogURL = properties.getProperty(String.format("xsd.catalog.%s.url", catalog));
         String xsltURL = properties.getProperty(String.format("xsd.catalog.%s.xslt", catalog));
         URL urlCatalog = new URL(catalogURL);

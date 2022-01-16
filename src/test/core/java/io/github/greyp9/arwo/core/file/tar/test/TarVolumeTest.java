@@ -3,7 +3,6 @@ package io.github.greyp9.arwo.core.file.tar.test;
 import io.github.greyp9.arwo.core.file.find.FindInFolderQuery;
 import io.github.greyp9.arwo.core.file.tar.TarMetaData;
 import io.github.greyp9.arwo.core.file.tar.TarVolume;
-import io.github.greyp9.arwo.core.lang.StringU;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import org.junit.Before;
 import org.junit.Ignore;
@@ -38,12 +37,12 @@ public class TarVolumeTest {
         }
     }
 
-    private void checkFile(File file) throws IOException {
+    private void checkFile(final File file) throws IOException {
         Level level = Level.FINEST;
-        logger.info(StringU.create(80, "-"));
+        //logger.info(StringU.create(80, "-"));
         logger.info(String.format(Const.PATTERN_ENTRY,
                 file.length(), new Date(file.lastModified()), file.getAbsolutePath()));
-        logger.log(level, StringU.create(40, "-"));
+        //logger.log(level, StringU.create(40, "-"));
         final TarVolume tarVolume = new TarVolume(file);
         final Collection<TarMetaData> entries = tarVolume.getEntries();
         for (TarMetaData metaData : entries) {

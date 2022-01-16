@@ -22,7 +22,7 @@ public class URLCodecTest {
         Assert.assertEquals(pathA, pathZ);
     }
 
-    private void checkManifestJar(URL url) throws Exception {
+    private void checkManifestJar(final URL url) throws Exception {
         final File file = URLCodec.toFile(url);
         final JarFile jarFile = new JarFile(file);
         final Manifest manifest = jarFile.getManifest();
@@ -30,7 +30,7 @@ public class URLCodecTest {
         Assert.assertNotNull(ManifestU.getImplementationBuild(manifest));
     }
 
-    private void checkManifestConnection(URL url) throws Exception {
+    private void checkManifestConnection(final URL url) throws Exception {
         final URLConnection urlConnection = url.openConnection();
         final JarURLConnection jarURLConnection = (JarURLConnection) urlConnection;
         final Manifest manifest = jarURLConnection.getManifest();

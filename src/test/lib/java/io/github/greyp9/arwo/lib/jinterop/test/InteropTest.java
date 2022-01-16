@@ -38,7 +38,7 @@ public class InteropTest {
         }
     }
 
-    private void doTestConnectivityServer(String server, Properties properties) throws IOException {
+    private void doTestConnectivityServer(final String server, final Properties properties) throws IOException {
         String host = properties.getProperty(String.format("%s.%s.host", Const.INTEROP_SERVER, server));
         String user = properties.getProperty(String.format("%s.%s.user", Const.INTEROP_SERVER, server));
         String pass = properties.getProperty(String.format("%s.%s.pass", Const.INTEROP_SERVER, server));
@@ -46,7 +46,7 @@ public class InteropTest {
         doTestConnectivityServer(host, user, pass);
     }
 
-    private void doTestConnectivityServer(String host, String user, String pass) throws IOException {
+    private void doTestConnectivityServer(final String host, final String user, final String pass) throws IOException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(os, true, UTF8Codec.Const.UTF8);
         InteropShell shell = new InteropShell(host, user, pass);

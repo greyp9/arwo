@@ -15,7 +15,7 @@ public class UrlProtocolTest {
         Assert.assertEquals("root@localhost:8443", url.getAuthority());
         Assert.assertEquals("root", url.getUserInfo());
         Assert.assertEquals("localhost", url.getHost());
-        Assert.assertEquals(8443, url.getPort());
+        Assert.assertEquals(PORT, url.getPort());
         Assert.assertEquals("/hello/world/?a=1&b=2", url.getFile());
         Assert.assertEquals("/hello/world/", url.getPath());
         Assert.assertEquals("a=1&b=2", url.getQuery());
@@ -29,6 +29,8 @@ public class UrlProtocolTest {
         Assert.assertEquals("root@localhost:8443", uri.getAuthority());
         Assert.assertEquals("root", uri.getUserInfo());
         Assert.assertEquals("localhost", uri.getHost());
-        Assert.assertEquals(8443, uri.getPort());
+        Assert.assertEquals(PORT, uri.getPort());
     }
+
+    private static final int PORT = 8443;
 }

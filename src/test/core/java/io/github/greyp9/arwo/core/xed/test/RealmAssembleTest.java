@@ -29,6 +29,7 @@ import javax.xml.namespace.QName;
 import java.net.URL;
 import java.util.logging.Logger;
 
+@SuppressWarnings("checkstyle:magicnumber")
 public class RealmAssembleTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 

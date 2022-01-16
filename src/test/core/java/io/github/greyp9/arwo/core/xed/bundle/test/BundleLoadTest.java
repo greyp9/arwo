@@ -23,7 +23,7 @@ public class BundleLoadTest {
 
     @Test
     public void testLoadFactory() throws Exception {
-        for (int j = 0; (j < 3); ++j) {
+        for (int j = 0; (j < 2); ++j) {
             final XedFactory factory0 = new XedFactory();
             final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
             final QName qname = QNameU.getQName("{urn:arwo:realm}realm");

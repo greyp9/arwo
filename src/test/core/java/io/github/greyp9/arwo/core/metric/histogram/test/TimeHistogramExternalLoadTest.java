@@ -10,6 +10,7 @@ import org.junit.Test;
 import java.util.Date;
 import java.util.logging.Logger;
 
+@SuppressWarnings("checkstyle:magicnumber")
 public class TimeHistogramExternalLoadTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 

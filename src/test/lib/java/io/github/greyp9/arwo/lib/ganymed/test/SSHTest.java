@@ -38,14 +38,14 @@ public class SSHTest {
 
     @Test
     public void testServerConnectivity() throws Exception {
-        File fileProperties = new File(SystemU.userHome(), ".arwo/test.properties.xml");
+        final File fileProperties = new File(SystemU.userHome(), ".arwo/test.properties.xml");
         Assume.assumeTrue(fileProperties.exists());
-        Properties properties = PropertiesU.loadFromXml(fileProperties.toURI().toURL());
+        final Properties properties = PropertiesU.loadFromXml(fileProperties.toURI().toURL());
         logger.info("" + properties.size());
         Assert.assertTrue(properties.size() > 0);
-        String sshServerList = properties.getProperty(Const.SSH_SERVER);
+        final String sshServerList = properties.getProperty(Const.SSH_SERVER);
         Assert.assertNotNull(sshServerList);
-        String[] servers = sshServerList.split(",");
+        final String[] servers = sshServerList.split(",");
         for (String server : servers) {
             if (server.length() > 0) {
                 doTestConnectivityServer(server, properties);
@@ -53,36 +53,37 @@ public class SSHTest {
         }
     }
 
-    private void doTestConnectivityServer(String server, Properties properties) throws IOException {
-        String host = properties.getProperty(String.format("%s.%s.host", Const.SSH_SERVER, server));
-        String port = properties.getProperty(String.format("%s.%s.port", Const.SSH_SERVER, server));
-        String user = properties.getProperty(String.format("%s.%s.user", Const.SSH_SERVER, server));
-        String pass = properties.getProperty(String.format("%s.%s.pass", Const.SSH_SERVER, server));
+    private void doTestConnectivityServer(final String server, final Properties properties) throws IOException {
+        final String host = properties.getProperty(String.format("%s.%s.host", Const.SSH_SERVER, server));
+        final String port = properties.getProperty(String.format("%s.%s.port", Const.SSH_SERVER, server));
+        final String user = properties.getProperty(String.format("%s.%s.user", Const.SSH_SERVER, server));
+        final String pass = properties.getProperty(String.format("%s.%s.pass", Const.SSH_SERVER, server));
         logger.info(String.format("Authenticate: HOST=[%s] PORT=[%s]", host, port));
         doTestConnectivityServer(host, port, user, pass);
     }
 
-    private void doTestConnectivityServer(String host, String port, String user, String pass) throws IOException {
+    private void doTestConnectivityServer(final String host, final String port,
+                                          final String user, final String pass) throws IOException {
         // connect
-        Connection connection = new Connection(host, Integer.parseInt(port));
+        final Connection connection = new Connection(host, Integer.parseInt(port));
         connection.connect();
-        String[] remainingAuthMethods = connection.getRemainingAuthMethods(user);
+        final String[] remainingAuthMethods = connection.getRemainingAuthMethods(user);
         for (String remainingAuthMethod : remainingAuthMethods) {
             logger.info(remainingAuthMethod);
         }
         // authenticate
         if (connection.isAuthMethodAvailable(user, "keyboard-interactive")) {
-            Properties properties = new Properties();
+            final Properties properties = new Properties();
             properties.setProperty("//Password: ", pass);
-            InteractiveCallback callback = new InteractiveCallbackImpl(properties);
-            boolean authenticated = connection.authenticateWithKeyboardInteractive(user, callback);
+            final InteractiveCallback callback = new InteractiveCallbackImpl(properties);
+            final boolean authenticated = connection.authenticateWithKeyboardInteractive(user, callback);
             if (!authenticated) {
                 throw new SecurityException(user);
             }
         }
         // authenticate
         if (connection.isAuthMethodAvailable(user, "password")) {
-            boolean authenticated = connection.authenticateWithPassword(user, pass);
+            final boolean authenticated = connection.authenticateWithPassword(user, pass);
             if (!authenticated) {
                 throw new SecurityException(user);
             }
@@ -100,18 +101,18 @@ public class SSHTest {
         connection.close();
     }
 
-    private void checkSFTP(String directory, Connection connection) throws IOException {
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        PrintStream ps = new PrintStream(os, true, UTF8Codec.Const.UTF8);
-        SFTPv3Client client = new SFTPv3Client(connection);
-        List<SFTPv3DirectoryEntry> list = client.ls(directory);
+    private void checkSFTP(final String directory, final Connection connection) throws IOException {
+        final ByteArrayOutputStream os = new ByteArrayOutputStream();
+        final PrintStream ps = new PrintStream(os, true, UTF8Codec.Const.UTF8);
+        final SFTPv3Client client = new SFTPv3Client(connection);
+        final List<SFTPv3DirectoryEntry> list = client.ls(directory);
         for (SFTPv3DirectoryEntry entry : list) {
             ps.println(entry.filename);
         }
         logger.info(UTF8Codec.toString(os.toByteArray()));
     }
 
-    private void checkCommandBuiltIn(Connection connection, UserExecutor executor) throws IOException {
+    private void checkCommandBuiltIn(final Connection connection, final UserExecutor executor) throws IOException {
         final SSHConnection sshConnection = new SSHConnection(connection, "xterm");
         final ExecutorService executorStream = executor.getExecutorStream();
         final SSHConnectionX sshConnectionX = new SSHConnectionX(sshConnection, executorStream);
@@ -123,7 +124,7 @@ public class SSHTest {
         Assert.assertEquals("root", gid);
     }
 
-    private void checkCommandAdHoc(Connection connection, UserExecutor executor) throws IOException {
+    private void checkCommandAdHoc(final Connection connection, final UserExecutor executor) throws IOException {
         final SSHConnection sshConnection = new SSHConnection(connection, "xterm");
         final ExecutorService executorStream = executor.getExecutorStream();
         final ResultsContext resultsContext = ResultsContext.createEmpty();
@@ -132,7 +133,7 @@ public class SSHTest {
         logger.info(command.getStdout());
     }
 
-    private void checkCommandExplicit(Connection connection, UserExecutor executor) throws IOException {
+    private void checkCommandExplicit(final Connection connection, final UserExecutor executor) throws IOException {
         final SSHConnection sshConnection = new SSHConnection(connection, "xterm");
         final ExecutorService executorStream = executor.getExecutorStream();
         final ResultsContext resultsContext = ResultsContext.createEmpty();
@@ -148,16 +149,16 @@ public class SSHTest {
     public static class InteractiveCallbackImpl implements InteractiveCallback {
         private final Properties properties;
 
-        public InteractiveCallbackImpl(Properties properties) {
+        public InteractiveCallbackImpl(final Properties properties) {
             this.properties = properties;
         }
 
-        public String[] replyToChallenge(
-                String name, String instruction, int numPrompts, String[] prompt, boolean[] echo) throws Exception {
-            String[] replies = new String[numPrompts];
+        public final String[] replyToChallenge(final String name, final String instruction, final int numPrompts,
+                                               final String[] prompt, final boolean[] echo) throws Exception {
+            final String[] replies = new String[numPrompts];
             for (int i = 0; (i < numPrompts); i++) {
-                String key = String.format("%s/%s/%s", name, instruction, prompt[i]);
-                String value = properties.getProperty(key);
+                final String key = String.format("%s/%s/%s", name, instruction, prompt[i]);
+                final String value = properties.getProperty(key);
                 if (value == null) {
                     throw new GeneralSecurityException(key);
                 } else {

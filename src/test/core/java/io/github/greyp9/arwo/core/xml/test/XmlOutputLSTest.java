@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 public class XmlOutputLSTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @SuppressWarnings("checkstyle:magicnumber")
     @Test
     public void testOutputXML() throws Exception {
         // start with known ugly xml
@@ -40,7 +41,7 @@ public class XmlOutputLSTest {
         }
     }
 
-    private byte[] toXmlPrettyLS(Document document) throws IOException {
+    private byte[] toXmlPrettyLS(final Document document) throws IOException {
         try {
             ByteArrayOutputStream bos = new ByteArrayOutputStream();
             DOMImplementationRegistry registry = DOMImplementationRegistry.newInstance();

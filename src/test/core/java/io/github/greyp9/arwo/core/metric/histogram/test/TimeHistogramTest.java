@@ -15,6 +15,7 @@ import java.util.Date;
 import java.util.TreeMap;
 import java.util.logging.Logger;
 
+@SuppressWarnings("checkstyle:magicnumber")
 public class TimeHistogramTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
@@ -83,7 +84,8 @@ public class TimeHistogramTest {
     @Test
     public void testCreate() {
         final File folder = new File(folderClass, "create");
-        TimeHistogram histogram = new TimeHistogram("foo", null, folder.getPath(), "PT1M", "PT15M", "PT1H", "PT6H", "P1D", "P5D");
+        TimeHistogram histogram = new TimeHistogram("foo", null, folder.getPath(),
+                "PT1M", "PT15M", "PT1H", "PT6H", "P1D", "P5D");
         Assert.assertEquals(DurationU.toMillisP(DurationU.Const.ONE_MINUTE), histogram.getDurationCell());
         Assert.assertEquals(15 * DurationU.toMillisP(DurationU.Const.ONE_MINUTE), histogram.getDurationWord());
         Assert.assertEquals(DurationU.toMillisP(DurationU.Const.ONE_HOUR), histogram.getDurationLine());
@@ -95,7 +97,8 @@ public class TimeHistogramTest {
     @Test
     public void testNormalizeAdvance() {
         final File folder = new File(folderClass, "normalize-advance");
-        final TimeHistogram histogram = new TimeHistogram("foo", null, folder.getPath(), "PT1M", "PT15M", "PT1H", "PT1H", "PT1H", "PT2H");
+        final TimeHistogram histogram = new TimeHistogram("foo", null, folder.getPath(),
+                "PT1M", "PT15M", "PT1H", "PT1H", "PT1H", "PT2H");
         logger.info(histogram.toString());
         final Date dateStart = DateU.floor(new Date(), "PT1H");
         final Date dateEnd = DurationU.add(dateStart, DateU.Const.TZ_GMT, "P1D");

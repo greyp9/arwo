@@ -35,7 +35,7 @@ public class IMAPTest {
         }
     }
 
-    private void doTestConnectivityServer(String server, Properties properties) throws MessagingException {
+    private void doTestConnectivityServer(final String server, final Properties properties) throws MessagingException {
         String protocol = properties.getProperty(String.format("%s.%s.protocol", Const.IMAP_SERVER, server));
         String host = properties.getProperty(String.format("%s.%s.host", Const.IMAP_SERVER, server));
         String port = properties.getProperty(String.format("%s.%s.port", Const.IMAP_SERVER, server));
@@ -45,8 +45,8 @@ public class IMAPTest {
         doTestConnectivityServer(protocol, host, port, user, pass);
     }
 
-    private void doTestConnectivityServer(String protocol, String host, String port,
-                                          String user, String pass) throws MessagingException {
+    private void doTestConnectivityServer(final String protocol, final String host, final String port,
+                                          final String user, final String pass) throws MessagingException {
         Properties properties = new Properties();
         //properties.setProperty("mail.debug", "true");
         properties.setProperty("mail.store.protocol", protocol);

@@ -58,7 +58,7 @@ public class DefaultValueTest {
         Assert.assertNull(valueInstance.getNameTypeValue(enabled));
         // default data populated for this attribute
         final ValueInstance valueInstanceWithDefault = new DefaultTransform().transform(valueInstance);
-        Assert.assertEquals(3, valueInstanceWithDefault.getNameTypeValues().size());
+        Assert.assertEquals(ntv.size() + 1, valueInstanceWithDefault.getNameTypeValues().size());
         Assert.assertNotNull(valueInstanceWithDefault.getNameTypeValue(enabled));
         final NameTypeValue ntvEnabled = valueInstanceWithDefault.getNameTypeValue(enabled);
         Assert.assertEquals(Boolean.TRUE.toString(), ntvEnabled.getValueS());
@@ -89,10 +89,10 @@ public class DefaultValueTest {
                 "lshFavorite.lshFavoriteType.comment", "comment");
         // no data for this attribute
         final ValueInstance valueInstance = ValueInstance.create(lshFavorite, ntv);
-        Assert.assertEquals(3, valueInstance.getNameTypeValues().size());
+        Assert.assertEquals(ntv.size(), valueInstance.getNameTypeValues().size());
         // default data populated for this attribute
         final ValueInstance valueInstanceWithDefault = new DefaultTransform().transform(valueInstance);
-        Assert.assertEquals(3, valueInstanceWithDefault.getNameTypeValues().size());
+        Assert.assertEquals(ntv.size(), valueInstanceWithDefault.getNameTypeValues().size());
         Assert.assertNotNull(valueInstanceWithDefault.getNameTypeValue(enabled));
         final NameTypeValue ntvEnabled = valueInstanceWithDefault.getNameTypeValue(enabled);
         Assert.assertEquals(Boolean.FALSE.toString(), ntvEnabled.getValueS());

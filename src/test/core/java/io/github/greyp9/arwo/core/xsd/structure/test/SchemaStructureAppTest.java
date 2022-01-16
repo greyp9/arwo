@@ -51,7 +51,7 @@ public class SchemaStructureAppTest {
         }
     }
 
-    public static void trace(TypeDefinitions typeDefinitions, Logger logger, Level level) {
+    public static void trace(final TypeDefinitions typeDefinitions, final Logger logger, final Level level) {
         // inspect model
         for (Map.Entry<String, TypeInstance> entry : typeDefinitions.getElementTypes().entrySet()) {
             logger.log(level, "ELEMENT/" + entry.getKey());

@@ -30,8 +30,9 @@ public class LocalCommandTest {
     @Test
     public void testPreProcess() throws Exception {
         final Script script = new Script(null, new Date(), null, "ls\npwd\ndf\n");
+        final int sizeExpected = 3;
         final Collection<Command> commands = script.getCommands();
-        Assert.assertEquals(3, commands.size());
+        Assert.assertEquals(sizeExpected, commands.size());
     }
 
     @Test

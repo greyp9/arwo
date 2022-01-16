@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 public class XmlOutputTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
+    @SuppressWarnings("checkstyle:magicnumber")
     @Test
     public void testOutputXML() throws Exception {
         // start with known ugly xml

@@ -23,8 +23,10 @@ public class Pseudo2Test {
         PseudoI18n.main(new String[] { "+", file.getAbsolutePath() });
         final Locale localeDF = Locale.getDefault();
         final Locale localeES = new Locale("ES");
-        final ResourceBundle bundleDF = ResourceBundle.getBundle("io.github.greyp9.arwo.properties.i18n.test", localeDF);
-        final ResourceBundle bundleES = ResourceBundle.getBundle("io.github.greyp9.arwo.properties.i18n.test", localeES);
+        final ResourceBundle bundleDF = ResourceBundle.getBundle(
+                "io.github.greyp9.arwo.properties.i18n.test", localeDF);
+        final ResourceBundle bundleES = ResourceBundle.getBundle(
+                "io.github.greyp9.arwo.properties.i18n.test", localeES);
         final String textDF = bundleDF.getString("table.sftpFolderType.footer");
         final String textES = bundleES.getString("table.sftpFolderType.footer");
         PseudoI18n.main(new String[] { "-", file.getAbsolutePath() });

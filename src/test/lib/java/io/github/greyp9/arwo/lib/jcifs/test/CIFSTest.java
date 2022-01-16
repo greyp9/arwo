@@ -45,7 +45,7 @@ public class CIFSTest {
         }
     }
 
-    private void doTestConnectivityServer(String server, Properties properties) throws IOException {
+    private void doTestConnectivityServer(final String server, final Properties properties) throws IOException {
         String url = properties.getProperty(String.format("%s.%s.url", Const.CIFS_SERVER, server));
         String user = properties.getProperty(String.format("%s.%s.user", Const.CIFS_SERVER, server));
         String pass = properties.getProperty(String.format("%s.%s.pass", Const.CIFS_SERVER, server));
@@ -53,7 +53,7 @@ public class CIFSTest {
         doTestConnectivityServer(url, user, pass);
     }
 
-    private void doTestConnectivityServer(String url, String user, String pass) throws IOException {
+    private void doTestConnectivityServer(final String url, final String user, final String pass) throws IOException {
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         PrintStream ps = new PrintStream(os, true, UTF8Codec.Const.UTF8);
         NtlmPasswordAuthentication auth = new NtlmPasswordAuthentication("", user, pass);
@@ -65,7 +65,7 @@ public class CIFSTest {
         logger.info(UTF8Codec.toString(os.toByteArray()));
     }
 
-    private static String display(SmbFile smbFile) throws SmbException {
+    private static String display(final SmbFile smbFile) throws SmbException {
         StringBuilder builder = new StringBuilder();
         builder.append(String.format("[name=%s]%n", smbFile.getName()));
         builder.append(new Date(smbFile.createTime()));

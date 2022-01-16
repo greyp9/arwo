@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.core.number.NumberScale;
 import org.junit.Assert;
 import org.junit.Test;
 
+@SuppressWarnings("checkstyle:magicnumber")
 public class NumberScaleTest {
 
     @Test

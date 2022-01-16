@@ -113,6 +113,7 @@ public class RealmViewTest {
         //Assert.assertEquals("[N\u00e4me, P\u00e4ssw\u00f6rd, R\u00f6les]", itemNamesI18n.toString());
     }
 
+    @SuppressWarnings("checkstyle:magicnumber")
     @Test
     public void testCreateView2() throws Exception {
         // load model

@@ -59,7 +59,7 @@ public class CronServiceTester {
         logger.info("APP/END");
     }
 
-    private boolean process(byte[] input, CronService cronService) throws IOException {
+    private boolean process(final byte[] input, final CronService cronService) throws IOException {
         Date date = new Date();
         boolean stop = false;
         String text = UTF8Codec.toString(input);
@@ -83,7 +83,8 @@ public class CronServiceTester {
         return stop;
     }
 
-    private CronTabExecutor getCronTabExecutor(String authorization, Principal principal) throws IOException {
+    private CronTabExecutor getCronTabExecutor(final String authorization,
+                                               final Principal principal) throws IOException {
         final ExecutorService executorService = ExecutorServiceFactory.create(1, getClass().getSimpleName());
         final Meter meter = new Meter(App.Meter.QNAME_CRON_JOBS, new XedFactory());
         final RowSet rowSet = meter.getRowSet("{urn:xed:metric}cronJobsType", "job");
@@ -97,7 +98,7 @@ public class CronServiceTester {
         return new CronTab("tab1", cronJobs, DateU.Const.TZ_GMT);
     }
 
-    public static void main(String[] args) {
+    public static void main(final String[] args) {
         LoggerU.adjust(Logger.getLogger(""));
         try {
             new CronServiceTester().run();

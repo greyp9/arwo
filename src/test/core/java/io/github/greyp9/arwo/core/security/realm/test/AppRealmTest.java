@@ -26,7 +26,8 @@ public class AppRealmTest {
 
     @Test
     public void testHashCredential() throws Exception {
-        final String salt = "arwo-salt", credential = "arwo-credential";
+        final String salt = "arwo-salt";
+        final String credential = "arwo-credential";
         final String credentialHash = AppRealm.hashCredential(salt, credential);
         Assert.assertEquals("expectedHash", "lSi8VXKeMAEv7Qd41GpW5oh5Gfwkq1qpKUB6kn/NARk=", credentialHash);
     }
@@ -37,7 +38,8 @@ public class AppRealmTest {
         final String realmName = getClass().getSimpleName();
         final String salt = "arwo-salt";
         final Collection<AuthPrincipal> principals = new ArrayList<AuthPrincipal>();
-        final String name = "arwo-name", credential = "arwo-credential";
+        final String name = "arwo-name";
+        final String credential = "arwo-credential";
         final String credentialHash = AppRealm.hashCredential(salt, credential);
         principals.add(new AuthPrincipal(new AppPrincipal(name, Collections.singleton("*")), credentialHash));
         final AppRealm appRealm = new AppRealm(realmName, salt, principals);
@@ -60,6 +62,7 @@ public class AppRealmTest {
         Assert.assertTrue("user should authorize", userInRoleRead);
     }
 
+    @SuppressWarnings("checkstyle:magicnumber")
     @Test
     public void testAppRealmFromDocument() throws Exception {
         // realm schema
@@ -75,7 +78,8 @@ public class AppRealmTest {
         final AppRealm appRealm = AppRealmFactory.toAppRealm(xsdRealm, xmlRealm);
         Assert.assertNotNull(appRealm);
         // authenticate
-        final String name = "arwo-name", credential = "arwo-credential";
+        final String name = "arwo-name";
+        final String credential = "arwo-credential";
         // authenticate
         final AppPrincipal appPrincipal1 = appRealm.authenticate(null, null);
         Assert.assertNull("user should not authenticate", appPrincipal1);

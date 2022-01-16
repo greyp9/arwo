@@ -45,7 +45,7 @@ public class SchemaTypeAppTest {
         }
     }
 
-    public static void trace(TypeComponents typeComponents, Logger logger, Level level) {
+    public static void trace(final TypeComponents typeComponents, final Logger logger, final Level level) {
         // inspect model
         for (Map.Entry<String, XsdAtom> entry : typeComponents.getElements().entrySet()) {
             logger.log(level, "ELEMENT/" + entry.getKey());

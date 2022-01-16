@@ -8,11 +8,12 @@ import org.junit.Test;
 import java.util.logging.Logger;
 
 public class MatrixTest {
-    Logger logger = Logger.getLogger(getClass().getName());
+    private final Logger logger = Logger.getLogger(getClass().getName());
 
     @Test
     public void testMatrix() throws Exception {
-        final int rows = 3, columns = 3;
+        final int rows = 3;
+        final int columns = 3;
         final Matrix matrix = new Matrix(rows, columns);
         for (int row = 0; (row < rows); ++row) {
             for (int column = 0; (column < columns); ++column) {
@@ -26,7 +27,8 @@ public class MatrixTest {
 
     @Test
     public void testMatrixX() throws Exception {
-        final int rows = 3, columns = 3;
+        final int rows = 3;
+        final int columns = 3;
         final Matrix matrix = new Matrix(rows, columns);
         for (int row = 0; (row < rows); ++row) {
             for (int column = 0; (column < columns); ++column) {
@@ -40,12 +42,14 @@ public class MatrixTest {
 
     @Test
     public void testMatrixXColumnHeaders() throws Exception {
-        final int rows = 3, columns = 3;
+        final int rows = 3;
+        final int columns = 3;
+        final int rowMultiple = 11;
         final Matrix matrix = new Matrix(rows, columns);
         for (int row = 0; (row < rows); ++row) {
-            matrix.setRowLabel(row, Integer.toString(row * 11));
+            matrix.setRowLabel(row, Integer.toString(row * rowMultiple));
             for (int column = 0; (column < columns); ++column) {
-                matrix.setColumnLabel(column, Integer.toString(column * 11));
+                matrix.setColumnLabel(column, Integer.toString(column * rowMultiple));
                 matrix.set(row, column, (row * column));
             }
         }

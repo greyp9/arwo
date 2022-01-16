@@ -52,7 +52,7 @@ public class SardineTest {
         }
     }
 
-    private void doTestConnectivityServer(String server, Properties properties) throws IOException {
+    private void doTestConnectivityServer(final String server, final Properties properties) throws IOException {
         String certificate = properties.getProperty(String.format("%s.%s.certificate", Const.WEBDAV_SERVER, server));
         String protocol = properties.getProperty(String.format("%s.%s.protocol", Const.WEBDAV_SERVER, server));
         String host = properties.getProperty(String.format("%s.%s.host", Const.WEBDAV_SERVER, server));
@@ -63,15 +63,15 @@ public class SardineTest {
         doTestConnectivityServer(certificate, protocol, host, port, user, pass);
     }
 
-    private void doTestConnectivityServer(String certificate, String protocol,
-                                          String host, String port, String user, String pass) throws IOException {
+    private void doTestConnectivityServer(final String certificate, final String protocol, final String host,
+                                          final String port, final String user, final String pass) throws IOException {
         final Sardine connection = new SardineFactory().createConnection(certificate);
         connection.setCredentials(user, pass);
         final URL url = new URL(protocol, host, NumberU.toInt(port, 0), Http.Token.SLASH);
         enumerateRecurse(url, connection);
     }
 
-    private void enumerateRecurse(URL url, Sardine connection) throws IOException {
+    private void enumerateRecurse(final URL url, final Sardine connection) throws IOException {
         logger.info(String.format("QUERY:[%s]", url.toExternalForm()));
         List<DavResource> resources = connection.list(url.toExternalForm());
         for (DavResource resource : resources) {
@@ -82,29 +82,29 @@ public class SardineTest {
         }
     }
 
-    private void iterate(URL url, DavResource resource, Sardine connection) throws IOException {
+    private void iterate(final URL url, final DavResource resource, final Sardine connection) throws IOException {
         // filter out identity resource
         final String pathURL = URLCodec.decode(url.getFile());
         final String pathResource = resource.getPath();
         if (pathURL.equals(pathResource)) {
             return;
         }
-        String pathEncoded = url.getFile() + URLCodec.encode(new FileX(pathResource).getFilename()) +
-                (pathResource.endsWith("/") ? "/" : "");
+        String pathEncoded = url.getFile() + URLCodec.encode(new FileX(pathResource).getFilename())
+                + (pathResource.endsWith("/") ? "/" : "");
         URL urlChild = new URL(url.getProtocol(), url.getHost(), url.getPort(), pathEncoded);
         final boolean isFolderURL = pathURL.endsWith("/");
         final boolean isFolderResource = pathResource.endsWith("/");
         if (isFolderURL || isFolderResource) {
             enumerateRecurse(urlChild, connection);
         } else {
-            String pathEncoded2 = url.getFile() + "/" + URLCodec.encode(new FileX(pathResource).getFilename()) +
-                    (pathResource.endsWith("/") ? "/" : "");
+            String pathEncoded2 = url.getFile() + "/" + URLCodec.encode(new FileX(pathResource).getFilename())
+                    + (pathResource.endsWith("/") ? "/" : "");
             URL urlChild2 = new URL(url.getProtocol(), url.getHost(), url.getPort(), pathEncoded2);
             read(urlChild2, resource, connection);
         }
     }
 
-    private void read(URL url, DavResource resource, Sardine connection) {
+    private void read(final URL url, final DavResource resource, final Sardine connection) {
         //logger.info(String.format("READ:[%s]", resource.toString()));
         logger.info(String.format("READ:[%s]", url.toExternalForm()));
         try {

@@ -13,6 +13,7 @@ import org.w3c.dom.Document;
 
 import java.util.logging.Logger;
 
+@SuppressWarnings("checkstyle:magicnumber")
 public class XmlOutputSunTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 

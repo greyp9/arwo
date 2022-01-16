@@ -26,6 +26,7 @@ import java.net.URL;
 import java.util.Collection;
 import java.util.logging.Logger;
 
+@SuppressWarnings("checkstyle:magicnumber")
 public class ChoiceNoNsOpTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 

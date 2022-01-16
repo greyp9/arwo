@@ -66,9 +66,10 @@ public class DocumentFactoryAppTest {
         }
     }
 
-    public static int validate(URL urlInitial, byte[] xsdInitial, Document document, Logger logger) throws IOException {
-        Validator validator = (xsdInitial == null) ?
-                new Validator(urlInitial) : new Validator(urlInitial, xsdInitial);
+    public static int validate(final URL urlInitial, final byte[] xsdInitial,
+                               final Document document, final Logger logger) throws IOException {
+        Validator validator = (xsdInitial == null)
+                ? new Validator(urlInitial) : new Validator(urlInitial, xsdInitial);
         Collection<String> messages = validator.validate(DocumentU.toXml(document));
         Level level = (messages.isEmpty() ? Level.INFO : Level.WARNING);
         logger.log(level, "" + messages.size());

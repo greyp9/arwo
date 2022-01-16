@@ -6,7 +6,11 @@ import org.junit.Assert;
 import org.junit.Assume;
 import org.junit.Test;
 
-import javax.mail.*;
+import javax.mail.Folder;
+import javax.mail.Message;
+import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.Store;
 import java.io.File;
 import java.util.Properties;
 import java.util.logging.Logger;
@@ -31,7 +35,7 @@ public class POP3Test {
         }
     }
 
-    private void doTestConnectivityServer(String server, Properties properties) throws MessagingException {
+    private void doTestConnectivityServer(final String server, final Properties properties) throws MessagingException {
         String protocol = properties.getProperty(String.format("%s.%s.protocol", Const.POP3_SERVER, server));
         String host = properties.getProperty(String.format("%s.%s.host", Const.POP3_SERVER, server));
         String port = properties.getProperty(String.format("%s.%s.port", Const.POP3_SERVER, server));
@@ -41,8 +45,8 @@ public class POP3Test {
         doTestConnectivityServer(protocol, host, port, user, pass);
     }
 
-    private void doTestConnectivityServer(String protocol, String host, String port,
-                                          String user, String pass) throws MessagingException {
+    private void doTestConnectivityServer(final String protocol, final String host, final String port,
+                                          final String user, final String pass) throws MessagingException {
         Properties properties = new Properties();
         //properties.setProperty("mail.debug", "true");
         properties.setProperty("mail.store.protocol", protocol);

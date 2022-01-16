@@ -40,7 +40,8 @@ public class LocaleCursorTest {
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final TypeInstance localeType = xsdTypes.getElementType(App.Actions.QNAME_LOCALE.toString());
         final DataTypeRestrictions restrictions = localeType.getDataType().getRestrictions();
-        Assert.assertEquals(6, restrictions.getEnumValues().size());
+        final int sizeExpected = 6;
+        Assert.assertEquals(sizeExpected, restrictions.getEnumValues().size());
         // generate document
         final DocumentFactory documentFactory = new DocumentFactory(xsdTypes.getTypeDefinitions(), false);
         final Document document = documentFactory.generateEmpty(App.Actions.QNAME_LOCALE);

@@ -37,14 +37,14 @@ public class SFTPTest {
 
     @Test
     public void testServerConnectivity() throws Exception {
-        File fileProperties = new File(SystemU.userHome(), ".arwo/test.properties.xml");
+        final File fileProperties = new File(SystemU.userHome(), ".arwo/test.properties.xml");
         Assume.assumeTrue(fileProperties.exists());
-        Properties properties = PropertiesU.loadFromXml(fileProperties.toURI().toURL());
+        final Properties properties = PropertiesU.loadFromXml(fileProperties.toURI().toURL());
         logger.info("" + properties.size());
         Assert.assertTrue(properties.size() > 0);
-        String sshServerList = properties.getProperty(Const.SSH_SERVER);
+        final String sshServerList = properties.getProperty(Const.SSH_SERVER);
         Assert.assertNotNull(sshServerList);
-        String[] servers = sshServerList.split(",");
+        final String[] servers = sshServerList.split(",");
         for (String server : servers) {
             if (server.length() > 0) {
                 doTestConnectivityServer(server, properties);
@@ -52,16 +52,17 @@ public class SFTPTest {
         }
     }
 
-    private void doTestConnectivityServer(String server, Properties properties) throws IOException {
-        String host = properties.getProperty(String.format("%s.%s.host", Const.SSH_SERVER, server));
-        String port = properties.getProperty(String.format("%s.%s.port", Const.SSH_SERVER, server));
-        String user = properties.getProperty(String.format("%s.%s.user", Const.SSH_SERVER, server));
-        String pass = properties.getProperty(String.format("%s.%s.pass", Const.SSH_SERVER, server));
+    private void doTestConnectivityServer(final String server, final Properties properties) throws IOException {
+        final String host = properties.getProperty(String.format("%s.%s.host", Const.SSH_SERVER, server));
+        final String port = properties.getProperty(String.format("%s.%s.port", Const.SSH_SERVER, server));
+        final String user = properties.getProperty(String.format("%s.%s.user", Const.SSH_SERVER, server));
+        final String pass = properties.getProperty(String.format("%s.%s.pass", Const.SSH_SERVER, server));
         logger.info(String.format("Authenticate: HOST=[%s] PORT=[%s]", host, port));
         doTestConnectivityServer(host, port, user, pass);
     }
 
-    private void doTestConnectivityServer(String host, String port, String user, String pass) throws IOException {
+    private void doTestConnectivityServer(final String host, final String port,
+                                          final String user, final String pass) throws IOException {
         final Date date = new Date();
         // establish connection
         final Connection connection = new Connection(host, Integer.parseInt(port));

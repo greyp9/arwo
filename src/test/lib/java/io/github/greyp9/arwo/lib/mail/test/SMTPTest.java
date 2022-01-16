@@ -37,7 +37,7 @@ public class SMTPTest {
         }
     }
 
-    private void doTestConnectivityServer(String server, Properties properties) throws MessagingException {
+    private void doTestConnectivityServer(final String server, final Properties properties) throws MessagingException {
         String protocol = properties.getProperty(String.format("%s.%s.protocol", Const.SMTP_SERVER, server));
         String host = properties.getProperty(String.format("%s.%s.host", Const.SMTP_SERVER, server));
         String port = properties.getProperty(String.format("%s.%s.port", Const.SMTP_SERVER, server));
@@ -50,16 +50,19 @@ public class SMTPTest {
         doTestConnectivityServer(protocol, host, port, user, pass, to, subject);
     }
 
-    private void doTestConnectivityServer(String protocol, String host, String port, String user, String pass,
-                                          String to, String subject) throws MessagingException {
+    private void doTestConnectivityServer(final String protocol, final String host, final String port,
+                                          final String user, final String pass,
+                                          final String to, final String subject) throws MessagingException {
         Properties properties = new Properties();
         //properties.setProperty("mail.debug", "true");
         Session session = Session.getInstance(properties);
         sendMessage(protocol, host, Integer.parseInt(port), user, pass, user, to, subject, session);
     }
 
-    private void sendMessage(String protocol, String host, int port, String user, String password,
-                             String from, String to, String subject, Session session) throws MessagingException {
+    @SuppressWarnings("checkstyle:parameternumber")
+    private void sendMessage(final String protocol, final String host, final int port, final String user,
+                             final String password, final String from, final String to, final String subject,
+                             final Session session) throws MessagingException {
         Date date = new Date();
         Transport transport = session.getTransport(protocol);
         transport.connect(host, port, user, password);

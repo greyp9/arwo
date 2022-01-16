@@ -119,7 +119,7 @@ public class LFSFindTest {
                 final HttpResponse httpResponseThis = new LFSHandlerGet(servletHttpRequestThis, userState).doGetSafe();
                 // validate response
                 Assert.assertNotNull(httpResponseThis);
-                @SuppressWarnings("ArraysAsListWithZeroOrOneArgument") final Collection<String> excludes = Arrays.asList();
+                final Collection<String> excludes = Arrays.asList();
                 if (!excludes.contains(resourceThis)) {
                     final Collection statusCodesOK = Arrays.asList(
                             HttpURLConnection.HTTP_OK, HttpURLConnection.HTTP_MOVED_TEMP);

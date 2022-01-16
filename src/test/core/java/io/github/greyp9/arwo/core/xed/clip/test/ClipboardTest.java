@@ -64,11 +64,12 @@ public class ClipboardTest {
         Assert.assertEquals(2, ElementU.getChildren(principals).size());
         new OpClipPaste(clipboard).paste(cursorPrincipalType);
         logger.finest(DocumentU.toString(document));
-        Assert.assertEquals(4, ElementU.getChildren(principals).size());
+        final int sizeExpected = 4;
+        Assert.assertEquals(sizeExpected, ElementU.getChildren(principals).size());
         // paste empty
         new OpClipClear(clipboard).clear();
         new OpClipPaste(clipboard).paste(cursorPrincipalType);
         logger.finest(DocumentU.toString(document));
-        Assert.assertEquals(4, ElementU.getChildren(principals).size());
+        Assert.assertEquals(sizeExpected, ElementU.getChildren(principals).size());
     }
 }

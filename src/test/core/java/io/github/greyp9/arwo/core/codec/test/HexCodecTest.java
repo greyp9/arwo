@@ -18,9 +18,10 @@ public class HexCodecTest {
 
     @Test
     public void testCodec_Permute() {
-        final byte[] input = new byte[512];
+        final int permuteChar = 256;
+        final byte[] input = new byte[permuteChar * 2];
         for (int i = 0; (i < input.length); ++i) {
-            input[i] = (byte) (i % 256);
+            input[i] = (byte) (i % permuteChar);
         }
         final String encoded = HexCodec.encode(input);
         Assert.assertTrue(encoded.startsWith("000102030405"));

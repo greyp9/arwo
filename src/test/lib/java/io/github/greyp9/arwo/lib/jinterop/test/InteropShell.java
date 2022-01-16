@@ -28,13 +28,13 @@ public class InteropShell {
     private final String user;
     private final String pass;
 
-    public InteropShell(String host, String user, String pass) {
+    public InteropShell(final String host, final String user, final String pass) {
         this.host = host;
         this.user = user;
         this.pass = pass;
     }
 
-    public Collection<Command> runCommands(Collection<String> stdins) throws IOException {
+    public final Collection<Command> runCommands(final Collection<String> stdins) throws IOException {
         JISystem.setAutoRegisteration(true);
         JISession session = JISession.createSession("", user, pass);
         session.useSessionSecurity(true);
@@ -47,14 +47,15 @@ public class InteropShell {
         }
     }
 
-    private Collection<Command> runCommands(Collection<String> stdins, JISession session)
+    private Collection<Command> runCommands(final Collection<String> stdins, final JISession session)
             throws JIException, UnknownHostException {
         JIProgId progId = JIProgId.valueOf("WScript.Shell");
         JIComServer comServer = new JIComServer(progId, host, session);
         return runCommands(stdins, comServer);
     }
 
-    private Collection<Command> runCommands(Collection<String> stdins, JIComServer comServer) throws JIException {
+    private Collection<Command> runCommands(final Collection<String> stdins,
+                                            final JIComServer comServer) throws JIException {
         IJIComObject unknown = comServer.createInstance();
         IJIComObject comObject = unknown.queryInterface(IJIDispatch.IID);
         IJIDispatch shell = (IJIDispatch) JIObjectFactory.narrowObject(comObject);
@@ -64,13 +65,14 @@ public class InteropShell {
         return commands;
     }
 
-    private void queryShell(IJIDispatch shell) throws JIException {
+    private void queryShell(final IJIDispatch shell) throws JIException {
         JIVariant variantCurrentDirectory = shell.get("CurrentDirectory");
         String currentDirectory = variantCurrentDirectory.getObjectAsString().getString();
         logger.info(currentDirectory);
     }
 
-    private Collection<Command> runCommands(Collection<String> stdins, IJIDispatch shell) throws JIException {
+    private Collection<Command> runCommands(final Collection<String> stdins,
+                                            final IJIDispatch shell) throws JIException {
         Collection<Command> commands = new ArrayList<Command>();
         for (String stdin : stdins) {
             commands.add(runCommand(stdin, shell));
@@ -78,7 +80,7 @@ public class InteropShell {
         return commands;
     }
 
-    private Command runCommand(String stdin, IJIDispatch shell) throws JIException {
+    private Command runCommand(final String stdin, final IJIDispatch shell) throws JIException {
         Date dateStart = new Date();
         Object[] params = { new JIString(String.format("cmd /c %s", stdin)) };
         JIVariant[] results = shell.callMethodA("Exec", params);
@@ -90,7 +92,8 @@ public class InteropShell {
         }
     }
 
-    private Command processResults(String stdin, Date dateStart, JIVariant variant) throws JIException {
+    private Command processResults(final String stdin, final Date dateStart,
+                                   final JIVariant variant) throws JIException {
         IJIComObject comObject = variant.getObjectAsComObject();
         IJIDispatch results = (IJIDispatch) JIObjectFactory.narrowObject(comObject);
         String stdOut = consumeStream(results.get("StdOut"));
@@ -100,7 +103,7 @@ public class InteropShell {
         return new CommandDone(commandWork, stdOut, stdErr, new Date(), 0);
     }
 
-    private String consumeStream(JIVariant variant) throws JIException {
+    private String consumeStream(final JIVariant variant) throws JIException {
         IJIComObject comObject = variant.getObjectAsComObject();
         IJIDispatch stream = (IJIDispatch) JIObjectFactory.narrowObject(comObject);
         StringBuilder buffer = new StringBuilder();
@@ -111,12 +114,12 @@ public class InteropShell {
         return buffer.toString();
     }
 
-    private boolean atEndOfStream(IJIDispatch stream) throws JIException {
+    private boolean atEndOfStream(final IJIDispatch stream) throws JIException {
         JIVariant atEndOfStream = stream.get("AtEndOfStream");
         return atEndOfStream.getObjectAsBoolean();
     }
 
-    private String readAll(IJIDispatch stream) throws JIException {
+    private String readAll(final IJIDispatch stream) throws JIException {
         JIVariant readAll = stream.callMethodA("ReadAll");
         return readAll.getObjectAsString().getString();
     }

@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 public class ZipArchiveZTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    private void doGrouping(Date dateEntry, final Collection<File> grouping) throws IOException {
+    private void doGrouping(final Date dateEntry, final Collection<File> grouping) throws IOException {
         boolean isEnabledCreateZip = System.getProperties().isEmpty();
         final String comment = XsdDateU.toXSDZMillis(new Date());
         final String filename = String.format("%s.%s.zip",
@@ -44,7 +44,8 @@ public class ZipArchiveZTest {
     public void testCategorize() throws Exception {
         final FileRegrouper fileRegrouper = new FileRegrouper(DurationU.Const.ONE_HOUR);
         final File filePath = new File(SystemU.tempDir());
-        final Collection<File> files = new FindInFolderQuery(filePath.getParentFile(), filePath.getName(), false).getFound();
+        final Collection<File> files = new FindInFolderQuery(
+                filePath.getParentFile(), filePath.getName(), false).getFound();
         for (File file : files) {
             fileRegrouper.add(file);
         }

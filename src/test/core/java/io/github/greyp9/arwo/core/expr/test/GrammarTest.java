@@ -9,7 +9,7 @@ import org.junit.Test;
 
 public class GrammarTest {
 
-    private void checkTree(Tree tree) {
+    private void checkTree(final Tree tree) {
         Assert.assertNotNull(tree);
         final Node node = tree.getRoot();
         Assert.assertNotNull(node);
