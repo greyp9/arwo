@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.xed.view.html.type;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
+import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.bundle.XsdBundle;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.view.type.ViewInstanceText;
@@ -25,7 +26,8 @@ public class TextHtmlView {
         final String name = typeInstance.getID(parentInstance);
         final String value = cursor.getValue(typeInstance);
         final String title = bundle.getDetail(cursor.getTypeInstance(), viewInstance.getTypeInstance());
-        final String size = Integer.toString(Const.WIDTH_INPUT_TEXT);
+        final String size = Value.defaultOnNull(
+                typeInstance.getDirective(Html.SIZE), Integer.toString(Const.WIDTH_INPUT_TEXT));
         final NameTypeValues attrs = NameTypeValuesU.create(Html.NAME, name, Html.TYPE, Html.TEXT,
                 Html.VALUE, value, Html.SIZE, size, Html.TITLE, title, Html.ACCESSKEY, Html.VALUE_1);
         ElementU.addElement(td, Html.INPUT, null, attrs);
