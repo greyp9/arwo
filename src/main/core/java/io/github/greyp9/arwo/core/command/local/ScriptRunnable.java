@@ -44,6 +44,10 @@ public class ScriptRunnable implements Runnable {
         this.commands = commands;
     }
 
+    public Script getScript() {
+        return script;
+    }
+
     public ScriptRunnable(final Script script, final ScriptContext context) {
         this.script = script;
         this.context = context;
