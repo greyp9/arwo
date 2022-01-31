@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.app.local.fs.view;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.favorite.AppFavoriteView;
 import io.github.greyp9.arwo.app.core.view.props.AppPropertiesView;
+import io.github.greyp9.arwo.app.core.view.refresh.AppRefreshView;
 import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
 import io.github.greyp9.arwo.core.app.App;
@@ -91,8 +92,8 @@ public abstract class LFSView {
     public final HttpResponse doGetResponse() throws IOException {
         // template html
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
+        new AppRefreshView(userState).addContentTo(html.getDocumentElement());
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
-        addMetaRefresh(html.getDocumentElement());
         // context-specific content
         final String modeKey = Value.join(Http.Token.DOT, App.Action.MENU, App.Mode.VIEW, request.getMode());
         final AppTitle title = AppTitle.Factory.getResourceLabel(
@@ -117,15 +118,6 @@ public abstract class LFSView {
             httpResponse = new HttpResponse(HttpURLConnection.HTTP_OK, headers, new ByteArrayInputStream(entity));
         }
         return httpResponse;
-    }
-
-    private void addMetaRefresh(final Element html) throws IOException {
-        final String refresh = userState.getProperties().getProperty(XedActionRefresh.Const.KEY);
-        if (!Value.isEmpty(refresh)) {
-            final Element head = new XPather(html, null).getElement(Html.XPath.HEAD);
-            ElementU.addElement(head, Html.META, null, NTV.create(
-                    Html.HTTP_EQUIV, App.Action.REFRESH, Html.CONTENT, refresh));
-        }
     }
 
     private void addHeaderView(final Element html, final AppTitle title) throws IOException {

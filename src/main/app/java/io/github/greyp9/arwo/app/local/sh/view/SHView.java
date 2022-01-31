@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.app.local.sh.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.favorite.AppFavoriteView;
+import io.github.greyp9.arwo.app.core.view.refresh.AppRefreshView;
 import io.github.greyp9.arwo.app.local.sh.core.SHRequest;
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
 import io.github.greyp9.arwo.core.app.App;
@@ -61,6 +62,7 @@ public abstract class SHView {
     public final HttpResponse doGetResponse() throws IOException {
         // template html
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
+        new AppRefreshView(userState).addContentTo(html.getDocumentElement());
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
         // context-specific content
         final AppTitle title = AppTitle.Factory.getHostLabel(httpRequest, bundle);
