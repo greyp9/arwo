@@ -44,7 +44,7 @@ public class ScriptRunnable implements Runnable {
         this.commands = commands;
     }
 
-    public Script getScript() {
+    public final Script getScript() {
         return script;
     }
 
