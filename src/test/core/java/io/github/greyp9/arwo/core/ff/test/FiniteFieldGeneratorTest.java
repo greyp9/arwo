@@ -17,7 +17,7 @@ public class FiniteFieldGeneratorTest {
                 "07ec21ce3f045f5d9a2121cf58798c94510122ad81272411a50e2918382ac428",
                 HexCodec.encode(HashU.sha256(FiniteField.EXP)));
         Assert.assertEquals(
-                "f1930ba3ffbadd49b15e5720a34f4eee56d5ad634dfd5aee683f999bc0e2b970",
+                "9bc7b6f7f6423e975f3a7d66c47d9868957ee5a3fa2e94c25763220e692d2c69",
                 HexCodec.encode(HashU.sha256(FiniteField.LOG)));
     }
 

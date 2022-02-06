@@ -26,9 +26,9 @@ public final class FiniteField {
             + "1f2163a5f407091b2d7799b0cb46ca45cf4ade798b8691a8e33e42c651f30e12"
             + "365aee297b8d8c8f8a8594a7f20d17394bdd7c8497a2fd1c246cb4c752f60000");
 
-    // GF256 log vector
+    // GF256 log vector (corrected)
     public static final byte[] LOG = HexCodec.decode(""
-            + "00ff190132021ac64bc71b6833eedf036404e00e348d81ef4c7108c8f8691cc1"
+            + "ff00190132021ac64bc71b6833eedf036404e00e348d81ef4c7108c8f8691cc1"
             + "7dc21db5f9b9276a4de4a6729ac90978652f8a05210fe12412f082453593da8e"
             + "968fdbbd36d0ce94135cd2f14046833866ddfd30bf068b62b325e29822889110"
             + "7e6e48c3a3b61e423a6b2854fa853dba2b790a159b9f5eca4ed4ace5f373a757"
