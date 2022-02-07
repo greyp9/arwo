@@ -19,34 +19,42 @@ public class GF256Test {
     @Parameterized.Parameters
     public static Object[][] data() {
         return new Object[][]{
-                {2, UTF8Codec.toBytes("Hello"), 0 },
-                {2, null, 256 },
-                {3, UTF8Codec.toBytes("Hello world"), 0 },
-                {3, null, 1024 },
-                {4, UTF8Codec.toBytes("Hello world Hello world"), 0},
-                {4, null, 4096 },
+                {2, 2, UTF8Codec.toBytes("Hello"), 0},
+                {2, 2, null, 256},
+                {3, 3, UTF8Codec.toBytes("Hello world"), 0},
+                {3, 3, null, 1024},
+                {4, 4, UTF8Codec.toBytes("Hello world Hello world"), 0},
+                {4, 4, null, 4096},
+
+                {3, 2, UTF8Codec.toBytes("Hello"), 0},
+                {3, 2, null, 1024},
+                {4, 2, UTF8Codec.toBytes("Hello"), 0},
+                {4, 2, null, 1024},
         };
     }
 
     @Parameterized.Parameter()
-    public int shareCount;
+    public int sharesGenerated;
 
     @Parameterized.Parameter(1)
-    public byte[] inputFixed;
+    public int sharesNeeded;
 
     @Parameterized.Parameter(2)
+    public byte[] inputFixed;
+
+    @Parameterized.Parameter(3)
     public int inputLength;
 
     @Test
     public void testPermutations() {
-        logger.finest(String.format("SHARE COUNT [%d]", shareCount));
+        logger.finest(String.format("SHARES GENERATED [%d], NEEDED [%d]", sharesGenerated, sharesNeeded));
         final byte[] input = (inputFixed == null) ? generate(inputLength) : inputFixed;
-        final byte[][] output = new byte[shareCount][input.length];
+        final byte[][] output = new byte[sharesGenerated][input.length];
         // replicate input into shares
         final Random random = new Random(0L);
         for (int i = 0; (i < input.length); ++i) {
-            final byte[] generate = GF256.generate(random, shareCount - 1, input[i]);
-            for (int j = 0; (j < shareCount); ++j) {
+            final byte[] generate = GF256.generate(random, sharesNeeded - 1, input[i]);
+            for (int j = 0; (j < sharesGenerated); ++j) {
                 output[j][i] = GF256.evaluate(generate, (byte) (j + 1));
             }
         }
@@ -57,8 +65,8 @@ public class GF256Test {
         // reconstitute input from shares
         final byte[] inputRecover = new byte[input.length];
         for (int i = 0; (i < input.length); ++i) {
-            final byte[][] parts = new byte[shareCount][2];
-            for (int j = 0; (j < shareCount); ++j) {
+            final byte[][] parts = new byte[sharesNeeded][2];
+            for (int j = 0; (j < sharesNeeded); ++j) {
                 parts[j][0] = (byte) (j + 1);
                 parts[j][1] = output[j][i];
             }
