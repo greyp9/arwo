@@ -62,7 +62,7 @@ public abstract class SHView {
     public final HttpResponse doGetResponse() throws IOException {
         // template html
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
-        new AppRefreshView(userState).addContentTo(html.getDocumentElement());
+        new AppRefreshView(userState.getProperties()).addContentTo(html.getDocumentElement());
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
         // context-specific content
         final AppTitle title = AppTitle.Factory.getHostLabel(httpRequest, bundle);
