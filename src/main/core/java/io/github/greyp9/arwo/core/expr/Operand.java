@@ -8,7 +8,6 @@ public final class Operand extends Node {
     }
 
     public Operand(final String value) {
-        super(null, null);
         this.value = value;
     }
 

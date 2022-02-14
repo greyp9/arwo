@@ -10,37 +10,4 @@ public final class Tree {
     public Tree(final Node root) {
         this.root = root;
     }
-
-    public boolean evaluate(final String value) {
-        return evaluate(root, value);
-    }
-
-    private static boolean evaluate(final Node node, final String text) {
-        boolean evaluate = false;
-        if (node instanceof Operand) {
-            evaluate = evaluate((Operand) node, text);
-        } else if (node instanceof Operator) {
-            evaluate = evaluate((Operator) node, text);
-        }
-        return evaluate;
-    }
-
-    private static boolean evaluate(final Operator operator, final String text) {
-        boolean evaluate = false;
-        final Node left = operator.getLeft();
-        final Node right = operator.getRight();
-        final String op = operator.getValue();
-        if (Token.Const.AND.equalsIgnoreCase(op)) {
-            evaluate = evaluate(left, text) && evaluate(right, text);
-        } else if (Token.Const.OR.equalsIgnoreCase(op)) {
-            evaluate = evaluate(left, text) || evaluate(right, text);
-        } else if (Token.Const.NOT.equalsIgnoreCase(op) && (null == left)) {
-            evaluate = !evaluate(right, text);
-        }
-        return evaluate;
-    }
-
-    private static boolean evaluate(final Operand operand, final String text) {
-        return text.contains(operand.getValue());
-    }
 }

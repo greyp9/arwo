@@ -1,4 +1,4 @@
-package io.github.greyp9.arwo.core.expr;
+package io.github.greyp9.arwo.core.expr.token;
 
 public final class Parser {
     private final String expression;

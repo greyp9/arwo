@@ -1,7 +1,6 @@
 package io.github.greyp9.arwo.core.text.filter;
 
 import io.github.greyp9.arwo.core.expr.Grammar;
-import io.github.greyp9.arwo.core.expr.Tree;
 import io.github.greyp9.arwo.core.lang.SystemU;
 
 import java.io.BufferedReader;
@@ -17,7 +16,7 @@ public class TextLineFilter {
     private final Collection<String> includes;
     private final Collection<String> excludes;
     //private final Collection<String> expressions;
-    private final Tree tree;
+    private final TextMatchTree tree;
 
     public TextLineFilter(final TextFilters textFilters) {
         this.includes = textFilters.getIncludes();
@@ -25,7 +24,7 @@ public class TextLineFilter {
         //this.expressions = textFilters.getExpressions();
         final String expression = textFilters.getExpressions().iterator().next();
         final Grammar grammar = new Grammar(expression);
-        this.tree = (expression == null) ? null : grammar.createTree();
+        this.tree = (expression == null) ? null : new TextMatchTree(grammar.toNode());
     }
 
     public final byte[] doFilter(final byte[] bytes, final String encoding) throws IOException {
