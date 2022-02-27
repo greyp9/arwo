@@ -30,6 +30,7 @@ public final class Http {
         public static final String CONTENT_ENCODING = "Content-Encoding";
         public static final String CONTENT_LENGTH = "Content-Length";
         public static final String CONTENT_TYPE = "Content-Type";
+        public static final String COOKIE = "Cookie";
         public static final String EXPIRES = "Expires";
         public static final String GZIP = "gzip";
         public static final String HOST = "Host";
@@ -37,6 +38,7 @@ public final class Http {
         public static final String LOCATION = "Location";
         public static final String USER_AGENT = "User-Agent";
         public static final String WWW_AUTHENTICATE = "WWW-Authenticate";
+        public static final String X_XSRF_TOKEN = "x-xsrf-token";
     }
 
     public static class Realm {
@@ -52,6 +54,7 @@ public final class Http {
         public static final String TEXT_XML_UTF8 = "text/xml; charset='UTF-8'";
 
         public static final String APP_CERT = "application/pkix-cert";
+        public static final String APP_JSON = "application/json";
 
         public static final String FORM_URL_ENCODED = "application/x-www-form-urlencoded";
         public static final String FORM_MULTIPART = "multipart/form-data";
@@ -60,5 +63,7 @@ public final class Http {
     public static class Method {
         public static final String GET = "GET";
         public static final String POST = "POST";
+        public static final String PUT = "PUT";
+        public static final String DELETE = "DELETE";
     }
 }
