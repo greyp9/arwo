@@ -39,6 +39,7 @@ public final class Token {
         public static final String AND = "AND";
         public static final String OR = "OR";
         public static final String NOT = "NOT";
+        public static final String REGEX = "REGEX";
 
         public static final String OPEN_PAREN = "(";
         public static final String CLOSE_PAREN = ")";

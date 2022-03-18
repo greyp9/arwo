@@ -2,7 +2,6 @@ package io.github.greyp9.arwo.core.value;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.stream.Stream;
 
 public final class NameTypeValues extends ArrayList<NameTypeValue> {
     private static final long serialVersionUID = -1996418375827653958L;
@@ -23,10 +22,6 @@ public final class NameTypeValues extends ArrayList<NameTypeValue> {
         for (final NameTypeValue nameTypeValue : nameTypeValues) {
             add(nameTypeValue);
         }
-    }
-
-    public Stream<NameTypeValue> stream() {
-        return super.stream();
     }
 
     public void addNN(final String name, final Object value) {
