@@ -125,6 +125,7 @@ public class GrammarTest {
     public void testGrammarFnSimple() {
         final Grammar grammar = new Grammar("f(x)");
         final Node root = grammar.toNode();
+        Assert.assertNotNull(root);
         Assert.assertEquals("f(x)", root.render());
     }
 
@@ -132,6 +133,7 @@ public class GrammarTest {
     public void testGrammarFnMultiArg() {
         final Grammar grammar = new Grammar("f(x y z)");
         final Node root = grammar.toNode();
+        Assert.assertNotNull(root);
         Assert.assertEquals("f(x y z)", root.render());
     }
 
@@ -139,6 +141,7 @@ public class GrammarTest {
     public void testGrammarFnNested() {
         final Grammar grammar = new Grammar("f(g(x))");
         final Node root = grammar.toNode();
+        Assert.assertNotNull(root);
         Assert.assertEquals("f(g(x))", root.render());
     }
 
@@ -146,6 +149,7 @@ public class GrammarTest {
     public void testGrammarFnMultiArgNested() {
         final Grammar grammar = new Grammar("f(g('x') h(y) i(z))");
         final Node root = grammar.toNode();
+        Assert.assertNotNull(root);
         Assert.assertEquals("f(g(x) h(y) i(z))", root.render());
     }
 

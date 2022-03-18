@@ -11,6 +11,14 @@ public final class MultiOperator extends Node {
     private final String op;
     private final List<Node> operands;
 
+    public String getOp() {
+        return op;
+    }
+
+    public List<Node> getOperands() {
+        return operands;
+    }
+
     public MultiOperator(final String op, final Node... operands) {
         this.op = op;
         this.operands = Arrays.asList(operands);
