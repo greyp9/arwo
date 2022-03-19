@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.core.codec.hex.HexCodec;
 import io.github.greyp9.arwo.core.expr.Node;
 import io.github.greyp9.arwo.core.expr.Operand;
 import io.github.greyp9.arwo.core.expr.eval.ExpressionEvaluator;
+import io.github.greyp9.arwo.core.expr.eval.FolderEvaluator;
 import io.github.greyp9.arwo.core.expr.eval.LastModifiedEvaluator;
 import io.github.greyp9.arwo.core.expr.eval.Sha256Evaluator;
 import io.github.greyp9.arwo.core.expr.eval.SysEnvEvaluator;
@@ -62,6 +63,17 @@ public class EvaluatorTest {
     }
 
     @Test
+    public void testEvaluateExpressionFolder() {
+        final ExpressionEvaluator evaluator = new ExpressionEvaluator();
+        evaluator.register(ENV, new SysEnvEvaluator());
+        evaluator.register(FOLDER, new FolderEvaluator());
+        final String content = evaluator.evaluateAsString("folder(env('HOME') '*')");
+        Assert.assertNotNull(content);
+        Assert.assertTrue(content.contains("Downloads"));
+        logger.finest(content);
+    }
+
+    @Test
     public void testEvaluateExpressionComplex() {
         final ExpressionEvaluator evaluator = new ExpressionEvaluator();
         evaluator.register(PROP, new SysPropEvaluator());
@@ -82,4 +94,5 @@ public class EvaluatorTest {
     private static final String ENV = "env";
     private static final String MODIFIED = "mod";
     private static final String SHA256 = "sha256";
+    private static final String FOLDER = "folder";
 }
