@@ -65,7 +65,7 @@ public final class Parser {
 
     private Token getNextTokenWord() {
         int cursorStart = cursor;
-        while (Character.isLetter(expression.charAt(cursor))) {
+        while (Character.isLetterOrDigit(expression.charAt(cursor))) {
             ++cursor;
             if (cursor == expression.length()) {
                 break;
