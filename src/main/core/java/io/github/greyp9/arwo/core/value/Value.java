@@ -122,4 +122,12 @@ public final class Value {
     public static char[] toCharArray(final String value) {
         return ((value == null) ? null : value.toCharArray());
     }
+
+    public static String generate(final String value, final int count) {
+        final StringBuilder buffer = new StringBuilder();
+        for (int i = 0; (i < count); ++i) {
+            buffer.append(value);
+        }
+        return buffer.toString();
+    }
 }
