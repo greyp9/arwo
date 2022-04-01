@@ -16,6 +16,9 @@ public class DataSplitter {
         this.random = random;
     }
 
+    /**
+     * Split parameter data into shares, based on the DataSplitter config.
+     */
     public final byte[][] split(final byte[] data) {
         final int shareLength = data.length + 1;  // shares include an extra byte to preserve share index
         final byte[][] dataShares = new byte[shareCount][shareLength];
@@ -34,6 +37,9 @@ public class DataSplitter {
         return dataShares;
     }
 
+    /**
+     * Reconstitute the shares into the original data.
+     */
     public final byte[] join(final byte[][] dataShares) {
         final int shareCountIn = dataShares.length;
         final int dataLength = dataShares[0].length - 1;  // last byte preserves share index
