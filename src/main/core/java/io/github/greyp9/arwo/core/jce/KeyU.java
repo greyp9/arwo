@@ -29,6 +29,11 @@ public final class KeyU {
         return new SecretKeySpec(secretKey.getEncoded(), keyAlgorithm);
     }
 
+    public static SecretKey toKeyPBE(
+            final char[] secret, final byte[] salt) throws GeneralSecurityException {
+        return toKeyPBE(secret, salt, Const.PBKDF_ITERATIONS, AES.Const.KEY_BITS,
+                Const.PBKDF_ALGORITHM, AES.Const.ALGORITHM);
+    }
 
     // KEY
 
@@ -61,5 +66,12 @@ public final class KeyU {
         final byte[] bytes = new byte[length];
         new SecureRandom().nextBytes(bytes);
         return bytes;
+    }
+
+
+    public static class Const {
+        public static final String PBKDF_ALGORITHM = "PBKDF2WithHmacSHA256";
+        public static final int PBKDF_ITERATIONS = 4096;
+        public static final int AES_SIZE_IV = 16;
     }
 }

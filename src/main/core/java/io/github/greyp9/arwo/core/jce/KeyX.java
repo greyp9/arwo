@@ -33,4 +33,9 @@ public class KeyX {
             throw new IOException(e);
         }
     }
+
+    public static class Const {
+        public static final String TRANSFORM_CTR = "AES/CTR/NoPadding";
+        public static final String TRANSFORM_GCM = "AES/GCM/NoPadding";
+    }
 }
