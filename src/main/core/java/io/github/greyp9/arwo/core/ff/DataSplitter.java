@@ -27,12 +27,12 @@ public class DataSplitter {
             final byte[] generate = GF256.generate(random, thresholdCount - 1, data[i]);
             // populate the share arrays for each byte of the input data
             for (int j = 0; (j < shareCount); ++j) {
-                dataShares[j][i] = GF256.evaluate(generate, (byte) j);
+                dataShares[j][i] = GF256.evaluate(generate, (byte) (j + 1));
             }
         }
         // preserve share indices (needed for data recovery)
         for (int j = 0; (j < shareCount); ++j) {
-            dataShares[j][data.length] = (byte) j;
+            dataShares[j][data.length] = (byte) (j + 1);
         }
         return dataShares;
     }

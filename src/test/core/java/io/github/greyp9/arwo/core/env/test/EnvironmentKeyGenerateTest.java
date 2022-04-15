@@ -65,12 +65,12 @@ public class EnvironmentKeyGenerateTest {
             final byte[] salt = HashU.sha256(UTF8Codec.toBytes(password));
             final SecretKey key = KeyU.toKeyPBE(password.toCharArray(), salt);
             final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_CTR);
-            ivs[i] = KeyU.getRandomBytes(KeyU.Const.AES_SIZE_IV);
+            ivs[i] = KeyU.getRandomBytes(AES.Const.IV_BYTES_CTR);
             final IvParameterSpec ivParameterSpec = new IvParameterSpec(ivs[i]);
             final byte[] shareWrapped = keyCodec.encode(shares[i], ivParameterSpec);
             logger.info(HexCodec.encode(shareWrapped));
             sharesWrapped[i] = shareWrapped;
-            Assert.assertEquals(shares[i].length + KeyU.Const.AES_SIZE_IV, sharesWrapped[i].length);
+            Assert.assertEquals(shares[i].length + AES.Const.IV_BYTES_CTR, sharesWrapped[i].length);
         }
         // recover the shares
         final byte[][] sharesUnwrapped = new byte[pbkdfData.length][];
@@ -84,7 +84,7 @@ public class EnvironmentKeyGenerateTest {
             Assert.assertEquals(shares[i].length, sharesUnwrapped[i].length);
         }
         // reconstitute the secret
-        final DataSplitter dataSplitterRecover = new DataSplitter(shareCount, thresholdCount, random);
+        final DataSplitter dataSplitterRecover = new DataSplitter(shareCount, thresholdCount, null);
         final byte[] keyBytesRecover = dataSplitterRecover.join(sharesUnwrapped);
         logger.info(HexCodec.encode(keyBytesRecover));
         Assert.assertArrayEquals(keyBytes, keyBytesRecover);

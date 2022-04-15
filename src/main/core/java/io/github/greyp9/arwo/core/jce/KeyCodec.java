@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.core.value.Value;
 
 import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
+import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import java.security.GeneralSecurityException;
 import java.security.Key;
@@ -28,12 +29,18 @@ public class KeyCodec {
                 ? encodeSymmetric(bytes, ivParameterSpec) : encodeAsymmetric(bytes)));
     }
 
+    public final byte[] encode(final byte[] bytes, final GCMParameterSpec parameterSpec)
+            throws GeneralSecurityException {
+        return (Value.isEmpty(bytes) ? bytes : (isSymmetric()
+                ? encodeSymmetric(bytes, parameterSpec) : encodeAsymmetric(bytes)));
+    }
+
     private boolean isSymmetric() {
         return (key instanceof SecretKey);
     }
 
     private byte[] encodeSymmetric(final byte[] bytes) throws GeneralSecurityException {
-        final byte[] ivBytes = KeyU.getRandomBytes(KeyU.Const.AES_SIZE_IV);
+        final byte[] ivBytes = KeyU.getRandomBytes(AES.Const.IV_BYTES_CTR);
         final IvParameterSpec ivParameterSpec = new IvParameterSpec(ivBytes);
         return encodeSymmetric(bytes, ivParameterSpec);
     }
@@ -43,6 +50,13 @@ public class KeyCodec {
         final Cipher cipher = KeyU.getCipher(transform);
         final Cipher cipherInit = KeyU.initCipher(cipher, Cipher.ENCRYPT_MODE, key, ivParameterSpec);
         return ByteU.join(ivParameterSpec.getIV(), cipherInit.doFinal(bytes, 0, bytes.length));
+    }
+
+    private byte[] encodeSymmetric(final byte[] bytes, final GCMParameterSpec parameterSpec)
+            throws GeneralSecurityException {
+        final Cipher cipher = KeyU.getCipher(transform);
+        final Cipher cipherInit = KeyU.initCipher(cipher, Cipher.ENCRYPT_MODE, key, parameterSpec);
+        return ByteU.join(parameterSpec.getIV(), cipherInit.doFinal(bytes, 0, bytes.length));
     }
 
     private byte[] encodeAsymmetric(final byte[] bytes) throws GeneralSecurityException {
@@ -61,8 +75,14 @@ public class KeyCodec {
                 ? decodeSymmetric(bytes, ivParameterSpec) : decodeAsymmetric(bytes)));
     }
 
+    public final byte[] decode(final byte[] bytes, final GCMParameterSpec parameterSpec)
+            throws GeneralSecurityException {
+        return (Value.isEmpty(bytes) ? bytes : (isSymmetric()
+                ? decodeSymmetric(bytes, parameterSpec) : decodeAsymmetric(bytes)));
+    }
+
     private byte[] decodeSymmetric(final byte[] bytes) throws GeneralSecurityException {
-        final IvParameterSpec ivParameterSpec = new IvParameterSpec(bytes, 0, KeyU.Const.AES_SIZE_IV);
+        final IvParameterSpec ivParameterSpec = new IvParameterSpec(bytes, 0, AES.Const.IV_BYTES_CTR);
         return decodeSymmetric(bytes, ivParameterSpec);
     }
 
@@ -70,7 +90,14 @@ public class KeyCodec {
             throws GeneralSecurityException {
         final Cipher cipher = KeyU.getCipher(transform);
         final Cipher cipherInit = KeyU.initCipher(cipher, Cipher.DECRYPT_MODE, key, ivParameterSpec);
-        return cipherInit.doFinal(bytes, KeyU.Const.AES_SIZE_IV, (bytes.length - KeyU.Const.AES_SIZE_IV));
+        return cipherInit.doFinal(bytes, AES.Const.IV_BYTES_CTR, (bytes.length - AES.Const.IV_BYTES_CTR));
+    }
+
+    private byte[] decodeSymmetric(final byte[] bytes, final GCMParameterSpec parameterSpec)
+            throws GeneralSecurityException {
+        final Cipher cipher = KeyU.getCipher(transform);
+        final Cipher cipherInit = KeyU.initCipher(cipher, Cipher.DECRYPT_MODE, key, parameterSpec);
+        return cipherInit.doFinal(bytes, AES.Const.IV_BYTES_GCM, (bytes.length - AES.Const.IV_BYTES_GCM));
     }
 
     private byte[] decodeAsymmetric(final byte[] bytes) throws GeneralSecurityException {

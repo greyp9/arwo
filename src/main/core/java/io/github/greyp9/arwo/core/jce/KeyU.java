@@ -72,6 +72,5 @@ public final class KeyU {
     public static class Const {
         public static final String PBKDF_ALGORITHM = "PBKDF2WithHmacSHA256";
         public static final int PBKDF_ITERATIONS = 4096;
-        public static final int AES_SIZE_IV = 16;
     }
 }
