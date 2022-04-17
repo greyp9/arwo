@@ -57,9 +57,9 @@ public class LocalCommandTest {
             final Long elapsed = DurationU.toDuration(command.getStart(), command.getFinish(), null);
             Assert.assertNotNull(elapsed);
             Assert.assertTrue(elapsed > 0);
-            logger.info(command.getStdin());
-            logger.info(command.getStdout());
-            logger.info("" + elapsed);
+            logger.finest(command.getStdin());
+            logger.finest(command.getStdout());
+            logger.finest("" + elapsed);
         }
     }
 
@@ -85,9 +85,9 @@ public class LocalCommandTest {
             final Long elapsed = DurationU.toDuration(command.getStart(), command.getFinish(), null);
             Assert.assertNotNull(elapsed);
             Assert.assertTrue(elapsed >= 0);
-            logger.info(command.getStdin());
-            logger.info(command.getStderr());
-            logger.info("" + elapsed);
+            logger.finest(command.getStdin());
+            logger.finest(command.getStderr());
+            logger.finest("" + elapsed);
         }
     }
 }

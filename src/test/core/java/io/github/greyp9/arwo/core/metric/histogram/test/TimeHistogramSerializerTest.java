@@ -29,14 +29,14 @@ public class TimeHistogramSerializerTest {
     @BeforeClass
     public static void beforeClass() {
         final boolean mkdir = FOLDER_TEST.mkdir();
-        LOGGER.info(String.format("CREATE TEMP FOLDER: [%s][%s]", mkdir, FOLDER_TEST.getPath()));
+        LOGGER.finest(String.format("CREATE TEMP FOLDER: [%s][%s]", mkdir, FOLDER_TEST.getPath()));
     }
 
     @AfterClass
     public static void afterClass() {
         new FindInFolderQuery(FOLDER_TEST, "foo.*.xml", false).getFound().forEach(File::delete);
         final boolean delete = FOLDER_TEST.delete();
-        LOGGER.info(String.format("DELETE TEMP FOLDER: [%s][%s]", delete, FOLDER_TEST.getPath()));
+        LOGGER.finest(String.format("DELETE TEMP FOLDER: [%s][%s]", delete, FOLDER_TEST.getPath()));
     }
 
     @Test

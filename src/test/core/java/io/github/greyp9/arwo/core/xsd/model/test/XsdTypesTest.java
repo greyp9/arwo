@@ -38,7 +38,7 @@ public class XsdTypesTest {
             // check model
             final XPathContext context = xsdTypes.getContext();
             Assert.assertNotNull(context);
-            logger.info(context.getPrefixToURI().toString());
+            logger.finest(context.getPrefixToURI().toString());
             Assert.assertEquals(XsdU.NS_URI_XSD, context.getNamespaceURI("xsd"));
             Assert.assertEquals(XsdU.NS_URI_XSD, context.getNamespaceURI("xs"));
             Assert.assertEquals("http://java.sun.com/xml/ns/javaee", context.getNamespaceURI("javaee"));
@@ -54,7 +54,7 @@ public class XsdTypesTest {
         // check model
         final XPathContext context = xsdTypes.getContext();
         Assert.assertNotNull(context);
-        logger.info(context.getPrefixToURI().toString());
+        logger.finest(context.getPrefixToURI().toString());
         Assert.assertEquals(XsdU.NS_URI_XSD, context.getNamespaceURI("xsd"));
         Assert.assertEquals("urn:arwo:realm", context.getNamespaceURI("realm"));
         // generate document

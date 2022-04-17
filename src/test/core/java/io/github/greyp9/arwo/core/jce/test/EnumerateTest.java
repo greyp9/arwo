@@ -23,7 +23,7 @@ public class EnumerateTest {
                 Optional.of(value)
                         .filter(v -> v.contains("KeyGenerator"))
                         .filter(v -> v.contains("AES"))
-                        .ifPresent(match -> logger.info(value));
+                        .ifPresent(match -> logger.finest(value));
             }
         }
     }

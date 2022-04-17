@@ -11,19 +11,19 @@ public class LoggerTest {
 
     @Test
     public void testHierarchy() throws Exception {
-        logger.info("BEGIN");
+        logger.finest("BEGIN");
         // iterate through hierarchy from current logger
         Logger loggerIt = logger;
         while (loggerIt != null) {
             final Level level = loggerIt.getLevel();
             if (level != null) {
-                logger.info(level.getName());
+                logger.finest(level.getName());
             } else {
-                logger.info("null");
+                logger.finest("null");
             }
             loggerIt = loggerIt.getParent();
         }
-        logger.info("END");
+        logger.finest("END");
     }
 
     @Test

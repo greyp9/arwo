@@ -24,9 +24,9 @@ public class ZipArchiveTest {
         final String comment = XsdDateU.toXSDZMillis(new Date());
         // source files
         final File folderSource = new File(SystemU.tempDir());
-        logger.info(folderSource.getAbsolutePath());
+        logger.finest(folderSource.getAbsolutePath());
         Collection<File> files = new FindInFolderQuery(folderSource, "*.*", false).getFound();
-        logger.info("" + files.size());
+        logger.finest("" + files.size());
         // group files
         FileGrouper fileGrouper = new FileGrouper("PT1H");
         for (File file : files) {

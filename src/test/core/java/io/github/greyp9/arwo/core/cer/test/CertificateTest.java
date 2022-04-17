@@ -19,11 +19,11 @@ public class CertificateTest {
         for (String resource : Const.RESOURCES) {
             final byte[] bytesOriginal = StreamU.read(ResourceU.resolve(resource));
             Assert.assertNotNull(bytesOriginal);
-            logger.info(UTF8Codec.toString(bytesOriginal));
+            logger.finest(UTF8Codec.toString(bytesOriginal));
             final X509Certificate certificate = CertificateU.toX509(bytesOriginal);
-            logger.info(certificate.getSubjectDN().toString());
+            logger.finest(certificate.getSubjectDN().toString());
             final byte[] bytesCopy = CertificateU.toBytes(certificate);
-            logger.info(UTF8Codec.toString(bytesCopy));
+            logger.finest(UTF8Codec.toString(bytesCopy));
             Assert.assertEquals(CRCU.crc32(bytesOriginal), CRCU.crc32(bytesCopy));
         }
     }

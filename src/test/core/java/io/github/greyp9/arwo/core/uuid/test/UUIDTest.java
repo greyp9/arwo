@@ -17,7 +17,7 @@ public class UUIDTest {
     @Test
     public void testGenerateUUID() throws Exception {
         for (int i = 0; (i < 2); ++i) {
-            logger.info(UUID.randomUUID().toString());
+            logger.finest(UUID.randomUUID().toString());
         }
     }
 }

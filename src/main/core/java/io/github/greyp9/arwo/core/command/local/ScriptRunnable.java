@@ -106,7 +106,7 @@ public class ScriptRunnable implements Runnable {
         Integer exitValue = null;
         try {
             final String[] commandArray = ShellU.toCommandArray(commandWork.getStdin());
-            logger.info(String.format("COMMAND:[%s], USERDIR=[%s]",
+            logger.fine(String.format("COMMAND:[%s], USERDIR=[%s]",
                     Arrays.asList(commandArray).toString(), dir.getAbsolutePath()));
             final Runtime runtime = Runtime.getRuntime();
             final Process process = runtime.exec(commandArray, null, dir);

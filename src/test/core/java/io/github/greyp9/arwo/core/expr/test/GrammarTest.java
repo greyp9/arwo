@@ -16,7 +16,7 @@ public class GrammarTest {
         Assert.assertNotNull(tree);
         final Node node = tree.getRoot();
         Assert.assertNotNull(node);
-        logger.info(node.render());
+        logger.fine(node.render());
         Assert.assertTrue(node instanceof Operand);
         final Operand operand = (Operand) node;
         Assert.assertEquals("A", operand.getValue());

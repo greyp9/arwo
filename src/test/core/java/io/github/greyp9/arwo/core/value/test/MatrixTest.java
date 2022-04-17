@@ -21,8 +21,8 @@ public class MatrixTest {
             }
         }
         final String render = matrix.render(" | ");
-        logger.info("3 x 3 matrix\n" + render);
-        logger.info(CRCU.crc32String(UTF8Codec.toBytes(render)) + "/" + render.length());
+        logger.finest("3 x 3 matrix\n" + render);
+        logger.finest(CRCU.crc32String(UTF8Codec.toBytes(render)) + "/" + render.length());
     }
 
     @Test
@@ -36,8 +36,8 @@ public class MatrixTest {
             }
         }
         final String render = matrix.render(" | ");
-        logger.info("3 x 3 matrix\n" + render);
-        logger.info(CRCU.crc32String(UTF8Codec.toBytes(render)) + "/" + render.length());
+        logger.finest("3 x 3 matrix\n" + render);
+        logger.finest(CRCU.crc32String(UTF8Codec.toBytes(render)) + "/" + render.length());
     }
 
     @Test
@@ -54,7 +54,7 @@ public class MatrixTest {
             }
         }
         final String render = matrix.render(" | ");
-        logger.info("3 x 3 matrix (row labels, column labels)\n" + render);
-        logger.info(CRCU.crc32String(UTF8Codec.toBytes(render)) + "/" + render.length());
+        logger.finest("3 x 3 matrix (row labels, column labels)\n" + render);
+        logger.finest(CRCU.crc32String(UTF8Codec.toBytes(render)) + "/" + render.length());
     }
 }

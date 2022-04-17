@@ -26,6 +26,6 @@ public class NameTypeValuesTest {
                 Http.Header.ACCEPT, Http.Mime.TEXT_HTML_UTF8,
                 Http.Header.ACCEPT_ENCODING, Http.Header.GZIP,
                 Http.Header.AUTHORIZATION, basicAuth);
-        logger.info(headers.toString());
+        logger.finest(headers.toString());
     }
 }

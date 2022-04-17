@@ -18,7 +18,7 @@ public class EnvironmentTest {
     public void testGetEnv() throws IOException {
         final byte[] sysenv = EnvironmentU.getEnv(Collections.<String>emptyList());
         Assert.assertNotNull(sysenv);
-        logger.info(UTF8Codec.toString(sysenv));
-        logger.info(FingerPrint.toHex256(sysenv));
+        logger.finest(UTF8Codec.toString(sysenv));
+        logger.finest(FingerPrint.toHex256(sysenv));
     }
 }

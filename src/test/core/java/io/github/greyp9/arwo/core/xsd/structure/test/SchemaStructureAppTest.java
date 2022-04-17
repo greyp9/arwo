@@ -33,7 +33,7 @@ public class SchemaStructureAppTest {
         for (String xsd : TestApp.Resources.XSD_ARRAY) {
             URL urlInitial = ResourceU.resolve(xsd);
             Assert.assertNotNull(urlInitial);
-            logger.info("UrlInitial/" + URLCodec.toExternalForm(urlInitial));
+            logger.finest("UrlInitial/" + URLCodec.toExternalForm(urlInitial));
             URL urlCatalog = URLCodec.resolve(urlInitial, ".");
             Assert.assertNotNull(urlInitial);
             logger.finest("UrlCatalog/" + URLCodec.toExternalForm(urlCatalog));

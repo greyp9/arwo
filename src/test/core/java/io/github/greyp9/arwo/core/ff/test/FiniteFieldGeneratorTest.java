@@ -35,7 +35,7 @@ public class FiniteFieldGeneratorTest {
         for (int i = 1; (i < (sizeFiniteFieldExponent - 2)); ++i) {
             bytesFiniteFieldExponent[i] = multiply(bytesFiniteFieldExponent[i - 1], AES_GENERATOR);
         }
-        logger.info(HexCodec.encode(bytesFiniteFieldExponent));
+        logger.finest(HexCodec.encode(bytesFiniteFieldExponent));
         Assert.assertEquals(
                 "07ec21ce3f045f5d9a2121cf58798c94510122ad81272411a50e2918382ac428",
                 HexCodec.encode(HashU.sha256(bytesFiniteFieldExponent)));
@@ -44,7 +44,7 @@ public class FiniteFieldGeneratorTest {
         for (int i = 0; (i < sizeFiniteFieldLog); ++i) {
             bytesFiniteFieldLog[bytesFiniteFieldExponent[i] & LOW_BYTE_MASK] = (byte) i;
         }
-        logger.info(HexCodec.encode(bytesFiniteFieldLog));
+        logger.finest(HexCodec.encode(bytesFiniteFieldLog));
         Assert.assertEquals(
                 "f1930ba3ffbadd49b15e5720a34f4eee56d5ad634dfd5aee683f999bc0e2b970",
                 HexCodec.encode(HashU.sha256(bytesFiniteFieldLog)));

@@ -33,7 +33,7 @@ public class TimeHistogramTest {
         Date date = DateU.floor(XsdDateU.fromXSDZ("2000-01-01T00:00:00Z"), durationPage);
         TimeHistogram histogram = new TimeHistogram(null, null, null,
                 durationCell, durationPage, durationPage, durationPage, durationPage, durationPage);
-        logger.info(histogram.toString());
+        logger.finest(histogram.toString());
         for (int a = 0; (a < 3); ++a) {
             final Date dateIt = DurationU.add(date, DateU.Const.TZ_GMT, String.format("P%dD", a));
             histogram.add(dateIt, 1);
@@ -99,7 +99,7 @@ public class TimeHistogramTest {
         final File folder = new File(folderClass, "normalize-advance");
         final TimeHistogram histogram = new TimeHistogram("foo", null, folder.getPath(),
                 "PT1M", "PT15M", "PT1H", "PT1H", "PT1H", "PT2H");
-        logger.info(histogram.toString());
+        logger.finest(histogram.toString());
         final Date dateStart = DateU.floor(new Date(), "PT1H");
         final Date dateEnd = DurationU.add(dateStart, DateU.Const.TZ_GMT, "P1D");
         final long durationIt = DurationU.toMillisP("PT1M");
@@ -121,7 +121,7 @@ public class TimeHistogramTest {
         final File folder = new File(folderClass, "serialize");
         final TimeHistogram histogram = new TimeHistogram(
                 "foo", null, folder.getPath(), "PT1M", "PT1M", "PT5M", "PT5M", "PT5M", "PT10M");
-        logger.info(histogram.toString());
+        logger.finest(histogram.toString());
         final Date floor = DateU.floor(new Date(), "PT5M");
         final Date plusPT1M = DurationU.add(floor, DateU.Const.TZ_GMT, "PT1M");
         histogram.add(floor, 1);

@@ -50,7 +50,7 @@ public class XmlOutputSunTest {
         Assert.assertEquals("c26f702f", CRCU.crc32String(xmlNew));
 */
         final byte[] xmlNew = DocumentPrettyU.toXmlPretty(document);
-        logger.info("\n" + UTF8Codec.toString(xmlNew));
+        logger.finest("\n" + UTF8Codec.toString(xmlNew));
 /*
         Assert.assertEquals(253, xmlNew.length);
         Assert.assertEquals("40cabef1", CRCU.crc32String(xmlNew));

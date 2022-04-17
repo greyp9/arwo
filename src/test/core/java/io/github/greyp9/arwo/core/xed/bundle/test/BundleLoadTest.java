@@ -36,8 +36,8 @@ public class BundleLoadTest {
                 Assert.assertNotNull(xed1);
             }
             final long lap2 = stopwatch.lap();
-            logger.info(Long.toString(lap1));
-            logger.info(Long.toString(lap2));
+            logger.finest(Long.toString(lap1));
+            logger.finest(Long.toString(lap2));
         }
     }
 
@@ -46,7 +46,7 @@ public class BundleLoadTest {
         for (int i = 0; (i < 2); ++i) {
             Bundle bundle = getBundle();
             Assert.assertNotNull(bundle);
-            logger.info(bundle.getString("realm.realmType"));
+            logger.finest(bundle.getString("realm.realmType"));
         }
     }
 

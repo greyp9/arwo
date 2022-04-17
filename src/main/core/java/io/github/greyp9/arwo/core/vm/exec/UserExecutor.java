@@ -30,7 +30,7 @@ public class UserExecutor {
                 Const.N_THREAD_STREAMS, String.format("STREAM-%s", principal.getName()));
         this.runnables = new ArrayList<Runnable>();
         this.interval = new Interval(date, null);
-        logger.info(String.format("[+][%s][%s]", executorCommand, executorStream));
+        logger.fine(String.format("[+][%s][%s]", executorCommand, executorStream));
     }
 
     public final Principal getPrincipal() {
@@ -61,7 +61,7 @@ public class UserExecutor {
         interval.setDateFinish(date);
         executorCommand.shutdown();
         executorStream.shutdown();
-        logger.info(String.format("[-][%s][%s]", executorCommand, executorStream));
+        logger.fine(String.format("[-][%s][%s]", executorCommand, executorStream));
     }
 
     private static class Const {

@@ -37,7 +37,7 @@ public class DocumentFactoryAppTest {
         for (String xsd : TestApp.Resources.XSD_ARRAY) {
             URL urlInitial = ResourceU.resolve(xsd);
             Assert.assertNotNull(urlInitial);
-            logger.info("UrlInitial/" + URLCodec.toExternalForm(urlInitial));
+            logger.finest("UrlInitial/" + URLCodec.toExternalForm(urlInitial));
             URL urlCatalog = URLCodec.resolve(urlInitial, ".");
             Assert.assertNotNull(urlInitial);
             logger.finest("UrlCatalog/" + URLCodec.toExternalForm(urlCatalog));
@@ -71,7 +71,7 @@ public class DocumentFactoryAppTest {
         Validator validator = (xsdInitial == null)
                 ? new Validator(urlInitial) : new Validator(urlInitial, xsdInitial);
         Collection<String> messages = validator.validate(DocumentU.toXml(document));
-        Level level = (messages.isEmpty() ? Level.INFO : Level.WARNING);
+        Level level = (messages.isEmpty() ? Level.FINE : Level.WARNING);
         logger.log(level, "" + messages.size());
         for (String message : messages) {
             logger.warning(message);

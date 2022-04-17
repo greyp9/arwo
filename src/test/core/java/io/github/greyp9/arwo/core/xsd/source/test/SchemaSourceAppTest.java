@@ -27,7 +27,7 @@ public class SchemaSourceAppTest {
         for (String xsd : TestApp.Resources.XSD_ARRAY) {
             URL urlInitial = ResourceU.resolve(xsd);
             Assert.assertNotNull(urlInitial);
-            logger.info("UrlInitial/" + URLCodec.toExternalForm(urlInitial));
+            logger.finest("UrlInitial/" + URLCodec.toExternalForm(urlInitial));
             URL urlCatalog = URLCodec.resolve(urlInitial, ".");
             Assert.assertNotNull(urlInitial);
             logger.finest("UrlCatalog/" + URLCodec.toExternalForm(urlCatalog));
@@ -49,7 +49,7 @@ public class SchemaSourceAppTest {
         for (final String xsd : TestApp.Resources.XSD_ARRAY) {
             final URL urlInitial = ResourceU.resolve(xsd);
             Assert.assertNotNull(urlInitial);
-            logger.info("UrlInitial/" + URLCodec.toExternalForm(urlInitial));
+            logger.finest("UrlInitial/" + URLCodec.toExternalForm(urlInitial));
             // resolve schema collection for this initial schema
             final SchemaCollectionFactory schemaCollectionFactory = new SchemaCollectionFactory(null);
             final SchemaCollection schemaCollection = schemaCollectionFactory.create(urlInitial);

@@ -44,7 +44,7 @@ public class EnvironmentKeyGenerateTest {
         keyGenerator.init(AES.Const.KEY_BITS);
         final SecretKey keyGenerate = keyGenerator.generateKey();
         final byte[] keyBytes = keyGenerate.getEncoded();
-        logger.info(HexCodec.encode(keyBytes));
+        logger.finest(HexCodec.encode(keyBytes));
         // split the secret
         final int shareCount = 3;
         final int thresholdCount = 3;
@@ -68,7 +68,7 @@ public class EnvironmentKeyGenerateTest {
             ivs[i] = KeyU.getRandomBytes(AES.Const.IV_BYTES_CTR);
             final IvParameterSpec ivParameterSpec = new IvParameterSpec(ivs[i]);
             final byte[] shareWrapped = keyCodec.encode(shares[i], ivParameterSpec);
-            logger.info(HexCodec.encode(shareWrapped));
+            logger.finest(HexCodec.encode(shareWrapped));
             sharesWrapped[i] = shareWrapped;
             Assert.assertEquals(shares[i].length + AES.Const.IV_BYTES_CTR, sharesWrapped[i].length);
         }
@@ -86,7 +86,7 @@ public class EnvironmentKeyGenerateTest {
         // reconstitute the secret
         final DataSplitter dataSplitterRecover = new DataSplitter(shareCount, thresholdCount, null);
         final byte[] keyBytesRecover = dataSplitterRecover.join(sharesUnwrapped);
-        logger.info(HexCodec.encode(keyBytesRecover));
+        logger.finest(HexCodec.encode(keyBytesRecover));
         Assert.assertArrayEquals(keyBytes, keyBytesRecover);
     }
 }

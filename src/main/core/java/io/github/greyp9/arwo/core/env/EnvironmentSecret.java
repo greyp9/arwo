@@ -100,7 +100,7 @@ public final class EnvironmentSecret {
                 final byte[] bytesRecover = keyCodec.decode(shareBytes, parameterSpec);
                 shares.add(new EnvironmentShare(atom, bytesRecover));
             } catch (GeneralSecurityException e) {
-                LOGGER.info(() -> String.format("FAILED TO RECOVER ORDINAL %d", atom.getOrdinal()));
+                LOGGER.fine(() -> String.format("FAILED TO RECOVER ORDINAL %d", atom.getOrdinal()));
             }
         }
     }

@@ -44,11 +44,11 @@ public class FileSystemTest {
         while (FileU.isLink(fileIt)) {
             fileIt = FileU.getCanonicalFile(fileIt);
             files.add(fileIt);
-            logger.info(fileIt.getAbsolutePath());
+            logger.finest(fileIt.getAbsolutePath());
         }
         //Assert.assertEquals(2, files.size());
         for (File file : files) {
-            logger.info(file.getAbsolutePath());
+            logger.finest(file.getAbsolutePath());
         }
     }
 
@@ -63,7 +63,7 @@ public class FileSystemTest {
             Assert.assertTrue(folder.exists());
             final File[] files = FileU.listFiles(folder);
             for (File file : files) {
-                logger.info(file.getAbsolutePath());
+                logger.finest(file.getAbsolutePath());
                 Assert.assertTrue(file.exists());
             }
         }

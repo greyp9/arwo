@@ -9,6 +9,7 @@ import java.io.IOException;
 import java.util.logging.Logger;
 
 public class Base64CodecTest {
+    private final Logger logger = Logger.getLogger(getClass().getName());
 
     @Test
     public void testCodec_Simple() throws IOException {
@@ -27,7 +28,7 @@ public class Base64CodecTest {
             input[i] = (byte) (i % permuteChar);
         }
         final String encoded = Base64Codec.encode(input);
-        Logger.getLogger(getClass().getName()).info(encoded);
+        logger.finest(encoded);
         Assert.assertTrue(encoded.startsWith("AAECAwQFBgcI"));
         Assert.assertTrue(encoded.endsWith("+Pn6+/z9/v8="));
         final byte[] inputRecover = Base64Codec.decode(encoded);

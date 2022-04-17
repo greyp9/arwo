@@ -18,7 +18,7 @@ public class SysPropsTest {
     public void testGetProps() throws IOException {
         final byte[] sysprops = SysPropsU.getProps(Collections.<String>emptyList());
         Assert.assertNotNull(sysprops);
-        logger.info(UTF8Codec.toString(sysprops));
-        logger.info(FingerPrint.toHex256(sysprops));
+        logger.finest(UTF8Codec.toString(sysprops));
+        logger.finest(FingerPrint.toHex256(sysprops));
     }
 }
