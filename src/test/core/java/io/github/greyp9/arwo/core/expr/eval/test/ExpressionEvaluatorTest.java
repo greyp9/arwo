@@ -1,7 +1,8 @@
 package io.github.greyp9.arwo.core.expr.eval.test;
 
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
-import io.github.greyp9.arwo.core.env.KeyEvaluator;
+import io.github.greyp9.arwo.core.env.eval.KeyEvaluator;
+import io.github.greyp9.arwo.core.env.eval.KeyNode;
 import io.github.greyp9.arwo.core.expr.Node;
 import io.github.greyp9.arwo.core.expr.eval.ExpressionEvaluator;
 import io.github.greyp9.arwo.core.expr.eval.LastModifiedEvaluator;
@@ -46,8 +47,11 @@ public class ExpressionEvaluatorTest {
 
         final String expression = "key(2 prop('file.encoding') env('HOME') mod('~/Downloads'))";
         final Node node = evaluator.evaluate(expression);
-        //Assert.assertTrue(node instanceof Operand);
-        Assert.assertNull(node);
+        Assert.assertTrue(node instanceof KeyNode);
+        final KeyNode keyNode = (KeyNode) node;
+        Assert.assertEquals(2, keyNode.getThreshold());
+        final int expectedAtoms = 3;
+        Assert.assertEquals(expectedAtoms, keyNode.getAtomNodes().size());
     }
 
     private static final String PROP = "prop";

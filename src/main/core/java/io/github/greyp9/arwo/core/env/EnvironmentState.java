@@ -39,4 +39,12 @@ public final class EnvironmentState {
         this.atoms = new ArrayList<>(Arrays.asList(atoms));
         this.threshold = threshold;
     }
+
+    public EnvironmentState(final String resource, final String expression,
+                            final int threshold, final List<EnvironmentAtom> atoms) {
+        this.resource = resource;
+        this.expression = expression;
+        this.atoms = atoms;
+        this.threshold = threshold;
+    }
 }

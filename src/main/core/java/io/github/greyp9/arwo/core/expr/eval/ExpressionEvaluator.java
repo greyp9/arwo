@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.expr.eval;
 
+import io.github.greyp9.arwo.core.env.eval.AtomNode;
 import io.github.greyp9.arwo.core.expr.Grammar;
 import io.github.greyp9.arwo.core.expr.Node;
 import io.github.greyp9.arwo.core.expr.Operand;
@@ -24,7 +25,13 @@ public final class ExpressionEvaluator {
 
     public String evaluateAsString(final String expression) {
         final Node node = evaluate(expression);
-        return (node instanceof Operand) ? ((Operand) node).getValue() : null;
+        if (node instanceof Operand) {
+            return ((Operand) node).getValue();
+        } else if (node instanceof AtomNode) {
+            return ((AtomNode) node).getAtom().getValue();
+        } else {
+            return null;
+        }
     }
 
     public Node evaluate(final String expression) {
@@ -62,7 +69,7 @@ public final class ExpressionEvaluator {
         if (evaluator == null) {
             throw new IllegalArgumentException(op);
         } else {
-            node = evaluator.evaluate(operandsA);
+            node = evaluator.evaluate(new MultiOperator(multiOperator.getOp(), operandsA));
         }
         return node;
     }

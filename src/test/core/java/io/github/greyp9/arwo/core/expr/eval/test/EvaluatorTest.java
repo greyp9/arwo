@@ -2,8 +2,8 @@ package io.github.greyp9.arwo.core.expr.eval.test;
 
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.codec.hex.HexCodec;
+import io.github.greyp9.arwo.core.env.eval.AtomNode;
 import io.github.greyp9.arwo.core.expr.Node;
-import io.github.greyp9.arwo.core.expr.Operand;
 import io.github.greyp9.arwo.core.expr.eval.ExpressionEvaluator;
 import io.github.greyp9.arwo.core.expr.eval.FolderEvaluator;
 import io.github.greyp9.arwo.core.expr.eval.LastModifiedEvaluator;
@@ -32,8 +32,8 @@ public class EvaluatorTest {
         final ExpressionEvaluator evaluator = new ExpressionEvaluator();
         evaluator.register(PROP, new SysPropEvaluator());
         final Node node = evaluator.evaluate("prop('file.encoding')");
-        Assert.assertTrue(node instanceof Operand);
-        Assert.assertEquals(UTF8Codec.Const.UTF8, ((Operand) node).getValue());
+        Assert.assertTrue(node instanceof AtomNode);
+        Assert.assertEquals(UTF8Codec.Const.UTF8, ((AtomNode) node).getAtom().getValue());
     }
 
     @Test
@@ -41,8 +41,8 @@ public class EvaluatorTest {
         final ExpressionEvaluator evaluator = new ExpressionEvaluator();
         evaluator.register(ENV, new SysEnvEvaluator());
         final Node node = evaluator.evaluate("env('HOME')");
-        Assert.assertTrue(node instanceof Operand);
-        Assert.assertEquals(SystemU.userHome(), ((Operand) node).getValue());
+        Assert.assertTrue(node instanceof AtomNode);
+        Assert.assertEquals(SystemU.userHome(), ((AtomNode) node).getAtom().getValue());
     }
 
     @Test
