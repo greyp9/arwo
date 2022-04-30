@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.StringTokenizer;
+import java.util.function.Supplier;
 
 public final class Value {
 
@@ -79,7 +80,7 @@ public final class Value {
     }
 
     public static List<String> split(final String connector, final String values) {
-        final List<String> valuesList = new ArrayList<String>();
+        final List<String> valuesList = new ArrayList<>();
         if (values != null) {
             final StringTokenizer tokenizer = new StringTokenizer(values, connector, false);
             while (tokenizer.hasMoreTokens()) {
@@ -129,5 +130,11 @@ public final class Value {
             buffer.append(value);
         }
         return buffer.toString();
+    }
+
+    public static <T extends Exception> void require(final boolean condition, final Supplier<T> e) throws T {
+        if (!condition) {
+            throw e.get();
+        }
     }
 }
