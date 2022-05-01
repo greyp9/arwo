@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.core.codec.hex.HexCodec;
 import io.github.greyp9.arwo.core.envsec.EnvironmentSecret;
 import io.github.greyp9.arwo.core.expr.Grammar;
 import io.github.greyp9.arwo.core.expr.Node;
+import io.github.greyp9.arwo.core.expr.Operand;
 import io.github.greyp9.arwo.core.expr.Tree;
 import io.github.greyp9.arwo.core.expr.op.MultiOperator;
 import io.github.greyp9.arwo.core.file.find.FindInFolderQuery;
@@ -19,6 +20,7 @@ import org.junit.runners.MethodSorters;
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Properties;
@@ -37,9 +39,9 @@ public class EnvironmentSecretPersistTest {
         folderTest.mkdir();
         logger.finest(folderTest.getAbsolutePath());
         final File fileExpression = new File(folderTest, "env.txt");
-        final String expression = "secret(\n"
-                + "secret(prop('file.encoding') prop('java.runtime.version'))\n"
-                + "secret(prop('os.name') prop('os.version'))\n"
+        final String expression = "secret(2 \n"
+                + "secret(2 prop('file.encoding') prop('java.runtime.version'))\n"
+                + "secret(2 prop('os.name') prop('os.version'))\n"
                 + ")";
         StreamU.write(fileExpression, UTF8Codec.toBytes(expression));
     }
@@ -53,13 +55,17 @@ public class EnvironmentSecretPersistTest {
         final MultiOperator root = Optional.of(tree.getRoot())
                 .map(MultiOperator.class::cast)
                 .orElseThrow(IllegalStateException::new);
-        final List<Node> children1 = root.getOperands();
-        for (Node child1 : children1) {
+        final List<Node> operands = new ArrayList<>(root.getOperands());
+        final Node operandThresholdN = operands.remove(0);
+        Assert.assertTrue(operandThresholdN instanceof Operand);
+        for (Node child1 : operands) {
             final MultiOperator multi1 = Optional.of(child1)
                     .map(MultiOperator.class::cast)
                     .orElseThrow(IllegalStateException::new);
             Assert.assertEquals("secret", multi1.getOp());
-            final List<Node> children2 = multi1.getOperands();
+            final List<Node> children2 = new ArrayList<>(multi1.getOperands());
+            final Node operandThresholdNChild = children2.remove(0);
+            Assert.assertTrue(operandThresholdNChild instanceof Operand);
             for (Node child2 : children2) {
                 final MultiOperator multi2 = Optional.of(child2)
                         .map(MultiOperator.class::cast)

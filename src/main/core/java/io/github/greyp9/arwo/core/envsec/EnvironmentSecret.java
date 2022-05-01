@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.core.codec.b64.Base64Codec;
 import io.github.greyp9.arwo.core.envsec.eval.EvaluatorRegistry;
 import io.github.greyp9.arwo.core.expr.Grammar;
 import io.github.greyp9.arwo.core.expr.Node;
+import io.github.greyp9.arwo.core.expr.Operand;
 import io.github.greyp9.arwo.core.expr.Tree;
 import io.github.greyp9.arwo.core.expr.op.MultiOperator;
 import io.github.greyp9.arwo.core.ff.DataSplitter;
@@ -26,6 +27,7 @@ import javax.crypto.spec.GCMParameterSpec;
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -65,9 +67,11 @@ public final class EnvironmentSecret {
 
     private Element generateA(final MultiOperator operator, final byte[] data)
             throws GeneralSecurityException, IOException {
-        final List<Node> operands = operator.getOperands();
-        // number of shares equal to number of operands
-        final DataSplitter dataSplitter = new DataSplitter(operands.size(), operands.size(), random);
+        final List<Node> operands = new ArrayList<>(operator.getOperands());
+        final Operand operandThresholdN = (Operand) operands.remove(0);
+        final int sharesN = operands.size();
+        final int thresholdN = Integer.parseInt(operandThresholdN.getValue());
+        final DataSplitter dataSplitter = new DataSplitter(sharesN, thresholdN, random);
         final byte[][] shares = dataSplitter.split(data);
         // assemble store of share data
         final Document document = DocumentU.createDocument(Const.SECRET, Const.URI);
@@ -117,26 +121,28 @@ public final class EnvironmentSecret {
 
     private byte[] recoverA(final MultiOperator operator, final Element element)
             throws IOException, GeneralSecurityException {
-        final List<Node> operands = operator.getOperands();
+        final List<Node> operands = new ArrayList<>(operator.getOperands());
+        final Operand operandThresholdN = (Operand) operands.remove(0);
         final int sharesN = operands.size();
-        final int thresholdN = operands.size();
-        final byte[][] shares = new byte[operands.size()][];
-        int index = -1;
+        final int thresholdN = Integer.parseInt(operandThresholdN.getValue());
+        final List<byte[]> shares = new ArrayList<>();
         final Iterator<Node> iterator = operands.iterator();
         for (Element elementChild : ElementU.getChildren(element)) {
+            final byte[] share;
             final Node node = iterator.next();
             final MultiOperator operatorChild = (MultiOperator) node;
             final String op = operatorChild.getOp();
             if (Const.SECRET.equals(op)) {
-                shares[++index] = recoverA(operatorChild, elementChild);
+                share = recoverA(operatorChild, elementChild);
             } else {
-                final byte[] share = Base64Codec.decode(ElementU.getTextContent(elementChild));
+                final byte[] cipherText = Base64Codec.decode(ElementU.getTextContent(elementChild));
                 final Object result = registry.evaluate(operatorChild);
-                shares[++index] = unprotect((NameTypeValue) result, share);
+                share = unprotect((NameTypeValue) result, cipherText);
             }
+            Optional.ofNullable(share).ifPresent(shares::add);
         }
         final DataSplitter dataSplitter = new DataSplitter(sharesN, thresholdN, null);
-        return dataSplitter.join(shares);
+        return dataSplitter.join(shares.toArray(new byte[shares.size()][]));
     }
 
     private byte[] protect(
