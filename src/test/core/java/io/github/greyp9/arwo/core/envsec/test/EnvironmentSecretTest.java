@@ -214,4 +214,19 @@ public class EnvironmentSecretTest {
         final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
         Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
     }
+
+    @Test
+    public void test_ExpressionRecurse() throws IOException, GeneralSecurityException {
+        final File fileExpression = new File(folderTest, "envER.txt");
+        final File fileShares = new File(folderTest, "envER.txt.xml");
+        tearDownCustom(fileExpression, fileShares);
+        final String expression =
+                "secret(3 folder(prop('user.home') '*.*') folder(env('HOME') '*.*') mod(env('HOME')))";
+        StreamU.write(fileExpression, UTF8Codec.toBytes(expression));
+
+        final byte[] secret = AES.generate().getEncoded();
+        new EnvironmentSecret(fileExpression.getPath(), new Random(0L)).generate(secret);
+        final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
+        Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+    }
 }
