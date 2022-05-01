@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.app.core.view.head;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.config.Preferences;
 import io.github.greyp9.arwo.core.date.HttpDateU;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.http.Http;
@@ -9,6 +10,7 @@ import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.ByteU;
 import io.github.greyp9.arwo.core.io.StreamU;
+import io.github.greyp9.arwo.core.lang.NumberU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import org.w3c.dom.Element;
@@ -29,14 +31,18 @@ public class AppHeadView {
 
     public final HttpResponse addContentTo(
             final Element html, final MetaFile metaFile, final Bundle bundle) throws IOException {
+        final Preferences preferences = new Preferences(userState.getConfig());
+        final String settingHeadSize = preferences.getSetting("/app:view/app:headSize");
+        final int headSize = NumberU.toInt(settingHeadSize, Const.PAGE_HEAD_VIEW);
+
         httpRequest.getClass();
-        userState.getClass();
         html.getClass();
         bundle.getClass();
+
         // get first bytes of resource
         final byte[] bytes = StreamU.read(metaFile.getBytes());
         final int offset = 0;
-        final int length = Math.min(bytes.length, Const.PAGE_HEAD_VIEW);
+        final int length = Math.min(bytes.length, headSize);
         final byte[] bytesHead = ByteU.extract(bytes, offset, length);
         final String lastModified = HttpDateU.toHttpZ(new Date(metaFile.getMetaData().getLastModified()));
         final NameTypeValues headers = new NameTypeValues(new NameTypeValue(Http.Header.LAST_MODIFIED, lastModified));

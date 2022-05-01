@@ -326,6 +326,7 @@
         <xsd:sequence>
             <xsd:element name='mimeTypes' type='app:mimeTypesType'/>
             <xsd:element name='localization' type='app:localizationType'/>
+            <xsd:element name='view' type='app:viewType'/>
             <xsd:element name='table' type='app:tableType'/>
             <xsd:element name='ui' type='app:uiType'/>
         </xsd:sequence>
@@ -363,6 +364,13 @@
             <xsd:enumeration value='JA'/>
         </xsd:restriction>
     </xsd:simpleType>
+
+    <xsd:complexType name='viewType'>
+        <xsd:sequence>
+            <xsd:element name='headSize' type='xsd:unsignedInt' default='4096'/>
+            <xsd:element name='tailSize' type='xsd:unsignedInt' default='4096'/>
+        </xsd:sequence>
+    </xsd:complexType>
 
     <xsd:complexType name='tableType'>
         <xsd:sequence>

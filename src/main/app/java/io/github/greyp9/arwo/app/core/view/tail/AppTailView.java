@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.app.core.view.tail;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.config.Preferences;
 import io.github.greyp9.arwo.core.date.HttpDateU;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.http.Http;
@@ -9,6 +10,7 @@ import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.ByteU;
 import io.github.greyp9.arwo.core.io.StreamU;
+import io.github.greyp9.arwo.core.lang.NumberU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import org.w3c.dom.Element;
@@ -29,13 +31,17 @@ public class AppTailView {
 
     public final HttpResponse addContentTo(
             final Element html, final MetaFile metaFile, final Bundle bundle) throws IOException {
+        final Preferences preferences = new Preferences(userState.getConfig());
+        final String settingTailSize = preferences.getSetting("/app:view/app:tailSize");
+        final int tailSize = NumberU.toInt(settingTailSize, Const.PAGE_TAIL_VIEW);
+
         httpRequest.getClass();
-        userState.getClass();
         html.getClass();
         bundle.getClass();
+
         // get last bytes of resource
         final byte[] bytes = StreamU.read(metaFile.getBytes());
-        final int offset = Math.max(0, bytes.length - Const.PAGE_TAIL_VIEW);
+        final int offset = Math.max(0, bytes.length - tailSize);
         final int length = bytes.length - offset;
         final byte[] bytesTail = ByteU.extract(bytes, offset, length);
         final String lastModified = HttpDateU.toHttpZ(new Date(metaFile.getMetaData().getLastModified()));

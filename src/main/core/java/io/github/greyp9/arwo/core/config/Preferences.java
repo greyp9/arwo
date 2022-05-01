@@ -24,6 +24,10 @@ public class Preferences {
         this.cursor = new XedNav(xed).find(element);
     }
 
+    public final String getSetting(final String xpath) throws IOException {
+        return cursor.getXed().getXPather().getText(Const.PREFERENCES + xpath);
+    }
+
     public final String getMIMEType(final String path) throws IOException {
         final String extensionFile = Value.defaultOnNull(new FileX(path).getExtension(), "");
         final String extensionToLower = extensionFile.toLowerCase(Locale.getDefault());
