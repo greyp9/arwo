@@ -10,6 +10,7 @@ import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.menu.MenuItem;
 import io.github.greyp9.arwo.core.menu.MenuSystem;
+import io.github.greyp9.arwo.core.resource.Pather;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
@@ -106,14 +107,30 @@ public class MenuView {
             final String key = Value.join(".", App.CSS.MENU, parentName, itemIt.getName());
             final String title = bundle.getString(key + ".DETAIL");
             final String label = bundle.getString(key);
-            final SubmitToken token = new SubmitToken(
-                    itemIt.getSubject(), itemIt.getAction(), itemIt.getObject(), itemIt.getObject2());
-            final String htmlClass = Value.join(Html.SPACE, App.CSS.MENU, App.CSS.MIN,
-                    (itemIt.isOpen() ? App.CSS.ACTIVE : null));
-            HtmlU.addButton(divMenu, label, menuSystem.getSubmitID(), token.toString(), htmlClass, title, accessKey);
+            if (itemIt.getAction().equals(App.Action.HREF)) {
+                final String baseURI = httpRequest.getBaseURI();
+                final String pathInfo = httpRequest.getPathInfo();
+                final String object = itemIt.getObject();
+                final String pathInfo1 = getPathInfo(pathInfo, object);
+                ElementU.addElement(divMenu, Html.A, label, NTV.create(Html.TITLE, title,
+                        Html.CLASS, App.CSS.MENU, Html.HREF, (baseURI + pathInfo1)));
+            } else {
+                final SubmitToken token = new SubmitToken(
+                        itemIt.getSubject(), itemIt.getAction(), itemIt.getObject(), itemIt.getObject2());
+                final String htmlClass = Value.join(Html.SPACE, App.CSS.MENU, App.CSS.MIN,
+                        (itemIt.isOpen() ? App.CSS.ACTIVE : null));
+                HtmlU.addButton(divMenu, label, menuSystem.getSubmitID(), token.toString(),
+                        htmlClass, title, accessKey);
+            }
         }
         if ((itemOpen != null) && (!itemOpen.getMenuItems().isEmpty())) {
             addMenu(html, itemOpen, false, false, accessKey, null);
         }
+    }
+
+    private String getPathInfo(final String pathInfo, final String contextUpdate) {
+        final Pather pather0 = new Pather(pathInfo);
+        final Pather pather1 = new Pather(pather0.getRight());
+        return pather0.getLeft() + contextUpdate + pather1.getRight();
     }
 }

@@ -238,6 +238,7 @@ public final class App {
         public static final String FILE_UPDATE = "fileUpdate";
         public static final String FILE_CREATE = "fileCreate";
         public static final String FOLDER_CREATE = "folderCreate";
+        public static final String HREF = "href";
         public static final String REFRESH = "refresh";
         public static final String COMMAND = "command";
         public static final String SQL = "sql";

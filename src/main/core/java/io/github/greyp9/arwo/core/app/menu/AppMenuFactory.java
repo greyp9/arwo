@@ -118,12 +118,15 @@ public class AppMenuFactory implements MenuFactory {
         final MenuItem itemViewHead = new MenuItem(App.Mode.VIEW_HEAD, App.Target.USER_STATE, App.Mode.VIEW_HEAD);
         final MenuItem itemViewTail = new MenuItem(App.Mode.VIEW_TAIL, App.Target.USER_STATE, App.Mode.VIEW_TAIL);
         final MenuItem itemViewGZ = new MenuItem(App.Mode.VIEW_GZ, App.Target.USER_STATE, App.Mode.VIEW_GZ);
+        final MenuItem itemViewGZRef = new MenuItem(App.Mode.VIEW_GZ, null, App.Action.HREF, "/" + App.Mode.VIEW_GZ);
         final MenuItem itemViewZIP = new MenuItem(App.Mode.VIEW_ZIP, App.Target.USER_STATE, App.Mode.VIEW_ZIP);
+        final MenuItem itemViewZIPRef = new MenuItem(App.Mode.VIEW_ZIP, null, App.Action.HREF, "/" + App.Mode.VIEW_ZIP);
         final MenuItem itemViewTGZ = new MenuItem(App.Mode.VIEW_TGZ, App.Target.USER_STATE, App.Mode.VIEW_TGZ);
         final MenuItem itemViewHex = new MenuItem(App.Mode.VIEW_HEX, App.Target.USER_STATE, App.Mode.VIEW_HEX);
         final MenuItem itemViewR = new MenuItem(App.Mode.VIEW_R, App.Target.USER_STATE, App.Mode.VIEW_R);
         return new MenuItem(App.Mode.VIEW, App.Target.USER_STATE, App.Action.MENU, Value.join("/", key, App.Mode.VIEW),
-                itemView, itemViewHead, itemViewTail, itemViewGZ, itemViewZIP, itemViewTGZ, itemViewHex, itemViewR);
+                itemView, itemViewHead, itemViewTail, itemViewGZ, itemViewGZRef, itemViewZIP, itemViewZIPRef,
+                itemViewTGZ, itemViewHex, itemViewR);
     }
 
     private static MenuItem createMenuViewMime(final String key) {
