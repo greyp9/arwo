@@ -1,13 +1,18 @@
 package io.github.greyp9.arwo.core.envsec.eval;
 
+import io.github.greyp9.arwo.core.expr.Node;
+import io.github.greyp9.arwo.core.expr.Operand;
 import io.github.greyp9.arwo.core.expr.op.MultiOperator;
+import io.github.greyp9.arwo.core.value.NameTypeValue;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.TreeMap;
 
 public final class EvaluatorRegistry {
-
     private final Map<String, Evaluator> evaluators;
 
     public EvaluatorRegistry() {
@@ -17,15 +22,27 @@ public final class EvaluatorRegistry {
         this.evaluators.put("mod", new LastModifiedEvaluator());
     }
 
-    public Object evaluate(final MultiOperator multiOperator) throws IOException {
-        final String op = multiOperator.getOp();
-        final Evaluator evaluator = evaluators.get(op);
-        if (evaluator == null) {
-            throw new IOException(op);
-        } else {
-            final Object evaluate = evaluator.evaluate(multiOperator);
-            multiOperator.setResult(evaluate);
-            return evaluate;
+    public NameTypeValue evaluate(final MultiOperator operator) throws IOException {
+        final String op = operator.getOp();
+        final List<Node> operands = new ArrayList<>();
+        for (Node node : operator.getOperands()) {
+            operands.add(toOperand(node));
         }
+        final Evaluator evaluator = Optional.ofNullable(evaluators.get(op))
+                .orElseThrow(() -> new IOException("foo"));
+        return (NameTypeValue) evaluator.evaluate(new MultiOperator(op, operands));
+    }
+
+    private Operand toOperand(final Node node) throws IOException {
+        final Operand operand;
+        if (node instanceof Operand) {
+            operand = (Operand) node;
+        } else if (node instanceof MultiOperator) {
+            final NameTypeValue ntv = evaluate((MultiOperator) node);
+            operand = new Operand(ntv.getValueS());
+        } else {
+            throw new IOException(node.getClass().getName());
+        }
+        return operand;
     }
 }

@@ -78,27 +78,15 @@ public final class EnvironmentSecret {
         final Element element = document.getDocumentElement();
         for (int i = 0; (i < operands.size()); ++i) {
             final MultiOperator operatorChild = (MultiOperator) operands.get(i);
-            final Element elementChild = generateB(operatorChild, shares[i]);
-            if (elementChild == null) {
-                final NameTypeValue ntv = (NameTypeValue) operands.get(i).getResult();
-                final byte[] share = protect(ntv, shares[i]);
-                ElementU.addElement(element, Const.SHARE, Base64Codec.encode(share));
-            } else {
+            if (Const.SECRET.equals(operatorChild.getOp())) {
+                final Element elementChild = generateA(operatorChild, shares[i]);
                 element.getOwnerDocument().adoptNode(elementChild);
                 ElementU.addElement(element, elementChild, null);
+            } else {
+                final NameTypeValue nameTypeValue = registry.evaluate(operatorChild);
+                final byte[] share = protect(nameTypeValue, shares[i]);
+                ElementU.addElement(element, Const.SHARE, Base64Codec.encode(share));
             }
-        }
-        return element;
-    }
-
-    private Element generateB(final MultiOperator operator, final byte[] data)
-            throws GeneralSecurityException, IOException {
-        final Element element;
-        if (Const.SECRET.equals(operator.getOp())) {
-            element = generateA(operator, data);
-        } else {
-            registry.evaluate(operator);
-            element = null;
         }
         return element;
     }
@@ -136,8 +124,8 @@ public final class EnvironmentSecret {
                 share = recoverA(operatorChild, elementChild);
             } else {
                 final byte[] cipherText = Base64Codec.decode(ElementU.getTextContent(elementChild));
-                final Object result = registry.evaluate(operatorChild);
-                share = unprotect((NameTypeValue) result, cipherText);
+                final NameTypeValue nameTypeValue = registry.evaluate(operatorChild);
+                share = unprotect(nameTypeValue, cipherText);
             }
             Optional.ofNullable(share).ifPresent(shares::add);
         }

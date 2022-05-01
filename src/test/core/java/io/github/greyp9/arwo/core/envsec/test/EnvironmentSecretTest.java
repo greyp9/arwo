@@ -96,6 +96,21 @@ public class EnvironmentSecretTest {
     }
 
     @Test
+    public void test_OneSecretPropWrap() throws IOException, GeneralSecurityException {
+        final File fileExpression = new File(folderTest, "envOSPW.txt");
+        final File fileShares = new File(folderTest, "envOSPW.txt.xml");
+        tearDownCustom(fileExpression, fileShares);
+        final String expression =
+                "secret(2 prop('file.encoding') mod(prop('user.home')))";
+        StreamU.write(fileExpression, UTF8Codec.toBytes(expression));
+
+        final byte[] secret = AES.generate().getEncoded();
+        new EnvironmentSecret(fileExpression.getPath(), new Random(0L)).generate(secret);
+        final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
+        Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+    }
+
+    @Test
     public void test_OneSecretThreshold() throws IOException, GeneralSecurityException {
         final File fileExpression = new File(folderTest, "envOST.txt");
         final File fileShares = new File(folderTest, "envOST.txt.xml");
