@@ -50,6 +50,22 @@ public class EnvironmentSecretTest {
     }
 
     @Test
+    public void test_OneSecretNewProp() throws IOException, GeneralSecurityException {
+        final File fileExpression = new File(folderTest, "envOSNP.txt");
+        final File fileShares = new File(folderTest, "envOSNP.txt.xml");
+        tearDownCustom(fileExpression, fileShares);
+        final String expression =
+                "secret(2 prop('file.encoding') prop('foo'))";
+        StreamU.write(fileExpression, UTF8Codec.toBytes(expression));
+
+        final byte[] secret = AES.generate().getEncoded();
+        new EnvironmentSecret(fileExpression.getPath(), new Random(0L)).generate(secret);
+        System.setProperty("foo", "bar");  // add property that was missing, should cause recovery to fail
+        final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
+        Assert.assertNotEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+    }
+
+    @Test
     public void test_OneSecretEnv() throws IOException, GeneralSecurityException {
         final File fileExpression = new File(folderTest, "envOSE.txt");
         final File fileShares = new File(folderTest, "envOSE.txt.xml");
