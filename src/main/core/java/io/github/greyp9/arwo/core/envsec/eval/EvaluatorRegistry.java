@@ -13,13 +13,15 @@ public final class EvaluatorRegistry {
     public EvaluatorRegistry() {
         this.evaluators = new TreeMap<>();
         this.evaluators.put("prop", new SysPropEvaluator());
+        this.evaluators.put("env", new SysEnvEvaluator());
+        this.evaluators.put("mod", new LastModifiedEvaluator());
     }
 
     public Object evaluate(final MultiOperator multiOperator) throws IOException {
         final String op = multiOperator.getOp();
         final Evaluator evaluator = evaluators.get(op);
         if (evaluator == null) {
-            throw new IllegalStateException(op);
+            throw new IOException(op);
         } else {
             final Object evaluate = evaluator.evaluate(multiOperator);
             multiOperator.setResult(evaluate);

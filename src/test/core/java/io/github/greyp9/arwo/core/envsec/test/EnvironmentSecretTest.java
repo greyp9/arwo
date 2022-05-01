@@ -13,6 +13,7 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -26,10 +27,18 @@ public class EnvironmentSecretTest {
         logger.finest(String.format("mkdirs=%s", mkdirs));
     }
 
+    /**
+     * Custom cleanup per test case.
+     */
+    private void tearDownCustom(final File... files) {
+        Arrays.stream(files).forEach(File::deleteOnExit);
+    }
+
     @Test
-    public void test_OneSecret() throws IOException, GeneralSecurityException {
-        final File fileExpression = new File(folderTest, "env0.txt");
-        final File fileShares = new File(folderTest, "env0.xml");
+    public void test_OneSecretProp() throws IOException, GeneralSecurityException {
+        final File fileExpression = new File(folderTest, "envOSP.txt");
+        final File fileShares = new File(folderTest, "envOSP.txt.xml");
+        tearDownCustom(fileExpression, fileShares);
         final String expression =
                 "secret(2 prop('file.encoding') prop('java.runtime.version'))";
         StreamU.write(fileExpression, UTF8Codec.toBytes(expression));
@@ -38,15 +47,43 @@ public class EnvironmentSecretTest {
         new EnvironmentSecret(fileExpression.getPath(), new Random(0L)).generate(secret);
         final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
         Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+    }
 
-        fileExpression.deleteOnExit();
-        fileShares.deleteOnExit();
+    @Test
+    public void test_OneSecretEnv() throws IOException, GeneralSecurityException {
+        final File fileExpression = new File(folderTest, "envOSE.txt");
+        final File fileShares = new File(folderTest, "envOSE.txt.xml");
+        tearDownCustom(fileExpression, fileShares);
+        final String expression =
+                "secret(2 env('HOME') env('SHELL'))";
+        StreamU.write(fileExpression, UTF8Codec.toBytes(expression));
+
+        final byte[] secret = AES.generate().getEncoded();
+        new EnvironmentSecret(fileExpression.getPath(), new Random(0L)).generate(secret);
+        final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
+        Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+    }
+
+    @Test
+    public void test_OneSecretMod() throws IOException, GeneralSecurityException {
+        final File fileExpression = new File(folderTest, "envOSM.txt");
+        final File fileShares = new File(folderTest, "envOSM.txt.xml");
+        tearDownCustom(fileExpression, fileShares);
+        final String expression =
+                "secret(2 mod('~') mod('~/Downloads'))";
+        StreamU.write(fileExpression, UTF8Codec.toBytes(expression));
+
+        final byte[] secret = AES.generate().getEncoded();
+        new EnvironmentSecret(fileExpression.getPath(), new Random(0L)).generate(secret);
+        final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
+        Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
     }
 
     @Test
     public void test_OneSecretThreshold() throws IOException, GeneralSecurityException {
-        final File fileExpression = new File(folderTest, "env2.txt");
-        final File fileShares = new File(folderTest, "env2.xml");
+        final File fileExpression = new File(folderTest, "envOST.txt");
+        final File fileShares = new File(folderTest, "envOST.txt.xml");
+        tearDownCustom(fileExpression, fileShares);
         final String expression =
                 "secret(2 prop('file.encoding') prop('java.runtime.version') prop('A'))";
         StreamU.write(fileExpression, UTF8Codec.toBytes(expression));
@@ -58,15 +95,13 @@ public class EnvironmentSecretTest {
         System.setProperty("A", "bar");
         final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
         Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
-
-        fileExpression.deleteOnExit();
-        fileShares.deleteOnExit();
     }
 
     @Test
     public void test_OneSecretThresholdOrder() throws IOException, GeneralSecurityException {
-        final File fileExpression = new File(folderTest, "env4.txt");
-        final File fileShares = new File(folderTest, "env4.xml");
+        final File fileExpression = new File(folderTest, "envOSTO.txt");
+        final File fileShares = new File(folderTest, "envOSTO.txt.xml");
+        tearDownCustom(fileExpression, fileShares);
         final String expression =
                 "secret(2 prop('A') prop('file.encoding') prop('java.runtime.version'))";
         StreamU.write(fileExpression, UTF8Codec.toBytes(expression));
@@ -78,15 +113,13 @@ public class EnvironmentSecretTest {
         System.setProperty("A", "bar");
         final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
         Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
-
-        fileExpression.deleteOnExit();
-        fileShares.deleteOnExit();
     }
 
     @Test
     public void test_OneSecretThresholdFail() throws IOException, GeneralSecurityException {
-        final File fileExpression = new File(folderTest, "env3.txt");
-        final File fileShares = new File(folderTest, "env3.xml");
+        final File fileExpression = new File(folderTest, "envOSTF.txt");
+        final File fileShares = new File(folderTest, "envOSTF.txt.xml");
+        tearDownCustom(fileExpression, fileShares);
         final String expression =
                 "secret(2 prop('file.encoding') prop('A') prop('B'))";
         StreamU.write(fileExpression, UTF8Codec.toBytes(expression));
@@ -100,15 +133,13 @@ public class EnvironmentSecretTest {
         System.setProperty("B", "foo");
         final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
         Assert.assertNotEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
-
-        fileExpression.deleteOnExit();
-        fileShares.deleteOnExit();
     }
 
     @Test
     public void test_LayeredSecret() throws IOException, GeneralSecurityException {
-        final File fileExpression = new File(folderTest, "env1.txt");
-        final File fileShares = new File(folderTest, "env1.xml");
+        final File fileExpression = new File(folderTest, "envLS.txt");
+        final File fileShares = new File(folderTest, "envLS.txt.xml");
+        tearDownCustom(fileExpression, fileShares);
         final String expression = "secret(2\n"
                 + "secret(2 prop('file.encoding') prop('java.runtime.version'))\n"
                 + "secret(2 prop('os.name') prop('os.version'))\n"
@@ -119,8 +150,5 @@ public class EnvironmentSecretTest {
         new EnvironmentSecret(fileExpression.getPath(), new Random(0L)).generate(secret);
         final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
         Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
-
-        fileExpression.deleteOnExit();
-        fileShares.deleteOnExit();
     }
 }

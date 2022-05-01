@@ -57,7 +57,7 @@ public final class EnvironmentSecret {
         final MultiOperator operatorSecret = Optional.of(tree.getRoot())
                 .map(MultiOperator.class::cast)
                 .filter(m -> m.getOp().equals(Const.SECRET))
-                .orElseThrow(IllegalStateException::new);
+                .orElseThrow(IOException::new);
         final Element elementSecret = generateA(operatorSecret, secret);
         final byte[] xml = DocumentU.toXml(elementSecret);
         logger.finest(UTF8Codec.toString(xml));
@@ -111,7 +111,7 @@ public final class EnvironmentSecret {
         final MultiOperator operatorSecret = Optional.of(tree.getRoot())
                 .map(MultiOperator.class::cast)
                 .filter(m -> m.getOp().equals(Const.SECRET))
-                .orElseThrow(IllegalStateException::new);
+                .orElseThrow(IOException::new);
         final File fileShares = new File(resourceShares);
         final byte[] xml = StreamU.read(fileShares);
         final Document document = DocumentU.toDocument(xml);
