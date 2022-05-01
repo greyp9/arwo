@@ -17,9 +17,11 @@ public final class EvaluatorRegistry {
 
     public EvaluatorRegistry() {
         this.evaluators = new TreeMap<>();
-        this.evaluators.put("prop", new SysPropEvaluator());
-        this.evaluators.put("env", new SysEnvEvaluator());
-        this.evaluators.put("mod", new LastModifiedEvaluator());
+        this.evaluators.put(Const.ENV, new SysEnvEvaluator());
+        this.evaluators.put(Const.FOLDER, new FolderEvaluator());
+        this.evaluators.put(Const.MOD, new LastModifiedEvaluator());
+        this.evaluators.put(Const.PROP, new SysPropEvaluator());
+        this.evaluators.put(Const.SHA256, new Sha256Evaluator());
     }
 
     public NameTypeValue evaluate(final MultiOperator operator) throws IOException {
@@ -44,5 +46,13 @@ public final class EvaluatorRegistry {
             throw new IOException(node.getClass().getName());
         }
         return operand;
+    }
+
+    private static class Const {
+        private static final String ENV = "env";
+        private static final String FOLDER = "folder";
+        private static final String MOD = "mod";
+        private static final String PROP = "prop";
+        private static final String SHA256 = "sha256";
     }
 }

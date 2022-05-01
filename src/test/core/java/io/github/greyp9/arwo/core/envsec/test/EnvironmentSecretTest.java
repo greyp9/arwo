@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.jce.AES;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import org.junit.Assert;
+import org.junit.Assume;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -102,6 +103,37 @@ public class EnvironmentSecretTest {
         tearDownCustom(fileExpression, fileShares);
         final String expression =
                 "secret(2 prop('file.encoding') mod(prop('user.home')))";
+        StreamU.write(fileExpression, UTF8Codec.toBytes(expression));
+
+        final byte[] secret = AES.generate().getEncoded();
+        new EnvironmentSecret(fileExpression.getPath(), new Random(0L)).generate(secret);
+        final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
+        Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+    }
+
+    @Test
+    public void test_OneSecretSHA() throws IOException, GeneralSecurityException {
+        Assume.assumeNotNull(System.getProperty("basedir"));  // works in Maven context
+        final File fileExpression = new File(folderTest, "envOSS.txt");
+        final File fileShares = new File(folderTest, "envOSS.txt.xml");
+        tearDownCustom(fileExpression, fileShares);
+        final String expression =
+                "secret(2 sha256(prop('basedir') 'pom.xml') sha256(prop('basedir') 'README.md'))";
+        StreamU.write(fileExpression, UTF8Codec.toBytes(expression));
+
+        final byte[] secret = AES.generate().getEncoded();
+        new EnvironmentSecret(fileExpression.getPath(), new Random(0L)).generate(secret);
+        final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
+        Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+    }
+
+    @Test
+    public void test_OneSecretFolder() throws IOException, GeneralSecurityException {
+        final File fileExpression = new File(folderTest, "envOSF.txt");
+        final File fileShares = new File(folderTest, "envOSF.txt.xml");
+        tearDownCustom(fileExpression, fileShares);
+        final String expression =
+                "secret(2 folder('~' '*.*') folder('~/Downloads' '*.*'))";
         StreamU.write(fileExpression, UTF8Codec.toBytes(expression));
 
         final byte[] secret = AES.generate().getEncoded();

@@ -161,7 +161,7 @@ public final class EnvironmentSecret {
     }
 
     public static class Const {
-        private static final String URI = "urn:arwo:env";
+        private static final String URI = "urn:arwo:envsec";
         private static final String SHARE = "share";
         private static final String SECRET = "secret";
     }
