@@ -214,6 +214,32 @@
                 </executions>
             </plugin>
             <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.0.0</version>
+                <executions>
+                    <execution>
+                        <id>generate-i18n</id>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>java</goal>
+                        </goals>
+                        <configuration>
+                            <mainClass>io.github.greyp9.arwo.core.i18n.PseudoI18n</mainClass>
+                            <classpathScope>test</classpathScope>
+                            <arguments>
+                                <argument>+</argument>
+                                <argument>${project.build.outputDirectory}/io/github/greyp9/arwo/text/core/core.properties</argument>
+                                <argument>${project.build.outputDirectory}/io/github/greyp9/arwo/xsd/action/action.properties</argument>
+                                <argument>${project.build.outputDirectory}/io/github/greyp9/arwo/xsd/app/app.properties</argument>
+                                <argument>${project.build.outputDirectory}/io/github/greyp9/arwo/xsd/meter/meter.properties</argument>
+                                <argument>${project.build.outputDirectory}/io/github/greyp9/arwo/xsd/realm/realm.properties</argument>
+                            </arguments>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>3.0.0-M5</version>
