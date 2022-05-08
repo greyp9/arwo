@@ -17,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Optional;
 
 public class EnvServlet extends javax.servlet.http.HttpServlet {
 
@@ -27,7 +28,8 @@ public class EnvServlet extends javax.servlet.http.HttpServlet {
         super.init(config);
         final Context context = AppNaming.lookupSubcontext(getServletContext().getContextPath());
         synchronized (this) {
-            this.appState = (AppState) AppNaming.lookup(context, App.Naming.APP_STATE);
+            this.appState = Optional.ofNullable(AppNaming.lookup(context, App.Naming.APP_STATE))  // convert others...
+                    .map(AppState.class::cast).orElseThrow(ServletException::new);
         }
     }
 

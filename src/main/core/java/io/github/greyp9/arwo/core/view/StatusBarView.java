@@ -12,7 +12,9 @@ import io.github.greyp9.arwo.core.vm.app.ManifestU;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import org.w3c.dom.Element;
 
+import java.security.Principal;
 import java.util.Date;
+import java.util.Optional;
 
 public class StatusBarView {
     private final ServletHttpRequest httpRequest;
@@ -27,7 +29,7 @@ public class StatusBarView {
         final DateX dateX = locus.getDateX();
         final Date date = httpRequest.getDate();
         final String dateString = dateX.toString(date);
-        final String user = httpRequest.getPrincipal().getName();
+        final String user = Optional.ofNullable(httpRequest.getPrincipal()).map(Principal::getName).orElse(Html.HYPHEN);
         final String duration = DurationU.durationXSD(DateU.since(date));
         final String status = String.format("[%s] [%s] [%s]", user, dateString, duration);
         final String version = ManifestU.getSpecificationVersion(getClass());

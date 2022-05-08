@@ -8,6 +8,7 @@ import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.date.HttpDateU;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.res.ResourceU;
+import io.github.greyp9.arwo.core.security.realm.AppPrincipal;
 import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 
@@ -17,9 +18,11 @@ import java.net.URL;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.Locale;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
@@ -56,8 +59,8 @@ public class AppState {
         this.contextPath = contextPath;
         this.cronService = new CronService(contextPath);
         this.factory = new XedFactory();
-        this.userStates = new ArrayList<AppUserState>();
-        this.reference = new AtomicReference<String>();
+        this.userStates = new ArrayList<>();
+        this.reference = new AtomicReference<>();
         // cache system schemas
         try {
             final URL[] urls = {
@@ -86,8 +89,10 @@ public class AppState {
         reference.set(cause);
     }
 
-    public final AppUserState getUserState(final Principal principal, final Date date) throws IOException {
+    public final AppUserState getUserState(final Principal principalQ, final Date date) throws IOException {
         synchronized (userStates) {
+            final Principal principal = Optional.ofNullable(principalQ)
+                    .orElse(new AppPrincipal("anonymous", Collections.emptyList()));
             AppUserState userState = find(principal);
             if (userState == null) {
                 final File userHome = AppFolder.getWebappRoot(contextPath);
