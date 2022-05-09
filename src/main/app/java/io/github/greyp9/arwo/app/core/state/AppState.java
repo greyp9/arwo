@@ -96,7 +96,7 @@ public class AppState {
             AppUserState userState = find(principal);
             if (userState == null) {
                 final File userHome = AppFolder.getWebappRoot(contextPath);
-                final String submitID = Integer.toHexString(hashCode());
+                final String submitID = Integer.toHexString(principal.getName().hashCode());
                 final DateX dateX = new DateX(HttpDateU.Const.DEFAULT, DateU.Const.TZ_GMT);
                 final Locus locus = new Locus(Locale.getDefault(), dateX);
                 userState = new AppUserState(this, principal, date, userHome, submitID, locus);
