@@ -33,6 +33,13 @@
         </xsl:copy>
     </xsl:template>
 
+    <xsl:template match='/xsd:schema/xsd:complexType[@name="jdbcServerType"]//xsd:element[@name="url"]'>
+        <xsl:copy>
+            <xsl:attribute name='xed:size'>132</xsl:attribute>
+            <xsl:apply-templates select='@*|node()'/>
+        </xsl:copy>
+    </xsl:template>
+
     <xsl:template match='/xsd:schema/xsd:complexType[@name="sshAuthPasswordType" or @name="cifsServerType" or
     @name="webdavServerType" or @name="jdbcServerType" or @name="smtpServerType" or @name="imapServerType" or
     @name="pop3ServerType"]/xsd:sequence/xsd:element[@name="password"]'>
