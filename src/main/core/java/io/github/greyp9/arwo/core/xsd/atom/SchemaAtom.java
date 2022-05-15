@@ -14,7 +14,7 @@ public class SchemaAtom {
         this.atom = atom;
     }
 
-    public final URL getUrl() {
+    public final URL getURL() {
         return url;
     }
 

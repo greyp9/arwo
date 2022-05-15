@@ -10,11 +10,13 @@ import jcifs.smb.SmbFile;
 import java.net.MalformedURLException;
 import java.util.Date;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class CIFSConnection {
+    private final Logger logger = Logger.getLogger(getClass().getName());
+
     private final SmbFile smbFile;
     private final long dateOpen;
-
 
     private final Properties properties;
     private final PropertiesX propertiesX;
@@ -71,6 +73,6 @@ public class CIFSConnection {
     }
 
     public final void close() {
-        getClass();  // find library hook to close connection
+        logger.finest("close()");  // find library hook to close connection
     }
 }

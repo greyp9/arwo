@@ -46,7 +46,7 @@ public class XsdBundles {
 
     private void update(final SchemaAtom schemaAtom, final Locale localeUpdate) {
         final String namespaceURI = schemaAtom.getQName().getNamespaceURI();
-        final URL url = schemaAtom.getUrl();
+        final URL url = schemaAtom.getURL();
         final String urlExternalForm = url.toExternalForm();
         final FileX fileX = new FileX(urlExternalForm);
         final String urlExternalFormP = fileX.getFolderSlash();

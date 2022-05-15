@@ -2,13 +2,35 @@
 <FindBugsFilter xmlns="https://github.com/spotbugs/filter/3.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
                 xsi:schemaLocation="https://github.com/spotbugs/filter/3.0.0 https://raw.githubusercontent.com/spotbugs/spotbugs/3.1.0/spotbugs/etc/findbugsfilter.xsd">
     <Match>
+        <!-- revisit -->
         <Bug code="EI"/>
     </Match>
     <Match>
+        <!-- revisit -->
         <Bug code="EI2"/>
     </Match>
     <Match>
+        <!-- code is as intended -->
+        <Or>
+            <Class name="io.github.greyp9.arwo.core.codec.hex.HexCodec"/>
+            <Class name="io.github.greyp9.arwo.core.envsec.EnvironmentSecret"/>
+            <Class name="io.github.greyp9.arwo.core.io.StreamU"/>
+        </Or>
+        <Bug code="PZLA"/>
+    </Match>
+    <Match>
+        <!-- code is as intended -->
         <Class name="io.github.greyp9.arwo.core.vm.mutex.MutexU"/>
-        <Bug code="NN"/>
+        <Bug code="NN,UW,Wa"/>
+    </Match>
+    <Match>
+        <!-- code is as intended -->
+        <Class name="io.github.greyp9.arwo.core.jdbc.runnable.QueryRunnable"/>
+        <Bug code="SQL"/>
+    </Match>
+    <Match>
+        <!-- false positive -->
+        <Class name="io.github.greyp9.arwo.core.text.filter.Transform"/>
+        <Bug code="BC"/>
     </Match>
 </FindBugsFilter>

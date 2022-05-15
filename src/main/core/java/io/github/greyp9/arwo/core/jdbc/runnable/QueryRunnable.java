@@ -40,10 +40,7 @@ public class QueryRunnable implements Runnable {
             query.start();
             runQuery();
             query.finish(null);
-        } catch (IOException e) {
-            query.getResults().add(Const.JDBC_EXCEPTION, App.CSS.STDERR, e.getMessage());
-            query.finish(e);
-        } catch (SQLException e) {
+        } catch (IOException | SQLException e) {
             query.getResults().add(Const.JDBC_EXCEPTION, App.CSS.STDERR, e.getMessage());
             query.finish(e);
         } finally {

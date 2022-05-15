@@ -5,8 +5,11 @@ import io.github.greyp9.arwo.core.lang.CompareU;
 import io.github.greyp9.arwo.lib.interop.dcom.connection.InteropConnection;
 
 import java.util.Date;
+import java.util.logging.Logger;
 
 public class InteropConnectionResource implements ConnectionResource, Comparable<ConnectionResource> {
+    private final Logger logger = Logger.getLogger(getClass().getName());
+
     private final String name;
     private final InteropConnection connection;
 
@@ -52,7 +55,7 @@ public class InteropConnectionResource implements ConnectionResource, Comparable
 
     @Override
     public final void close() {
-        getClass();
+        logger.finest("close()");
     }
 
     @Override
