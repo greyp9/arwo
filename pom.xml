@@ -306,7 +306,14 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>4.5.3.0</version>  &lt;!&ndash; 2022-01-05 &ndash;&gt;
+                <version>4.6.0.0</version>  &lt;!&ndash; 2022-03-24 &ndash;&gt;
+                <dependencies>
+                    <dependency>
+                        <groupId>com.github.spotbugs</groupId>
+                        <artifactId>spotbugs</artifactId>
+                        <version>4.7.0</version>  &lt;!&ndash; 2022-05-04 &ndash;&gt;
+                    </dependency>
+                </dependencies>
                 <configuration>
                     <includeTests>false</includeTests>
                 </configuration>
@@ -373,6 +380,21 @@
                         <ruleset>src/config/pmd/pmd.xml</ruleset>
                     </rulesets>
                     <linkXRef>false</linkXRef>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.github.spotbugs</groupId>
+                <artifactId>spotbugs-maven-plugin</artifactId>
+                <version>4.6.0.0</version>  <!-- 2022-03-24 -->
+                <configuration>
+                    <!-- https://spotbugs.github.io/spotbugs-maven-plugin/spotbugs-mojo.html -->
+                    <!-- https://spotbugs.readthedocs.io/en/latest/analysisprops.html -->
+                    <!-- https://spotbugs.readthedocs.io/en/latest/filter.html -->
+                    <effort>Min</effort>
+                    <threshold>Medium</threshold>
+                    <onlyAnalyze>io.github.greyp9.arwo.core.-</onlyAnalyze>
+                    <!-- <includeFilterFile>src/config/spotbugs/spotbugs-include.xml</includeFilterFile> -->
+                    <excludeFilterFile>src/config/spotbugs/spotbugs-exclude.xml</excludeFilterFile>
                 </configuration>
             </plugin>
         </plugins>
