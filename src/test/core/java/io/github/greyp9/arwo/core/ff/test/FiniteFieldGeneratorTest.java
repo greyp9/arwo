@@ -15,10 +15,10 @@ public class FiniteFieldGeneratorTest {
     public void testLookupTables() {
         Assert.assertEquals(
                 "07ec21ce3f045f5d9a2121cf58798c94510122ad81272411a50e2918382ac428",
-                HexCodec.encode(HashU.sha256(FiniteField.EXP)));
+                FiniteField.sha256Exp());
         Assert.assertEquals(
                 "9bc7b6f7f6423e975f3a7d66c47d9868957ee5a3fa2e94c25763220e692d2c69",
-                HexCodec.encode(HashU.sha256(FiniteField.LOG)));
+                FiniteField.sha256Log());
     }
 
     /**

@@ -7,4 +7,8 @@
     <Match>
         <Bug code="EI2"/>
     </Match>
+    <Match>
+        <Class name="io.github.greyp9.arwo.core.vm.mutex.MutexU"/>
+        <Bug code="NN"/>
+    </Match>
 </FindBugsFilter>

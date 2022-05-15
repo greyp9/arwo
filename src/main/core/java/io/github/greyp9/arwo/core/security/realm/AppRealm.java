@@ -30,7 +30,7 @@ public class AppRealm {
         for (final AuthPrincipal principal : principals) {
             this.principals.put(principal.getPrincipal().getName(), principal);
         }
-        defaultPassword = generatePassword();
+        defaultPassword = generatePassword(new SecureRandom());
         Logger.getLogger(getClass().getName()).log(Level.OFF, String.format("[%s][%s]", realmName, defaultPassword));
         //System.out.println(defaultPassword);
         this.timestamp = new Date();
@@ -114,9 +114,9 @@ public class AppRealm {
         return new AppPrincipal(principal.getName(), principal.isAuthenticated(), principal.getRoles());
     }
 
-    private String generatePassword() {
+    private String generatePassword(final SecureRandom secureRandom) {
         final byte[] bytes = new byte[Const.SIZE_GEN_PASS];
-        new SecureRandom().nextBytes(bytes);
+        secureRandom.nextBytes(bytes);
         return Base64Codec.encode(bytes);
         //return PRINCIPAL_NAME;
     }

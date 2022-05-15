@@ -1,13 +1,14 @@
 package io.github.greyp9.arwo.core.vm.mutex;
 
 import java.util.Map;
+import java.util.Objects;
 import java.util.TreeMap;
 
 public final class Counters {
     private final Map<String, Counter> entries;
 
     public Counters() {
-        this.entries = new TreeMap<String, Counter>();
+        this.entries = new TreeMap<>();
     }
 
     public int getValue(final String name) {
@@ -66,6 +67,16 @@ public final class Counters {
         @Override
         public int compareTo(final Counter o) {
             return name.compareTo(o.getName());
+        }
+
+        @Override
+        public boolean equals(final Object o) {
+            return ((o instanceof Counter) && compareTo((Counter) o) == 0);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(name);
         }
     }
 }

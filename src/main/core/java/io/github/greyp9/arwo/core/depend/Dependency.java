@@ -2,6 +2,8 @@ package io.github.greyp9.arwo.core.depend;
 
 import io.github.greyp9.arwo.core.lang.CompareU;
 
+import java.util.Objects;
+
 public final class Dependency implements Comparable<Dependency> {
     private final String src;
     private final String dest;
@@ -34,5 +36,15 @@ public final class Dependency implements Comparable<Dependency> {
     @Override
     public int compareTo(final Dependency dependency) {
         return CompareU.compare(src, dependency.getSrc());
+    }
+
+    @Override
+    public boolean equals(final Object o) {
+        return ((o instanceof Dependency) && compareTo((Dependency) o) == 0);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(src);
     }
 }

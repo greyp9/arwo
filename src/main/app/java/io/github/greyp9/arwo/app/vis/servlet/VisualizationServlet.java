@@ -19,6 +19,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class VisualizationServlet extends javax.servlet.http.HttpServlet {
+    private static final long serialVersionUID = -5180967998637798384L;
+
     private transient AppState appState;
 
     @Override

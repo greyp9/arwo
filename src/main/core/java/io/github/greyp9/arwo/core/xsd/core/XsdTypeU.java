@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.xsd.core;
 import javax.xml.namespace.QName;
 import java.util.Arrays;
 import java.util.Collection;
+import java.util.Collections;
 
 // i18nf
 public final class XsdTypeU {
@@ -45,10 +46,10 @@ public final class XsdTypeU {
         public static final QName UNSIGNED_LONG = new QName(XsdU.NS_URI_XSD, "unsignedLong");
         public static final QName UNSIGNED_SHORT = new QName(XsdU.NS_URI_XSD, "unsignedShort");
 
-        public static final Collection<QName> BUILTIN = Arrays.asList(
+        public static final Collection<QName> BUILTIN = Collections.unmodifiableList(Arrays.asList(
                 ANY_SIMPLE_TYPE, ANY_TYPE, ANY_URI, BASE_64_BINARY, BOOLEAN, DATE,
                 DATE_TIME, DECIMAL, DURATION, ID, INT, INTEGER, LONG, NMTOKEN,
                 NON_NEG_INTEGER, NORMALIZED_STRING, POSITIVE_INTEGER, QNAME, STRING, TIME,
-                TOKEN, UNSIGNED_BYTE, UNSIGNED_INT, UNSIGNED_LONG, UNSIGNED_SHORT);
+                TOKEN, UNSIGNED_BYTE, UNSIGNED_INT, UNSIGNED_LONG, UNSIGNED_SHORT));
     }
 }

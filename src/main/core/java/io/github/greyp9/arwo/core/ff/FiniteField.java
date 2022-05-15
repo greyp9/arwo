@@ -1,14 +1,23 @@
 package io.github.greyp9.arwo.core.ff;
 
 import io.github.greyp9.arwo.core.codec.hex.HexCodec;
+import io.github.greyp9.arwo.core.hash.secure.HashU;
 
 public final class FiniteField {
 
     private FiniteField() {
     }
 
+    public static String sha256Exp() {
+        return HexCodec.encode(HashU.sha256(FiniteField.EXP));
+    }
+
+    public static String sha256Log() {
+        return HexCodec.encode(HashU.sha256(FiniteField.LOG));
+    }
+
     // GF256 exponent vector
-    public static final byte[] EXP = HexCodec.decode(""
+    static final byte[] EXP = HexCodec.decode(""
             + "0103050f113355ff1a2e7296a1f813355fe13848d87395a4f702060a1e2266aa"
             + "e5345ce43759eb266abed97090abe63153f5040c143c44cc4fd168b8d36eb2cd"
             + "4cd467a9e03b4dd762a6f10818287888839eb9d06bbddc7f8198b3ce49db769a"
@@ -27,7 +36,7 @@ public final class FiniteField {
             + "365aee297b8d8c8f8a8594a7f20d17394bdd7c8497a2fd1c246cb4c752f60000");
 
     // GF256 log vector (corrected)
-    public static final byte[] LOG = HexCodec.decode(""
+    static final byte[] LOG = HexCodec.decode(""
             + "ff00190132021ac64bc71b6833eedf036404e00e348d81ef4c7108c8f8691cc1"
             + "7dc21db5f9b9276a4de4a6729ac90978652f8a05210fe12412f082453593da8e"
             + "968fdbbd36d0ce94135cd2f14046833866ddfd30bf068b62b325e29822889110"

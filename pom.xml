@@ -392,7 +392,7 @@
                     <!-- https://spotbugs.readthedocs.io/en/latest/filter.html -->
                     <effort>Min</effort>
                     <threshold>Medium</threshold>
-                    <onlyAnalyze>io.github.greyp9.arwo.core.-</onlyAnalyze>
+                    <onlyAnalyze>io.github.greyp9.arwo.-</onlyAnalyze>
                     <!-- <includeFilterFile>src/config/spotbugs/spotbugs-include.xml</includeFilterFile> -->
                     <excludeFilterFile>src/config/spotbugs/spotbugs-exclude.xml</excludeFilterFile>
                 </configuration>

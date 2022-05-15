@@ -20,6 +20,7 @@ import java.io.IOException;
 import java.util.Optional;
 
 public class EnvServlet extends javax.servlet.http.HttpServlet {
+    private static final long serialVersionUID = -5127455369391017196L;
 
     private transient AppState appState;
 
