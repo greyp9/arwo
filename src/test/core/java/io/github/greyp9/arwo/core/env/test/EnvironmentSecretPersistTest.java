@@ -52,8 +52,9 @@ public class EnvironmentSecretPersistTest {
         Assert.assertEquals(AES.Const.KEY_BYTES, secret.length);
         logger.finest("GENERATE:" + HexCodec.encode(secret));
         PROPERTIES.setProperty("secret", HexCodec.encode(secret));
-        final EnvironmentStore store = EnvironmentSecret.generate(secret, state, new Random(0L));
-        final EnvironmentStore storeWrapped = EnvironmentSecret.protect(store);
+        final Random random = new Random(0L);
+        final EnvironmentStore store = EnvironmentSecret.generate(secret, state, random);
+        final EnvironmentStore storeWrapped = EnvironmentSecret.protect(store, random);
         final byte[] shareXml = EnvironmentSecret.serialize(storeWrapped);
         StreamU.write(fileEnvironment, shareXml);
     }

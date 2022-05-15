@@ -138,8 +138,8 @@ public final class EnvironmentSecret {
         final String password = ntv.getValueS();
         final byte[] salt = HashU.sha256(UTF8Codec.toBytes(ntv.getName()));
         final SecretKey key = KeyU.toKeyPBE(Value.toCharArray(password), salt);
-        final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_GCM);
-        final byte[] iv = KeyU.getRandomBytes(AES.Const.IV_BYTES_GCM);
+        final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_GCM, random);
+        final byte[] iv = KeyU.getRandomBytes(AES.Const.IV_BYTES_GCM, random);
         final GCMParameterSpec parameterSpec = new GCMParameterSpec(AES.Const.TAG_BYTES_GCM * Byte.SIZE, iv);
         return keyCodec.encode(plainText, parameterSpec);
     }
@@ -149,7 +149,7 @@ public final class EnvironmentSecret {
         final String password = ntv.getValueS();
         final byte[] salt = HashU.sha256(UTF8Codec.toBytes(ntv.getName()));
         final SecretKey key = KeyU.toKeyPBE(Value.toCharArray(password), salt);
-        final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_GCM);
+        final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_GCM, random);
         final GCMParameterSpec parameterSpec = new GCMParameterSpec(
                 AES.Const.TAG_BYTES_GCM * Byte.SIZE, cipherText, 0, AES.Const.IV_BYTES_GCM);
         try {

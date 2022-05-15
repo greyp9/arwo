@@ -9,14 +9,17 @@ import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.IvParameterSpec;
 import java.security.GeneralSecurityException;
 import java.security.Key;
+import java.util.Random;
 
 public class KeyCodec {
     private final Key key;
     private final String transform;
+    private final Random random;
 
-    public KeyCodec(final Key key, final String transform) {
+    public KeyCodec(final Key key, final String transform, final Random random) {
         this.key = key;
         this.transform = transform;
+        this.random = random;
     }
 
     public final byte[] encode(final byte[] bytes) throws GeneralSecurityException {
@@ -40,7 +43,7 @@ public class KeyCodec {
     }
 
     private byte[] encodeSymmetric(final byte[] bytes) throws GeneralSecurityException {
-        final byte[] ivBytes = KeyU.getRandomBytes(AES.Const.IV_BYTES_CTR);
+        final byte[] ivBytes = KeyU.getRandomBytes(AES.Const.IV_BYTES_CTR, random);
         final IvParameterSpec ivParameterSpec = new IvParameterSpec(ivBytes);
         return encodeSymmetric(bytes, ivParameterSpec);
     }

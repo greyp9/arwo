@@ -62,7 +62,7 @@ public class EnvironmentSecretPermuteTest {
         final EnvironmentState stateInitial = collectState(shareCount, thresholdCount);
         final byte[] secret = AES.generate().getEncoded();
         final EnvironmentStore store = EnvironmentSecret.generate(secret, stateInitial, random);
-        final EnvironmentStore storeWrapped = EnvironmentSecret.protect(store);
+        final EnvironmentStore storeWrapped = EnvironmentSecret.protect(store, random);
         final byte[] shareXml = EnvironmentSecret.serialize(storeWrapped);
 
         final EnvironmentState stateRecover = collectState(available, thresholdCount);

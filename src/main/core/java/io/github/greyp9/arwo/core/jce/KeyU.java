@@ -10,8 +10,8 @@ import javax.crypto.spec.SecretKeySpec;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.Key;
-import java.security.SecureRandom;
 import java.security.spec.AlgorithmParameterSpec;
+import java.util.Random;
 
 public final class KeyU {
 
@@ -62,9 +62,9 @@ public final class KeyU {
         return Cipher.getInstance(transform);
     }
 
-    public static byte[] getRandomBytes(final int length) {
+    public static byte[] getRandomBytes(final int length, final Random random) {
         final byte[] bytes = new byte[length];
-        new SecureRandom().nextBytes(bytes);
+        random.nextBytes(bytes);
         return bytes;
     }
 

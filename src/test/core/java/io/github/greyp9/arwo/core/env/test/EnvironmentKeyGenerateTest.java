@@ -64,8 +64,8 @@ public class EnvironmentKeyGenerateTest {
             final String password = pbkdfData[i];
             final byte[] salt = HashU.sha256(UTF8Codec.toBytes(password));
             final SecretKey key = KeyU.toKeyPBE(password.toCharArray(), salt);
-            final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_CTR);
-            ivs[i] = KeyU.getRandomBytes(AES.Const.IV_BYTES_CTR);
+            final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_CTR, random);
+            ivs[i] = KeyU.getRandomBytes(AES.Const.IV_BYTES_CTR, random);
             final IvParameterSpec ivParameterSpec = new IvParameterSpec(ivs[i]);
             final byte[] shareWrapped = keyCodec.encode(shares[i], ivParameterSpec);
             logger.finest(HexCodec.encode(shareWrapped));
@@ -78,7 +78,7 @@ public class EnvironmentKeyGenerateTest {
             final String password = pbkdfData[i];
             final byte[] salt = HashU.sha256(UTF8Codec.toBytes(password));
             final SecretKey key = KeyU.toKeyPBE(password.toCharArray(), salt);
-            final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_CTR);
+            final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_CTR, random);
             final byte[] shareUnwrapped = keyCodec.decode(sharesWrapped[i]);
             sharesUnwrapped[i] = shareUnwrapped;
             Assert.assertEquals(shares[i].length, sharesUnwrapped[i].length);

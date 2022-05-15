@@ -32,8 +32,9 @@ public class EnvironmentSecretTest {
     public void testSplitProtectRecover() throws GeneralSecurityException {
         final EnvironmentState state = collectState();
         final byte[] secret = AES.generate().getEncoded();
-        final EnvironmentStore store = EnvironmentSecret.generate(secret, state, new Random(0L));
-        final EnvironmentStore storeWrapped = EnvironmentSecret.protect(store);
+        final Random random = new Random(0L);
+        final EnvironmentStore store = EnvironmentSecret.generate(secret, state, random);
+        final EnvironmentStore storeWrapped = EnvironmentSecret.protect(store, random);
         final EnvironmentStore storeUnwrapped = EnvironmentSecret.unprotect(storeWrapped);
         final byte[] secretRecover = EnvironmentSecret.recover(state, storeUnwrapped);
         Assert.assertArrayEquals("recovered secret should match original", secret, secretRecover);
@@ -43,8 +44,9 @@ public class EnvironmentSecretTest {
     public void testSplitProtectSerializeRecover() throws GeneralSecurityException, IOException {
         final EnvironmentState state = collectState();
         final byte[] secret = AES.generate().getEncoded();
-        final EnvironmentStore store = EnvironmentSecret.generate(secret, state, new Random(0L));
-        final EnvironmentStore storeWrapped = EnvironmentSecret.protect(store);
+        final Random random = new Random(0L);
+        final EnvironmentStore store = EnvironmentSecret.generate(secret, state, random);
+        final EnvironmentStore storeWrapped = EnvironmentSecret.protect(store, random);
         final byte[] shareXml = EnvironmentSecret.serialize(storeWrapped);
         logger.finest(() -> UTF8Codec.toString(shareXml));
         final EnvironmentStore storeWrappedA = EnvironmentSecret.deserialize(shareXml, state);
@@ -57,8 +59,9 @@ public class EnvironmentSecretTest {
     public void testAtThreshold() throws GeneralSecurityException, IOException {
         final EnvironmentState state = collectState();
         final byte[] secret = AES.generate().getEncoded();
-        final EnvironmentStore store = EnvironmentSecret.generate(secret, state, new Random(0L));
-        final EnvironmentStore storeWrapped = EnvironmentSecret.protect(store);
+        final Random random = new Random(0L);
+        final EnvironmentStore store = EnvironmentSecret.generate(secret, state, random);
+        final EnvironmentStore storeWrapped = EnvironmentSecret.protect(store, random);
         final byte[] shareXml = EnvironmentSecret.serialize(storeWrapped);
         logger.finest(() -> UTF8Codec.toString(shareXml));
         final EnvironmentState stateOneOff = collectStateOneOff();
@@ -73,9 +76,10 @@ public class EnvironmentSecretTest {
         final EnvironmentState state = collectState();
         final byte[] secret = AES.generate().getEncoded();
         logger.finest(() -> HexCodec.encode(secret));
-        final EnvironmentStore store = EnvironmentSecret.generate(secret, state, new Random(0L));
+        final Random random = new Random(0L);
+        final EnvironmentStore store = EnvironmentSecret.generate(secret, state, random);
         store.getShares().stream().map(EnvironmentShare::getShare).map(HexCodec::encode).forEach(logger::finest);
-        final EnvironmentStore storeWrapped = EnvironmentSecret.protect(store);
+        final EnvironmentStore storeWrapped = EnvironmentSecret.protect(store, random);
         final byte[] shareXml = EnvironmentSecret.serialize(storeWrapped);
         logger.finest(() -> UTF8Codec.toString(shareXml));
         final EnvironmentState stateTwoOff = collectStateTwoOff();

@@ -6,12 +6,13 @@ import io.github.greyp9.arwo.core.codec.b64.Base64Codec;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.security.Key;
+import java.security.SecureRandom;
 
 public class KeyX {
     private final KeyCodec keyCodec;
 
     public KeyX(final Key key, final String transform) {
-        this.keyCodec = new KeyCodec(key, transform);
+        this.keyCodec = new KeyCodec(key, transform, new SecureRandom());
     }
 
     public final String protect(final String value) throws IOException {

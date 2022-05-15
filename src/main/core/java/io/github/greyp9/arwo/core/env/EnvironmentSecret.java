@@ -57,22 +57,24 @@ public final class EnvironmentSecret {
         return dataSplitter.join(shares);
     }
 
-    public static EnvironmentStore protect(final EnvironmentStore store) throws GeneralSecurityException {
+    public static EnvironmentStore protect(
+            final EnvironmentStore store, final Random random) throws GeneralSecurityException {
         final List<EnvironmentShare> sharesProtected = new ArrayList<>();
         for (EnvironmentShare environmentShare : store.getShares()) {
-            sharesProtected.add(protect(environmentShare));
+            sharesProtected.add(protect(environmentShare, random));
         }
         return new EnvironmentStore(sharesProtected);
     }
 
-    private static EnvironmentShare protect(final EnvironmentShare share) throws GeneralSecurityException {
+    private static EnvironmentShare protect(
+            final EnvironmentShare share, final Random random) throws GeneralSecurityException {
         final EnvironmentAtom atom = share.getAtom();
         final byte[] shareBytes = share.getShare();
         final String password = atom.getValue();
         final byte[] salt = HashU.sha256(UTF8Codec.toBytes(atom.getKey()));
         final SecretKey key = KeyU.toKeyPBE(password.toCharArray(), salt);
-        final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_GCM);
-        final byte[] iv = KeyU.getRandomBytes(AES.Const.IV_BYTES_GCM);
+        final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_GCM, random);
+        final byte[] iv = KeyU.getRandomBytes(AES.Const.IV_BYTES_GCM, random);
         final GCMParameterSpec parameterSpec = new GCMParameterSpec(AES.Const.TAG_BYTES_GCM * Byte.SIZE, iv);
         return new EnvironmentShare(atom, keyCodec.encode(shareBytes, parameterSpec));
     }
@@ -93,7 +95,7 @@ public final class EnvironmentSecret {
             final String password = atom.getValue();
             final byte[] salt = HashU.sha256(UTF8Codec.toBytes(atom.getKey()));
             final SecretKey key = KeyU.toKeyPBE(password.toCharArray(), salt);
-            final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_GCM);
+            final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_GCM, null);
             final GCMParameterSpec parameterSpec = new GCMParameterSpec(
                     AES.Const.TAG_BYTES_GCM * Byte.SIZE, shareBytes, 0, AES.Const.IV_BYTES_GCM);
             try {
