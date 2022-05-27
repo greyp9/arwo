@@ -390,7 +390,8 @@
                     <!-- https://spotbugs.github.io/spotbugs-maven-plugin/spotbugs-mojo.html -->
                     <!-- https://spotbugs.readthedocs.io/en/latest/analysisprops.html -->
                     <!-- https://spotbugs.readthedocs.io/en/latest/filter.html -->
-                    <effort>Min</effort>
+                    <!-- effort=Max [more accurate prediction]; threshold=Low [no confidence filtering]-->
+                    <effort>Max</effort>
                     <threshold>Low</threshold>
                     <onlyAnalyze>io.github.greyp9.arwo.-</onlyAnalyze>
                     <!-- <includeFilterFile>src/config/spotbugs/spotbugs-include.xml</includeFilterFile> -->

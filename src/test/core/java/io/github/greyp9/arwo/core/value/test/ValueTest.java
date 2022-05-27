@@ -17,4 +17,14 @@ public class ValueTest {
         tokens.add("c");
         Assert.assertEquals("a b c", Value.joinCollection(" ", tokens));
     }
+
+    @Test
+    public void testAs() throws Exception {
+        final Object anObject = "string";
+        final String asString = Value.as(anObject, String.class);
+        Assert.assertNotNull(asString);
+        Assert.assertEquals("string", asString);
+        final Integer asInteger = Value.as(anObject, Integer.class);
+        Assert.assertNull(asInteger);
+    }
 }

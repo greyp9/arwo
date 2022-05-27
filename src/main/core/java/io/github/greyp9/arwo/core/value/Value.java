@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.value;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 import java.util.StringTokenizer;
 import java.util.function.Supplier;
 
@@ -136,5 +137,9 @@ public final class Value {
         if (!condition) {
             throw e.get();
         }
+    }
+
+    public static <T> T as(final Object o, final Class<T> clazz) {
+        return Optional.of(o).filter(clazz::isInstance).map(clazz::cast).orElse(null);
     }
 }

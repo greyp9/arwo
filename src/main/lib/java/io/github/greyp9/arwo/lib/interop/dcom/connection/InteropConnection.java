@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.lib.interop.dcom.connection;
 
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.lang.SystemU;
+import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.util.PropertiesX;
 
 import java.util.Date;
@@ -25,7 +26,7 @@ public class InteropConnection {
         this.properties = new Properties();
         properties.setProperty(App.Settings.HOST, host);
         properties.setProperty(App.Settings.USER, user);
-        properties.setProperty(App.Settings.PASSWORD, password);
+        PropertiesU.setProperty(properties, App.Settings.PASSWORD, password);
         this.propertiesX = new PropertiesX(properties);
         propertiesX.setLong(App.Connection.DATE_LAST, dateOpen);
         propertiesX.setLong(App.Connection.COUNT, 0L);

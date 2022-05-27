@@ -6,6 +6,11 @@ public final class Http {
     private Http() {
     }
 
+    public static class Protocol {
+        public static final String HTTP = "http";
+        public static final String HTTPS = "https";
+    }
+
     public static class Token {
         public static final String AMP = "&";
         public static final String BACKSLASH = "\\";
