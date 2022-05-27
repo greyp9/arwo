@@ -16,6 +16,12 @@ public final class PropertiesU {
     private PropertiesU() {
     }
 
+    public static Properties load(final byte[] bytes) throws IOException {
+        final Properties properties = new Properties();
+        properties.load(new ByteArrayInputStream(bytes));
+        return properties;
+    }
+
     public static Properties loadFromXml(final URL url) throws IOException {
         return loadFromXml(StreamU.read(url));
     }
