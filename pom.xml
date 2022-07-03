@@ -344,6 +344,7 @@
             <resource>
                 <directory>src/main/app/resources/webapp</directory>
                 <includes>
+                    <include>arwo-war/css/*.css</include>
                     <include>arwo-war/ico/*.ico</include>
                     <include>arwo-war/*.html</include>
                 </includes>
