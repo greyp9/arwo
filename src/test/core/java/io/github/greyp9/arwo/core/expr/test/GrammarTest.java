@@ -28,37 +28,55 @@ public class GrammarTest {
     @Test
     public void testGrammar1() {
         final Grammar grammar = new Grammar("A");
-        checkTree(new TextMatchTree(grammar.toNode()));
+        final Node node = grammar.toNode();
+        Assert.assertNotNull(node);
+        checkTree(new TextMatchTree(node));
+        Assert.assertEquals("A", node.render());
     }
 
     @Test
     public void testGrammar2() {
         final Grammar grammar = new Grammar("'A'");
+        final Node node = grammar.toNode();
+        Assert.assertNotNull(node);
         checkTree(new TextMatchTree(grammar.toNode()));
+        Assert.assertEquals("A", node.render());
     }
 
     @Test
     public void testGrammar3() {
         final Grammar grammar = new Grammar("\"A\"");
+        final Node node = grammar.toNode();
+        Assert.assertNotNull(node);
         checkTree(new TextMatchTree(grammar.toNode()));
+        Assert.assertEquals("A", node.render());
     }
 
     @Test
     public void testGrammar4() {
         final Grammar grammar = new Grammar("(A)");
+        final Node node = grammar.toNode();
+        Assert.assertNotNull(node);
         checkTree(new TextMatchTree(grammar.toNode()));
+        Assert.assertEquals("A", node.render());
     }
 
     @Test
     public void testGrammar5() {
         final Grammar grammar = new Grammar("('A')");
+        final Node node = grammar.toNode();
+        Assert.assertNotNull(node);
         checkTree(new TextMatchTree(grammar.toNode()));
+        Assert.assertEquals("A", node.render());
     }
 
     @Test
     public void testGrammar6() {
         final Grammar grammar = new Grammar("(\"A\")");
+        final Node node = grammar.toNode();
+        Assert.assertNotNull(node);
         checkTree(new TextMatchTree(grammar.toNode()));
+        Assert.assertEquals("A", node.render());
     }
 
     @Test
@@ -68,6 +86,7 @@ public class GrammarTest {
         Assert.assertFalse(tree.evaluate("A"));
         Assert.assertFalse(tree.evaluate("B"));
         Assert.assertTrue(tree.evaluate("AB"));
+        Assert.assertEquals("(A AND B)", tree.getRoot().render());
     }
 
     @Test
@@ -77,6 +96,7 @@ public class GrammarTest {
         Assert.assertFalse(tree.evaluate("A"));
         Assert.assertFalse(tree.evaluate("B"));
         Assert.assertTrue(tree.evaluate("AB"));
+        Assert.assertEquals("(A AND B)", tree.getRoot().render());
     }
 
     @Test
@@ -86,6 +106,7 @@ public class GrammarTest {
         Assert.assertTrue(tree.evaluate("A"));
         Assert.assertTrue(tree.evaluate("B"));
         Assert.assertTrue(tree.evaluate("AB"));
+        Assert.assertEquals("(A OR B)", tree.getRoot().render());
     }
 
     @Test
@@ -95,6 +116,7 @@ public class GrammarTest {
         Assert.assertTrue(tree.evaluate("A"));
         Assert.assertTrue(tree.evaluate("B"));
         Assert.assertTrue(tree.evaluate("AB"));
+        Assert.assertEquals("(A OR B)", tree.getRoot().render());
     }
 
     @Test
@@ -103,6 +125,7 @@ public class GrammarTest {
         final TextMatchTree tree = new TextMatchTree(grammar.toNode());
         Assert.assertFalse(tree.evaluate("A"));
         Assert.assertTrue(tree.evaluate("B"));
+        Assert.assertEquals("(NOT A)", tree.getRoot().render());
     }
 
     @Test
@@ -111,6 +134,16 @@ public class GrammarTest {
         final TextMatchTree tree = new TextMatchTree(grammar.toNode());
         Assert.assertFalse(tree.evaluate("A"));
         Assert.assertTrue(tree.evaluate("B"));
+        Assert.assertEquals("(NOT A)", tree.getRoot().render());
+    }
+
+    @Test
+    public void testGrammarNOT3() {
+        final Grammar grammar = new Grammar("NOT NOT A");
+        final TextMatchTree tree = new TextMatchTree(grammar.toNode());
+        Assert.assertTrue(tree.evaluate("A"));
+        Assert.assertFalse(tree.evaluate("B"));
+        Assert.assertEquals("(NOT (NOT A))", tree.getRoot().render());
     }
 
     @Test

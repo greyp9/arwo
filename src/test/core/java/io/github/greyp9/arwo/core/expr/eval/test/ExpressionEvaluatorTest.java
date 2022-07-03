@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.core.env.eval.KeyEvaluator;
 import io.github.greyp9.arwo.core.env.eval.KeyNode;
 import io.github.greyp9.arwo.core.expr.Node;
 import io.github.greyp9.arwo.core.expr.eval.ExpressionEvaluator;
+import io.github.greyp9.arwo.core.expr.eval.FolderEvaluator;
 import io.github.greyp9.arwo.core.expr.eval.LastModifiedEvaluator;
 import io.github.greyp9.arwo.core.expr.eval.SysEnvEvaluator;
 import io.github.greyp9.arwo.core.expr.eval.SysPropEvaluator;
@@ -54,8 +55,20 @@ public class ExpressionEvaluatorTest {
         Assert.assertEquals(expectedAtoms, keyNode.getAtomNodes().size());
     }
 
+    @Test
+    public void testFolder() {
+        final ExpressionEvaluator evaluator = new ExpressionEvaluator();
+        evaluator.register(PROP, new SysPropEvaluator());
+        evaluator.register(FOLDER, new FolderEvaluator());
+        final String contentUserHome = evaluator.evaluateAsString("folder(prop('user.home') '*')");
+        logger.finest(contentUserHome);
+        Assert.assertNotNull(contentUserHome);
+        Assert.assertTrue(contentUserHome.contains("Downloads"));
+    }
+
     private static final String PROP = "prop";
     private static final String ENV = "env";
     private static final String MODIFIED = "mod";
     private static final String KEY = "key";
+    private static final String FOLDER = "folder";
 }

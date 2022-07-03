@@ -33,7 +33,7 @@ public class FunctionTest {
     }
 
     @Test
-    public void testFunctionCreateNestedAlphanum() {
+    public void testFunctionCreateNestedAlphaNum() {
         final Node nodeA = new Operand("a");
         final Node nodeF = new MultiOperator("f", nodeA);
         final Node nodeG = new MultiOperator("g", nodeF);
