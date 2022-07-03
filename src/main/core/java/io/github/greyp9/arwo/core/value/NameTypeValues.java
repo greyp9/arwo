@@ -24,10 +24,11 @@ public final class NameTypeValues extends ArrayList<NameTypeValue> {
         }
     }
 
-    public void addNN(final String name, final Object value) {
+    public NameTypeValues addNN(final String name, final Object value) {
         if ((name != null) && (value != null)) {
             add(name, value);
         }
+        return this;
     }
 
     public void add(final String name, final Object value) {
