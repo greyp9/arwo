@@ -34,8 +34,13 @@ public class TLSContextFactory {
     }
 
     public final TLSContext createTrustAll(final String protocol) throws GeneralSecurityException {
+        return createTrustAll(protocol, null);
+    }
+
+    public final TLSContext createTrustAll(final String protocol,
+                                           final TLSKeyManager keyManager) throws GeneralSecurityException {
         final TLSTrustManager trustManager = new TLSTrustManager((KeyStore) null);
-        return new TLSContext(null, trustManager, protocol);
+        return new TLSContext(keyManager, trustManager, protocol);
     }
 
     public final TLSKeyManager getKeyManager(final String type, final String path, final char[] password)

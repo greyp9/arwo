@@ -37,9 +37,7 @@ public class AlertCertificate {
                 final URL url = new URL(String.format("https://%s:%s", host, port));
                 final CertificateClient client = new CertificateClient(protocol);
                 alert(client.getCertificateChain(url));
-            } catch (GeneralSecurityException e) {
-                alerts.add(new Alert(Alert.Severity.ERR, message, e.getMessage()));
-            } catch (IOException e) {
+            } catch (GeneralSecurityException | IOException e) {
                 alerts.add(new Alert(Alert.Severity.ERR, message, e.getMessage()));
             }
         }
