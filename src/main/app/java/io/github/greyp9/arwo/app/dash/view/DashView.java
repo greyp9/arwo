@@ -22,6 +22,7 @@ import io.github.greyp9.arwo.core.menu.view.MenuView;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.view.StatusBarView;
+import io.github.greyp9.arwo.core.vm.process.RuntimeU;
 import io.github.greyp9.arwo.core.xed.action.XedActionLocale;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
 import io.github.greyp9.arwo.core.xml.DocumentU;
@@ -107,6 +108,7 @@ public class DashView {
         final String durationU = DurationU.duration(userState.getDateSessionStart(), httpRequest.getDate());
         final Bundle bundle = request.getBundle();
         final NameTypeValues properties = new NameTypeValues();
+        properties.add(bundle.getString("DashView.runtime.name"), RuntimeU.getName());
         properties.add(bundle.getString("DashView.webapp.uptime"), durationA);
         properties.add(bundle.getString("DashView.session.uptime"), durationU);
         final AppPropertiesView view = new AppPropertiesView("dashPropertiesType", userState);  // i18n metadata
