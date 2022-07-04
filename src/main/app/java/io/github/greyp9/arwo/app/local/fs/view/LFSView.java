@@ -141,7 +141,8 @@ public abstract class LFSView {
         final Properties properties = userState.getProperties();
         new XedActionLocale(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
         new XedActionRefresh(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
-        new XedActionTextExpression(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
+        new XedActionTextExpression(userState.getXedFactory(), locale).addContentTo(
+                html, userState.getFiltersRecent(), submitID, properties);
         new XedActionTextFilter(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
     }
 

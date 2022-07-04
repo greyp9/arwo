@@ -60,9 +60,11 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.security.Principal;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import java.util.Locale;
 import java.util.Map;
 import java.util.Properties;
@@ -91,6 +93,7 @@ public class AppUserState {
     // user alerts
     private final Alerts alerts;
     // text filters (for file display)
+    private final List<String> filtersRecent;
     private final Map<String, TextFilters> textFilters;
     // actions to be confirms
     private final DeferredActions deferredActions;
@@ -162,6 +165,10 @@ public class AppUserState {
 
     public final Alerts getAlerts() {
         return alerts;
+    }
+
+    public List<String> getFiltersRecent() {
+        return filtersRecent;
     }
 
     public final TextFilters getTextFilters() {
@@ -268,7 +275,8 @@ public class AppUserState {
         this.interval = new Interval(date, null);
         this.userRoot = AppFolder.getUserHome(webappRoot, principal);
         this.submitID = submitID;
-        this.textFilters = new TreeMap<String, TextFilters>();
+        this.filtersRecent = new ArrayList<>();
+        this.textFilters = new TreeMap<>();
         //this.textFilters.put("", new TextFilters());
         this.alerts = new Alerts();
         this.documentState = new XedUserState(webappRoot, appState.getFactory(), principal, submitID, locus, alerts);
@@ -348,7 +356,8 @@ public class AppUserState {
             documentState.applyLocale(httpArguments);
         } else if (App.Action.TEXT_EXPRESSION.equals(action)) {
             final TextFilters textFiltersOp = getTextFilters(context);
-            new XedActionTextExpression(getXedFactory(), getLocale()).updateTextFilters(textFiltersOp, httpArguments);
+            new XedActionTextExpression(getXedFactory(), getLocale()).updateTextFilters(
+                    filtersRecent, textFiltersOp, httpArguments);
         } else if (App.Action.TEXT_FILTER.equals(action)) {
             final TextFilters textFiltersOp = getTextFilters(context);
             new XedActionTextFilter(getXedFactory(), getLocale()).updateTextFilters(textFiltersOp, httpArguments);
