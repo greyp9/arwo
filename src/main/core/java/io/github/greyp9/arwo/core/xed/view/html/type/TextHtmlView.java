@@ -41,8 +41,10 @@ public class TextHtmlView {
         final String name = typeInstance.getID(parentInstance);
         final String value = cursor.getValue(typeInstance);
         final String title = bundle.getDetail(cursor.getTypeInstance(), viewInstance.getTypeInstance());
+        final String size = Value.defaultOnNull(
+                typeInstance.getDirective(Html.SIZE), Integer.toString(Const.WIDTH_INPUT_TEXT));
         final NameTypeValues attrs = NameTypeValuesU.create(Html.NAME, name, Html.TYPE, Html.TEXT,
-                Html.VALUE, value, Html.TITLE, title);
+                Html.VALUE, value, Html.SIZE, size, Html.TITLE, title);
         ElementU.addElement(td, Html.INPUT, null, attrs);
     }
 

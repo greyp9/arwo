@@ -57,4 +57,11 @@
         </xsl:copy>
     </xsl:template>
 
+    <xsl:template match='/xsd:schema/xsd:complexType[@name="textExpressionType"]//xsd:element[@name="expression"]'>
+        <xsl:copy>
+            <xsl:attribute name='xed:size'>132</xsl:attribute>
+            <xsl:apply-templates select='@*|node()'/>
+        </xsl:copy>
+    </xsl:template>
+
 </xsl:stylesheet>
