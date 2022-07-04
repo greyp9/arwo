@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.hash;
 
+import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.lang.NumberU;
 
 import java.util.zip.CRC32;
@@ -19,8 +20,11 @@ public final class CRCU {
         return crc32.getValue();
     }
 
+    public static String crc32String(final String value) {
+        return crc32String(UTF8Codec.toBytes(value));
+    }
+
     public static String crc32String(final byte[] value) {
         return NumberU.toHex((int) crc32(value));
-
     }
 }

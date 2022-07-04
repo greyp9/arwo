@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.glyph.UTF16;
+import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.script.History;
@@ -66,6 +67,7 @@ public class AppHistoryView {
                 new ColumnMetaData(App.Action.SELECT, Types.VARCHAR),
                 new ColumnMetaData("context", Types.VARCHAR),  // i18n metadata
                 new ColumnMetaData("stdin", Types.VARCHAR),  // i18n metadata
+                new ColumnMetaData("crc", Types.VARCHAR),  // i18n metadata
                 new ColumnMetaData("dateSubmit", Types.TIMESTAMP, true),  // i18n metadata
                 new ColumnMetaData("state", Types.VARCHAR),  // i18n metadata
                 new ColumnMetaData("wait", Types.INTEGER),  // i18n metadata
@@ -77,7 +79,7 @@ public class AppHistoryView {
         return new RowSetMetaData(id, columns);
     }
 
-    private RowSet createRowSet(final RowSetMetaData metaData) throws IOException {
+    private RowSet createRowSet(final RowSetMetaData metaData) {
         final RowSet rowSet = new RowSet(metaData, null, null);
         for (final Script script : history.getHistory()) {
             createRow(rowSet, script);
@@ -96,6 +98,7 @@ public class AppHistoryView {
         insertRow.setNextColumn(new TableViewLink(UTF16.SELECT, null, href));
         insertRow.setNextColumn(script.getContext());
         insertRow.setNextColumn(script.getText());
+        insertRow.setNextColumn(CRCU.crc32String(script.getText().trim()));
         insertRow.setNextColumn(script.getDate());
         insertRow.setNextColumn(getState(isStarted, isFinished));
         insertRow.setNextColumn(Duration.toDuration(script.getDelay(httpRequest.getDate())));
