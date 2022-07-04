@@ -167,7 +167,7 @@ public class AppUserState {
         return alerts;
     }
 
-    public List<String> getFiltersRecent() {
+    public final List<String> getFiltersRecent() {
         return filtersRecent;
     }
 

@@ -2,7 +2,7 @@ package io.github.greyp9.arwo.core.vm.process;
 
 import java.lang.management.ManagementFactory;
 
-public class RuntimeU {
+public final class RuntimeU {
 
     private RuntimeU() {
     }

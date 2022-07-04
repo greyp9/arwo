@@ -64,8 +64,9 @@ public class XedActionTextExpression extends XedAction {
         if (isExpression) {
             filtersRecent.remove(expression);
             filtersRecent.add(0, expression);
-            if (filtersRecent.size() > 6) {
-                filtersRecent.subList(6, filtersRecent.size()).clear();
+            final int retainRecentSize = 6;
+            if (filtersRecent.size() > retainRecentSize) {
+                filtersRecent.subList(retainRecentSize, filtersRecent.size()).clear();
             }
             textFilters.getExpressions().add(expression);
         }
