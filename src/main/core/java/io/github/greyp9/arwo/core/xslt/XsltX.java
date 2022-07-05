@@ -25,6 +25,11 @@ public class XsltX {
         }
     }
 
+    public final XsltX setParameter(final String name, final Object value) {
+        this.transformer.setParameter(name, value);
+        return this;
+    }
+
     public final byte[] transform(final byte[] input) throws IOException {
         try {
             final InputStream isXML = new ByteArrayInputStream(input);
