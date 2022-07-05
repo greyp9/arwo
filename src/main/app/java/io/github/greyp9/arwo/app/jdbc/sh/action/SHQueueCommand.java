@@ -40,21 +40,6 @@ public class SHQueueCommand {
         final Bundle bundle = request.getBundle();
         final Alerts alerts = request.getAlerts();
         final String server = request.getServer();
-        final JDBCConnectionFactory factory = new JDBCConnectionFactory(httpRequest, userState, bundle, alerts);
-        final ConnectionCache cache = userState.getJDBC().getCache();
-        final JDBCConnectionResource resource = (JDBCConnectionResource) cache.getResource(server, factory);
-        if (resource == null) {
-            alerts.add(new Alert(Alert.Severity.WARN, bundle.format("SFTPHandlerPostMultipart.no.connect", server)));
-        } else {
-            location = doAction(httpArguments, resource.getConnection());
-        }
-        return location;
-    }
-
-    private String doAction(final NameTypeValues httpArguments, final JDBCConnection connection) throws IOException {
-        final ServletHttpRequest httpRequest = request.getHttpRequest();
-        final AppUserState userState = request.getUserState();
-        final String server = request.getServer();
         // queue command text for execution
         final String sql = new XedActionSQL(userState.getXedFactory()).getSQL(httpArguments);
         final History history = userState.getJDBC().getHistory();
@@ -62,6 +47,23 @@ public class SHQueueCommand {
         final Query query = new Query(server, httpRequest.getDate().getTime(), id, sql);
         history.add(query);
         userState.getJDBC().getProperties().setProperty(App.Settings.SQL, sql);
+        // acquire connection
+        final JDBCConnectionFactory factory = new JDBCConnectionFactory(httpRequest, userState, bundle, alerts);
+        final ConnectionCache cache = userState.getJDBC().getCache();
+        final JDBCConnectionResource resource = (JDBCConnectionResource) cache.getResource(server, factory);
+        // perform query
+        if (resource == null) {
+            alerts.add(new Alert(Alert.Severity.WARN, bundle.format("SFTPHandlerPostMultipart.no.connect", server)));
+        } else {
+            location = doAction(query, resource.getConnection());
+        }
+        return location;
+    }
+
+    private String doAction(final Query query, final JDBCConnection connection) throws IOException {
+        final ServletHttpRequest httpRequest = request.getHttpRequest();
+        final AppUserState userState = request.getUserState();
+        final String server = request.getServer();
         // runnable to execute commands
         final UserExecutor userExecutor = userState.getUserExecutor();
         final ResourceCache cacheBlob = userState.getCacheBlob();
