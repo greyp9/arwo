@@ -6,7 +6,6 @@ import io.github.greyp9.arwo.app.vis.view.VisualizationEntryView;
 import io.github.greyp9.arwo.app.vis.view.VisualizationHistoryView;
 import io.github.greyp9.arwo.app.vis.view.VisualizationInventoryView;
 import io.github.greyp9.arwo.core.alert.Alert;
-import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
@@ -81,7 +80,7 @@ public class VisualizationHandlerGet {
 
     private HttpResponse doGet3(final String name) throws IOException {
         HttpResponse httpResponse;
-        final TimeHistogram histogram = (TimeHistogram) AppNaming.lookup(App.Application.LOOKUP, name);
+        final TimeHistogram histogram = (TimeHistogram) AppNaming.lookup("", name);  // TODO
         if (histogram == null) {
             httpResponse = HttpResponseU.to404();
         } else if (Html.FILE.equals(request.getMode())) {

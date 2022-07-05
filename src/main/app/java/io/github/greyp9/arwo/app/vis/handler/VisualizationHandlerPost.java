@@ -160,7 +160,7 @@ public class VisualizationHandlerPost {
 
     private List<String> getMetrics(final String context) {
         final Pattern patternMetricName = Pattern.compile("(.*)\\.(.*)\\.xml");  // filename pattern is known
-        final TimeHistogram histogram = (TimeHistogram) AppNaming.lookup(App.Application.LOOKUP, context);
+        final TimeHistogram histogram = (TimeHistogram) AppNaming.lookup("", context);  // TODO
         final File folder = new File(histogram.getFolder());
         final Collection<String> metrics = new TreeSet<>();
         for (final File file : new FindInFolderQuery(folder, "*.xml", false).getFound()) {

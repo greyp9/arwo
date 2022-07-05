@@ -10,12 +10,6 @@ public final class App {
     private App() {
     }
 
-    public static class Application {
-        public static final String NAME = Application.class.getName();
-        public static final String LOOKUP = "application";
-        public static final String QUIT = "q";
-    }
-
     public static class Actions {
         public static final String XSD = "io/github/greyp9/arwo/xsd/action/action.xsd";
         public static final String URI_ACTION = "urn:arwo:action";
