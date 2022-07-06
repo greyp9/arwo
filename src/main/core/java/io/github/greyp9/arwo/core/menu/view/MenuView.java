@@ -59,7 +59,7 @@ public class MenuView {
         final Element divMenus = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENUS));
         final Element div = ElementU.addElement(divMenus, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.PAGE_TITLE));
         ElementU.addElement(div, Html.IMG, null,
-                NTV.create(Html.SRC, "${CONTEXT}/res/ico/app-black.ico", Html.ALT, ""));
+                NTV.create(Html.SRC, "${CONTEXT}/ico/app-black.ico", Html.ALT, ""));
         ElementU.addElement(div, Html.SPAN, title.getText());
         return divMenus;
     }
