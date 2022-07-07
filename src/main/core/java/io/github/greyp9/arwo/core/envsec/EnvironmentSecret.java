@@ -91,7 +91,7 @@ public final class EnvironmentSecret {
         return element;
     }
 
-    public byte[] recover() throws IOException, GeneralSecurityException {
+    public byte[] recover() throws IOException {
         final File fileExpression = new File(resourceExpression);
         final String expression = UTF8Codec.toString(StreamU.read(fileExpression));
         final Grammar grammar = new Grammar(expression);
@@ -104,7 +104,11 @@ public final class EnvironmentSecret {
         final byte[] xml = StreamU.read(fileShares);
         final Document document = DocumentU.toDocument(xml);
         final Element elementSecret = document.getDocumentElement();
-        return recoverA(operatorSecret, elementSecret);
+        try {
+            return recoverA(operatorSecret, elementSecret);
+        } catch (GeneralSecurityException e) {
+            throw new IOException(e);
+        }
     }
 
     private byte[] recoverA(final MultiOperator operator, final Element element)

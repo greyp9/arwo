@@ -31,7 +31,7 @@ public final class EvaluatorRegistry {
             operands.add(toOperand(node));
         }
         final Evaluator evaluator = Optional.ofNullable(evaluators.get(op))
-                .orElseThrow(() -> new IOException("foo"));
+                .orElseThrow(() -> new IOException(op));
         return (NameTypeValue) evaluator.evaluate(new MultiOperator(op, operands));
     }
 
