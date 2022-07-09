@@ -15,10 +15,12 @@ public final class FileU {
     }
 
     public static void ensureFolders(final File folder) {
-        if (!folder.getParentFile().exists()) {
-            ensureFolders(folder.getParentFile());
+        if (folder != null) {
+            if (!folder.exists()) {
+                ensureFolders(folder.getParentFile());
+                mkdir(folder);
+            }
         }
-        ensureFolder(folder);
     }
 
     public static void ensureFolder(final File folder) {
