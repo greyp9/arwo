@@ -4,9 +4,15 @@
             xmlns:xsd='http://www.w3.org/2001/XMLSchema'
             elementFormDefault='qualified'>
 
-    <xsd:element name='account' type='p:accountType'/>
+    <xsd:element name='accountPBE' type='p:accountTypePBE'/>
+    <xsd:element name='accountGCM' type='p:accountTypeGCM'/>
 
-    <xsd:complexType name="accountType">
+    <xsd:complexType name="accountTypePBE">
+        <xsd:attribute name='user' type='xsd:string' use='required'/>
+        <xsd:attribute name='password' type='xsd:string' use='required'/>
+    </xsd:complexType>
+
+    <xsd:complexType name="accountTypeGCM">
         <xsd:attribute name='user' type='xsd:string' use='required'/>
         <xsd:attribute name='password' type='xsd:string' use='required'/>
     </xsd:complexType>

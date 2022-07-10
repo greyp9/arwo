@@ -14,7 +14,6 @@ import org.junit.Test;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
-import javax.crypto.spec.IvParameterSpec;
 import java.security.GeneralSecurityException;
 import java.security.NoSuchAlgorithmException;
 import java.util.Random;
@@ -58,16 +57,13 @@ public class EnvironmentKeyGenerateTest {
                 "abcdefghijklmnopqrst01234567890123456789",
         };
         Assert.assertEquals(shareCount, pbkdfData.length);
-        final byte[][] ivs = new byte[pbkdfData.length][];
         final byte[][] sharesWrapped = new byte[pbkdfData.length][];
         for (int i = 0; (i < shareCount); ++i) {
             final String password = pbkdfData[i];
             final byte[] salt = HashU.sha256(UTF8Codec.toBytes(password));
             final SecretKey key = KeyU.toKeyPBE(password.toCharArray(), salt);
-            final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_CTR, random);
-            ivs[i] = KeyU.getRandomBytes(AES.Const.IV_BYTES_CTR, random);
-            final IvParameterSpec ivParameterSpec = new IvParameterSpec(ivs[i]);
-            final byte[] shareWrapped = keyCodec.encode(shares[i], ivParameterSpec);
+            final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_CTR, KeyX.Const.PARAM_SPEC_IV, random);
+            final byte[] shareWrapped = keyCodec.encode(shares[i]);
             logger.finest(HexCodec.encode(shareWrapped));
             sharesWrapped[i] = shareWrapped;
             Assert.assertEquals(shares[i].length + AES.Const.IV_BYTES_CTR, sharesWrapped[i].length);
@@ -78,7 +74,7 @@ public class EnvironmentKeyGenerateTest {
             final String password = pbkdfData[i];
             final byte[] salt = HashU.sha256(UTF8Codec.toBytes(password));
             final SecretKey key = KeyU.toKeyPBE(password.toCharArray(), salt);
-            final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_CTR, random);
+            final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_CTR, KeyX.Const.PARAM_SPEC_IV, random);
             final byte[] shareUnwrapped = keyCodec.decode(sharesWrapped[i]);
             sharesUnwrapped[i] = shareUnwrapped;
             Assert.assertEquals(shares[i].length, sharesUnwrapped[i].length);

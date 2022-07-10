@@ -46,4 +46,10 @@ public class QNameTest {
         Assert.assertEquals(App.Realm.QNAME.getPrefix(), qname.getPrefix());
         logger.finest(qname.toString());
     }
+
+    @Test
+    public void testQNameRender() {
+        final QName qname = new QName("urn:a:b", "app");
+        Assert.assertEquals("{urn:a:b}app", qname.toString());
+    }
 }

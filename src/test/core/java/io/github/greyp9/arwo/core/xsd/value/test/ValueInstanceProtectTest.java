@@ -23,6 +23,7 @@ import org.junit.Test;
 import org.w3c.dom.Document;
 
 import javax.crypto.SecretKey;
+import javax.crypto.spec.IvParameterSpec;
 import javax.xml.namespace.QName;
 import java.net.URL;
 import java.util.Collection;
@@ -36,7 +37,7 @@ public class ValueInstanceProtectTest {
         // load model
         final URL urlInitial = ResourceU.resolve(TestApp.Resources.XSD_PROTECT);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
-        final QName qname = QNameU.getQName("{urn:arwo:protect}account");
+        final QName qname = QNameU.getQName("{urn:arwo:protect}accountPBE");
         // generate document
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
         logger.finest("\n" + DocumentU.toString(document));
@@ -50,23 +51,24 @@ public class ValueInstanceProtectTest {
         Assert.assertEquals(qname, instanceAccount.getQName());
         // check
         final NameTypeValues ntv = NameTypeValuesU.create(
-                "account.accountType.user", "user",
-                "account.accountType.password", "password");
+                "accountPBE.accountTypePBE.user", "user",
+                "accountPBE.accountTypePBE.password", "password");
         final ValueInstance valueInstance = ValueInstance.create(instanceAccount, ntv);
         Assert.assertEquals(2, valueInstance.getNameTypeValues().size());
         // update value instance
         final char[] secret = "secret".toCharArray();
-        final TransformContext context = new TransformContext(secret, null);
+        final byte[] salt = Base64Codec.decode("AAECAwQFBgc=");
+        final SecretKey keyEncrypt = KeyU.toKeyPBE(secret, salt, 1000, 128, "PBKDF2WithHmacSHA1", "AES");
+        final TransformContext context = new TransformContext(keyEncrypt, null);
         final ValueInstance valueInstanceX = new ProtectKeyTransform(valueInstance, context).transform();
         // check
         Assert.assertEquals(2, valueInstanceX.getNameTypeValues().size());
         final NameTypeValues ntvX = valueInstanceX.getNameTypeValues();
-        Assert.assertEquals("user", ntvX.getValue("account.accountType.user"));
+        Assert.assertEquals("user", ntvX.getValue("accountPBE.accountTypePBE.user"));
         // check
-        final String valueProtect = ntvX.getValue("account.accountType.password");
-        final byte[] salt = Base64Codec.decode("AAECAwQFBgc=");
-        final SecretKey key = KeyU.toKeyPBE(secret, salt, 1000, 128, "PBKDF2WithHmacSHA1", "AES");
-        final KeyX keyX = new KeyX(key, "AES/CBC/PKCS5Padding");
+        final String valueProtect = ntvX.getValue("accountPBE.accountTypePBE.password");
+        final SecretKey keyDecrypt = KeyU.toKeyPBE(secret, salt, 1000, 128, "PBKDF2WithHmacSHA1", "AES");
+        final KeyX keyX = new KeyX(keyDecrypt, "AES/CBC/PKCS5Padding", IvParameterSpec.class.getSimpleName());
         final String plaintext = keyX.unprotect(valueProtect);
         Assert.assertEquals("password", plaintext);
     }
@@ -76,7 +78,7 @@ public class ValueInstanceProtectTest {
         final char[] secret = "secret".toCharArray();
         final byte[] salt = Base64Codec.decode("AAECAwQFBgc=");
         final SecretKey key = KeyU.toKeyPBE(secret, salt, 1000, 128, "PBKDF2WithHmacSHA1", "AES");
-        final KeyX keyX = new KeyX(key, "AES/CBC/PKCS5Padding");
+        final KeyX keyX = new KeyX(key, "AES/CBC/PKCS5Padding", KeyX.Const.PARAM_SPEC_IV);
         final String protect1 = keyX.protect("toProtect");
         final String protect2 = keyX.protect("toProtect");
         Assert.assertNotEquals(protect1, protect2);

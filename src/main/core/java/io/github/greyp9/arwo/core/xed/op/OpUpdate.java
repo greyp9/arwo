@@ -1,6 +1,5 @@
 package io.github.greyp9.arwo.core.xed.op;
 
-import io.github.greyp9.arwo.core.lang.CharU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.xed.model.Xed;
@@ -21,21 +20,22 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
+import java.security.Key;
 import java.util.Collection;
 
 @SuppressWarnings("PMD.TooManyMethods")
 public class OpUpdate {
-    private final char[] secret;
+    private final Key key;
     private final Xed xed;
 
-    public OpUpdate(final char[] secret, final Xed xed) {
-        this.secret = CharU.copy(secret);
+    public OpUpdate(final Key key, final Xed xed) {
+        this.key = key;
         this.xed = xed;
     }
 
     public final Element apply(final Element element, final ValueInstance valueInstanceIn) throws IOException {
         final XPather xpather = new XPather(element, xed.getXPather().getContext());
-        final TransformContext context = new TransformContext(secret, xpather);
+        final TransformContext context = new TransformContext(key, xpather);
         final ValueInstance valueInstance = new ValueInstanceTransform(context).transform(valueInstanceIn);
         final TypeInstance typeInstance = valueInstance.getTypeInstance();
         final NameTypeValues nameTypeValues = valueInstance.getNameTypeValues();

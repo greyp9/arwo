@@ -102,7 +102,9 @@ public abstract class TypeInstance {  // xsd:complexType, xsd:simpleType @ xsd:e
     }
 
     public final boolean isMasked() {
-        return ((getDirective(XedU.HASH) != null) || (getDirective(XedU.PBE) != null));
+        return ((getDirective(XedU.HASH) != null)
+                || (getDirective(XedU.PBE) != null)
+                || (getDirective(XedU.TRANSFORM) != null));
     }
 
     @SuppressWarnings("unused")

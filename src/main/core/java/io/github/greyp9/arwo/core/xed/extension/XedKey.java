@@ -9,14 +9,11 @@ import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.security.Key;
 
 public final class XedKey {
 
     private XedKey() {
-    }
-
-    public static boolean isKey(final TypeInstance typeInstance) {
-        return (typeInstance.getDirective(XedU.PBE) != null);
     }
 
     public static KeyX getKeyPBE(final char[] secret, final TypeInstance typeInstance) throws IOException {
@@ -26,12 +23,36 @@ public final class XedKey {
         final String pbe = typeInstance.getDirective(XedU.PBE);
         final String algorithm = typeInstance.getDirective(XedU.ALGORITHM);
         final String transform = typeInstance.getDirective(XedU.TRANSFORM);
+        final String parameterSpec = typeInstance.getDirective(XedU.PARAM_SPEC);
         try {
             final String keyEncoded = KeyU.encodeSecretKey(
                     KeyU.toKeyPBE(secret, salt, iterations, keySize, pbe, algorithm));
-            return new KeyX(KeyU.decodeSecretKey(keyEncoded, algorithm), transform);
+            return new KeyX(KeyU.decodeSecretKey(keyEncoded, algorithm), transform, parameterSpec);
         } catch (GeneralSecurityException e) {
             throw new IOException(e);
         }
+    }
+
+    public static KeyX getKeyLegacyPBE(final char[] secret) throws IOException {
+        final byte[] salt = Base64Codec.decode("AAECAwQFBgc=");
+        final int iterations = 1000;
+        final int keySize = 128;
+        final String pbe = "PBKDF2WithHmacSHA1";
+        final String algorithm = "AES";
+        final String transform = "AES/CBC/PKCS5Padding";
+        final String parameterSpec = null;
+        try {
+            final String keyEncoded = KeyU.encodeSecretKey(
+                    KeyU.toKeyPBE(secret, salt, iterations, keySize, pbe, algorithm));
+            return new KeyX(KeyU.decodeSecretKey(keyEncoded, algorithm), transform, parameterSpec);
+        } catch (GeneralSecurityException e) {
+            throw new IOException(e);
+        }
+    }
+
+    public static KeyX getKeyAES(final Key key, final TypeInstance typeInstance) {
+        final String transform = typeInstance.getDirective(XedU.TRANSFORM);
+        final String parameterSpec = typeInstance.getDirective(XedU.PARAM_SPEC);
+        return new KeyX(key, transform, parameterSpec);
     }
 }

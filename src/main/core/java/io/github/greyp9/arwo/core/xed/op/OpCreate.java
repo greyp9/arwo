@@ -1,6 +1,5 @@
 package io.github.greyp9.arwo.core.xed.op;
 
-import io.github.greyp9.arwo.core.lang.CharU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
@@ -22,14 +21,15 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
+import java.security.Key;
 import java.util.Collection;
 
 public class OpCreate {
-    private final char[] secret;
+    private final Key key;
     private final Xed xed;
 
-    public OpCreate(final char[] secret, final Xed xed) {
-        this.secret = CharU.copy(secret);
+    public OpCreate(final Key key, final Xed xed) {
+        this.key = key;
         this.xed = xed;
     }
 
@@ -38,7 +38,7 @@ public class OpCreate {
         final Element create = ElementU.addElementBeforeNS(
                 element, typeInstance.getName(), typeInstance.getURI(), null);
         final XPather xpather = new XPather(create, xed.getXPather().getContext());
-        final TransformContext context = new TransformContext(secret, xpather);
+        final TransformContext context = new TransformContext(key, xpather);
         final ValueInstance valueInstance = new ValueInstanceTransform(context).transform(valueInstanceIn);
         final NameTypeValues nameTypeValues = valueInstance.getNameTypeValues();
         final Collection<TypeInstance> typeInstances = new TypeInstanceX(typeInstance).getPageInstances();

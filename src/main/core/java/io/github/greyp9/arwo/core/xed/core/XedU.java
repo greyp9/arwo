@@ -18,6 +18,7 @@ public final class XedU {
     public static final String ITERATIONS = "iterations";
     public static final String KEYSIZE = "keysize";
     //public static final String KEYSPEC = "keyspec";
+    public static final String PARAM_SPEC = "parameterSpec";
     public static final String PBE = "pbe";
     public static final String SALT = "salt";
     public static final String TRANSFORM = "transform";

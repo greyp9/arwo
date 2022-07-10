@@ -1,22 +1,23 @@
 package io.github.greyp9.arwo.core.xed.transform;
 
-import io.github.greyp9.arwo.core.lang.CharU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 
+import java.security.Key;
+
 public class TransformContext {
-    private final char[] secret;
+    private final Key key;
     private final XPather xpather;
 
-    public final char[] getSecret() {
-        return CharU.copy(secret);
+    public final Key getKey() {
+        return key;
     }
 
     public final XPather getXPather() {
         return xpather;
     }
 
-    public TransformContext(final char[] secret, final XPather xpather) {
-        this.secret = CharU.copy(secret);
+    public TransformContext(final Key key, final XPather xpather) {
+        this.key = key;
         this.xpather = xpather;
     }
 }

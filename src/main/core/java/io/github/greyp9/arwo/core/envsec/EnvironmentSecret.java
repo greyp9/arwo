@@ -11,7 +11,6 @@ import io.github.greyp9.arwo.core.expr.op.MultiOperator;
 import io.github.greyp9.arwo.core.ff.DataSplitter;
 import io.github.greyp9.arwo.core.hash.secure.HashU;
 import io.github.greyp9.arwo.core.io.StreamU;
-import io.github.greyp9.arwo.core.jce.AES;
 import io.github.greyp9.arwo.core.jce.KeyCodec;
 import io.github.greyp9.arwo.core.jce.KeyU;
 import io.github.greyp9.arwo.core.jce.KeyX;
@@ -23,7 +22,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.crypto.SecretKey;
-import javax.crypto.spec.GCMParameterSpec;
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -142,10 +140,8 @@ public final class EnvironmentSecret {
         final String password = ntv.getValueS();
         final byte[] salt = HashU.sha256(UTF8Codec.toBytes(ntv.getName()));
         final SecretKey key = KeyU.toKeyPBE(Value.toCharArray(password), salt);
-        final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_GCM, random);
-        final byte[] iv = KeyU.getRandomBytes(AES.Const.IV_BYTES_GCM, random);
-        final GCMParameterSpec parameterSpec = new GCMParameterSpec(AES.Const.TAG_BYTES_GCM * Byte.SIZE, iv);
-        return keyCodec.encode(plainText, parameterSpec);
+        final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_GCM, KeyX.Const.PARAM_SPEC_GCM, random);
+        return keyCodec.encode(plainText);
     }
 
     private byte[] unprotect(
@@ -153,11 +149,9 @@ public final class EnvironmentSecret {
         final String password = ntv.getValueS();
         final byte[] salt = HashU.sha256(UTF8Codec.toBytes(ntv.getName()));
         final SecretKey key = KeyU.toKeyPBE(Value.toCharArray(password), salt);
-        final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_GCM, random);
-        final GCMParameterSpec parameterSpec = new GCMParameterSpec(
-                AES.Const.TAG_BYTES_GCM * Byte.SIZE, cipherText, 0, AES.Const.IV_BYTES_GCM);
+        final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_GCM, KeyX.Const.PARAM_SPEC_GCM, random);
         try {
-            return keyCodec.decode(cipherText, parameterSpec);
+            return keyCodec.decode(cipherText);
         } catch (GeneralSecurityException e) {
             logger.fine(() -> String.format("FAILED TO RECOVER ORDINAL %s", ntv.getName()));
             return null;

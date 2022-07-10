@@ -4,7 +4,6 @@ import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.codec.b64.Base64Codec;
 import io.github.greyp9.arwo.core.ff.DataSplitter;
 import io.github.greyp9.arwo.core.hash.secure.HashU;
-import io.github.greyp9.arwo.core.jce.AES;
 import io.github.greyp9.arwo.core.jce.KeyCodec;
 import io.github.greyp9.arwo.core.jce.KeyU;
 import io.github.greyp9.arwo.core.jce.KeyX;
@@ -16,7 +15,6 @@ import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.crypto.SecretKey;
-import javax.crypto.spec.GCMParameterSpec;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
@@ -73,10 +71,8 @@ public final class EnvironmentSecret {
         final String password = atom.getValue();
         final byte[] salt = HashU.sha256(UTF8Codec.toBytes(atom.getKey()));
         final SecretKey key = KeyU.toKeyPBE(password.toCharArray(), salt);
-        final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_GCM, random);
-        final byte[] iv = KeyU.getRandomBytes(AES.Const.IV_BYTES_GCM, random);
-        final GCMParameterSpec parameterSpec = new GCMParameterSpec(AES.Const.TAG_BYTES_GCM * Byte.SIZE, iv);
-        return new EnvironmentShare(atom, keyCodec.encode(shareBytes, parameterSpec));
+        final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_GCM, KeyX.Const.PARAM_SPEC_GCM, random);
+        return new EnvironmentShare(atom, keyCodec.encode(shareBytes));
     }
 
     public static EnvironmentStore unprotect(final EnvironmentStore store) throws GeneralSecurityException {
@@ -95,11 +91,9 @@ public final class EnvironmentSecret {
             final String password = atom.getValue();
             final byte[] salt = HashU.sha256(UTF8Codec.toBytes(atom.getKey()));
             final SecretKey key = KeyU.toKeyPBE(password.toCharArray(), salt);
-            final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_GCM, null);
-            final GCMParameterSpec parameterSpec = new GCMParameterSpec(
-                    AES.Const.TAG_BYTES_GCM * Byte.SIZE, shareBytes, 0, AES.Const.IV_BYTES_GCM);
+            final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_GCM, KeyX.Const.PARAM_SPEC_GCM, null);
             try {
-                final byte[] bytesRecover = keyCodec.decode(shareBytes, parameterSpec);
+                final byte[] bytesRecover = keyCodec.decode(shareBytes);
                 shares.add(new EnvironmentShare(atom, bytesRecover));
             } catch (GeneralSecurityException e) {
                 LOGGER.fine(() -> String.format("FAILED TO RECOVER ORDINAL %d", atom.getOrdinal()));

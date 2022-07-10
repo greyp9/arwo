@@ -1,8 +1,10 @@
 package io.github.greyp9.arwo.core.app;
 
+import io.github.greyp9.arwo.core.envsec.EnvironmentSecret;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 
 import javax.xml.namespace.QName;
+import java.security.KeyStore;
 
 // i18nf
 public final class App {
@@ -37,6 +39,11 @@ public final class App {
         public static final String XSD = "io/github/greyp9/arwo/xsd/app/app.xsd";
         public static final QName QNAME_APP = new QName("urn:arwo:app", "app", "app");
         public static final QName QNAME_FAVS = new QName("urn:arwo:app", "favorites", "app");
+    }
+
+    public static class Secret {
+        public static final String CONTEXT = EnvironmentSecret.class.getName();
+        public static final String NAME = KeyStore.class.getName();
     }
 
     public static class Servlet {

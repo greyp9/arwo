@@ -2,6 +2,8 @@ package io.github.greyp9.arwo.core.xed.write;
 
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.lang.SystemU;
+import io.github.greyp9.arwo.core.naming.AppNaming;
 import io.github.greyp9.arwo.core.resource.Pather;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
@@ -21,6 +23,9 @@ import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.security.Key;
+import java.security.KeyStore;
 
 public class XedWrite {
     private final XedRequest request;
@@ -46,12 +51,21 @@ public class XedWrite {
         // handle form submit (write to session TypeInstance)
         final ValueInstance valueInstance = ValueInstance.create(cursor.getTypeInstance(), httpArguments);
         // redirect to clean up client POST state
-        return apply(location, cursor, token, valueInstance);
+        try {
+            return apply(location, cursor, token, valueInstance);
+        } catch (GeneralSecurityException e) {
+            throw new IOException(e);
+        }
     }
 
-    @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity", "PMD.ModifiedCyclomaticComplexity" })
+    @SuppressWarnings({"PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity", "PMD.ModifiedCyclomaticComplexity"})
     private String apply(final String locationIn, final XedCursor cursor,
-                         final SubmitToken token, final ValueInstance valueInstance) throws IOException {
+                         final SubmitToken token, final ValueInstance valueInstance)
+            throws GeneralSecurityException, IOException {
+        final String documentURI = cursor.getXed().getDocument().getDocumentElement().getNamespaceURI();
+        final KeyStore keyStore = (KeyStore) AppNaming.lookup(App.Secret.CONTEXT, App.Secret.NAME);
+        final Key keyApplication = keyStore.getKey(documentURI, SystemU.userDir().toCharArray());
+        final Key key = Value.defaultOnNull(keyApplication, request.getKey());
         String location = locationIn;
         final Pather pather = new Pather(request.getHttpRequest().getPathInfo());
         final String baseURI = request.getHttpRequest().getBaseURI() + pather.getLeft();
@@ -60,14 +74,12 @@ public class XedWrite {
         if (action == null) {
             getClass();  // NOOP - null guard
         } else if (App.Action.CREATE.equals(action)) {
-            final char[] secret = request.getSecret();
-            final Element create = new OpCreate(secret, cursor.getXed()).apply(
+            final Element create = new OpCreate(key, cursor.getXed()).apply(
                     cursor.getParentConcrete().getElement(), valueInstance);
             final XedCursor cursorCreate = new XedNav(cursor.getXed()).find(create);
             location = baseURI + cursorCreate.getURI();  // nav to new node (browser "back" for multi-create use case)
         } else if (App.Action.UPDATE.equals(action)) {
-            final char[] secret = request.getSecret();
-            new OpUpdate(secret, cursor.getXed()).apply(cursor.getElement(), valueInstance);
+            new OpUpdate(key, cursor.getXed()).apply(cursor.getElement(), valueInstance);
         } else if (App.Action.DELETE.equals(action)) {
             cursor.getXed().delete(cursor.getElement());
             //location = baseURI + cursor.getParent().getURI();  // don't nav to parent (multi-delete use case)
