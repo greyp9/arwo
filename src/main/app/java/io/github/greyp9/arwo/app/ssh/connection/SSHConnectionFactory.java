@@ -13,12 +13,13 @@ import io.github.greyp9.arwo.core.codec.b64.Base64Codec;
 import io.github.greyp9.arwo.core.config.CursorSSH;
 import io.github.greyp9.arwo.core.connect.ConnectionFactory;
 import io.github.greyp9.arwo.core.connect.ConnectionResource;
-import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.jce.KeyX;
 import io.github.greyp9.arwo.core.lang.NumberU;
+import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.url.URLCodec;
 import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.core.xed.core.XedU;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.extension.XedKey;
 import io.github.greyp9.arwo.core.xed.session.XedSession;
@@ -29,6 +30,7 @@ import io.github.greyp9.arwo.lib.ganymed.ssh.server.ServerParams;
 
 import java.io.IOException;
 import java.net.URI;
+import java.security.Key;
 import java.util.logging.Logger;
 
 public class SSHConnectionFactory implements ConnectionFactory {
@@ -73,11 +75,12 @@ public class SSHConnectionFactory implements ConnectionFactory {
         final String user = cursorSSH.getUser();
         final String password = cursorSSH.getPassword();
         final String privateKey = cursorSSH.getPrivateKey();
-        final char[] secret = Value.toCharArray(httpRequest.getHeader(Http.Header.AUTHORIZATION));
+        //final char[] secret = Value.toCharArray(httpRequest.getHeader(Http.Header.AUTHORIZATION));
         final XedCursor cursor = cursorSSH.getCursor();
         final TypeInstance instancePassword = cursor.getChildInstance(
                 App.Settings.AUTH_PASSWORD).getInstance(App.Settings.PASSWORD);
-        final KeyX keyPassword = XedKey.getKeyPBE(secret, instancePassword);
+        final Key key = userState.getKey(XedU.NS_URI_XED, SystemU.userDir().toCharArray());
+        final KeyX keyPassword = XedKey.getKeyAES(key, instancePassword);
         final String passwordClear = ((password == null) ? null : keyPassword.unprotect(password));
         final String privateKeyClear = ((privateKey == null) ? null : keyPassword.unprotect(privateKey));
         final String algorithm = cursorSSH.getAlgorithm();

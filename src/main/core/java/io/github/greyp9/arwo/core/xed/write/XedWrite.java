@@ -8,6 +8,7 @@ import io.github.greyp9.arwo.core.resource.Pather;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.core.xed.core.XedU;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.op.OpClipClear;
@@ -62,10 +63,12 @@ public class XedWrite {
     private String apply(final String locationIn, final XedCursor cursor,
                          final SubmitToken token, final ValueInstance valueInstance)
             throws GeneralSecurityException, IOException {
-        final String documentURI = cursor.getXed().getDocument().getDocumentElement().getNamespaceURI();
+        // for now, user access to app keystore
         final KeyStore keyStore = (KeyStore) AppNaming.lookup(App.Secret.CONTEXT, App.Secret.NAME);
-        final Key keyApplication = keyStore.getKey(documentURI, SystemU.userDir().toCharArray());
-        final Key key = Value.defaultOnNull(keyApplication, request.getKey());
+        //final String documentURI = cursor.getXed().getDocument().getDocumentElement().getNamespaceURI();
+        //final Key keyApplication = keyStore.getKey(documentURI, SystemU.userDir().toCharArray());
+        final Key key = keyStore.getKey(XedU.NS_URI_XED, SystemU.userDir().toCharArray());
+        //final Key key = Value.defaultOnNull(keyApplication, request.getKey());
         String location = locationIn;
         final Pather pather = new Pather(request.getHttpRequest().getPathInfo());
         final String baseURI = request.getHttpRequest().getBaseURI() + pather.getLeft();

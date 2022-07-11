@@ -34,6 +34,7 @@ import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.link.MetaLink;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.menu.MenuSystem;
+import io.github.greyp9.arwo.core.naming.AppNaming;
 import io.github.greyp9.arwo.core.page.Page;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.resource.Pather;
@@ -59,6 +60,9 @@ import io.github.greyp9.arwo.core.xed.state.XedUserState;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
+import java.security.GeneralSecurityException;
+import java.security.Key;
+import java.security.KeyStore;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -74,6 +78,7 @@ import java.util.TreeMap;
         "PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity", "PMD.ModifiedCyclomaticComplexity" })
 public class AppUserState {
     private final AppState appState;
+    private final KeyStore keyStore;
     // lifetime
     private final Interval interval;
     // user identity token
@@ -114,6 +119,18 @@ public class AppUserState {
 
     // visualization view state
     private Page pageVisualization;
+
+    public KeyStore getKeyStore() {
+        return keyStore;
+    }
+
+    public Key getKey(final String key, final char[] password) throws IOException {
+        try {
+            return keyStore.getKey(key, password);
+        } catch (GeneralSecurityException e) {
+            throw new IOException(e);
+        }
+    }
 
     public final CronService getCronService() {
         return appState.getCronService();
@@ -271,6 +288,7 @@ public class AppUserState {
     public AppUserState(final AppState appState, final Principal principal, final Date date, final File webappRoot,
                         final String submitID, final Locus locus) throws IOException {
         this.appState = appState;
+        this.keyStore = (KeyStore) AppNaming.lookup(App.Secret.CONTEXT, App.Secret.NAME);
         this.principal = principal;
         this.interval = new Interval(date, null);
         this.userRoot = AppFolder.getUserHome(webappRoot, principal);
