@@ -361,6 +361,20 @@
 -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jar-plugin</artifactId>
+                <version>3.2.0</version>  <!-- 2019-10-29 -->
+                <configuration>
+                    <archive>
+                        <manifest/>
+                        <manifestEntries>
+                            <Specification-Version>${version}</Specification-Version>
+                            <Implementation-Version>${maven.build.timestamp}</Implementation-Version>
+                        </manifestEntries>
+                    </archive>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
                 <version>3.9.1</version>  <!-- 2020-06-21 -->
             </plugin>
