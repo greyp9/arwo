@@ -46,12 +46,16 @@ public class Query {
     }
 
     public Query(final String context, final long date, final String id, final String text) {
+        this(context, date, id, text, new Results(text, new Interval(null, null)));
+    }
+
+    public Query(final String context, final long date, final String id, final String text, final Results results) {
         this.context = context;
         this.date = date;
         this.id = id;
         this.text = text;
         this.properties = new Properties();
-        this.results = new Results(text, new Interval(null, null));
+        this.results = results;
         this.exception = null;
     }
 

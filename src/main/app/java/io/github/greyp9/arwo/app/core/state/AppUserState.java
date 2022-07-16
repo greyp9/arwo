@@ -304,7 +304,7 @@ public class AppUserState {
         this.cron = new SubsystemCron(documentState.getFactory());
         this.local = new SubsystemLocal();
         this.ssh = new SubsystemSSH(alerts);
-        this.jdbc = new SubsystemJDBC(alerts);
+        this.jdbc = new SubsystemJDBC(alerts, this.userRoot);
         this.mail = new SubsystemMail(alerts);
         this.cifs = new SubsystemCIFS(alerts);
         this.interop = new SubsystemInterop(alerts);
