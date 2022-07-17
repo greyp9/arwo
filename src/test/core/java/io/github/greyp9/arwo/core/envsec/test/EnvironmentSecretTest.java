@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.envsec.test;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.codec.hex.HexCodec;
 import io.github.greyp9.arwo.core.envsec.EnvironmentSecret;
+import io.github.greyp9.arwo.core.envsec.eval.PropEvaluator;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.jce.AES;
 import io.github.greyp9.arwo.core.lang.SystemU;
@@ -14,7 +15,9 @@ import org.junit.Test;
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.security.KeyException;
 import java.util.Arrays;
+import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Logger;
 
@@ -62,8 +65,8 @@ public class EnvironmentSecretTest {
         final byte[] secret = AES.generate().getEncoded();
         new EnvironmentSecret(fileExpression.getPath(), new Random(0L)).generate(secret);
         System.setProperty("foo", "bar");  // add property that was missing, should cause recovery to fail
-        final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
-        Assert.assertNotEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+        Assert.assertThrows(KeyException.class,
+                () -> new EnvironmentSecret(fileExpression.getPath(), null).recover());
     }
 
     @Test
@@ -194,8 +197,8 @@ public class EnvironmentSecretTest {
 
         System.setProperty("A", "bar");
         System.setProperty("B", "foo");
-        final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
-        Assert.assertNotEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+        Assert.assertThrows(KeyException.class,
+                () -> new EnvironmentSecret(fileExpression.getPath(), null).recover());
     }
 
     @Test
@@ -228,5 +231,33 @@ public class EnvironmentSecretTest {
         new EnvironmentSecret(fileExpression.getPath(), new Random(0L)).generate(secret);
         final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
         Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+    }
+
+    @Test
+    public void test_CustomEvaluator() throws IOException, GeneralSecurityException {
+        final File fileExpression = new File(folderTest, "envCE.txt");
+        final File fileShares = new File(folderTest, "envCE.txt.xml");
+        tearDownCustom(fileExpression, fileShares);
+        final String expression =
+                "secret(3 p('a') p('b') p('c'))";
+        StreamU.write(fileExpression, UTF8Codec.toBytes(expression));
+
+        final byte[] secret = AES.generate().getEncoded();
+        logger.finest(HexCodec.encode(secret));
+        final Properties properties = new Properties();
+        properties.setProperty("a", "1");
+        properties.setProperty("b", "2");
+        properties.setProperty("c", "3");
+        final PropEvaluator evaluator = new PropEvaluator(properties);
+        final EnvironmentSecret environmentSecret = new EnvironmentSecret(fileExpression.getPath(), new Random(0L));
+        environmentSecret.register("p", evaluator);
+        environmentSecret.generate(secret);
+
+        final byte[] secretRecover1 = environmentSecret.recover();
+        logger.finest(HexCodec.encode(secretRecover1));
+        Assert.assertArrayEquals(secret, secretRecover1);
+
+        properties.setProperty("c", "1");
+        Assert.assertThrows(KeyException.class, () -> environmentSecret.recover());
     }
 }

@@ -76,6 +76,7 @@ public class SSHConnectionFactory implements ConnectionFactory {
         final String password = cursorSSH.getPassword();
         final String privateKey = cursorSSH.getPrivateKey();
         //final char[] secret = Value.toCharArray(httpRequest.getHeader(Http.Header.AUTHORIZATION));
+        Logger.getLogger(getClass().getName()).finest(httpRequest.getURI());
         final XedCursor cursor = cursorSSH.getCursor();
         final TypeInstance instancePassword = cursor.getChildInstance(
                 App.Settings.AUTH_PASSWORD).getInstance(App.Settings.PASSWORD);

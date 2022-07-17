@@ -24,6 +24,14 @@ public final class EvaluatorRegistry {
         this.evaluators.put(Const.SHA256, new Sha256Evaluator());
     }
 
+    public void register(final String key, final Evaluator evaluator) throws IOException {
+        if (evaluators.containsKey(key)) {
+            throw new IOException(key, new IllegalStateException(key));
+        } else {
+            evaluators.put(key, evaluator);
+        }
+    }
+
     public NameTypeValue evaluate(final MultiOperator operator) throws IOException {
         final String op = operator.getOp();
         final List<Node> operands = new ArrayList<>();

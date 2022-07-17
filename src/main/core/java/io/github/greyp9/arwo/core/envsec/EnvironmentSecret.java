@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.core.envsec;
 
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.codec.b64.Base64Codec;
+import io.github.greyp9.arwo.core.envsec.eval.Evaluator;
 import io.github.greyp9.arwo.core.envsec.eval.EvaluatorRegistry;
 import io.github.greyp9.arwo.core.expr.Grammar;
 import io.github.greyp9.arwo.core.expr.Node;
@@ -10,6 +11,7 @@ import io.github.greyp9.arwo.core.expr.Tree;
 import io.github.greyp9.arwo.core.expr.op.MultiOperator;
 import io.github.greyp9.arwo.core.ff.DataSplitter;
 import io.github.greyp9.arwo.core.hash.secure.HashU;
+import io.github.greyp9.arwo.core.io.ByteU;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.jce.KeyCodec;
 import io.github.greyp9.arwo.core.jce.KeyU;
@@ -25,6 +27,7 @@ import javax.crypto.SecretKey;
 import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.security.KeyException;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -47,6 +50,10 @@ public final class EnvironmentSecret {
         this.registry = new EvaluatorRegistry();
     }
 
+    public void register(final String key, final Evaluator evaluator) throws IOException {
+        registry.register(key, evaluator);
+    }
+
     public void generate(final byte[] secret) throws IOException, GeneralSecurityException {
         final File fileExpression = new File(resourceExpression);
         final String expression = UTF8Codec.toString(StreamU.read(fileExpression));
@@ -57,6 +64,7 @@ public final class EnvironmentSecret {
                 .filter(m -> m.getOp().equals(Const.SECRET))
                 .orElseThrow(IOException::new);
         final Element elementSecret = generateA(operatorSecret, secret);
+        ElementU.setAttribute(elementSecret, Const.HASH, toHash(expression, secret));
         final byte[] xml = DocumentU.toXml(elementSecret);
         logger.finest(UTF8Codec.toString(xml));
         final File fileShares = new File(resourceShares);
@@ -89,7 +97,7 @@ public final class EnvironmentSecret {
         return element;
     }
 
-    public byte[] recover() throws IOException {
+    public byte[] recover() throws IOException, GeneralSecurityException {
         final File fileExpression = new File(resourceExpression);
         final String expression = UTF8Codec.toString(StreamU.read(fileExpression));
         final Grammar grammar = new Grammar(expression);
@@ -102,11 +110,9 @@ public final class EnvironmentSecret {
         final byte[] xml = StreamU.read(fileShares);
         final Document document = DocumentU.toDocument(xml);
         final Element elementSecret = document.getDocumentElement();
-        try {
-            return recoverA(operatorSecret, elementSecret);
-        } catch (GeneralSecurityException e) {
-            throw new IOException(e);
-        }
+        final byte[] secret = recoverA(operatorSecret, elementSecret);
+        verify(ElementU.getAttribute(elementSecret, Const.HASH), toHash(expression, secret), resourceExpression);
+        return secret;
     }
 
     private byte[] recoverA(final MultiOperator operator, final Element element)
@@ -153,8 +159,22 @@ public final class EnvironmentSecret {
         try {
             return keyCodec.decode(cipherText);
         } catch (GeneralSecurityException e) {
-            logger.fine(() -> String.format("FAILED TO RECOVER ORDINAL %s", ntv.getName()));
+            logger.info(String.format("FAILED TO RECOVER ATTRIBUTE: [%s]", ntv.getName()));
             return null;
+        }
+    }
+
+    private String toHash(final String expression, final byte[] secret) {
+        return Base64Codec.encode(HashU.sha256(ByteU.join(UTF8Codec.toBytes(expression), secret)));
+    }
+
+    private void verify(final String hashExpected, final String hashActual,
+                        final String label) throws GeneralSecurityException {
+        if (hashExpected.equals(hashActual)) {
+            logger.info(String.format("RECOVERED SECRET: [%s]", label));
+        } else {
+            logger.severe(String.format("FAILED TO RECOVER SECRET: [%s]", label));
+            throw new KeyException(label);
         }
     }
 
@@ -162,5 +182,6 @@ public final class EnvironmentSecret {
         private static final String URI = "urn:arwo:envsec";
         private static final String SHARE = "share";
         private static final String SECRET = "secret";
+        private static final String HASH = "hash";
     }
 }

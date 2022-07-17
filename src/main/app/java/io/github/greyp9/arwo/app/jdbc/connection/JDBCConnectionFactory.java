@@ -27,6 +27,7 @@ import java.sql.Connection;
 import java.sql.Driver;
 import java.sql.SQLException;
 import java.util.Properties;
+import java.util.logging.Logger;
 
 public class JDBCConnectionFactory implements ConnectionFactory {
     private final ServletHttpRequest httpRequest;
@@ -64,6 +65,7 @@ public class JDBCConnectionFactory implements ConnectionFactory {
         final String user = cursorJDBC.getUser();
         final String password = cursorJDBC.getPassword();
         //final char[] secret = Value.toCharArray(httpRequest.getHeader(Http.Header.AUTHORIZATION));
+        Logger.getLogger(getClass().getName()).finest(httpRequest.getURI());
         final XedCursor cursor = cursorJDBC.getCursor();
         final TypeInstance instancePassword = cursor.getChildInstance(App.Settings.PASSWORD);
         final Key key = userState.getKey(XedU.NS_URI_XED, SystemU.userDir().toCharArray());

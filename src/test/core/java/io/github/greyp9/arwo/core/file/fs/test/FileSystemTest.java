@@ -78,13 +78,14 @@ public class FileSystemTest {
                 SystemU.userHome(),
                 SystemU.tempDir(),
         };
+        final int recentCount = 10;
         for (String folderPath : folderPaths) {
             final File folder = new File(folderPath);
             Assert.assertTrue(folder.exists());
             final File[] files = FileU.listFiles(folder);
-            final long skip = Math.max(0, (files.length - 10));
+            final long skip = Math.max(0, (files.length - recentCount));
             final List<File> filesRecent = Arrays.stream(files).sorted().skip(skip).collect(Collectors.toList());
-            Assert.assertTrue(filesRecent.size() <= 10);
+            Assert.assertTrue(filesRecent.size() <= recentCount);
         }
     }
 }

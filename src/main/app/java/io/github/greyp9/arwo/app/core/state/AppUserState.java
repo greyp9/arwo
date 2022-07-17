@@ -120,11 +120,11 @@ public class AppUserState {
     // visualization view state
     private Page pageVisualization;
 
-    public KeyStore getKeyStore() {
+    public final KeyStore getKeyStore() {
         return keyStore;
     }
 
-    public Key getKey(final String key, final char[] password) throws IOException {
+    public final Key getKey(final String key, final char[] password) throws IOException {
         try {
             return keyStore.getKey(key, password);
         } catch (GeneralSecurityException e) {
