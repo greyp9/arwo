@@ -30,10 +30,11 @@ public class ResultsReader extends ResultsXML {
         final boolean isName = element.getLocalName().equals(E_RESULTS);
         final boolean isNamespace = element.getNamespaceURI().equals(NS_RESULTS);
         if (isName && isNamespace) {
+            final String context = ElementU.getAttribute(element, A_CONTEXT);
             final String command = ElementU.getAttribute(element, A_COMMAND);
             final Date start = XsdDateU.fromXSDZ(ElementU.getAttribute(element, A_START));
             final Date finish = XsdDateU.fromXSDZ(ElementU.getAttribute(element, A_FINISH));
-            results = new Results(command, new Interval(start, finish));
+            results = new Results(context, command, new Interval(start, finish));
             readFrom(ElementU.getChildren(element), results);
         }
         return results;

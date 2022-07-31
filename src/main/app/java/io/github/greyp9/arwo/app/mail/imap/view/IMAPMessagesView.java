@@ -39,7 +39,7 @@ public class IMAPMessagesView extends IMAPView {
         final RowSet rowSet = getRowSet(metaData, viewState.isConnected());
         final RowSet rowSetStyled = new IMAPMessagesStyled(request, rowSet).getRowSet();
         // optionally persist fetched results
-        final Results results = new Results(request.getHttpRequest().getURI(),
+        final Results results = new Results(request.getServer(), request.getHttpRequest().getURI(),
                 new Interval(request.getHttpRequest().getDate(), new Date()));
         results.add(rowSetStyled.getID(), null, rowSetStyled);
         new ResultsPersister(request.getUserState().getResultsContext(request.getHttpRequest())).write(results);

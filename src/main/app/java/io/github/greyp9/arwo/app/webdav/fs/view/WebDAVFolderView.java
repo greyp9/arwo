@@ -89,7 +89,7 @@ public class WebDAVFolderView extends WebDAVView {
                 : getRowSetRaw(metaData, viewState));
         final RowSet rowSetStyled = new WebDAVFolderStyled(request, rowSetRaw).getRowSet();
         // optionally persist fetched results
-        final Results results = new Results(request.getHttpRequest().getURI(),
+        final Results results = new Results(request.getServer(), request.getHttpRequest().getURI(),
                 new Interval(request.getHttpRequest().getDate(), new Date()));
         results.add(rowSetStyled.getID(), null, rowSetStyled);
         // optionally persist fetched results

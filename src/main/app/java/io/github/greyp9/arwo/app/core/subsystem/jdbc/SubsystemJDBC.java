@@ -60,7 +60,7 @@ public class SubsystemJDBC {
                 final Results results = reader.readFrom(
                         new MetaFile(null, null, new ByteArrayInputStream(StreamU.read(file))));
                 final Date dateStart = results.getInterval().getDateStart();
-                final Query query = new Query("RECENT", dateStart.getTime(),
+                final Query query = new Query(results.getContext(), dateStart.getTime(),
                         history.getNewID(dateStart), results.getCommand(), results);
                 history.add(query);
             } catch (IOException e) {

@@ -38,7 +38,9 @@ public class ResultsWriter extends ResultsXML {
 
     private void writeTo(final Document document, final Results results) {
         final Element elementResults = document.getDocumentElement();
-        ElementU.setAttributes(elementResults, NTV.create(A_COMMAND, results.getCommand(),
+        ElementU.setAttributes(elementResults, NTV.create(
+                A_CONTEXT, results.getContext(),
+                A_COMMAND, results.getCommand(),
                 A_START, XsdDateU.toXSDZMillis(results.getInterval().getDateStart()),
                 A_FINISH, XsdDateU.toXSDZMillis(results.getInterval().getDateFinish())));
         for (final Result result : results.getResults()) {

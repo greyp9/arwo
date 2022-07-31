@@ -31,6 +31,7 @@ public class ResultsXML {
     protected static final String E_TABLE_LINK = TableViewLink.class.getSimpleName();
 
     protected static final String A_COMMAND = "command";
+    protected static final String A_CONTEXT = "context";
     protected static final String A_START = "start";
     protected static final String A_FINISH = "finish";
     protected static final String A_ID = "id";

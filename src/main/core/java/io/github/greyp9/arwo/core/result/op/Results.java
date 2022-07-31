@@ -10,9 +10,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 
 public class Results {
+    private final String context;
     private final String command;
     private final Interval interval;
     private final Collection<Result> data;
+
+    public final String getContext() {
+        return context;
+    }
 
     public final String getCommand() {
         return command;
@@ -26,10 +31,11 @@ public class Results {
         return data;
     }
 
-    public Results(final String command, final Interval interval) {
+    public Results(final String context, final String command, final Interval interval) {
+        this.context = context;
         this.command = command;
         this.interval = interval;
-        this.data = new ArrayList<Result>();
+        this.data = new ArrayList<>();
     }
 
     public final void add(final String id, final String type, final RowSet rowSet) {

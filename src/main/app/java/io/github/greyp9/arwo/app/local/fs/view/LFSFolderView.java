@@ -92,7 +92,7 @@ public class LFSFolderView extends LFSView {
         }
         final RowSet rowSetStyled = new LFSFolderStyled(request, rowSetRaw).getRowSet();
         // optionally persist fetched results
-        final Results results = new Results(request.getHttpRequest().getURI(),
+        final Results results = new Results(request.getContext(), request.getHttpRequest().getURI(),
                 new Interval(request.getHttpRequest().getDate(), new Date()));
         results.add(rowSetStyled.getID(), null, rowSetStyled);
         // optionally persist fetched results

@@ -46,7 +46,7 @@ public class Query {
     }
 
     public Query(final String context, final long date, final String id, final String text) {
-        this(context, date, id, text, new Results(text, new Interval(null, null)));
+        this(context, date, id, text, new Results(context, text, new Interval(null, null)));
     }
 
     public Query(final String context, final long date, final String id, final String text, final Results results) {
