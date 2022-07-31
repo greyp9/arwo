@@ -20,6 +20,10 @@ public class KeyX {
         this.keyCodec = new KeyCodec(key, transform, parameterSpec, random);
     }
 
+    public final boolean hasKey() {
+        return keyCodec.hasKey();
+    }
+
     public final String protect(final String value) throws IOException {
         try {
             final byte[] bytesClear = UTF8Codec.toBytes(value);

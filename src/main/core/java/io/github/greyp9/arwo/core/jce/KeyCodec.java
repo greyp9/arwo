@@ -25,6 +25,10 @@ public class KeyCodec {
         this.random = random;
     }
 
+    public final boolean hasKey() {
+        return (key != null);
+    }
+
     public final byte[] encode(final byte[] bytes) throws GeneralSecurityException {
         return (Value.isEmpty(bytes) ? bytes : (isSymmetric() ? encodeSymmetric(bytes) : encodeAsymmetric(bytes)));
     }
