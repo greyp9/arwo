@@ -170,11 +170,11 @@ public final class EnvironmentSecret {
 
     private void verify(final String hashExpected, final String hashActual,
                         final String label) throws GeneralSecurityException {
-        if (hashExpected.equals(hashActual)) {
+        if (Value.equal(hashExpected, hashActual)) {
             logger.info(String.format("RECOVERED SECRET: [%s]", label));
         } else {
             logger.severe(String.format("FAILED TO RECOVER SECRET: [%s]", label));
-            throw new KeyException(label);
+            throw new KeyException(String.format("%s: [%s] != [%s]", label, hashExpected, hashActual));
         }
     }
 
