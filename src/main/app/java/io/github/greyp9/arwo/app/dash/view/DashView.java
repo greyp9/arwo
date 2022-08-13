@@ -12,6 +12,7 @@ import io.github.greyp9.arwo.core.app.AppRequest;
 import io.github.greyp9.arwo.core.app.AppTitle;
 import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.Http;
@@ -105,12 +106,17 @@ public class DashView {
     }
 
     private void addPropertiesView(final Element html) throws IOException {
+        final DateX dateX = userState.getLocus().getDateX();
+        final String startA = dateX.toString(userState.getDateAppStart());
         final String durationA = DurationU.duration(userState.getDateAppStart(), httpRequest.getDate());
+        final String startU = dateX.toString(userState.getDateSessionStart());
         final String durationU = DurationU.duration(userState.getDateSessionStart(), httpRequest.getDate());
         final Bundle bundle = request.getBundle();
         final NameTypeValues properties = new NameTypeValues();
         properties.add(bundle.getString("DashView.runtime.name"), RuntimeU.getName());
+        properties.add(bundle.getString("DashView.webapp.start"), startA);
         properties.add(bundle.getString("DashView.webapp.uptime"), durationA);
+        properties.add(bundle.getString("DashView.session.start"), startU);
         properties.add(bundle.getString("DashView.session.uptime"), durationU);
         final AppPropertiesView view = new AppPropertiesView("dashPropertiesType", userState);  // i18n metadata
         view.addContentTo(html, null, bundle, properties);
