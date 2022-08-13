@@ -25,18 +25,20 @@ public class LFSFolder {
     }
 
     public LFSFolder(final File folderBase, final String folderOffset, final File[] files,
-                     final RowSetMetaData metaData, final boolean sort) {
+                     final RowSetMetaData metaData, final boolean viewDot, final boolean sort) {
         // "native" sort, in case none supplied by user
         final Sorts sorts = (sort ? new Sorts(new Sort("type", true), new Sort("name", true)) : null);  // i18n metadata
         // load from source data
         this.rowSet = new RowSet(metaData, sorts, null);
         for (final File file : files) {
+            final String fileName = file.getName();
+            final boolean include = (viewDot || !fileName.startsWith("."));
             // skip spurious entries
-            if (".".equals(file.getName())) {
+            if (".".equals(fileName)) {
                 file.getClass();
-            } else if ("..".equals(file.getName())) {
+            } else if ("..".equals(fileName)) {
                 file.getClass();
-            } else {
+            } else if (include) {
                 loadRow(rowSet, folderBase, folderOffset, file);
             }
         }

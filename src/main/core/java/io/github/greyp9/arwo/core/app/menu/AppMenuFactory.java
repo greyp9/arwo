@@ -124,9 +124,11 @@ public class AppMenuFactory implements MenuFactory {
         final MenuItem itemViewTGZ = new MenuItem(App.Mode.VIEW_TGZ, App.Target.USER_STATE, App.Mode.VIEW_TGZ);
         final MenuItem itemViewHex = new MenuItem(App.Mode.VIEW_HEX, App.Target.USER_STATE, App.Mode.VIEW_HEX);
         final MenuItem itemViewR = new MenuItem(App.Mode.VIEW_R, App.Target.USER_STATE, App.Mode.VIEW_R);
+        final MenuItem itemViewDot = new MenuItem(
+                App.Mode.VIEW_DOT, App.Target.USER_STATE, App.Action.TOGGLE, App.Mode.VIEW_DOT);
         return new MenuItem(App.Mode.VIEW, App.Target.USER_STATE, App.Action.MENU, Value.join("/", key, App.Mode.VIEW),
                 itemView, itemViewHead, itemViewTail, itemViewGZ, itemViewGZRef, itemViewZIP, itemViewZIPRef,
-                itemViewTGZ, itemViewHex, itemViewR);
+                itemViewTGZ, itemViewHex, itemViewR, itemViewDot);
     }
 
     private static MenuItem createMenuViewMime(final String key) {

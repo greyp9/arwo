@@ -15,6 +15,7 @@ import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewState;
 import io.github.greyp9.arwo.core.table.state.ViewStates;
+import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import org.w3c.dom.Element;
 
@@ -49,10 +50,11 @@ public final class LFSSymlinkView extends LFSView {
     }
 
     private RowSet createRowSetRaw(final RowSetMetaData metaData) {
+        final boolean viewDot = PropertiesU.isBoolean(getUserState().getProperties(), App.Mode.VIEW_DOT);
         final String path = getRequest().getPath();
         final LFSDataSource source = new LFSDataSource(getRequest(), getFolderBase());
         final File[] files = source.lsSymlink(path);
-        final RowSet rowSet = new LFSFolder(getFolderBase(), path, files, metaData, false).getRowSet();
+        final RowSet rowSet = new LFSFolder(getFolderBase(), path, files, metaData, viewDot, false).getRowSet();
         rowSet.getProperties().setProperty(Integer.toString(App.FS.S_IFLNK), Boolean.TRUE.toString());
         return rowSet;
     }

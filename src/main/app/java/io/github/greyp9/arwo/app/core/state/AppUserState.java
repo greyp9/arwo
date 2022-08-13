@@ -298,6 +298,7 @@ public class AppUserState {
         //this.textFilters.put("", new TextFilters());
         this.alerts = new Alerts();
         this.documentState = new XedUserState(webappRoot, appState.getFactory(), principal, submitID, locus, alerts);
+        this.documentState.getProperties().setProperty(App.Mode.VIEW_DOT, Boolean.TRUE.toString());
         this.viewStates = new ViewStates(new XedActionFilter(documentState.getFactory(), null), getConfig());
         this.userExecutor = new UserExecutor(principal, date, new File(SystemU.userHome()));
         this.deferredActions = new DeferredActions();

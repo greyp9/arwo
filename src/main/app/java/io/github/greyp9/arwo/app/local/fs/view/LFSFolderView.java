@@ -117,19 +117,20 @@ public class LFSFolderView extends LFSView {
         final LFSDataSource source = new LFSDataSource(request, folderBase);
         final ResourceCache cache = userState.getCache();
         final String path = request.getPath();
+        final boolean viewDot = PropertiesU.isBoolean(userState.getProperties(), App.Mode.VIEW_DOT);
         // on view state change, userState at next HTTP/GET will contain USE_CACHE directive
         // if disconnected, resource will only be fetched if no cached copy is available
         if (PropertiesU.isBoolean(userState.getProperties(), App.Action.USE_CACHE)) {
             rowSet = cache.getRowSet(path);
         } else if (viewState.isConnected()) {
             final File[] files = source.listFiles(path, recurse);
-            rowSet = new LFSFolder(folderBase, path, files, metaData, true).getRowSet();
+            rowSet = new LFSFolder(folderBase, path, files, metaData, viewDot, true).getRowSet();
             cache.putRowSet(path, rowSet);
         } else if (cache.containsRowSet(path)) {
             rowSet = cache.getRowSet(path);
         } else {
             final File[] files = source.listFiles(path, recurse);
-            rowSet = new LFSFolder(folderBase, path, files, metaData, true).getRowSet();
+            rowSet = new LFSFolder(folderBase, path, files, metaData, viewDot, true).getRowSet();
             cache.putRowSet(path, rowSet);
         }
         return rowSet;

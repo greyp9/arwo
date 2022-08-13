@@ -172,6 +172,7 @@ public final class App {
         public static final String VIEW_HTML = "viewHtml";
         public static final String VIEW_TEXT = "viewText";
         public static final String VIEW_R = "viewR";
+        public static final String VIEW_DOT = "viewDot";
     }
 
     public static class Settings {
