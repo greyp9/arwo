@@ -142,4 +142,8 @@ public final class Value {
     public static <T> T as(final Object o, final Class<T> clazz) {
         return Optional.of(o).filter(clazz::isInstance).map(clazz::cast).orElse(null);
     }
+
+    public static <T> Optional<T> asOptional(final Object o, final Class<T> clazz) {
+        return Optional.of(o).filter(clazz::isInstance).map(clazz::cast);
+    }
 }

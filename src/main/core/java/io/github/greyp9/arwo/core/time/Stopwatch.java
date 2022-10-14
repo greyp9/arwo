@@ -19,6 +19,10 @@ public class Stopwatch {
         return getLast();
     }
 
+    public final long elapsed() {
+        return System.currentTimeMillis() - getStart().getTime();
+    }
+
     public final Date getStart() {
         return dates.get(0);
     }

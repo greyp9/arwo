@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.core.tls.context.TLSContext;
 import io.github.greyp9.arwo.core.tls.context.TLSContextFactory;
 import io.github.greyp9.arwo.core.tls.manage.TLSKeyManager;
 
+import javax.net.ssl.HostnameVerifier;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
 import java.net.URL;
@@ -16,9 +17,15 @@ import java.util.Collection;
 
 public class CertificateClient {
     private final String protocol;
+    private final HostnameVerifier hostnameVerifier;
 
     public CertificateClient(final String protocol) {
+        this(protocol, null);
+    }
+
+    public CertificateClient(final String protocol, final HostnameVerifier hostnameVerifier) {
         this.protocol = protocol;
+        this.hostnameVerifier = hostnameVerifier;
     }
 
     public final Collection<X509Certificate> getCertificateChain(final URL url)
@@ -32,6 +39,9 @@ public class CertificateClient {
         final TLSContext context = new TLSContextFactory().createTrustAll(protocol, keyManager);
         final TrustAllConnectionFactory connectionFactory = new TrustAllConnectionFactory(context);
         final HttpsURLConnection connection = connectionFactory.openConnection(url);
+        if (hostnameVerifier != null) {
+            connection.setHostnameVerifier(hostnameVerifier);
+        }
         connection.connect();
         final Certificate[] certificates = connection.getServerCertificates();
         connection.disconnect();
