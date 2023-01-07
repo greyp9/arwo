@@ -2,6 +2,8 @@ package io.github.greyp9.arwo.core.codec.test;
 
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.codec.b64.Base64Codec;
+import io.github.greyp9.arwo.core.io.StreamU;
+import io.github.greyp9.arwo.core.res.ResourceU;
 import org.junit.Assert;
 import org.junit.Test;
 
@@ -18,6 +20,14 @@ public class Base64CodecTest {
         Assert.assertEquals("SGVsbG8gd29ybGQh", encoded);
         final String plaintextRecover = UTF8Codec.toString(Base64Codec.decode(encoded));
         Assert.assertEquals(plaintext, plaintextRecover);
+    }
+
+    @Test
+    public void testCodec_Resource() throws IOException {
+        final byte[] bytes = StreamU.read(ResourceU.resolve("io/github/greyp9/arwo/core/codec/b64.txt"));
+        final String string = UTF8Codec.toString(bytes);
+        final String plaintextRecover = UTF8Codec.toString(Base64Codec.decode(string));
+        logger.info(plaintextRecover);
     }
 
     @Test
