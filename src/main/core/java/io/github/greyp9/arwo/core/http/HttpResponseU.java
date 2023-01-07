@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.core.date.HttpDateU;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.value.Value;
 
 import java.io.ByteArrayInputStream;
 import java.net.HttpURLConnection;
@@ -26,10 +27,11 @@ public final class HttpResponseU {
 
     public static HttpResponse to200(final MetaFile metaFile) {
         final String lastModified = HttpDateU.toHttpZ(new Date(metaFile.getMetaData().getLastModified()));
+        final String contentType = Value.defaultOnEmpty(metaFile.getContentType(), Http.Mime.TEXT_PLAIN_UTF8);
         final long length = metaFile.getMetaData().getLength();
         final NameTypeValues headers = new NameTypeValues(
                 new NameTypeValue(Http.Header.LAST_MODIFIED, lastModified),
-                new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_PLAIN_UTF8),
+                new NameTypeValue(Http.Header.CONTENT_TYPE, contentType),
                 new NameTypeValue(Http.Header.CONTENT_LENGTH, length));
         return new HttpResponse(HttpURLConnection.HTTP_OK, headers, metaFile.getBytes());
     }
