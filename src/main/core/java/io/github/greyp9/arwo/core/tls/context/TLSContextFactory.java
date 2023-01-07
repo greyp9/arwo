@@ -28,6 +28,13 @@ public class TLSContextFactory {
     }
 
     public final TLSContext create(
+            final TLSKeyManager keyManager, final X509Certificate certificate, final String protocol)
+            throws GeneralSecurityException {
+        final TLSTrustManager trustManager = new TLSTrustManager(new X509Certificate[] { certificate });
+        return new TLSContext(keyManager, trustManager, protocol);
+    }
+
+    public final TLSContext create(
             final X509Certificate certificate, final String protocol) throws GeneralSecurityException {
         final TLSTrustManager trustManager = new TLSTrustManager(new X509Certificate[] { certificate });
         return new TLSContext(null, trustManager, protocol);
