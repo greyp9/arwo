@@ -31,8 +31,9 @@ public final class NameTypeValues extends ArrayList<NameTypeValue> {
         return this;
     }
 
-    public void add(final String name, final Object value) {
+    public NameTypeValues add(final String name, final Object value) {
         add(new NameTypeValue(name, value));
+        return this;
     }
 
     public String getValue(final String name) {
