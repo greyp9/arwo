@@ -15,6 +15,8 @@ import java.net.MalformedURLException;
 import java.net.Proxy;
 import java.net.URL;
 import java.net.URLConnection;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -103,7 +105,9 @@ public class HttpClient {
         final Map<String, List<String>> headerFields = connection.getHeaderFields();
         for (Map.Entry<String, List<String>> entry : headerFields.entrySet()) {
             final String name = entry.getKey();
-            for (String value : entry.getValue()) {
+            final List<String> values = new ArrayList<>(entry.getValue());
+            Collections.reverse(values);  // JDK-8133686
+            for (String value : values) {
                 headers.add(name, value);
             }
         }
