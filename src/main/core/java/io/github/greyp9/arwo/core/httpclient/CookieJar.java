@@ -14,8 +14,10 @@ import org.w3c.dom.Element;
 import java.io.IOException;
 import java.net.HttpCookie;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 public final class CookieJar {
@@ -45,10 +47,22 @@ public final class CookieJar {
                 .collect(Collectors.toList());
     }
 
+    public String toHeader(final String cookieNameRegex) {
+        final Pattern pattern = Pattern.compile(cookieNameRegex);
+        final List<HttpCookie> httpCookies = cookies.stream()
+                .filter(c -> pattern.matcher(c.getName()).matches())
+                .collect(Collectors.toList());
+        return toHeader(httpCookies);
+    }
+
     public String toHeader() {
+        return toHeader(cookies);
+    }
+
+    public String toHeader(final Collection<HttpCookie> httpCookies) {
         final List<String> cookieCrumbs = new ArrayList<>();
-        for (final HttpCookie cookie : cookies) {
-            cookieCrumbs.add(String.format("%s=%s", cookie.getName(), cookie.getValue()));
+        for (final HttpCookie httpCookie : httpCookies) {
+            cookieCrumbs.add(String.format("%s=%s", httpCookie.getName(), httpCookie.getValue()));
         }
         return Value.joinCollection("; ", cookieCrumbs);
     }
@@ -117,8 +131,6 @@ public final class CookieJar {
             cookies.removeAll(cookies.stream()
                     .filter(c -> c.getName().equalsIgnoreCase(httpCookie.getName()))
                     .collect(Collectors.toSet()));
-        } else if (!httpCookie.getSecure()) {
-            logger.fine(String.format("CONTEXT [%s] COOKIE [%s] FILTER INSECURE", context, httpCookie.getName()));
         } else {
             logger.fine(String.format("CONTEXT [%s] COOKIE [%s] SET", context, httpCookie.getName()));
             cookies.removeAll(cookies.stream()
