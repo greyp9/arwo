@@ -21,8 +21,10 @@ public final class DataPersist {
 
     public void run(final String label, final byte[] data) throws IOException {
         final String hash = FingerPrint.toHex256(data);
-        final File file = new File(folder, Value.join(Http.Token.DOT, label, hash, extension));
-        StreamU.write(file, data);
+        if (folder.exists()) {
+            final File file = new File(folder, Value.join(Http.Token.DOT, label, hash, extension));
+            StreamU.write(file, data);
+        }
         logger.finest(Value.join(Http.Token.EQUALS, label, hash));
     }
 }
