@@ -42,10 +42,16 @@ public final class URLCodec {
             final URI uri = url.toURI();
             final URI resolve = uri.resolve(relativeResource);
             return resolve.toURL();
-        } catch (MalformedURLException e) {
+        } catch (MalformedURLException | URISyntaxException e) {
             throw new IOException(e);
-        } catch (URISyntaxException e) {
-            throw new IOException(e);
+        }
+    }
+
+    public static File toFileUnchecked(final URL url) {
+        try {
+            return toFile(url);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
         }
     }
 

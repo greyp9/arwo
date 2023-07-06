@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppRequest;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
+import io.github.greyp9.arwo.core.lang.ClasspathU;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.table.core.TableU;
 import io.github.greyp9.arwo.core.table.html.TableView;
@@ -22,10 +23,12 @@ import org.w3c.dom.Element;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
 import java.net.URLClassLoader;
 import java.sql.Types;
+import java.util.Arrays;
+import java.util.Collection;
 import java.util.Date;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("FieldCanBeLocal")
 public class ClasspathView {
@@ -40,21 +43,22 @@ public class ClasspathView {
     }
 
     public final void addContent(final Element html) throws IOException {
-        if (urlClassLoader != null) {
-            final RowSetMetaData metaData = createMetaData();
-            final RowSet rowSet = createRowSet(metaData);
-            final Bundle bundle = request.getBundle();
-            final Locus locus = request.getLocus();
-            //final String submitID = request.getSubmitID();
-            final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
-            final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
-            TableU.addFooterStandard(table, bundle);
-            final XedActionFilter filter = new XedActionFilter(userState.getXedFactory(), userState.getLocale());
-            final TableContext tableContext = new TableContext(
-                    viewState, filter, userState.getSubmitID(), App.CSS.TABLE, bundle, locus);
-            final TableView tableView = new TableView(table, tableContext);
-            tableView.addContentTo(html);
-        }
+        // in Java 11+, get classpath entries from system properties
+        final Collection<File> files = (urlClassLoader == null) ? ClasspathU.getClassPath()
+                : Arrays.stream(urlClassLoader.getURLs()).map(URLCodec::toFileUnchecked).collect(Collectors.toList());
+        final RowSetMetaData metaData = createMetaData();
+        final RowSet rowSet = createRowSet(metaData, files);
+        final Bundle bundle = request.getBundle();
+        final Locus locus = request.getLocus();
+        //final String submitID = request.getSubmitID();
+        final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
+        final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
+        TableU.addFooterStandard(table, bundle);
+        final XedActionFilter filter = new XedActionFilter(userState.getXedFactory(), userState.getLocale());
+        final TableContext tableContext = new TableContext(
+                viewState, filter, userState.getSubmitID(), App.CSS.TABLE, bundle, locus);
+        final TableView tableView = new TableView(table, tableContext);
+        tableView.addContentTo(html);
     }
 
     private RowSetMetaData createMetaData() {
@@ -66,22 +70,22 @@ public class ClasspathView {
         return new RowSetMetaData("classloaderType", columns);
     }
 
-    private RowSet createRowSet(final RowSetMetaData metaData) throws IOException {
+    private RowSet createRowSet(final RowSetMetaData metaData,
+                                final Collection<File> files) {
         final RowSet rowSet = new RowSet(metaData, null, null);
-        final URL[] urls = urlClassLoader.getURLs();
-        if (urls.length > 0) {
-            final URL firstUrl = urls[0];
-            final File folderBase = URLCodec.toFile(firstUrl).getParentFile();
-            for (URL url : urls) {
-                final File file = URLCodec.toFile(url);
+        if (!files.isEmpty()) {
+            final File firstFile = files.iterator().next();
+            final File folderBase = firstFile.getParentFile();
+            for (final File file : files) {
                 createRow(rowSet, file, folderBase);
             }
         }
         return rowSet;
     }
 
-    private void createRow(final RowSet rowSet, final File file, final File fileBase) {
-        final String relativePath = file.getPath().replace(fileBase.getPath(), "");
+    private void createRow(final RowSet rowSet, final File file, final File folderBase) {
+        final String path = file.getPath();
+        final String relativePath = (folderBase == null) ? path : path.replace(folderBase.getPath(), "");
         final InsertRow insertRow = new InsertRow(rowSet);
         insertRow.setNextColumn(relativePath);
         insertRow.setNextColumn(new Date(file.lastModified()));
