@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.date;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.TimeZone;
 
 public final class XsdDateU {
 
@@ -24,6 +25,12 @@ public final class XsdDateU {
             e.getClass();
         }
         return date;
+    }
+
+    public static String toXSD(final Date date, final TimeZone timeZone) {
+        final String pattern = "yyyy-MM-dd'T'HH:mm:ssZ";
+        final DateFormat dateFormat = DateU.getDateFormat(pattern, timeZone, true);
+        return dateFormat.format(date);
     }
 
     public static String toXSDZ(final Date date) {

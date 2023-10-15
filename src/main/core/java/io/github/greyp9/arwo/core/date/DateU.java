@@ -31,6 +31,16 @@ public final class DateU {
         return DurationU.add(floor(date, interval), Const.TZ_GMT, interval);
     }
 
+    public static Date floor(final Date date, final String interval, final Date dateEpoch) {
+        Date dateCandidate = dateEpoch;
+        Date dateNext = DurationU.add(dateCandidate, Const.TZ_GMT, interval);
+        while (!dateNext.after(date)) {
+            dateCandidate = dateNext;
+            dateNext = DurationU.add(dateCandidate, Const.TZ_GMT, interval);
+        }
+        return dateCandidate;
+    }
+
     public static Date floor(final Date date, final String interval) {
         final Date datePlus = DurationU.add(date, Const.TZ_GMT, interval);
         final long durationMillis = datePlus.getTime() - date.getTime();
