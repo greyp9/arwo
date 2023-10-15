@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public final class TimeHistogram implements Disposable {
@@ -27,7 +28,7 @@ public final class TimeHistogram implements Disposable {
     // for instantiation via reflection
     @SuppressWarnings("checkstyle:magicnumber")
     public TimeHistogram(final String... params) {
-        this(params[0], null, params[1], params[2], params[3], params[4], params[5], params[6], params[7]);
+        this(params[0], params[1], params[2], params[3], params[4], params[5], params[6], params[7], params[8]);
     }
 
     @SuppressWarnings("checkstyle:parameternumber")
@@ -135,6 +136,47 @@ public final class TimeHistogram implements Disposable {
         }
     }
 
+    public void set(final Date date, final double amount) {
+        synchronized (this) {
+            final Date dateStart = DateU.floor(date, durationPage);
+            final TimeHistogramPage page = pages.computeIfAbsent(dateStart,
+                    p -> new TimeHistogramPage(dateStart, durationCell, getPageSize()));
+            page.set(date, amount);
+        }
+    }
+
+    public void setIf(final Date date, final double amount, final Predicate<Double> predicate) {
+        synchronized (this) {
+            final Date dateStart = DateU.floor(date, durationPage);
+            final TimeHistogramPage page = pages.computeIfAbsent(dateStart,
+                    p -> new TimeHistogramPage(dateStart, durationCell, getPageSize()));
+            page.setIf(date, amount, predicate);
+        }
+    }
+
+    public void fillIn(final Date date) {
+        synchronized (this) {
+            final Date dateStart = DateU.floor(date, durationPage);
+            final TimeHistogramPage page = pages.computeIfAbsent(dateStart,
+                    p -> new TimeHistogramPage(dateStart, durationCell, getPageSize()));
+            page.fillIn();
+        }
+    }
+
+    public void addPage(final Date date, final TimeHistogramPage page) {
+        pages.put(date, page);
+    }
+
+    public TimeHistogram diff(final Date date, final String metric) {
+        final TimeHistogram histogramDiff = new TimeHistogram(name, metric, folder,
+                durationCell, durationWord, durationLine, durationParagraph, durationPage, durationPages);
+        synchronized (this) {
+            final TimeHistogramPage page = pages.get(date);
+            histogramDiff.addPage(date, page.diff());
+        }
+        return histogramDiff;
+    }
+
     public void expireCache(final Date date) {
         synchronized (this) {
             final Date dateStart = DateU.floor(date, durationPage);
@@ -151,6 +193,18 @@ public final class TimeHistogram implements Disposable {
             final TimeHistogramPage page = pages.computeIfAbsent(dateStart,
                     p -> new TimeHistogramPage(dateStart, durationCell, getPageSize()));
             return page.getBuckets(pos, len);
+        }
+    }
+
+    // get buckets with TZ shift
+    public double[] getBuckets(final Date date, final int pos, final int len, final int shift) {
+        synchronized (this) {
+            final Date dateStart = DateU.floor(date, durationPage);
+            final TimeHistogramPage page = pages.computeIfAbsent(dateStart,
+                    p -> new TimeHistogramPage(dateStart, durationCell, getPageSize()));
+            final double[] buckets = page.getBuckets(pos, len);
+            System.arraycopy(buckets, (-1 * shift), buckets, 0, buckets.length - (-1 * shift));
+            return buckets;
         }
     }
 

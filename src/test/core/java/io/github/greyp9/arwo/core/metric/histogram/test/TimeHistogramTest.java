@@ -82,6 +82,21 @@ public class TimeHistogramTest {
     }
 
     @Test
+    public void testPredicate() {
+        TimeHistogram histogram = new TimeHistogram("foo", null, null,
+                "PT1M", "PT15M", "PT1H", "PT6H", "P1D", "P5D");
+        Date date = DateU.floor(new Date(), "P1D");
+
+        histogram.setIf(date, 1.0, (d -> d.equals(0.0)));
+        final double[] buckets1 = histogram.getBuckets(date, 0, histogram.getPageSize());
+        Assert.assertEquals(1.0, buckets1[0], 0.01);
+
+        histogram.setIf(date, 2.0, (d -> d.equals(0.0)));
+        final double[] buckets2 = histogram.getBuckets(date, 0, histogram.getPageSize());
+        Assert.assertEquals(1.0, buckets2[0], 0.01);
+    }
+
+    @Test
     public void testCreate() {
         final File folder = new File(folderClass, "create");
         TimeHistogram histogram = new TimeHistogram("foo", null, folder.getPath(),

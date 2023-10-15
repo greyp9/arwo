@@ -1,6 +1,5 @@
 package io.github.greyp9.arwo.core.metric.histogram.core;
 
-import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.io.StreamU;
 
 import java.io.File;
@@ -12,9 +11,8 @@ public final class TimeHistogramSerializerFS extends TimeHistogramSerializer {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
     @Override
-    public void save(final TimeHistogram histogram, final Date date) {
+    public void save(final TimeHistogram histogram, final Date dateStart) {
         try {
-            final Date dateStart = DateU.floor(date, histogram.getDurationPage());
             final TimeHistogramPage page = histogram.getHistogramPage(dateStart);
             final String file = getFile(histogram, dateStart);
             StreamU.writeMkdirs(new File(file), toBytes(page));
@@ -24,9 +22,8 @@ public final class TimeHistogramSerializerFS extends TimeHistogramSerializer {
     }
 
     @Override
-    public void load(final TimeHistogram histogram, final Date date) {
+    public void load(final TimeHistogram histogram, final Date dateStart) {
         try {
-            final Date dateStart = DateU.floor(date, histogram.getDurationPage());
             final String file = getFile(histogram, dateStart);
             final byte[] bytes = StreamU.read(new File(file));
             toHistogram(histogram, bytes);
