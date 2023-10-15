@@ -167,8 +167,8 @@ public final class TimeHistogram implements Disposable {
         pages.put(date, page);
     }
 
-    public TimeHistogram diff(final Date date, final String metric) {
-        final TimeHistogram histogramDiff = new TimeHistogram(name, metric, folder,
+    public TimeHistogram diff(final Date date, final String metricDiff) {
+        final TimeHistogram histogramDiff = new TimeHistogram(name, metricDiff, folder,
                 durationCell, durationWord, durationLine, durationParagraph, durationPage, durationPages);
         synchronized (this) {
             final TimeHistogramPage page = pages.get(date);

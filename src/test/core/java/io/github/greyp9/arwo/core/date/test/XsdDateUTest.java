@@ -16,6 +16,7 @@ public class XsdDateUTest {
     private static final String MILLENIUM_SECONDS_Z = "2000-01-01T00:00:00Z";
     private static final String MILLENIUM_MILLIS_Z = "2000-01-01T00:00:00.000Z";
     private static final String TZ_NY = "America/New_York";
+    private static final int OFFSET_TZ_NY = -5;
 
     @Test
     public void testConversionToMillis() {
@@ -38,7 +39,7 @@ public class XsdDateUTest {
         final Date date = XsdDateU.fromXSDZ(MILLENIUM_SECONDS_Z);
         final TimeZone tz = TimeZone.getTimeZone(TZ_NY);
 
-        Assert.assertEquals(-5, tz.getRawOffset() / (DurationU.Const.ONE_HOUR_MILLIS));
+        Assert.assertEquals(OFFSET_TZ_NY, tz.getRawOffset() / (DurationU.Const.ONE_HOUR_MILLIS));
         Assert.assertEquals(DurationU.Const.ONE_HOUR_MILLIS, tz.getDSTSavings());
 
         final String dateString = XsdDateU.toXSD(date, tz);
