@@ -14,6 +14,11 @@ public class Stopwatch {
         lap();
     }
 
+    public final void reset() {
+        this.dates.clear();
+        lap();
+    }
+
     public final long lap() {
         dates.add(new Date());
         return getLast();
