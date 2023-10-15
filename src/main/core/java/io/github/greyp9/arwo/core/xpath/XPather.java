@@ -11,6 +11,7 @@ import javax.xml.xpath.XPathConstants;
 import javax.xml.xpath.XPathExpression;
 import javax.xml.xpath.XPathExpressionException;
 import javax.xml.xpath.XPathFactory;
+import javax.xml.xpath.XPathFactoryConfigurationException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -123,13 +124,13 @@ public class XPather {
     private static XPathExpression getExpression(
             final String expression, final NamespaceContext context) throws IOException {
         try {
-            final XPathFactory factory = XPathFactory.newInstance();
+            final XPathFactory factory = XPathFactory.newInstance(XPathFactory.DEFAULT_OBJECT_MODEL_URI);
             final XPath xpath = factory.newXPath();
             if (context != null) {
                 xpath.setNamespaceContext(context);
             }
             return xpath.compile(expression);
-        } catch (XPathExpressionException e) {
+        } catch (XPathFactoryConfigurationException | XPathExpressionException e) {
             throw new IOException(e);
         }
     }
