@@ -68,6 +68,10 @@ public final class CookieJar {
     }
 
     public static CookieJar fromXml(final byte[] xml) throws IOException {
+        return (xml == null) ? null : fromXmlNN(xml);
+    }
+
+    public static CookieJar fromXmlNN(final byte[] xml) throws IOException {
         final CookieJar cookieJar = new CookieJar();
         final Document document = DocumentU.toDocument(xml);
         final XPathContext context = new XPathContext();
