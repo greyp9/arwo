@@ -8,6 +8,25 @@ import org.junit.Test;
 public class MathTest {
 
     @Test
+    public void testLogBase1_5() {
+        final float f = 1.5f;
+        Assert.assertEquals(0, MathU.log(0L, f));
+        Assert.assertEquals(0, MathU.log(1L, f));
+        Assert.assertEquals(1, MathU.log(2L, f));
+        Assert.assertEquals(2, MathU.log(3L, f));
+        Assert.assertEquals(3, MathU.log(5L, f));
+        Assert.assertEquals(4, MathU.log(6L, f));
+        Assert.assertEquals(7, MathU.log(25L, f));
+        Assert.assertEquals(8, MathU.log(26L, f));
+        Assert.assertEquals(15, MathU.log(656L, f));
+        Assert.assertEquals(16, MathU.log(657L, f));
+        Assert.assertEquals(27, MathU.log(68_403L, f));
+        Assert.assertEquals(29, MathU.log(136_806L, f));
+        Assert.assertEquals(31, MathU.log(431_439L, f));
+        Assert.assertEquals(32, MathU.log(431_440L, f));
+    }
+
+    @Test
     public void testLogBase2() {
         Assert.assertEquals(0, MathU.log(1L, 2));
         Assert.assertEquals(1, MathU.log(2L, 2));
