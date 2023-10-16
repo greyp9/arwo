@@ -91,6 +91,7 @@ public final class DurationU {
         public static final long ONE_MINUTE_MILLIS = 60L * ONE_SECOND_MILLIS;
         public static final long ONE_HOUR_MILLIS = 60L * ONE_MINUTE_MILLIS;
         public static final long ONE_DAY_MILLIS = 24L * ONE_HOUR_MILLIS;
+        public static final long ONE_DAY_HOURS = 24L;
         public static final long ONE_WEEK_DAYS = 7L;
 
         public static final int GROUP_YEAR = 2;

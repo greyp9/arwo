@@ -6,17 +6,20 @@ import io.github.greyp9.arwo.core.date.XsdDateU;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.lang.MathU;
-import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogram;
+import io.github.greyp9.arwo.core.metric.histogram2.time.TimeHistogram;
 import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import org.w3c.dom.Element;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 public final class TimeHistogramDiv {
     private final TimeHistogram histogram;
     private final String label;
     private final Date date;
+    private final TimeZone timeZone;
     private final int position;
     private final int linesPerParagraph;
     private final int cellsPerLine;
@@ -88,7 +91,7 @@ public final class TimeHistogramDiv {
                 }
             }
             // paragraph divider (for readability)
-            if (++lineInParagraph % linesPerParagraph == 0) {
+            if (++dow % linesPerParagraph == 2) {  // solution for week = (Monday - Sunday)
                 final Element trP = ElementU.addElement(table, Html.TR, null, NTV.create(Html.STYLE, "height: 0.5em;"));
                 ElementU.addElement(trP, Html.TD, null/*, NTV.create(Html.STYLE, "height: 0.5em; !important")*/);
             }

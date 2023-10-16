@@ -27,6 +27,12 @@ public final class XsdDateU {
         return date;
     }
 
+    public static String toXSDwDOW(final Date date, final TimeZone timeZone) {
+        final String pattern = "yyyy-MM-dd'T'HH:mm:ssZ/EEE";
+        final DateFormat dateFormat = DateU.getDateFormat(pattern, timeZone, true);
+        return dateFormat.format(date);
+    }
+
     public static String toXSD(final Date date, final TimeZone timeZone) {
         final String pattern = "yyyy-MM-dd'T'HH:mm:ssZ";
         final DateFormat dateFormat = DateU.getDateFormat(pattern, timeZone, true);
