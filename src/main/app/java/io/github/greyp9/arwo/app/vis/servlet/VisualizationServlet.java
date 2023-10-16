@@ -59,7 +59,7 @@ public class VisualizationServlet extends javax.servlet.http.HttpServlet {
     protected final void doPost(final HttpServletRequest request, final HttpServletResponse response)
             throws ServletException, IOException {
         // get request context
-        final ServletHttpRequest httpRequest = ServletU.read(request);
+        final ServletHttpRequest httpRequest = ServletU.read(request, this);
         // process request
         AppUserState userState;
         synchronized (this) {

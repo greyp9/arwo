@@ -42,8 +42,7 @@ public class VisualizationRequest {
     }
 
     public final String getMetric() {
-        final String leftToken = patherMetric.getLeftToken();
-        return ("-".equals(leftToken) ? getContext() : leftToken);
+        return patherMetric.getLeftToken();
     }
 
     public final String getMode() {

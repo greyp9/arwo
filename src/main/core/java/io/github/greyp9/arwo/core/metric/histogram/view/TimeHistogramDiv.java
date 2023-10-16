@@ -20,21 +20,21 @@ public final class TimeHistogramDiv {
     private final String label;
     private final Date date;
     private final TimeZone timeZone;
-    private final int position;
     private final int linesPerParagraph;
     private final int cellsPerLine;
     private final int cellsPerWord;
     private final float scale;
 
     public TimeHistogramDiv(final TimeHistogram histogram, final String label,
-                            final Date date, final int position, final float scale) {
+                            final Date date, final TimeZone timeZone, final float scale) {
         this.histogram = histogram;
         this.label = label;
         this.date = date;
-        this.position = position;
-        this.linesPerParagraph = histogram.getParagraphSize();
-        this.cellsPerLine = histogram.getLineSize();
-        this.cellsPerWord = histogram.getWordSize();
+        this.timeZone = timeZone;
+        this.linesPerParagraph = (int) DurationU.Const.ONE_WEEK_DAYS;
+        this.cellsPerLine = (int) DurationU.Const.ONE_DAY_HOURS;
+        final int wordsPerLine = 6;  // divide day into six sections
+        this.cellsPerWord = cellsPerLine / wordsPerLine;
         this.scale = scale;
     }
 
@@ -50,29 +50,29 @@ public final class TimeHistogramDiv {
         final Element tr = ElementU.addElement(table, Html.TR, null, NTV.create());
         for (int i = 0; (i < cellsPerLine); i += cellsPerWord) {
             ElementU.addElement(tr, Html.TD, UTF16.NBSP);
-            final String duration = DurationU.durationXSD(histogram.getDurationCell() * i);
+            final String duration = DurationU.durationXSD(DurationU.toMillisP(histogram.getDurationCell()) * i);
             ElementU.addElement(tr, Html.TD, "+" + duration, NTV.create(
                     Html.COLSPAN, Integer.toString(cellsPerWord), Html.STYLE, "align: left;"));
         }
     }
 
     private void addContentTRs(final Element table) {
-        final int cursorStart = position * histogram.getPageSize();
-        final int cursorEnd = cursorStart + histogram.getPageSize();
-        final double[] buckets = histogram.getBuckets(date, cursorStart, (cursorEnd - cursorStart));
-        final long interval = histogram.getDurationCell();
+        final Date dateStartPage = new Date(date.getTime() - timeZone.getOffset(date.getTime()));
+        final Date dateEndPage = histogram.incrementPage(dateStartPage, 1);
+        final double[] buckets = histogram.getBuckets(dateStartPage, dateEndPage);
+        final long interval = DurationU.toMillisP(histogram.getDurationCell());
         final long length = buckets.length;
-        final String durationToPage = DurationU.durationXSD(interval * cursorStart);
-        final Date dateStartPage = DurationU.add(date, DateU.Const.TZ_GMT, durationToPage);
         // paragraph divider state (for readability)
-        int lineInParagraph = 0;
+        final Calendar calendar = Calendar.getInstance(timeZone);
+        calendar.setTime(dateStartPage);
+        int dow = calendar.get(Calendar.DAY_OF_WEEK);
         // iterate through rows
         for (int i = 0; (i < length); i += cellsPerLine) {
             final Element tr = ElementU.addElement(table, Html.TR);
             final String duration = DurationU.durationXSD(interval * i);
             final Date dateLine = DurationU.add(dateStartPage, DateU.Const.TZ_GMT, duration);
             // row label
-            ElementU.addElement(tr, Html.TD, XsdDateU.toXSDZ(dateLine));
+            ElementU.addElement(tr, Html.TD, XsdDateU.toXSDwDOW(dateLine, timeZone));
             // iterate through data columns in each line
             for (int j = 0; (j < cellsPerLine); ++j) {
                 // row word break (for readability)
@@ -84,7 +84,8 @@ public final class TimeHistogramDiv {
                     // render cell data
                     final long l = (long) buckets[index];
                     final int maxShade = 15;
-                    final int colorShade = MathU.bound(0, MathU.log(l, scale), maxShade);
+                    final int log = (l == 0) ? 0 : (l == 1) ? 1 : MathU.log(l, scale);
+                    final int colorShade = MathU.bound(0, log, maxShade);
                     final String cssClass = String.format("histogram r%d", colorShade);
                     final String title = ((l == 0L) ? null : Long.toString(l));
                     ElementU.addElement(tr, Html.TD, UTF16.NBSP, NTV.create(Html.CLASS, cssClass, Html.TITLE, title));

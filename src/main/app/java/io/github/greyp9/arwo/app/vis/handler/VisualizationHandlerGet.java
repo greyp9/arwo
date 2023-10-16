@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.app.vis.handler;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.vis.core.VisualizationContext;
 import io.github.greyp9.arwo.app.vis.core.VisualizationRequest;
 import io.github.greyp9.arwo.app.vis.view.VisualizationEntryView;
 import io.github.greyp9.arwo.app.vis.view.VisualizationHistoryView;
@@ -11,15 +12,17 @@ import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
-import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogram;
+import io.github.greyp9.arwo.core.metric.histogram2.time.TimeHistogram;
 import io.github.greyp9.arwo.core.naming.AppNaming;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.Value;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
+import java.util.TimeZone;
 
 public class VisualizationHandlerGet {
     private final VisualizationRequest request;
@@ -47,6 +50,8 @@ public class VisualizationHandlerGet {
         HttpResponse httpResponse;
         final String baseURI = httpRequest.getBaseURI();
         final String pathInfo = httpRequest.getPathInfo();
+        final String context = request.getContext();
+        final String mode = request.getMode();
         final boolean isPathInfo = (pathInfo != null);
         final boolean isTrailingSlash = (isPathInfo && (pathInfo.endsWith(Http.Token.SLASH)));
         final boolean isNoPathInfo = (!isPathInfo);
@@ -55,10 +60,12 @@ public class VisualizationHandlerGet {
             httpResponse = HttpResponseU.to302(PathU.toDir(baseURI));
         } else if (isNoTrailingSlash) {
             httpResponse = HttpResponseU.to302(PathU.toDir(httpRequest.getURI()));
-        } else if (Value.isEmpty(request.getContext())) {
+        } else if (Value.isEmpty(context)) {
             httpResponse = new VisualizationInventoryView(httpRequest, request, userState).doGetResponse();
-        } else if (Value.isEmpty(request.getMode())) {
-            httpResponse = HttpResponseU.to302(PathU.toDir(baseURI, request.getContext(), "-", Html.HTML));
+        } else if (Value.isEmpty(mode)) {
+            final File folder = new File(httpRequest.getInitParams().getProperty("folder"));
+            httpResponse = HttpResponseU.to302(PathU.toDir(baseURI, context,
+                    new VisualizationContext(folder, context).iterateMetric("-", 0), Html.HTML));
         } else {
             httpResponse = doGet2();
         }
@@ -80,13 +87,17 @@ public class VisualizationHandlerGet {
 
     private HttpResponse doGet3(final String name) throws IOException {
         HttpResponse httpResponse;
-        final TimeHistogram histogram = (TimeHistogram) AppNaming.lookup("", name);  // TODO
+        final TimeHistogram histogram = (TimeHistogram) AppNaming.lookup("application", name);
+        final Properties initParams = httpRequest.getInitParams();
+        final File folder = new File(initParams.getProperty("folder"));
+        final TimeZone tz = TimeZone.getTimeZone(initParams.getProperty("tz"));
         if (histogram == null) {
             httpResponse = HttpResponseU.to404();
         } else if (Html.FILE.equals(request.getMode())) {
             httpResponse = new VisualizationHistoryView(httpRequest, request, userState, histogram).doGetResponse();
         } else {
-            httpResponse = new VisualizationEntryView(httpRequest, request, userState, histogram).doGetResponse();
+            httpResponse = new VisualizationEntryView(
+                    httpRequest, request, userState, histogram, folder, tz).doGetResponse();
         }
         return httpResponse;
     }

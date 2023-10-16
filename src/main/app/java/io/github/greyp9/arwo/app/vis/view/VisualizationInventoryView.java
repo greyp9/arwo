@@ -8,7 +8,7 @@ import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.locus.Locus;
-import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogram;
+import io.github.greyp9.arwo.core.metric.histogram2.time.TimeHistogram;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
 import io.github.greyp9.arwo.core.table.core.TableU;
@@ -24,8 +24,9 @@ import org.w3c.dom.Element;
 
 import java.io.IOException;
 import java.sql.Types;
-import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
+import java.util.TreeSet;
 
 public final class VisualizationInventoryView extends VisualizationView {
 
@@ -66,11 +67,11 @@ public final class VisualizationInventoryView extends VisualizationView {
         final RowSet rowSet = new RowSet(metaData, null, null);
         // available visualizations are declared in init-params of servlet
         final Properties initParams = httpRequest.getInitParams();
-        for (final Map.Entry<Object, Object> entry : initParams.entrySet()) {
-            final String key = (String) entry.getKey();
-            final String value = (String) entry.getValue();
+        final Set<Object> keys = new TreeSet<>(initParams.keySet());
+        for (Object key : keys) {
+            final String value = initParams.getProperty(key.toString());
             if (TimeHistogram.class.getName().equals(value)) {
-                createRow(rowSet, key);
+                createRow(rowSet, key.toString());
             }
         }
         return rowSet;

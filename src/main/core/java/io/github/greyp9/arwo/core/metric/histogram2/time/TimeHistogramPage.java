@@ -34,10 +34,8 @@ public final class TimeHistogramPage {
     }
 
     public void setIf(final int index, final double amount, final Predicate<Double> predicate) {
-        if (NumberU.inBounds(index, 0, buckets.length - 1)) {
-            if (predicate.test(buckets[index])) {
-                buckets[index] = amount;
-            }
+        if ((NumberU.inBounds(index, 0, buckets.length - 1)) && (predicate.test(buckets[index]))) {
+            buckets[index] = amount;
         }
     }
 

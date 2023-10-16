@@ -1,12 +1,12 @@
 package io.github.greyp9.arwo.app.vis.handler;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.vis.core.VisualizationContext;
 import io.github.greyp9.arwo.app.vis.core.VisualizationRequest;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
-import io.github.greyp9.arwo.core.file.find.FindInFolderQuery;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpArguments;
@@ -14,8 +14,6 @@ import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
-import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogram;
-import io.github.greyp9.arwo.core.naming.AppNaming;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.submit.SubmitTokenU;
@@ -24,12 +22,6 @@ import io.github.greyp9.arwo.core.value.NameTypeValues;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.TreeSet;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class VisualizationHandlerPost {
     private final VisualizationRequest request;
@@ -135,41 +127,19 @@ public class VisualizationHandlerPost {
             final int log = 3;
             location = PathU.toDir(baseURI, context, metric, mode, page, Integer.toString(log));
         } else if (App.Action.SELECT.equals(action) && "navMetricPrev".equals(object)) {
-            location = PathU.toDir(baseURI, context, iterateMetric(context, metric, -1), mode, page, scale);
+            location = getLocation(baseURI, context, metric, -1, mode, page, scale);
         } else if (App.Action.SELECT.equals(action) && "navMetricNext".equals(object)) {
-            location = PathU.toDir(baseURI, context, iterateMetric(context, metric, 1), mode, page, scale);
+            location = getLocation(baseURI, context, metric, 1, mode, page, scale);
         } else {
             alerts.add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }
         return location;
     }
 
-    private String iterateMetric(final String context, final String metric, final int value) {
-        String toMetric = metric;
-        final List<String> metrics = getMetrics(context);
-        if (!metrics.isEmpty()) {
-            final int indexOf = metrics.indexOf(metric);
-            if (indexOf >= 0) {
-                toMetric = metrics.get((indexOf + value + metrics.size()) % metrics.size());
-            } else {
-                toMetric = metrics.get(0);
-            }
-        }
-        return toMetric;
-    }
-
-    private List<String> getMetrics(final String context) {
-        final Pattern patternMetricName = Pattern.compile("(.*)\\.(.*)\\.xml");  // filename pattern is known
-        final TimeHistogram histogram = (TimeHistogram) AppNaming.lookup("", context);  // TODO
-        final File folder = new File(histogram.getFolder());
-        final Collection<String> metrics = new TreeSet<>();
-        for (final File file : new FindInFolderQuery(folder, "*.xml", false).getFound()) {
-            final Matcher matcher = patternMetricName.matcher(file.getName());
-            if (matcher.matches()) {
-                metrics.add(matcher.group(1));  // extract the metric name from the filename
-            }
-            metrics.remove(context);  // ignore the default filename for the context
-        }
-        return new ArrayList<>(metrics);
+    private String getLocation(final String baseURI, final String context, final String metric, final int delta,
+                               final String mode, final String page, final String scale) {
+        final File folder = new File(httpRequest.getInitParams().getProperty("folder"));
+        return PathU.toDir(baseURI, context, new VisualizationContext(folder, context)
+                .iterateMetric(metric, delta), mode, page, scale);
     }
 }

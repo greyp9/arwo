@@ -13,7 +13,7 @@ import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.locus.Locus;
-import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogram;
+import io.github.greyp9.arwo.core.metric.histogram2.time.TimeHistogram;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
 import io.github.greyp9.arwo.core.table.html.TableView;
@@ -30,6 +30,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.Types;
 import java.util.Date;
+import java.util.Properties;
 
 public final class VisualizationHistoryView extends VisualizationView {
     private final TimeHistogram histogram;
@@ -69,8 +70,9 @@ public final class VisualizationHistoryView extends VisualizationView {
 
     private RowSet createRowSet(final RowSetMetaData metaData) throws IOException {
         final DateX dateX = new DateX(HttpDateU.Const.DEFAULT, DateU.Const.TZ_GMT);
-        final File folder = new File(histogram.getFolder());
-        final String pattern = String.format("%s.*.xml", histogram.getName());
+        final Properties initParams = getHttpRequest().getInitParams();
+        final File folder = new File(initParams.getProperty("folder"), histogram.getName());
+        final String pattern = String.format("%s.*.xml", getRequest().getMetric());
         final FindInFolderQuery query = new FindInFolderQuery(folder, pattern, false);
         final RowSet rowSet = new RowSet(metaData, null, null);
         for (final File file : query.getFound()) {
@@ -82,9 +84,10 @@ public final class VisualizationHistoryView extends VisualizationView {
     private void addRow(final RowSet rowSet, final File file, final DateX dateX) {
         final ServletHttpRequest httpRequest = getHttpRequest();
         final VisualizationRequest request = getRequest();
-        final String dateString = file.getName().replace(histogram.getName() + ".", "").replace(".xml", "");
+        final String dateString = file.getName().replace(request.getMetric() + ".", "").replace(".xml", "");
         final Date date = DateX.fromFilenameMM(dateString);
-        final String href = PathU.toDir(httpRequest.getBaseURI(), request.getContext(), Html.HTML, dateString);
+        final String href = PathU.toDir(httpRequest.getBaseURI(),
+                request.getContext(), request.getMetric(), Html.HTML, dateString);
         final TableViewLink link = new TableViewLink(UTF16.ICON_FILE, null, href);
         final InsertRow insertRow = new InsertRow(rowSet);
         insertRow.setNextColumn(link);

@@ -31,10 +31,8 @@ public final class TimeHistogramPage {
     public void setIf(final Date date, final double amount, final Predicate<Double> predicate) {
         final long offset = date.getTime() - dateStart.getTime();
         final int i = (int) (offset / durationCell);
-        if (NumberU.inBounds(i, 0, buckets.length - 1)) {
-            if (predicate.test(buckets[i])) {
-                buckets[i] = amount;
-            }
+        if ((NumberU.inBounds(i, 0, buckets.length - 1)) && (predicate.test(buckets[i]))) {
+            buckets[i] = amount;
         }
     }
 
