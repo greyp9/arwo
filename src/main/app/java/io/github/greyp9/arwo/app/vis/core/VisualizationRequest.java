@@ -2,8 +2,10 @@ package io.github.greyp9.arwo.app.vis.core;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.app.AppRequest;
+import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.resource.Pather;
+import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
 
 public class VisualizationRequest {
@@ -14,6 +16,7 @@ public class VisualizationRequest {
     private final Pather patherMode;
     private final Pather patherPage;
     private final Pather patherScale;
+    private final NameTypeValues args;
 
     public final AppRequest getAppRequest() {
         return appRequest;
@@ -35,6 +38,7 @@ public class VisualizationRequest {
         this.patherMode = new Pather(patherMetric.getRight());  // html, text
         this.patherPage = new Pather(patherMode.getRight());  // 2000-01-01T00-00Z
         this.patherScale = new Pather(patherPage.getRight());  // 2, 3
+        this.args = HttpArguments.toArguments(httpRequest.getQuery());
     }
 
     public final String getContext() {
@@ -55,6 +59,10 @@ public class VisualizationRequest {
 
     public final String getScale() {
         return patherScale.getLeftToken();
+    }
+
+    public final NameTypeValues getArgs() {
+        return args;
     }
 
     public final String getPath() {

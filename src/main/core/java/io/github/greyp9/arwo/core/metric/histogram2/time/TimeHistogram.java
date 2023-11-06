@@ -128,4 +128,13 @@ public final class TimeHistogram {
         }
         return dateNew;
     }
+
+    public static class Const {
+        public static final String DURATION = "duration";
+        public static final String DURATION_LINE = "durationLine";
+        public static final String DURATION_PARAGRAPH = "durationParagraph";
+        public static final String DURATION_WORD = "durationWord";
+        public static final String HISTOGRAM = "histogram";
+        public static final String TZ = "tz";
+    }
 }

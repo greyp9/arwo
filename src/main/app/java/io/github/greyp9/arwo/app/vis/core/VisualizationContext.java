@@ -1,8 +1,6 @@
 package io.github.greyp9.arwo.app.vis.core;
 
 import io.github.greyp9.arwo.core.file.find.FindInFolderQuery;
-import io.github.greyp9.arwo.core.metric.histogram2.time.TimeHistogram;
-import io.github.greyp9.arwo.core.naming.AppNaming;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -36,17 +34,18 @@ public final class VisualizationContext {
     }
 
     private static List<String> getMetrics(final File folder, final String context) {
-        final Pattern patternMetricName = Pattern.compile("(.*)\\.(.*)\\.xml");  // filename pattern is known
-        final TimeHistogram histogram = (TimeHistogram) AppNaming.lookup("application", context);
-        final File folderHistogram = new File(folder, histogram.getName());
         final Collection<String> metrics = new TreeSet<>();
-        for (final File file : new FindInFolderQuery(folderHistogram, "*.xml", false).getFound()) {
-            final Matcher matcher = patternMetricName.matcher(file.getName());
+        final File folderHistogram = new File(folder, context);
+        final Collection<File> files = new FindInFolderQuery(folderHistogram, PATTERN_FILENAME, false).getFound();
+        for (final File file : files) {
+            final Matcher matcher = PATTERN_FILENAME.matcher(file.getName());
             if (matcher.matches()) {
                 metrics.add(matcher.group(1));  // extract the metric name from the filename
             }
-            metrics.remove(context);  // ignore the default filename for the context
         }
+        metrics.remove(context);  // ignore the default filename for the context
         return new ArrayList<>(metrics);
     }
+
+    private static final Pattern PATTERN_FILENAME = Pattern.compile("(.*)\\.(.*)\\.xml");  // filename pattern is known
 }

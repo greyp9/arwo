@@ -18,6 +18,7 @@ import io.github.greyp9.arwo.core.metric.histogram2.time.TimeHistogram;
 import io.github.greyp9.arwo.core.metric.histogram2.time.TimeHistogramSerializer;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.value.NTV;
+import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import org.w3c.dom.Element;
@@ -25,20 +26,19 @@ import org.w3c.dom.Element;
 import java.io.File;
 import java.io.IOException;
 import java.util.Date;
-import java.util.TimeZone;
+import java.util.Properties;
 
 public final class VisualizationEntryView extends VisualizationView {
     private final TimeHistogram histogram;
     private final File folder;
-    private final TimeZone timeZone;
+    private final Properties initParams;
 
     public VisualizationEntryView(final ServletHttpRequest httpRequest, final VisualizationRequest request,
-                                  final AppUserState userState, final TimeHistogram histogram,
-                                  final File folder, final TimeZone timeZone) {
+                                  final AppUserState userState, final TimeHistogram histogram) {
         super(httpRequest, request, userState);
         this.histogram = histogram;
-        this.folder = folder;
-        this.timeZone = timeZone;
+        this.folder = new File(request.getHttpRequest().getInitParams().getProperty("folder"));
+        this.initParams = request.getHttpRequest().getInitParams();
     }
 
     protected HttpResponse addContentTo(final Element html) throws IOException {
@@ -94,6 +94,7 @@ public final class VisualizationEntryView extends VisualizationView {
     private void addContentHistogram(final Element html, final TimeHistogram histogramOp, final Date dateOp) {
         final VisualizationRequest request = getRequest();
         final String label = request.getMetric();
+        final NameTypeValues args = request.getArgs();
         final float scale = NumberU.toFloat(request.getScale(), 2.0f);
 /*
         PropertiesX properties = new PropertiesX(userState.getPageVisualization().getProperties());
@@ -108,9 +109,9 @@ public final class VisualizationEntryView extends VisualizationView {
 */
         // data view
         if (Html.TEXT.equals(request.getMode())) {
-            new TimeHistogramText(histogramOp, label, dateOp, timeZone).addContentTo(html);
+            new TimeHistogramText(histogramOp, label, dateOp, initParams, args).addContentTo(html);
         } else {
-            new TimeHistogramDiv(histogramOp, label, dateOp, timeZone, scale).addContentTo(html);
+            new TimeHistogramDiv(histogramOp, label, dateOp, initParams, args, scale).addContentTo(html);
         }
     }
 }

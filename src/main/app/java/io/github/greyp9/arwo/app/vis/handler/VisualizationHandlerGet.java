@@ -22,7 +22,6 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Map;
 import java.util.Properties;
-import java.util.TimeZone;
 
 public class VisualizationHandlerGet {
     private final VisualizationRequest request;
@@ -88,16 +87,13 @@ public class VisualizationHandlerGet {
     private HttpResponse doGet3(final String name) throws IOException {
         HttpResponse httpResponse;
         final TimeHistogram histogram = (TimeHistogram) AppNaming.lookup("application", name);
-        final Properties initParams = httpRequest.getInitParams();
-        final File folder = new File(initParams.getProperty("folder"));
-        final TimeZone tz = TimeZone.getTimeZone(initParams.getProperty("tz"));
         if (histogram == null) {
             httpResponse = HttpResponseU.to404();
         } else if (Html.FILE.equals(request.getMode())) {
             httpResponse = new VisualizationHistoryView(httpRequest, request, userState, histogram).doGetResponse();
         } else {
             httpResponse = new VisualizationEntryView(
-                    httpRequest, request, userState, histogram, folder, tz).doGetResponse();
+                    httpRequest, request, userState, histogram).doGetResponse();
         }
         return httpResponse;
     }
