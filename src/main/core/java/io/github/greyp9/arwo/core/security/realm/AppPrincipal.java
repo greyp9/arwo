@@ -36,4 +36,6 @@ public final class AppPrincipal implements java.security.Principal {
     public Collection<String> getRoles() {
         return roles;
     }
+
+    public static final String ANONYMOUS = "anonymous";
 }
