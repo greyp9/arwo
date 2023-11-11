@@ -1,7 +1,7 @@
 package io.github.greyp9.arwo.core.i18n.test;
 
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
@@ -17,9 +17,9 @@ public class PseudoTest {
         final Pattern unicodeSequence = Pattern.compile("\\\\u\\p{XDigit}{4}");
         final Matcher matcher = unicodeSequence.matcher(input);
         final boolean find = matcher.find();
-        Assert.assertTrue(find);
+        Assertions.assertTrue(find);
         final String group = matcher.group(0);
-        Assert.assertEquals("\\ud83c", group);
+        Assertions.assertEquals("\\ud83c", group);
     }
 
     @Test
@@ -29,9 +29,9 @@ public class PseudoTest {
         final Pattern unicodeSequence = Pattern.compile("\\\\u[0-9a-fA-F]{4}");
         final Matcher matcher = unicodeSequence.matcher(input);
         final boolean find = matcher.find();
-        Assert.assertTrue(find);
+        Assertions.assertTrue(find);
         final String group = matcher.group(0);
-        Assert.assertEquals("\\ud83c", group);
+        Assertions.assertEquals("\\ud83c", group);
     }
 
 /*

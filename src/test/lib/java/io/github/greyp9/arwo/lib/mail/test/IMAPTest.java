@@ -2,9 +2,9 @@ package io.github.greyp9.arwo.lib.mail.test;
 
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.util.PropertiesU;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.Test;
 
 import javax.mail.Folder;
 import javax.mail.Message;
@@ -21,12 +21,12 @@ public class IMAPTest {
     @Test
     public void testServerConnectivity() throws Exception {
         File fileProperties = new File(SystemU.userHome(), ".arwo/test.properties.xml");
-        Assume.assumeTrue(fileProperties.exists());
+        Assumptions.assumeTrue(fileProperties.exists());
         Properties properties = PropertiesU.loadFromXml(fileProperties.toURI().toURL());
         logger.info("" + properties.size());
-        Assert.assertTrue(properties.size() > 0);
+        Assertions.assertTrue(properties.size() > 0);
         String serverList = properties.getProperty(Const.IMAP_SERVER);
-        Assert.assertNotNull(serverList);
+        Assertions.assertNotNull(serverList);
         String[] servers = serverList.split(",");
         for (String server : servers) {
             if (server.length() > 0) {

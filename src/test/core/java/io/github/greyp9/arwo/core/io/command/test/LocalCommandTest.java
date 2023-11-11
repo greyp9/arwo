@@ -11,9 +11,9 @@ import io.github.greyp9.arwo.core.security.realm.AppPrincipal;
 import io.github.greyp9.arwo.core.util.CollectionU;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.vm.exec.UserExecutor;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.Date;
@@ -22,7 +22,7 @@ import java.util.logging.Logger;
 public class LocalCommandTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
@@ -32,14 +32,14 @@ public class LocalCommandTest {
         final Script script = new Script(null, new Date(), null, "ls\npwd\ndf\n");
         final int sizeExpected = 3;
         final Collection<Command> commands = script.getCommands();
-        Assert.assertEquals(sizeExpected, commands.size());
+        Assertions.assertEquals(sizeExpected, commands.size());
     }
 
     @Test
     public void testSimpleCommandGood() throws Exception {
         final Script script = new Script(null, new Date(), null, "ls");  // "cmd /c dir"
         final Collection<Command> commandsPre = script.getCommands();
-        Assert.assertEquals(1, commandsPre.size());
+        Assertions.assertEquals(1, commandsPre.size());
         final AppPrincipal principal = new AppPrincipal("root", CollectionU.toCollection("*"));
         final UserExecutor executor = new UserExecutor(principal, new Date(), null);
         final ScriptContext context = new ScriptContext(
@@ -48,15 +48,15 @@ public class LocalCommandTest {
         scriptRunnable.run();
         final Collection<Command> commands = script.getCommands();
         for (final Command command : commands) {
-            Assert.assertTrue(command instanceof CommandDone);
-            Assert.assertTrue(Value.defaultOnNull(command.getPID(), 0) > 0);
-            Assert.assertEquals(Integer.valueOf(0), command.getExitValue());
-            Assert.assertTrue(command.getStdin().length() > 0);
-            Assert.assertTrue(command.getStdout().length() > 0);
-            Assert.assertTrue(command.getStderr().length() == 0);
+            Assertions.assertTrue(command instanceof CommandDone);
+            Assertions.assertTrue(Value.defaultOnNull(command.getPID(), 0) > 0);
+            Assertions.assertEquals(Integer.valueOf(0), command.getExitValue());
+            Assertions.assertTrue(command.getStdin().length() > 0);
+            Assertions.assertTrue(command.getStdout().length() > 0);
+            Assertions.assertTrue(command.getStderr().length() == 0);
             final Long elapsed = DurationU.toDuration(command.getStart(), command.getFinish(), null);
-            Assert.assertNotNull(elapsed);
-            Assert.assertTrue(elapsed > 0);
+            Assertions.assertNotNull(elapsed);
+            Assertions.assertTrue(elapsed > 0);
             logger.finest(command.getStdin());
             logger.finest(command.getStdout());
             logger.finest("" + elapsed);
@@ -67,7 +67,7 @@ public class LocalCommandTest {
     public void testSimpleCommandBad() throws Exception {
         final Script script = new Script(null, new Date(), null, "lslsls");  // "dirdirdir"
         final Collection<Command> commandsPre = script.getCommands();
-        Assert.assertEquals(1, commandsPre.size());
+        Assertions.assertEquals(1, commandsPre.size());
         final AppPrincipal principal = new AppPrincipal("root", CollectionU.toCollection("*"));
         final UserExecutor executor = new UserExecutor(principal, new Date(), null);
         final ScriptContext context = new ScriptContext(
@@ -76,15 +76,15 @@ public class LocalCommandTest {
         scriptRunnable.run();
         final Collection<Command> commands = script.getCommands();
         for (final Command command : commands) {
-            Assert.assertTrue(command instanceof CommandDone);
-            //Assert.assertNull(command.getPID());  // OS difference
-            //Assert.assertNull(command.getExitValue());  // OS difference
-            Assert.assertTrue(command.getStdin().length() > 0);
-            Assert.assertTrue(command.getStdout().length() == 0);
-            Assert.assertTrue(command.getStderr().length() > 0);
+            Assertions.assertTrue(command instanceof CommandDone);
+            //Assertions.assertNull(command.getPID());  // OS difference
+            //Assertions.assertNull(command.getExitValue());  // OS difference
+            Assertions.assertTrue(command.getStdin().length() > 0);
+            Assertions.assertTrue(command.getStdout().length() == 0);
+            Assertions.assertTrue(command.getStderr().length() > 0);
             final Long elapsed = DurationU.toDuration(command.getStart(), command.getFinish(), null);
-            Assert.assertNotNull(elapsed);
-            Assert.assertTrue(elapsed >= 0);
+            Assertions.assertNotNull(elapsed);
+            Assertions.assertTrue(elapsed >= 0);
             logger.finest(command.getStdin());
             logger.finest(command.getStderr());
             logger.finest("" + elapsed);

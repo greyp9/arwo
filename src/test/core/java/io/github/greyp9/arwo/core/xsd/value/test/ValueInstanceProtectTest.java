@@ -18,8 +18,8 @@ import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 
 import javax.crypto.SecretKey;
@@ -44,17 +44,17 @@ public class ValueInstanceProtectTest {
         final Xed xed = new Xed(document, xsdTypes);
         // validate
         final Collection<String> messages0 = xed.validate();
-        Assert.assertEquals("[]", messages0.toString());
+        Assertions.assertEquals("[]", messages0.toString());
         // navigate in document
         final XedCursor cursorAccount = new XedNav(xed).getRoot();
         final TypeInstance instanceAccount = cursorAccount.getTypeInstance();
-        Assert.assertEquals(qname, instanceAccount.getQName());
+        Assertions.assertEquals(qname, instanceAccount.getQName());
         // check
         final NameTypeValues ntv = NameTypeValuesU.create(
                 "accountPBE.accountTypePBE.user", "user",
                 "accountPBE.accountTypePBE.password", "password");
         final ValueInstance valueInstance = ValueInstance.create(instanceAccount, ntv);
-        Assert.assertEquals(2, valueInstance.getNameTypeValues().size());
+        Assertions.assertEquals(2, valueInstance.getNameTypeValues().size());
         // update value instance
         final char[] secret = "secret".toCharArray();
         final byte[] salt = Base64Codec.decode("AAECAwQFBgc=");
@@ -62,15 +62,15 @@ public class ValueInstanceProtectTest {
         final TransformContext context = new TransformContext(keyEncrypt, null);
         final ValueInstance valueInstanceX = new ProtectKeyTransform(valueInstance, context).transform();
         // check
-        Assert.assertEquals(2, valueInstanceX.getNameTypeValues().size());
+        Assertions.assertEquals(2, valueInstanceX.getNameTypeValues().size());
         final NameTypeValues ntvX = valueInstanceX.getNameTypeValues();
-        Assert.assertEquals("user", ntvX.getValue("accountPBE.accountTypePBE.user"));
+        Assertions.assertEquals("user", ntvX.getValue("accountPBE.accountTypePBE.user"));
         // check
         final String valueProtect = ntvX.getValue("accountPBE.accountTypePBE.password");
         final SecretKey keyDecrypt = KeyU.toKeyPBE(secret, salt, 1000, 128, "PBKDF2WithHmacSHA1", "AES");
         final KeyX keyX = new KeyX(keyDecrypt, "AES/CBC/PKCS5Padding", IvParameterSpec.class.getSimpleName());
         final String plaintext = keyX.unprotect(valueProtect);
-        Assert.assertEquals("password", plaintext);
+        Assertions.assertEquals("password", plaintext);
     }
 
     @Test
@@ -81,8 +81,8 @@ public class ValueInstanceProtectTest {
         final KeyX keyX = new KeyX(key, "AES/CBC/PKCS5Padding", KeyX.Const.PARAM_SPEC_IV);
         final String protect1 = keyX.protect("toProtect");
         final String protect2 = keyX.protect("toProtect");
-        Assert.assertNotEquals(protect1, protect2);
-        Assert.assertEquals("toProtect", keyX.unprotect(protect1));
-        Assert.assertEquals("toProtect", keyX.unprotect(protect2));
+        Assertions.assertNotEquals(protect1, protect2);
+        Assertions.assertEquals("toProtect", keyX.unprotect(protect1));
+        Assertions.assertEquals("toProtect", keyX.unprotect(protect2));
     }
 }

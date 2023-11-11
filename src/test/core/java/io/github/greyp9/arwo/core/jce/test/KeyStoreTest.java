@@ -4,8 +4,8 @@ import io.github.greyp9.arwo.core.codec.hex.HexCodec;
 import io.github.greyp9.arwo.core.jce.AES;
 import io.github.greyp9.arwo.core.jce.KeyU;
 import io.github.greyp9.arwo.core.lang.SystemU;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -25,8 +25,8 @@ public class KeyStoreTest {
         final byte[] keyBytes2 = KeyU.getRandomBytes(AES.Const.KEY_BYTES, random);
         final String hex1 = "60b420bb3851d9d47acb933dbe70399bf6c92da33af01d4fb770e98c0325f41d";
         final String hex2 = "3ebaf8986da712c82bcd4d554bf0b54023c29b624de9ef9c2f931efc580f9afb";
-        Assert.assertEquals(hex1, HexCodec.encode(keyBytes1));
-        Assert.assertEquals(hex2, HexCodec.encode(keyBytes2));
+        Assertions.assertEquals(hex1, HexCodec.encode(keyBytes1));
+        Assertions.assertEquals(hex2, HexCodec.encode(keyBytes2));
         final SecretKey key1 = new SecretKeySpec(keyBytes1, AES.Const.ALGORITHM);
         final SecretKey key2 = new SecretKeySpec(keyBytes2, AES.Const.ALGORITHM);
         final char[] password = SystemU.userDir().toCharArray();
@@ -38,7 +38,7 @@ public class KeyStoreTest {
         keyStore.setEntry("2", new KeyStore.SecretKeyEntry(key2), parameter);
         final Key key1Recover = keyStore.getKey("1", password);
         final Key key2Recover = keyStore.getKey("2", password);
-        Assert.assertEquals(hex1, HexCodec.encode(key1Recover.getEncoded()));
-        Assert.assertEquals(hex2, HexCodec.encode(key2Recover.getEncoded()));
+        Assertions.assertEquals(hex1, HexCodec.encode(key1Recover.getEncoded()));
+        Assertions.assertEquals(hex2, HexCodec.encode(key2Recover.getEncoded()));
     }
 }

@@ -6,8 +6,8 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.xml.DocumentU;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.DOMConfiguration;
 import org.w3c.dom.DOMStringList;
 import org.w3c.dom.Document;
@@ -29,15 +29,15 @@ public class XmlOutputLSTest {
         // start with known ugly xml
         final byte[] xmlUgly = StreamU.read(ResourceU.resolve(Const.XML));
         logger.finest("\n" + UTF8Codec.toString(xmlUgly));
-        Assert.assertEquals(283, xmlUgly.length);
-        Assert.assertEquals("96fe8f4d", CRCU.crc32String(xmlUgly));
+        Assertions.assertEquals(283, xmlUgly.length);
+        Assertions.assertEquals("96fe8f4d", CRCU.crc32String(xmlUgly));
         // this transform pretty prints (80 columns max, no normalize of element xmlns attributes)
         final Document document = DocumentU.toDocument(xmlUgly);
         final byte[] xmlNew = toXmlPrettyLS(document);
         logger.finest("\n" + UTF8Codec.toString(xmlNew));
         if (SystemU.javaVersion().startsWith("1.8")) {
-            Assert.assertEquals(270, xmlNew.length);
-            Assert.assertEquals("8b6a8189", CRCU.crc32String(xmlNew));
+            Assertions.assertEquals(270, xmlNew.length);
+            Assertions.assertEquals("8b6a8189", CRCU.crc32String(xmlNew));
         }
     }
 

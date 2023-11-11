@@ -11,8 +11,8 @@ import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 
 import javax.xml.namespace.QName;
@@ -25,10 +25,10 @@ public class I18nTest {
     @Test
     public void testCoreBundle() throws Exception {
         final ResourceBundle resourceBundle = new AppText(Locale.getDefault()).getBundleCore();
-        Assert.assertTrue(resourceBundle.keySet().size() > 0);
+        Assertions.assertTrue(resourceBundle.keySet().size() > 0);
         final Bundle bundle = new Bundle(resourceBundle);
-        Assert.assertEquals("[{0} row(s)]", bundle.getString(Table.Const.FOOTER_SIZE));
-        Assert.assertEquals("foo", bundle.getString("foo"));
+        Assertions.assertEquals("[{0} row(s)]", bundle.getString(Table.Const.FOOTER_SIZE));
+        Assertions.assertEquals("foo", bundle.getString("foo"));
     }
 
     @Test
@@ -40,9 +40,9 @@ public class I18nTest {
         final XsdBundle xsdBundle = new XsdBundle(new XsdBundles(xsdTypes, Locale.getDefault()));
         final Xed xed = new Xed(document, xsdTypes, xsdBundle);
         final ResourceBundle resourceBundle = xed.getRootBundle();
-        Assert.assertTrue(resourceBundle.keySet().size() > 0);
+        Assertions.assertTrue(resourceBundle.keySet().size() > 0);
         final Bundle bundle = new Bundle(resourceBundle);
-        Assert.assertEquals("Realm", bundle.getString("realm.realmType"));
+        Assertions.assertEquals("Realm", bundle.getString("realm.realmType"));
     }
 
     @Test
@@ -56,8 +56,8 @@ public class I18nTest {
         final Xed xed = new Xed(document, xsdTypes, xsdBundle);
         final ResourceBundle resourceBundleDocType = xed.getRootBundle();
         final Bundle bundle = new Bundle(resourceBundleDocType, resourceBundleCore);
-        Assert.assertEquals("[{0} row(s)]", bundle.getString(Table.Const.FOOTER_SIZE));
-        Assert.assertEquals("foo", bundle.getString("foo"));
-        Assert.assertEquals("Realm", bundle.getString("realm.realmType"));
+        Assertions.assertEquals("[{0} row(s)]", bundle.getString(Table.Const.FOOTER_SIZE));
+        Assertions.assertEquals("foo", bundle.getString("foo"));
+        Assertions.assertEquals("Realm", bundle.getString("realm.realmType"));
     }
 }

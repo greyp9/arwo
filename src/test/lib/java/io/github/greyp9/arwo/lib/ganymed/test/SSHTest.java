@@ -18,9 +18,9 @@ import io.github.greyp9.arwo.lib.ganymed.ssh.command.runnable.ScriptRunnable;
 import io.github.greyp9.arwo.lib.ganymed.ssh.command.runnable.ScriptX;
 import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
 import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnectionX;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -39,12 +39,12 @@ public class SSHTest {
     @Test
     public void testServerConnectivity() throws Exception {
         final File fileProperties = new File(SystemU.userHome(), ".arwo/test.properties.xml");
-        Assume.assumeTrue(fileProperties.exists());
+        Assumptions.assumeTrue(fileProperties.exists());
         final Properties properties = PropertiesU.loadFromXml(fileProperties.toURI().toURL());
         logger.info("" + properties.size());
-        Assert.assertTrue(properties.size() > 0);
+        Assertions.assertTrue(properties.size() > 0);
         final String sshServerList = properties.getProperty(Const.SSH_SERVER);
-        Assert.assertNotNull(sshServerList);
+        Assertions.assertNotNull(sshServerList);
         final String[] servers = sshServerList.split(",");
         for (String server : servers) {
             if (server.length() > 0) {
@@ -120,8 +120,8 @@ public class SSHTest {
         final String gid = sshConnectionX.toNameGID(0);
         logger.info(String.format("uid(0) = %s", uid));
         logger.info(String.format("gid(0) = %s", gid));
-        Assert.assertEquals("root", uid);
-        Assert.assertEquals("root", gid);
+        Assertions.assertEquals("root", uid);
+        Assertions.assertEquals("root", gid);
     }
 
     private void checkCommandAdHoc(final Connection connection, final UserExecutor executor) throws IOException {
@@ -129,7 +129,7 @@ public class SSHTest {
         final ExecutorService executorStream = executor.getExecutorStream();
         final ResultsContext resultsContext = ResultsContext.createEmpty();
         final Command command = new ScriptX(sshConnection, executorStream, resultsContext).runCommand("ls /");
-        Assert.assertEquals(Integer.valueOf(0), command.getExitValue());
+        Assertions.assertEquals(Integer.valueOf(0), command.getExitValue());
         logger.info(command.getStdout());
     }
 
@@ -142,7 +142,7 @@ public class SSHTest {
         final ScriptRunnable runnable = new ScriptRunnable(script, context);
         runnable.run();
         final Command command = script.getCommands().iterator().next();
-        Assert.assertEquals(Integer.valueOf(0), command.getExitValue());
+        Assertions.assertEquals(Integer.valueOf(0), command.getExitValue());
         logger.info(command.getStdout());
     }
 

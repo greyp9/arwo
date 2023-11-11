@@ -7,8 +7,8 @@ import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xml.pretty.DocumentPrettyU;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 
 import java.util.logging.Logger;
@@ -22,15 +22,15 @@ public class XmlOutputSunTest {
         // start with known ugly xml
         final byte[] xmlUgly = StreamU.read(ResourceU.resolve(Const.XML));
         logger.finest("\n" + UTF8Codec.toString(xmlUgly));
-        Assert.assertEquals(283, xmlUgly.length);
-        Assert.assertEquals("96fe8f4d", CRCU.crc32String(xmlUgly));
+        Assertions.assertEquals(283, xmlUgly.length);
+        Assertions.assertEquals("96fe8f4d", CRCU.crc32String(xmlUgly));
         // this transform pretty prints
         final Document document = DocumentU.toDocument(xmlUgly);
         final byte[] xmlNew = DocumentPrettyU.toXmlPretty(document);
         logger.finest("\n" + UTF8Codec.toString(xmlNew));
         if (SystemU.javaVersion().startsWith("1.8")) {
-            Assert.assertEquals(248, xmlNew.length);
-            Assert.assertEquals("c26f702f", CRCU.crc32String(xmlNew));
+            Assertions.assertEquals(248, xmlNew.length);
+            Assertions.assertEquals("c26f702f", CRCU.crc32String(xmlNew));
         }
     }
 
@@ -39,21 +39,21 @@ public class XmlOutputSunTest {
         // start with known ugly xml
         final byte[] xmlUgly = StreamU.read(ResourceU.resolve(Const.XML));
         logger.finest("\n" + UTF8Codec.toString(xmlUgly));
-        Assert.assertEquals(283, xmlUgly.length);
-        Assert.assertEquals("96fe8f4d", CRCU.crc32String(xmlUgly));
+        Assertions.assertEquals(283, xmlUgly.length);
+        Assertions.assertEquals("96fe8f4d", CRCU.crc32String(xmlUgly));
         // this transform pretty prints
         final Document document = DocumentU.toDocument(xmlUgly);
 /*
         final byte[] xmlNew = toXmlPrettyOF(document);
         logger.finest("\n" + UTF8Codec.toString(xmlNew));
-        Assert.assertEquals(248, xmlNew.length);
-        Assert.assertEquals("c26f702f", CRCU.crc32String(xmlNew));
+        Assertions.assertEquals(248, xmlNew.length);
+        Assertions.assertEquals("c26f702f", CRCU.crc32String(xmlNew));
 */
         final byte[] xmlNew = DocumentPrettyU.toXmlPretty(document);
         logger.finest("\n" + UTF8Codec.toString(xmlNew));
 /*
-        Assert.assertEquals(253, xmlNew.length);
-        Assert.assertEquals("40cabef1", CRCU.crc32String(xmlNew));
+        Assertions.assertEquals(253, xmlNew.length);
+        Assertions.assertEquals("40cabef1", CRCU.crc32String(xmlNew));
 */
     }
 

@@ -10,8 +10,8 @@ import io.github.greyp9.arwo.core.file.zip.ZipMetaData;
 import io.github.greyp9.arwo.core.file.zip.ZipVolume;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.lang.SystemU;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -26,16 +26,16 @@ public class ZipAppenderTest {
         // setup
         final Date date = DateU.floor(new Date(), "PT2S");  // time resolution recorded in zip
         final File folderTemp = new File(SystemU.tempDir());
-        Assert.assertTrue(folderTemp.exists());
+        Assertions.assertTrue(folderTemp.exists());
         final String filename = String.format("temp-test-%s.zip", DateX.toFilename(date));
         final File fileTemp = new File(folderTemp, filename);
-        Assert.assertFalse(fileTemp.exists());
+        Assertions.assertFalse(fileTemp.exists());
         // append one
         final MetaFile metaFileA = MetaFileFactory.create("a.txt", date.getTime(), UTF8Codec.toBytes("abc123"));
         if (SystemU.isTrue()) {
             final ZipAppender zipAppender = new ZipAppender(fileTemp);
             final boolean success = zipAppender.append("1", metaFileA);
-            Assert.assertTrue(success);
+            Assertions.assertTrue(success);
         }
         validateFile(fileTemp, 1, metaFileA, null);
         validateBytes(fileTemp, 1, metaFileA, null);
@@ -45,7 +45,7 @@ public class ZipAppenderTest {
         if (SystemU.isTrue()) {
             final ZipAppender zipAppender = new ZipAppender(fileTemp);
             final boolean success = zipAppender.append("2", metaFileB, metaFileC);
-            Assert.assertTrue(success);
+            Assertions.assertTrue(success);
         }
         final int sizeExpected = 3;
         validateFile(fileTemp, sizeExpected, metaFileA, metaFileB);
@@ -56,27 +56,27 @@ public class ZipAppenderTest {
                                      final MetaFile metaFileA, final MetaFile metaFileB) throws IOException {
         final ZipVolume zipVolume = new ZipVolume(fileTemp);
         final MetaFile metaFileNull = zipVolume.getEntry(null);
-        Assert.assertNull(metaFileNull);
+        Assertions.assertNull(metaFileNull);
         final Collection<ZipMetaData> entries = zipVolume.getEntries();
         for (ZipMetaData entry : entries) {
             final String comment = entry.getComment();
             if (entry.getPath().equals("a.txt")) {
-                Assert.assertEquals("1", comment);
+                Assertions.assertEquals("1", comment);
             } else if (entry.getPath().equals("b.txt")) {
-                Assert.assertEquals("2", comment);
+                Assertions.assertEquals("2", comment);
             } else if (entry.getPath().equals("c.txt")) {
-                Assert.assertEquals("2", comment);
+                Assertions.assertEquals("2", comment);
             }
         }
-        Assert.assertEquals(size, entries.size());
+        Assertions.assertEquals(size, entries.size());
         // validate file entry
         final MetaFile metaFileALoad = zipVolume.getEntry("a.txt");
-        Assert.assertNotNull(metaFileALoad);
-        Assert.assertEquals(metaFileA.getMetaData().toString(), metaFileALoad.getMetaData().toString());
+        Assertions.assertNotNull(metaFileALoad);
+        Assertions.assertEquals(metaFileA.getMetaData().toString(), metaFileALoad.getMetaData().toString());
         if (metaFileB != null) {
             final MetaFile metaFileBLoad = zipVolume.getEntry("b.txt");
-            Assert.assertNotNull(metaFileBLoad);
-            Assert.assertEquals(metaFileB.getMetaData().toString(), metaFileBLoad.getMetaData().toString());
+            Assertions.assertNotNull(metaFileBLoad);
+            Assertions.assertEquals(metaFileB.getMetaData().toString(), metaFileBLoad.getMetaData().toString());
         }
     }
 
@@ -85,7 +85,7 @@ public class ZipAppenderTest {
         final byte[] bytesTemp = StreamU.read(fileTemp);
         final ZipVolume zipVolume = new ZipVolume(new ByteArrayInputStream(bytesTemp));
         final MetaFile metaFileNull = zipVolume.getEntry(null);
-        Assert.assertNull(metaFileNull);
+        Assertions.assertNull(metaFileNull);
         final Collection<ZipMetaData> entries = zipVolume.getEntries();
         for (ZipMetaData entry : entries) {
             final String comment = entry.getComment();
@@ -93,22 +93,22 @@ public class ZipAppenderTest {
             // comment doesn't work for ZipInputStream usage
             //
             if (entry.getPath().equals("a.txt")) {
-                Assert.assertEquals(null, comment);
+                Assertions.assertEquals(null, comment);
             } else if (entry.getPath().equals("b.txt")) {
-                Assert.assertEquals(null, comment);
+                Assertions.assertEquals(null, comment);
             } else if (entry.getPath().equals("c.txt")) {
-                Assert.assertEquals(null, comment);
+                Assertions.assertEquals(null, comment);
             }
         }
-        Assert.assertEquals(size, entries.size());
+        Assertions.assertEquals(size, entries.size());
         // validate file entry
         final MetaFile metaFileALoad = zipVolume.getEntry("a.txt");
-        Assert.assertNotNull(metaFileALoad);
-        Assert.assertEquals(metaFileA.getMetaData().toString(), metaFileALoad.getMetaData().toString());
+        Assertions.assertNotNull(metaFileALoad);
+        Assertions.assertEquals(metaFileA.getMetaData().toString(), metaFileALoad.getMetaData().toString());
         if (metaFileB != null) {
             final MetaFile metaFileBLoad = zipVolume.getEntry("b.txt");
-            Assert.assertNotNull(metaFileBLoad);
-            Assert.assertEquals(metaFileB.getMetaData().toString(), metaFileBLoad.getMetaData().toString());
+            Assertions.assertNotNull(metaFileBLoad);
+            Assertions.assertEquals(metaFileB.getMetaData().toString(), metaFileBLoad.getMetaData().toString());
         }
     }
 }

@@ -7,8 +7,8 @@ import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xpath.XPather;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -25,15 +25,15 @@ public class CronJobXTest {
             final String name = ElementU.getAttribute(element, "name");
             final boolean enabled = Boolean.parseBoolean(ElementU.getAttribute(element, "enabled"));
             final Element child = ElementU.getChildren(element).iterator().next();
-            Assert.assertNotNull(cron);
-            Assert.assertNotNull(name);
-            Assert.assertNotNull(enabled);
-            Assert.assertNotNull(child);
+            Assertions.assertNotNull(cron);
+            Assertions.assertNotNull(name);
+            Assertions.assertNotNull(enabled);
+            Assertions.assertNotNull(child);
             final String type = child.getLocalName();
             final CronJob cronJob = new CronJob(name, enabled, Value.join(" ", cron, type), child);
-            Assert.assertTrue(cronJob.getName().startsWith("type"));
-            Assert.assertTrue(cronJob.isEnabled());
-            Assert.assertTrue(cronJob.getElement().getLocalName().startsWith("type"));
+            Assertions.assertTrue(cronJob.getName().startsWith("type"));
+            Assertions.assertTrue(cronJob.isEnabled());
+            Assertions.assertTrue(cronJob.getElement().getLocalName().startsWith("type"));
         }
     }
 

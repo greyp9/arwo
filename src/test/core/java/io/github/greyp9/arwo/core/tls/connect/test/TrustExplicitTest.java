@@ -4,9 +4,9 @@ import io.github.greyp9.arwo.core.tls.client.CertificateClient;
 import io.github.greyp9.arwo.core.tls.connect.TrustExplicitConnectionFactory;
 import io.github.greyp9.arwo.core.tls.context.TLSContext;
 import io.github.greyp9.arwo.core.tls.context.TLSContextFactory;
-import org.junit.Assert;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
@@ -23,7 +23,7 @@ public class TrustExplicitTest {
      * Test access to custom SSL context, which redefines the trusted server certificate.
      */
     @Test
-    @Ignore("test requires TLS-enabled server running on 8443")
+    @Disabled("test requires TLS-enabled server running on 8443")
     public void testExplicitTrust() throws GeneralSecurityException, IOException {
         // acquire trusted certificate
         final URL url = new URL("https://localhost:8443/");
@@ -36,7 +36,7 @@ public class TrustExplicitTest {
         final TLSContext context = new TLSContextFactory().create(certificate, "TLS");
         final TrustExplicitConnectionFactory connectionFactory = new TrustExplicitConnectionFactory(context);
         final HttpsURLConnection urlConnection = connectionFactory.openConnection(url);
-        Assert.assertNotNull(urlConnection);
+        Assertions.assertNotNull(urlConnection);
         urlConnection.connect();
         urlConnection.disconnect();
     }

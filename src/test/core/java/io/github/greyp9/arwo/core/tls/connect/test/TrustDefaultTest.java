@@ -1,8 +1,8 @@
 package io.github.greyp9.arwo.core.tls.connect.test;
 
 import io.github.greyp9.arwo.core.tls.connect.TrustDefaultConnectionFactory;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import javax.net.ssl.HttpsURLConnection;
 import java.io.IOException;
@@ -20,7 +20,7 @@ public class TrustDefaultTest {
         // perform server request
         final TrustDefaultConnectionFactory connectionFactory = new TrustDefaultConnectionFactory("TLS");
         final HttpsURLConnection urlConnection = connectionFactory.openConnection(url);
-        Assert.assertNotNull(urlConnection);
+        Assertions.assertNotNull(urlConnection);
         urlConnection.connect();
         urlConnection.disconnect();
     }

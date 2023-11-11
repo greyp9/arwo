@@ -3,50 +3,39 @@ package io.github.greyp9.arwo.core.ff.test;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.codec.hex.HexCodec;
 import io.github.greyp9.arwo.core.ff.GF256;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Random;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
-@RunWith(Parameterized.class)
 @SuppressWarnings({"checkstyle:magicnumber", "checkstyle:visibilitymodifier"})
 public class GF256Test {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Parameterized.Parameters
-    public static Object[][] data() {
-        return new Object[][]{
-                {2, 2, UTF8Codec.toBytes("Hello"), 0},
-                {2, 2, null, 256},
-                {3, 3, UTF8Codec.toBytes("Hello world"), 0},
-                {3, 3, null, 1024},
-                {4, 4, UTF8Codec.toBytes("Hello world Hello world"), 0},
-                {4, 4, null, 4096},
+    public static Stream<Arguments> data() {
+        return Stream.of(
+                Arguments.arguments(2, 2, UTF8Codec.toBytes("Hello"), 0),
+                Arguments.arguments(2, 2, null, 256),
+                Arguments.arguments(3, 3, UTF8Codec.toBytes("Hello world"), 0),
+                Arguments.arguments(3, 3, null, 1024),
+                Arguments.arguments(4, 4, UTF8Codec.toBytes("Hello world Hello world"), 0),
+                Arguments.arguments(4, 4, null, 4096),
 
-                {3, 2, UTF8Codec.toBytes("Hello"), 0},
-                {3, 2, null, 1024},
-                {4, 2, UTF8Codec.toBytes("Hello"), 0},
-                {4, 2, null, 1024},
-        };
+                Arguments.arguments(3, 2, UTF8Codec.toBytes("Hello"), 0),
+                Arguments.arguments(3, 2, null, 1024),
+                Arguments.arguments(4, 2, UTF8Codec.toBytes("Hello"), 0),
+                Arguments.arguments(4, 2, null, 1024)
+        );
     }
 
-    @Parameterized.Parameter()
-    public int sharesGenerated;
-
-    @Parameterized.Parameter(1)
-    public int sharesNeeded;
-
-    @Parameterized.Parameter(2)
-    public byte[] inputFixed;
-
-    @Parameterized.Parameter(3)
-    public int inputLength;
-
-    @Test
-    public void testPermutations() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public final void testPermutations(final int sharesGenerated, final int sharesNeeded,
+                                 final byte[] inputFixed, final int inputLength) {
         logger.finest(String.format("SHARES GENERATED [%d], NEEDED [%d]", sharesGenerated, sharesNeeded));
         final byte[] input = (inputFixed == null) ? generate(inputLength) : inputFixed;
         final byte[][] output = new byte[sharesGenerated][input.length];
@@ -73,7 +62,7 @@ public class GF256Test {
             inputRecover[i] = GF256.recover(parts);
         }
         logger.finest(String.format("INPUT  [%s]", HexCodec.encode(inputRecover)));
-        Assert.assertArrayEquals(input, inputRecover);
+        Assertions.assertArrayEquals(input, inputRecover);
     }
 
     private static byte[] generate(final int length) {

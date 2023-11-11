@@ -4,8 +4,8 @@ import io.github.greyp9.arwo.core.cer.CertificateU;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.tls.client.CertificateClient;
 import io.github.greyp9.arwo.core.tls.verifier.TrustAllHostnameVerifier;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.net.URL;
 import java.security.cert.X509Certificate;
@@ -16,7 +16,7 @@ public class CertificateAnyHostnameTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
     @Test
-    @Ignore("live network access")
+    @Disabled("live network access")
     public void testFetchCertificate() throws Exception {
         final URL url = new URL("https://localhost:7443");
         final CertificateClient client = new CertificateClient("TLSv1.2", new TrustAllHostnameVerifier());

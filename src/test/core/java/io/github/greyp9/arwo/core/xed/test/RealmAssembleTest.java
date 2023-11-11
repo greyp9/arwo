@@ -18,10 +18,10 @@ import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -33,7 +33,7 @@ import java.util.logging.Logger;
 public class RealmAssembleTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
@@ -52,26 +52,26 @@ public class RealmAssembleTest {
         final NameTypeValues ntv1 = HttpArguments.toArguments("user=arwo&credential=arwo&roles=*");
         final ValueInstance value1 = ValueInstance.create(cursorPrincipalType.getTypeInstance(), ntv1);
         final Element principal1 = xed.create(cursorPrincipalType.getParent().getElement(), value1);
-        Assert.assertNotNull(principal1);
+        Assertions.assertNotNull(principal1);
         // insert
         final NameTypeValues ntv2 = HttpArguments.toArguments("user=arwo2&credential=arwo2&roles=**");
         final ValueInstance value2 = ValueInstance.create(cursorPrincipalType.getTypeInstance(), ntv2);
         final Element principal2 = xed.create(cursorPrincipalType.getParent().getElement(), value2);
-        Assert.assertNotNull(principal2);
+        Assertions.assertNotNull(principal2);
         // validate
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
-        Assume.assumeTrue(SystemU.javaVersion().startsWith("1.8"));
-        Assert.assertEquals(384, xml.length);
-        Assert.assertEquals("6e6b144e", CRCU.crc32String(xml));
+        Assumptions.assumeTrue(SystemU.javaVersion().startsWith("1.8"));
+        Assertions.assertEquals(384, xml.length);
+        Assertions.assertEquals("6e6b144e", CRCU.crc32String(xml));
         // check hashes
         final TypeInstance tiCredential = cursorPrincipalType.getChildInstance("credential");
         final XPather xpather1 = new XPather(principal1, xed.getXPather().getContext());
         final String hash1 = XedHash.getHash(tiCredential, "arwo", new TransformContext(null, xpather1));
-        Assert.assertEquals("1/LNHf3yHLrcgbvDIN9OBPTppq5rSWUa7kfTORfChr8=", hash1);
+        Assertions.assertEquals("1/LNHf3yHLrcgbvDIN9OBPTppq5rSWUa7kfTORfChr8=", hash1);
         final XPather xpather2 = new XPather(principal2, xed.getXPather().getContext());
         final String hash2 = XedHash.getHash(tiCredential, "arwo2", new TransformContext(null, xpather2));
-        Assert.assertEquals("i1Otk1K9L0SBdbqYUkno5UoEAjXd9iBKLPhCxPpy2o0=", hash2);
+        Assertions.assertEquals("i1Otk1K9L0SBdbqYUkno5UoEAjXd9iBKLPhCxPpy2o0=", hash2);
     }
 
     @Test
@@ -88,29 +88,29 @@ public class RealmAssembleTest {
         final NameTypeValues ntv1 = HttpArguments.toArguments("user=arwo&credential=arwo&roles=*");
         final ValueInstance value1 = ValueInstance.create(cursorPrincipalType.getTypeInstance(), ntv1);
         final Element principal1 = xed.create(cursorPrincipalType.getParent().getElement(), value1);
-        Assert.assertNotNull(principal1);
+        Assertions.assertNotNull(principal1);
         // check hash
         logger.finest(DocumentU.toString(document));
         final TypeInstance tiCredential = cursorPrincipalType.getChildInstance("credential");
         final XPather xpather1 = new XPather(principal1, xed.getXPather().getContext());
         final String hash1 = XedHash.getHash(tiCredential, "arwo", new TransformContext(null, xpather1));
-        Assert.assertEquals("1/LNHf3yHLrcgbvDIN9OBPTppq5rSWUa7kfTORfChr8=", hash1);
+        Assertions.assertEquals("1/LNHf3yHLrcgbvDIN9OBPTppq5rSWUa7kfTORfChr8=", hash1);
         // update
         final XedCursor cursor1 = new XedNav(xed).find(principal1);
         final NameTypeValues ntv2 = HttpArguments.toArguments("user=arwo2&credential=arwo2&roles=**");
         final ValueInstance value2 = ValueInstance.create(cursorPrincipalType.getTypeInstance(), ntv2);
         final Element principal2 = xed.update(cursor1.getElement(), value2);
-        Assert.assertNotNull(principal2);
+        Assertions.assertNotNull(principal2);
         // validate
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
-        Assume.assumeTrue(SystemU.javaVersion().startsWith("1.8"));
-        Assert.assertEquals(254, xml.length);
-        Assert.assertEquals("7487e72a", CRCU.crc32String(xml));
+        Assumptions.assumeTrue(SystemU.javaVersion().startsWith("1.8"));
+        Assertions.assertEquals(254, xml.length);
+        Assertions.assertEquals("7487e72a", CRCU.crc32String(xml));
         // check hash
         final XPather xpather2 = new XPather(principal2, xed.getXPather().getContext());
         final String hash2 = XedHash.getHash(tiCredential, "arwo2", new TransformContext(null, xpather2));
-        Assert.assertEquals("i1Otk1K9L0SBdbqYUkno5UoEAjXd9iBKLPhCxPpy2o0=", hash2);
+        Assertions.assertEquals("i1Otk1K9L0SBdbqYUkno5UoEAjXd9iBKLPhCxPpy2o0=", hash2);
     }
 
     @Test
@@ -127,16 +127,16 @@ public class RealmAssembleTest {
         final NameTypeValues ntv1 = HttpArguments.toArguments("user=arwo&credential=arwo&roles=*");
         final ValueInstance value1 = ValueInstance.create(cursorPrincipalType.getTypeInstance(), ntv1);
         final Element principal1 = xed.create(cursorPrincipalType.getParent().getElement(), value1);
-        Assert.assertNotNull(principal1);
+        Assertions.assertNotNull(principal1);
         // delete
         final XedCursor cursor1 = new XedNav(xed).find(principal1);
         final Element principalD = xed.delete(cursor1.getElement());
-        Assert.assertNotNull(principalD);
+        Assertions.assertNotNull(principalD);
         // validate
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
-        Assume.assumeTrue(SystemU.javaVersion().startsWith("1.8"));
-        Assert.assertEquals(109, xml.length);
-        Assert.assertEquals("0093040f", CRCU.crc32String(xml));
+        Assumptions.assumeTrue(SystemU.javaVersion().startsWith("1.8"));
+        Assertions.assertEquals(109, xml.length);
+        Assertions.assertEquals("0093040f", CRCU.crc32String(xml));
     }
 }

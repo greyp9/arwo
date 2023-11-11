@@ -7,10 +7,10 @@ import io.github.greyp9.arwo.core.env.EnvironmentState;
 import io.github.greyp9.arwo.core.env.EnvironmentStore;
 import io.github.greyp9.arwo.core.jce.AES;
 import io.github.greyp9.arwo.core.value.Value;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -18,15 +18,14 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Random;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
-@RunWith(Parameterized.class)
 @SuppressWarnings({"checkstyle:magicnumber", "checkstyle:visibilitymodifier"})
 public class EnvironmentSecretPermuteTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Parameterized.Parameters
-    public static Object[][] data() {
-        final Collection<Object[]> parameters = new ArrayList<>();
+    public static Stream<Arguments> data() {
+        final Collection<Arguments> parameters = new ArrayList<>();
         final int minShares = 2;
         final int maxShares = 5;
         for (int shares = minShares; (shares <= maxShares); ++shares) {
@@ -34,28 +33,19 @@ public class EnvironmentSecretPermuteTest {
                 for (int available = threshold - 1; (available <= shares); ++available) {
                     final Random[] randoms = {new Random(0L)};
                     for (Random random : randoms) {
-                        parameters.add(new Object[] { shares, threshold, available, random });
+                        parameters.add(Arguments.arguments(shares, threshold, available, random));
                     }
                 }
             }
         }
-        return parameters.toArray(new Object[0][]);
+        return parameters.stream();
     }
 
-    @Parameterized.Parameter()
-    public int shareCount;
-
-    @Parameterized.Parameter(1)
-    public int thresholdCount;
-
-    @Parameterized.Parameter(2)
-    public int available;
-
-    @Parameterized.Parameter(3)
-    public Random random;
-
-    @Test
-    public void testSplitProtectSerializeRecover() throws GeneralSecurityException, IOException {
+    @ParameterizedTest
+    @MethodSource("data")
+    public final void testSplitProtectSerializeRecover(
+            final int shareCount, final int thresholdCount, final int available, final Random random)
+            throws GeneralSecurityException, IOException {
         logger.finest(() -> String.format("shares=[%d], threshold=[%d], available=[%d], random=[%s]",
                 shareCount, thresholdCount, available, random));
 
@@ -70,9 +60,9 @@ public class EnvironmentSecretPermuteTest {
         final EnvironmentStore storeUnwrapped = EnvironmentSecret.unprotect(storeWrappedA);
         final byte[] secretRecover = EnvironmentSecret.recover(stateRecover, storeUnwrapped);
         if (available >= thresholdCount) {
-            Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+            Assertions.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
         } else {
-            Assert.assertNotEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+            Assertions.assertNotEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
         }
     }
 

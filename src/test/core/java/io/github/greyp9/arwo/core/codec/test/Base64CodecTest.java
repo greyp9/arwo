@@ -4,8 +4,8 @@ import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.codec.b64.Base64Codec;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.res.ResourceU;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.logging.Logger;
@@ -17,9 +17,9 @@ public class Base64CodecTest {
     public void testCodec_Simple() throws IOException {
         final String plaintext = "Hello world!";
         final String encoded = Base64Codec.encode(UTF8Codec.toBytes(plaintext));
-        Assert.assertEquals("SGVsbG8gd29ybGQh", encoded);
+        Assertions.assertEquals("SGVsbG8gd29ybGQh", encoded);
         final String plaintextRecover = UTF8Codec.toString(Base64Codec.decode(encoded));
-        Assert.assertEquals(plaintext, plaintextRecover);
+        Assertions.assertEquals(plaintext, plaintextRecover);
     }
 
     @Test
@@ -39,15 +39,15 @@ public class Base64CodecTest {
         }
         final String encoded = Base64Codec.encode(input);
         logger.finest(encoded);
-        Assert.assertTrue(encoded.startsWith("AAECAwQFBgcI"));
-        Assert.assertTrue(encoded.endsWith("+Pn6+/z9/v8="));
+        Assertions.assertTrue(encoded.startsWith("AAECAwQFBgcI"));
+        Assertions.assertTrue(encoded.endsWith("+Pn6+/z9/v8="));
         final byte[] inputRecover = Base64Codec.decode(encoded);
-        Assert.assertArrayEquals(input, inputRecover);
+        Assertions.assertArrayEquals(input, inputRecover);
     }
 
     @Test
     public void testCodec_BadInput() {
         final String encoded = "0123456789abcdefgh!@#$0123456789";
-        Assert.assertThrows(IllegalArgumentException.class, () -> Base64Codec.decode(encoded));
+        Assertions.assertThrows(IllegalArgumentException.class, () -> Base64Codec.decode(encoded));
     }
 }

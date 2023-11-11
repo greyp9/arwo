@@ -3,8 +3,8 @@ package io.github.greyp9.arwo.core.lang.test;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.hash.text.FingerPrint;
 import io.github.greyp9.arwo.core.vm.env.EnvironmentU;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -17,7 +17,7 @@ public class EnvironmentTest {
     @Test
     public void testGetEnv() throws IOException {
         final byte[] sysenv = EnvironmentU.getEnv(Collections.<String>emptyList());
-        Assert.assertNotNull(sysenv);
+        Assertions.assertNotNull(sysenv);
         logger.finest(UTF8Codec.toString(sysenv));
         logger.finest(FingerPrint.toHex256(sysenv));
     }

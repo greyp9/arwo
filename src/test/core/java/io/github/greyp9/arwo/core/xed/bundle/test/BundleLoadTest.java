@@ -9,8 +9,8 @@ import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import javax.xml.namespace.QName;
 import java.io.IOException;
@@ -29,11 +29,11 @@ public class BundleLoadTest {
             final QName qname = QNameU.getQName("{urn:arwo:realm}realm");
             final Stopwatch stopwatch = new Stopwatch(getClass().getSimpleName());
             final Xed xed = factory0.generateEmpty(urlInitial, qname, null);
-            Assert.assertNotNull(xed);
+            Assertions.assertNotNull(xed);
             final long lap1 = stopwatch.lap();
             for (int i = 0; (i < 2); ++i) {
                 final Xed xed1 = factory0.generateEmpty(urlInitial, qname, null);
-                Assert.assertNotNull(xed1);
+                Assertions.assertNotNull(xed1);
             }
             final long lap2 = stopwatch.lap();
             logger.finest(Long.toString(lap1));
@@ -45,7 +45,7 @@ public class BundleLoadTest {
     public void testLoadDefaultLocale() throws Exception {
         for (int i = 0; (i < 2); ++i) {
             Bundle bundle = getBundle();
-            Assert.assertNotNull(bundle);
+            Assertions.assertNotNull(bundle);
             logger.finest(bundle.getString("realm.realmType"));
         }
     }

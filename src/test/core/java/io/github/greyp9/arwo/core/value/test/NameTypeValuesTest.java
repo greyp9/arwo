@@ -5,16 +5,16 @@ import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.httpclient.HttpClientU;
 import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.logging.Logger;
 
 public class NameTypeValuesTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
@@ -35,18 +35,18 @@ public class NameTypeValuesTest {
     public void testUseForQueryString() throws Exception {
         final String queryString1 = HttpArguments.toQueryString(new NameTypeValues()
                 .addNN("a", null).addNN("b", null));
-        Assert.assertEquals("", queryString1);
+        Assertions.assertEquals("", queryString1);
 
         final String queryString2 = HttpArguments.toQueryString(new NameTypeValues()
                 .addNN("a", "foo").addNN("b", null));
-        Assert.assertEquals("a=foo", queryString2);
+        Assertions.assertEquals("a=foo", queryString2);
 
         final String queryString3 = HttpArguments.toQueryString(new NameTypeValues()
                 .addNN("a", "foo").addNN("b", "bar"));
-        Assert.assertEquals("a=foo&b=bar", queryString3);
+        Assertions.assertEquals("a=foo&b=bar", queryString3);
 
         final String queryString4 = HttpArguments.toQueryString(new NameTypeValues()
                 .addNN("a", null).addNN("b", "bar"));
-        Assert.assertEquals("b=bar", queryString4);
+        Assertions.assertEquals("b=bar", queryString4);
     }
 }

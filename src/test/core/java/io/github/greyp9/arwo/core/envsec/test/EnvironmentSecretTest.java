@@ -7,10 +7,10 @@ import io.github.greyp9.arwo.core.envsec.eval.PropEvaluator;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.jce.AES;
 import io.github.greyp9.arwo.core.lang.SystemU;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -25,8 +25,8 @@ public class EnvironmentSecretTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
     private final File folderTest = new File(SystemU.tempDir(), getClass().getSimpleName());
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    public final void setUp() throws Exception {
         final boolean mkdirs = folderTest.mkdirs();
         logger.finest(String.format("mkdirs=%s", mkdirs));
     }
@@ -50,7 +50,7 @@ public class EnvironmentSecretTest {
         final byte[] secret = AES.generate().getEncoded();
         new EnvironmentSecret(fileExpression.getPath(), new Random(0L)).generate(secret);
         final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
-        Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+        Assertions.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
     }
 
     @Test
@@ -65,7 +65,7 @@ public class EnvironmentSecretTest {
         final byte[] secret = AES.generate().getEncoded();
         new EnvironmentSecret(fileExpression.getPath(), new Random(0L)).generate(secret);
         System.setProperty("foo", "bar");  // add property that was missing, should cause recovery to fail
-        Assert.assertThrows(KeyException.class,
+        Assertions.assertThrows(KeyException.class,
                 () -> new EnvironmentSecret(fileExpression.getPath(), null).recover());
     }
 
@@ -81,7 +81,7 @@ public class EnvironmentSecretTest {
         final byte[] secret = AES.generate().getEncoded();
         new EnvironmentSecret(fileExpression.getPath(), new Random(0L)).generate(secret);
         final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
-        Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+        Assertions.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
     }
 
     @Test
@@ -96,7 +96,7 @@ public class EnvironmentSecretTest {
         final byte[] secret = AES.generate().getEncoded();
         new EnvironmentSecret(fileExpression.getPath(), new Random(0L)).generate(secret);
         final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
-        Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+        Assertions.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
     }
 
     @Test
@@ -111,12 +111,12 @@ public class EnvironmentSecretTest {
         final byte[] secret = AES.generate().getEncoded();
         new EnvironmentSecret(fileExpression.getPath(), new Random(0L)).generate(secret);
         final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
-        Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+        Assertions.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
     }
 
     @Test
     public void test_OneSecretSHA() throws IOException, GeneralSecurityException {
-        Assume.assumeNotNull(System.getProperty("basedir"));  // works in Maven context
+        Assumptions.assumeTrue(System.getProperty("basedir") != null);  // works in Maven context
         final File fileExpression = new File(folderTest, "envOSS.txt");
         final File fileShares = new File(folderTest, "envOSS.txt.xml");
         tearDownCustom(fileExpression, fileShares);
@@ -127,7 +127,7 @@ public class EnvironmentSecretTest {
         final byte[] secret = AES.generate().getEncoded();
         new EnvironmentSecret(fileExpression.getPath(), new Random(0L)).generate(secret);
         final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
-        Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+        Assertions.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
     }
 
     @Test
@@ -142,7 +142,7 @@ public class EnvironmentSecretTest {
         final byte[] secret = AES.generate().getEncoded();
         new EnvironmentSecret(fileExpression.getPath(), new Random(0L)).generate(secret);
         final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
-        Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+        Assertions.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
     }
 
     @Test
@@ -160,7 +160,7 @@ public class EnvironmentSecretTest {
 
         System.setProperty("A", "bar");
         final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
-        Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+        Assertions.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
     }
 
     @Test
@@ -178,7 +178,7 @@ public class EnvironmentSecretTest {
 
         System.setProperty("A", "bar");
         final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
-        Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+        Assertions.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
     }
 
     @Test
@@ -197,7 +197,7 @@ public class EnvironmentSecretTest {
 
         System.setProperty("A", "bar");
         System.setProperty("B", "foo");
-        Assert.assertThrows(KeyException.class,
+        Assertions.assertThrows(KeyException.class,
                 () -> new EnvironmentSecret(fileExpression.getPath(), null).recover());
     }
 
@@ -215,7 +215,7 @@ public class EnvironmentSecretTest {
         final byte[] secret = AES.generate().getEncoded();
         new EnvironmentSecret(fileExpression.getPath(), new Random(0L)).generate(secret);
         final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
-        Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+        Assertions.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
     }
 
     @Test
@@ -230,7 +230,7 @@ public class EnvironmentSecretTest {
         final byte[] secret = AES.generate().getEncoded();
         new EnvironmentSecret(fileExpression.getPath(), new Random(0L)).generate(secret);
         final byte[] secretRecover = new EnvironmentSecret(fileExpression.getPath(), null).recover();
-        Assert.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
+        Assertions.assertEquals(HexCodec.encode(secret), HexCodec.encode(secretRecover));
     }
 
     @Test
@@ -255,9 +255,9 @@ public class EnvironmentSecretTest {
 
         final byte[] secretRecover1 = environmentSecret.recover();
         logger.finest(HexCodec.encode(secretRecover1));
-        Assert.assertArrayEquals(secret, secretRecover1);
+        Assertions.assertArrayEquals(secret, secretRecover1);
 
         properties.setProperty("c", "1");
-        Assert.assertThrows(KeyException.class, () -> environmentSecret.recover());
+        Assertions.assertThrows(KeyException.class, () -> environmentSecret.recover());
     }
 }

@@ -3,8 +3,8 @@ package io.github.greyp9.arwo.core.i18n.test;
 import io.github.greyp9.arwo.core.i18n.PseudoI18n;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.url.URLCodec;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.net.URL;
@@ -18,7 +18,7 @@ public class Pseudo2Test {
     @Test
     public void testPartialHandling() throws Exception {
         final URL url = ResourceU.resolve("io/github/greyp9/arwo/properties/i18n/test.properties");
-        Assert.assertNotNull(url);
+        Assertions.assertNotNull(url);
         final File file = URLCodec.toFile(url);
         PseudoI18n.main(new String[] { "+", file.getAbsolutePath() });
         final Locale localeDF = Locale.getDefault();
@@ -32,7 +32,8 @@ public class Pseudo2Test {
         PseudoI18n.main(new String[] { "-", file.getAbsolutePath() });
         logger.finest(textDF);
         logger.finest(textES);
-        Assert.assertEquals("[{0,number,integer} file(s)] [{1,number,integer} folder(s)]", textDF);
-        Assert.assertEquals("[{0,number,integer} f\u00edl\u00e9(s)] [{1,number,integer} f\u00f3ld\u00e9r(s)]", textES);
+        Assertions.assertEquals("[{0,number,integer} file(s)] [{1,number,integer} folder(s)]", textDF);
+        Assertions.assertEquals(
+                "[{0,number,integer} f\u00edl\u00e9(s)] [{1,number,integer} f\u00f3ld\u00e9r(s)]", textES);
     }
 }

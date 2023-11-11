@@ -11,8 +11,8 @@ import io.github.greyp9.arwo.core.table.row.Row;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.sort.Sort;
 import io.github.greyp9.arwo.core.table.sort.Sorts;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.sql.Types;
@@ -25,17 +25,17 @@ public class TableTest {
     public void testTableLoadUserHome() throws Exception {
         final File folderHome = FileU.toFile(SystemU.userHome());
         final File[] files = FileU.listFiles(folderHome);
-        Assert.assertTrue(files.length > 0);
+        Assertions.assertTrue(files.length > 0);
     }
 
     @Test
     public void testLoad() throws Exception {
         final RowSet rowSet = createRowSet(null, null);
         final int sizeExpected = 3;
-        Assert.assertEquals(sizeExpected, rowSet.getRows());
+        Assertions.assertEquals(sizeExpected, rowSet.getRows());
         final Row rowFirst = rowSet.iterator().next();
-        Assert.assertEquals("a", rowFirst.getString(0));
-        Assert.assertEquals(Integer.valueOf(1), rowFirst.getInteger(1));
+        Assertions.assertEquals("a", rowFirst.getString(0));
+        Assertions.assertEquals(Integer.valueOf(1), rowFirst.getInteger(1));
     }
 
     @Test
@@ -44,10 +44,10 @@ public class TableTest {
         final Sorts sorts = new Sorts(sort);
         final int sizeExpected = 3;
         final RowSet rowSet = createRowSet(sorts, null);
-        Assert.assertEquals(sizeExpected, rowSet.getRows());
+        Assertions.assertEquals(sizeExpected, rowSet.getRows());
         final Row row1 = rowSet.iterator().next();
-        Assert.assertEquals("c", row1.getString(0));
-        Assert.assertEquals(Integer.valueOf(sizeExpected), row1.getInteger(1));
+        Assertions.assertEquals("c", row1.getString(0));
+        Assertions.assertEquals(Integer.valueOf(sizeExpected), row1.getInteger(1));
     }
 
     @Test
@@ -55,10 +55,10 @@ public class TableTest {
         final Filter filter = new Filter(0, "letter", Filter.Operator.EQ, "b");
         final Filters filters = new Filters(filter);
         final RowSet rowSet = createRowSet(null, filters);
-        Assert.assertEquals(1, rowSet.getRows());
+        Assertions.assertEquals(1, rowSet.getRows());
         final Row row1 = rowSet.iterator().next();
-        Assert.assertEquals("b", row1.getString(0));
-        Assert.assertEquals(Integer.valueOf(2), row1.getInteger(1));
+        Assertions.assertEquals("b", row1.getString(0));
+        Assertions.assertEquals(Integer.valueOf(2), row1.getInteger(1));
     }
 
     @Test
@@ -68,14 +68,14 @@ public class TableTest {
         final Filter filter = new Filter(0, "letter", Filter.Operator.LEQ, "b");
         final Filters filters = new Filters(filter);
         final RowSet rowSet = createRowSet(sorts, filters);
-        Assert.assertEquals(2, rowSet.getRows());
+        Assertions.assertEquals(2, rowSet.getRows());
         final Iterator<Row> iterator = rowSet.iterator();
         final Row row1 = iterator.next();
-        Assert.assertEquals("b", row1.getString(0));
-        Assert.assertEquals(Integer.valueOf(2), row1.getInteger(1));
+        Assertions.assertEquals("b", row1.getString(0));
+        Assertions.assertEquals(Integer.valueOf(2), row1.getInteger(1));
         final Row row2 = iterator.next();
-        Assert.assertEquals("a", row2.getString(0));
-        Assert.assertEquals(Integer.valueOf(1), row2.getInteger(1));
+        Assertions.assertEquals("a", row2.getString(0));
+        Assertions.assertEquals(Integer.valueOf(1), row2.getInteger(1));
     }
 
     private static RowSet createRowSet(final Sorts sorts, final Filters filters) throws Exception {

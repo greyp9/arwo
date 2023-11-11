@@ -11,8 +11,8 @@ import io.github.greyp9.arwo.core.xed.op.OpClone;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xml.pretty.DocumentPrettyU;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -31,7 +31,7 @@ public class OpCloneTest {
         // starting document
         final byte[] xml0 = StreamU.read(ResourceU.resolve("io/github/greyp9/arwo/xml/clone/clone1.xml"));
         logger.log(level, UTF8Codec.toString(xml0));
-        Assert.assertEquals("4bb444c0", CRCU.crc32String(xml0));
+        Assertions.assertEquals("4bb444c0", CRCU.crc32String(xml0));
         // verify Document codec
         final Document document = DocumentU.toDocument(xml0);
         final byte[] xml1a = DocumentU.toXml(document);
@@ -39,8 +39,8 @@ public class OpCloneTest {
         logger.log(level, UTF8Codec.toString(xml1a));
         logger.log(level, UTF8Codec.toString(xml1b));
         if (SystemU.javaVersion().startsWith("1.8")) {
-            Assert.assertEquals("e8356f89", CRCU.crc32String(xml1a));
-            Assert.assertEquals("390ab656", CRCU.crc32String(xml1b));
+            Assertions.assertEquals("e8356f89", CRCU.crc32String(xml1a));
+            Assertions.assertEquals("390ab656", CRCU.crc32String(xml1b));
         }
         // operate on document
         final Xed xed = new Xed(document, xsdTypes);
@@ -52,8 +52,8 @@ public class OpCloneTest {
         logger.log(level, UTF8Codec.toString(xml2a));
         logger.log(level, UTF8Codec.toString(xml2b));
         if (SystemU.javaVersion().startsWith("1.8")) {
-            Assert.assertEquals("cc139faf", CRCU.crc32String(xml2a));
-            Assert.assertEquals("be731769", CRCU.crc32String(xml2b));
+            Assertions.assertEquals("cc139faf", CRCU.crc32String(xml2a));
+            Assertions.assertEquals("be731769", CRCU.crc32String(xml2b));
         }
         // normalize document & verify
         Document documentNormal = DocumentU.toDocument(DocumentU.toXml(document));
@@ -62,8 +62,8 @@ public class OpCloneTest {
         logger.log(level, UTF8Codec.toString(xml3a));
         logger.log(level, UTF8Codec.toString(xml3b));
         if (SystemU.javaVersion().startsWith("1.8")) {
-            Assert.assertEquals("cc139faf", CRCU.crc32String(xml3a));
-            Assert.assertEquals("166bbd37", CRCU.crc32String(xml3b));
+            Assertions.assertEquals("cc139faf", CRCU.crc32String(xml3a));
+            Assertions.assertEquals("166bbd37", CRCU.crc32String(xml3b));
         }
     }
 }

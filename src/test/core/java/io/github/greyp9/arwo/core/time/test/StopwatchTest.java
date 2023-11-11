@@ -1,8 +1,8 @@
 package io.github.greyp9.arwo.core.time.test;
 
 import io.github.greyp9.arwo.core.time.Stopwatch;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 public class StopwatchTest {
 
@@ -13,11 +13,11 @@ public class StopwatchTest {
         stopwatch.lap();
         stopwatch.lap();
         long last = stopwatch.getLast();
-        Assert.assertTrue(last < aBitOfTime);
+        Assertions.assertTrue(last < aBitOfTime);
         long[] laps = stopwatch.getLaps();
-        Assert.assertEquals(2, laps.length);
+        Assertions.assertEquals(2, laps.length);
         for (long lap : laps) {
-            Assert.assertTrue(lap < aBitOfTime);
+            Assertions.assertTrue(lap < aBitOfTime);
         }
     }
 }

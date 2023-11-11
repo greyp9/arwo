@@ -8,8 +8,8 @@ import io.github.greyp9.arwo.core.env.EnvironmentShare;
 import io.github.greyp9.arwo.core.env.EnvironmentState;
 import io.github.greyp9.arwo.core.env.EnvironmentStore;
 import io.github.greyp9.arwo.core.jce.AES;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
@@ -25,7 +25,7 @@ public class EnvironmentSecretTest {
         final byte[] secret = AES.generate().getEncoded();
         final EnvironmentStore store = EnvironmentSecret.generate(secret, state, new Random(0L));
         final byte[] secretRecover = EnvironmentSecret.recover(state, store);
-        Assert.assertArrayEquals("recovered secret should match original", secret, secretRecover);
+        Assertions.assertArrayEquals(secret, secretRecover, "recovered secret should match original");
     }
 
     @Test
@@ -37,7 +37,7 @@ public class EnvironmentSecretTest {
         final EnvironmentStore storeWrapped = EnvironmentSecret.protect(store, random);
         final EnvironmentStore storeUnwrapped = EnvironmentSecret.unprotect(storeWrapped);
         final byte[] secretRecover = EnvironmentSecret.recover(state, storeUnwrapped);
-        Assert.assertArrayEquals("recovered secret should match original", secret, secretRecover);
+        Assertions.assertArrayEquals(secret, secretRecover, "recovered secret should match original");
     }
 
     @Test
@@ -52,7 +52,7 @@ public class EnvironmentSecretTest {
         final EnvironmentStore storeWrappedA = EnvironmentSecret.deserialize(shareXml, state);
         final EnvironmentStore storeUnwrapped = EnvironmentSecret.unprotect(storeWrappedA);
         final byte[] secretRecover = EnvironmentSecret.recover(state, storeUnwrapped);
-        Assert.assertArrayEquals("recovered secret should match original", secret, secretRecover);
+        Assertions.assertArrayEquals(secret, secretRecover, "recovered secret should match original");
     }
 
     @Test
@@ -68,7 +68,7 @@ public class EnvironmentSecretTest {
         final EnvironmentStore storeWrappedA = EnvironmentSecret.deserialize(shareXml, stateOneOff);
         final EnvironmentStore storeUnwrapped = EnvironmentSecret.unprotect(storeWrappedA);
         final byte[] secretRecover = EnvironmentSecret.recover(stateOneOff, storeUnwrapped);
-        Assert.assertArrayEquals("recovered secret should match original", secret, secretRecover);
+        Assertions.assertArrayEquals(secret, secretRecover, "recovered secret should match original");
     }
 
     @Test
@@ -87,7 +87,7 @@ public class EnvironmentSecretTest {
         final EnvironmentStore storeUnwrapped = EnvironmentSecret.unprotect(storeWrappedA);
         final byte[] secretRecover = EnvironmentSecret.recover(stateTwoOff, storeUnwrapped);
         logger.finest(() -> HexCodec.encode(secretRecover));
-        Assert.assertNotEquals("secret should be unrecoverable when threshold not met",
+        Assertions.assertNotEquals("secret should be unrecoverable when threshold not met",
                 HexCodec.encode(secret), HexCodec.encode(secretRecover));
     }
 

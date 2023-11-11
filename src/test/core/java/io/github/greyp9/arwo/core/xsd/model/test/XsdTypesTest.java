@@ -10,9 +10,9 @@ import io.github.greyp9.arwo.core.xpath.XPather;
 import io.github.greyp9.arwo.core.xsd.core.XsdU;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 
 import javax.xml.namespace.QName;
@@ -23,7 +23,7 @@ import java.util.logging.Logger;
 public class XsdTypesTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
@@ -34,14 +34,14 @@ public class XsdTypesTest {
         if (fileWebApp25.exists()) {
             final URL urlInitial = URLCodec.toURL(fileWebApp25);
             final XsdTypes xsdTypes = new XsdTypes(urlInitial);
-            Assert.assertNotNull(xsdTypes);
+            Assertions.assertNotNull(xsdTypes);
             // check model
             final XPathContext context = xsdTypes.getContext();
-            Assert.assertNotNull(context);
+            Assertions.assertNotNull(context);
             logger.finest(context.getPrefixToURI().toString());
-            Assert.assertEquals(XsdU.NS_URI_XSD, context.getNamespaceURI("xsd"));
-            Assert.assertEquals(XsdU.NS_URI_XSD, context.getNamespaceURI("xs"));
-            Assert.assertEquals("http://java.sun.com/xml/ns/javaee", context.getNamespaceURI("javaee"));
+            Assertions.assertEquals(XsdU.NS_URI_XSD, context.getNamespaceURI("xsd"));
+            Assertions.assertEquals(XsdU.NS_URI_XSD, context.getNamespaceURI("xs"));
+            Assertions.assertEquals("http://java.sun.com/xml/ns/javaee", context.getNamespaceURI("javaee"));
         }
     }
 
@@ -50,20 +50,20 @@ public class XsdTypesTest {
         // load model
         final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
-        Assert.assertNotNull(xsdTypes);
+        Assertions.assertNotNull(xsdTypes);
         // check model
         final XPathContext context = xsdTypes.getContext();
-        Assert.assertNotNull(context);
+        Assertions.assertNotNull(context);
         logger.finest(context.getPrefixToURI().toString());
-        Assert.assertEquals(XsdU.NS_URI_XSD, context.getNamespaceURI("xsd"));
-        Assert.assertEquals("urn:arwo:realm", context.getNamespaceURI("realm"));
+        Assertions.assertEquals(XsdU.NS_URI_XSD, context.getNamespaceURI("xsd"));
+        Assertions.assertEquals("urn:arwo:realm", context.getNamespaceURI("realm"));
         // generate document
         final QName name = QNameU.getQName("{urn:arwo:realm}realm");
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(name);
         // traverse document
         XPather xpather = new XPather(document, xsdTypes.getContext());
-        Assert.assertNotNull(xpather.getElement("/realm:realm"));
-        Assert.assertNotNull(xpather.getElement("/realm:realm/realm:principals"));
-        Assert.assertNull(xpather.getElement("/realm:realm/realm:principals/realm:principal"));
+        Assertions.assertNotNull(xpather.getElement("/realm:realm"));
+        Assertions.assertNotNull(xpather.getElement("/realm:realm/realm:principals"));
+        Assertions.assertNull(xpather.getElement("/realm:realm/realm:principals/realm:principal"));
     }
 }

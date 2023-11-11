@@ -3,7 +3,7 @@ package io.github.greyp9.arwo.core.file.filter.test;
 import io.github.greyp9.arwo.core.file.filter.FilterFiles;
 import io.github.greyp9.arwo.core.file.find.FindInFolderQuery;
 import io.github.greyp9.arwo.core.lang.SystemU;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.ArrayList;

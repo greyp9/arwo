@@ -8,7 +8,7 @@ import io.github.greyp9.arwo.core.file.find.FindInFolderQuery;
 import io.github.greyp9.arwo.core.file.group.FileRegrouper;
 import io.github.greyp9.arwo.core.file.zip.ZipAppender;
 import io.github.greyp9.arwo.core.lang.SystemU;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;

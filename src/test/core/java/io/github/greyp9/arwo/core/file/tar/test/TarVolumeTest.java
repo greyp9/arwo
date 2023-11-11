@@ -4,9 +4,9 @@ import io.github.greyp9.arwo.core.file.find.FindInFolderQuery;
 import io.github.greyp9.arwo.core.file.tar.TarMetaData;
 import io.github.greyp9.arwo.core.file.tar.TarVolume;
 import io.github.greyp9.arwo.core.lang.SystemU;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -19,13 +19,13 @@ import java.util.logging.Logger;
 public class TarVolumeTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         //io.github.greyp9.arwo.core.logging.LoggerU.adjustShort(Logger.getLogger(""));
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testFindIterateArchives() throws Exception {
         File root = new File(SystemU.resolve("~/Downloads"));
         Collection<File> files = new TreeSet<File>();

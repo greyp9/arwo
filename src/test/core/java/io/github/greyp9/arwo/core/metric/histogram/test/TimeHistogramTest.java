@@ -6,9 +6,9 @@ import io.github.greyp9.arwo.core.date.XsdDateU;
 import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogram;
 import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogramSerializer;
 import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogramSerializerMem;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.Date;
@@ -21,8 +21,8 @@ public class TimeHistogramTest {
 
     private final File folderClass = new File(String.format("./target/%s", getClass().getSimpleName()));
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    public final void setUp() throws Exception {
         io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
 
@@ -39,18 +39,18 @@ public class TimeHistogramTest {
             histogram.add(dateIt, 1);
         }
         final double[] buckets = histogram.getBuckets(date, 0, histogram.getPageSize());
-        Assert.assertEquals(31, buckets.length);
+        Assertions.assertEquals(31, buckets.length);
         for (int i = 0; (i < 3); ++i) {
-            Assert.assertEquals(1L, (long) buckets[i]);
+            Assertions.assertEquals(1L, (long) buckets[i]);
         }
         for (int j = 3; (j < 31); ++j) {
-            Assert.assertEquals(0L, (long) buckets[j]);
+            Assertions.assertEquals(0L, (long) buckets[j]);
         }
         final int pos = 7;
         final int len = histogram.getPageSize() - pos;
         final double[] buckets2 = histogram.getBuckets(date, pos, len);
         for (int j = 0; (j < len); ++j) {
-            Assert.assertEquals(0L, (long) buckets2[j]);
+            Assertions.assertEquals(0L, (long) buckets2[j]);
         }
     }
 
@@ -70,13 +70,13 @@ public class TimeHistogramTest {
         }
 /* old concept "advance()" no longer implemented
         histogram.advance(7);
-        Assert.assertEquals("2000-01-08T00:00:00Z", XsdDateU.toXSDZ(histogram.getDateStart()));
+        Assertions.assertEquals("2000-01-08T00:00:00Z", XsdDateU.toXSDZ(histogram.getDateStart()));
         final double[] buckets = histogram.getBuckets(0, histogram.getLength());
         for (int i = 0; (i < 84); ++i) {
-            Assert.assertEquals(i + 7, (int) buckets[i]);
+            Assertions.assertEquals(i + 7, (int) buckets[i]);
         }
         for (int j = 84; (j < 91); ++j) {
-            Assert.assertEquals(0, (int) buckets[j]);
+            Assertions.assertEquals(0, (int) buckets[j]);
         }
 */
     }
@@ -89,11 +89,11 @@ public class TimeHistogramTest {
 
         histogram.setIf(date, 1.0, (d -> d.equals(0.0)));
         final double[] buckets1 = histogram.getBuckets(date, 0, histogram.getPageSize());
-        Assert.assertEquals(1.0, buckets1[0], 0.01);
+        Assertions.assertEquals(1.0, buckets1[0], 0.01);
 
         histogram.setIf(date, 2.0, (d -> d.equals(0.0)));
         final double[] buckets2 = histogram.getBuckets(date, 0, histogram.getPageSize());
-        Assert.assertEquals(1.0, buckets2[0], 0.01);
+        Assertions.assertEquals(1.0, buckets2[0], 0.01);
     }
 
     @Test
@@ -101,12 +101,12 @@ public class TimeHistogramTest {
         final File folder = new File(folderClass, "create");
         TimeHistogram histogram = new TimeHistogram("foo", null, folder.getPath(),
                 "PT1M", "PT15M", "PT1H", "PT6H", "P1D", "P5D");
-        Assert.assertEquals(DurationU.toMillisP(DurationU.Const.ONE_MINUTE), histogram.getDurationCell());
-        Assert.assertEquals(15 * DurationU.toMillisP(DurationU.Const.ONE_MINUTE), histogram.getDurationWord());
-        Assert.assertEquals(DurationU.toMillisP(DurationU.Const.ONE_HOUR), histogram.getDurationLine());
-        Assert.assertEquals(6 * DurationU.toMillisP(DurationU.Const.ONE_HOUR), histogram.getDurationParagraph());
-        Assert.assertEquals(1440, histogram.getPageSize());
-        Assert.assertEquals(1440 * 5, histogram.getPageSize() * histogram.getPageCount());
+        Assertions.assertEquals(DurationU.toMillisP(DurationU.Const.ONE_MINUTE), histogram.getDurationCell());
+        Assertions.assertEquals(15 * DurationU.toMillisP(DurationU.Const.ONE_MINUTE), histogram.getDurationWord());
+        Assertions.assertEquals(DurationU.toMillisP(DurationU.Const.ONE_HOUR), histogram.getDurationLine());
+        Assertions.assertEquals(6 * DurationU.toMillisP(DurationU.Const.ONE_HOUR), histogram.getDurationParagraph());
+        Assertions.assertEquals(1440, histogram.getPageSize());
+        Assertions.assertEquals(1440 * 5, histogram.getPageSize() * histogram.getPageCount());
     }
 
     @Test
@@ -153,11 +153,11 @@ public class TimeHistogramTest {
         // check data
         final double[] buckets = histogramCodec.getBuckets(floor, 0, histogramCodec.getPageSize());
         final int length = buckets.length;
-        Assert.assertEquals(5, buckets.length);
-        Assert.assertEquals(1, (int) buckets[0]);
-        Assert.assertEquals(2, (int) buckets[1]);
+        Assertions.assertEquals(5, buckets.length);
+        Assertions.assertEquals(1, (int) buckets[0]);
+        Assertions.assertEquals(2, (int) buckets[1]);
         for (int i = 2; (i < length); ++i) {
-            Assert.assertEquals(0, (int) buckets[i]);
+            Assertions.assertEquals(0, (int) buckets[i]);
         }
     }
 }

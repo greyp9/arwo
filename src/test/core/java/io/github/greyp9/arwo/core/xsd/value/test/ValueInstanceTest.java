@@ -23,8 +23,8 @@ import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -48,24 +48,24 @@ public class ValueInstanceTest {
         final Xed xed = new Xed(document, xsdTypes);
         // validate
         final Collection<String> messages0 = xed.validate();
-        Assert.assertEquals("[]", messages0.toString());
+        Assertions.assertEquals("[]", messages0.toString());
         // navigate in document
         final XedCursor cursorFile = new XedNav(xed).getRoot();
         final TypeInstance instanceFile = cursorFile.getTypeInstance();
-        Assert.assertEquals(qname, instanceFile.getQName());
+        Assertions.assertEquals(qname, instanceFile.getQName());
         // check
         final NameTypeValues nameTypeValues = NameTypeValuesU.create("name", "foo.txt", "type", "text");
         final ValueInstance valueInstance = ValueInstance.create(instanceFile, nameTypeValues);
-        Assert.assertEquals(2, valueInstance.getNameTypeValues().size());
+        Assertions.assertEquals(2, valueInstance.getNameTypeValues().size());
         // update value instance
         ValueInstance valueInstanceTransform = new ValueInstanceTransform(null).transform(valueInstance);
         // check
         final NameTypeValues nameTypeValuesTransform = valueInstanceTransform.getNameTypeValues();
-        Assert.assertEquals(nameTypeValues.size() + 1, nameTypeValuesTransform.size());
-        Assert.assertNull(nameTypeValuesTransform.getNameValue("name"));
-        Assert.assertEquals("foo.txt", nameTypeValuesTransform.getValue("file.fileType.name"));
-        Assert.assertEquals("text", nameTypeValuesTransform.getValue("file.fileType.type"));
-        Assert.assertEquals("false", nameTypeValuesTransform.getValue("file.fileType.hidden"));
+        Assertions.assertEquals(nameTypeValues.size() + 1, nameTypeValuesTransform.size());
+        Assertions.assertNull(nameTypeValuesTransform.getNameValue("name"));
+        Assertions.assertEquals("foo.txt", nameTypeValuesTransform.getValue("file.fileType.name"));
+        Assertions.assertEquals("text", nameTypeValuesTransform.getValue("file.fileType.type"));
+        Assertions.assertEquals("false", nameTypeValuesTransform.getValue("file.fileType.hidden"));
     }
 
     @Test
@@ -82,11 +82,11 @@ public class ValueInstanceTest {
         // navigate in document
         final XedCursor cursorRealm = new XedNav(xed).getRoot();
         final TypeInstance instanceRealm = cursorRealm.getTypeInstance();
-        Assert.assertEquals(qname, instanceRealm.getQName());
+        Assertions.assertEquals(qname, instanceRealm.getQName());
         final TypeInstance instancePrincipals = instanceRealm.getInstance("principals");
-        Assert.assertEquals(QNameU.getQName("{urn:arwo:realm}principals"), instancePrincipals.getQName());
+        Assertions.assertEquals(QNameU.getQName("{urn:arwo:realm}principals"), instancePrincipals.getQName());
         final TypeInstance instancePrincipal = instancePrincipals.getInstance("principal");
-        Assert.assertEquals(QNameU.getQName("{urn:arwo:realm}principal"), instancePrincipal.getQName());
+        Assertions.assertEquals(QNameU.getQName("{urn:arwo:realm}principal"), instancePrincipal.getQName());
         // check value instance transform
         if (SystemU.isTrue()) {
             final NameTypeValues ntv = NameTypeValuesU.create(
@@ -94,16 +94,16 @@ public class ValueInstanceTest {
                     "principal.principalType.credential", "appCredential",
                     "principal.principalType.roles", "*");
             final ValueInstance valueInstance = ValueInstance.create(instancePrincipal, ntv);
-            Assert.assertEquals(ntv.size(), valueInstance.getNameTypeValues().size());
+            Assertions.assertEquals(ntv.size(), valueInstance.getNameTypeValues().size());
             final XPather xpather = new XPather(element, xed.getXPather().getContext());
             final TransformContext context = new TransformContext(null, xpather);
             final ValueInstance valueInstanceX = new ProtectHashTransform(valueInstance, context).transform();
             final String hash = Base64Codec.encode(HashU.sha256(UTF8Codec.toBytes("appCredential")));
             final NameTypeValues nameTypeValuesX = valueInstanceX.getNameTypeValues();
-            Assert.assertEquals(ntv.size(), nameTypeValuesX.size());
-            Assert.assertEquals("appUser", nameTypeValuesX.getValue("principal.principalType.user"));
-            Assert.assertEquals(hash, nameTypeValuesX.getValue("principal.principalType.credential"));
-            Assert.assertEquals("*", nameTypeValuesX.getValue("principal.principalType.roles"));
+            Assertions.assertEquals(ntv.size(), nameTypeValuesX.size());
+            Assertions.assertEquals("appUser", nameTypeValuesX.getValue("principal.principalType.user"));
+            Assertions.assertEquals(hash, nameTypeValuesX.getValue("principal.principalType.credential"));
+            Assertions.assertEquals("*", nameTypeValuesX.getValue("principal.principalType.roles"));
         }
         // check value instance transform
         if (SystemU.isTrue()) {
@@ -112,14 +112,14 @@ public class ValueInstanceTest {
                     "principal.principalType.credential", Html.MASK,
                     "principal.principalType.roles", "*");
             final ValueInstance valueInstance = ValueInstance.create(instancePrincipal, ntv);
-            Assert.assertEquals(ntv.size(), valueInstance.getNameTypeValues().size());
+            Assertions.assertEquals(ntv.size(), valueInstance.getNameTypeValues().size());
             final XPather xpather = new XPather(element, xed.getXPather().getContext());
             final TransformContext context = new TransformContext(null, xpather);
             final ValueInstance valueInstanceX = new ProtectHashTransform(valueInstance, context).transform();
             final NameTypeValues nameTypeValuesX = valueInstanceX.getNameTypeValues();
-            Assert.assertEquals(2, nameTypeValuesX.size());
-            Assert.assertEquals("appUser", nameTypeValuesX.getValue("principal.principalType.user"));
-            Assert.assertEquals("*", nameTypeValuesX.getValue("principal.principalType.roles"));
+            Assertions.assertEquals(2, nameTypeValuesX.size());
+            Assertions.assertEquals("appUser", nameTypeValuesX.getValue("principal.principalType.user"));
+            Assertions.assertEquals("*", nameTypeValuesX.getValue("principal.principalType.roles"));
         }
     }
 }

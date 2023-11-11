@@ -12,9 +12,9 @@ import io.github.greyp9.arwo.core.expr.eval.SysEnvEvaluator;
 import io.github.greyp9.arwo.core.expr.eval.SysPropEvaluator;
 import io.github.greyp9.arwo.core.hash.secure.HashU;
 import io.github.greyp9.arwo.core.lang.SystemU;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -22,8 +22,8 @@ import java.util.logging.Logger;
 public class EvaluatorTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    public final void setUp() throws Exception {
         logger.finest("setup()");
     }
 
@@ -32,8 +32,8 @@ public class EvaluatorTest {
         final ExpressionEvaluator evaluator = new ExpressionEvaluator();
         evaluator.register(PROP, new SysPropEvaluator());
         final Node node = evaluator.evaluate("prop('file.encoding')");
-        Assert.assertTrue(node instanceof AtomNode);
-        Assert.assertEquals(UTF8Codec.Const.UTF8, ((AtomNode) node).getAtom().getValue());
+        Assertions.assertTrue(node instanceof AtomNode);
+        Assertions.assertEquals(UTF8Codec.Const.UTF8, ((AtomNode) node).getAtom().getValue());
     }
 
     @Test
@@ -41,8 +41,8 @@ public class EvaluatorTest {
         final ExpressionEvaluator evaluator = new ExpressionEvaluator();
         evaluator.register(ENV, new SysEnvEvaluator());
         final Node node = evaluator.evaluate("env('HOME')");
-        Assert.assertTrue(node instanceof AtomNode);
-        Assert.assertEquals(SystemU.userHome(), ((AtomNode) node).getAtom().getValue());
+        Assertions.assertTrue(node instanceof AtomNode);
+        Assertions.assertEquals(SystemU.userHome(), ((AtomNode) node).getAtom().getValue());
     }
 
     @Test
@@ -50,16 +50,16 @@ public class EvaluatorTest {
         final ExpressionEvaluator evaluator = new ExpressionEvaluator();
         evaluator.register(PROP, new SysPropEvaluator());
         evaluator.register(ENV, new SysEnvEvaluator());
-        Assert.assertEquals(UTF8Codec.Const.UTF8, evaluator.evaluateAsString("prop('file.encoding')"));
-        Assert.assertEquals(SystemU.userHome(), evaluator.evaluateAsString("env('HOME')"));
+        Assertions.assertEquals(UTF8Codec.Const.UTF8, evaluator.evaluateAsString("prop('file.encoding')"));
+        Assertions.assertEquals(SystemU.userHome(), evaluator.evaluateAsString("env('HOME')"));
     }
 
     @Test
     public void testEvaluateExpressionNotRegistered() {
         final ExpressionEvaluator evaluator = new ExpressionEvaluator();
-        final IllegalArgumentException exception = Assert.assertThrows(
+        final IllegalArgumentException exception = Assertions.assertThrows(
                 IllegalArgumentException.class, () -> evaluator.evaluate("foo('bar')"));
-        Assert.assertTrue(exception.getMessage().contains("foo"));
+        Assertions.assertTrue(exception.getMessage().contains("foo"));
     }
 
     @Test
@@ -68,8 +68,8 @@ public class EvaluatorTest {
         evaluator.register(ENV, new SysEnvEvaluator());
         evaluator.register(FOLDER, new FolderEvaluator());
         final String content = evaluator.evaluateAsString("folder(env('HOME') '*')");
-        Assert.assertNotNull(content);
-        Assert.assertTrue(content.contains("Downloads"));
+        Assertions.assertNotNull(content);
+        Assertions.assertTrue(content.contains("Downloads"));
         logger.finest(content);
     }
 
@@ -82,12 +82,12 @@ public class EvaluatorTest {
         evaluator.register(SHA256, new Sha256Evaluator());
         final String lastModified = Long.toString(new File(SystemU.userHome()).lastModified());
         logger.finest(lastModified);
-        Assert.assertEquals(lastModified, evaluator.evaluateAsString("mod(env('HOME'))"));
-        Assert.assertEquals(lastModified, evaluator.evaluateAsString("mod(prop('user.home'))"));
+        Assertions.assertEquals(lastModified, evaluator.evaluateAsString("mod(env('HOME'))"));
+        Assertions.assertEquals(lastModified, evaluator.evaluateAsString("mod(prop('user.home'))"));
         final String sha256 = HexCodec.encode(HashU.sha256(UTF8Codec.toBytes(lastModified)));
         logger.finest(sha256);
-        Assert.assertEquals(sha256, evaluator.evaluateAsString("sha256(mod(env('HOME')))"));
-        Assert.assertEquals(sha256, evaluator.evaluateAsString("sha256(mod(prop('user.home')))"));
+        Assertions.assertEquals(sha256, evaluator.evaluateAsString("sha256(mod(env('HOME')))"));
+        Assertions.assertEquals(sha256, evaluator.evaluateAsString("sha256(mod(prop('user.home')))"));
     }
 
     private static final String PROP = "prop";

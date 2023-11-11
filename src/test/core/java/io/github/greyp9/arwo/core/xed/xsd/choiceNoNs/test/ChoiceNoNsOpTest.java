@@ -14,10 +14,10 @@ import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -30,7 +30,7 @@ import java.util.logging.Logger;
 public class ChoiceNoNsOpTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
@@ -47,14 +47,14 @@ public class ChoiceNoNsOpTest {
         // navigate
         final Element jobs = xed.getXPather().getElement("/jobs");
         final XedCursor cursorJobsByNode = new XedNav(xed).find(jobs);
-        Assert.assertEquals("/", cursorJobsByNode.getURI());
+        Assertions.assertEquals("/", cursorJobsByNode.getURI());
         final XedCursor cursorJobsByPath = new XedNav(xed).find("/");
-        Assert.assertEquals(cursorJobsByNode.getElement(), cursorJobsByPath.getElement());
+        Assertions.assertEquals(cursorJobsByNode.getElement(), cursorJobsByPath.getElement());
         // navigate
         XedCursor cursorJobTIByNode = new XedNav(xed).find("job", cursorJobsByNode);
-        Assert.assertEquals("/36a9a/", cursorJobTIByNode.getURI());
+        Assertions.assertEquals("/36a9a/", cursorJobTIByNode.getURI());
         XedCursor cursorEJobTIByNode = new XedNav(xed).find("enhancedJob", cursorJobsByNode);
-        Assert.assertEquals("/92da2/", cursorEJobTIByNode.getURI());
+        Assertions.assertEquals("/92da2/", cursorEJobTIByNode.getURI());
     }
 
     @Test
@@ -75,23 +75,23 @@ public class ChoiceNoNsOpTest {
                 "jobName=job1&jobEnabled=true&taskA/taskB/taskC=taskA");
         final ValueInstance value1 = ValueInstance.create(cursorJobType.getTypeInstance(), ntv1);
         final Element job1 = xed.create(cursorJobType.getParent().getElement(), value1);
-        Assert.assertNotNull(job1);
+        Assertions.assertNotNull(job1);
         final Collection<String> messages1 = xed.validate();
-        Assert.assertEquals("[]", messages1.toString());
+        Assertions.assertEquals("[]", messages1.toString());
         // insert
         final NameTypeValues ntv2 = HttpArguments.toArguments(
                 "jobName=job2&jobEnabled=true&taskA/taskB/taskC=taskB");
         final ValueInstance value2 = ValueInstance.create(cursorJobType.getTypeInstance(), ntv2);
         final Element job2 = xed.create(cursorJobType.getParent().getElement(), value2);
-        Assert.assertNotNull(job2);
+        Assertions.assertNotNull(job2);
         final Collection<String> messages2 = xed.validate();
-        Assert.assertEquals("[]", messages2.toString());
+        Assertions.assertEquals("[]", messages2.toString());
         // validate
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
-        Assume.assumeTrue(SystemU.javaVersion().startsWith("1.8"));
-        Assert.assertEquals(272, xml.length);
-        Assert.assertEquals("cdf94a8b", CRCU.crc32String(xml));
+        Assumptions.assumeTrue(SystemU.javaVersion().startsWith("1.8"));
+        Assertions.assertEquals(272, xml.length);
+        Assertions.assertEquals("cdf94a8b", CRCU.crc32String(xml));
     }
 
     @Test
@@ -112,22 +112,22 @@ public class ChoiceNoNsOpTest {
                 "jobName=job1&jobEnabled=true&taskA/taskB/taskC=taskA");
         final ValueInstance value1 = ValueInstance.create(cursorJobType.getTypeInstance(), ntv1);
         final Element job1 = xed.create(cursorJobType.getParent().getElement(), value1);
-        Assert.assertNotNull(job1);
+        Assertions.assertNotNull(job1);
         final Collection<String> messages1 = xed.validate();
-        Assert.assertEquals("[]", messages1.toString());
+        Assertions.assertEquals("[]", messages1.toString());
         // update
         final XedCursor cursor1 = new XedNav(xed).find(job1);
         final NameTypeValues ntv2 = HttpArguments.toArguments(
                 "jobName=job1&jobEnabled=true&taskA/taskB/taskC=taskB");
         final ValueInstance value2 = ValueInstance.create(cursorJobType.getTypeInstance(), ntv2);
         final Element job2 = xed.update(cursor1.getElement(), value2);
-        Assert.assertNotNull(job2);
+        Assertions.assertNotNull(job2);
         // validate
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
-        Assume.assumeTrue(SystemU.javaVersion().startsWith("1.8"));
-        Assert.assertEquals(171, xml.length);
-        Assert.assertEquals("d306a4dd", CRCU.crc32String(xml));
+        Assumptions.assumeTrue(SystemU.javaVersion().startsWith("1.8"));
+        Assertions.assertEquals(171, xml.length);
+        Assertions.assertEquals("d306a4dd", CRCU.crc32String(xml));
     }
 
     @Test
@@ -148,23 +148,23 @@ public class ChoiceNoNsOpTest {
                 "jobName=job1&jobEnabled=true&before=before1&after=after1&taskA/taskB/taskC=taskA");
         final ValueInstance value1 = ValueInstance.create(cursorJobType.getTypeInstance(), ntv1);
         final Element job1 = xed.create(cursorJobType.getParent().getElement(), value1);
-        Assert.assertNotNull(job1);
+        Assertions.assertNotNull(job1);
         final Collection<String> messages1 = xed.validate();
-        Assert.assertEquals("[]", messages1.toString());
+        Assertions.assertEquals("[]", messages1.toString());
         // insert
         final NameTypeValues ntv2 = HttpArguments.toArguments(
                 "jobName=job2&jobEnabled=true&before=before2&after=after2&taskA/taskB/taskC=taskB");
         final ValueInstance value2 = ValueInstance.create(cursorJobType.getTypeInstance(), ntv2);
         final Element job2 = xed.create(cursorJobType.getParent().getElement(), value2);
-        Assert.assertNotNull(job2);
+        Assertions.assertNotNull(job2);
         final Collection<String> messages2 = xed.validate();
-        Assert.assertEquals("[]", messages2.toString());
+        Assertions.assertEquals("[]", messages2.toString());
         // validate
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
-        Assume.assumeTrue(SystemU.javaVersion().startsWith("1.8"));
-        Assert.assertEquals(398, xml.length);
-        Assert.assertEquals("19d4e9f8", CRCU.crc32String(xml));
+        Assumptions.assumeTrue(SystemU.javaVersion().startsWith("1.8"));
+        Assertions.assertEquals(398, xml.length);
+        Assertions.assertEquals("19d4e9f8", CRCU.crc32String(xml));
     }
 
     @Test
@@ -185,23 +185,23 @@ public class ChoiceNoNsOpTest {
                 "jobName=job1&jobEnabled=true&before=before1&after=after1&taskA/taskB/taskC=taskA");
         final ValueInstance value1 = ValueInstance.create(cursorJobType.getTypeInstance(), ntv1);
         final Element job1 = xed.create(cursorJobType.getParent().getElement(), value1);
-        Assert.assertNotNull(job1);
+        Assertions.assertNotNull(job1);
         final Collection<String> messages1 = xed.validate();
-        Assert.assertEquals("[]", messages1.toString());
+        Assertions.assertEquals("[]", messages1.toString());
         // update
         final XedCursor cursor1 = new XedNav(xed).find(job1);
         final NameTypeValues ntv2 = HttpArguments.toArguments(
                 "jobName=job2&jobEnabled=true&before=before2&after=after2&taskA/taskB/taskC=taskB");
         final ValueInstance value2 = ValueInstance.create(cursorJobType.getTypeInstance(), ntv2);
         final Element job2 = xed.update(cursor1.getElement(), value2);
-        Assert.assertNotNull(job2);
+        Assertions.assertNotNull(job2);
         final Collection<String> messages2 = xed.validate();
-        Assert.assertEquals("[]", messages2.toString());
+        Assertions.assertEquals("[]", messages2.toString());
         // validate
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
-        Assume.assumeTrue(SystemU.javaVersion().startsWith("1.8"));
-        Assert.assertEquals(234, xml.length);
-        Assert.assertEquals("889ee76f", CRCU.crc32String(xml));
+        Assumptions.assumeTrue(SystemU.javaVersion().startsWith("1.8"));
+        Assertions.assertEquals(234, xml.length);
+        Assertions.assertEquals("889ee76f", CRCU.crc32String(xml));
     }
 }

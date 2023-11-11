@@ -6,8 +6,8 @@ import io.github.greyp9.arwo.core.file.find.FindInFolderQuery;
 import io.github.greyp9.arwo.core.file.zip.ZipMetaData;
 import io.github.greyp9.arwo.core.file.zip.ZipVolume;
 import io.github.greyp9.arwo.core.lang.SystemU;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -18,7 +18,7 @@ import java.util.logging.Logger;
 public class ZipVolumeTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         //io.github.greyp9.arwo.core.logging.LoggerU.adjustShort(Logger.getLogger(""));
     }

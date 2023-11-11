@@ -1,6 +1,6 @@
 package io.github.greyp9.arwo.core.jce.test;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.security.Provider;
 import java.security.Security;

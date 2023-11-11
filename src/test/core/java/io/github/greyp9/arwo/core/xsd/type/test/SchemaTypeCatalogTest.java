@@ -8,10 +8,10 @@ import io.github.greyp9.arwo.core.xsd.source.SchemaCollection;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollectionFactory;
 import io.github.greyp9.arwo.core.xsd.type.TypeComponents;
 import io.github.greyp9.arwo.core.xsd.type.TypeComponentsFactory;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,21 +24,21 @@ import java.util.logging.Logger;
 public class SchemaTypeCatalogTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         //io.github.greyp9.arwo.core.logging.LoggerU.adjustShort(Logger.getLogger(""));
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testSchemaCatalogs() throws Exception {
         File fileProperties = new File(SystemU.userHome(), ".arwo/test.properties.xml");
-        Assert.assertTrue(fileProperties.exists());
+        Assertions.assertTrue(fileProperties.exists());
         Properties properties = PropertiesU.loadFromXml(fileProperties.toURI().toURL());
         logger.finest("" + properties.size());
-        Assert.assertTrue(properties.size() > 0);
+        Assertions.assertTrue(properties.size() > 0);
         String catalogList = properties.getProperty("xsd.catalog");
-        Assert.assertNotNull(catalogList);
+        Assertions.assertNotNull(catalogList);
         String[] catalogs = catalogList.split(",");
         for (String catalog : catalogs) {
             if (catalog.length() > 0) {
@@ -59,7 +59,7 @@ public class SchemaTypeCatalogTest {
             // resolve schema collection for this initial schema
             SchemaCollectionFactory schemaCollectionFactory = new SchemaCollectionFactory(urlCatalog, urlXslt);
             SchemaCollection schemaCollection = schemaCollectionFactory.create(URLCodec.toURL(file));
-            Assert.assertNotNull(schemaCollection);
+            Assertions.assertNotNull(schemaCollection);
             // pre-parse of schema collection
             TypeComponentsFactory tcFactory = new TypeComponentsFactory(schemaCollection);
             TypeComponents typeComponents = tcFactory.create();

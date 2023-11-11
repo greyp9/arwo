@@ -3,7 +3,7 @@ package io.github.greyp9.arwo.core.value.test;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.value.Matrix;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.logging.Logger;
 

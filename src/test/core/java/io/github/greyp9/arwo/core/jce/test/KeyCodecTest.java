@@ -16,8 +16,8 @@ import io.github.greyp9.arwo.core.xed.transform.TransformContext;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;
@@ -39,7 +39,7 @@ public class KeyCodecTest {
         keyGenerator.init(AES.Const.KEY_BITS);
         final SecretKey keyGenerate = keyGenerator.generateKey();
         final byte[] keyBytes = keyGenerate.getEncoded();
-        Assert.assertEquals(AES.Const.KEY_BYTES, keyBytes.length);
+        Assertions.assertEquals(AES.Const.KEY_BYTES, keyBytes.length);
         logger.finest(HexCodec.encode(keyBytes));
     }
 
@@ -56,7 +56,7 @@ public class KeyCodecTest {
         final String plainText = "plaintext";
         final String cryptText = keyX.protect(plainText);
         final String plainTextRecover = keyX.unprotect(cryptText);
-        Assert.assertEquals(plainText, plainTextRecover);
+        Assertions.assertEquals(plainText, plainTextRecover);
     }
 
     @Test
@@ -72,7 +72,7 @@ public class KeyCodecTest {
         final String plainText = "plaintext";
         final String cryptText = keyX.protect(plainText);
         final String plainTextRecover = keyX.unprotect(cryptText);
-        Assert.assertEquals(plainText, plainTextRecover);
+        Assertions.assertEquals(plainText, plainTextRecover);
     }
 
     @Test
@@ -88,10 +88,10 @@ public class KeyCodecTest {
         cipher.init(Cipher.ENCRYPT_MODE, key, parameterSpec);
         final byte[] plainText = UTF8Codec.toBytes("plainText");
         final byte[] cipherText = cipher.doFinal(plainText);
-        Assert.assertEquals(plainText.length + AES.Const.TAG_BYTES_GCM, cipherText.length);
+        Assertions.assertEquals(plainText.length + AES.Const.TAG_BYTES_GCM, cipherText.length);
         cipher.init(Cipher.DECRYPT_MODE, key, parameterSpec);
         final byte[] plainTextRecover = cipher.doFinal(cipherText);
-        Assert.assertArrayEquals(plainText, plainTextRecover);
+        Assertions.assertArrayEquals(plainText, plainTextRecover);
     }
 
     @Test
@@ -113,13 +113,13 @@ public class KeyCodecTest {
         final TransformContext transformContext = new TransformContext(secretKey, null);
         final ProtectKeyTransform protectKeyTransform = new ProtectKeyTransform(valueInstance, transformContext);
         final ValueInstance valueInstanceX = protectKeyTransform.transform();
-        Assert.assertEquals(user, valueInstanceX.getNameTypeValue(typeUser).getValueS());
+        Assertions.assertEquals(user, valueInstanceX.getNameTypeValue(typeUser).getValueS());
 
         final String passwordX = valueInstanceX.getNameTypeValue(typePass).getValueS();
         final KeyX keyX = new KeyX(secretKey,
                 typePass.getDirective(XedU.TRANSFORM),
                 typePass.getDirective(XedU.PARAM_SPEC));
         final String passwordRecover = keyX.unprotect(passwordX);
-        Assert.assertEquals(password, passwordRecover);
+        Assertions.assertEquals(password, passwordRecover);
     }
 }

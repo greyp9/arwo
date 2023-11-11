@@ -14,8 +14,8 @@ import io.github.greyp9.arwo.core.xed.view.text.PropertyPageTextView;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 
 import java.net.URL;
@@ -39,6 +39,6 @@ public class LocaleI18nTest {
         final XedCursor cursor = new XedNav(xed).getRoot();
         final String pageText = new PropertyPageTextView(new XedPropertyPageView(null, cursor)).render();
         logger.finest(pageText);
-        Assert.assertEquals("599e073f", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
+        Assertions.assertEquals("0e07d15d", CRCU.crc32String(UTF8Codec.toBytes(pageText)));  // ru
     }
 }

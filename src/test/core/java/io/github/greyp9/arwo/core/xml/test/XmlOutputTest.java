@@ -6,8 +6,8 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.xml.DocumentU;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 
 import java.util.logging.Logger;
@@ -21,15 +21,15 @@ public class XmlOutputTest {
         // start with known ugly xml
         final byte[] xmlUgly = StreamU.read(ResourceU.resolve(Const.XML));
         logger.finest("\n" + UTF8Codec.toString(xmlUgly));
-        Assert.assertEquals(283, xmlUgly.length);
-        Assert.assertEquals("96fe8f4d", CRCU.crc32String(xmlUgly));
+        Assertions.assertEquals(283, xmlUgly.length);
+        Assertions.assertEquals("96fe8f4d", CRCU.crc32String(xmlUgly));
         // this transform reorders attributes and normalizes spacing within element declaration
         final Document document = DocumentU.toDocument(xmlUgly);
         final byte[] xmlNew = DocumentU.toXml(document);
         logger.finest("\n" + UTF8Codec.toString(xmlNew));
         if (SystemU.javaVersion().startsWith("1.8")) {
-            Assert.assertEquals(266, xmlNew.length);
-            Assert.assertEquals("2c3ef15e", CRCU.crc32String(xmlNew));
+            Assertions.assertEquals(266, xmlNew.length);
+            Assertions.assertEquals("2c3ef15e", CRCU.crc32String(xmlNew));
         }
     }
 

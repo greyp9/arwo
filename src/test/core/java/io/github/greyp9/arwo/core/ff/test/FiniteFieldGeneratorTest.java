@@ -3,8 +3,8 @@ package io.github.greyp9.arwo.core.ff.test;
 import io.github.greyp9.arwo.core.codec.hex.HexCodec;
 import io.github.greyp9.arwo.core.ff.FiniteField;
 import io.github.greyp9.arwo.core.hash.secure.HashU;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.logging.Logger;
 
@@ -13,10 +13,10 @@ public class FiniteFieldGeneratorTest {
 
     @Test
     public void testLookupTables() {
-        Assert.assertEquals(
+        Assertions.assertEquals(
                 "07ec21ce3f045f5d9a2121cf58798c94510122ad81272411a50e2918382ac428",
                 FiniteField.sha256Exp());
-        Assert.assertEquals(
+        Assertions.assertEquals(
                 "9bc7b6f7f6423e975f3a7d66c47d9868957ee5a3fa2e94c25763220e692d2c69",
                 FiniteField.sha256Log());
     }
@@ -36,7 +36,7 @@ public class FiniteFieldGeneratorTest {
             bytesFiniteFieldExponent[i] = multiply(bytesFiniteFieldExponent[i - 1], AES_GENERATOR);
         }
         logger.finest(HexCodec.encode(bytesFiniteFieldExponent));
-        Assert.assertEquals(
+        Assertions.assertEquals(
                 "07ec21ce3f045f5d9a2121cf58798c94510122ad81272411a50e2918382ac428",
                 HexCodec.encode(HashU.sha256(bytesFiniteFieldExponent)));
 
@@ -45,7 +45,7 @@ public class FiniteFieldGeneratorTest {
             bytesFiniteFieldLog[bytesFiniteFieldExponent[i] & LOW_BYTE_MASK] = (byte) i;
         }
         logger.finest(HexCodec.encode(bytesFiniteFieldLog));
-        Assert.assertEquals(
+        Assertions.assertEquals(
                 "f1930ba3ffbadd49b15e5720a34f4eee56d5ad634dfd5aee683f999bc0e2b970",
                 HexCodec.encode(HashU.sha256(bytesFiniteFieldLog)));
     }

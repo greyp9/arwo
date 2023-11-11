@@ -6,17 +6,17 @@ import io.github.greyp9.arwo.core.expr.op.BinaryOperator;
 import io.github.greyp9.arwo.core.expr.op.MultiOperator;
 import io.github.greyp9.arwo.core.expr.op.UnaryOperator;
 import io.github.greyp9.arwo.core.text.filter.TextMatchTree;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.logging.Logger;
 
 public class ExpressionTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    public final void setUp() throws Exception {
         logger.finest("setup()");
     }
 
@@ -25,7 +25,7 @@ public class ExpressionTest {
         final Node nodeA = new Operand("A");
         final Node nodeB = new Operand("B");
         final Node node = new BinaryOperator("OR", nodeA, nodeB);
-        Assert.assertEquals("(A OR B)", node.render());
+        Assertions.assertEquals("(A OR B)", node.render());
     }
 
     @Test
@@ -37,12 +37,12 @@ public class ExpressionTest {
         final Node nodeD = new Operand("D");
         final Node nodeOrCD = new BinaryOperator("OR", nodeC, nodeD);
         final Node node = new BinaryOperator("AND", nodeOrAB, nodeOrCD);
-        Assert.assertEquals("((A OR B) AND (C OR D))", node.render());
+        Assertions.assertEquals("((A OR B) AND (C OR D))", node.render());
         final TextMatchTree tree = new TextMatchTree(node);
-        Assert.assertFalse(tree.evaluate("AB"));
-        Assert.assertFalse(tree.evaluate("CD"));
-        Assert.assertTrue(tree.evaluate("AC"));
-        Assert.assertTrue(tree.evaluate("BD"));
+        Assertions.assertFalse(tree.evaluate("AB"));
+        Assertions.assertFalse(tree.evaluate("CD"));
+        Assertions.assertTrue(tree.evaluate("AC"));
+        Assertions.assertTrue(tree.evaluate("BD"));
     }
 
     @Test
@@ -51,9 +51,9 @@ public class ExpressionTest {
         final Node nodeB = new Operand("B");
         final Node nodeOrAB = new BinaryOperator("OR", nodeA, nodeB);
         final TextMatchTree tree = new TextMatchTree(nodeOrAB);
-        Assert.assertTrue(tree.evaluate("A"));
-        Assert.assertTrue(tree.evaluate("B"));
-        Assert.assertFalse(tree.evaluate("C"));
+        Assertions.assertTrue(tree.evaluate("A"));
+        Assertions.assertTrue(tree.evaluate("B"));
+        Assertions.assertFalse(tree.evaluate("C"));
     }
 
     @Test
@@ -62,10 +62,10 @@ public class ExpressionTest {
         final Node nodeB = new Operand("B");
         final Node nodeAndAB = new BinaryOperator("AND", nodeA, nodeB);
         final TextMatchTree tree = new TextMatchTree(nodeAndAB);
-        Assert.assertFalse(tree.evaluate("A"));
-        Assert.assertFalse(tree.evaluate("B"));
-        Assert.assertFalse(tree.evaluate("C"));
-        Assert.assertTrue(tree.evaluate("AB"));
+        Assertions.assertFalse(tree.evaluate("A"));
+        Assertions.assertFalse(tree.evaluate("B"));
+        Assertions.assertFalse(tree.evaluate("C"));
+        Assertions.assertTrue(tree.evaluate("AB"));
     }
 
     @Test
@@ -73,15 +73,15 @@ public class ExpressionTest {
         final Node nodeA = new Operand("A");
         final Node nodeNotA = new UnaryOperator("NOT", nodeA);
         final TextMatchTree tree = new TextMatchTree(nodeNotA);
-        Assert.assertFalse(tree.evaluate("A"));
-        Assert.assertTrue(tree.evaluate("B"));
+        Assertions.assertFalse(tree.evaluate("A"));
+        Assertions.assertTrue(tree.evaluate("B"));
     }
 
     @Test
     public void testUnaryOperator() {
         final Node nodeA = new Operand("A");
         final Node node = new UnaryOperator("NOT", nodeA);
-        Assert.assertEquals("(NOT A)", node.render());
+        Assertions.assertEquals("(NOT A)", node.render());
     }
 
     @Test
@@ -89,7 +89,7 @@ public class ExpressionTest {
         final Node nodeA = new Operand("A");
         final Node nodeB = new Operand("B");
         final Node node = new BinaryOperator("OR", nodeA, nodeB);
-        Assert.assertEquals("(A OR B)", node.render());
+        Assertions.assertEquals("(A OR B)", node.render());
     }
 
     @Test
@@ -99,7 +99,7 @@ public class ExpressionTest {
         final Node nodeC = new Operand("C");
         final Node nodeD = new Operand("D");
         final Node node = new MultiOperator("f", nodeA, nodeB, nodeC, nodeD);
-        Assert.assertEquals("f(A B C D)", node.render());
+        Assertions.assertEquals("f(A B C D)", node.render());
     }
 
     @Test
@@ -111,7 +111,7 @@ public class ExpressionTest {
         final Node nodeAB = new MultiOperator("f", nodeA, nodeB);
         final Node nodeCD = new BinaryOperator("OR", nodeC, nodeD);
         final Node node = new BinaryOperator("AND", nodeAB, nodeCD);
-        Assert.assertEquals("(f(A B) AND (C OR D))", node.render());
+        Assertions.assertEquals("(f(A B) AND (C OR D))", node.render());
     }
 
     @Test
@@ -123,6 +123,6 @@ public class ExpressionTest {
         final Node nodeD = new Operand("D");
         final Node nodeOrCD = new BinaryOperator("OR", nodeC, nodeD);
         final Node node = new BinaryOperator("AND", nodeOrAB, nodeOrCD);
-        Assert.assertEquals("((A OR B) AND (C OR D))", node.render());
+        Assertions.assertEquals("((A OR B) AND (C OR D))", node.render());
     }
 }

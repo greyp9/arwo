@@ -13,9 +13,9 @@ import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitionsFactory;
 import io.github.greyp9.arwo.core.xsd.type.TypeComponents;
 import io.github.greyp9.arwo.core.xsd.type.TypeComponentsFactory;
 import io.github.greyp9.arwo.core.xsd.validate.Validator;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 
 import java.io.IOException;
@@ -27,7 +27,7 @@ import java.util.logging.Logger;
 public class DocumentFactoryAppTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
@@ -36,23 +36,23 @@ public class DocumentFactoryAppTest {
     public void testGenerateDocuments() throws Exception {
         for (String xsd : TestApp.Resources.XSD_ARRAY) {
             URL urlInitial = ResourceU.resolve(xsd);
-            Assert.assertNotNull(urlInitial);
+            Assertions.assertNotNull(urlInitial);
             logger.finest("UrlInitial/" + URLCodec.toExternalForm(urlInitial));
             URL urlCatalog = URLCodec.resolve(urlInitial, ".");
-            Assert.assertNotNull(urlInitial);
+            Assertions.assertNotNull(urlInitial);
             logger.finest("UrlCatalog/" + URLCodec.toExternalForm(urlCatalog));
             // resolve schema collection for this initial schema
             SchemaCollectionFactory schemaCollectionFactory = new SchemaCollectionFactory(urlCatalog);
             SchemaCollection schemaCollection = schemaCollectionFactory.create(urlInitial);
-            Assert.assertNotNull(schemaCollection);
+            Assertions.assertNotNull(schemaCollection);
             // pre-parse of schema collection
             TypeComponentsFactory typeComponentsFactory = new TypeComponentsFactory(schemaCollection);
             TypeComponents typeComponents = typeComponentsFactory.create();
-            Assert.assertNotNull(typeComponents);
+            Assertions.assertNotNull(typeComponents);
             // create type definitions for schema set
             TypeDefinitionsFactory typeDefinitionsFactory = new TypeDefinitionsFactory(typeComponents);
             TypeDefinitions typeDefinitions = typeDefinitionsFactory.create();
-            Assert.assertNotNull(typeDefinitions);
+            Assertions.assertNotNull(typeDefinitions);
             boolean[] includeOptionals = { false, true };
             for (boolean includeOptional : includeOptionals) {
                 DocumentFactory documentFactory = new DocumentFactory(typeDefinitions, includeOptional);

@@ -8,9 +8,9 @@ import io.github.greyp9.arwo.core.jce.AES;
 import io.github.greyp9.arwo.core.jce.KeyCodec;
 import io.github.greyp9.arwo.core.jce.KeyU;
 import io.github.greyp9.arwo.core.jce.KeyX;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
@@ -22,8 +22,8 @@ import java.util.logging.Logger;
 public class EnvironmentKeyGenerateTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    public final void setUp() throws Exception {
         logger.finest("setup()");
     }
 
@@ -33,7 +33,7 @@ public class EnvironmentKeyGenerateTest {
         keyGenerator.init(AES.Const.KEY_BITS);
         final SecretKey key = keyGenerator.generateKey();
         final byte[] keyBytes = key.getEncoded();
-        Assert.assertEquals(AES.Const.KEY_BYTES, keyBytes.length);
+        Assertions.assertEquals(AES.Const.KEY_BYTES, keyBytes.length);
     }
 
     @Test
@@ -56,7 +56,7 @@ public class EnvironmentKeyGenerateTest {
                 "01234567890123456789",
                 "abcdefghijklmnopqrst01234567890123456789",
         };
-        Assert.assertEquals(shareCount, pbkdfData.length);
+        Assertions.assertEquals(shareCount, pbkdfData.length);
         final byte[][] sharesWrapped = new byte[pbkdfData.length][];
         for (int i = 0; (i < shareCount); ++i) {
             final String password = pbkdfData[i];
@@ -66,7 +66,7 @@ public class EnvironmentKeyGenerateTest {
             final byte[] shareWrapped = keyCodec.encode(shares[i]);
             logger.finest(HexCodec.encode(shareWrapped));
             sharesWrapped[i] = shareWrapped;
-            Assert.assertEquals(shares[i].length + AES.Const.IV_BYTES_CTR, sharesWrapped[i].length);
+            Assertions.assertEquals(shares[i].length + AES.Const.IV_BYTES_CTR, sharesWrapped[i].length);
         }
         // recover the shares
         final byte[][] sharesUnwrapped = new byte[pbkdfData.length][];
@@ -77,12 +77,12 @@ public class EnvironmentKeyGenerateTest {
             final KeyCodec keyCodec = new KeyCodec(key, KeyX.Const.TRANSFORM_CTR, KeyX.Const.PARAM_SPEC_IV, random);
             final byte[] shareUnwrapped = keyCodec.decode(sharesWrapped[i]);
             sharesUnwrapped[i] = shareUnwrapped;
-            Assert.assertEquals(shares[i].length, sharesUnwrapped[i].length);
+            Assertions.assertEquals(shares[i].length, sharesUnwrapped[i].length);
         }
         // reconstitute the secret
         final DataSplitter dataSplitterRecover = new DataSplitter(shareCount, thresholdCount, null);
         final byte[] keyBytesRecover = dataSplitterRecover.join(sharesUnwrapped);
         logger.finest(HexCodec.encode(keyBytesRecover));
-        Assert.assertArrayEquals(keyBytes, keyBytesRecover);
+        Assertions.assertArrayEquals(keyBytes, keyBytesRecover);
     }
 }

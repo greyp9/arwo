@@ -14,9 +14,9 @@ import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -29,7 +29,7 @@ import java.util.logging.Logger;
 public class NoNsOpTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
@@ -46,12 +46,12 @@ public class NoNsOpTest {
         // navigate
         final Element documentE = xed.getXPather().getElement("/document");
         final XedCursor cursorDocumentByNode = new XedNav(xed).find(documentE);
-        Assert.assertEquals("/", cursorDocumentByNode.getURI());
+        Assertions.assertEquals("/", cursorDocumentByNode.getURI());
         final XedCursor cursorDocumentByPath = new XedNav(xed).find("/");
-        Assert.assertEquals(cursorDocumentByNode.getElement(), cursorDocumentByPath.getElement());
+        Assertions.assertEquals(cursorDocumentByNode.getElement(), cursorDocumentByPath.getElement());
         // navigate
         XedCursor cursorFilenameType = new XedNav(xed).find("file", cursorDocumentByNode);
-        Assert.assertEquals("/668f4/", cursorFilenameType.getURI());
+        Assertions.assertEquals("/668f4/", cursorFilenameType.getURI());
     }
 
     @Test
@@ -71,35 +71,35 @@ public class NoNsOpTest {
         final NameTypeValues ntv1 = HttpArguments.toArguments("");
         final ValueInstance value1 = ValueInstance.create(cursorFileType.getTypeInstance(), ntv1);
         final Element file1 = xed.create(cursorFileType.getParent().getElement(), value1);
-        Assert.assertNotNull(file1);
+        Assertions.assertNotNull(file1);
         final Collection<String> messages1 = xed.validate();
-        Assert.assertEquals("[]", messages1.toString());
+        Assertions.assertEquals("[]", messages1.toString());
         // insert
         final XedCursor cursorFile = new XedNav(xed).find(file1);
-        Assert.assertEquals("/668f4/ace47/", cursorFile.getURI());
+        Assertions.assertEquals("/668f4/ace47/", cursorFile.getURI());
         final XedCursor cursorIncludeType = new XedNav(xed).find("include", cursorFile);
-        Assert.assertEquals("/668f4/ace47/2bce1/", cursorIncludeType.getURI());
+        Assertions.assertEquals("/668f4/ace47/2bce1/", cursorIncludeType.getURI());
         final NameTypeValues ntv2 = HttpArguments.toArguments("include=include1");
         final ValueInstance value2 = ValueInstance.create(cursorIncludeType.getTypeInstance(), ntv2);
         final Element include2 = xed.create(cursorIncludeType.getParent().getElement(), value2);
-        Assert.assertNotNull(include2);
+        Assertions.assertNotNull(include2);
         final Collection<String> messages2 = xed.validate();
-        Assert.assertEquals("[]", messages2.toString());
+        Assertions.assertEquals("[]", messages2.toString());
         // insert
         final XedCursor cursorExcludeType = new XedNav(xed).find("exclude", cursorFile);
-        Assert.assertEquals("/668f4/ace47/13592/", cursorExcludeType.getURI());
+        Assertions.assertEquals("/668f4/ace47/13592/", cursorExcludeType.getURI());
         final NameTypeValues ntv3 = HttpArguments.toArguments("exclude=exclude1");
         final ValueInstance value3 = ValueInstance.create(cursorExcludeType.getTypeInstance(), ntv3);
         final Element exclude3 = xed.create(cursorExcludeType.getParent().getElement(), value3);
-        Assert.assertNotNull(exclude3);
+        Assertions.assertNotNull(exclude3);
         final Collection<String> messages3 = xed.validate();
-        Assert.assertEquals("[]", messages3.toString());
+        Assertions.assertEquals("[]", messages3.toString());
         // validate
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
         if (SystemU.javaVersion().startsWith("1.8")) {
-            Assert.assertEquals(149, xml.length);
-            Assert.assertEquals("3176067a", CRCU.crc32String(xml));
+            Assertions.assertEquals(149, xml.length);
+            Assertions.assertEquals("3176067a", CRCU.crc32String(xml));
         }
     }
 
@@ -120,34 +120,34 @@ public class NoNsOpTest {
         final NameTypeValues ntv1 = HttpArguments.toArguments("");
         final ValueInstance value1 = ValueInstance.create(cursorFileType.getTypeInstance(), ntv1);
         final Element file1 = xed.create(cursorFileType.getParent().getElement(), value1);
-        Assert.assertNotNull(file1);
+        Assertions.assertNotNull(file1);
         final Collection<String> messages1 = xed.validate();
-        Assert.assertEquals("[]", messages1.toString());
+        Assertions.assertEquals("[]", messages1.toString());
         // insert
         final XedCursor cursorFile = new XedNav(xed).find(file1);
-        Assert.assertEquals("/668f4/ace47/", cursorFile.getURI());
+        Assertions.assertEquals("/668f4/ace47/", cursorFile.getURI());
         final XedCursor cursorIncludeType = new XedNav(xed).find("include", cursorFile);
-        Assert.assertEquals("/668f4/ace47/2bce1/", cursorIncludeType.getURI());
+        Assertions.assertEquals("/668f4/ace47/2bce1/", cursorIncludeType.getURI());
         final NameTypeValues ntv2 = HttpArguments.toArguments("include=include1");
         final ValueInstance value2 = ValueInstance.create(cursorIncludeType.getTypeInstance(), ntv2);
         final Element include2 = xed.create(cursorIncludeType.getParent().getElement(), value2);
-        Assert.assertNotNull(include2);
+        Assertions.assertNotNull(include2);
         final Collection<String> messages2 = xed.validate();
-        Assert.assertEquals("[]", messages2.toString());
+        Assertions.assertEquals("[]", messages2.toString());
         // update
         final XedCursor cursorInclude = new XedNav(xed).find(include2);
         final NameTypeValues ntv3 = HttpArguments.toArguments("include=include3");
         final ValueInstance value3 = ValueInstance.create(cursorIncludeType.getTypeInstance(), ntv3);
         final Element include3 = xed.update(cursorInclude.getElement(), value3);
-        Assert.assertNotNull(include3);
+        Assertions.assertNotNull(include3);
         final Collection<String> messages3 = xed.validate();
-        Assert.assertEquals("[]", messages3.toString());
+        Assertions.assertEquals("[]", messages3.toString());
         // validate
         logger.finest(DocumentU.toString(document));
         final byte[] xml = DocumentU.toXml(document);
         if (SystemU.javaVersion().startsWith("1.8")) {
-            Assert.assertEquals(121, xml.length);
-            Assert.assertEquals("ea9eccbe", CRCU.crc32String(xml));
+            Assertions.assertEquals(121, xml.length);
+            Assertions.assertEquals("ea9eccbe", CRCU.crc32String(xml));
         }
     }
 }

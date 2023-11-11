@@ -16,9 +16,9 @@ import io.github.greyp9.arwo.core.xsd.data.DataTypeRestrictions;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 
 import java.net.URL;
@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 public class LocaleCursorTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
@@ -41,7 +41,7 @@ public class LocaleCursorTest {
         final TypeInstance localeType = xsdTypes.getElementType(App.Actions.QNAME_LOCALE.toString());
         final DataTypeRestrictions restrictions = localeType.getDataType().getRestrictions();
         final int sizeExpected = 6;
-        Assert.assertEquals(sizeExpected, restrictions.getEnumValues().size());
+        Assertions.assertEquals(sizeExpected, restrictions.getEnumValues().size());
         // generate document
         final DocumentFactory documentFactory = new DocumentFactory(xsdTypes.getTypeDefinitions(), false);
         final Document document = documentFactory.generateEmpty(App.Actions.QNAME_LOCALE);
@@ -50,9 +50,9 @@ public class LocaleCursorTest {
         final XsdBundle xsdBundle = new XsdBundle(new XsdBundles(xsdTypes, Locale.getDefault()));
         final Xed xed = new Xed(document, xsdTypes, xsdBundle);
         final XedCursor cursor = new XedNav(xed).getRoot();
-        Assert.assertEquals(localeType, cursor.getTypeInstance());
+        Assertions.assertEquals(localeType, cursor.getTypeInstance());
         final String pageText = new PropertyPageTextView(new XedPropertyPageView(null, cursor)).render();
         logger.finest(pageText);
-        Assert.assertEquals("599e073f", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
+        Assertions.assertEquals("599e073f", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
     }
 }

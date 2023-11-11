@@ -14,9 +14,9 @@ import io.github.greyp9.arwo.core.xed.view.text.PropertyPageTextView;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 
 import java.net.URL;
@@ -26,7 +26,7 @@ import java.util.logging.Logger;
 public class RealmI18nTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
@@ -45,6 +45,6 @@ public class RealmI18nTest {
         final XedCursor cursor = new XedNav(xed).getRoot();
         final String pageText = new PropertyPageTextView(new XedPropertyPageView(null, cursor)).render();
         logger.finest(pageText);
-        Assert.assertEquals("c6124a28", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
+        Assertions.assertEquals("ae45c241", CRCU.crc32String(UTF8Codec.toBytes(pageText)));  // ru
     }
 }

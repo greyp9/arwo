@@ -3,8 +3,8 @@ package io.github.greyp9.arwo.core.lang.test;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.hash.text.FingerPrint;
 import io.github.greyp9.arwo.core.vm.props.SysPropsU;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -17,7 +17,7 @@ public class SysPropsTest {
     @Test
     public void testGetProps() throws IOException {
         final byte[] sysprops = SysPropsU.getProps(Collections.<String>emptyList());
-        Assert.assertNotNull(sysprops);
+        Assertions.assertNotNull(sysprops);
         logger.finest(UTF8Codec.toString(sysprops));
         logger.finest(FingerPrint.toHex256(sysprops));
     }

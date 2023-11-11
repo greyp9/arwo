@@ -8,9 +8,9 @@ import io.github.greyp9.arwo.core.security.realm.AppPrincipal;
 import io.github.greyp9.arwo.core.security.realm.AppRealm;
 import io.github.greyp9.arwo.core.security.realm.AuthPrincipal;
 import io.github.greyp9.arwo.core.security.update.AppRealmFactory;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.net.URL;
 import java.util.ArrayList;
@@ -19,7 +19,7 @@ import java.util.Collections;
 
 public class AppRealmTest {
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(java.util.logging.Logger.getLogger(""));
     }
@@ -29,7 +29,7 @@ public class AppRealmTest {
         final String salt = "arwo-salt";
         final String credential = "arwo-credential";
         final String credentialHash = AppRealm.hashCredential(salt, credential);
-        Assert.assertEquals("expectedHash", "lSi8VXKeMAEv7Qd41GpW5oh5Gfwkq1qpKUB6kn/NARk=", credentialHash);
+        Assertions.assertEquals("lSi8VXKeMAEv7Qd41GpW5oh5Gfwkq1qpKUB6kn/NARk=", credentialHash, "expectedHash");
     }
 
     @Test
@@ -45,21 +45,21 @@ public class AppRealmTest {
         final AppRealm appRealm = new AppRealm(realmName, salt, principals);
         // authenticate
         final AppPrincipal appPrincipal1 = appRealm.authenticate(null, null);
-        Assert.assertNull("user should not authenticate", appPrincipal1);
+        Assertions.assertNull(appPrincipal1, "user should not authenticate");
         // authenticate
         final AppPrincipal appPrincipal2 = appRealm.authenticate(name, null);
-        Assert.assertNull("user should not authenticate", appPrincipal2);
+        Assertions.assertNull(appPrincipal2, "user should not authenticate");
         // authenticate
         final AppPrincipal appPrincipal3 = appRealm.authenticate(credential, name);
-        Assert.assertFalse("user should not authenticate", appPrincipal3.isAuthenticated());
-        Assert.assertEquals(0, appPrincipal3.getRoles().size());
+        Assertions.assertFalse(appPrincipal3.isAuthenticated(), "user should not authenticate");
+        Assertions.assertEquals(0, appPrincipal3.getRoles().size());
         // authenticate
         final AppPrincipal appPrincipal4 = appRealm.authenticate(name, credential);
-        Assert.assertNotNull("user should authenticate", appPrincipal4);
+        Assertions.assertNotNull(appPrincipal4, "user should authenticate");
         final boolean userInRoleStar = appRealm.isUserInRole(appPrincipal4, "*");
-        Assert.assertTrue("user should authorize", userInRoleStar);
+        Assertions.assertTrue(userInRoleStar, "user should authorize");
         final boolean userInRoleRead = appRealm.isUserInRole(appPrincipal4, "read");
-        Assert.assertTrue("user should authorize", userInRoleRead);
+        Assertions.assertTrue(userInRoleRead, "user should authorize");
     }
 
     @SuppressWarnings("checkstyle:magicnumber")
@@ -68,35 +68,35 @@ public class AppRealmTest {
         // realm schema
         final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final byte[] xsdRealm = StreamU.read(urlInitial);
-        Assert.assertEquals(1321, xsdRealm.length);
-        Assert.assertEquals("25b6f2fe", CRCU.crc32String(xsdRealm));
+        Assertions.assertEquals(1321, xsdRealm.length);
+        Assertions.assertEquals("25b6f2fe", CRCU.crc32String(xsdRealm));
         // realm document
         final byte[] xmlRealm = StreamU.read(ResourceU.resolve(AppRealmTest.Const.XML));
-        Assert.assertEquals(285, xmlRealm.length);
-        Assert.assertEquals("bc1608a7", CRCU.crc32String(xmlRealm));
+        Assertions.assertEquals(285, xmlRealm.length);
+        Assertions.assertEquals("bc1608a7", CRCU.crc32String(xmlRealm));
         // realm
         final AppRealm appRealm = AppRealmFactory.toAppRealm(xsdRealm, xmlRealm);
-        Assert.assertNotNull(appRealm);
+        Assertions.assertNotNull(appRealm);
         // authenticate
         final String name = "arwo-name";
         final String credential = "arwo-credential";
         // authenticate
         final AppPrincipal appPrincipal1 = appRealm.authenticate(null, null);
-        Assert.assertNull("user should not authenticate", appPrincipal1);
+        Assertions.assertNull(appPrincipal1, "user should not authenticate");
         // authenticate
         final AppPrincipal appPrincipal2 = appRealm.authenticate(name, null);
-        Assert.assertNull("user should not authenticate", appPrincipal2);
+        Assertions.assertNull(appPrincipal2, "user should not authenticate");
         // authenticate
         final AppPrincipal appPrincipal3 = appRealm.authenticate(credential, name);
-        Assert.assertFalse("user should not authenticate", appPrincipal3.isAuthenticated());
-        Assert.assertEquals(0, appPrincipal3.getRoles().size());
+        Assertions.assertFalse(appPrincipal3.isAuthenticated(), "user should not authenticate");
+        Assertions.assertEquals(0, appPrincipal3.getRoles().size());
         // authenticate
         final AppPrincipal appPrincipal4 = appRealm.authenticate(name, credential);
-        Assert.assertNotNull("user should authenticate", appPrincipal4);
+        Assertions.assertNotNull(appPrincipal4, "user should authenticate");
         final boolean userInRoleStar = appRealm.isUserInRole(appPrincipal4, "*");
-        Assert.assertTrue("user should authorize", userInRoleStar);
+        Assertions.assertTrue(userInRoleStar, "user should authorize");
         final boolean userInRoleRead = appRealm.isUserInRole(appPrincipal4, "read");
-        Assert.assertTrue("user should authorize", userInRoleRead);
+        Assertions.assertTrue(userInRoleRead, "user should authorize");
     }
 
     public static class Const {

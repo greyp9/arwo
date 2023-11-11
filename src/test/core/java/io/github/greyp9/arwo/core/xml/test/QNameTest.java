@@ -4,8 +4,8 @@ import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.xml.QNameU;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import javax.xml.namespace.QName;
 import java.net.URL;
@@ -18,10 +18,10 @@ public class QNameTest {
     public void testQNameColon() {
         final String qnameString = "a:b";
         final QName qname = QNameU.getQNameColon(qnameString);
-        Assert.assertNotNull(qname);
-        Assert.assertEquals("", qname.getNamespaceURI());
-        Assert.assertEquals("b", qname.getLocalPart());
-        Assert.assertEquals("a", qname.getPrefix());
+        Assertions.assertNotNull(qname);
+        Assertions.assertEquals("", qname.getNamespaceURI());
+        Assertions.assertEquals("b", qname.getLocalPart());
+        Assertions.assertEquals("a", qname.getPrefix());
         logger.finest(qname.toString());
     }
 
@@ -29,10 +29,10 @@ public class QNameTest {
     public void testQNameToString() {
         final String qnameString = "{a}b";
         final QName qname = QNameU.getQName(qnameString);
-        Assert.assertNotNull(qname);
-        Assert.assertEquals("a", qname.getNamespaceURI());
-        Assert.assertEquals("b", qname.getLocalPart());
-        Assert.assertEquals("", qname.getPrefix());
+        Assertions.assertNotNull(qname);
+        Assertions.assertEquals("a", qname.getNamespaceURI());
+        Assertions.assertEquals("b", qname.getLocalPart());
+        Assertions.assertEquals("", qname.getPrefix());
         logger.finest(qname.toString());
     }
 
@@ -41,15 +41,15 @@ public class QNameTest {
         final URL urlInitial = ResourceU.resolve(App.Realm.XSD);
         final XsdTypes xsdTypes = new XsdTypes(urlInitial);
         final QName qname = xsdTypes.getQName("realm:realm");
-        Assert.assertEquals(App.Realm.QNAME.getNamespaceURI(), qname.getNamespaceURI());
-        Assert.assertEquals(App.Realm.QNAME.getLocalPart(), qname.getLocalPart());
-        Assert.assertEquals(App.Realm.QNAME.getPrefix(), qname.getPrefix());
+        Assertions.assertEquals(App.Realm.QNAME.getNamespaceURI(), qname.getNamespaceURI());
+        Assertions.assertEquals(App.Realm.QNAME.getLocalPart(), qname.getLocalPart());
+        Assertions.assertEquals(App.Realm.QNAME.getPrefix(), qname.getPrefix());
         logger.finest(qname.toString());
     }
 
     @Test
     public void testQNameRender() {
         final QName qname = new QName("urn:a:b", "app");
-        Assert.assertEquals("{urn:a:b}app", qname.toString());
+        Assertions.assertEquals("{urn:a:b}app", qname.toString());
     }
 }

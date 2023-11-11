@@ -16,8 +16,6 @@ import java.util.Date;
 import java.util.Properties;
 import java.util.TimeZone;
 
-import static io.github.greyp9.arwo.core.metric.histogram2.time.TimeHistogram.Const;
-
 public final class TimeHistogramText {
     private final TimeHistogram histogram;
     private final String label;
@@ -33,19 +31,22 @@ public final class TimeHistogramText {
         this.histogram = histogram;
         this.label = label;
         this.dateView = date;
-        this.durationView = Value.defaultOnEmpty(args.getValue(Const.DURATION), histogram.getDurationPage());
-        this.timeZone = TimeZone.getTimeZone(initParams.getProperty(Const.TZ));
+        this.durationView = Value.defaultOnEmpty(
+                args.getValue(TimeHistogram.Const.DURATION), histogram.getDurationPage());
+        this.timeZone = TimeZone.getTimeZone(initParams.getProperty(TimeHistogram.Const.TZ));
         final long millisCell = DurationU.toMillisP(histogram.getDurationCell());
-        final long millisWord = DurationU.toMillisP(initParams.getProperty(Const.DURATION_WORD));
-        final long millisLine = DurationU.toMillisP(initParams.getProperty(Const.DURATION_LINE));
-        final long millisParagraph = DurationU.toMillisP(initParams.getProperty(Const.DURATION_PARAGRAPH));
+        final long millisWord = DurationU.toMillisP(initParams.getProperty(TimeHistogram.Const.DURATION_WORD));
+        final long millisLine = DurationU.toMillisP(initParams.getProperty(TimeHistogram.Const.DURATION_LINE));
+        final long millisParagraph = DurationU.toMillisP(
+                initParams.getProperty(TimeHistogram.Const.DURATION_PARAGRAPH));
         this.linesPerParagraph = (int) (millisParagraph / millisLine);
         this.cellsPerLine = (int) (millisLine / millisCell);
         this.cellsPerWord = (int) (millisWord / millisCell);
     }
 
     public void addContentTo(final Element html) {
-        final Element div = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, Const.HISTOGRAM));
+        final Element div = ElementU.addElement(html, Html.DIV, null,
+                NTV.create(Html.CLASS, TimeHistogram.Const.HISTOGRAM));
         ElementU.addElement(div, Html.H1, label);
         ElementU.addElement(div, Html.PRE, getText());
     }

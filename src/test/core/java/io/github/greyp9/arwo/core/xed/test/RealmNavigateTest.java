@@ -15,9 +15,9 @@ import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -28,7 +28,7 @@ import java.util.logging.Logger;
 public class RealmNavigateTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
@@ -51,130 +51,130 @@ public class RealmNavigateTest {
         if (SystemU.isTrue()) {
             // reference to realm (root)
             final XedCursor cursorRoot = new XedNav(xed).getRoot();
-            Assert.assertNotNull(cursorRoot);
-            Assert.assertEquals(realm, xpather.getElement("/realm:realm"));
-            Assert.assertEquals(xed, cursorRoot.getXed());
-            Assert.assertEquals(null, cursorRoot.getParent());
-            Assert.assertEquals(realm, cursorRoot.getNode());
-            Assert.assertEquals(Integer.valueOf(0), cursorRoot.getOrdinal());
-            Assert.assertEquals(typeInstanceRealm, cursorRoot.getTypeInstance());
-            Assert.assertEquals("/", cursorRoot.getURI());
+            Assertions.assertNotNull(cursorRoot);
+            Assertions.assertEquals(realm, xpather.getElement("/realm:realm"));
+            Assertions.assertEquals(xed, cursorRoot.getXed());
+            Assertions.assertEquals(null, cursorRoot.getParent());
+            Assertions.assertEquals(realm, cursorRoot.getNode());
+            Assertions.assertEquals(Integer.valueOf(0), cursorRoot.getOrdinal());
+            Assertions.assertEquals(typeInstanceRealm, cursorRoot.getTypeInstance());
+            Assertions.assertEquals("/", cursorRoot.getURI());
             // reference to realm (root)
             final XedCursor cursorByNode = new XedNav(xed).find(realm);
-            Assert.assertNotNull(cursorByNode);
-            Assert.assertEquals(cursorRoot.getXed(), cursorByNode.getXed());
-            Assert.assertEquals(cursorRoot.getParent(), cursorByNode.getParent());
-            Assert.assertEquals(cursorRoot.getNode(), cursorByNode.getNode());
-            Assert.assertEquals(cursorRoot.getOrdinal(), cursorByNode.getOrdinal());
-            Assert.assertEquals(cursorRoot.getTypeInstance(), cursorByNode.getTypeInstance());
-            Assert.assertEquals(cursorRoot.getURI(), cursorByNode.getURI());
+            Assertions.assertNotNull(cursorByNode);
+            Assertions.assertEquals(cursorRoot.getXed(), cursorByNode.getXed());
+            Assertions.assertEquals(cursorRoot.getParent(), cursorByNode.getParent());
+            Assertions.assertEquals(cursorRoot.getNode(), cursorByNode.getNode());
+            Assertions.assertEquals(cursorRoot.getOrdinal(), cursorByNode.getOrdinal());
+            Assertions.assertEquals(cursorRoot.getTypeInstance(), cursorByNode.getTypeInstance());
+            Assertions.assertEquals(cursorRoot.getURI(), cursorByNode.getURI());
             // reference to realm (root)
             final XedCursor cursorByPath = new XedNav(xed).find("/");
-            Assert.assertNotNull(cursorByPath);
-            Assert.assertEquals(cursorRoot.getXed(), cursorByPath.getXed());
-            Assert.assertEquals(cursorRoot.getParent(), cursorByPath.getParent());
-            Assert.assertEquals(cursorRoot.getNode(), cursorByPath.getNode());
-            Assert.assertEquals(cursorRoot.getOrdinal(), cursorByPath.getOrdinal());
-            Assert.assertEquals(cursorRoot.getTypeInstance(), cursorByPath.getTypeInstance());
-            Assert.assertEquals(cursorRoot.getURI(), cursorByPath.getURI());
+            Assertions.assertNotNull(cursorByPath);
+            Assertions.assertEquals(cursorRoot.getXed(), cursorByPath.getXed());
+            Assertions.assertEquals(cursorRoot.getParent(), cursorByPath.getParent());
+            Assertions.assertEquals(cursorRoot.getNode(), cursorByPath.getNode());
+            Assertions.assertEquals(cursorRoot.getOrdinal(), cursorByPath.getOrdinal());
+            Assertions.assertEquals(cursorRoot.getTypeInstance(), cursorByPath.getTypeInstance());
+            Assertions.assertEquals(cursorRoot.getURI(), cursorByPath.getURI());
         }
         if (SystemU.isTrue()) {
             // reference to principalsType
             final XedCursor cursorByPath = new XedNav(xed).find("/ecd28/");
-            Assert.assertNotNull(cursorByPath);
-            Assert.assertEquals(xed, cursorByPath.getXed());
-            Assert.assertNotNull(cursorByPath.getParent());
-            Assert.assertNull(cursorByPath.getNode());
-            Assert.assertNull(cursorByPath.getOrdinal());
-            Assert.assertEquals(typeInstancePrincipals, cursorByPath.getTypeInstance());
-            Assert.assertEquals("/ecd28/", cursorByPath.getURI());
+            Assertions.assertNotNull(cursorByPath);
+            Assertions.assertEquals(xed, cursorByPath.getXed());
+            Assertions.assertNotNull(cursorByPath.getParent());
+            Assertions.assertNull(cursorByPath.getNode());
+            Assertions.assertNull(cursorByPath.getOrdinal());
+            Assertions.assertEquals(typeInstancePrincipals, cursorByPath.getTypeInstance());
+            Assertions.assertEquals("/ecd28/", cursorByPath.getURI());
         }
         if (SystemU.isTrue()) {
             // reference to principals element
             final XedCursor cursorByNode = new XedNav(xed).find(principals);
-            Assert.assertNotNull(cursorByNode);
-            Assert.assertEquals(xed, cursorByNode.getXed());
-            Assert.assertNotNull(cursorByNode.getParent());
-            Assert.assertEquals(principals, cursorByNode.getNode());
-            Assert.assertEquals(Integer.valueOf(0), cursorByNode.getOrdinal());
-            Assert.assertEquals(typeInstancePrincipals, cursorByNode.getTypeInstance());
-            Assert.assertEquals("/ecd28/7256d/", cursorByNode.getURI());
+            Assertions.assertNotNull(cursorByNode);
+            Assertions.assertEquals(xed, cursorByNode.getXed());
+            Assertions.assertNotNull(cursorByNode.getParent());
+            Assertions.assertEquals(principals, cursorByNode.getNode());
+            Assertions.assertEquals(Integer.valueOf(0), cursorByNode.getOrdinal());
+            Assertions.assertEquals(typeInstancePrincipals, cursorByNode.getTypeInstance());
+            Assertions.assertEquals("/ecd28/7256d/", cursorByNode.getURI());
             // reference to principals element
             final XedCursor cursorByPath = new XedNav(xed).find("/ecd28/7256d/");
-            Assert.assertNotNull(cursorByPath);
-            Assert.assertEquals(xed, cursorByPath.getXed());
-            Assert.assertNotNull(cursorByPath.getParent());
-            Assert.assertEquals(principals, cursorByPath.getNode());
-            Assert.assertEquals(Integer.valueOf(0), cursorByPath.getOrdinal());
-            Assert.assertEquals(typeInstancePrincipals, cursorByPath.getTypeInstance());
-            Assert.assertEquals("/ecd28/7256d/", cursorByPath.getURI());
+            Assertions.assertNotNull(cursorByPath);
+            Assertions.assertEquals(xed, cursorByPath.getXed());
+            Assertions.assertNotNull(cursorByPath.getParent());
+            Assertions.assertEquals(principals, cursorByPath.getNode());
+            Assertions.assertEquals(Integer.valueOf(0), cursorByPath.getOrdinal());
+            Assertions.assertEquals(typeInstancePrincipals, cursorByPath.getTypeInstance());
+            Assertions.assertEquals("/ecd28/7256d/", cursorByPath.getURI());
         }
         if (SystemU.isTrue()) {
             // reference to principalType
             final XedCursor cursorByPath = new XedNav(xed).find("/ecd28/7256d/8dc37/");
-            Assert.assertNotNull(cursorByPath);
-            Assert.assertEquals(xed, cursorByPath.getXed());
-            Assert.assertNotNull(cursorByPath.getParent());
-            Assert.assertNull(cursorByPath.getNode());
-            Assert.assertNull(cursorByPath.getOrdinal());
-            Assert.assertEquals(typeInstancePrincipal, cursorByPath.getTypeInstance());
-            Assert.assertEquals("/ecd28/7256d/8dc37/", cursorByPath.getURI());
+            Assertions.assertNotNull(cursorByPath);
+            Assertions.assertEquals(xed, cursorByPath.getXed());
+            Assertions.assertNotNull(cursorByPath.getParent());
+            Assertions.assertNull(cursorByPath.getNode());
+            Assertions.assertNull(cursorByPath.getOrdinal());
+            Assertions.assertEquals(typeInstancePrincipal, cursorByPath.getTypeInstance());
+            Assertions.assertEquals("/ecd28/7256d/8dc37/", cursorByPath.getURI());
         }
         if (SystemU.isTrue()) {
             final Element principal1 = xed.create(principals, ValueInstance.create(typeInstancePrincipal,
                     HttpArguments.toArguments("user=arwo&credential=arwo&roles=*")));
-            Assert.assertNotNull(principal1);
-            Assert.assertEquals(1, principals.getChildNodes().getLength());
-            Assert.assertEquals("arwo", xpather.getText(
+            Assertions.assertNotNull(principal1);
+            Assertions.assertEquals(1, principals.getChildNodes().getLength());
+            Assertions.assertEquals("arwo", xpather.getText(
                     "/realm:realm/realm:principals/realm:principal[1]/realm:user"));
             // reference to principal element
             final XedCursor cursorByNode = new XedNav(xed).find(principal1);
-            Assert.assertNotNull(cursorByNode);
-            Assert.assertEquals(xed, cursorByNode.getXed());
-            Assert.assertNotNull(cursorByNode.getParent());
-            Assert.assertEquals(principal1, cursorByNode.getNode());
-            Assert.assertEquals(Integer.valueOf(0), cursorByNode.getOrdinal());
-            Assert.assertEquals(typeInstancePrincipal, cursorByNode.getTypeInstance());
-            Assert.assertEquals("/ecd28/7256d/8dc37/c3dce/", cursorByNode.getURI());
+            Assertions.assertNotNull(cursorByNode);
+            Assertions.assertEquals(xed, cursorByNode.getXed());
+            Assertions.assertNotNull(cursorByNode.getParent());
+            Assertions.assertEquals(principal1, cursorByNode.getNode());
+            Assertions.assertEquals(Integer.valueOf(0), cursorByNode.getOrdinal());
+            Assertions.assertEquals(typeInstancePrincipal, cursorByNode.getTypeInstance());
+            Assertions.assertEquals("/ecd28/7256d/8dc37/c3dce/", cursorByNode.getURI());
             // reference to principal element
             final XedCursor cursorByPath = new XedNav(xed).find("/ecd28/7256d/8dc37/c3dce/");
-            Assert.assertNotNull(cursorByPath);
-            Assert.assertEquals(xed, cursorByPath.getXed());
-            Assert.assertNotNull(cursorByPath.getParent());
-            Assert.assertEquals(principal1, cursorByPath.getNode());
-            Assert.assertEquals(Integer.valueOf(0), cursorByPath.getOrdinal());
-            Assert.assertEquals(typeInstancePrincipal, cursorByPath.getTypeInstance());
-            Assert.assertEquals("/ecd28/7256d/8dc37/c3dce/", cursorByPath.getURI());
+            Assertions.assertNotNull(cursorByPath);
+            Assertions.assertEquals(xed, cursorByPath.getXed());
+            Assertions.assertNotNull(cursorByPath.getParent());
+            Assertions.assertEquals(principal1, cursorByPath.getNode());
+            Assertions.assertEquals(Integer.valueOf(0), cursorByPath.getOrdinal());
+            Assertions.assertEquals(typeInstancePrincipal, cursorByPath.getTypeInstance());
+            Assertions.assertEquals("/ecd28/7256d/8dc37/c3dce/", cursorByPath.getURI());
         }
         if (SystemU.isTrue()) {
             final Element principal2 = xed.create(principals, ValueInstance.create(typeInstancePrincipal,
                     HttpArguments.toArguments("user=arwo2&credential=arwo2&roles=**")));
-            Assert.assertNotNull(principal2);
-            Assert.assertEquals(2, principals.getChildNodes().getLength());
-            Assert.assertEquals("arwo2", xpather.getText(
+            Assertions.assertNotNull(principal2);
+            Assertions.assertEquals(2, principals.getChildNodes().getLength());
+            Assertions.assertEquals("arwo2", xpather.getText(
                     "/realm:realm/realm:principals/realm:principal[2]/realm:user"));
             // reference to principal element
             final XedCursor cursorByNode = new XedNav(xed).find(principal2);
-            Assert.assertNotNull(cursorByNode);
-            Assert.assertEquals(xed, cursorByNode.getXed());
-            Assert.assertNotNull(cursorByNode.getParent());
-            Assert.assertEquals(principal2, cursorByNode.getNode());
-            Assert.assertEquals(Integer.valueOf(1), cursorByNode.getOrdinal());
-            Assert.assertEquals(typeInstancePrincipal, cursorByNode.getTypeInstance());
-            Assert.assertEquals("/ecd28/7256d/8dc37/b0d58/", cursorByNode.getURI());
+            Assertions.assertNotNull(cursorByNode);
+            Assertions.assertEquals(xed, cursorByNode.getXed());
+            Assertions.assertNotNull(cursorByNode.getParent());
+            Assertions.assertEquals(principal2, cursorByNode.getNode());
+            Assertions.assertEquals(Integer.valueOf(1), cursorByNode.getOrdinal());
+            Assertions.assertEquals(typeInstancePrincipal, cursorByNode.getTypeInstance());
+            Assertions.assertEquals("/ecd28/7256d/8dc37/b0d58/", cursorByNode.getURI());
             // reference to principal element
             final XedCursor cursorByPath = new XedNav(xed).find("/ecd28/7256d/8dc37/b0d58/");
-            Assert.assertNotNull(cursorByPath);
-            Assert.assertEquals(xed, cursorByPath.getXed());
-            Assert.assertNotNull(cursorByPath.getParent());
-            Assert.assertEquals(principal2, cursorByPath.getNode());
-            Assert.assertEquals(Integer.valueOf(1), cursorByPath.getOrdinal());
-            Assert.assertEquals(typeInstancePrincipal, cursorByPath.getTypeInstance());
-            Assert.assertEquals("/ecd28/7256d/8dc37/b0d58/", cursorByPath.getURI());
+            Assertions.assertNotNull(cursorByPath);
+            Assertions.assertEquals(xed, cursorByPath.getXed());
+            Assertions.assertNotNull(cursorByPath.getParent());
+            Assertions.assertEquals(principal2, cursorByPath.getNode());
+            Assertions.assertEquals(Integer.valueOf(1), cursorByPath.getOrdinal());
+            Assertions.assertEquals(typeInstancePrincipal, cursorByPath.getTypeInstance());
+            Assertions.assertEquals("/ecd28/7256d/8dc37/b0d58/", cursorByPath.getURI());
         }
         logger.finest(DocumentU.toString(document));
         if (SystemU.javaVersion().startsWith("1.8")) {
-            Assert.assertEquals("6e6b144e", CRCU.crc32String(DocumentU.toXml(document)));
+            Assertions.assertEquals("6e6b144e", CRCU.crc32String(DocumentU.toXml(document)));
         }
     }
 }

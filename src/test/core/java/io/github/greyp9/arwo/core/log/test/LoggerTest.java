@@ -1,6 +1,6 @@
 package io.github.greyp9.arwo.core.log.test;
 
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
 import java.util.logging.Handler;
 import java.util.logging.Level;

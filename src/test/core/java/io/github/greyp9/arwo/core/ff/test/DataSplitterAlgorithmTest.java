@@ -3,43 +3,34 @@ package io.github.greyp9.arwo.core.ff.test;
 import io.github.greyp9.arwo.core.codec.hex.HexCodec;
 import io.github.greyp9.arwo.core.ff.GF256;
 import io.github.greyp9.arwo.core.value.Value;
-import org.junit.Assert;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.Parameterized;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
 import java.util.Random;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
-@RunWith(Parameterized.class)
-@SuppressWarnings({"checkstyle:magicnumber", "checkstyle:visibilitymodifier"})
+@SuppressWarnings({ "checkstyle:magicnumber", "checkstyle:visibilitymodifier" })
 public class DataSplitterAlgorithmTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Parameterized.Parameters
-    public static Object[][] data() {
-        return new Object[][]{
-                {2, 2, Value.generate("00", 32)},
-                {3, 3, Value.generate("01", 32)},
+    public static Stream<Arguments> data() {
+        return Stream.of(
+                Arguments.arguments(2, 2, Value.generate("00", 32)),
+                Arguments.arguments(3, 3, Value.generate("01", 32)),
 
-                {3, 2, Value.generate("02", 32)},
-                {4, 3, Value.generate("03", 32)},
+                Arguments.arguments(3, 2, Value.generate("02", 32)),
+                Arguments.arguments(4, 3, Value.generate("03", 32)),
 
-                {4, 2, Value.generate("04", 32)},
-        };
+                Arguments.arguments(4, 2, Value.generate("04", 32))
+        );
     }
 
-    @Parameterized.Parameter()
-    public int countGenerated;
-
-    @Parameterized.Parameter(1)
-    public int countNeeded;
-
-    @Parameterized.Parameter(2)
-    public String inputHex;
-
-    @Test
-    public void testSplitRecoverFixed() {
+    @ParameterizedTest
+    @MethodSource("data")
+    public final void testSplitRecoverFixed(final int countGenerated, final int countNeeded, final String inputHex) {
         // original bytes
         final byte[] bytesOriginal = HexCodec.decode(inputHex);
         logger.finest(String.format("ORIGINAL [%s]", inputHex));
@@ -68,6 +59,6 @@ public class DataSplitterAlgorithmTest {
         }
         // verify recovery
         logger.finest(String.format("RECOVER  [%s]", HexCodec.encode(bytesRecover)));
-        Assert.assertArrayEquals(bytesOriginal, bytesRecover);
+        Assertions.assertArrayEquals(bytesOriginal, bytesRecover);
     }
 }

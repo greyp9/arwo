@@ -15,10 +15,10 @@ import io.github.greyp9.arwo.core.file.find.FindInFolderQuery;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.jce.AES;
 import io.github.greyp9.arwo.core.lang.SystemU;
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.io.File;
 import java.io.IOException;
@@ -29,7 +29,7 @@ import java.util.Random;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@TestMethodOrder(MethodOrderer.MethodName.class)
 public class EnvironmentSecretPersistTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
     private final File folderTest = new File(SystemU.tempDir(), getClass().getSimpleName());
@@ -49,7 +49,7 @@ public class EnvironmentSecretPersistTest {
         final File fileEnvironment = new File(folderTest, "env.xml");
         final EnvironmentState state = collectEnvironmentState(fileExpression);
         final byte[] secret = AES.generate().getEncoded();
-        Assert.assertEquals(AES.Const.KEY_BYTES, secret.length);
+        Assertions.assertEquals(AES.Const.KEY_BYTES, secret.length);
         logger.finest("GENERATE:" + HexCodec.encode(secret));
         PROPERTIES.setProperty("secret", HexCodec.encode(secret));
         final Random random = new Random(0L);
@@ -69,15 +69,15 @@ public class EnvironmentSecretPersistTest {
         final EnvironmentStore storeUnwrapped = EnvironmentSecret.unprotect(storeWrappedA);
         final byte[] secret = EnvironmentSecret.recover(state, storeUnwrapped);
         logger.finest("RECOVER:" + HexCodec.encode(secret));
-        Assert.assertEquals(AES.Const.KEY_BYTES, secret.length);
-        Assert.assertEquals(PROPERTIES.getProperty("secret"), HexCodec.encode(secret));
+        Assertions.assertEquals(AES.Const.KEY_BYTES, secret.length);
+        Assertions.assertEquals(PROPERTIES.getProperty("secret"), HexCodec.encode(secret));
     }
 
     private EnvironmentState collectEnvironmentState(final File fileExpression) throws IOException {
         final String expression = UTF8Codec.toString(StreamU.read(fileExpression));
         final ExpressionEvaluator evaluator = ExpressionEvaluatorFactory.create();
         final Node node = evaluator.evaluate(expression);
-        Assert.assertTrue(node instanceof KeyNode);
+        Assertions.assertTrue(node instanceof KeyNode);
         final KeyNode keyNode = (KeyNode) node;
         final List<EnvironmentAtom> atoms = keyNode.getAtomNodes().stream()
                 .map(AtomNode::getAtom).collect(Collectors.toList());

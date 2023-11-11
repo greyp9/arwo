@@ -10,8 +10,8 @@ import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.text.filter.TextFilters;
 import io.github.greyp9.arwo.core.text.filter.TextLineFilter;
 import io.github.greyp9.arwo.core.text.line.LineU;
-import org.junit.Assume;
-import org.junit.Test;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,7 +32,8 @@ public class LogLineFilterTest {
     public void testTextLineFilter_Simple() throws IOException {
         final String folderOut = System.getProperty("folderOut");
         final String tzid = System.getProperty("tzid");  // "America/New_York"
-        Assume.assumeNotNull(folderOut, tzid);
+        Assumptions.assumeTrue(folderOut != null);
+        Assumptions.assumeTrue(tzid != null);
 
         final File[] foldersIn = {
                 new File(SystemU.userHome(), "Downloads/data1"),
@@ -41,7 +42,7 @@ public class LogLineFilterTest {
         // skip on existing data (clear output data manually for each run)
         final FindInFolderQuery fileQueryOut = new FindInFolderQuery(new File(folderOut), "*.*", false);
         final Collection<File> filesOut = fileQueryOut.getFound();
-        Assume.assumeTrue(filesOut.isEmpty());
+        Assumptions.assumeTrue(filesOut.isEmpty());
 
         // load queries to be executed on input data
         final Collection<TextQuery> textQueries = new ArrayList<>();

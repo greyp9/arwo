@@ -6,9 +6,9 @@ import io.github.greyp9.arwo.core.url.URLCodec;
 import io.github.greyp9.arwo.core.xsd.atom.SchemaAtom;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollection;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollectionFactory;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.net.URL;
 import java.util.Map;
@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class SchemaSourceAppTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         //io.github.greyp9.arwo.core.logging.LoggerU.adjustShort(Logger.getLogger(""));
     }
@@ -26,15 +26,15 @@ public class SchemaSourceAppTest {
     public void testAssembleSchemaCollection() throws Exception {
         for (String xsd : TestApp.Resources.XSD_ARRAY) {
             URL urlInitial = ResourceU.resolve(xsd);
-            Assert.assertNotNull(urlInitial);
+            Assertions.assertNotNull(urlInitial);
             logger.finest("UrlInitial/" + URLCodec.toExternalForm(urlInitial));
             URL urlCatalog = URLCodec.resolve(urlInitial, ".");
-            Assert.assertNotNull(urlInitial);
+            Assertions.assertNotNull(urlInitial);
             logger.finest("UrlCatalog/" + URLCodec.toExternalForm(urlCatalog));
             // resolve schema collection for this initial schema
             SchemaCollectionFactory schemaCollectionFactory = new SchemaCollectionFactory(urlCatalog);
             SchemaCollection schemaCollection = schemaCollectionFactory.create(urlInitial);
-            Assert.assertNotNull(schemaCollection);
+            Assertions.assertNotNull(schemaCollection);
             logger.finest(urlInitial.toExternalForm().replace(urlCatalog.toExternalForm(), ""));
             logger.finest("TargetNamespace/" + schemaCollection.getSchemaInitial().getQName().getNamespaceURI());
             for (Map.Entry<String, SchemaAtom> entry : schemaCollection.getSchemas().entrySet()) {
@@ -48,13 +48,13 @@ public class SchemaSourceAppTest {
     public void testNoCatalog() throws Exception {
         for (final String xsd : TestApp.Resources.XSD_ARRAY) {
             final URL urlInitial = ResourceU.resolve(xsd);
-            Assert.assertNotNull(urlInitial);
+            Assertions.assertNotNull(urlInitial);
             logger.finest("UrlInitial/" + URLCodec.toExternalForm(urlInitial));
             // resolve schema collection for this initial schema
             final SchemaCollectionFactory schemaCollectionFactory = new SchemaCollectionFactory(null);
             final SchemaCollection schemaCollection = schemaCollectionFactory.create(urlInitial);
-            Assert.assertNotNull(schemaCollection);
-            Assert.assertNotNull(schemaCollection.getSchemas().get(URLCodec.toExternalForm(urlInitial)));
+            Assertions.assertNotNull(schemaCollection);
+            Assertions.assertNotNull(schemaCollection.getSchemas().get(URLCodec.toExternalForm(urlInitial)));
         }
     }
 }

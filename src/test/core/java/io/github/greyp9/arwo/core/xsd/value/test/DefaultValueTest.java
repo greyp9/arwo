@@ -13,8 +13,8 @@ import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitions;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 
 import javax.xml.namespace.QName;
@@ -54,14 +54,14 @@ public class DefaultValueTest {
                 "lshFavorite.lshFavoriteType.comment", "comment");
         // no data for this attribute
         final ValueInstance valueInstance = ValueInstance.create(lshFavorite, ntv);
-        Assert.assertEquals(2, valueInstance.getNameTypeValues().size());
-        Assert.assertNull(valueInstance.getNameTypeValue(enabled));
+        Assertions.assertEquals(2, valueInstance.getNameTypeValues().size());
+        Assertions.assertNull(valueInstance.getNameTypeValue(enabled));
         // default data populated for this attribute
         final ValueInstance valueInstanceWithDefault = new DefaultTransform().transform(valueInstance);
-        Assert.assertEquals(ntv.size() + 1, valueInstanceWithDefault.getNameTypeValues().size());
-        Assert.assertNotNull(valueInstanceWithDefault.getNameTypeValue(enabled));
+        Assertions.assertEquals(ntv.size() + 1, valueInstanceWithDefault.getNameTypeValues().size());
+        Assertions.assertNotNull(valueInstanceWithDefault.getNameTypeValue(enabled));
         final NameTypeValue ntvEnabled = valueInstanceWithDefault.getNameTypeValue(enabled);
-        Assert.assertEquals(Boolean.TRUE.toString(), ntvEnabled.getValueS());
+        Assertions.assertEquals(Boolean.TRUE.toString(), ntvEnabled.getValueS());
     }
 
     @Test
@@ -70,13 +70,13 @@ public class DefaultValueTest {
         final TypeInstance enabled = lshFavorite.getInstance("enabled");
         // start with empty value instance
         final ValueInstance valueInstance = ValueInstance.create(lshFavorite, new NameTypeValues());
-        Assert.assertEquals(0, valueInstance.getNameTypeValues().size());
-        Assert.assertNull(valueInstance.getNameTypeValue(enabled));
+        Assertions.assertEquals(0, valueInstance.getNameTypeValues().size());
+        Assertions.assertNull(valueInstance.getNameTypeValue(enabled));
         final ValueInstance valueInstanceWithDefault = new DefaultTransform().transform(valueInstance);
-        Assert.assertEquals(1, valueInstanceWithDefault.getNameTypeValues().size());
-        Assert.assertNotNull(valueInstanceWithDefault.getNameTypeValue(enabled));
+        Assertions.assertEquals(1, valueInstanceWithDefault.getNameTypeValues().size());
+        Assertions.assertNotNull(valueInstanceWithDefault.getNameTypeValue(enabled));
         final NameTypeValue ntvEnabled = valueInstanceWithDefault.getNameTypeValue(enabled);
-        Assert.assertEquals(Boolean.TRUE.toString(), ntvEnabled.getValueS());
+        Assertions.assertEquals(Boolean.TRUE.toString(), ntvEnabled.getValueS());
     }
 
     @Test
@@ -89,12 +89,12 @@ public class DefaultValueTest {
                 "lshFavorite.lshFavoriteType.comment", "comment");
         // no data for this attribute
         final ValueInstance valueInstance = ValueInstance.create(lshFavorite, ntv);
-        Assert.assertEquals(ntv.size(), valueInstance.getNameTypeValues().size());
+        Assertions.assertEquals(ntv.size(), valueInstance.getNameTypeValues().size());
         // default data populated for this attribute
         final ValueInstance valueInstanceWithDefault = new DefaultTransform().transform(valueInstance);
-        Assert.assertEquals(ntv.size(), valueInstanceWithDefault.getNameTypeValues().size());
-        Assert.assertNotNull(valueInstanceWithDefault.getNameTypeValue(enabled));
+        Assertions.assertEquals(ntv.size(), valueInstanceWithDefault.getNameTypeValues().size());
+        Assertions.assertNotNull(valueInstanceWithDefault.getNameTypeValue(enabled));
         final NameTypeValue ntvEnabled = valueInstanceWithDefault.getNameTypeValue(enabled);
-        Assert.assertEquals(Boolean.FALSE.toString(), ntvEnabled.getValueS());
+        Assertions.assertEquals(Boolean.FALSE.toString(), ntvEnabled.getValueS());
     }
 }

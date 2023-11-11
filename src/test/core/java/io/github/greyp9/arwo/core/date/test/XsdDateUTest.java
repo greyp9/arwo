@@ -3,8 +3,8 @@ package io.github.greyp9.arwo.core.date.test;
 import io.github.greyp9.arwo.core.date.DateU;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.date.XsdDateU;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.util.Date;
 import java.util.TimeZone;
@@ -23,7 +23,7 @@ public class XsdDateUTest {
         final Date date = XsdDateU.fromXSDZ(MILLENIUM_SECONDS_Z);
         final String dateString = XsdDateU.toXSDZMillis(date);
         logger.finest(dateString);
-        Assert.assertEquals(MILLENIUM_MILLIS_Z, dateString);
+        Assertions.assertEquals(MILLENIUM_MILLIS_Z, dateString);
     }
 
     @Test
@@ -31,7 +31,7 @@ public class XsdDateUTest {
         final Date date = XsdDateU.fromXSDZ(MILLENIUM_MILLIS_Z);
         final String dateString = XsdDateU.toXSDZ(date);
         logger.finest(dateString);
-        Assert.assertEquals(MILLENIUM_SECONDS_Z, dateString);
+        Assertions.assertEquals(MILLENIUM_SECONDS_Z, dateString);
     }
 
     @Test
@@ -39,12 +39,12 @@ public class XsdDateUTest {
         final Date date = XsdDateU.fromXSDZ(MILLENIUM_SECONDS_Z);
         final TimeZone tz = TimeZone.getTimeZone(TZ_NY);
 
-        Assert.assertEquals(OFFSET_TZ_NY, tz.getRawOffset() / (DurationU.Const.ONE_HOUR_MILLIS));
-        Assert.assertEquals(DurationU.Const.ONE_HOUR_MILLIS, tz.getDSTSavings());
+        Assertions.assertEquals(OFFSET_TZ_NY, tz.getRawOffset() / (DurationU.Const.ONE_HOUR_MILLIS));
+        Assertions.assertEquals(DurationU.Const.ONE_HOUR_MILLIS, tz.getDSTSavings());
 
         final String dateString = XsdDateU.toXSD(date, tz);
         logger.finest(dateString);
-        Assert.assertEquals("1999-12-31T19:00:00-0500", dateString);
+        Assertions.assertEquals("1999-12-31T19:00:00-0500", dateString);
     }
 
     @Test
@@ -54,6 +54,6 @@ public class XsdDateUTest {
 
         final String dateString = XsdDateU.toXSD(date, tz);
         logger.finest(dateString);
-        Assert.assertEquals("2000-06-30T20:00:00-0400", dateString);
+        Assertions.assertEquals("2000-06-30T20:00:00-0400", dateString);
     }
 }

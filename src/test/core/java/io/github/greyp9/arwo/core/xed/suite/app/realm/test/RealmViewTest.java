@@ -24,9 +24,9 @@ import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitions;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -39,7 +39,7 @@ import java.util.logging.Logger;
 public class RealmViewTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         //io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
@@ -54,23 +54,23 @@ public class RealmViewTest {
         final TypeInstance typeInstanceRealm = typeDefinitions.getElementTypes().get(qname.toString());
         final TypeInstance typeInstancePrincipals = typeInstanceRealm.getInstance("principals");
         final TypeInstance typeInstancePrincipal = typeInstancePrincipals.getInstance("principal");
-        Assert.assertNotNull(typeInstancePrincipal);
+        Assertions.assertNotNull(typeInstancePrincipal);
         final Document document = new DocumentFactory(typeDefinitions, true).generateEmpty(qname);
         final XsdBundle xsdBundleDF = new XsdBundle(new XsdBundles(xsdTypes, Locale.getDefault()));
         final Xed xed = new Xed(document, xsdTypes, xsdBundleDF);
         final Element elementPrincipal = xed.getXPather().getElement("/realm:realm/realm:principals/realm:principal");
         final XedCursor cursorPrincipal = new XedNav(xed).find(elementPrincipal);
-        Assert.assertNotNull(cursorPrincipal);
+        Assertions.assertNotNull(cursorPrincipal);
         // load model
         final XedCursorView view = new XedCursorView(cursorPrincipal);
         final XedPropertyPageView pageView = view.getPageView();
         final Collection<String> itemNames = ViewInstanceU.getItemNames(pageView.getViewInstances());
         logger.finest(itemNames.toString());
-        Assert.assertEquals("[user, credential, roles]", itemNames.toString());
+        Assertions.assertEquals("[user, credential, roles]", itemNames.toString());
         final Collection<String> itemNamesI18n = ViewInstanceU.getItemNamesI18n(
                 pageView.getCursor(), pageView.getViewInstances());
         logger.finest(itemNamesI18n.toString());
-        Assert.assertEquals("[Name, Password, Roles]", itemNamesI18n.toString());
+        Assertions.assertEquals("[Name, Password, Roles]", itemNamesI18n.toString());
         // change locale
         final XsdBundle xsdBundleDE = new XsdBundle(new XsdBundles(xsdTypes, Locale.GERMAN));
         final Xed xedDE = new Xed(document, xsdTypes, xsdBundleDE);
@@ -81,7 +81,7 @@ public class RealmViewTest {
                 pageViewDE.getCursor(), pageViewDE.getViewInstances());
         logger.finest(itemNamesI18nDE.toString());
         // disable-i18n
-        //Assert.assertEquals("[N\u00e4me, P\u00e4ssw\u00f6rd, R\u00f6les]", itemNamesI18nDE.toString());
+        //Assertions.assertEquals("[N\u00e4me, P\u00e4ssw\u00f6rd, R\u00f6les]", itemNamesI18nDE.toString());
     }
 
     @Test
@@ -94,23 +94,23 @@ public class RealmViewTest {
         final TypeInstance typeInstanceRealm = typeDefinitions.getElementTypes().get(qname.toString());
         final TypeInstance typeInstancePrincipals = typeInstanceRealm.getInstance("principals");
         final TypeInstance typeInstancePrincipal = typeInstancePrincipals.getInstance("principal");
-        Assert.assertNotNull(typeInstancePrincipal);
+        Assertions.assertNotNull(typeInstancePrincipal);
         final Document document = new DocumentFactory(typeDefinitions, true).generateEmpty(qname);
         final XsdBundle xsdBundleDE = new XsdBundle(new XsdBundles(xsdTypes, Locale.GERMAN));
         final Xed xed = new Xed(document, xsdTypes, xsdBundleDE);
         final Element elementPrincipal = xed.getXPather().getElement("/realm:realm/realm:principals/realm:principal");
         final XedCursor cursorPrincipal = new XedNav(xed).find(elementPrincipal);
-        Assert.assertNotNull(cursorPrincipal);
+        Assertions.assertNotNull(cursorPrincipal);
         // load model
         final XedCursorView view = new XedCursorView(cursorPrincipal);
         final XedPropertyPageView pageView = view.getPageView();
         final Collection<String> itemNames = ViewInstanceU.getItemNames(pageView.getViewInstances());
-        Assert.assertEquals("[user, credential, roles]", itemNames.toString());
+        Assertions.assertEquals("[user, credential, roles]", itemNames.toString());
         final Collection<String> itemNamesI18n = ViewInstanceU.getItemNamesI18n(
                 pageView.getCursor(), pageView.getViewInstances());
         logger.finest(itemNamesI18n.toString());
         // disable-i18n
-        //Assert.assertEquals("[N\u00e4me, P\u00e4ssw\u00f6rd, R\u00f6les]", itemNamesI18n.toString());
+        //Assertions.assertEquals("[N\u00e4me, P\u00e4ssw\u00f6rd, R\u00f6les]", itemNamesI18n.toString());
     }
 
     @SuppressWarnings("checkstyle:magicnumber")
@@ -131,7 +131,7 @@ public class RealmViewTest {
         final NameTypeValues ntv1 = HttpArguments.toArguments("user=arwo&credential=arwo&roles=*");
         final ValueInstance value1 = ValueInstance.create(cursorPrincipalType.getTypeInstance(), ntv1);
         final Element principal1 = xedUI.create(cursorPrincipalType.getParent().getElement(), value1);
-        Assert.assertNotNull(principal1);
+        Assertions.assertNotNull(principal1);
         // verify page
         if (SystemU.isTrue()) {
             final XedCursor cursorPrincipal = new XedNav(xedUI).find(principal1);
@@ -139,14 +139,14 @@ public class RealmViewTest {
             final XedPropertyPageView pageView = cursorView.getPageView();
             final String pageText = new PropertyPageTextView(pageView).render();
             logger.finest(SystemU.eol() + pageText);
-            Assert.assertEquals(178, pageText.length());
-            Assert.assertEquals("b7ca26b2", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
+            Assertions.assertEquals(178, pageText.length());
+            Assertions.assertEquals("b7ca26b2", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
         }
         // insert
         final NameTypeValues ntv2 = HttpArguments.toArguments("user=arwo2&credential=arwo2&roles=**");
         final ValueInstance value2 = ValueInstance.create(cursorPrincipalType.getTypeInstance(), ntv2);
         final Element principal2 = xedUI.create(cursorPrincipalType.getParent().getElement(), value2);
-        Assert.assertNotNull(principal2);
+        Assertions.assertNotNull(principal2);
         // verify page
         if (SystemU.isTrue()) {
             final XedCursor cursorPrincipal = new XedNav(xedUI).find(principal2);
@@ -154,8 +154,8 @@ public class RealmViewTest {
             final XedPropertyPageView pageView = view.getPageView();
             final String pageText = new PropertyPageTextView(pageView).render();
             logger.finest(SystemU.eol() + pageText);
-            Assert.assertEquals(178, pageText.length());
-            Assert.assertEquals("d707be74", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
+            Assertions.assertEquals(178, pageText.length());
+            Assertions.assertEquals("d707be74", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
         }
         // verify table
         if (SystemU.isTrue()) {
@@ -163,8 +163,8 @@ public class RealmViewTest {
             final XedTableView tableView = view.getTableView();
             final String tableText = new TableTextView(tableView).render();
             logger.finest(SystemU.eol() + tableText);
-            Assert.assertEquals(193, tableText.length());
-            Assert.assertEquals("d3fa20e5", CRCU.crc32String(UTF8Codec.toBytes(tableText)));
+            Assertions.assertEquals(193, tableText.length());
+            Assertions.assertEquals("d3fa20e5", CRCU.crc32String(UTF8Codec.toBytes(tableText)));
         }
         // change locale
         final XsdBundle xsdBundleDE = new XsdBundle(new XsdBundles(xsdTypes, Locale.GERMAN));
@@ -176,8 +176,8 @@ public class RealmViewTest {
             final XedPropertyPageView pageView = view.getPageView();
             final String pageText = new PropertyPageTextView(pageView).render();
             logger.finest(SystemU.eol() + pageText);
-            Assert.assertEquals(178, pageText.length());
-            Assert.assertEquals("b7ca26b2", CRCU.crc32String(UTF8Codec.toBytes(pageText)));
+            Assertions.assertEquals(178, pageText.length());
+            Assertions.assertEquals("5b3c3809", CRCU.crc32String(UTF8Codec.toBytes(pageText)));  // xsdBundleDE
         }
         // verify table
         if (SystemU.isTrue()) {
@@ -187,8 +187,8 @@ public class RealmViewTest {
             final XedTableView tableView = view.getTableView();
             final String tableText = new TableTextView(tableView).render();
             logger.finest(SystemU.eol() + tableText);
-            Assert.assertEquals(193, tableText.length());
-            Assert.assertEquals("d3fa20e5", CRCU.crc32String(UTF8Codec.toBytes(tableText)));
+            Assertions.assertEquals(193, tableText.length());
+            Assertions.assertEquals("61ff36bb", CRCU.crc32String(UTF8Codec.toBytes(tableText)));  // xsdBundleDE
         }
     }
 }

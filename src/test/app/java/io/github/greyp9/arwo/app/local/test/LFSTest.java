@@ -24,10 +24,10 @@ import io.github.greyp9.arwo.core.util.CollectionU;
 import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Ignore;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
@@ -44,13 +44,13 @@ import java.util.logging.Logger;
 public class LFSTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         //io.github.greyp9.arwo.core.logging.LoggerU.adjustShort(Logger.getLogger(""));
     }
 
     @Test
-    @Ignore
+    @Disabled
     public void testFolderRecurse() throws Exception {
         // setup application context
         final String contextPath = "/arwo";
@@ -64,7 +64,7 @@ public class LFSTest {
         final DateX dateX = new DateX(HttpDateU.Const.DEFAULT, DateU.Const.TZ_GMT);
         final Locus locus = new Locus(Locale.getDefault(), dateX);
         final AppUserState userState = new AppUserState(appState, principal, date, userHome, submitID, locus);
-        Assert.assertNotNull(userState);
+        Assertions.assertNotNull(userState);
         // iterate through lfs context roots
         final Stopwatch stopwatch = new Stopwatch(null);
         final Collection<String> resources = new ArrayList<>();
@@ -83,11 +83,11 @@ public class LFSTest {
                     httpRequest, date, principal, contextPath, servletPath, pathInfo);
             final HttpResponse httpResponse = new LFSHandlerGet(servletHttpRequest, userState).doGetSafe();
             // validate response
-            Assert.assertNotNull(httpResponse);
-            Assert.assertEquals(HttpURLConnection.HTTP_OK, httpResponse.getStatusCode());
+            Assertions.assertNotNull(httpResponse);
+            Assertions.assertEquals(HttpURLConnection.HTTP_OK, httpResponse.getStatusCode());
             // load html into parser
             final ByteArrayInputStream responseStream = httpResponse.getEntity();
-            Assert.assertNotNull(responseStream);
+            Assertions.assertNotNull(responseStream);
             final byte[] responseBytes = StreamU.read(responseStream);
             final Document document = DocumentU.toDocument(responseBytes);
             final XPather pather = new XPather(document);

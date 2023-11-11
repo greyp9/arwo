@@ -3,9 +3,9 @@ package io.github.greyp9.arwo.core.metric.histogram.test;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.date.XsdDateU;
 import io.github.greyp9.arwo.core.metric.histogram.core.TimeHistogram;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.Date;
 import java.util.logging.Logger;
@@ -14,8 +14,8 @@ import java.util.logging.Logger;
 public class TimeHistogramExternalLoadTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    public final void setUp() throws Exception {
         logger.entering(getClass().getName(), null);
     }
 
@@ -32,7 +32,7 @@ public class TimeHistogramExternalLoadTest {
              histogram.add(new Date(date.getTime() + offset), offset);
         }
         final double[] buckets = histogram.getBuckets(date, 0, histogram.getPageSize());
-        Assert.assertEquals(4_000, buckets[4], 0.1d);
+        Assertions.assertEquals(4_000, buckets[4], 0.1d);
     }
 
     @Test
@@ -50,6 +50,6 @@ public class TimeHistogramExternalLoadTest {
         }
         final Date dateNextPage = new Date(date.getTime() + durationPage);
         final double[] buckets = histogram.getBuckets(dateNextPage, 0, histogram.getPageSize());
-        Assert.assertEquals(14_000, buckets[4], 0.1d);
+        Assertions.assertEquals(14_000, buckets[4], 0.1d);
     }
 }

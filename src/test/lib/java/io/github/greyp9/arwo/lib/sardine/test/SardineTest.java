@@ -13,10 +13,10 @@ import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.url.URLCodec;
 import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.lib.sardine.webdav.connection.SardineFactory;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,20 +30,20 @@ import java.util.logging.Logger;
 public class SardineTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    public final void setUp() throws Exception {
         io.github.greyp9.arwo.core.logging.LoggerU.adjust(Logger.getLogger(""));
     }
 
     @Test
     public void testServerConnectivity() throws Exception {
         File fileProperties = new File(SystemU.userHome(), ".arwo/test.properties.xml");
-        Assume.assumeTrue(fileProperties.exists());
+        Assumptions.assumeTrue(fileProperties.exists());
         Properties properties = PropertiesU.loadFromXml(fileProperties.toURI().toURL());
         logger.info("" + properties.size());
-        Assert.assertTrue(properties.size() > 0);
+        Assertions.assertTrue(properties.size() > 0);
         String serverList = properties.getProperty(Const.WEBDAV_SERVER);
-        Assert.assertNotNull(serverList);
+        Assertions.assertNotNull(serverList);
         String[] servers = serverList.split(",");
         for (String server : servers) {
             if (server.length() > 0) {

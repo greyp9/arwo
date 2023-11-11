@@ -21,9 +21,9 @@ import io.github.greyp9.arwo.core.vm.exec.UserExecutor;
 import io.github.greyp9.arwo.lib.ganymed.ssh.client.ClientParams;
 import io.github.greyp9.arwo.lib.ganymed.ssh.command.runnable.ScriptX;
 import io.github.greyp9.arwo.lib.ganymed.ssh.connection.SSHConnection;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -38,12 +38,12 @@ public class SFTPTest {
     @Test
     public void testServerConnectivity() throws Exception {
         final File fileProperties = new File(SystemU.userHome(), ".arwo/test.properties.xml");
-        Assume.assumeTrue(fileProperties.exists());
+        Assumptions.assumeTrue(fileProperties.exists());
         final Properties properties = PropertiesU.loadFromXml(fileProperties.toURI().toURL());
         logger.info("" + properties.size());
-        Assert.assertTrue(properties.size() > 0);
+        Assertions.assertTrue(properties.size() > 0);
         final String sshServerList = properties.getProperty(Const.SSH_SERVER);
-        Assert.assertNotNull(sshServerList);
+        Assertions.assertNotNull(sshServerList);
         final String[] servers = sshServerList.split(",");
         for (String server : servers) {
             if (server.length() > 0) {
@@ -77,7 +77,7 @@ public class SFTPTest {
         final ExecutorService executorStream = executor.getExecutorStream();
         final ResultsContext resultsContext = ResultsContext.createEmpty();
         final Command command = new ScriptX(sshConnection, executorStream, resultsContext).runCommand("pwd");
-        Assert.assertEquals(Integer.valueOf(0), command.getExitValue());
+        Assertions.assertEquals(Integer.valueOf(0), command.getExitValue());
         final String userHome = command.getStdout().trim();
         logger.info(userHome);
         // craft dummy context
@@ -86,7 +86,7 @@ public class SFTPTest {
         final SFTPDataSource dataSource = new SFTPDataSource(request, sshConnection);
         // precondition, user.home exists
         final SFTPv3FileAttributes attributesUserHome = dataSource.exists(userHome);
-        Assert.assertNotNull(attributesUserHome);
+        Assertions.assertNotNull(attributesUserHome);
         // ensure test container folder
         final String pathContainer = PathU.toDir(userHome, getClass().getSimpleName());
         SFTPv3FileAttributes attributesContainer = dataSource.exists(pathContainer);
@@ -94,26 +94,26 @@ public class SFTPTest {
             dataSource.createDirectory(pathContainer, attributesUserHome.permissions);
             attributesContainer = dataSource.exists(pathContainer);
         }
-        Assert.assertNotNull(attributesContainer);
+        Assertions.assertNotNull(attributesContainer);
         // create test folder
         final String filename = DateX.toFilename(date);
         final String pathFolder = PathU.toDir(pathContainer, filename);
         dataSource.createDirectory(pathFolder, attributesContainer.permissions);
         final SFTPv3FileAttributes attributesFolderPre = dataSource.exists(pathFolder);
-        Assert.assertNotNull(attributesFolderPre);
+        Assertions.assertNotNull(attributesFolderPre);
         // create test file
         dataSource.write(UTF8Codec.toBytes(filename), pathFolder, filename, null);
         final String pathFile = PathU.toPath(pathFolder, filename);
         final SFTPv3FileAttributes attributesFileYes = dataSource.exists(pathFile);
-        Assert.assertNotNull(attributesFileYes);
+        Assertions.assertNotNull(attributesFileYes);
         // remove test file
         dataSource.delete(pathFile);
         final SFTPv3FileAttributes attributesFileNo = dataSource.exists(pathFile);
-        Assert.assertNull(attributesFileNo);
+        Assertions.assertNull(attributesFileNo);
         // remove test folder
         dataSource.deleteDirectory(pathFolder);
         final SFTPv3FileAttributes attributesFolderPost = dataSource.exists(pathFolder);
-        Assert.assertNull(attributesFolderPost);
+        Assertions.assertNull(attributesFolderPost);
     }
 
     private static class Const {

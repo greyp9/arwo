@@ -8,9 +8,9 @@ import io.github.greyp9.arwo.core.xsd.source.SchemaCollection;
 import io.github.greyp9.arwo.core.xsd.source.SchemaCollectionFactory;
 import io.github.greyp9.arwo.core.xsd.type.TypeComponents;
 import io.github.greyp9.arwo.core.xsd.type.TypeComponentsFactory;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.net.URL;
 import java.util.Map;
@@ -20,7 +20,7 @@ import java.util.logging.Logger;
 public class SchemaTypeAppTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         //io.github.greyp9.arwo.core.logging.LoggerU.adjustShort(Logger.getLogger(""));
     }
@@ -29,15 +29,15 @@ public class SchemaTypeAppTest {
     public void testAssembleTypeComponents() throws Exception {
         for (String xsd : TestApp.Resources.XSD_ARRAY) {
             URL urlInitial = ResourceU.resolve(xsd);
-            Assert.assertNotNull(urlInitial);
+            Assertions.assertNotNull(urlInitial);
             logger.finest("UrlInitial/" + URLCodec.toExternalForm(urlInitial));
             URL urlCatalog = URLCodec.resolve(urlInitial, ".");
-            Assert.assertNotNull(urlInitial);
+            Assertions.assertNotNull(urlInitial);
             logger.finest("UrlCatalog/" + URLCodec.toExternalForm(urlCatalog));
             // resolve schema collection for this initial schema
             SchemaCollectionFactory schemaCollectionFactory = new SchemaCollectionFactory(urlCatalog);
             SchemaCollection schemaCollection = schemaCollectionFactory.create(urlInitial);
-            Assert.assertNotNull(schemaCollection);
+            Assertions.assertNotNull(schemaCollection);
             // pre-parse of schema collection
             TypeComponentsFactory tcFactory = new TypeComponentsFactory(schemaCollection);
             TypeComponents typeComponents = tcFactory.create();

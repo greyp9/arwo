@@ -6,10 +6,10 @@ import io.github.greyp9.arwo.core.util.PropertiesU;
 import jcifs.smb.NtlmPasswordAuthentication;
 import jcifs.smb.SmbException;
 import jcifs.smb.SmbFile;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -22,8 +22,8 @@ import java.util.logging.Logger;
 public class CIFSTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    public final void setUp() throws Exception {
         System.setProperty("java.protocol.handler.pkgs", "sun.net.www.protocol");
         jcifs.Config.registerSmbURLHandler();
     }
@@ -31,12 +31,12 @@ public class CIFSTest {
     @Test
     public void testServerConnectivity() throws Exception {
         File fileProperties = new File(SystemU.userHome(), ".arwo/test.properties.xml");
-        Assume.assumeTrue(fileProperties.exists());
+        Assumptions.assumeTrue(fileProperties.exists());
         Properties properties = PropertiesU.loadFromXml(fileProperties.toURI().toURL());
         logger.info("" + properties.size());
-        Assert.assertTrue(properties.size() > 0);
+        Assertions.assertTrue(properties.size() > 0);
         String sshServerList = properties.getProperty(Const.CIFS_SERVER);
-        Assert.assertNotNull(sshServerList);
+        Assertions.assertNotNull(sshServerList);
         String[] servers = sshServerList.split(",");
         for (String server : servers) {
             if (server.length() > 0) {

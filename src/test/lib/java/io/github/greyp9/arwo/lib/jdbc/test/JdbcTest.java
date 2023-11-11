@@ -18,10 +18,10 @@ import io.github.greyp9.arwo.core.util.CollectionU;
 import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.vm.exec.ExecutorServiceFactory;
-import org.junit.Assert;
-import org.junit.Assume;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Assumptions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -42,19 +42,19 @@ import java.util.logging.Logger;
 public class JdbcTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
     }
 
     @Test
     public void testServerConnectivity() throws Exception {
         File fileProperties = new File(SystemU.userHome(), ".arwo/test.properties.xml");
-        Assume.assumeTrue(fileProperties.exists());
+        Assumptions.assumeTrue(fileProperties.exists());
         Properties properties = PropertiesU.loadFromXml(fileProperties.toURI().toURL());
         logger.info("" + properties.size());
-        Assert.assertTrue(properties.size() > 0);
+        Assertions.assertTrue(properties.size() > 0);
         String sshServerList = properties.getProperty(Const.JDBC_SERVER);
-        Assert.assertNotNull(sshServerList);
+        Assertions.assertNotNull(sshServerList);
         String[] servers = sshServerList.split(",");
         for (String server : servers) {
             if (server.length() > 0) {
@@ -82,7 +82,7 @@ public class JdbcTest {
         PropertiesU.setProperty(properties, "password", pass);
         Driver driver = (Driver) driverClass.newInstance();
         Connection connection = driver.connect(url, properties);
-        Assert.assertNotNull(connection);
+        Assertions.assertNotNull(connection);
         int i = 0;
         String sql = propertiesTest.getProperty(String.format("%s.%s.sql.%d", Const.JDBC_SERVER, server, ++i));
         while (sql != null) {

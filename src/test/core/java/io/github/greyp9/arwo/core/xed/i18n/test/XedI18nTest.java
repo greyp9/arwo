@@ -10,8 +10,8 @@ import io.github.greyp9.arwo.core.xsd.document.DocumentFactory;
 import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
 import io.github.greyp9.arwo.core.xsd.model.XsdTypes;
 import io.github.greyp9.arwo.core.xsd.structure.TypeDefinitions;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 
 import javax.xml.namespace.QName;
@@ -33,27 +33,27 @@ public class XedI18nTest {
         final Xed xedNL = new Xed(document, xsdTypes, xsdBundleNL);
         // check top-level type
         final TypeInstance typeInstance = typeDefinitions.getElementTypes().get(qname.toString());
-        Assert.assertNotNull(typeInstance);
+        Assertions.assertNotNull(typeInstance);
         // i18n test values
         final String key = "realm.realmType";
         final String valueDF = "Realm";
         final String valueJA = "\u5c3a\u30e8\u4e39\u3057m";
         // check i18n (should be default, as no locale specified)
         final ResourceBundle bundleNull = xedNL.getBundle(typeInstance.getURI());
-        Assert.assertNull(bundleNull);
+        Assertions.assertNull(bundleNull);
         // update locale, check i18n
         final XsdBundle xsdBundleDF = new XsdBundle(new XsdBundles(xsdTypes, Locale.getDefault()));
         final Xed xedDF = new Xed(xedNL.getDocument(), xedNL.getXsdTypes(), xsdBundleDF);
-        Assert.assertEquals(Locale.getDefault(), xedDF.getLocale());
+        Assertions.assertEquals(Locale.getDefault(), xedDF.getLocale());
         final ResourceBundle bundleDF = xedDF.getBundle(typeInstance.getURI());
-        Assert.assertNotNull(bundleDF);
-        Assert.assertEquals(valueDF, bundleDF.getString(key));
+        Assertions.assertNotNull(bundleDF);
+        Assertions.assertEquals(valueDF, bundleDF.getString(key));
         // update locale, check i18n
         final XsdBundle xsdBundleJA = new XsdBundle(new XsdBundles(xsdTypes, new Locale("ja")));
         final Xed xedJA = new Xed(xedDF.getDocument(), xedDF.getXsdTypes(), xsdBundleJA);
-        Assert.assertEquals(new Locale("ja"), xedJA.getLocale());
+        Assertions.assertEquals(new Locale("ja"), xedJA.getLocale());
         final ResourceBundle bundleJA = xedJA.getBundle(typeInstance.getURI());
-        Assert.assertNotNull(bundleJA);
-        //Assert.assertEquals(valueJA, bundleJA.getString(key));  // disable-i18n
+        Assertions.assertNotNull(bundleJA);
+        //Assertions.assertEquals(valueJA, bundleJA.getString(key));  // disable-i18n
     }
 }

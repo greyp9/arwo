@@ -10,9 +10,9 @@ import io.github.greyp9.arwo.core.expr.eval.LastModifiedEvaluator;
 import io.github.greyp9.arwo.core.expr.eval.SysEnvEvaluator;
 import io.github.greyp9.arwo.core.expr.eval.SysPropEvaluator;
 import io.github.greyp9.arwo.core.lang.SystemU;
-import org.junit.Assert;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.util.logging.Logger;
@@ -20,8 +20,8 @@ import java.util.logging.Logger;
 public class ExpressionEvaluatorTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
-    public void setUp() throws Exception {
+    @BeforeEach
+    public final void setUp() throws Exception {
         logger.finest("setup()");
     }
 
@@ -32,10 +32,10 @@ public class ExpressionEvaluatorTest {
         evaluator.register(ENV, new SysEnvEvaluator());
         evaluator.register(MODIFIED, new LastModifiedEvaluator());
 
-        Assert.assertEquals(UTF8Codec.Const.UTF8, evaluator.evaluateAsString("prop('file.encoding')"));
-        Assert.assertEquals(SystemU.userHome(), evaluator.evaluateAsString("env('HOME')"));
+        Assertions.assertEquals(UTF8Codec.Const.UTF8, evaluator.evaluateAsString("prop('file.encoding')"));
+        Assertions.assertEquals(SystemU.userHome(), evaluator.evaluateAsString("env('HOME')"));
         final String lastModified = Long.toString(new File(SystemU.userHome()).lastModified());
-        Assert.assertEquals(lastModified, evaluator.evaluateAsString("mod(env('HOME'))"));
+        Assertions.assertEquals(lastModified, evaluator.evaluateAsString("mod(env('HOME'))"));
     }
 
     @Test
@@ -48,11 +48,11 @@ public class ExpressionEvaluatorTest {
 
         final String expression = "key(2 prop('file.encoding') env('HOME') mod('~/Downloads'))";
         final Node node = evaluator.evaluate(expression);
-        Assert.assertTrue(node instanceof KeyNode);
+        Assertions.assertTrue(node instanceof KeyNode);
         final KeyNode keyNode = (KeyNode) node;
-        Assert.assertEquals(2, keyNode.getThreshold());
+        Assertions.assertEquals(2, keyNode.getThreshold());
         final int expectedAtoms = 3;
-        Assert.assertEquals(expectedAtoms, keyNode.getAtomNodes().size());
+        Assertions.assertEquals(expectedAtoms, keyNode.getAtomNodes().size());
     }
 
     @Test
@@ -62,8 +62,8 @@ public class ExpressionEvaluatorTest {
         evaluator.register(FOLDER, new FolderEvaluator());
         final String contentUserHome = evaluator.evaluateAsString("folder(prop('user.home') '*')");
         logger.finest(contentUserHome);
-        Assert.assertNotNull(contentUserHome);
-        Assert.assertTrue(contentUserHome.contains("Downloads"));
+        Assertions.assertNotNull(contentUserHome);
+        Assertions.assertTrue(contentUserHome.contains("Downloads"));
     }
 
     private static final String PROP = "prop";

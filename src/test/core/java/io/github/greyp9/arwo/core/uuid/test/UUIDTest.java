@@ -1,7 +1,7 @@
 package io.github.greyp9.arwo.core.uuid.test;
 
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.UUID;
 import java.util.logging.Logger;
@@ -9,7 +9,7 @@ import java.util.logging.Logger;
 public class UUIDTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    @Before
+    @BeforeEach
     public void setUp() throws Exception {
         //io.github.greyp9.arwo.core.logging.LoggerU.adjustTiny(Logger.getLogger(""));
     }

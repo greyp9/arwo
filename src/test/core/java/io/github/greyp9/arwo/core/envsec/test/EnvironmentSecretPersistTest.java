@@ -12,10 +12,10 @@ import io.github.greyp9.arwo.core.file.find.FindInFolderQuery;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.jce.AES;
 import io.github.greyp9.arwo.core.lang.SystemU;
-import org.junit.Assert;
-import org.junit.FixMethodOrder;
-import org.junit.Test;
-import org.junit.runners.MethodSorters;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.MethodOrderer;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestMethodOrder;
 
 import java.io.File;
 import java.io.IOException;
@@ -27,7 +27,7 @@ import java.util.Properties;
 import java.util.Random;
 import java.util.logging.Logger;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
+@TestMethodOrder(MethodOrderer.MethodName.class)
 public class EnvironmentSecretPersistTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
     private final File folderTest = new File(SystemU.tempDir(), getClass().getSimpleName());
@@ -57,20 +57,20 @@ public class EnvironmentSecretPersistTest {
                 .orElseThrow(IllegalStateException::new);
         final List<Node> operands = new ArrayList<>(root.getOperands());
         final Node operandThresholdN = operands.remove(0);
-        Assert.assertTrue(operandThresholdN instanceof Operand);
+        Assertions.assertTrue(operandThresholdN instanceof Operand);
         for (Node child1 : operands) {
             final MultiOperator multi1 = Optional.of(child1)
                     .map(MultiOperator.class::cast)
                     .orElseThrow(IllegalStateException::new);
-            Assert.assertEquals("secret", multi1.getOp());
+            Assertions.assertEquals("secret", multi1.getOp());
             final List<Node> children2 = new ArrayList<>(multi1.getOperands());
             final Node operandThresholdNChild = children2.remove(0);
-            Assert.assertTrue(operandThresholdNChild instanceof Operand);
+            Assertions.assertTrue(operandThresholdNChild instanceof Operand);
             for (Node child2 : children2) {
                 final MultiOperator multi2 = Optional.of(child2)
                         .map(MultiOperator.class::cast)
                         .orElseThrow(IllegalStateException::new);
-                Assert.assertEquals("prop", multi2.getOp());
+                Assertions.assertEquals("prop", multi2.getOp());
             }
         }
     }
@@ -79,7 +79,7 @@ public class EnvironmentSecretPersistTest {
     public void test_2_GenerateSecret() throws IOException, GeneralSecurityException {
         final File fileExpression = new File(folderTest, "env.txt");
         final byte[] secret = AES.generate().getEncoded();
-        Assert.assertEquals(AES.Const.KEY_BYTES, secret.length);
+        Assertions.assertEquals(AES.Const.KEY_BYTES, secret.length);
         logger.finest("GENERATE:" + HexCodec.encode(secret));
         PROPERTIES.setProperty("secret", HexCodec.encode(secret));
         new EnvironmentSecret(fileExpression.getPath(), new Random(0L)).generate(secret);
@@ -90,7 +90,7 @@ public class EnvironmentSecretPersistTest {
         final File fileExpression = new File(folderTest, "env.txt");
         final EnvironmentSecret environmentSecret = new EnvironmentSecret(fileExpression.getPath(), null);
         final byte[] secretRecover = environmentSecret.recover();
-        Assert.assertEquals(PROPERTIES.getProperty("secret"), HexCodec.encode(secretRecover));
+        Assertions.assertEquals(PROPERTIES.getProperty("secret"), HexCodec.encode(secretRecover));
     }
 
     @Test
@@ -98,6 +98,6 @@ public class EnvironmentSecretPersistTest {
         // clean up test folder content; then test folder
         new FindInFolderQuery(folderTest, "env.*", false).getFound().forEach(File::delete);
         folderTest.delete();
-        Assert.assertFalse(folderTest.exists());
+        Assertions.assertFalse(folderTest.exists());
     }
 }

@@ -5,8 +5,8 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.text.filter.TextFilters;
 import io.github.greyp9.arwo.core.text.filter.TextLineFilter;
-import org.junit.Assert;
-import org.junit.Test;
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
@@ -76,9 +76,9 @@ public class TextLineFilterTest {
         final TextFilters textFilters = new TextFilters();
         textFilters.getExpressions().add("regex('\\d{3}')");
         final TextLineFilter filter = new TextLineFilter(textFilters);
-        Assert.assertTrue(filter.doFilter(UTF8Codec.toBytes("1234"), UTF8Codec.Const.UTF8).length > 0);
-        Assert.assertTrue(filter.doFilter(UTF8Codec.toBytes("123"), UTF8Codec.Const.UTF8).length > 0);
-        Assert.assertFalse(filter.doFilter(UTF8Codec.toBytes("12"), UTF8Codec.Const.UTF8).length > 0);
+        Assertions.assertTrue(filter.doFilter(UTF8Codec.toBytes("1234"), UTF8Codec.Const.UTF8).length > 0);
+        Assertions.assertTrue(filter.doFilter(UTF8Codec.toBytes("123"), UTF8Codec.Const.UTF8).length > 0);
+        Assertions.assertFalse(filter.doFilter(UTF8Codec.toBytes("12"), UTF8Codec.Const.UTF8).length > 0);
     }
 
     @Test
@@ -86,9 +86,9 @@ public class TextLineFilterTest {
         final TextFilters textFilters = new TextFilters();
         textFilters.getExpressions().add("regex('\\w{3}')");
         final TextLineFilter filter = new TextLineFilter(textFilters);
-        Assert.assertTrue(filter.doFilter(UTF8Codec.toBytes("abcd"), UTF8Codec.Const.UTF8).length > 0);
-        Assert.assertTrue(filter.doFilter(UTF8Codec.toBytes("abc"), UTF8Codec.Const.UTF8).length > 0);
-        Assert.assertFalse(filter.doFilter(UTF8Codec.toBytes("ab"), UTF8Codec.Const.UTF8).length > 0);
+        Assertions.assertTrue(filter.doFilter(UTF8Codec.toBytes("abcd"), UTF8Codec.Const.UTF8).length > 0);
+        Assertions.assertTrue(filter.doFilter(UTF8Codec.toBytes("abc"), UTF8Codec.Const.UTF8).length > 0);
+        Assertions.assertFalse(filter.doFilter(UTF8Codec.toBytes("ab"), UTF8Codec.Const.UTF8).length > 0);
     }
 
     @Test
@@ -96,9 +96,9 @@ public class TextLineFilterTest {
         final TextFilters textFilters = new TextFilters();
         textFilters.getExpressions().add("regex('\\w+?\\s+?\\w+?')");
         final TextLineFilter filter = new TextLineFilter(textFilters);
-        Assert.assertTrue(filter.doFilter(UTF8Codec.toBytes("ab cd"), UTF8Codec.Const.UTF8).length > 0);
-        Assert.assertTrue(filter.doFilter(UTF8Codec.toBytes("ab c"), UTF8Codec.Const.UTF8).length > 0);
-        Assert.assertFalse(filter.doFilter(UTF8Codec.toBytes("ab"), UTF8Codec.Const.UTF8).length > 0);
+        Assertions.assertTrue(filter.doFilter(UTF8Codec.toBytes("ab cd"), UTF8Codec.Const.UTF8).length > 0);
+        Assertions.assertTrue(filter.doFilter(UTF8Codec.toBytes("ab c"), UTF8Codec.Const.UTF8).length > 0);
+        Assertions.assertFalse(filter.doFilter(UTF8Codec.toBytes("ab"), UTF8Codec.Const.UTF8).length > 0);
     }
 
     @Test
@@ -106,9 +106,9 @@ public class TextLineFilterTest {
         final TextFilters textFilters = new TextFilters();
         textFilters.getExpressions().add("regex('[abc]{3}')");
         final TextLineFilter filter = new TextLineFilter(textFilters);
-        Assert.assertFalse(filter.doFilter(UTF8Codec.toBytes("bcdbcd"), UTF8Codec.Const.UTF8).length > 0);
-        Assert.assertTrue(filter.doFilter(UTF8Codec.toBytes("abcd"), UTF8Codec.Const.UTF8).length > 0);
-        Assert.assertTrue(filter.doFilter(UTF8Codec.toBytes("abab"), UTF8Codec.Const.UTF8).length > 0);
-        Assert.assertFalse(filter.doFilter(UTF8Codec.toBytes("ab"), UTF8Codec.Const.UTF8).length > 0);
+        Assertions.assertFalse(filter.doFilter(UTF8Codec.toBytes("bcdbcd"), UTF8Codec.Const.UTF8).length > 0);
+        Assertions.assertTrue(filter.doFilter(UTF8Codec.toBytes("abcd"), UTF8Codec.Const.UTF8).length > 0);
+        Assertions.assertTrue(filter.doFilter(UTF8Codec.toBytes("abab"), UTF8Codec.Const.UTF8).length > 0);
+        Assertions.assertFalse(filter.doFilter(UTF8Codec.toBytes("ab"), UTF8Codec.Const.UTF8).length > 0);
     }
 }
