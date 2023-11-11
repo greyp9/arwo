@@ -10,7 +10,7 @@
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
-        <checkstyle.version>8.45.1</checkstyle.version>
+        <checkstyle.version>9.3</checkstyle.version>
         <pmd.version>6.38.0</pmd.version>
     </properties>
     <dependencies>
@@ -297,7 +297,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.1.2</version>  <!-- 2021-01-23 -->
+                <version>3.3.1</version>  <!-- 2023-10-21 -->
                 <dependencies>
                     <dependency>
                         <groupId>com.puppycrawl.tools</groupId>
@@ -307,8 +307,7 @@
                 </dependencies>
                 <configuration>
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                    <configLocation>src/config/checkstyle/checkstyle-8.45.1.xml</configLocation>
-                    <encoding>UTF-8</encoding>
+                    <configLocation>src/config/checkstyle/checkstyle-9.3.xml</configLocation>
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>true</failsOnError>
                     <linkXRef>false</linkXRef>
