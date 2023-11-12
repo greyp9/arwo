@@ -56,8 +56,11 @@ public class RealmViewTest {
         final TypeInstance typeInstancePrincipal = typeInstancePrincipals.getInstance("principal");
         Assertions.assertNotNull(typeInstancePrincipal);
         final Document document = new DocumentFactory(typeDefinitions, true).generateEmpty(qname);
-        final XsdBundle xsdBundleDF = new XsdBundle(new XsdBundles(xsdTypes, Locale.getDefault()));
-        final Xed xed = new Xed(document, xsdTypes, xsdBundleDF);
+        final XsdBundle xsdBundle = new XsdBundle(new XsdBundles(xsdTypes, Locale.getDefault()));
+        final XsdBundle xsdBundleDE = new XsdBundle(new XsdBundles(xsdTypes, Locale.GERMAN));
+        final boolean isAvailableI18n =
+                !xsdBundleDE.getLabel(typeInstanceRealm).equals(xsdBundle.getLabel(typeInstanceRealm));
+        final Xed xed = new Xed(document, xsdTypes, xsdBundle);
         final Element elementPrincipal = xed.getXPather().getElement("/realm:realm/realm:principals/realm:principal");
         final XedCursor cursorPrincipal = new XedNav(xed).find(elementPrincipal);
         Assertions.assertNotNull(cursorPrincipal);
@@ -72,7 +75,6 @@ public class RealmViewTest {
         logger.finest(itemNamesI18n.toString());
         Assertions.assertEquals("[Name, Password, Roles]", itemNamesI18n.toString());
         // change locale
-        final XsdBundle xsdBundleDE = new XsdBundle(new XsdBundles(xsdTypes, Locale.GERMAN));
         final Xed xedDE = new Xed(document, xsdTypes, xsdBundleDE);
         final XedCursor cursorPrincipalDE = new XedNav(xedDE).find(elementPrincipal);
         final XedCursorView viewDE = new XedCursorView(cursorPrincipalDE);
@@ -80,8 +82,12 @@ public class RealmViewTest {
         final Collection<String> itemNamesI18nDE = ViewInstanceU.getItemNamesI18n(
                 pageViewDE.getCursor(), pageViewDE.getViewInstances());
         logger.finest(itemNamesI18nDE.toString());
-        // disable-i18n
-        //Assertions.assertEquals("[N\u00e4me, P\u00e4ssw\u00f6rd, R\u00f6les]", itemNamesI18nDE.toString());
+        // pseudo i18n bundles are assembled by Maven antrun plugin, which runs on successful build
+        // if i18n bundles are available, expect i18n text; otherwise, expect default locale text
+        // on "mvn clean package", i18n bundles will not present; on subsequent "mvn package" they will be present
+        final String expected = isAvailableI18n
+                ? "[N\u00e4me, P\u00e4ssw\u00f6rd, R\u00f6les]" : "[Name, Password, Roles]";
+        Assertions.assertEquals(expected, itemNamesI18nDE.toString());
     }
 
     @Test
@@ -96,7 +102,11 @@ public class RealmViewTest {
         final TypeInstance typeInstancePrincipal = typeInstancePrincipals.getInstance("principal");
         Assertions.assertNotNull(typeInstancePrincipal);
         final Document document = new DocumentFactory(typeDefinitions, true).generateEmpty(qname);
+        final XsdBundle xsdBundleDF = new XsdBundle(new XsdBundles(xsdTypes, Locale.getDefault()));
         final XsdBundle xsdBundleDE = new XsdBundle(new XsdBundles(xsdTypes, Locale.GERMAN));
+        final boolean isAvailableI18n =
+                !xsdBundleDE.getLabel(typeInstanceRealm).equals(xsdBundleDF.getLabel(typeInstanceRealm));
+
         final Xed xed = new Xed(document, xsdTypes, xsdBundleDE);
         final Element elementPrincipal = xed.getXPather().getElement("/realm:realm/realm:principals/realm:principal");
         final XedCursor cursorPrincipal = new XedNav(xed).find(elementPrincipal);
@@ -109,8 +119,11 @@ public class RealmViewTest {
         final Collection<String> itemNamesI18n = ViewInstanceU.getItemNamesI18n(
                 pageView.getCursor(), pageView.getViewInstances());
         logger.finest(itemNamesI18n.toString());
-        // disable-i18n
-        //Assertions.assertEquals("[N\u00e4me, P\u00e4ssw\u00f6rd, R\u00f6les]", itemNamesI18n.toString());
+        // pseudo i18n bundles are assembled by Maven antrun plugin, which runs on successful build
+        // if i18n bundles are available, expect i18n text; otherwise, expect default locale text
+        final String expected = isAvailableI18n
+                ? "[N\u00e4me, P\u00e4ssw\u00f6rd, R\u00f6les]" : "[Name, Password, Roles]";
+        Assertions.assertEquals(expected, itemNamesI18n.toString());
     }
 
     @SuppressWarnings("checkstyle:magicnumber")
@@ -123,6 +136,7 @@ public class RealmViewTest {
         final Document document = new DocumentFactory(xsdTypes.getTypeDefinitions(), false).generateEmpty(qname);
         final Xed xed = new Xed(document, xsdTypes);
         final XsdBundle xsdBundle = new XsdBundle(new XsdBundles(xsdTypes, Locale.getDefault()));
+        final XsdBundle xsdBundleDE = new XsdBundle(new XsdBundles(xsdTypes, Locale.GERMAN));
         final Xed xedUI = new Xed(xed.getDocument(), xed.getXsdTypes(), xsdBundle);
         // navigate
         final XedCursor cursorPrincipalType = new XedNav(xedUI).find("/ecd28/7256d/8dc37/");
@@ -167,7 +181,6 @@ public class RealmViewTest {
             Assertions.assertEquals("d3fa20e5", CRCU.crc32String(UTF8Codec.toBytes(tableText)));
         }
         // change locale
-        final XsdBundle xsdBundleDE = new XsdBundle(new XsdBundles(xsdTypes, Locale.GERMAN));
         final Xed xedDE = new Xed(document, xsdTypes, xsdBundleDE);
         // verify page
         if (SystemU.isTrue()) {
@@ -177,18 +190,31 @@ public class RealmViewTest {
             final String pageText = new PropertyPageTextView(pageView).render();
             logger.finest(SystemU.eol() + pageText);
             Assertions.assertEquals(178, pageText.length());
-            Assertions.assertEquals("5b3c3809", CRCU.crc32String(UTF8Codec.toBytes(pageText)));  // xsdBundleDE
+            // pseudo i18n bundles are assembled by Maven antrun plugin, which runs on successful build
+            // if i18n bundles are available, expect RU text; otherwise, expect default locale text
+            final TypeInstance typeInstance = cursorPrincipal.getTypeInstance();
+            final boolean isAvailableI18n =
+                    !xsdBundleDE.getLabel(typeInstance).equals(xsdBundle.getLabel(typeInstance));
+            final String expected = isAvailableI18n ? "5b3c3809" : "b7ca26b2";
+            Assertions.assertEquals(expected, CRCU.crc32String(UTF8Codec.toBytes(pageText)));
         }
         // verify table
         if (SystemU.isTrue()) {
             final XedCursor cursorPrincipals = new XedNav(xedDE).find(principals);
+            Assertions.assertNotNull(cursorPrincipals);
             final XedCursor cursorPrincipalTypeDE = new XedNav(xedDE).find("principal", cursorPrincipals);
             final XedCursorView view = new XedCursorView(cursorPrincipalTypeDE);
             final XedTableView tableView = view.getTableView();
             final String tableText = new TableTextView(tableView).render();
             logger.finest(SystemU.eol() + tableText);
             Assertions.assertEquals(193, tableText.length());
-            Assertions.assertEquals("61ff36bb", CRCU.crc32String(UTF8Codec.toBytes(tableText)));  // xsdBundleDE
+            // pseudo i18n bundles are assembled by Maven antrun plugin, which runs on successful build
+            // if i18n bundles are available, expect RU text; otherwise, expect default locale text
+            final TypeInstance typeInstance = cursorPrincipals.getTypeInstance();
+            final boolean isAvailableI18n =
+                    !xsdBundleDE.getLabel(typeInstance).equals(xsdBundle.getLabel(typeInstance));
+            final String expected = isAvailableI18n ? "61ff36bb" : "d3fa20e5";
+            Assertions.assertEquals(expected, CRCU.crc32String(UTF8Codec.toBytes(tableText)));
         }
     }
 }
