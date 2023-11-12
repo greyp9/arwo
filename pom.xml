@@ -11,7 +11,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
         <checkstyle.version>9.3</checkstyle.version>
-        <pmd.version>6.38.0</pmd.version>
+        <pmd.version>6.55.0</pmd.version>
     </properties>
     <dependencies>
         <dependency>
@@ -69,7 +69,7 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-checkstyle-plugin</artifactId>
-                    <version>3.1.2</version>
+                    <version>3.3.1</version>
                     <dependencies>
                         <dependency>
                             <groupId>com.puppycrawl.tools</groupId>
@@ -81,24 +81,19 @@
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-pmd-plugin</artifactId>
-                    <version>3.15.0</version>  <!-- 2021-09-06 -->
+                    <version>3.21.2</version>  <!-- 2023-10-30 -->
                     <dependencies>
+                        <!-- https://repo.maven.apache.org/maven2/net/sourceforge/pmd/pmd-core/ -->
                         <dependency>
                             <groupId>net.sourceforge.pmd</groupId>
                             <artifactId>pmd-core</artifactId>
                             <version>${pmd.version}</version>
                         </dependency>
+                        <!-- https://repo.maven.apache.org/maven2/net/sourceforge/pmd/pmd-java/ -->
                         <dependency>
                             <groupId>net.sourceforge.pmd</groupId>
                             <artifactId>pmd-java</artifactId>
                             <version>${pmd.version}</version>
-                        </dependency>
-                        <!-- https://issues.apache.org/jira/browse/MPMD-325 -->
-                        <!-- fixed in [org.apache.maven.plugins:maven-pmd-plugin:3.16.0] -->
-                        <dependency>
-                            <groupId>org.ow2.asm</groupId>
-                            <artifactId>asm</artifactId>
-                            <version>9.2</version>
                         </dependency>
                     </dependencies>
                 </plugin>
@@ -297,14 +292,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
-                <version>3.3.1</version>  <!-- 2023-10-21 -->
-                <dependencies>
-                    <dependency>
-                        <groupId>com.puppycrawl.tools</groupId>
-                        <artifactId>checkstyle</artifactId>
-                        <version>${checkstyle.version}</version>
-                    </dependency>
-                </dependencies>
                 <configuration>
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
                     <configLocation>src/config/checkstyle/checkstyle-9.3.xml</configLocation>
@@ -325,11 +312,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-pmd-plugin</artifactId>
-                <version>3.15.0</version>  <!-- 2021-09-06 -->
                 <configuration>
                     <includeTests>false</includeTests>
                     <rulesets>
-                        <ruleset>src/config/pmd/pmd.xml</ruleset>
+                        <ruleset>src/config/pmd/pmd-6.55.0.xml</ruleset>
                     </rulesets>
                     <printFailingErrors>true</printFailingErrors>
                     <linkXRef>false</linkXRef>
