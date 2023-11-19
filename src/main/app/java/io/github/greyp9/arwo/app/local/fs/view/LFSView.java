@@ -1,7 +1,7 @@
 package io.github.greyp9.arwo.app.local.fs.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
-import io.github.greyp9.arwo.app.core.view.favorite.AppFavoriteView;
+import io.github.greyp9.arwo.app.core.view.favorite.FavoriteMenu;
 import io.github.greyp9.arwo.app.core.view.props.AppPropertiesView;
 import io.github.greyp9.arwo.app.core.view.refresh.AppRefreshView;
 import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
@@ -134,7 +134,9 @@ public abstract class LFSView {
         final XedNav nav = new XedNav(xedUI);
         final XedCursor cursorFavorites = nav.findX("/app:favorites/app:lfsFavorites");  // i18n xpath
         final XedCursor cursorType = nav.find("lfsFavorite", cursorFavorites);  // i18n xpath
-        new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.FILESYSTEM).addContentTo(html);
+        // replacing table with menu bar
+        new FavoriteMenu(getRequest(), userState, cursorType, AppMenuFactory.Const.FILESYSTEM).addContentTo(divMenus);
+        //new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.FILESYSTEM).addContentTo(html);
         // settings property strips
         final Locale locale = userState.getLocus().getLocale();
         final String submitID = userState.getSubmitID();
