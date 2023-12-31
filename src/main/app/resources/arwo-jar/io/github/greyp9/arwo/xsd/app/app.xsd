@@ -374,7 +374,7 @@
 
     <xsd:complexType name='tableType'>
         <xsd:sequence>
-            <xsd:element name='pageSize' type='xsd:unsignedShort'/>
+            <xsd:element name='pageSize' type='xsd:unsignedShort' default='30'/>
         </xsd:sequence>
     </xsd:complexType>
 

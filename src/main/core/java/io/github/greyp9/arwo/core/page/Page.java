@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.page;
 
 import io.github.greyp9.arwo.core.lang.MathU;
+import io.github.greyp9.arwo.core.value.Value;
 
 import java.util.Properties;
 
@@ -82,10 +83,13 @@ public class Page {
             Page page = pageIn;
             if (page != null) {
                 int position = MathU.bound(0, page.getPosition(), count - 1);
-                position -= (position % page.getCount());
-                page = new Page(position, page.getCount(), page.getProperties());
+                final int pageCount = Value.defaultOnInvalid(page.getCount(), 0, DEFAULT_PAGE_SIZE);
+                position -= (position % pageCount);
+                page = new Page(position, pageCount, page.getProperties());
             }
             return page;
         }
     }
+
+    private static final int DEFAULT_PAGE_SIZE = 30;
 }

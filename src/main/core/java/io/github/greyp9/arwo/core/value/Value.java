@@ -43,6 +43,10 @@ public final class Value {
         return ((left == null) ? (right == null) : (left.equals(right)));
     }
 
+    public static int defaultOnInvalid(final int value, final int invalidValue, final int defaultValue) {
+        return ((value == invalidValue) ? defaultValue : value);
+    }
+
     public static int defaultOnNull(final String value, final int defaultOnNull) {
         return ((value == null) ? defaultOnNull : Integer.parseInt(value));
     }
