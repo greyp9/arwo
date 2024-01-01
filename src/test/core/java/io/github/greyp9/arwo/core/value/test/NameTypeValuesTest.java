@@ -9,6 +9,7 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
+import java.io.UnsupportedEncodingException;
 import java.util.logging.Logger;
 
 public class NameTypeValuesTest {
@@ -48,5 +49,16 @@ public class NameTypeValuesTest {
         final String queryString4 = HttpArguments.toQueryString(new NameTypeValues()
                 .addNN("a", null).addNN("b", "bar"));
         Assertions.assertEquals("b=bar", queryString4);
+    }
+
+    @Test
+    public void testUseInAppSignal() throws UnsupportedEncodingException {
+        final String queryString = HttpArguments.toQueryString(new NameTypeValues()
+                .addNN("signal", "q").addNN("source", getClass().getName()).addNN("at", "2000-01-01T00:00:00Z"));
+        logger.finest("queryString = " + queryString);
+        final NameTypeValues arguments = HttpArguments.toArguments(queryString);
+        Assertions.assertEquals("q", arguments.getValue("signal"));
+        Assertions.assertEquals(getClass().getName(), arguments.getValue("source"));
+        Assertions.assertEquals("2000-01-01T00:00:00Z", arguments.getValue("at"));
     }
 }
