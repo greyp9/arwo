@@ -30,7 +30,7 @@ public class FileMetaData {
         return directory;
     }
 
-    public Properties getProperties() {
+    public final Properties getProperties() {
         return properties;
     }
 

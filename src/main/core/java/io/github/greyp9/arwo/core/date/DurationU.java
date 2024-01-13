@@ -21,8 +21,12 @@ public final class DurationU {
         return (isValue ? (dateZ.getTime() - dateStart.getTime()) : null);
     }
 
+    public static long toMillisP(final String duration, final long defaultMillis) {
+        return NumberU.toLong(toMillis(duration), defaultMillis);
+    }
+
     public static long toMillisP(final String duration) {
-        return NumberU.toLong(toMillis(duration), 0L);
+        return toMillisP(duration, 0L);
     }
 
     public static Long toMillis(final String duration) {

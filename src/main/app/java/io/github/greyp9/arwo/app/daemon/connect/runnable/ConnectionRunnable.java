@@ -44,7 +44,8 @@ public class ConnectionRunnable implements Runnable {
                 date = new Date();
             }
         }
-        logger.exiting(getClass().getName(), Runnable.class.getName(), reference.get());
+        logger.finer(reference::get);
+        logger.exiting(getClass().getName(), Runnable.class.getName());
     }
 
     private Date getNextTime(final Date date, final String duration) {
