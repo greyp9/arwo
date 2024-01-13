@@ -11,6 +11,7 @@ import io.github.greyp9.arwo.core.jdbc.query.History;
 import io.github.greyp9.arwo.core.jdbc.query.Query;
 import io.github.greyp9.arwo.core.result.op.Results;
 import io.github.greyp9.arwo.core.result.xml.ResultsReader;
+import io.github.greyp9.arwo.core.util.PropertiesX;
 
 import java.io.ByteArrayInputStream;
 import java.io.File;
@@ -51,21 +52,28 @@ public class SubsystemJDBC {
     private void loadRecent(final Alerts alerts, final File folder) {
         final File folderHistory = new File(folder, "result/jdbc");
         final Collection<File> files = new FindInFolderQuery(folderHistory, "*.results", false).getFound();
-        final int recentCount = 10;
-        final long skip = Math.max(0, (files.size() - recentCount));
+        final long skip = Math.max(0, (files.size() - COUNT_RECENT));
         final List<File> filesRecent = files.stream().sorted().skip(skip).collect(Collectors.toList());
         final ResultsReader reader = new ResultsReader();
+        final PropertiesX propertiesX = new PropertiesX(new Properties());
         for (final File file : filesRecent) {
             try {
                 final Results results = reader.readFrom(
                         new MetaFile(null, null, new ByteArrayInputStream(StreamU.read(file))));
-                final Date dateStart = results.getInterval().getDateStart();
-                final Query query = new Query(results.getContext(), dateStart.getTime(),
-                        history.getNewID(dateStart), results.getCommand(), results);
-                history.add(query);
+                final String context = results.getContext();
+                final long countContext = propertiesX.addLong(context, 1L);
+                if (countContext <= COUNT_RECENT_PER_CONTEXT) {
+                    final Date dateStart = results.getInterval().getDateStart();
+                    final Query query = new Query(results.getContext(), dateStart.getTime(),
+                            history.getNewID(dateStart), results.getCommand(), results);
+                    history.add(query);
+                }
             } catch (IOException e) {
                 alerts.add(new Alert(Alert.Severity.ERR, e.getMessage()));
             }
         }
     }
+
+    private static final int COUNT_RECENT = 100;
+    private static final int COUNT_RECENT_PER_CONTEXT = 20;
 }

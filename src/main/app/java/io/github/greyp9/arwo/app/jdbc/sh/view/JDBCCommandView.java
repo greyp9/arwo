@@ -81,7 +81,7 @@ public class JDBCCommandView extends JDBCView {
         if (query == null) {
             final History history = jdbc.getHistory();
             new JDBCHistoryView("jdbcHistoryType", history, bundle,  // i18n metadata
-                    httpRequest, userState).addContentTo(html);
+                    request, userState).addContentTo(html);
         } else {
             final ResultsContext context = userState.getResultsContext(httpRequest);
             new ResultsView(query.getResults(), context).addContentTo(html);

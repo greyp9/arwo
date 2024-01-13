@@ -19,14 +19,15 @@ public class JDBCInventoryXView extends JDBCView {
 
     @Override
     protected final HttpResponse addContentTo(final Element html) throws IOException {
-        final ServletHttpRequest httpRequest = getRequest().getHttpRequest();
+        final JDBCRequest request = getRequest();
+        final ServletHttpRequest httpRequest = request.getHttpRequest();
         final AppUserState userState = getUserState();
         final History history = userState.getJDBC().getHistory();
-        final Bundle bundle = getRequest().getBundle();
+        final Bundle bundle = request.getBundle();
         final String baseURI = httpRequest.getBaseURI();
         new JDBCInventoryView(httpRequest, userState, "").addContent(html);
         new AppConnectionView(httpRequest, userState, userState.getJDBC().getCache(), baseURI).addContentTo(html, true);
-        new JDBCHistoryView("jdbcHistoryType", history, bundle, httpRequest, userState).addContentTo(html); // i18n meta
+        new JDBCHistoryView("jdbcHistoryType", history, bundle, request, userState).addContentTo(html); // i18n meta
         return null;
     }
 }

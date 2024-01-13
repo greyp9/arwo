@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.app.jdbc.sh.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.jdbc.sh.core.JDBCRequest;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.date.DurationU;
@@ -23,6 +24,7 @@ import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewState;
+import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import org.w3c.dom.Element;
 
@@ -34,16 +36,18 @@ public class JDBCHistoryView {
     private final String tableID;
     private final History history;
     private final Bundle bundle;
+    private final JDBCRequest request;
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
 
 
     public JDBCHistoryView(final String tableID, final History history,
-                           final Bundle bundle, final ServletHttpRequest httpRequest, final AppUserState userState) {
+                           final Bundle bundle, final JDBCRequest request, final AppUserState userState) {
         this.tableID = tableID;
         this.history = history;
         this.bundle = bundle;
-        this.httpRequest = httpRequest;
+        this.request = request;
+        this.httpRequest = request.getHttpRequest();
         this.userState = userState;
     }
 
@@ -77,9 +81,12 @@ public class JDBCHistoryView {
     }
 
     private RowSet createRowSet(final RowSetMetaData metaData) throws IOException {
+        final String server = request.getServer();
         final RowSet rowSet = new RowSet(metaData, null, null);
         for (final Query query : history.getHistory()) {
-            createRow(rowSet, query);
+            if (Value.isEmpty(server) || server.equals(query.getContext())) {
+                createRow(rowSet, query);
+            }
         }
         return rowSet;
     }
