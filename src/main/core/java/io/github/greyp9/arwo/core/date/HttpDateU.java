@@ -25,6 +25,21 @@ public final class HttpDateU {
         return date;
     }
 
+    public static Date fromHttpZMilli(final String date) {
+        return ((date == null) ? null : fromHttpZMilliNotNull(date));
+    }
+
+    private static Date fromHttpZMilliNotNull(final String dateString) {
+        final DateFormat dateFormat = DateU.getDateFormat(Const.HTTP_Z_MILLI, DateU.Const.TZ_GMT, true);
+        Date date = null;  // NOPMD
+        try {
+            date = dateFormat.parse(dateString);  // NOPMD
+        } catch (ParseException e) {
+            e.getClass();
+        }
+        return date;
+    }
+
     public static String toHttp(final Date date, final String tz) {
         return ((date == null) ? null : toHttpNotNull(date, tz));
     }

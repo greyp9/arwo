@@ -95,6 +95,11 @@ background-color: InactiveCaption;
 color: InactiveCaptionText;
 }
 
+table td.links
+{
+text-align: center;
+}
+
 tfoot span.left
 {
 float: left;
@@ -313,7 +318,7 @@ padding: 0 0 0 2em;
 <table summary='inactive' class='inactive'>
 <caption title='tooltip for caption'>caption</caption>
 <tr><th>columnA</th><th>columnB</th><th>columnC</th><th>columnD</th><th>columnE</th></tr>
-<tr><td>valueA1</td><td>valueB1</td><td>valueC1</td><td>valueD1</td><td>valueE1</td></tr>
+<tr><td class='links'><a href="..">hi</a><a href="..">bye</a></td><td>valueB1</td><td>valueC1</td><td>valueD1</td><td>valueE1</td></tr>
 <tr><td>valueA2</td><td>valueB2</td><td>valueC2</td><td>valueD2</td><td>valueE2</td></tr>
 </table>
 </div>

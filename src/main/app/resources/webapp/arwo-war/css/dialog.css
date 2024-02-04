@@ -77,6 +77,11 @@ tbody.dialog td.attr-value
 width: 100%;
 }
 
+tbody.table td.links a.links
+{
+display: inline;
+}
+
 tbody.dialog td a, tbody.table td a  /* TABLE CELL SHOULD BE ALL HYPERLINK */
 {
 display: block;

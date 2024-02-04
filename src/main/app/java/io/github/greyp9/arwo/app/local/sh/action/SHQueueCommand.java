@@ -56,7 +56,7 @@ public class SHQueueCommand {
         userExecutor.getRunnables().add(runnable);
         userExecutor.getExecutorCommand().execute(runnable);
         // redirect to resource for execution monitor
-        final DateX dateX = DateX.Factory.createURL();
+        final DateX dateX = DateX.Factory.createFilenameMilli();
         final String commandID = dateX.toString(httpRequest.getDate());
         return PathU.toDir(httpRequest.getBaseURI(), commandID);
     }

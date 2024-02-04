@@ -9,6 +9,7 @@ public final class UTF16 {
     public static final String ARROW_RIGHT = "\u25b6";
     public static final String ARROW_UP = "\u25b2";  // ▲
     public static final String BULLET = "\u2022";
+    public static final String CHECK = "\u2713";
     public static final String CHECKBOX_FALSE = "\u2610";  // ☐
     public static final String CHECKBOX_TRUE = "\u2611";  // ☑
     public static final String CLOSE = "X";
@@ -16,6 +17,7 @@ public final class UTF16 {
     public static final String DISCONNECTED = "\u2283\u2282";  // ⊃⊂
     public static final String DOCUMENT = "\u2637"; // "\u23cd";  // "\u2395";  // ⎕
     //public static final String FAVORITE = "\u2764";  // ❤
+    public static final String GEAR = "\u2699";
     public static final String GO_BACK = "\u232b";  // ⌫
     public static final String HOME = "\u23cf";  // "\u2302";  // ⌂⏏
     public static final String HOURGLASS = "\u231b";  // ⌛

@@ -303,7 +303,7 @@ public class AppUserState {
         this.userExecutor = new UserExecutor(principal, date, new File(SystemU.userHome()));
         this.deferredActions = new DeferredActions();
         this.cron = new SubsystemCron(documentState.getFactory());
-        this.local = new SubsystemLocal();
+        this.local = new SubsystemLocal(alerts, this.userRoot);
         this.ssh = new SubsystemSSH(alerts);
         this.jdbc = new SubsystemJDBC(alerts, this.userRoot);
         this.mail = new SubsystemMail(alerts);

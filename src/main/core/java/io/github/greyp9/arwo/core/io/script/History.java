@@ -14,7 +14,7 @@ public class History {
 
     public History() {
         this.scripts = new ArrayList<>();
-        this.dateX = DateX.Factory.createURL();
+        this.dateX = DateX.Factory.createFilenameMilli();
     }
 
     public final synchronized Collection<Script> getHistory() {

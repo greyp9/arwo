@@ -13,6 +13,7 @@ import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.table.cell.Duration;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
+import io.github.greyp9.arwo.core.table.cell.TableViewLinks;
 import io.github.greyp9.arwo.core.table.core.TableU;
 import io.github.greyp9.arwo.core.table.html.TableView;
 import io.github.greyp9.arwo.core.table.insert.InsertRow;
@@ -27,6 +28,7 @@ import org.w3c.dom.Element;
 
 import java.io.IOException;
 import java.sql.Types;
+import java.util.Arrays;
 
 public class AppHistoryView {
     private final String tableID;
@@ -90,12 +92,16 @@ public class AppHistoryView {
     private void createRow(final RowSet rowSet, final Script script) {
         final boolean isStarted = (script.getStart() != null);
         final boolean isFinished = (script.getFinish() != null);
+        final boolean isProgress = script.isProgress();
         final String id = script.getID();
         final String href = includeContext
                 ? PathU.toDir(httpRequest.getBaseURI(), script.getContext(), id)
                 : PathU.toDir(httpRequest.getBaseURI(), id);
+        final String hrefResults = href + "?results";
         final InsertRow insertRow = new InsertRow(rowSet);
-        insertRow.setNextColumn(new TableViewLink(UTF16.SELECT, null, href));
+        insertRow.setNextColumn(new TableViewLinks(Arrays.asList(
+                new TableViewLink(UTF16.GEAR, null, href),
+                new TableViewLink(UTF16.CHECK, null, isFinished ? hrefResults : null))));
         insertRow.setNextColumn(script.getContext());
         insertRow.setNextColumn(script.getText());
         insertRow.setNextColumn(CRCU.crc32String(script.getText().trim()));
@@ -103,8 +109,8 @@ public class AppHistoryView {
         insertRow.setNextColumn(getState(isStarted, isFinished));
         insertRow.setNextColumn(Duration.toDuration(script.getDelay(httpRequest.getDate())));
         insertRow.setNextColumn(Duration.toDuration(script.getElapsed(httpRequest.getDate())));
-        insertRow.setNextColumn(script.getStdoutLength());
-        insertRow.setNextColumn(script.getStderrLength());
+        insertRow.setNextColumn(isProgress ? script.getStdoutLength() : null);
+        insertRow.setNextColumn(isProgress ? script.getStderrLength() : null);
         insertRow.setNextColumn(script.getExitValue());
         rowSet.add(insertRow.getRow());
     }

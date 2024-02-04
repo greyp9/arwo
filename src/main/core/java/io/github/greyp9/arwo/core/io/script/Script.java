@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Optional;
 import java.util.Properties;
 
 @SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
@@ -39,6 +40,10 @@ public class Script {
 
     public final String getText() {
         return text;
+    }
+
+    public final boolean isReload() {
+        return properties.containsKey(Const.RELOAD);
     }
 
     public final Properties getProperties() {
@@ -85,6 +90,13 @@ public class Script {
 
     public final synchronized void finish() {
         new PropertiesX(properties).setLong(Const.FINISH, new Date().getTime());
+    }
+
+    public final synchronized void deserialize(final Date start, final Date finish) {
+        final PropertiesX propertiesX = new PropertiesX(properties);
+        propertiesX.setLong(Const.START, start.getTime());
+        Optional.ofNullable(finish).ifPresent(f -> propertiesX.setLong(Const.FINISH, f.getTime()));
+        propertiesX.setLong(Const.RELOAD, 1L);
     }
 
     public final synchronized Collection<Command> getCommands() {
@@ -137,7 +149,11 @@ public class Script {
         return (isValue ? (dateZ.getTime() - dateA.getTime()) : null);
     }
 
-    public final synchronized long getStdoutLength() {
+    public final synchronized boolean isProgress() {
+        return ((!commandsWork.isEmpty()) || (!commandsDone.isEmpty()));
+    }
+
+    public final synchronized Long getStdoutLength() {
         long length = 0L;
         final Collection<Command> commands = getCommands();
         for (final Command command : commands) {
@@ -147,7 +163,7 @@ public class Script {
         return length;
     }
 
-    public final synchronized long getStderrLength() {
+    public final synchronized Long getStderrLength() {
         long length = 0L;
         final Collection<Command> commands = getCommands();
         for (final Command command : commands) {
@@ -175,5 +191,6 @@ public class Script {
         private static final String START = "start";  // i18n internal
         private static final String FINISH = "finish";  // i18n internal
         private static final String INTERRUPTED = "interrupted";  // i18n internal
+        private static final String RELOAD = "reload";  // i18n internal
     }
 }

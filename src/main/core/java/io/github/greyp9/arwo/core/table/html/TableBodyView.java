@@ -11,6 +11,7 @@ import io.github.greyp9.arwo.core.table.cell.Duration;
 import io.github.greyp9.arwo.core.table.cell.TableViewButton;
 import io.github.greyp9.arwo.core.table.cell.TableViewGlyph;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
+import io.github.greyp9.arwo.core.table.cell.TableViewLinks;
 import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.Row;
@@ -23,6 +24,7 @@ import org.w3c.dom.Element;
 import java.sql.Types;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 
 @SuppressWarnings({ "PMD.GodClass", "PMD.TooManyMethods" })
 public class TableBodyView {
@@ -97,6 +99,8 @@ public class TableBodyView {
             addCell(tr, (BaselineValue) value, type);
         } else if (value instanceof TableViewLink) {
             addCell(tr, (TableViewLink) value);
+        } else if (value instanceof TableViewLinks) {
+            addCell(tr, (TableViewLinks) value);
         } else if (value instanceof TableViewButton) {
             addCell(tr, (TableViewButton) value);
         } else if (value instanceof TableViewGlyph) {
@@ -191,6 +195,17 @@ public class TableBodyView {
         // 'display: block' makes entire cell a hyperlink, not just the inner text
         ElementU.addElement(td, Html.A, tableViewLink.getText(),
                 NameTypeValuesU.create(Html.HREF, tableViewLink.getHref()));
+    }
+
+    private void addCell(final Element tr, final TableViewLinks tableViewLinks) {
+        final Element td = ElementU.addElement(tr, Html.TD, null, NameTypeValuesU.create(Html.CLASS, App.CSS.LINKS));
+        final List<TableViewLink> links = tableViewLinks.getLinks();
+        for (TableViewLink tableViewLink : links) {
+            if (tableViewLink.getHref() != null) {
+                ElementU.addElement(td, Html.A, tableViewLink.getText(),
+                        NameTypeValuesU.create(Html.CLASS, App.CSS.LINKS, Html.HREF, tableViewLink.getHref()));
+            }
+        }
     }
 
     private void addCell(final Element tr, final TableViewButton tvb) {
