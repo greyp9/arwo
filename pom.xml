@@ -106,6 +106,31 @@
         </pluginManagement>
         <plugins>
             <plugin>
+                <groupId>io.github.git-commit-id</groupId>
+                <artifactId>git-commit-id-maven-plugin</artifactId>
+                <version>4.9.9</version>
+                <executions>
+                    <execution>
+                        <id>git-commit-id-execution</id>
+                        <goals>
+                            <goal>revision</goal>
+                        </goals>
+                        <phase>initialize</phase>
+                    </execution>
+                </executions>
+                <configuration>
+                    <includeOnlyProperties>
+                        <includeOnlyProperty>^git.commit.id.abbrev$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.commit.time$</includeOnlyProperty>
+                        <includeOnlyProperty>^git.dirty$</includeOnlyProperty>
+                    </includeOnlyProperties>
+                    <dateFormat>yyyy-MM-dd&apos;T&apos;HH:mm:ss&apos;Z&apos;</dateFormat>
+                    <dateFormatTimeZone>GMT</dateFormatTimeZone>
+                    <offline>true</offline>
+                    <commitIdGenerationMode>full</commitIdGenerationMode>
+                </configuration>
+            </plugin>
+            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.12.1</version>  <!-- 2023-12-21 -->
@@ -214,7 +239,7 @@
                                 <replace token="SPECIFICATION_VERSION" value="${project.version}" dir="target/classes">
                                     <include name="arwo-war/index.html"/>
                                 </replace>
-                                <replace token="IMPLEMENTATION_VERSION" value="${maven.build.timestamp}" dir="target/classes">
+                                <replace token="IMPLEMENTATION_VERSION" value="${maven.build.timestamp}-${git.commit.id.abbrev}" dir="target/classes">
                                     <include name="arwo-war/index.html"/>
                                 </replace>
                             </tasks>
@@ -387,8 +412,11 @@
                         <manifest/>
                         <manifestEntries>
                             <Specification-Version>${project.version}</Specification-Version>
-                            <Implementation-Version>${maven.build.timestamp}</Implementation-Version>
+                            <Implementation-Version>${maven.build.timestamp}-${git.commit.id.abbrev}</Implementation-Version>
                             <Multi-Release>true</Multi-Release>
+                            <git-commit-id>${git.commit.id.abbrev}</git-commit-id>
+                            <git-commit-time>${git.commit.time}</git-commit-time>
+                            <git-dirty>${git.dirty}</git-dirty>
                         </manifestEntries>
                     </archive>
                 </configuration>
