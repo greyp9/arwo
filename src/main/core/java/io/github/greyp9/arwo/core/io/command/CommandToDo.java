@@ -36,7 +36,7 @@ public class CommandToDo extends Command {
     }
 
     @Override
-    public final Integer getPID() {
+    public final Long getPID() {
         return null;
     }
 

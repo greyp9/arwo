@@ -49,7 +49,7 @@ public class LocalCommandTest {
         final Collection<Command> commands = script.getCommands();
         for (final Command command : commands) {
             Assertions.assertTrue(command instanceof CommandDone);
-            Assertions.assertTrue(Value.defaultOnNull(command.getPID(), 0) > 0);
+            Assertions.assertTrue(Value.defaultOnNull(command.getPID(), 0L) > 0L);
             Assertions.assertEquals(Integer.valueOf(0), command.getExitValue());
             Assertions.assertTrue(command.getStdin().length() > 0);
             Assertions.assertTrue(command.getStdout().length() > 0);

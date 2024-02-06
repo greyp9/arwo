@@ -66,7 +66,8 @@ public class ScriptRunnable implements Runnable {
             logger.entering(getClass().getName(), Runnable.class.getName());
             script.start();
             runInner();
-        } catch (IOException e) {
+        } catch (final Throwable e) {
+            logger.throwing(getClass().getName(), null, e);
             alerts.add(new Alert(Alert.Severity.ERR, e.getMessage(), e.getClass().getSimpleName()));
         } finally {
             script.finish();
@@ -110,7 +111,7 @@ public class ScriptRunnable implements Runnable {
                     Arrays.asList(commandArray).toString(), dir.getAbsolutePath()));
             final Runtime runtime = Runtime.getRuntime();
             final Process process = runtime.exec(commandArray, null, dir);
-            final Integer processId = ProcessU.getProcessId(process);
+            final Long processId = ProcessU.getProcessId(process);
             commandWork = script.updateCommand(commandWork, processId);
 
             // IN PROGRESS COMMANDS ARE AVAILABLE TO CHECK PROGRESS

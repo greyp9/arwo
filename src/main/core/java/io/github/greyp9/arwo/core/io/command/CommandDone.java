@@ -9,7 +9,7 @@ public class CommandDone extends Command {
     private final String stderr;
     private final long dateStart;
     private final long dateFinish;
-    private final Integer pid;
+    private final Long pid;
     private final Integer exitValue;
 
     @Override
@@ -43,7 +43,7 @@ public class CommandDone extends Command {
     }
 
     @Override
-    public final Integer getPID() {
+    public final Long getPID() {
         return pid;
     }
 

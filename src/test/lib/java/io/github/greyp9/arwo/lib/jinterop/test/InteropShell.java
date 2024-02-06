@@ -85,7 +85,7 @@ public class InteropShell {
         Object[] params = { new JIString(String.format("cmd /c %s", stdin)) };
         JIVariant[] results = shell.callMethodA("Exec", params);
         if ((results == null) || (results.length == 0)) {
-            CommandWork commandWork = new CommandWork(null, stdin, null, null, dateStart, dateStart, 0);
+            CommandWork commandWork = new CommandWork(null, stdin, null, null, dateStart, dateStart, 0L);
             return new CommandDone(commandWork, "", "", new Date(), -1);
         } else {
             return processResults(stdin, dateStart, results[0]);
@@ -99,7 +99,7 @@ public class InteropShell {
         String stdOut = consumeStream(results.get("StdOut"));
         String stdErr = consumeStream(results.get("StdErr"));
         results.release();
-        CommandWork commandWork = new CommandWork(null, stdin, null, null, dateStart, dateStart, 0);
+        CommandWork commandWork = new CommandWork(null, stdin, null, null, dateStart, dateStart, 0L);
         return new CommandDone(commandWork, stdOut, stdErr, new Date(), 0);
     }
 

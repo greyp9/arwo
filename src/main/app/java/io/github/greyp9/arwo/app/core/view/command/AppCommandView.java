@@ -78,7 +78,7 @@ public class AppCommandView {
     }
 
     private String toExtraInfo(final TextRenderer rendererStderr, final TextRenderer rendererStdout) {
-        final Integer pid = command.getPID();
+        final Long pid = command.getPID();
         final String pidText = (pid == null) ? null : String.format("[PID:%s]", pid);
         final Integer exitValue = command.getExitValue();
         final String exitValueText = (exitValue == null) ? null : String.format("[EXIT:%s]", exitValue);

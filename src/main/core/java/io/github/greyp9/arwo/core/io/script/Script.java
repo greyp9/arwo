@@ -120,7 +120,7 @@ public class Script {
         return commandWork;
     }
 
-    public final synchronized CommandWork updateCommand(final CommandWork command, final Integer pid) {
+    public final synchronized CommandWork updateCommand(final CommandWork command, final Long pid) {
         final CommandWork commandUpdate = new CommandWork(command, pid);
         commandsWork.remove(command);
         commandsWork.add(commandUpdate);

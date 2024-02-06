@@ -10,10 +10,11 @@ public final class ProcessU {
     private ProcessU() {
     }
 
-    public static Integer getProcessId(final Process process) {
+    public static Long getProcessId(final Process process) {
         final boolean isUNIXProcess = process.getClass().getName().equals("java.lang.UNIXProcess");
         final boolean isProcessImpl = process.getClass().getName().equals("java.lang.ProcessImpl");
-        return ((isUNIXProcess || isProcessImpl) ? getProcessIdUNIX(process) : null);
+        final Integer pid = (isUNIXProcess || isProcessImpl) ? getProcessIdUNIX(process) : null;
+        return (pid == null) ? null : (long) pid;
     }
 
     private static Integer getProcessIdUNIX(final Process process) {
@@ -34,7 +35,7 @@ public final class ProcessU {
                 final Field field = process.getClass().getDeclaredField("pid");  // i18n internal
                 field.setAccessible(true);
                 processId = ((Integer) field.get(process));
-            } catch (IllegalAccessException | NoSuchFieldException e) {
+            } catch (ReflectiveOperationException | RuntimeException e) {
                 Logger.getLogger(getClass().getName()).warning(e.getMessage());
             }
             return processId;

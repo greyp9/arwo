@@ -101,7 +101,7 @@ public class ScriptRunnable implements Runnable {
         CommandWork commandWork = script.startCommand(commandToDo, UTF8Codec.Const.UTF8, dir);
         final WshScriptExec exec = shell.exec(commandWork.getStdin());
         if (exec != null) {
-            commandWork = script.updateCommand(commandWork, exec.getPID());
+            commandWork = script.updateCommand(commandWork, (long) exec.getPID());
             monitorCommand(exec, commandWork);
             exec.getDispatch().release();
         }

@@ -18,7 +18,7 @@ public abstract class Command {
 
     public abstract Date getFinish();
 
-    public abstract Integer getPID();
+    public abstract Long getPID();
 
     public abstract Integer getExitValue();
 

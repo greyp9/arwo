@@ -10,7 +10,7 @@ public class CommandWork extends Command {
     private final String stdin;
     private final String name;
     private final long dateStart;
-    private final Integer pid;
+    private final Long pid;
     private final ByteBuffer byteBufferStdin;
     private final ByteBuffer byteBufferStdout;
     private final ByteBuffer byteBufferStderr;
@@ -58,7 +58,7 @@ public class CommandWork extends Command {
     }
 
     @Override
-    public final Integer getPID() {
+    public final Long getPID() {
         return pid;
     }
 
@@ -80,7 +80,7 @@ public class CommandWork extends Command {
     }
 
     public CommandWork(final String dir, final String stdin, final String charset,
-                       final String name, final Date dateScheduled, final Date dateStart, final Integer pid) {
+                       final String name, final Date dateScheduled, final Date dateStart, final Long pid) {
         super(dateScheduled);
         this.dir = dir;
         this.stdin = stdin;
@@ -92,7 +92,7 @@ public class CommandWork extends Command {
         this.byteBufferStderr = new ByteBuffer(charset);
     }
 
-    public CommandWork(final CommandWork command, final Integer pid) {
+    public CommandWork(final CommandWork command, final Long pid) {
         super(command.getScheduled());
         this.stdin = command.getStdin();
         this.dir = command.getDir();

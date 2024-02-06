@@ -108,7 +108,23 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>3.8.1</version>
+                <version>3.12.1</version>  <!-- 2023-12-21 -->
+                <executions>
+                    <execution>
+                        <id>java11</id>
+                        <phase>compile</phase>
+                        <goals>
+                            <goal>compile</goal>
+                        </goals>
+                        <configuration>
+                            <release>11</release>
+                            <compileSourceRoots>
+                                <compileSourceRoot>${project.basedir}/src/main/core/java11</compileSourceRoot>
+                            </compileSourceRoots>
+                            <multiReleaseOutput>true</multiReleaseOutput>
+                        </configuration>
+                    </execution>
+                </executions>
                 <configuration>
                     <source>8</source>
                     <target>8</target>
@@ -134,6 +150,7 @@
                         <configuration>
                             <sources>
                                 <source>src/main/core/java</source>
+                                <source>src/main/core/java8</source>
                                 <source>src/main/lib/java</source>
                                 <source>src/main/app/java</source>
                             </sources>
@@ -364,13 +381,14 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>3.2.0</version>  <!-- 2019-10-29 -->
+                <version>3.3.0</version>  <!-- 2022-09-12 -->
                 <configuration>
                     <archive>
                         <manifest/>
                         <manifestEntries>
-                            <Specification-Version>${version}</Specification-Version>
+                            <Specification-Version>${project.version}</Specification-Version>
                             <Implementation-Version>${maven.build.timestamp}</Implementation-Version>
+                            <Multi-Release>true</Multi-Release>
                         </manifestEntries>
                     </archive>
                 </configuration>
@@ -449,6 +467,7 @@
         </plugins>
     </reporting>
     <profiles>
+<!--
         <profile>
             <id>jre8</id>
             <activation>
@@ -482,6 +501,8 @@
                 </plugins>
             </build>
         </profile>
+-->
+<!--
         <profile>
             <id>jre9plus</id>
             <activation>
@@ -515,5 +536,6 @@
                 </plugins>
             </build>
         </profile>
+-->
     </profiles>
 </project>
