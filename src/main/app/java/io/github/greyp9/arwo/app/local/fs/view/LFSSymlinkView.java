@@ -2,21 +2,8 @@ package io.github.greyp9.arwo.app.local.fs.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
-import io.github.greyp9.arwo.app.local.fs.data.LFSDataSource;
-import io.github.greyp9.arwo.app.local.fs.data.LFSFolder;
-import io.github.greyp9.arwo.app.local.fs.data.LFSFolderStyled;
-import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.http.HttpResponse;
-import io.github.greyp9.arwo.core.locus.Locus;
-import io.github.greyp9.arwo.core.table.html.TableView;
-import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
-import io.github.greyp9.arwo.core.table.model.Table;
-import io.github.greyp9.arwo.core.table.model.TableContext;
-import io.github.greyp9.arwo.core.table.row.RowSet;
-import io.github.greyp9.arwo.core.table.state.ViewState;
-import io.github.greyp9.arwo.core.table.state.ViewStates;
-import io.github.greyp9.arwo.core.util.PropertiesU;
-import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
+import io.github.greyp9.arwo.core.http.HttpResponseU;
 import org.w3c.dom.Element;
 
 import java.io.File;
@@ -31,6 +18,22 @@ public final class LFSSymlinkView extends LFSView {
 
     @Override
     protected HttpResponse addContentTo(final Element html) throws IOException {
+        final String basePathContext = getFolderBase().toPath().toRealPath().toString();
+        final String requestPathReal = getFile().toPath().toRealPath().toString();
+        final String baseURIFolder = getRequest().getBaseURIFolder();
+
+        final HttpResponse httpResponse;
+        if (requestPathReal.startsWith(basePathContext)) {
+            final String location = baseURIFolder + requestPathReal.substring(basePathContext.length());
+            httpResponse = HttpResponseU.to302(location);
+        } else {
+            httpResponse = HttpResponseU.to404();
+        }
+        return httpResponse;
+    }
+
+/*
+    private HttpResponse addContentToDeprecate(final Element html) throws IOException {
         final RowSetMetaData metaData = LFSFolder.createMetaData();
         final Locus locus = getUserState().getLocus();
         final ViewStates viewStates = getUserState().getViewStates();
@@ -58,4 +61,5 @@ public final class LFSSymlinkView extends LFSView {
         rowSet.getProperties().setProperty(Integer.toString(App.FS.S_IFLNK), Boolean.TRUE.toString());
         return rowSet;
     }
+*/
 }

@@ -72,7 +72,7 @@ public class LFSFolder {
         final InsertRow insertRow = new InsertRow(rowSet);
         insertRow.setNextColumn(type);
         insertRow.setNextColumn(pathFolder);
-        insertRow.setNextColumn(isLink ? file.getAbsolutePath() : file.getName());
+        insertRow.setNextColumn(file.getName());  // (isLink ? file.getAbsolutePath() : file.getName());
         insertRow.setNextColumn(new Date(file.lastModified()));
         insertRow.setNextColumn(extension);
         insertRow.setNextColumn(file.length());
