@@ -44,6 +44,10 @@ public class XedActionTextExpression extends XedAction {
             }
             // view (form submit buttons)
             final Xed xedUI = getXedUI(locale);
+            if (!filtersRecent.isEmpty()) {
+                final XPather xpather = xedUI.getXPather();
+                ElementU.setTextContent(xpather.getElement(XPATH_TEXT_EXPRESSION), filtersRecent.iterator().next());
+            }
             final XedPropertyPageView pageView = new XedPropertyPageView(null, new XedNav(xedUI).getRoot());
             final Bundle bundle = xedUI.getBundle();
             final ActionFactory factory = new ActionFactory(
@@ -58,7 +62,7 @@ public class XedActionTextExpression extends XedAction {
             final TextFilters textFilters, final NameTypeValues httpArguments) throws IOException {
         final Xed xed = super.update(httpArguments);
         final XPather xpather = xed.getXPather();
-        final String expression = xpather.getText("/action:textExpression/action:expression");  // i18n xpath
+        final String expression = xpather.getText(XPATH_TEXT_EXPRESSION);
         final boolean isExpression = (!Value.isEmpty(expression));
         textFilters.getExpressions().clear();
         if (isExpression) {
@@ -71,4 +75,6 @@ public class XedActionTextExpression extends XedAction {
             textFilters.getExpressions().add(expression);
         }
     }
+
+    private static final String XPATH_TEXT_EXPRESSION = "/action:textExpression/action:expression";  // i18n xpath
 }
