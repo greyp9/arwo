@@ -131,6 +131,6 @@ public class MenuView {
     private String getPathInfo(final String pathInfo, final String contextUpdate) {
         final Pather pather0 = new Pather(pathInfo);
         final Pather pather1 = new Pather(pather0.getRight());
-        return pather0.getLeft() + contextUpdate + pather1.getRight();
+        return pather0.getLeft() + Http.Token.SLASH + contextUpdate + pather1.getRight();
     }
 }

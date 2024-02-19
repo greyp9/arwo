@@ -114,20 +114,20 @@ public class AppMenuFactory implements MenuFactory {
     }
 
     private static MenuItem createMenuView(final String key) {
-        final MenuItem itemView = new MenuItem(App.Mode.VIEW, App.Target.USER_STATE, App.Mode.VIEW);
-        final MenuItem itemViewHead = new MenuItem(App.Mode.VIEW_HEAD, App.Target.USER_STATE, App.Mode.VIEW_HEAD);
-        final MenuItem itemViewTail = new MenuItem(App.Mode.VIEW_TAIL, App.Target.USER_STATE, App.Mode.VIEW_TAIL);
-        final MenuItem itemViewGZ = new MenuItem(App.Mode.VIEW_GZ, App.Target.USER_STATE, App.Mode.VIEW_GZ);
-        final MenuItem itemViewGZRef = new MenuItem(App.Mode.VIEW_GZ, null, App.Action.HREF, "/" + App.Mode.VIEW_GZ);
-        final MenuItem itemViewZIP = new MenuItem(App.Mode.VIEW_ZIP, App.Target.USER_STATE, App.Mode.VIEW_ZIP);
-        final MenuItem itemViewZIPRef = new MenuItem(App.Mode.VIEW_ZIP, null, App.Action.HREF, "/" + App.Mode.VIEW_ZIP);
-        final MenuItem itemViewTGZ = new MenuItem(App.Mode.VIEW_TGZ, App.Target.USER_STATE, App.Mode.VIEW_TGZ);
-        final MenuItem itemViewHex = new MenuItem(App.Mode.VIEW_HEX, App.Target.USER_STATE, App.Mode.VIEW_HEX);
-        final MenuItem itemViewR = new MenuItem(App.Mode.VIEW_R, App.Target.USER_STATE, App.Mode.VIEW_R);
+        // button strategy: ... new MenuItem(App.Mode.VIEW, App.Target.USER_STATE, App.Mode.VIEW)
+        final MenuItem itemView = new MenuItem(App.Mode.VIEW, null, App.Action.HREF, App.Mode.VIEW);
+        final MenuItem itemViewHead = new MenuItem(App.Mode.VIEW_HEAD, null, App.Action.HREF, App.Mode.VIEW_HEAD);
+        final MenuItem itemViewTail = new MenuItem(App.Mode.VIEW_TAIL, null, App.Action.HREF, App.Mode.VIEW_TAIL);
+        final MenuItem itemViewGZ = new MenuItem(App.Mode.VIEW_GZ, null, App.Action.HREF, App.Mode.VIEW_GZ);
+        final MenuItem itemViewZIP = new MenuItem(App.Mode.VIEW_ZIP, null, App.Action.HREF, App.Mode.VIEW_ZIP);
+        final MenuItem itemViewTGZ = new MenuItem(App.Mode.VIEW_TGZ, null, App.Action.HREF, App.Mode.VIEW_TGZ);
+        final MenuItem itemViewHex = new MenuItem(App.Mode.VIEW_HEX, null, App.Action.HREF, App.Mode.VIEW_HEX);
+        final MenuItem itemViewR = new MenuItem(App.Mode.VIEW_R, null, App.Action.HREF, App.Mode.VIEW_R);
         final MenuItem itemViewDot = new MenuItem(
                 App.Mode.VIEW_DOT, App.Target.USER_STATE, App.Action.TOGGLE, App.Mode.VIEW_DOT);
-        return new MenuItem(App.Mode.VIEW, App.Target.USER_STATE, App.Action.MENU, Value.join("/", key, App.Mode.VIEW),
-                itemView, itemViewHead, itemViewTail, itemViewGZ, itemViewGZRef, itemViewZIP, itemViewZIPRef,
+        return new MenuItem(App.Mode.VIEW, App.Target.USER_STATE, App.Action.MENU,
+                Value.join(Http.Token.SLASH, key, App.Mode.VIEW),
+                itemView, itemViewHead, itemViewTail, itemViewGZ, itemViewZIP,
                 itemViewTGZ, itemViewHex, itemViewR, itemViewDot);
     }
 
