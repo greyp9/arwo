@@ -45,12 +45,11 @@ public class SubsystemJDBC {
     public SubsystemJDBC(final Alerts alerts, final File folder) {
         this.cache = new ConnectionCache(App.Cache.JDBC, alerts);
         this.history = new History();
-        loadRecent(alerts, folder);
+        loadRecent(alerts, new File(folder, "result/jdbc"));
         this.properties = new Properties();
     }
 
-    private void loadRecent(final Alerts alerts, final File folder) {
-        final File folderHistory = new File(folder, "result/jdbc");
+    private void loadRecent(final Alerts alerts, final File folderHistory) {
         final Collection<File> files = new FindInFolderQuery(folderHistory, "*.results", false).getFound();
         final long skip = Math.max(0, (files.size() - COUNT_RECENT));
         final List<File> filesRecent = files.stream().sorted().skip(skip).collect(Collectors.toList());
