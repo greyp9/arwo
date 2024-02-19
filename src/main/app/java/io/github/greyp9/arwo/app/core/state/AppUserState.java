@@ -379,8 +379,8 @@ public class AppUserState {
             documentState.applyLocale(httpArguments);
         } else if (App.Action.TEXT_EXPRESSION.equals(action)) {
             final TextFilters textFiltersOp = getTextFilters(context);
-            new XedActionTextExpression(getXedFactory(), getLocale()).updateTextFilters(
-                    filtersRecent, textFiltersOp, httpArguments);
+            new XedActionTextExpression(getXedFactory(), getLocale(), textFiltersOp)
+                    .updateTextFilters(filtersRecent, httpArguments);
         } else if (App.Action.TEXT_FILTER.equals(action)) {
             final TextFilters textFiltersOp = getTextFilters(context);
             new XedActionTextFilter(getXedFactory(), getLocale()).updateTextFilters(textFiltersOp, httpArguments);

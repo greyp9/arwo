@@ -28,10 +28,13 @@ import java.util.Properties;
 
 public class XedActionTextExpression extends XedAction {
     private final Locale locale;
+    private final TextFilters textFilters;
 
-    public XedActionTextExpression(final XedFactory factory, final Locale locale) throws IOException {
+    public XedActionTextExpression(final XedFactory factory, final Locale locale,
+                                   final TextFilters textFilters) throws IOException {
         super(App.Actions.QNAME_TEXT_EXPRESSION, factory, null);
         this.locale = locale;
+        this.textFilters = textFilters;
     }
 
     public final void addContentTo(final Element html, final List<String> filtersRecent,
@@ -44,9 +47,9 @@ public class XedActionTextExpression extends XedAction {
             }
             // view (form submit buttons)
             final Xed xedUI = getXedUI(locale);
-            if (!filtersRecent.isEmpty()) {
-                final XPather xpather = xedUI.getXPather();
-                ElementU.setTextContent(xpather.getElement(XPATH_TEXT_EXPRESSION), filtersRecent.iterator().next());
+            if (textFilters.isData()) {
+                final String expression = textFilters.getExpressions().iterator().next();
+                ElementU.setTextContent(xedUI.getXPather().getElement(XPATH_TEXT_EXPRESSION), expression);
             }
             final XedPropertyPageView pageView = new XedPropertyPageView(null, new XedNav(xedUI).getRoot());
             final Bundle bundle = xedUI.getBundle();
@@ -58,8 +61,8 @@ public class XedActionTextExpression extends XedAction {
         }
     }
 
-    public final void updateTextFilters(final List<String> filtersRecent,
-            final TextFilters textFilters, final NameTypeValues httpArguments) throws IOException {
+    public final void updateTextFilters(
+            final List<String> filtersRecent, final NameTypeValues httpArguments) throws IOException {
         final Xed xed = super.update(httpArguments);
         final XPather xpather = xed.getXPather();
         final String expression = xpather.getText(XPATH_TEXT_EXPRESSION);
