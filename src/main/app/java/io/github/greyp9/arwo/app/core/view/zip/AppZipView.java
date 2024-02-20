@@ -11,6 +11,7 @@ import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.http.HttpResponse;
+import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.lang.NumberU;
@@ -25,9 +26,9 @@ import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewState;
-import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import org.w3c.dom.Element;
 
@@ -43,7 +44,6 @@ public class AppZipView {
     private final AppUserState userState;
     private final String zipEntry;
 
-
     public AppZipView(final String zipEntry, final ServletHttpRequest httpRequest, final AppUserState userState) {
         this.httpRequest = httpRequest;
         this.userState = userState;
@@ -53,9 +53,42 @@ public class AppZipView {
 
     public final HttpResponse addContentTo(
             final Element html, final MetaFile metaFile, final Bundle bundle) throws IOException {
-        final RowSetMetaData metaData = createMetaData();
-        final byte[] bytes = StreamU.read(metaFile.getBytes());
-        final RowSet rowSet = createRowSet(metaData, bytes);
+        final HttpResponse httpResponse;
+        if (Value.isEmpty(zipEntry)) {
+            httpResponse = addContentListing(html, metaFile, bundle);
+        } else {
+            httpResponse = addContentEntry(metaFile);
+        }
+        return httpResponse;
+    }
+
+    private HttpResponse addContentEntry(final MetaFile metaFile) throws IOException {
+        final ZipVolume zipVolume = new ZipVolume(metaFile.getBytes());
+        final MetaFile metaFileEntry = zipVolume.getEntry(zipEntry);
+        final HttpResponse httpResponse;
+        if (metaFileEntry == null) {
+            httpResponse = HttpResponseU.to404();
+        } else {
+            final NameTypeValues headers = new NameTypeValues(
+                    new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_PLAIN_UTF8));
+            httpResponse = new HttpResponse(HttpURLConnection.HTTP_OK, headers, metaFileEntry.getBytes());
+        }
+        return httpResponse;
+    }
+
+    private HttpResponse addContentListing(
+            final Element html, final MetaFile metaFile, final Bundle bundle) throws IOException {
+        final String id = metaFile.getMetaData().getPath();
+        final RowSet rowSet;
+        if (userState.getCache().containsRowSet(id)) {
+            rowSet = userState.getCache().getRowSet(id);
+        } else {
+            final RowSetMetaData metaData = createMetaData();
+            final byte[] bytes = StreamU.read(metaFile.getBytes());
+            rowSet = createRowSet(metaData, bytes);
+            userState.getCache().putRowSet(id, rowSet);
+        }
+        final RowSetMetaData metaData = rowSet.getMetaData();
         final Locus locus = userState.getLocus();
         final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
         final String title = httpRequest.getURI();
@@ -86,12 +119,7 @@ public class AppZipView {
     private RowSet createRowSet(final RowSetMetaData metaData, final byte[] bytes) throws IOException {
         final RowSet rowSet = new RowSet(metaData, null, null);
         final ZipVolume zipVolume = new ZipVolume(new ByteArrayInputStream(bytes));
-        final MetaFile metaFile = zipVolume.getEntry(zipEntry);
-        if (metaFile == null) {
-            createRows(rowSet, zipVolume);
-        } else {
-            createResponse(rowSet, metaFile);
-        }
+        createRows(rowSet, zipVolume);
         return rowSet;
     }
 
@@ -117,13 +145,6 @@ public class AppZipView {
         insertRow.setNextColumn(metaData.getCompressedLength());
         insertRow.setNextColumn(metaData.getLength());
         rowSet.add(insertRow.getRow());
-    }
-
-    private void createResponse(final RowSet rowSet, final MetaFile metaFile) {
-        final NameTypeValues headers = new NameTypeValues(
-                new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_PLAIN_UTF8));
-        final HttpResponse httpResponse = new HttpResponse(HttpURLConnection.HTTP_OK, headers, metaFile.getBytes());
-        PropertiesU.setProperty(rowSet.getProperties(), Const.QUERY_ZIP_ENTRY, httpResponse);
     }
 
     public static class Const {

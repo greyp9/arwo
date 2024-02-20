@@ -100,7 +100,11 @@ public class LFSHandlerPost {
         if (App.Target.USER_STATE.equals(subject)) {
             location = userState.applyPost(token, httpArguments, httpRequest, request.getContext());
         } else if (App.Target.VIEW_STATE.equals(subject)) {
+            // reset view state
             userState.getViewStates().apply(token, httpArguments, request.getBundle(), request.getAlerts());
+            // clear cache
+            userState.getCache().putRowSet(request.getPath().replace("!/", ""), null);
+            // enable caching
             PropertiesU.setProperty(userState.getProperties(), App.Action.USE_CACHE, Boolean.TRUE.toString());
         } else if (App.Target.SESSION.equals(subject)) {
             location = applySession(token, httpArguments, location);
