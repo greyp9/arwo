@@ -546,9 +546,8 @@ public class AppUserState {
 
     private String toView(final ServletHttpRequest httpRequest, final String action) {
         final Pather patherPathInfo = new Pather(httpRequest.getPathInfo());
-        final Pather patherContext = new Pather(patherPathInfo.getRight());
-        final String pathInfoNewView = patherContext.getRight();
-        return httpRequest.getBaseURI() + PathU.toPath("", Http.Token.HYPHEN, action) + pathInfoNewView;
+        final String pathInfoNewView = patherPathInfo.getRight();
+        return httpRequest.getBaseURI() + PathU.toPath("", action) + pathInfoNewView;
     }
 
     private void doCronOff(final ServletHttpRequest httpRequest) throws IOException {

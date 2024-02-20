@@ -15,7 +15,6 @@ import java.util.Locale;
 public class LFSRequest {
     private final AppRequest appRequest;
     private final AppUserState userState;
-    private final Pather patherContext;
     private final Pather patherMode;
     private final Pather patherFolder;
 
@@ -46,21 +45,16 @@ public class LFSRequest {
     public LFSRequest(final ServletHttpRequest httpRequest, final AppUserState userState) {
         this.appRequest = userState.getAppRequest(httpRequest);
         this.userState = userState;
-        this.patherContext = new Pather(httpRequest.getPathInfo());
-        this.patherMode = new Pather(patherContext.getRight());
+        this.patherMode = new Pather(httpRequest.getPathInfo());
         this.patherFolder = new Pather(patherMode.getRight());
     }
 
     public final String getBaseURIMode() {
-        return appRequest.getHttpRequest().getBaseURI() + patherContext.getLeft() + patherMode.getLeft();
+        return appRequest.getHttpRequest().getBaseURI() + patherMode.getLeft();
     }
 
     public final String getBaseURIFolder() {
         return getBaseURIMode() + patherFolder.getLeft();
-    }
-
-    public final String getContext() {
-        return patherContext.getLeftToken();
     }
 
     public final String getMode() {

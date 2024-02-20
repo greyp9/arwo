@@ -147,7 +147,7 @@ public class LFSFileView extends LFSView {
         final String path = file.getMetaData().getPath();
         final String lastModified = HttpDateU.toHttpZ(new Date(file.getMetaData().getLastModified()));
         final NameTypeValues headers = new NameTypeValues(new NameTypeValue(Http.Header.LAST_MODIFIED, lastModified));
-        final TextFilters textFilters = getUserState().getTextFilters(getRequest().getContext());
+        final TextFilters textFilters = getUserState().getTextFilters("");
         // if ((textFilters.getIncludes().isEmpty()) && (textFilters.getExcludes().isEmpty())) {
         if (!textFilters.isData()) {
             final Preferences preferences = new Preferences(getUserState().getConfig());

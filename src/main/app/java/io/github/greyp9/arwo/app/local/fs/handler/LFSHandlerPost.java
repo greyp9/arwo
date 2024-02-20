@@ -98,7 +98,7 @@ public class LFSHandlerPost {
         String location = locationIn;
         final String subject = token.getSubject();
         if (App.Target.USER_STATE.equals(subject)) {
-            location = userState.applyPost(token, httpArguments, httpRequest, request.getContext());
+            location = userState.applyPost(token, httpArguments, httpRequest, "");
         } else if (App.Target.VIEW_STATE.equals(subject)) {
             // reset view state
             userState.getViewStates().apply(token, httpArguments, request.getBundle(), request.getAlerts());

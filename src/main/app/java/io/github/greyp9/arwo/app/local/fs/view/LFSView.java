@@ -143,14 +143,14 @@ public abstract class LFSView {
         final Properties properties = userState.getProperties();
         new XedActionLocale(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
         new XedActionRefresh(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
-        final TextFilters textFilters = userState.getTextFilters(request.getContext());
+        final TextFilters textFilters = userState.getTextFilters("");
         new XedActionTextExpression(userState.getXedFactory(), locale, textFilters).addContentTo(
                 html, userState.getFiltersRecent(), submitID, properties);
         new XedActionTextFilter(userState.getXedFactory(), locale).addContentTo(html, submitID, properties);
     }
 
     private void addTextFiltersView(final Element html) {
-        final TextFilters textFilters = userState.getTextFilters(getRequest().getContext());
+        final TextFilters textFilters = userState.getTextFilters("");
         boolean isIncludes = !textFilters.getIncludes().isEmpty();
         boolean isExcludes = !textFilters.getExcludes().isEmpty();
         boolean isExpression = !textFilters.getExpressions().isEmpty();

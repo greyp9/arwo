@@ -59,7 +59,7 @@ public class LFSHandlerGet {
         } else if (Value.isEmpty(request.getMode())) {
             httpResponse = HttpResponseU.to302(PathU.toDir(baseURI, Http.Token.HYPHEN, App.Mode.VIEW));
         } else if (Value.isEmpty(request.getFolder())) {
-            final String offsetURI = PathU.toPath("", Http.Token.HYPHEN, App.Mode.VIEW);
+            final String offsetURI = PathU.toPath("", App.Mode.VIEW);
             httpResponse = new LFSInventoryView(request, userState, offsetURI).doGetResponse();
         } else {
             httpResponse = doGet3();
