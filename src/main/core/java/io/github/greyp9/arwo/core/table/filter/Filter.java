@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.table.filter;
 
 import io.github.greyp9.arwo.core.table.compare.CellComparator;
+import io.github.greyp9.arwo.core.value.Value;
 
 import java.util.regex.Pattern;
 
@@ -58,7 +59,7 @@ public class Filter {
                 matches = (compare >= 0);
                 break;
             case REGEX:
-                matches = valuePattern.matcher(valueToMatch.toString()).matches();
+                matches = valuePattern.matcher(Value.defaultOnNull(valueToMatch, "")).matches();
                 break;
             default:
                 break;

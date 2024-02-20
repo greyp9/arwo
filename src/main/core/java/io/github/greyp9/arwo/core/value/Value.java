@@ -47,6 +47,10 @@ public final class Value {
         return ((value == invalidValue) ? defaultValue : value);
     }
 
+    public static String defaultOnNull(final Object value, final String defaultValue) {
+        return (value == null) ? defaultValue : value.toString();
+    }
+
     public static int defaultOnNull(final String value, final int defaultOnNull) {
         return ((value == null) ? defaultOnNull : Integer.parseInt(value));
     }
