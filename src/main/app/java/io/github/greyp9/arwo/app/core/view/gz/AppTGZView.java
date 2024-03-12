@@ -24,6 +24,8 @@ import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewState;
+import io.github.greyp9.arwo.core.text.filter.TextFilters;
+import io.github.greyp9.arwo.core.text.filter.TextLineFilter;
 import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
@@ -109,10 +111,18 @@ public class AppTGZView {
         rowSet.add(insertRow.getRow());
     }
 
-    private void createResponse(final RowSet rowSet, final MetaFile metaFile) {
+    private void createResponse(final RowSet rowSet, final MetaFile metaFile) throws IOException {
         final NameTypeValues headers = new NameTypeValues(
                 new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_PLAIN_UTF8));
-        final HttpResponse httpResponse = new HttpResponse(HttpURLConnection.HTTP_OK, headers, metaFile.getBytes());
+        final TextFilters textFilters = userState.getTextFilters("");
+        final HttpResponse httpResponse;
+        if (textFilters.isData()) {
+            final String charset = userState.getCharset();
+            final byte[] bytes = new TextLineFilter(textFilters).doFilter(StreamU.read(metaFile.getBytes()), charset);
+            httpResponse = new HttpResponse(HttpURLConnection.HTTP_OK, headers, bytes);
+        } else {
+            httpResponse = new HttpResponse(HttpURLConnection.HTTP_OK, headers, metaFile.getBytes());
+        }
         PropertiesU.setProperty(rowSet.getProperties(), Const.QUERY_ZIP_ENTRY, httpResponse);
     }
 
