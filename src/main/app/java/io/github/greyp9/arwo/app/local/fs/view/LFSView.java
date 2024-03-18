@@ -123,6 +123,8 @@ public abstract class LFSView {
     private void addHeaderView(final Element html, final AppTitle title) throws IOException {
         // context menu
         final MenuView menuView = new MenuView(bundle, httpRequest, userState.getMenuSystem());
+        final Element divMenusSticky = menuView.addContentTo(
+                html, AppMenuFactory.Const.FILESYSTEM_STICKY, null, false, true, "v");
         final Element divMenus = menuView.addContentTo(html, AppMenuFactory.Const.FILESYSTEM, true);
         new FileUpload(httpRequest.getServletPath(), bundle).addContentTo(divMenus, menuView);
         // context title (with text filters)
@@ -135,7 +137,8 @@ public abstract class LFSView {
         final XedCursor cursorFavorites = nav.findX("/app:favorites/app:lfsFavorites");  // i18n xpath
         final XedCursor cursorType = nav.find("lfsFavorite", cursorFavorites);  // i18n xpath
         // replacing table with menu bar
-        new FavoriteMenu(getRequest(), userState, cursorType, AppMenuFactory.Const.FILESYSTEM).addContentTo(divMenus);
+        new FavoriteMenu(getRequest(), userState, cursorType, AppMenuFactory.Const.FILESYSTEM_STICKY)
+                .addContentTo(divMenusSticky);
         //new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.FILESYSTEM).addContentTo(html);
         // settings property strips
         final Locale locale = userState.getLocus().getLocale();

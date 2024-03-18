@@ -315,10 +315,6 @@ public class AppUserState {
         this.cacheBlob = new ResourceCache(appState.getContextPath() + App.Servlet.CACHE);
         this.pageViewHex = Page.Factory.initPage(Const.PAGE_HEX_VIEW, new Properties());
         this.pageVisualization = Page.Factory.initPage(Const.PAGE_VISUALIZATION, new Properties());
-
-        // open favorites menu bar
-        menuSystem.get("/lfs", "fs");  // init (precondition for "toggle()")
-        menuSystem.toggle("/lfs/fs/favorites");
     }
 
     public final AppRequest getAppRequest(final ServletHttpRequest httpRequest) {

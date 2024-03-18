@@ -21,6 +21,8 @@ public class AppMenuFactory implements MenuFactory {
             menuItem = createMenuBarDash(key);
         } else if (Const.FILESYSTEM.equals(type)) {
             menuItem = createMenuBarFileSystem(key);
+        } else if (Const.FILESYSTEM_STICKY.equals(type)) {
+            menuItem = createMenuFilesystemSticky(key);
         } else if (Const.HEX.equals(type)) {
             menuItem = createMenuBarHex(key);
         } else if (Const.NAV.equals(type)) {
@@ -182,6 +184,10 @@ public class AppMenuFactory implements MenuFactory {
                 itemCommand);
     }
 
+    private static MenuItem createMenuFilesystemSticky(final String key) {
+        return new MenuItem("favorites", App.Target.USER_STATE, App.Action.MENU, key + "/favorites");
+    }
+
     private static MenuItem createMenuCommand(final String key) {
         final String subject = App.Target.SESSION;
         final MenuItem itemFileSystem = new MenuItem(App.Action.FILESYSTEM, subject, App.Action.FILESYSTEM);
@@ -211,6 +217,7 @@ public class AppMenuFactory implements MenuFactory {
     public static class Const {
         public static final String DASHBOARD = "dash";
         public static final String FILESYSTEM = "fs";
+        public static final String FILESYSTEM_STICKY = "fs-sticky";
         public static final String HEX = "hex";
         public static final String NAV = "nav";
         public static final String COMMAND = "cmd";
