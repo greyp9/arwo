@@ -7,7 +7,6 @@ import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
-import io.github.greyp9.arwo.core.io.script.History;
 import io.github.greyp9.arwo.core.io.script.Script;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.resource.PathU;
@@ -29,21 +28,22 @@ import org.w3c.dom.Element;
 import java.io.IOException;
 import java.sql.Types;
 import java.util.Arrays;
+import java.util.Collection;
 
 public class AppHistoryView {
     private final String tableID;
     private final boolean includeContext;
-    private final History history;
+    private final Collection<Script> scripts;
     private final Bundle bundle;
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
 
 
-    public AppHistoryView(final String tableID, final boolean includeContext, final History history,
+    public AppHistoryView(final String tableID, final boolean includeContext, final Collection<Script> scripts,
                           final Bundle bundle, final ServletHttpRequest httpRequest, final AppUserState userState) {
         this.tableID = tableID;
         this.includeContext = includeContext;
-        this.history = history;
+        this.scripts = scripts;
         this.bundle = bundle;
         this.httpRequest = httpRequest;
         this.userState = userState;
@@ -83,7 +83,7 @@ public class AppHistoryView {
 
     private RowSet createRowSet(final RowSetMetaData metaData) {
         final RowSet rowSet = new RowSet(metaData, null, null);
-        for (final Script script : history.getHistory()) {
+        for (final Script script : scripts) {
             createRow(rowSet, script);
         }
         return rowSet;

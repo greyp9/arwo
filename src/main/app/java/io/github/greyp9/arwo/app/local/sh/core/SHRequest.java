@@ -12,6 +12,7 @@ import java.util.Locale;
 public class SHRequest {
     private final AppRequest request;
     private final AppUserState userState;
+    private final Pather patherContext;
     private final Pather patherScriptID;
 
     public final AppRequest getAppRequest() {
@@ -41,7 +42,12 @@ public class SHRequest {
     public SHRequest(final ServletHttpRequest httpRequest, final AppUserState userState) {
         this.request = userState.getAppRequest(httpRequest);
         this.userState = userState;
-        this.patherScriptID = new Pather(httpRequest.getPathInfo());
+        this.patherContext = new Pather(httpRequest.getPathInfo());
+        this.patherScriptID = new Pather(patherContext.getRight());
+    }
+
+    public final String getContext() {
+        return patherContext.getLeftToken();
     }
 
     public final String getScriptID() {

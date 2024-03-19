@@ -31,7 +31,9 @@ import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 @SuppressWarnings("PMD.ExcessiveImports")
 public class SHCommandView extends SHView {
@@ -79,8 +81,14 @@ public class SHCommandView extends SHView {
         new PropertyPageHtmlView(new XedPropertyPageView(null, cursor, buttons), xedRequest).addContentTo(html);
         // contextual content
         if (script == null) {
+            final String context = request.getContext();
+            final boolean filterByContext = !Value.isEmpty(context);
             final History history = local.getHistory();
-            new AppHistoryView("lshHistoryType", false, history, bundle,  // i18n metadata
+            final Collection<Script> scripts = history.getHistory();
+            final Collection<Script> scriptsDisplay = filterByContext
+                    ? scripts.stream().filter(s -> Value.equal(context, s.getContext())).collect(Collectors.toList())
+                    : scripts;
+            new AppHistoryView("lshHistoryType", true, scriptsDisplay, bundle,  // i18n metadata
                     httpRequest, userState).addContentTo(html);
         } else {
             new AppScriptView(script, userState.getLocus()).addContentTo(html);

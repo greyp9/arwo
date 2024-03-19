@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.favorite.AppFavoriteView;
 import io.github.greyp9.arwo.app.core.view.refresh.AppRefreshView;
 import io.github.greyp9.arwo.app.local.sh.core.SHRequest;
+import io.github.greyp9.arwo.core.action.ActionItem;
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppHtml;
@@ -12,10 +13,12 @@ import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.config.Preferences;
 import io.github.greyp9.arwo.core.html.Html;
+import io.github.greyp9.arwo.core.html.menu.ActionItemsMenu;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
+import io.github.greyp9.arwo.core.io.script.Script;
 import io.github.greyp9.arwo.core.menu.view.MenuView;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
@@ -34,8 +37,11 @@ import org.w3c.dom.Element;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.util.Collection;
+import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
+import java.util.stream.Collectors;
 
 @SuppressWarnings({ "PMD.AbstractNaming", "PMD.ExcessiveImports" })
 public abstract class SHView {
@@ -91,7 +97,15 @@ public abstract class SHView {
     private void addHeaderView(final Element html, final AppTitle title) throws IOException {
         // context menu
         final MenuView menuView = new MenuView(request.getBundle(), httpRequest, userState.getMenuSystem());
-        menuView.addContentTo(html, AppMenuFactory.Const.COMMAND, true);
+        final Element divMenus = menuView.addContentTo(html, AppMenuFactory.Const.COMMAND, true);
+        final Collection<Script> scripts = userState.getLocal().getHistory().getHistory();
+        final List<ActionItem> actionItems = scripts.stream()
+                .map(Script::getContext)
+                .distinct()
+                .sorted()
+                .map(c -> new ActionItem(c, null, null, null, null))
+                .collect(Collectors.toList());
+        new ActionItemsMenu("[Contexts]", httpRequest.getBaseURI(), actionItems).addContentTo(divMenus);
         // context title
         menuView.addTitle(html, title);
         // favorites (if toggled)

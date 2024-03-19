@@ -7,7 +7,6 @@ import io.github.greyp9.arwo.core.command.local.ScriptContext;
 import io.github.greyp9.arwo.core.command.local.ScriptRunnable;
 import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.date.DurationU;
-import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.script.History;
 import io.github.greyp9.arwo.core.io.script.Script;
@@ -35,10 +34,9 @@ public class SHQueueCommand {
         final AppUserState userState = request.getUserState();
         // queue command text for execution
         final String command = new XedActionCommand(userState.getXedFactory()).getCommand(httpArguments);
-        final String host = request.getHttpRequest().getHeader(Http.Header.HOST);
         final History history = userState.getLocal().getHistory();
         final String id = history.getNewID(httpRequest.getDate());
-        final Script script = new Script(host, httpRequest.getDate(), id, command);
+        final Script script = new Script(request.getContext(), httpRequest.getDate(), id, command);
         history.add(script);
         userState.getLocal().getProperties().setProperty(App.Settings.COMMAND, command);
         // runnable to execute commands
@@ -58,6 +56,6 @@ public class SHQueueCommand {
         // redirect to resource for execution monitor
         final DateX dateX = DateX.Factory.createFilenameMilli();
         final String commandID = dateX.toString(httpRequest.getDate());
-        return PathU.toDir(httpRequest.getBaseURI(), commandID);
+        return PathU.toDir(httpRequest.getBaseURI(), request.getContext(), commandID);
     }
 }
