@@ -9,6 +9,14 @@ import org.junit.jupiter.api.Test;
 public class CookieJarTest {
 
     @Test
+    public void testCtor() {
+        final CookieJar cookieJar = new CookieJar();
+        cookieJar.update("requestA", new NameTypeValues(new NameTypeValue("Set-Cookie", "a=1")));
+        final CookieJar cookieJar2 = new CookieJar(cookieJar.getCookies());
+        Assertions.assertEquals(1, cookieJar2.getCookies().size());
+    }
+
+    @Test
     public void testUpdate() {
         final CookieJar cookieJar = new CookieJar();
         Assertions.assertEquals(0, cookieJar.getCookies().size());

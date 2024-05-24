@@ -29,6 +29,10 @@ public final class CookieJar {
         this.cookies = new ArrayList<>();
     }
 
+    public CookieJar(final List<HttpCookie> cookies) {
+        this.cookies = new ArrayList<>(cookies);
+    }
+
     public List<HttpCookie> getCookies() {
         return cookies;
     }
@@ -116,15 +120,19 @@ public final class CookieJar {
 
     public void update(final String context, final NameTypeValues headers) {
         for (final NameTypeValue header : headers) {
-            final String value = header.getValueS();
-            if ("Set-Cookie".equalsIgnoreCase(header.getName()) && (!Value.isEmpty(value))) {
-                logger.fine(String.format("CONTEXT [%s] HEADER [%s]", context, value));
-                final List<HttpCookie> httpCookies = HttpCookie.parse(value);
-                for (HttpCookie httpCookie : httpCookies) {
-                    logger.fine(String.format("CONTEXT [%s] COOKIE [%s][%s]",
-                            context, httpCookie.getName(), httpCookie.getValue()));
-                    update(context, httpCookie);
-                }
+            update(context, header);
+        }
+    }
+
+    public void update(final String context, final NameTypeValue header) {
+        final String value = header.getValueS();
+        if ("Set-Cookie".equalsIgnoreCase(header.getName()) && (!Value.isEmpty(value))) {
+            logger.fine(String.format("CONTEXT [%s] HEADER [%s]", context, value));
+            final List<HttpCookie> httpCookies = HttpCookie.parse(value);
+            for (HttpCookie httpCookie : httpCookies) {
+                logger.fine(String.format("CONTEXT [%s] COOKIE [%s][%s]",
+                        context, httpCookie.getName(), httpCookie.getValue()));
+                update(context, httpCookie);
             }
         }
     }
