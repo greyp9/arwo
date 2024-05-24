@@ -428,6 +428,7 @@ public class AppUserState {
                 cacheIt.removeResource(name);
             }
         }
+        userExecutor.stop(date);
     }
 
     private boolean isUserState() throws IOException {
