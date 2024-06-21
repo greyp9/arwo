@@ -147,6 +147,13 @@ public final class Value {
         }
     }
 
+    // so/29945627
+    public static void doIf(final boolean condition, final Runnable runnable) {
+        if (condition) {
+            runnable.run();
+        }
+    }
+
     public static <T> T as(final Object o, final Class<T> clazz) {
         return Optional.of(o).filter(clazz::isInstance).map(clazz::cast).orElse(null);
     }
