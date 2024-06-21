@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpRequest;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.io.StreamU;
+import io.github.greyp9.arwo.core.lang.VersionU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
 
@@ -106,7 +107,9 @@ public class HttpClient {
         for (Map.Entry<String, List<String>> entry : headerFields.entrySet()) {
             final String name = entry.getKey();
             final List<String> values = new ArrayList<>(entry.getValue());
-            Collections.reverse(values);  // JDK-8133686
+            if (VersionU.languageLevel() < LANGUAGE_LEVEL_JDK_FIX) {
+                Collections.reverse(values);  // JDK-8133686
+            }
             for (String value : values) {
                 headers.add(name, value);
             }
@@ -115,8 +118,13 @@ public class HttpClient {
         try {
             StreamU.writeFully(connection.getInputStream(), os);
         } catch (IOException e) {
-            StreamU.writeFully(connection.getErrorStream(), os);
+            if (VersionU.languageLevel() < LANGUAGE_LEVEL_ERROR_STREAM) {
+                StreamU.writeFully(connection.getErrorStream(), os);
+            }
         }
         return new HttpResponse(statusCode, headers, os.toByteArray());
     }
+
+    private static final int LANGUAGE_LEVEL_JDK_FIX = 18;
+    private static final int LANGUAGE_LEVEL_ERROR_STREAM = 21;
 }
