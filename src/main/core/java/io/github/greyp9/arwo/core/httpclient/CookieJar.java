@@ -114,6 +114,12 @@ public final class CookieJar {
         return DocumentU.toXml(document);
     }
 
+    public void update(final String context, final List<HttpCookie> httpCookies) {
+        for (HttpCookie httpCookie : httpCookies) {
+            update(context, httpCookie);
+        }
+    }
+
     public void update(final List<HttpCookie> httpCookies) {
         cookies.addAll(httpCookies);
     }
