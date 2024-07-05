@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.expr.test;
 
+import io.github.greyp9.arwo.core.expr.Grammar;
 import io.github.greyp9.arwo.core.expr.Node;
 import io.github.greyp9.arwo.core.expr.Operand;
 import io.github.greyp9.arwo.core.expr.op.BinaryOperator;
@@ -124,5 +125,22 @@ public class ExpressionTest {
         final Node nodeOrCD = new BinaryOperator("OR", nodeC, nodeD);
         final Node node = new BinaryOperator("AND", nodeOrAB, nodeOrCD);
         Assertions.assertEquals("((A OR B) AND (C OR D))", node.render());
+    }
+
+    @Test
+    public void testRegex1() {
+        final TextMatchTree treeAorB = new TextMatchTree(new Grammar("regex('A|B')").toNode());
+        Assertions.assertTrue(treeAorB.evaluate("A"));
+        Assertions.assertTrue(treeAorB.evaluate("B"));
+        Assertions.assertFalse(treeAorB.evaluate("C"));
+    }
+
+    @Test
+    public void testRegex2() {
+        final TextMatchTree tree = new TextMatchTree(new Grammar("regex('.* \\d{2} millis')").toNode());
+        Assertions.assertFalse(tree.evaluate("time was 9 millis"));
+        Assertions.assertTrue(tree.evaluate("time was 10 millis"));
+        Assertions.assertTrue(tree.evaluate("time was 99 millis"));
+        Assertions.assertFalse(tree.evaluate("time was 100 millis"));
     }
 }
