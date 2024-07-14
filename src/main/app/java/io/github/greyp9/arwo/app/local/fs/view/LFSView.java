@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.favorite.FavoriteMenu;
 import io.github.greyp9.arwo.app.core.view.props.AppPropertiesView;
 import io.github.greyp9.arwo.app.core.view.refresh.AppRefreshView;
+import io.github.greyp9.arwo.app.core.view.rename.AppFilesRenameView;
 import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
 import io.github.greyp9.arwo.core.app.App;
@@ -185,6 +186,13 @@ public abstract class LFSView {
         if (PropertiesU.isBoolean(userState.getProperties(), App.Action.PROPERTIES)) {
             final AppPropertiesView view = new AppPropertiesView("lfsPropertiesType", userState);  // i18n metadata
             view.addContentTo(html, metaFile, bundle, getFileProperties());
+        }
+    }
+
+    protected final void addFilesRename(final Element html) throws IOException {
+        if (PropertiesU.isBoolean(userState.getProperties(), App.Action.FILES_RENAME)) {
+            final AppFilesRenameView view = new AppFilesRenameView(request.getHttpRequest(), userState);  // i18n meta
+            view.addContentTo(html);
         }
     }
 

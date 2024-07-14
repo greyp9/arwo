@@ -73,6 +73,14 @@
         </xsd:sequence>
     </xsd:complexType>
 
+    <xsd:element name='filesRename' type='action:filesRenameType'/>
+
+    <!-- greyp9/irby/src/main/app/resources/irby-jar/io/github/greyp9/irby/xsd/app/app.xsd -->
+    <xsd:complexType name="filesRenameType">
+        <xsd:attribute name='source' type='xsd:string'/>
+        <xsd:attribute name='target' type='xsd:string'/>
+    </xsd:complexType>
+
     <xsd:element name='textFilter' type='action:textFilterType'/>
 
     <xsd:complexType name='textFilterType'>

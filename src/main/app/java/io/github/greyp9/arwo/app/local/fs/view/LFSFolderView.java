@@ -71,6 +71,8 @@ public class LFSFolderView extends LFSView {
         final AppUserState userState = getUserState();
         // properties of cursor resource
         addFileProperties(html, null);
+        // files rename view
+        addFilesRename(html);
         // folder content
         final RowSetMetaData metaData = LFSFolder.createMetaData();
         final Locus locus = userState.getLocus();

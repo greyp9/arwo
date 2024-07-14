@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.local.fs.action.LFSAddFavorite;
 import io.github.greyp9.arwo.app.local.fs.action.LFSCreateFile;
 import io.github.greyp9.arwo.app.local.fs.action.LFSCreateFolder;
+import io.github.greyp9.arwo.app.local.fs.action.LFSRenameFiles;
 import io.github.greyp9.arwo.app.local.fs.action.LFSSelectFavorite;
 import io.github.greyp9.arwo.app.local.fs.action.LFSUpdateFile;
 import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
@@ -123,6 +124,8 @@ public class LFSHandlerPost {
             new LFSCreateFile(request, folderBase).apply(httpArguments);
         } else if (App.Action.FOLDER_CREATE.equals(action)) {
             new LFSCreateFolder(request, folderBase).apply(httpArguments);
+        } else if (App.Action.FILES_RENAME.equals(action)) {
+            new LFSRenameFiles(request, folderBase).apply(httpArguments);
         } else if (App.Action.FILE_UPDATE.equals(action)) {
             new LFSUpdateFile(request, folderBase).apply(httpArguments);
         } else if (App.Action.COMMAND.equals(action)) {

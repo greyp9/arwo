@@ -22,6 +22,7 @@ public final class App {
         public static final QName QNAME_FILE_EDIT = new QName(URI_ACTION, "fileEdit", PREFIX_ACTION);
         public static final QName QNAME_FILE_NEW = new QName(URI_ACTION, "fileNew", PREFIX_ACTION);
         public static final QName QNAME_FOLDER_NEW = new QName(URI_ACTION, "folderNew", PREFIX_ACTION);
+        public static final QName QNAME_FILES_RENAME = new QName(URI_ACTION, "filesRename", PREFIX_ACTION);
         public static final QName QNAME_FILTER = new QName(URI_ACTION, "filter", PREFIX_ACTION);
         public static final QName QNAME_LOCALE = new QName(URI_ACTION, "locale", PREFIX_ACTION);
         public static final QName QNAME_MAIL = new QName(URI_ACTION, "mail", PREFIX_ACTION);
@@ -239,6 +240,7 @@ public final class App {
         public static final String UPDATE_LOCALE = "updateLocale";
         public static final String TEXT_EXPRESSION = "textExpression";
         public static final String TEXT_FILTER = "textFilter";
+        public static final String FILES_RENAME = "filesRename";
         public static final String FILE_UPDATE = "fileUpdate";
         public static final String FILE_CREATE = "fileCreate";
         public static final String FOLDER_CREATE = "folderCreate";
