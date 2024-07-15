@@ -1,0 +1,2 @@
+2024-01-01 19:00:00,001 ERROR foo: event1 which happened at 2024-01-01 19:00:00,001 and was bad
+2024-01-01 19:00:00,002 ERROR foo: event2 which happened at 2024-01-01 19:00:00,002 and was bad

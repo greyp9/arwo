@@ -1,0 +1,8 @@
+2024-01-01 19:00:00,001 ERROR foo: event1
+    at stacktrace1
+    at stacktrace2
+    at stacktrace3
+2024-01-01 19:00:00,002 ERROR foo: event2
+    at stacktrace1
+    at stacktrace2
+    at stacktrace3
