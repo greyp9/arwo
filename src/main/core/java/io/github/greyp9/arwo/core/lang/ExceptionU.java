@@ -22,6 +22,12 @@ public final class ExceptionU {
         return messages;
     }
 
+    public static void assertEquals(final boolean expected, final boolean actual) throws IOException {
+        if (expected != actual) {
+            throw new IOException(String.format("failure, assertEquals(%s,%s)", expected, actual));
+        }
+    }
+
     public static void assertEquals(final long expected, final long actual) throws IOException {
         if (expected != actual) {
             throw new IOException(String.format("failure, assertEquals(%d,%d)", expected, actual));
