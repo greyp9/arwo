@@ -10,10 +10,10 @@ import org.w3c.dom.Element;
 import java.io.IOException;
 
 // i18nf
-public class CursorIMAP {
+public final class CursorIMAP {
     private final XedCursor cursor;
 
-    public final XedCursor getCursor() {
+    public XedCursor getCursor() {
         return cursor;
     }
 
@@ -27,39 +27,39 @@ public class CursorIMAP {
         this.cursor = (element == null) ? null : new XedNav(xed).find(element);
     }
 
-    public final String getName() {
+    public String getName() {
         return cursor.getValue(cursor.getChildInstance(App.Settings.NAME));
     }
 
-    public final boolean isEnabled() {
+    public boolean isEnabled() {
         return TypeU.toBooleanP(cursor.getValue(cursor.getChildInstance(App.Settings.ENABLED)));
     }
 
-    public final String getComment() {
+    public String getComment() {
         return cursor.getValue(cursor.getChildInstance(App.Settings.COMMENT));
     }
 
-    public final String getProtocol() {
+    public String getProtocol() {
         return cursor.getValue(cursor.getChildInstance(App.Settings.PROTOCOL));
     }
 
-    public final String getHost() {
+    public String getHost() {
         return cursor.getValue(cursor.getChildInstance(App.Settings.HOST));
     }
 
-    public final Integer getPort() {
+    public Integer getPort() {
         return TypeU.toInteger(cursor.getValue(cursor.getChildInstance(App.Settings.PORT)));
     }
 
-    public final String getUser() {
+    public String getUser() {
         return cursor.getValue(cursor.getChildInstance(App.Settings.USER));
     }
 
-    public final String getPassword() {
+    public String getPassword() {
         return cursor.getValue(cursor.getChildInstance(App.Settings.PASSWORD));
     }
 
-    public final String getCertificate() {
+    public String getCertificate() {
         return cursor.getValue(cursor.getChildInstance(App.Settings.CERTIFICATE));
     }
 

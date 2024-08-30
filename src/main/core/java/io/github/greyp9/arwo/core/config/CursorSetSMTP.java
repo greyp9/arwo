@@ -11,10 +11,10 @@ import java.util.Collection;
 import java.util.List;
 
 // i18nf
-public class CursorSetSMTP {
+public final class CursorSetSMTP {
     private final Collection<XedCursor> cursors;
 
-    public final Collection<XedCursor> getCursors() {
+    public Collection<XedCursor> getCursors() {
         return cursors;
     }
 

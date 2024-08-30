@@ -11,7 +11,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
-public class XsltX {
+public final class XsltX {
     private final Transformer transformer;
 
     public XsltX(final byte[] xslt) throws IOException {
@@ -25,12 +25,12 @@ public class XsltX {
         }
     }
 
-    public final XsltX setParameter(final String name, final Object value) {
+    public XsltX setParameter(final String name, final Object value) {
         this.transformer.setParameter(name, value);
         return this;
     }
 
-    public final byte[] transform(final byte[] input) throws IOException {
+    public byte[] transform(final byte[] input) throws IOException {
         try {
             final InputStream isXML = new ByteArrayInputStream(input);
             final ByteArrayOutputStream os = new ByteArrayOutputStream();

@@ -13,10 +13,10 @@ import org.w3c.dom.Element;
 import java.io.IOException;
 
 // i18nf
-public class CursorSSH {
+public final class CursorSSH {
     private final XedCursor cursor;
 
-    public final XedCursor getCursor() {
+    public XedCursor getCursor() {
         return cursor;
     }
 
@@ -30,39 +30,39 @@ public class CursorSSH {
         this.cursor = (element == null) ? null : new XedNav(xed).find(element);
     }
 
-    public final String getName() {
+    public String getName() {
         return cursor.getValue(cursor.getChildInstance(App.Settings.NAME));
     }
 
-    public final boolean isEnabled() {
+    public boolean isEnabled() {
         return TypeU.toBooleanP(cursor.getValue(cursor.getChildInstance(App.Settings.ENABLED)));
     }
 
-    public final String getComment() {
+    public String getComment() {
         return cursor.getValue(cursor.getChildInstance(App.Settings.COMMENT));
     }
 
-    public final String getHost() {
+    public String getHost() {
         return cursor.getValue(cursor.getChildInstance(App.Settings.HOST));
     }
 
-    public final String getPort() {
+    public String getPort() {
         return cursor.getValue(cursor.getChildInstance(App.Settings.PORT));
     }
 
-    public final String getProxy() {
+    public String getProxy() {
         return cursor.getValue(cursor.getChildInstance(App.Settings.PROXY));
     }
 
-    public final String getTerm() {
+    public String getTerm() {
         return cursor.getValue(cursor.getChildInstance(App.Settings.TERM));
     }
 
-    public final String getUser() {
+    public String getUser() {
         return cursor.getValue(cursor.getChildInstance(App.Settings.USER));
     }
 
-    public final String getAuthentication() {
+    public String getAuthentication() {
         String authentication = null;
         final XsdBundle bundle = cursor.getXed().getXsdBundle();
         final TypeInstance parentInstance = cursor.getTypeInstance();
@@ -74,21 +74,21 @@ public class CursorSSH {
         return authentication;
     }
 
-    public final String getPassword() {
+    public String getPassword() {
         return cursor.getValue(cursor.getChildInstance(
                 App.Settings.AUTH_PASSWORD).getInstance(App.Settings.PASSWORD));
     }
 
-    public final String getPrivateKey() {
+    public String getPrivateKey() {
         return cursor.getValue(cursor.getChildInstance(
                 App.Settings.AUTH_PUBLIC_KEY).getInstance(App.Settings.PRIVATE_KEY));
     }
 
-    public final String getAlgorithm() {
+    public String getAlgorithm() {
         return cursor.getValue(cursor.getChildInstance(App.Settings.ALGORITHM));
     }
 
-    public final String getPublicKey() {
+    public String getPublicKey() {
         return cursor.getValue(cursor.getChildInstance(App.Settings.PUBLIC_KEY));
     }
 

@@ -17,10 +17,10 @@ import java.sql.Types;
 import java.util.Collection;
 import java.util.Date;
 
-public class CIFSFolder {
+public final class CIFSFolder {
     private final RowSet rowSet;
 
-    public final RowSet getRowSet() {
+    public RowSet getRowSet() {
         return rowSet;
     }
 

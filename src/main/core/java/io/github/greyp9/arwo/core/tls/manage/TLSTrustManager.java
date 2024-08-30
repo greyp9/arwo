@@ -10,7 +10,7 @@ import java.security.KeyStore;
 import java.security.cert.X509Certificate;
 import java.util.Enumeration;
 
-public class TLSTrustManager {
+public final class TLSTrustManager {
     private final KeyStore keyStore;
     private final String algorithm;
 
@@ -31,7 +31,7 @@ public class TLSTrustManager {
     }
 
     @SuppressWarnings("PMD.MethodReturnsInternalArray")
-    public final TrustManager[] createTrustManagers() throws GeneralSecurityException {
+    public TrustManager[] createTrustManagers() throws GeneralSecurityException {
         return (keyStore == null) ? createTrustManagersN() : createTrustManagersNN();
     }
 

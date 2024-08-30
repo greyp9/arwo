@@ -12,10 +12,10 @@ import java.io.IOException;
 import java.util.Locale;
 
 // i18nf
-public class Preferences {
+public final class Preferences {
     private final XedCursor cursor;
 
-    public final XedCursor getCursor() {
+    public XedCursor getCursor() {
         return cursor;
     }
 
@@ -24,11 +24,11 @@ public class Preferences {
         this.cursor = new XedNav(xed).find(element);
     }
 
-    public final String getSetting(final String xpath) throws IOException {
+    public String getSetting(final String xpath) throws IOException {
         return cursor.getXed().getXPather().getText(Const.PREFERENCES + xpath);
     }
 
-    public final String getMIMEType(final String path) throws IOException {
+    public String getMIMEType(final String path) throws IOException {
         final String extensionFile = Value.defaultOnNull(new FileX(path).getExtension(), "");
         final String extensionToLower = extensionFile.toLowerCase(Locale.getDefault());
         final String xpath = String.format(Const.MIME_TYPE_FOR_EXT, extensionToLower);
@@ -36,37 +36,37 @@ public class Preferences {
         return Value.defaultOnEmpty(mimeType, getDefaultMIMEType());
     }
 
-    public final String getDefaultMIMEType() {
+    public String getDefaultMIMEType() {
         final XedCursor cursorMIMETypes = new XedNav(cursor.getXed()).findChild("mimeTypes", cursor);
         return cursorMIMETypes.getValue(cursorMIMETypes.getChildInstance("mimeDefaultType"));
     }
 
-    public final String getTZ() {
+    public String getTZ() {
         final XedCursor cursorIt = new XedNav(cursor.getXed()).findChild("localization", cursor);
         return cursorIt.getValue(cursorIt.getChildInstance("tz"));
     }
 
-    public final String getDateFormat() {
+    public String getDateFormat() {
         final XedCursor cursorIt = new XedNav(cursor.getXed()).findChild("localization", cursor);
         return cursorIt.getValue(cursorIt.getChildInstance("dateFormat"));
     }
 
-    public final String getLanguage() {
+    public String getLanguage() {
         final XedCursor cursorLocal = new XedNav(cursor.getXed()).findChild("localization", cursor);
         return cursorLocal.getValue(cursorLocal.getChildInstance("language"));
     }
 
-    public final int getTablePageSize() {
+    public int getTablePageSize() {
         final XedCursor cursorTable = new XedNav(cursor.getXed()).findChild("table", cursor);
         return NumberU.toInt(cursorTable.getValue(cursorTable.getChildInstance("pageSize")), Const.PAGE_SIZE_TABLE);
     }
 
-    public final String getIconColor() {
+    public String getIconColor() {
         final XedCursor cursorLocal = new XedNav(cursor.getXed()).findChild("ui", cursor);
         return cursorLocal.getValue(cursorLocal.getChildInstance("shortcut"));
     }
 
-    public final String getTheme() {
+    public String getTheme() {
         final XedCursor cursorLocal = new XedNav(cursor.getXed()).findChild("ui", cursor);
         return cursorLocal.getValue(cursorLocal.getChildInstance("theme"));
     }

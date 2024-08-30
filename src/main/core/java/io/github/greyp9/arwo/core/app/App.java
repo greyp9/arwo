@@ -205,7 +205,7 @@ public final class App {
         public static final String PASSWORD = "password";
     }
 
-    @SuppressWarnings({ "OctalInteger", "PMD.AvoidUsingOctalValues" })
+    @SuppressWarnings({ "OctalInteger", "PMD.AvoidUsingOctalValues" }) /* octal values are intended */
     public static class FS {
         public static final String BYTES = "bytes";
         public static final String FILES = "files";

@@ -11,10 +11,10 @@ import java.util.Collection;
 import java.util.List;
 
 // i18nf
-public class CursorSetSSH {
+public final class CursorSetSSH {
     private final Collection<XedCursor> cursors;
 
-    public final Collection<XedCursor> getCursors() {
+    public Collection<XedCursor> getCursors() {
         return cursors;
     }
 

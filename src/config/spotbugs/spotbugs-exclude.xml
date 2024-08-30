@@ -29,8 +29,8 @@
         <Bug code="SQL"/>
     </Match>
     <Match>
-        <!-- false positive -->
-        <Class name="io.github.greyp9.arwo.core.text.filter.Transform"/>
-        <Bug code="BC"/>
+        <!-- code is as intended -->
+        <Class name="io.github.greyp9.arwo.core.xed.extension.XedKey"/>
+        <Bug code="NP"/>
     </Match>
 </FindBugsFilter>

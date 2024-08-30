@@ -17,10 +17,10 @@ import javax.xml.namespace.QName;
 import java.io.IOException;
 import java.net.URL;
 
-public class Meter {
+public final class Meter {
     private final Xed xed;
 
-    public final Xed getXed() {
+    public Xed getXed() {
         return xed;
     }
 
@@ -33,7 +33,7 @@ public class Meter {
         this.xed = new Xed(document, xsdTypes);
     }
 
-    public final RowSet getRowSet(final String qnameDataType, final String qnameTypeInstance) {
+    public RowSet getRowSet(final String qnameDataType, final String qnameTypeInstance) {
         // "{urn:arwo:meter}cronJobsType" / "job"
         final DataType dataType = xed.getXsdTypes().getTypeDefinitions().getComplexTypes().get(qnameDataType);
         final TypeInstance typeInstance = dataType.getInstance(qnameTypeInstance);

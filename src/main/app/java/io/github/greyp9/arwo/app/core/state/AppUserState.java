@@ -76,7 +76,7 @@ import java.util.TreeMap;
 
 @SuppressWarnings({ "PMD.ExcessiveImports", "PMD.GodClass", "PMD.TooManyFields", "PMD.CouplingBetweenObjects",
         "PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity", "PMD.ModifiedCyclomaticComplexity" })
-public class AppUserState {
+public final class AppUserState {
     private final AppState appState;
     private final KeyStore keyStore;
     // lifetime
@@ -120,11 +120,11 @@ public class AppUserState {
     // visualization view state
     private Page pageVisualization;
 
-    public final KeyStore getKeyStore() {
+    public KeyStore getKeyStore() {
         return keyStore;
     }
 
-    public final Key getKey(final String key, final char[] password) throws IOException {
+    public Key getKey(final String key, final char[] password) throws IOException {
         try {
             return keyStore.getKey(key, password);
         } catch (GeneralSecurityException e) {
@@ -132,67 +132,67 @@ public class AppUserState {
         }
     }
 
-    public final CronService getCronService() {
+    public CronService getCronService() {
         return appState.getCronService();
     }
 
-    public final Date getDateAppStart() {
+    public Date getDateAppStart() {
         return appState.getDateStart();
     }
 
-    public final Date getDateSessionStart() {
+    public Date getDateSessionStart() {
         return interval.getDateStart();
     }
 
-    public final Interval getInterval() {
+    public Interval getInterval() {
         return interval;
     }
 
-    public final Principal getPrincipal() {
+    public Principal getPrincipal() {
         return principal;
     }
 
-    public final String getSubmitID() {
+    public String getSubmitID() {
         return submitID;
     }
 
-    public final UserExecutor getUserExecutor() {
+    public UserExecutor getUserExecutor() {
         return userExecutor;
     }
 
-    public final File getUserRoot() {
+    public File getUserRoot() {
         return userRoot;
     }
 
-    public final XedUserState getDocumentState() {
+    public XedUserState getDocumentState() {
         return documentState;
     }
 
-    public final ViewStates getViewStates() {
+    public ViewStates getViewStates() {
         return viewStates;
     }
 
-    public final ResourceCache getCache() {
+    public ResourceCache getCache() {
         return cache;
     }
 
-    public final ResourceCache getCacheBlob() {
+    public ResourceCache getCacheBlob() {
         return cacheBlob;
     }
 
-    public final Alerts getAlerts() {
+    public Alerts getAlerts() {
         return alerts;
     }
 
-    public final List<String> getFiltersRecent() {
+    public List<String> getFiltersRecent() {
         return filtersRecent;
     }
 
-    public final TextFilters getTextFilters() {
+    public TextFilters getTextFilters() {
         return getTextFilters("");
     }
 
-    public final TextFilters getTextFilters(final String context) {
+    public TextFilters getTextFilters(final String context) {
         TextFilters textFiltersOp = textFilters.get(context);
         if (textFiltersOp == null) {
             textFiltersOp = new TextFilters();
@@ -201,87 +201,87 @@ public class AppUserState {
         return textFiltersOp;
     }
 
-    public final DeferredActions getDeferredActions() {
+    public DeferredActions getDeferredActions() {
         return deferredActions;
     }
 
-    public final SubsystemCron getCron() {
+    public SubsystemCron getCron() {
         return cron;
     }
 
-    public final SubsystemLocal getLocal() {
+    public SubsystemLocal getLocal() {
         return local;
     }
 
-    public final SubsystemSSH getSSH() {
+    public SubsystemSSH getSSH() {
         return ssh;
     }
 
-    public final SubsystemJDBC getJDBC() {
+    public SubsystemJDBC getJDBC() {
         return jdbc;
     }
 
-    public final SubsystemMail getMail() {
+    public SubsystemMail getMail() {
         return mail;
     }
 
-    public final SubsystemCIFS getCIFS() {
+    public SubsystemCIFS getCIFS() {
         return cifs;
     }
 
-    public final SubsystemInterop getInterop() {
+    public SubsystemInterop getInterop() {
         return interop;
     }
 
-    public final SubsystemWebDAV getWebDAV() {
+    public SubsystemWebDAV getWebDAV() {
         return webDAV;
     }
 
-    public final MenuSystem getMenuSystem() {
+    public MenuSystem getMenuSystem() {
         return menuSystem;
     }
 
-    public final Page getPageViewHex() {
+    public Page getPageViewHex() {
         return pageViewHex;
     }
 
-    public final void setPageViewHex(final Page pageViewHex) {
+    public void setPageViewHex(final Page pageViewHex) {
         this.pageViewHex = pageViewHex;
     }
 
-    public final Page getPageVisualization() {
+    public Page getPageVisualization() {
         return pageVisualization;
     }
 
-    public final Bundle getBundle() {
+    public Bundle getBundle() {
         return new Bundle(new AppText(getLocus().getLocale()).getBundleCore());
     }
 
-    public final Locus getLocus() {
+    public Locus getLocus() {
         return documentState.getLocus();
     }
 
-    public final Locale getLocale() {
+    public Locale getLocale() {
         return documentState.getLocus().getLocale();
     }
 
-    public final XedFactory getXedFactory() {
+    public XedFactory getXedFactory() {
         return documentState.getFactory();
     }
 
-    public final ByteArrayInputStream getXHTML() {
+    public ByteArrayInputStream getXHTML() {
         return documentState.getXHTML();
     }
 
-    public final Xed getConfig() throws IOException {
+    public Xed getConfig() throws IOException {
         return documentState.getConfig();
     }
 
-    public final Properties getProperties() {
+    public Properties getProperties() {
         return documentState.getProperties();
     }
 
-    public final String getCharset() {
+    public String getCharset() {
         return documentState.getProperties().getProperty(App.Action.CHARSET, UTF8Codec.Const.UTF8);
     }
 
@@ -317,17 +317,17 @@ public class AppUserState {
         this.pageVisualization = Page.Factory.initPage(Const.PAGE_VISUALIZATION, new Properties());
     }
 
-    public final AppRequest getAppRequest(final ServletHttpRequest httpRequest) {
+    public AppRequest getAppRequest(final ServletHttpRequest httpRequest) {
         return new AppRequest(httpRequest, submitID, getLocus(), getBundle(), alerts);
     }
 
-    public final ResultsContext getResultsContext(final ServletHttpRequest httpRequest) throws IOException {
+    public ResultsContext getResultsContext(final ServletHttpRequest httpRequest) throws IOException {
         final XedActionFilter filter = new XedActionFilter(getXedFactory(), getLocale());
         final MetaLink metaLink = getMetaLink(httpRequest);
         return new ResultsContext(viewStates, filter, getLocus(), getBundle(), alerts, submitID, metaLink);
     }
 
-    public final MetaLink getMetaLink(final ServletHttpRequest httpRequest) {
+    public MetaLink getMetaLink(final ServletHttpRequest httpRequest) {
         MetaLink metaLink = new MetaLink(null, null);
         final String persist = httpRequest.getHttpRequest().getHeader(App.Header.RESULT);
         if (persist != null) {
@@ -342,12 +342,12 @@ public class AppUserState {
         return metaLink;
     }
 
-    public final String applyPost(final SubmitToken token, final NameTypeValues httpArguments,
+    public String applyPost(final SubmitToken token, final NameTypeValues httpArguments,
                                   final ServletHttpRequest httpRequest) throws IOException {
         return applyPost(token, httpArguments, httpRequest, "");
     }
 
-    public final String applyPost(final SubmitToken token, final NameTypeValues httpArguments,
+    public String applyPost(final SubmitToken token, final NameTypeValues httpArguments,
                                   final ServletHttpRequest httpRequest, final String context) throws IOException {
         httpArguments.getClass();
         // from HTTP POST form arguments...
@@ -418,7 +418,7 @@ public class AppUserState {
         return location;
     }
 
-    public final void close(final Date date) throws IOException {
+    public void close(final Date date) throws IOException {
         doClearCache();
         interval.setDateFinish(date);
         final ConnectionCache[] caches = { ssh.getCache() };

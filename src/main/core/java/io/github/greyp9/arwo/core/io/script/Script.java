@@ -16,7 +16,7 @@ import java.util.Optional;
 import java.util.Properties;
 
 @SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
-public class Script {
+public final class Script {
     private final String context;
     private final long date;
     private final String id;
@@ -26,27 +26,27 @@ public class Script {
     private final Collection<CommandWork> commandsWork;
     private final Collection<CommandDone> commandsDone;
 
-    public final String getContext() {
+    public String getContext() {
         return context;
     }
 
-    public final Date getDate() {
+    public Date getDate() {
         return new Date(date);
     }
 
-    public final String getID() {
+    public String getID() {
         return id;
     }
 
-    public final String getText() {
+    public String getText() {
         return text;
     }
 
-    public final boolean isReload() {
+    public boolean isReload() {
         return properties.containsKey(Const.RELOAD);
     }
 
-    public final Properties getProperties() {
+    public Properties getProperties() {
         return properties;
     }
 
@@ -66,40 +66,40 @@ public class Script {
         }
     }
 
-    public final synchronized boolean isInterrupted() {
+    public synchronized boolean isInterrupted() {
         return PropertiesU.isBoolean(properties, Const.INTERRUPTED);
     }
 
-    public final synchronized void setInterrupted() {
+    public synchronized void setInterrupted() {
         PropertiesU.setProperty(properties, Const.INTERRUPTED, Boolean.TRUE.toString());
     }
 
-    public final synchronized Date getStart() {
+    public synchronized Date getStart() {
         final long start = new PropertiesX(properties).getLong(Const.START);
         return ((start == 0) ? null : new Date(start));
     }
 
-    public final synchronized Date getFinish() {
+    public synchronized Date getFinish() {
         final long finish = new PropertiesX(properties).getLong(Const.FINISH);
         return ((finish == 0) ? null : new Date(finish));
     }
 
-    public final synchronized void start() {
+    public synchronized void start() {
         new PropertiesX(properties).setLong(Const.START, new Date().getTime());
     }
 
-    public final synchronized void finish() {
+    public synchronized void finish() {
         new PropertiesX(properties).setLong(Const.FINISH, new Date().getTime());
     }
 
-    public final synchronized void deserialize(final Date start, final Date finish) {
+    public synchronized void deserialize(final Date start, final Date finish) {
         final PropertiesX propertiesX = new PropertiesX(properties);
         propertiesX.setLong(Const.START, start.getTime());
         Optional.ofNullable(finish).ifPresent(f -> propertiesX.setLong(Const.FINISH, f.getTime()));
         propertiesX.setLong(Const.RELOAD, 1L);
     }
 
-    public final synchronized Collection<Command> getCommands() {
+    public synchronized Collection<Command> getCommands() {
         final Collection<Command> commands = new ArrayList<Command>();
         commands.addAll(commandsDone);
         commands.addAll(commandsWork);
@@ -107,11 +107,11 @@ public class Script {
         return commands;
     }
 
-    public final synchronized CommandToDo getCommandToDo() {
+    public synchronized CommandToDo getCommandToDo() {
         return (commandsToDo.isEmpty() ? null : commandsToDo.iterator().next());
     }
 
-    public final synchronized CommandWork startCommand(
+    public synchronized CommandWork startCommand(
             final CommandToDo command, final String charset, final String dir) {
         final CommandWork commandWork = new CommandWork(
                 dir, command.getStdin(), charset, getID(), command.getScheduled(), new Date(), null);
@@ -120,14 +120,14 @@ public class Script {
         return commandWork;
     }
 
-    public final synchronized CommandWork updateCommand(final CommandWork command, final Long pid) {
+    public synchronized CommandWork updateCommand(final CommandWork command, final Long pid) {
         final CommandWork commandUpdate = new CommandWork(command, pid);
         commandsWork.remove(command);
         commandsWork.add(commandUpdate);
         return commandUpdate;
     }
 
-    public final synchronized CommandDone finishCommand(final CommandWork command, final Integer exitValue) {
+    public synchronized CommandDone finishCommand(final CommandWork command, final Integer exitValue) {
         final CommandDone commandDone = new CommandDone(
                 command, command.getStdout(), command.getStderr(), new Date(), exitValue);
         commandsWork.remove(command);
@@ -135,25 +135,25 @@ public class Script {
         return commandDone;
     }
 
-    public final synchronized Long getDelay(final Date now) {  // how long waiting to start
+    public synchronized Long getDelay(final Date now) {  // how long waiting to start
         final Date dateA = new Date(date);
         final Date dateZ = ((getStart() == null) ? now : getStart());
         final boolean isValue = (dateZ != null);
         return (isValue ? (dateZ.getTime() - dateA.getTime()) : null);
     }
 
-    public final synchronized Long getElapsed(final Date now) {
+    public synchronized Long getElapsed(final Date now) {
         final Date dateA = getStart();
         final Date dateZ = ((getFinish() == null) ? now : getFinish());
         final boolean isValue = ((dateA != null) && (dateZ != null));
         return (isValue ? (dateZ.getTime() - dateA.getTime()) : null);
     }
 
-    public final synchronized boolean isProgress() {
+    public synchronized boolean isProgress() {
         return ((!commandsWork.isEmpty()) || (!commandsDone.isEmpty()));
     }
 
-    public final synchronized Long getStdoutLength() {
+    public synchronized Long getStdoutLength() {
         long length = 0L;
         final Collection<Command> commands = getCommands();
         for (final Command command : commands) {
@@ -163,7 +163,7 @@ public class Script {
         return length;
     }
 
-    public final synchronized Long getStderrLength() {
+    public synchronized Long getStderrLength() {
         long length = 0L;
         final Collection<Command> commands = getCommands();
         for (final Command command : commands) {
@@ -173,7 +173,7 @@ public class Script {
         return length;
     }
 
-    public final synchronized Integer getExitValue() {
+    public synchronized Integer getExitValue() {
         Integer exitValue = 0;
         final Collection<Command> commands = getCommands();
         for (final Command command : commands) {

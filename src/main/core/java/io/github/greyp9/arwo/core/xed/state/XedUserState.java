@@ -48,7 +48,7 @@ import java.util.Properties;
 import java.util.TimeZone;
 
 @SuppressWarnings("PMD.ExcessiveImports")
-public class XedUserState {
+public final class XedUserState {
     // user session identity token
     private final String submitID;
     // table view states
@@ -70,59 +70,59 @@ public class XedUserState {
     // user region preferences
     private Locus locus;
 
-    public final String getSubmitID() {
+    public String getSubmitID() {
         return submitID;
     }
 
-    public final Xed getConfig() throws IOException {
+    public Xed getConfig() throws IOException {
         return getSession(App.Servlet.SETTINGS).getXed();
     }
 
-    public final ViewStates getViewStates() {
+    public ViewStates getViewStates() {
         return viewStates;
     }
 
-    public final Alerts getAlerts() {
+    public Alerts getAlerts() {
         return alerts;
     }
 
-    public final XedSessions getSessions() {
+    public XedSessions getSessions() {
         return sessions;
     }
 
-    public final XedSession getSession(final String contextPath) throws IOException {
+    public XedSession getSession(final String contextPath) throws IOException {
         return sessions.getSession(contextPath);
     }
 
-    public final XedSession getSession(final String contextPath, final XedEntry xedEntry) throws IOException {
+    public XedSession getSession(final String contextPath, final XedEntry xedEntry) throws IOException {
         return sessions.getSession(contextPath, xedEntry);
     }
 
-    public final Properties getProperties() {
+    public Properties getProperties() {
         return properties;
     }
 
-    public final MenuSystem getMenuSystem() {
+    public MenuSystem getMenuSystem() {
         return menuSystem;
     }
 
-    public final XedFactory getFactory() {
+    public XedFactory getFactory() {
         return factory;
     }
 
-    public final XedClipboard getClipboard() {
+    public XedClipboard getClipboard() {
         return clipboard;
     }
 
-    public final ByteArrayInputStream getXHTML() {
+    public ByteArrayInputStream getXHTML() {
         return new ByteArrayInputStream(xhtml);
     }
 
-    public final Locus getLocus() {
+    public Locus getLocus() {
         return locus;
     }
 
-    public final Locale getLocale() {
+    public Locale getLocale() {
         return locus.getLocale();
     }
 
@@ -142,7 +142,7 @@ public class XedUserState {
         applyLocale();
     }
 
-    public final void applyGet(final NameTypeValues nameTypeValues) throws IOException {
+    public void applyGet(final NameTypeValues nameTypeValues) throws IOException {
         // from HTTP GET query string...
         for (final NameTypeValue nameTypeValue : nameTypeValues) {
             final String name = nameTypeValue.getName();
@@ -153,7 +153,7 @@ public class XedUserState {
         }
     }
 
-    public final String applyPost(
+    public String applyPost(
             final SubmitToken token, final NameTypeValues httpArguments, final XedRequest request) throws IOException {
         // from HTTP POST form arguments...
         String location = request.getHttpRequest().getURI();
@@ -186,7 +186,7 @@ public class XedUserState {
         return httpRequest.getBaseURI() + PathU.toPath("", view) + new Pather(httpRequest.getPathInfo()).getRight();
     }
 
-    public final void applySession(
+    public void applySession(
             final SubmitToken token, final NameTypeValues httpArguments, final XedRequest request) throws IOException {
         final String action = token.getAction();
         final String message = request.getBundle().getString("alert.action.not.implemented");
@@ -210,14 +210,14 @@ public class XedUserState {
         }
     }
 
-    public final void applyLocale(final NameTypeValues nameTypeValues) throws IOException {
+    public void applyLocale(final NameTypeValues nameTypeValues) throws IOException {
         // apply to user state
         final Xed actionLocale = new XedActionLocale(factory, null).update(nameTypeValues);
         final String localeID = actionLocale.getXPather().getText("/action:locale");  // i18n xpath
         locus = new LocusFactory().create(localeID, locus.getDateX());
     }
 
-    public final void applyLocale() throws IOException {
+    public void applyLocale() throws IOException {
         final Preferences preferences = new Preferences(getSession(App.Servlet.SETTINGS).getXed());
         final String tz = preferences.getTZ();
         final String dateFormat = preferences.getDateFormat();
@@ -225,7 +225,7 @@ public class XedUserState {
         locus = new LocusFactory().create(language, new DateX(dateFormat, TimeZone.getTimeZone(tz)));
     }
 
-    public final boolean isUnsavedState() throws IOException {
+    public boolean isUnsavedState() throws IOException {
         boolean isUnsavedState = false;
         for (final XedSession session : sessions.getSessions()) {
             isUnsavedState |= (session.getDateModify() != null);

@@ -12,11 +12,11 @@ import io.github.greyp9.arwo.core.table.row.RowSet;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 
-public class POP3MessagesStyled {
+public final class POP3MessagesStyled {
     private final POP3Request request;
     private final RowSet rowSet;
 
-    public final RowSet getRowSet() {
+    public RowSet getRowSet() {
         return rowSet;
     }
 

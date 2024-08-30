@@ -9,14 +9,14 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.GeneralSecurityException;
 
-public class TrustAllConnectionFactory {
+public final class TrustAllConnectionFactory {
     private final SSLSocketFactory socketFactory;
 
     public TrustAllConnectionFactory(final TLSContext context) throws GeneralSecurityException {
         socketFactory = context.getSocketFactory();
     }
 
-    public final HttpsURLConnection openConnection(final URL url) throws IOException {
+    public HttpsURLConnection openConnection(final URL url) throws IOException {
         return openConnection(url.openConnection());
     }
 

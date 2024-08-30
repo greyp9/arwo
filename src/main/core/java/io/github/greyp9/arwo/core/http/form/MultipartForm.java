@@ -13,7 +13,7 @@ import java.util.Arrays;
 import java.util.Collection;
 import java.util.Iterator;
 
-public class MultipartForm {
+public final class MultipartForm {
     private final Collection<MimePart> mimeParts;
 
     public MultipartForm(final InputStream is) throws IOException {
@@ -21,7 +21,7 @@ public class MultipartForm {
         decode(is);
     }
 
-    public final Iterator<MimePart> iterator() {
+    public Iterator<MimePart> iterator() {
         return mimeParts.iterator();
     }
 
@@ -40,7 +40,7 @@ public class MultipartForm {
                 readData(is, partDelimiter, mimePart.getBody());
                 mimeParts.add(mimePart);
                 mimePart = new MimePart();
-            } else if (line.length() == 0) {
+            } else if (line.isEmpty()) {
                 break;
             } else {
                 mimePart.addHeader(new MimeHeader(line.substring(0, line.length() - Const.CRLF_LENGTH)));

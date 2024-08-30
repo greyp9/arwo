@@ -21,11 +21,11 @@ import io.github.greyp9.arwo.core.value.Value;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 
-public class CIFSFolderStyled {
+public final class CIFSFolderStyled {
     private final CIFSRequest request;
     private final RowSet rowSet;
 
-    public final RowSet getRowSet() {
+    public RowSet getRowSet() {
         return rowSet;
     }
 

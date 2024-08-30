@@ -15,7 +15,7 @@ import java.util.Collection;
 import java.util.List;
 import java.util.TreeSet;
 
-public class DependencyResolver {
+public final class DependencyResolver {
     //private final String resource;
     private final XPather xpather;
 
@@ -27,7 +27,7 @@ public class DependencyResolver {
         this.xpather = new XPather(document, context);
     }
 
-    public final Collection<Dependency> resolveDependencies(final String className) throws IOException {
+    public Collection<Dependency> resolveDependencies(final String className) throws IOException {
         final Collection<Dependency> dependencies = new TreeSet<Dependency>();
         final String xpath = String.format("/irby:dependencies/irby:binding/irby:entry[@className='%s']", className);
         final List<Element> bindings = xpather.getElements(xpath);

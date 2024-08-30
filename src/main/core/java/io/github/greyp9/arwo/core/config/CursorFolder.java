@@ -10,10 +10,10 @@ import org.w3c.dom.Element;
 import java.io.IOException;
 
 // i18nf
-public class CursorFolder {
+public final class CursorFolder {
     private final XedCursor cursor;
 
-    public final XedCursor getCursor() {
+    public XedCursor getCursor() {
         return cursor;
     }
 
@@ -27,19 +27,19 @@ public class CursorFolder {
         this.cursor = (element == null) ? null : new XedNav(xed).find(element);
     }
 
-    public final String getName() {
+    public String getName() {
         return cursor.getValue(cursor.getChildInstance(App.Settings.NAME));
     }
 
-    public final boolean isEnabled() {
+    public boolean isEnabled() {
         return TypeU.toBooleanP(cursor.getValue(cursor.getChildInstance(App.Settings.ENABLED)));
     }
 
-    public final String getComment() {
+    public String getComment() {
         return cursor.getValue(cursor.getChildInstance(App.Settings.COMMENT));
     }
 
-    public final String getFolder() {
+    public String getFolder() {
         return cursor.getValue(cursor.getChildInstance("folder"));
     }
 

@@ -15,12 +15,12 @@ import io.github.greyp9.arwo.core.url.URLCodec;
 import java.io.UnsupportedEncodingException;
 import java.util.Iterator;
 
-public class IMAPFoldersStyled {
+public final class IMAPFoldersStyled {
     private final IMAPRequest request;
     private final RowSet rowSet;
     private final Bundle bundle;
 
-    public final RowSet getRowSet() {
+    public RowSet getRowSet() {
         return rowSet;
     }
 

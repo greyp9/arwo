@@ -9,7 +9,7 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.GeneralSecurityException;
 
-public class TrustDefaultConnectionFactory {
+public final class TrustDefaultConnectionFactory {
     private final SSLSocketFactory socketFactory;
 
     public TrustDefaultConnectionFactory(final String protocol) throws GeneralSecurityException {
@@ -18,11 +18,11 @@ public class TrustDefaultConnectionFactory {
         socketFactory = context.getSocketFactory();
     }
 
-    public final HttpsURLConnection openConnection(final URL url) throws IOException {
+    public HttpsURLConnection openConnection(final URL url) throws IOException {
         return openConnection(url.openConnection());
     }
 
-    public final HttpsURLConnection openConnection(final URL url, final Proxy proxy) throws IOException {
+    public HttpsURLConnection openConnection(final URL url, final Proxy proxy) throws IOException {
         return openConnection(url.openConnection(proxy));
     }
 

@@ -17,40 +17,40 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
 
-public class XsdTypes {
+public final class XsdTypes {
     private final URL urlInitial;
     private final URL urlCatalog;
     private final URL urlTransform;
     private final TypeDefinitions typeDefinitions;
     private final XPathContext context;
 
-    public final URL getUrlInitial() {
+    public URL getUrlInitial() {
         return urlInitial;
     }
 
-    public final URL getUrlCatalog() {
+    public URL getUrlCatalog() {
         return urlCatalog;
     }
 
-    public final URL getUrlTransform() {
+    public URL getUrlTransform() {
         return urlTransform;
     }
 
-    public final TypeDefinitions getTypeDefinitions() {
+    public TypeDefinitions getTypeDefinitions() {
         return typeDefinitions;
     }
 
-    public final QName getQName(final String qnameColon) {
+    public QName getQName(final String qnameColon) {
         final QName qname = QNameU.getQNameColon(qnameColon);
         final String uri = context.getNamespaceURI(qname.getPrefix());
         return new QName(uri, qname.getLocalPart(), qname.getPrefix());
     }
 
-    public final XPathContext getContext() {
+    public XPathContext getContext() {
         return context;
     }
 
-    public final TypeInstance getElementType(final String qname) {
+    public TypeInstance getElementType(final String qname) {
         return typeDefinitions.getElementType(qname);
     }
 

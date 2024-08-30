@@ -158,6 +158,8 @@
         <module name="WhitespaceAfter"/>
         <module name="WhitespaceAround"/>
 
+        <module name="SingleSpaceSeparator"/>
+
         <!-- Modifier Checks                                    -->
         <!-- See https://checkstyle.org/config_modifier.html -->
         <module name="ModifierOrder"/>

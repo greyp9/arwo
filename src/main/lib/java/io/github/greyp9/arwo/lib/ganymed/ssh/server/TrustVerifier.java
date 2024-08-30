@@ -24,7 +24,7 @@ import java.security.KeyFactory;
 import java.security.interfaces.RSAPublicKey;
 import java.security.spec.RSAPublicKeySpec;
 
-public class TrustVerifier {
+public final class TrustVerifier {
     private final String hostName;
     private final KnownHosts knownHosts;
 
@@ -37,7 +37,7 @@ public class TrustVerifier {
         }
     }
 
-    public final int verify(final ConnectionInfo connectionInfo) throws IOException {
+    public int verify(final ConnectionInfo connectionInfo) throws IOException {
         final String algorithm = connectionInfo.serverHostKeyAlgorithm;
         final byte[] key = connectionInfo.serverHostKey;
         return knownHosts.verifyHostkey(hostName, algorithm, key);

@@ -23,11 +23,11 @@ import java.util.Iterator;
 import java.util.Properties;
 import java.util.logging.Logger;
 
-public class LFSFolderStyled {
+public final class LFSFolderStyled {
     private final LFSRequest request;
     private final RowSet rowSet;
 
-    public final RowSet getRowSet() {
+    public RowSet getRowSet() {
         return rowSet;
     }
 

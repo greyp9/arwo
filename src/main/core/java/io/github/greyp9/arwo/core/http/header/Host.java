@@ -3,15 +3,15 @@ package io.github.greyp9.arwo.core.http.header;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public class Host {
+public final class Host {
     private final String hostname;
     private final Integer port;
 
-    public final String getHost() {
+    public String getHost() {
         return hostname;
     }
 
-    public final Integer getPort() {
+    public Integer getPort() {
         return port;
     }
 
@@ -27,7 +27,7 @@ public class Host {
     }
 
     @Override
-    public final String toString() {
+    public String toString() {
         return String.format("%s:%d", hostname, port);
     }
 

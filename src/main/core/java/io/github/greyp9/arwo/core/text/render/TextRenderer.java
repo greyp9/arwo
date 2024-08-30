@@ -7,7 +7,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 
-public class TextRenderer {
+public final class TextRenderer {
     private final int characterCount;
     private final Collection<String> lines;
 
@@ -16,15 +16,15 @@ public class TextRenderer {
         this.lines = LineU.toLines(text);
     }
 
-    public final int getCharacterCount() {
+    public int getCharacterCount() {
         return characterCount;
     }
 
-    public final int getLineCount() {
+    public int getLineCount() {
         return lines.size();
     }
 
-    public final String render(final int maxLines) {
+    public String render(final int maxLines) {
         final ArrayList<String> linesRender = new ArrayList<String>(lines);
         while (linesRender.size() > maxLines) {
             linesRender.remove(0);

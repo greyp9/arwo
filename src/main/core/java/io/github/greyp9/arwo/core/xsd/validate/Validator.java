@@ -14,7 +14,7 @@ import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.Collection;
 
-public class Validator {
+public final class Validator {
     private final InputSource inputSource;
 
     public Validator(final byte[] xsd) {
@@ -34,7 +34,7 @@ public class Validator {
         inputSource = new InputSource(fileXsd.toURI().toURL().toExternalForm());
     }
 
-    public final Collection<String> validate(final byte[] xml) throws IOException {
+    public Collection<String> validate(final byte[] xml) throws IOException {
         final DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
         factory.setNamespaceAware(true);
         factory.setValidating(true);

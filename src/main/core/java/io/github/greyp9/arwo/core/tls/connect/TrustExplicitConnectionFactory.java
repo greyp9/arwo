@@ -10,18 +10,18 @@ import java.net.URL;
 import java.net.URLConnection;
 import java.security.GeneralSecurityException;
 
-public class TrustExplicitConnectionFactory {
+public final class TrustExplicitConnectionFactory {
     private final SSLSocketFactory socketFactory;
 
     public TrustExplicitConnectionFactory(final TLSContext context) throws GeneralSecurityException {
         socketFactory = context.getSocketFactory();
     }
 
-    public final HttpsURLConnection openConnection(final URL url) throws IOException {
+    public HttpsURLConnection openConnection(final URL url) throws IOException {
         return openConnection(url.openConnection());
     }
 
-    public final HttpsURLConnection openConnection(final URL url, final Proxy proxy) throws IOException {
+    public HttpsURLConnection openConnection(final URL url, final Proxy proxy) throws IOException {
         return openConnection(url.openConnection(proxy));
     }
 
