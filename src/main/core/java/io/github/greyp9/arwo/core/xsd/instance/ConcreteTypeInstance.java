@@ -2,7 +2,6 @@ package io.github.greyp9.arwo.core.xsd.instance;
 
 import io.github.greyp9.arwo.core.xsd.atom.XsdAtom;
 import io.github.greyp9.arwo.core.xsd.data.DataType;
-import io.github.greyp9.arwo.core.xsd.data.NodeType;
 
 import javax.xml.namespace.QName;
 import java.util.Collection;

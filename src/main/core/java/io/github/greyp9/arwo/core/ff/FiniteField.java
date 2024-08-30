@@ -9,11 +9,11 @@ public final class FiniteField {
     }
 
     public static String sha256Exp() {
-        return HexCodec.encode(HashU.sha256(FiniteField.EXP));
+        return HexCodec.encode(HashU.sha256(EXP));
     }
 
     public static String sha256Log() {
-        return HexCodec.encode(HashU.sha256(FiniteField.LOG));
+        return HexCodec.encode(HashU.sha256(LOG));
     }
 
     // GF256 exponent vector

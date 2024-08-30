@@ -71,6 +71,7 @@ public class WebDAVRunnable extends CronRunnable {
 
     private void putHttpResponse(
             final HttpResponse httpResponse, final String filename, final AppUserState userState) throws IOException {
+        logger.finest(filename);
         if (!SystemU.isTrue()) {
             // persist invocation results
             final File file = getParams().getFile(userState.getUserRoot(), null);

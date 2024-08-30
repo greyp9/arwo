@@ -11,11 +11,9 @@ public final class ExecutorServiceFactory {
     private ExecutorServiceFactory() {
     }
 
-    @SuppressWarnings("PMD.DoNotUseThreads")
+    @SuppressWarnings({"PMD.DoNotUseThreads", "PMD.AvoidThreadGroup"})
     public static ExecutorService create(final int nThreads, final String prefix) {
-        final Thread thread = Thread.currentThread();
-        final ThreadGroup threadGroup = thread.getThreadGroup();
-        final ThreadFactory threadFactory = new NameThreadFactory(threadGroup, prefix);
+        final ThreadFactory threadFactory = new NameThreadFactory(Thread.currentThread().getThreadGroup(), prefix);
         return Executors.newFixedThreadPool(nThreads, threadFactory);
     }
 }

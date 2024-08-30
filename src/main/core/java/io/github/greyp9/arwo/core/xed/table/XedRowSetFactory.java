@@ -27,6 +27,7 @@ import javax.xml.namespace.QName;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.logging.Logger;
 
 public class XedRowSetFactory {
     private final String baseURI;
@@ -47,7 +48,7 @@ public class XedRowSetFactory {
     }
 
     public final RowSet create(final XedCursor cursor, final Collection<Element> children, final Element selected) {
-        submitID.getClass();
+        Logger.getLogger(getClass().getName()).finest(submitID);
 
         final XedNav nav = new XedNav(cursor.getXed());
         final RowSet rowSet = new RowSet(metaData, sorts, filters);

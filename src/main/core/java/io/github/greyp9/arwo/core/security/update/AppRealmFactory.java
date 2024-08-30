@@ -38,7 +38,7 @@ public final class AppRealmFactory {
             final byte[] xml = (realmFile.exists())
                     ? StreamU.read(realmFile) : StreamU.read(ResourceU.resolve(App.Realm.XML_EMPTY));
             Logger.getLogger(AppRealmFactory.class.getName()).log(Level.OFF, realmFile.getPath());
-            return AppRealmFactory.toAppRealm(xsd, xml);
+            return toAppRealm(xsd, xml);
         } catch (IOException e) {
             throw new IllegalStateException(e);
         }

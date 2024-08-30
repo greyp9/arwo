@@ -20,6 +20,7 @@ import javax.xml.namespace.QName;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Set;
+import java.util.logging.Logger;
 
 @SuppressWarnings({ "PMD.GodClass", "PMD.TooManyMethods" })
 public class ComplexTypeFactory {
@@ -150,7 +151,7 @@ public class ComplexTypeFactory {
             if (XsdU.EXTENSION.equals(name)) {
                 addExtension(atom, typeInstances);
             } else if (XsdU.RESTRICTION.equals(name)) {
-                name.getClass();  // ignore
+                Logger.getLogger(getClass().getName()).finest(name);
             } else {
                 throw new IllegalStateException(atom.toString());
             }
@@ -289,7 +290,7 @@ public class ComplexTypeFactory {
                 XsdTypeU.Const.ANY_SIMPLE_TYPE.getLocalPart());
         final String identity = ElementU.getAttributeNS(atom.getElement(), XedU.IDENTITY, XedU.NS_URI_XED);
         if (ref != null) {
-            ref.getClass();
+            Logger.getLogger(getClass().getName()).finest(ref);
         } else if (type != null) {
             addTypeInstance(atom, typeInstances, identity);
         } else {

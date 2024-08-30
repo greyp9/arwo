@@ -149,7 +149,7 @@ public final class StreamU {
 
     public static byte[] readUntil(final InputStream is, final byte[] until) throws IOException {
         final ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        StreamU.readUntil(is, bos, until);
+        readUntil(is, bos, until);
         return bos.toByteArray();
     }
 
