@@ -5,30 +5,72 @@
     <groupId>io.github.greyp9</groupId>
     <artifactId>arwo</artifactId>
     <version>0.3.0-SNAPSHOT</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>arwo-core</module>
+    </modules>
+
+    <!--
+    https://repo.maven.apache.org/maven2/org/junit/jupiter/junit-jupiter-api/
+    https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-compiler-plugin/
+    https://repo.maven.apache.org/maven2/org/apache/maven/plugins/maven-surefire-plugin/
+    -->
+
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
         <maven.compiler.target>1.8</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.build.timestamp.format>yyyy-MM-dd'T'HH:mm:ss'Z'</maven.build.timestamp.format>
-        <junit.version>5.11.0</junit.version>  <!-- 2024-08-14 -->
 
-        <maven.antrun.plugin.version>3.1.0</maven.antrun.plugin.version>  <!-- 2022-04-18 -->
-        <maven.assembly.plugin.version>3.7.1</maven.assembly.plugin.version>  <!-- 2024-03-15 -->
-        <maven.build-helper.plugin.version>3.6.0</maven.build-helper.plugin.version>  <!-- 2024-05-19 -->
-        <maven.checkstyle.plugin.version>3.5.0</maven.checkstyle.plugin.version>  <!-- 2024-08-19 -->
-        <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>  <!-- 2024-03-15 -->
-        <maven.exec.plugin.version>3.4.1</maven.exec.plugin.version>  <!-- 2024-08-12 -->
-        <maven.git-commit.plugin.version>4.9.9</maven.git-commit.plugin.version>  <!-- 2021-07-15, latest Java 8 support-->
-        <maven.jar.plugin.version>3.4.2</maven.jar.plugin.version>  <!-- 2024-06-16 -->
-        <maven.pmd.plugin.version>3.24.0</maven.pmd.plugin.version>  <!-- 2024-07-10, default for plugin-3.25.0 is 7.3.0 -->
-        <maven.project-info-reports.plugin.version>3.7.0</maven.project-info-reports.plugin.version>  <!-- 2024-08-18 -->
-        <maven.site.plugin.version>3.9.1</maven.site.plugin.version>  <!-- 2020-06-21 -->
-        <maven.spotbugs.plugin.version>4.8.6.2</maven.spotbugs.plugin.version>  <!-- 2024-07-05 -->
-        <maven.surefire.plugin.version>3.5.0</maven.surefire.plugin.version>  <!-- 2024-08-22 -->
+        <junit.version>5.11.2</junit.version>
 
-        <checkstyle.version>9.3</checkstyle.version>  <!-- 2022-01-30 -->
-        <pmd.version>7.5.0</pmd.version>  <!-- 2024-08-30 -->
+<!--        <maven.antrun.plugin.version>3.1.0</maven.antrun.plugin.version>  &lt;!&ndash; 2022-04-18 &ndash;&gt;-->
+<!--        <maven.assembly.plugin.version>3.7.1</maven.assembly.plugin.version>  &lt;!&ndash; 2024-03-15 &ndash;&gt;-->
+        <maven.build-helper.plugin.version>3.6.0</maven.build-helper.plugin.version>
+<!--        <maven.checkstyle.plugin.version>3.5.0</maven.checkstyle.plugin.version>  &lt;!&ndash; 2024-08-19 &ndash;&gt;-->
+        <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
+<!--        <maven.exec.plugin.version>3.4.1</maven.exec.plugin.version>  &lt;!&ndash; 2024-08-12 &ndash;&gt;-->
+<!--        <maven.git-commit.plugin.version>4.9.9</maven.git-commit.plugin.version>  &lt;!&ndash; 2021-07-15, latest Java 8 support&ndash;&gt;-->
+<!--        <maven.jar.plugin.version>3.4.2</maven.jar.plugin.version>  &lt;!&ndash; 2024-06-16 &ndash;&gt;-->
+<!--        <maven.pmd.plugin.version>3.24.0</maven.pmd.plugin.version>  &lt;!&ndash; 2024-07-10, default for plugin-3.25.0 is 7.3.0 &ndash;&gt;-->
+<!--        <maven.project-info-reports.plugin.version>3.7.0</maven.project-info-reports.plugin.version>  &lt;!&ndash; 2024-08-18 &ndash;&gt;-->
+<!--        <maven.site.plugin.version>3.9.1</maven.site.plugin.version>  &lt;!&ndash; 2020-06-21 &ndash;&gt;-->
+<!--        <maven.spotbugs.plugin.version>4.8.6.2</maven.spotbugs.plugin.version>  &lt;!&ndash; 2024-07-05 &ndash;&gt;-->
+        <maven.surefire.plugin.version>3.5.1</maven.surefire.plugin.version>
+
+<!--        <checkstyle.version>9.3</checkstyle.version>  &lt;!&ndash; 2022-01-30 &ndash;&gt;-->
+<!--        <pmd.version>7.5.0</pmd.version>  &lt;!&ndash; 2024-08-30 &ndash;&gt;-->
     </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-params</artifactId>
+                <version>${junit.version}</version>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-params</artifactId>
+            <scope>test</scope>
+        </dependency>
+    </dependencies>
+
+<!--
     <dependencies>
         <dependency>
             <groupId>ch.ethz.ganymed</groupId>
@@ -78,15 +120,34 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+-->
+<!--
     <distributionManagement>
         <snapshotRepository>
             <id>snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
+-->
     <build>
         <pluginManagement>
             <plugins>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>build-helper-maven-plugin</artifactId>
+                    <version>${maven.build-helper.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-compiler-plugin</artifactId>
+                    <version>${maven.compiler.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-surefire-plugin</artifactId>
+                    <version>${maven.surefire.plugin.version}</version>
+                </plugin>
+<!--
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
@@ -114,13 +175,13 @@
                     <artifactId>maven-pmd-plugin</artifactId>
                     <version>${maven.pmd.plugin.version}</version>
                     <dependencies>
-                        <!-- https://repo.maven.apache.org/maven2/net/sourceforge/pmd/pmd-core/ -->
+                        &lt;!&ndash; https://repo.maven.apache.org/maven2/net/sourceforge/pmd/pmd-core/ &ndash;&gt;
                         <dependency>
                             <groupId>net.sourceforge.pmd</groupId>
                             <artifactId>pmd-core</artifactId>
                             <version>${pmd.version}</version>
                         </dependency>
-                        <!-- https://repo.maven.apache.org/maven2/net/sourceforge/pmd/pmd-java/ -->
+                        &lt;!&ndash; https://repo.maven.apache.org/maven2/net/sourceforge/pmd/pmd-java/ &ndash;&gt;
                         <dependency>
                             <groupId>net.sourceforge.pmd</groupId>
                             <artifactId>pmd-java</artifactId>
@@ -128,8 +189,10 @@
                         </dependency>
                     </dependencies>
                 </plugin>
+-->
             </plugins>
         </pluginManagement>
+<!--
         <plugins>
             <plugin>
                 <groupId>io.github.git-commit-id</groupId>
@@ -207,7 +270,7 @@
                     </execution>
                 </executions>
             </plugin>
-<!-- alternate means of token replacement
+&lt;!&ndash; alternate means of token replacement
             <plugin>
                 <groupId>com.google.code.maven-replacer-plugin</groupId>
                 <artifactId>replacer</artifactId>
@@ -234,7 +297,7 @@
                     </replacements>
                 </configuration>
             </plugin>
--->
+&ndash;&gt;
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-antrun-plugin</artifactId>
@@ -264,7 +327,7 @@
                         </goals>
                         <configuration>
                             <target>
-                                <!--coalesce CSS resource from source components (for runtime efficiency)-->
+                                &lt;!&ndash;coalesce CSS resource from source components (for runtime efficiency)&ndash;&gt;
                                 <concat destfile="${project.build.directory}/classes/arwo-war/css/webapp.css">
                                     <fileset dir="${project.basedir}/src/main/app/resources/webapp/arwo-war">
                                         <include name="css/alert.css"/>
@@ -274,7 +337,7 @@
                                         <include name="css/table.css"/>
                                     </fileset>
                                 </concat>
-                                <!--mozilla theme CSS (derived from default)-->
+                                &lt;!&ndash;mozilla theme CSS (derived from default)&ndash;&gt;
                                 <copy overwrite='true' tofile='${project.build.directory}/classes/arwo-war/css/webapp.moz.css'
                                       file='${project.build.directory}/classes/arwo-war/css/webapp.css' description='mozilla theme'>
                                     <filterchain>
@@ -289,7 +352,7 @@
                                         </tokenfilter>
                                     </filterchain>
                                 </copy>
-                                <!--chrome theme CSS (derived from default)-->
+                                &lt;!&ndash;chrome theme CSS (derived from default)&ndash;&gt;
                                 <copy overwrite='true' tofile='${project.build.directory}/classes/arwo-war/css/webapp.crm.css'
                                       file='${project.build.directory}/classes/arwo-war/css/webapp.css' description='chrome theme'>
                                     <filterchain>
@@ -389,7 +452,7 @@
                     </execution>
                 </executions>
             </plugin>
-<!--
+&lt;!&ndash;
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
@@ -414,7 +477,7 @@
                     </execution>
                 </executions>
             </plugin>
--->
+&ndash;&gt;
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -460,7 +523,9 @@
                 <directory>src/test/core/resources</directory>
             </testResource>
         </testResources>
+-->
     </build>
+<!--
     <reporting>
         <plugins>
             <plugin>
@@ -494,14 +559,14 @@
                 <artifactId>spotbugs-maven-plugin</artifactId>
                 <version>${maven.spotbugs.plugin.version}</version>
                 <configuration>
-                    <!-- https://spotbugs.github.io/spotbugs-maven-plugin/spotbugs-mojo.html -->
-                    <!-- https://spotbugs.readthedocs.io/en/latest/analysisprops.html -->
-                    <!-- https://spotbugs.readthedocs.io/en/latest/filter.html -->
-                    <!-- effort=Max [more accurate prediction]; threshold=Low [no confidence filtering]-->
+                    &lt;!&ndash; https://spotbugs.github.io/spotbugs-maven-plugin/spotbugs-mojo.html &ndash;&gt;
+                    &lt;!&ndash; https://spotbugs.readthedocs.io/en/latest/analysisprops.html &ndash;&gt;
+                    &lt;!&ndash; https://spotbugs.readthedocs.io/en/latest/filter.html &ndash;&gt;
+                    &lt;!&ndash; effort=Max [more accurate prediction]; threshold=Low [no confidence filtering]&ndash;&gt;
                     <effort>Max</effort>
                     <threshold>Low</threshold>
                     <onlyAnalyze>io.github.greyp9.arwo.-</onlyAnalyze>
-                    <!-- <includeFilterFile>src/config/spotbugs/spotbugs-include.xml</includeFilterFile> -->
+                    &lt;!&ndash; <includeFilterFile>src/config/spotbugs/spotbugs-include.xml</includeFilterFile> &ndash;&gt;
                     <excludeFilterFile>src/config/spotbugs/spotbugs-exclude.xml</excludeFilterFile>
                 </configuration>
             </plugin>
@@ -542,7 +607,7 @@
                 </plugins>
             </build>
         </profile>
-<!--
+&lt;!&ndash;
         <profile>
             <id>jre8</id>
             <activation>
@@ -576,8 +641,8 @@
                 </plugins>
             </build>
         </profile>
--->
-<!--
+&ndash;&gt;
+&lt;!&ndash;
         <profile>
             <id>jre9plus</id>
             <activation>
@@ -611,6 +676,7 @@
                 </plugins>
             </build>
         </profile>
--->
+&ndash;&gt;
     </profiles>
+-->
 </project>
