@@ -33,21 +33,21 @@
         <junit.version>5.11.2</junit.version>
 
 <!--        <maven.antrun.plugin.version>3.1.0</maven.antrun.plugin.version>  &lt;!&ndash; 2022-04-18 &ndash;&gt;-->
-<!--        <maven.assembly.plugin.version>3.7.1</maven.assembly.plugin.version>  &lt;!&ndash; 2024-03-15 &ndash;&gt;-->
+        <maven.assembly.plugin.version>3.7.1</maven.assembly.plugin.version>  <!-- 2024-03-15 -->
         <maven.build-helper.plugin.version>3.6.0</maven.build-helper.plugin.version>
-<!--        <maven.checkstyle.plugin.version>3.5.0</maven.checkstyle.plugin.version>  &lt;!&ndash; 2024-08-19 &ndash;&gt;-->
+        <maven.checkstyle.plugin.version>3.5.0</maven.checkstyle.plugin.version>  <!-- 2024-08-19 -->
         <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
 <!--        <maven.exec.plugin.version>3.4.1</maven.exec.plugin.version>  &lt;!&ndash; 2024-08-12 &ndash;&gt;-->
 <!--        <maven.git-commit.plugin.version>4.9.9</maven.git-commit.plugin.version>  &lt;!&ndash; 2021-07-15, latest Java 8 support&ndash;&gt;-->
 <!--        <maven.jar.plugin.version>3.4.2</maven.jar.plugin.version>  &lt;!&ndash; 2024-06-16 &ndash;&gt;-->
-<!--        <maven.pmd.plugin.version>3.24.0</maven.pmd.plugin.version>  &lt;!&ndash; 2024-07-10, default for plugin-3.25.0 is 7.3.0 &ndash;&gt;-->
-<!--        <maven.project-info-reports.plugin.version>3.7.0</maven.project-info-reports.plugin.version>  &lt;!&ndash; 2024-08-18 &ndash;&gt;-->
-<!--        <maven.site.plugin.version>3.9.1</maven.site.plugin.version>  &lt;!&ndash; 2020-06-21 &ndash;&gt;-->
-<!--        <maven.spotbugs.plugin.version>4.8.6.2</maven.spotbugs.plugin.version>  &lt;!&ndash; 2024-07-05 &ndash;&gt;-->
+        <maven.pmd.plugin.version>3.24.0</maven.pmd.plugin.version>  <!-- 2024-07-10, default for plugin-3.25.0 is 7.3.0 -->
+        <maven.project-info-reports.plugin.version>3.7.0</maven.project-info-reports.plugin.version>  <!-- 2024-08-18 -->
+        <maven.site.plugin.version>3.9.1</maven.site.plugin.version>  <!-- 2020-06-21 -->
+        <maven.spotbugs.plugin.version>4.8.6.2</maven.spotbugs.plugin.version>  <!-- 2024-07-05 -->
         <maven.surefire.plugin.version>3.5.1</maven.surefire.plugin.version>
 
-<!--        <checkstyle.version>9.3</checkstyle.version>  &lt;!&ndash; 2022-01-30 &ndash;&gt;-->
-<!--        <pmd.version>7.5.0</pmd.version>  &lt;!&ndash; 2024-08-30 &ndash;&gt;-->
+        <checkstyle.version>9.3</checkstyle.version>  <!-- 2022-01-30 -->
+        <pmd.version>7.5.0</pmd.version>  <!-- 2024-08-30 -->
     </properties>
 
     <dependencyManagement>
@@ -90,18 +90,6 @@
             <artifactId>servlet-api</artifactId>
             <version>2.5</version>
         </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-api</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.junit.jupiter</groupId>
-            <artifactId>junit-jupiter-params</artifactId>
-            <version>${junit.version}</version>
-            <scope>test</scope>
-        </dependency>
     </dependencies>
 -->
 <!--
@@ -130,7 +118,6 @@
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven.surefire.plugin.version}</version>
                 </plugin>
-<!--
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-assembly-plugin</artifactId>
@@ -158,13 +145,13 @@
                     <artifactId>maven-pmd-plugin</artifactId>
                     <version>${maven.pmd.plugin.version}</version>
                     <dependencies>
-                        &lt;!&ndash; https://repo.maven.apache.org/maven2/net/sourceforge/pmd/pmd-core/ &ndash;&gt;
+                        <!-- https://repo.maven.apache.org/maven2/net/sourceforge/pmd/pmd-core/ -->
                         <dependency>
                             <groupId>net.sourceforge.pmd</groupId>
                             <artifactId>pmd-core</artifactId>
                             <version>${pmd.version}</version>
                         </dependency>
-                        &lt;!&ndash; https://repo.maven.apache.org/maven2/net/sourceforge/pmd/pmd-java/ &ndash;&gt;
+                        <!-- https://repo.maven.apache.org/maven2/net/sourceforge/pmd/pmd-java/ -->
                         <dependency>
                             <groupId>net.sourceforge.pmd</groupId>
                             <artifactId>pmd-java</artifactId>
@@ -172,11 +159,20 @@
                         </dependency>
                     </dependencies>
                 </plugin>
--->
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-site-plugin</artifactId>
+                    <version>${maven.site.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>com.github.spotbugs</groupId>
+                    <artifactId>spotbugs-maven-plugin</artifactId>
+                    <version>${maven.spotbugs.plugin.version}</version>
+                </plugin>
             </plugins>
         </pluginManagement>
-<!--
         <plugins>
+<!--
             <plugin>
                 <groupId>io.github.git-commit-id</groupId>
                 <artifactId>git-commit-id-maven-plugin</artifactId>
@@ -202,6 +198,8 @@
                     <commitIdGenerationMode>full</commitIdGenerationMode>
                 </configuration>
             </plugin>
+-->
+<!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -217,6 +215,8 @@
                     <testExcludes/>
                 </configuration>
             </plugin>
+-->
+<!--
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
@@ -393,12 +393,13 @@
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
+-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <configuration>
                     <includeTestSourceDirectory>true</includeTestSourceDirectory>
-                    <configLocation>src/config/checkstyle/checkstyle-9.3.xml</configLocation>
+                    <configLocation>arwo-build/checkstyle/checkstyle-9.3.xml</configLocation>
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>true</failsOnError>
                     <linkXRef>false</linkXRef>
@@ -418,9 +419,9 @@
                 <artifactId>maven-pmd-plugin</artifactId>
                 <configuration>
                     <includeTests>false</includeTests>
-                    <excludeFromFailureFile>src/config/pmd/excludeFromFailures.properties</excludeFromFailureFile>
+                    <excludeFromFailureFile>arwo-build/pmd/excludeFromFailures.properties</excludeFromFailureFile>
                     <rulesets>
-                        <ruleset>src/config/pmd/pmd-7.3.0.xml</ruleset>
+                        <ruleset>arwo-build/pmd/pmd-7.3.0.xml</ruleset>
                     </rulesets>
                     <printFailingErrors>true</printFailingErrors>
                     <linkXRef>false</linkXRef>
@@ -435,7 +436,7 @@
                     </execution>
                 </executions>
             </plugin>
-&lt;!&ndash;
+<!--
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
@@ -460,7 +461,8 @@
                     </execution>
                 </executions>
             </plugin>
-&ndash;&gt;
+-->
+<!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
@@ -479,12 +481,13 @@
                     </archive>
                 </configuration>
             </plugin>
+-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
-                <version>${maven.site.plugin.version}</version>
             </plugin>
         </plugins>
+<!--
         <resources>
             <resource>
                 <directory>src/main/core/resources/arwo-jar</directory>
@@ -508,14 +511,13 @@
         </testResources>
 -->
     </build>
-<!--
     <reporting>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
                 <configuration>
-                    <configLocation>src/config/checkstyle/checkstyle-9.3.xml</configLocation>
+                    <configLocation>arwo-build/checkstyle/checkstyle-9.3.xml</configLocation>
                 </configuration>
                 <reportSets>
                     <reportSet>
@@ -530,9 +532,9 @@
                 <artifactId>maven-pmd-plugin</artifactId>
                 <configuration>
                     <includeTests>false</includeTests>
-                    <excludeFromFailureFile>src/config/pmd/excludeFromFailures.properties</excludeFromFailureFile>
+                    <excludeFromFailureFile>arwo-build/pmd/excludeFromFailures.properties</excludeFromFailureFile>
                     <rulesets>
-                        <ruleset>src/config/pmd/pmd-7.3.0.xml</ruleset>
+                        <ruleset>arwo-build/pmd/pmd-7.3.0.xml</ruleset>
                     </rulesets>
                     <linkXRef>false</linkXRef>
                 </configuration>
@@ -540,22 +542,22 @@
             <plugin>
                 <groupId>com.github.spotbugs</groupId>
                 <artifactId>spotbugs-maven-plugin</artifactId>
-                <version>${maven.spotbugs.plugin.version}</version>
                 <configuration>
-                    &lt;!&ndash; https://spotbugs.github.io/spotbugs-maven-plugin/spotbugs-mojo.html &ndash;&gt;
-                    &lt;!&ndash; https://spotbugs.readthedocs.io/en/latest/analysisprops.html &ndash;&gt;
-                    &lt;!&ndash; https://spotbugs.readthedocs.io/en/latest/filter.html &ndash;&gt;
-                    &lt;!&ndash; effort=Max [more accurate prediction]; threshold=Low [no confidence filtering]&ndash;&gt;
+                    <!-- https://spotbugs.github.io/spotbugs-maven-plugin/spotbugs-mojo.html -->
+                    <!-- https://spotbugs.readthedocs.io/en/latest/analysisprops.html -->
+                    <!-- https://spotbugs.readthedocs.io/en/latest/filter.html -->
+                    <!-- effort=Max [more accurate prediction]; threshold=Low [no confidence filtering]-->
                     <effort>Max</effort>
                     <threshold>Low</threshold>
                     <onlyAnalyze>io.github.greyp9.arwo.-</onlyAnalyze>
-                    &lt;!&ndash; <includeFilterFile>src/config/spotbugs/spotbugs-include.xml</includeFilterFile> &ndash;&gt;
-                    <excludeFilterFile>src/config/spotbugs/spotbugs-exclude.xml</excludeFilterFile>
+                    <!-- <includeFilterFile>src/config/spotbugs/spotbugs-include.xml</includeFilterFile> -->
+                    <excludeFilterFile>arwo-build/spotbugs/spotbugs-exclude.xml</excludeFilterFile>
                 </configuration>
             </plugin>
         </plugins>
     </reporting>
     <profiles>
+<!--
         <profile>
             <id>jre11</id>
             <activation>
@@ -590,7 +592,8 @@
                 </plugins>
             </build>
         </profile>
-&lt;!&ndash;
+-->
+<!--
         <profile>
             <id>jre8</id>
             <activation>
@@ -624,8 +627,8 @@
                 </plugins>
             </build>
         </profile>
-&ndash;&gt;
-&lt;!&ndash;
+-->
+<!--
         <profile>
             <id>jre9plus</id>
             <activation>
@@ -659,7 +662,6 @@
                 </plugins>
             </build>
         </profile>
-&ndash;&gt;
-    </profiles>
 -->
+    </profiles>
 </project>
