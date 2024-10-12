@@ -6,6 +6,7 @@
     <artifactId>arwo</artifactId>
     <version>0.3.0-SNAPSHOT</version>
     <packaging>pom</packaging>
+
     <modules>
         <module>arwo-app</module>
         <module>arwo-core</module>
@@ -17,6 +18,7 @@
         <module>arwo-tomcat6</module>
         <module>arwo-tomcat7</module>
         <module>arwo-tomcat8</module>
+        <module>arwo-kube</module>
     </modules>
 
     <!--
@@ -33,14 +35,14 @@
 
         <junit.version>5.11.2</junit.version>
 
-<!--        <maven.antrun.plugin.version>3.1.0</maven.antrun.plugin.version>  &lt;!&ndash; 2022-04-18 &ndash;&gt;-->
+        <maven.antrun.plugin.version>3.1.0</maven.antrun.plugin.version>  <!-- 2022-04-18 -->
         <maven.assembly.plugin.version>3.7.1</maven.assembly.plugin.version>  <!-- 2024-03-15 -->
         <maven.build-helper.plugin.version>3.6.0</maven.build-helper.plugin.version>
         <maven.checkstyle.plugin.version>3.5.0</maven.checkstyle.plugin.version>  <!-- 2024-08-19 -->
         <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
-<!--        <maven.exec.plugin.version>3.4.1</maven.exec.plugin.version>  &lt;!&ndash; 2024-08-12 &ndash;&gt;-->
-<!--        <maven.git-commit.plugin.version>4.9.9</maven.git-commit.plugin.version>  &lt;!&ndash; 2021-07-15, latest Java 8 support&ndash;&gt;-->
-<!--        <maven.jar.plugin.version>3.4.2</maven.jar.plugin.version>  &lt;!&ndash; 2024-06-16 &ndash;&gt;-->
+        <maven.exec.plugin.version>3.4.1</maven.exec.plugin.version>  <!-- 2024-08-12 -->
+        <maven.git-commit.plugin.version>4.9.9</maven.git-commit.plugin.version>  <!-- 2021-07-15, latest Java 8 support-->
+        <maven.jar.plugin.version>3.4.2</maven.jar.plugin.version>  <!-- 2024-06-16 -->
         <maven.pmd.plugin.version>3.24.0</maven.pmd.plugin.version>  <!-- 2024-07-10, default for plugin-3.25.0 is 7.3.0 -->
         <maven.project-info-reports.plugin.version>3.7.0</maven.project-info-reports.plugin.version>  <!-- 2024-08-18 -->
         <maven.site.plugin.version>3.9.1</maven.site.plugin.version>  <!-- 2020-06-21 -->
@@ -79,23 +81,12 @@
         </dependency>
     </dependencies>
 
-<!--
-    <dependencies>
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>1.16.0</version>
-        </dependency>
-    </dependencies>
--->
-<!--
     <distributionManagement>
         <snapshotRepository>
             <id>snapshots</id>
             <url>https://oss.sonatype.org/content/repositories/snapshots</url>
         </snapshotRepository>
     </distributionManagement>
--->
     <build>
         <pluginManagement>
             <plugins>
@@ -111,8 +102,28 @@
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-antrun-plugin</artifactId>
+                    <version>${maven.antrun.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>io.github.git-commit-id</groupId>
+                    <artifactId>git-commit-id-maven-plugin</artifactId>
+                    <version>${maven.git-commit.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.codehaus.mojo</groupId>
+                    <artifactId>exec-maven-plugin</artifactId>
+                    <version>${maven.exec.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
                     <artifactId>maven-surefire-plugin</artifactId>
                     <version>${maven.surefire.plugin.version}</version>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-jar-plugin</artifactId>
+                    <version>${maven.jar.plugin.version}</version>
                 </plugin>
                 <plugin>
                     <groupId>org.apache.maven.plugins</groupId>
@@ -168,7 +179,6 @@
             </plugins>
         </pluginManagement>
         <plugins>
-<!--
             <plugin>
                 <groupId>io.github.git-commit-id</groupId>
                 <artifactId>git-commit-id-maven-plugin</artifactId>
@@ -194,62 +204,7 @@
                     <commitIdGenerationMode>full</commitIdGenerationMode>
                 </configuration>
             </plugin>
--->
-<!--
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
-                <version>${maven.compiler.plugin.version}</version>
-                <configuration>
-                    <source>8</source>
-                    <target>8</target>
-                    <excludes>
-                        <exclude>io/github/greyp9/arwo/lib/tomcat6/**</exclude>
-                        <exclude>io/github/greyp9/arwo/lib/tomcat7/**</exclude>
-                        <exclude>io/github/greyp9/arwo/lib/tomcat8/**</exclude>
-                    </excludes>
-                    <testExcludes/>
-                </configuration>
-            </plugin>
--->
-<!--
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>${maven.build-helper.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>add-source</id>
-                        <phase>process-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>src/main/core/java</source>
-                                <source>src/main/core/java8</source>
-                                <source>src/main/lib/java</source>
-                                <source>src/main/app/java</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>add-test-source</id>
-                        <phase>process-test-sources</phase>
-                        <goals>
-                            <goal>add-test-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>src/test/core/java</source>
-                                <source>src/test/lib/java</source>
-                                <source>src/test/app/java</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-&lt;!&ndash; alternate means of token replacement
+<!-- alternate means of token replacement
             <plugin>
                 <groupId>com.google.code.maven-replacer-plugin</groupId>
                 <artifactId>replacer</artifactId>
@@ -276,120 +231,18 @@
                     </replacements>
                 </configuration>
             </plugin>
-&ndash;&gt;
-            <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-antrun-plugin</artifactId>
-                <version>${maven.antrun.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                <replace token="SPECIFICATION_VERSION" value="${project.version}" dir="target/classes">
-                                    <include name="arwo-war/index.html"/>
-                                </replace>
-                                <replace token="IMPLEMENTATION_VERSION" value="${maven.build.timestamp}-${git.commit.id.abbrev}" dir="target/classes">
-                                    <include name="arwo-war/index.html"/>
-                                </replace>
-                            </target>
-                        </configuration>
-                    </execution>
-                    <execution>
-                        <id>make-css</id>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>run</goal>
-                        </goals>
-                        <configuration>
-                            <target>
-                                &lt;!&ndash;coalesce CSS resource from source components (for runtime efficiency)&ndash;&gt;
-                                <concat destfile="${project.build.directory}/classes/arwo-war/css/webapp.css">
-                                    <fileset dir="${project.basedir}/src/main/app/resources/webapp/arwo-war">
-                                        <include name="css/alert.css"/>
-                                        <include name="css/app.css"/>
-                                        <include name="css/dialog.css"/>
-                                        <include name="css/menu.css"/>
-                                        <include name="css/table.css"/>
-                                    </fileset>
-                                </concat>
-                                &lt;!&ndash;mozilla theme CSS (derived from default)&ndash;&gt;
-                                <copy overwrite='true' tofile='${project.build.directory}/classes/arwo-war/css/webapp.moz.css'
-                                      file='${project.build.directory}/classes/arwo-war/css/webapp.css' description='mozilla theme'>
-                                    <filterchain>
-                                        <tokenfilter>
-                                            <replacestring from='HighlightText' to='#ffffff'/>
-                                            <replacestring from='Highlight' to='#4a90d9'/>
-                                            <replacestring from='InfoBackground' to='#000000'/>
-                                            <replacestring from='InfoText' to='#ffffff'/>
-                                            <replacestring from='Window' to='#ededed'/>
-                                            <replacestring from='ButtonFace' to='#ededed'/>
-                                            <replacestring from='ButtonText' to='#2e3436'/>
-                                        </tokenfilter>
-                                    </filterchain>
-                                </copy>
-                                &lt;!&ndash;chrome theme CSS (derived from default)&ndash;&gt;
-                                <copy overwrite='true' tofile='${project.build.directory}/classes/arwo-war/css/webapp.crm.css'
-                                      file='${project.build.directory}/classes/arwo-war/css/webapp.css' description='chrome theme'>
-                                    <filterchain>
-                                        <tokenfilter>
-                                            <replacestring from='HighlightText' to='#000000'/>
-                                            <replacestring from='Highlight' to='#b5d5ff'/>
-                                            <replacestring from='InfoBackground' to='#fbfcc5'/>
-                                            <replacestring from='InfoText' to='#000000'/>
-                                            <replacestring from='Window' to='#ffffff'/>
-                                            <replacestring from='ButtonFace' to='#dddddd'/>
-                                            <replacestring from='ButtonText' to='#000000'/>
-                                        </tokenfilter>
-                                    </filterchain>
-                                </copy>
-                            </target>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>exec-maven-plugin</artifactId>
-                <version>${maven.exec.plugin.version}</version>
-                <executions>
-                    <execution>
-                        <id>generate-i18n</id>
-                        <phase>prepare-package</phase>
-                        <goals>
-                            <goal>java</goal>
-                        </goals>
-                        <configuration>
-                            <mainClass>io.github.greyp9.arwo.core.i18n.PseudoI18n</mainClass>
-                            <classpathScope>test</classpathScope>
-                            <arguments>
-                                <argument>+</argument>
-                                <argument>${project.build.outputDirectory}/io/github/greyp9/arwo/text/core/core.properties</argument>
-                                <argument>${project.build.outputDirectory}/io/github/greyp9/arwo/xsd/action/action.properties</argument>
-                                <argument>${project.build.outputDirectory}/io/github/greyp9/arwo/xsd/app/app.properties</argument>
-                                <argument>${project.build.outputDirectory}/io/github/greyp9/arwo/xsd/meter/meter.properties</argument>
-                                <argument>${project.build.outputDirectory}/io/github/greyp9/arwo/xsd/realm/realm.properties</argument>
-                            </arguments>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
-                <version>${maven.surefire.plugin.version}</version>
                 <configuration>
                     <printSummary>false</printSummary>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <systemPropertyVariables>
-                        <java.util.logging.config.file>src/test/core/resources/logging.properties</java.util.logging.config.file>
+                        <java.util.logging.config.file>arwo-core/src/test/resources/logging.properties</java.util.logging.config.file>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
--->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-checkstyle-plugin</artifactId>
@@ -458,11 +311,9 @@
                 </executions>
             </plugin>
 -->
-<!--
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>${maven.jar.plugin.version}</version>
                 <configuration>
                     <archive>
                         <manifest/>
@@ -477,36 +328,13 @@
                     </archive>
                 </configuration>
             </plugin>
--->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-site-plugin</artifactId>
             </plugin>
         </plugins>
-<!--
-        <resources>
-            <resource>
-                <directory>src/main/core/resources/arwo-jar</directory>
-            </resource>
-            <resource>
-                <directory>src/main/app/resources/arwo-jar</directory>
-            </resource>
-            <resource>
-                <directory>src/main/app/resources/webapp</directory>
-                <includes>
-                    <include>arwo-war/css/*.css</include>
-                    <include>arwo-war/ico/*.ico</include>
-                    <include>arwo-war/*.html</include>
-                </includes>
-            </resource>
-        </resources>
-        <testResources>
-            <testResource>
-                <directory>src/test/core/resources</directory>
-            </testResource>
-        </testResources>
--->
     </build>
+
     <reporting>
         <plugins>
             <plugin>
@@ -552,112 +380,5 @@
             </plugin>
         </plugins>
     </reporting>
-    <profiles>
-<!--
-        <profile>
-            <id>jre11</id>
-            <activation>
-                <jdk>11</jdk>
-            </activation>
-            <properties>
-                <maven.compiler.source>11</maven.compiler.source>
-                <maven.compiler.target>11</maven.compiler.target>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <executions>
-                            <execution>
-                                <id>java11</id>
-                                <phase>compile</phase>
-                                <goals>
-                                    <goal>compile</goal>
-                                </goals>
-                                <configuration>
-                                    <release>11</release>
-                                    <compileSourceRoots>
-                                        <compileSourceRoot>${project.basedir}/src/main/core/java11</compileSourceRoot>
-                                    </compileSourceRoots>
-                                    <multiReleaseOutput>true</multiReleaseOutput>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
--->
-<!--
-        <profile>
-            <id>jre8</id>
-            <activation>
-                <jdk>1.8</jdk>
-            </activation>
-            <properties>
-                <maven.compiler.source>8</maven.compiler.source>
-                <maven.compiler.target>8</maven.compiler.target>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>3.2.0</version>
-                        <executions>
-                            <execution>
-                                <id>add-source</id>
-                                <phase>process-sources</phase>
-                                <goals>
-                                    <goal>add-source</goal>
-                                </goals>
-                                <configuration>
-                                    <sources combine.children="append">
-                                        <source>src/main/core/java8</source>
-                                    </sources>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
--->
-<!--
-        <profile>
-            <id>jre9plus</id>
-            <activation>
-                <jdk>(1.8,)</jdk>
-            </activation>
-            <properties>
-                <maven.compiler.source>11</maven.compiler.source>
-                <maven.compiler.target>11</maven.compiler.target>
-            </properties>
-            <build>
-                <plugins>
-                    <plugin>
-                        <groupId>org.codehaus.mojo</groupId>
-                        <artifactId>build-helper-maven-plugin</artifactId>
-                        <version>3.2.0</version>
-                        <executions>
-                            <execution>
-                                <id>add-source</id>
-                                <phase>process-sources</phase>
-                                <goals>
-                                    <goal>add-source</goal>
-                                </goals>
-                                <configuration>
-                                    <sources combine.children="append">
-                                        <source>src/main/core/java11</source>
-                                    </sources>
-                                </configuration>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
-            </build>
-        </profile>
--->
-    </profiles>
+
 </project>

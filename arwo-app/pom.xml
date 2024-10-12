@@ -24,4 +24,83 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-antrun-plugin</artifactId>
+                <executions>
+                    <execution>
+                        <id>application-index-page</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <replace token="SPECIFICATION_VERSION" value="${project.version}" dir="target/classes">
+                                    <include name="arwo-war/index.html"/>
+                                </replace>
+                                <replace token="IMPLEMENTATION_VERSION" value="${maven.build.timestamp}-${git.commit.id.abbrev}" dir="target/classes">
+                                    <include name="arwo-war/index.html"/>
+                                </replace>
+                            </target>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id>application-css</id>
+                        <phase>process-resources</phase>
+                        <goals>
+                            <goal>run</goal>
+                        </goals>
+                        <configuration>
+                            <target>
+                                <!--coalesce CSS resource from source components (for runtime efficiency)-->
+                                <concat destfile="${project.build.directory}/classes/arwo-war/css/webapp.css">
+                                    <fileset dir="${project.basedir}/src/main/resources/arwo-war">
+                                        <include name="css/alert.css"/>
+                                        <include name="css/app.css"/>
+                                        <include name="css/dialog.css"/>
+                                        <include name="css/menu.css"/>
+                                        <include name="css/table.css"/>
+                                    </fileset>
+                                </concat>
+                                <!--mozilla theme CSS (derived from default)-->
+                                <copy overwrite='true' tofile='${project.build.directory}/classes/arwo-war/css/webapp.moz.css'
+                                      file='${project.build.directory}/classes/arwo-war/css/webapp.css' description='mozilla theme'>
+                                    <filterchain>
+                                        <tokenfilter>
+                                            <replacestring from='HighlightText' to='#ffffff'/>
+                                            <replacestring from='Highlight' to='#4a90d9'/>
+                                            <replacestring from='InfoBackground' to='#000000'/>
+                                            <replacestring from='InfoText' to='#ffffff'/>
+                                            <replacestring from='Window' to='#ededed'/>
+                                            <replacestring from='ButtonFace' to='#ededed'/>
+                                            <replacestring from='ButtonText' to='#2e3436'/>
+                                        </tokenfilter>
+                                    </filterchain>
+                                </copy>
+                                <!--chrome theme CSS (derived from default)-->
+                                <copy overwrite='true' tofile='${project.build.directory}/classes/arwo-war/css/webapp.crm.css'
+                                      file='${project.build.directory}/classes/arwo-war/css/webapp.css' description='chrome theme'>
+                                    <filterchain>
+                                        <tokenfilter>
+                                            <replacestring from='HighlightText' to='#000000'/>
+                                            <replacestring from='Highlight' to='#b5d5ff'/>
+                                            <replacestring from='InfoBackground' to='#fbfcc5'/>
+                                            <replacestring from='InfoText' to='#000000'/>
+                                            <replacestring from='Window' to='#ffffff'/>
+                                            <replacestring from='ButtonFace' to='#dddddd'/>
+                                            <replacestring from='ButtonText' to='#000000'/>
+                                        </tokenfilter>
+                                    </filterchain>
+                                </copy>
+                            </target>
+                        </configuration>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+
 </project>

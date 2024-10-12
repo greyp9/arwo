@@ -7,6 +7,7 @@
         <artifactId>arwo</artifactId>
         <version>0.3.0-SNAPSHOT</version>
     </parent>
+
     <artifactId>arwo-core</artifactId>
 
     <build>
@@ -29,28 +30,68 @@
                     </execution>
                 </executions>
             </plugin>
-<!--
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
-                <artifactId>maven-compiler-plugin</artifactId>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
                 <executions>
                     <execution>
-                        <id>java11</id>
-                        <phase>compile</phase>
+                        <id>generate-i18n</id>
+                        <phase>prepare-package</phase>
                         <goals>
-                            <goal>compile</goal>
+                            <goal>java</goal>
                         </goals>
                         <configuration>
-                            <release>11</release>
-                            <compileSourceRoots>
-                                <compileSourceRoot>${project.basedir}/src/main/java11</compileSourceRoot>
-                            </compileSourceRoots>
-                            <multiReleaseOutput>true</multiReleaseOutput>
+                            <mainClass>io.github.greyp9.arwo.core.i18n.PseudoI18n</mainClass>
+                            <classpathScope>test</classpathScope>
+                            <arguments>
+                                <argument>+</argument>
+                                <argument>${project.build.outputDirectory}/io/github/greyp9/arwo/xsd/action/action.properties</argument>
+                                <argument>${project.build.outputDirectory}/io/github/greyp9/arwo/xsd/app/app.properties</argument>
+                                <argument>${project.build.outputDirectory}/io/github/greyp9/arwo/xsd/meter/meter.properties</argument>
+                                <argument>${project.build.outputDirectory}/io/github/greyp9/arwo/xsd/realm/realm.properties</argument>
+                            </arguments>
                         </configuration>
                     </execution>
                 </executions>
             </plugin>
--->
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>jre11</id>
+            <activation>
+                <jdk>11</jdk>
+            </activation>
+            <properties>
+                <maven.compiler.source>11</maven.compiler.source>
+                <maven.compiler.target>11</maven.compiler.target>
+            </properties>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>java11</id>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                                <configuration>
+                                    <release>11</release>
+                                    <compileSourceRoots>
+                                        <compileSourceRoot>${project.basedir}/src/main/java11</compileSourceRoot>
+                                    </compileSourceRoots>
+                                    <multiReleaseOutput>true</multiReleaseOutput>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
+
 </project>
