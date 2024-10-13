@@ -10,7 +10,9 @@ public final class PathU {
 
     public static String toPath(final String basePath, final String... tokens) {
         final StringBuilder buffer = new StringBuilder();
-        buffer.append(basePath);
+        final String basePathN = basePath.endsWith(Http.Token.SLASH)
+                ? basePath.substring(0, basePath.length() - 1) : basePath;
+        buffer.append(basePathN);
         for (final String token : tokens) {
             if (!Value.isEmpty(token)) {
                 buffer.append(token.startsWith(Http.Token.SLASH) ? "" : Http.Token.SLASH);

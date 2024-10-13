@@ -8,6 +8,8 @@ public final class RuntimeU {
     }
 
     public static String getName() {
+        // https://stackoverflow.com/questions/41512483/runtimemxbean-getname-hangs-on-mac-os-x-sierra-how-to-fix
+        // $ scutil --set HostName $(scutil --get LocalHostName)
         return ManagementFactory.getRuntimeMXBean().getName();
     }
 }

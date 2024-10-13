@@ -8,6 +8,7 @@ import io.github.greyp9.arwo.app.core.subsystem.cron.SubsystemCron;
 import io.github.greyp9.arwo.app.core.subsystem.dav.SubsystemWebDAV;
 import io.github.greyp9.arwo.app.core.subsystem.interop.SubsystemInterop;
 import io.github.greyp9.arwo.app.core.subsystem.jdbc.SubsystemJDBC;
+import io.github.greyp9.arwo.app.core.subsystem.kube.SubsystemKube;
 import io.github.greyp9.arwo.app.core.subsystem.local.SubsystemLocal;
 import io.github.greyp9.arwo.app.core.subsystem.mail.SubsystemMail;
 import io.github.greyp9.arwo.app.core.subsystem.ssh.SubsystemSSH;
@@ -105,6 +106,7 @@ public final class AppUserState {
     // widget subsystems
     private final SubsystemCron cron;
     private final SubsystemLocal local;
+    private final SubsystemKube kube;
     private final SubsystemSSH ssh;
     private final SubsystemJDBC jdbc;
     private final SubsystemMail mail;
@@ -213,6 +215,10 @@ public final class AppUserState {
         return local;
     }
 
+    public SubsystemKube getKube() {
+        return kube;
+    }
+
     public SubsystemSSH getSSH() {
         return ssh;
     }
@@ -304,6 +310,7 @@ public final class AppUserState {
         this.deferredActions = new DeferredActions();
         this.cron = new SubsystemCron(documentState.getFactory());
         this.local = new SubsystemLocal(alerts, this.userRoot);
+        this.kube = new SubsystemKube(alerts);
         this.ssh = new SubsystemSSH(alerts);
         this.jdbc = new SubsystemJDBC(alerts, this.userRoot);
         this.mail = new SubsystemMail(alerts);
@@ -484,6 +491,8 @@ public final class AppUserState {
             cifs.getCache().removeResource(resourceName);
         } else if (App.Cache.JDBC.equals(cacheName)) {
             jdbc.getCache().removeResource(resourceName);
+        } else if (App.Cache.KUBE.equals(cacheName)) {
+            kube.getCache().removeResource(resourceName);
         } else if (App.Cache.SSH.equals(cacheName)) {
             ssh.getCache().removeResource(resourceName);
         } else if (App.Cache.DAV.equals(cacheName)) {

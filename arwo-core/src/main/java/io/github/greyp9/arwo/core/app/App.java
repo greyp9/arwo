@@ -76,6 +76,7 @@ public final class App {
         public static final String CIFS = "cifs";
         public static final String IMAP = "imap";
         public static final String JDBC = "jdbc";
+        public static final String KUBE = "kube";
         public static final String LFS = "lfs";
         public static final String LSH = "lsh";
         public static final String POP3 = "pop3";
