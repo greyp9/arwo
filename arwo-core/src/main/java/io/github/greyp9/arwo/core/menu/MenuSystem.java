@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.value.Value;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.Map;
+import java.util.Properties;
 import java.util.TreeMap;
 
 public class MenuSystem {
@@ -22,6 +23,14 @@ public class MenuSystem {
         this.menus = new TreeMap<String, MenuItem>();
         this.submitID = submitID;
         this.factory = factory;
+    }
+
+    public final void applyState(final Properties menuSystemState) {
+        for (Map.Entry<Object, Object> entry : menuSystemState.entrySet()) {
+            if (Boolean.parseBoolean(entry.getValue().toString())) {
+                toggle(entry.getKey().toString());
+            }
+        }
     }
 
     public final MenuItem get(final String id, final String type) {

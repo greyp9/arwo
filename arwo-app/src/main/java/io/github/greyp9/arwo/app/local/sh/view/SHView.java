@@ -1,10 +1,9 @@
 package io.github.greyp9.arwo.app.local.sh.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
-import io.github.greyp9.arwo.app.core.view.favorite.AppFavoriteView;
 import io.github.greyp9.arwo.app.core.view.refresh.AppRefreshView;
 import io.github.greyp9.arwo.app.local.sh.core.SHRequest;
-import io.github.greyp9.arwo.core.action.ActionItem;
+import io.github.greyp9.arwo.app.local.sh.favorite.FavoriteMenu;
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppHtml;
@@ -13,12 +12,10 @@ import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.config.Preferences;
 import io.github.greyp9.arwo.core.html.Html;
-import io.github.greyp9.arwo.core.html.menu.ActionItemsMenu;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
-import io.github.greyp9.arwo.core.io.script.Script;
 import io.github.greyp9.arwo.core.menu.view.MenuView;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
@@ -26,9 +23,6 @@ import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.view.StatusBarView;
 import io.github.greyp9.arwo.core.xed.action.XedActionLocale;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
-import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
-import io.github.greyp9.arwo.core.xed.model.Xed;
-import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import org.w3c.dom.Document;
@@ -37,11 +31,8 @@ import org.w3c.dom.Element;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.util.Collection;
-import java.util.List;
 import java.util.Locale;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 @SuppressWarnings({ "PMD.AbstractNaming", "PMD.ExcessiveImports" })
 public abstract class SHView {
@@ -71,7 +62,8 @@ public abstract class SHView {
         new AppRefreshView(userState.getProperties()).addContentTo(html.getDocumentElement());
         final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
         // context-specific content
-        final AppTitle title = AppTitle.Factory.getHostLabel(httpRequest, bundle);
+        final AppTitle title = AppTitle.Factory.getResourceLabel(
+                httpRequest, bundle, Value.wrap("[", "]", request.getContext()));
         addHeaderView(body, title);
         HttpResponse httpResponse = addContentTo(body);
         if (httpResponse == null) {
@@ -95,26 +87,15 @@ public abstract class SHView {
     }
 
     private void addHeaderView(final Element html, final AppTitle title) throws IOException {
+        new FavoriteMenu(request, userState, AppMenuFactory.Const.COMMAND_STICKY).addContentTo(html);
+
         // context menu
         final MenuView menuView = new MenuView(request.getBundle(), httpRequest, userState.getMenuSystem());
-        final Element divMenus = menuView.addContentTo(html, AppMenuFactory.Const.COMMAND, true);
-        final Collection<Script> scripts = userState.getLocal().getHistory().getHistory();
-        final List<ActionItem> actionItems = scripts.stream()
-                .map(Script::getContext)
-                .distinct()
-                .sorted()
-                .map(c -> new ActionItem(c, null, null, null, null))
-                .collect(Collectors.toList());
-        new ActionItemsMenu("[Contexts]", httpRequest.getBaseURI(), actionItems).addContentTo(divMenus);
+        /* final Element divMenus = */ menuView.addContentTo(html, AppMenuFactory.Const.COMMAND, true);
+
         // context title
         menuView.addTitle(html, title);
-        // favorites (if toggled)
-        final Xed xed = userState.getDocumentState().getSession(App.Servlet.FAVORITES).getXed();
-        final Xed xedX = userState.getXedFactory().getXedUI(xed, userState.getLocale());
-        final XedNav nav = new XedNav(xedX);
-        final XedCursor cursorFavorites = nav.findX("/app:favorites/app:lshFavorites");  // i18n xpath
-        final XedCursor cursorType = nav.find("lshFavorite", cursorFavorites);  // i18n xpath
-        new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.COMMAND).addContentTo(html);
+
         // settings property strips
         final Locale locale = userState.getLocus().getLocale();
         final String submitID = userState.getSubmitID();

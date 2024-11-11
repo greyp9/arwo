@@ -54,8 +54,10 @@ import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import io.github.greyp9.arwo.core.xed.action.XedActionRefresh;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextExpression;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
+import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.model.XedFactory;
+import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.state.XedUserState;
 
 import java.io.ByteArrayInputStream;
@@ -115,6 +117,7 @@ public final class AppUserState {
     private final SubsystemWebDAV webDAV;
     // menu system
     private final MenuSystem menuSystem;
+    private final Properties menuSystemState;  // store for dynamic menu state
 
     // binary viewer state (hex rendering)
     private Page pageViewHex;
@@ -247,6 +250,10 @@ public final class AppUserState {
         return menuSystem;
     }
 
+    public Properties getMenuSystemState() {
+        return menuSystemState;
+    }
+
     public Page getPageViewHex() {
         return pageViewHex;
     }
@@ -318,6 +325,7 @@ public final class AppUserState {
         this.interop = new SubsystemInterop(alerts);
         this.webDAV = new SubsystemWebDAV(alerts);
         this.menuSystem = new MenuSystem(submitID, new AppMenuFactory());
+        this.menuSystemState = new Properties();
         this.cache = new ResourceCache(null);
         this.cacheBlob = new ResourceCache(appState.getContextPath() + App.Servlet.CACHE);
         this.pageViewHex = Page.Factory.initPage(Const.PAGE_HEX_VIEW, new Properties());
@@ -370,6 +378,8 @@ public final class AppUserState {
         final String message = bundle.getString("alert.action.not.implemented");
         if (action == null) {
             getClass();
+        } else if (App.Action.COMMAND.equals(action)) {
+            location = doFavoriteSH(httpRequest, location, object);
         } else if (App.Action.RESET.equals(action)) {
             location = doLogOff(httpRequest);
         } else if (App.Action.STOP.equals(action)) {
@@ -392,7 +402,11 @@ public final class AppUserState {
         } else if (App.Action.REFRESH.equals(action)) {
             PropertiesU.toggleBoolean(properties, action);
         } else if (App.Action.MENU.equals(action)) {
-            menuSystem.toggle(object);
+            menuSystem.toggle(object);  // store for fixed menus
+            final boolean stateFrom = PropertiesU.isBoolean(menuSystemState, object);
+            PropertiesU.clearStartsWith(menuSystemState, object.replace(object2, ""));
+            PropertiesU.setBoolean(menuSystemState, object, !stateFrom);  // store for dynamic menus
+            location = PathU.toDir(httpRequest.getBaseURI(), object2);
         } else if (App.Action.TOGGLE.equals(action)) {
             PropertiesU.toggleBoolean(properties, object);
         } else if (App.Action.MIME_TYPE.equals(action)) {
@@ -443,6 +457,22 @@ public final class AppUserState {
         final boolean isWebDAV = (!webDAV.getCache().getResources().isEmpty());
         final boolean isDocument = documentState.isUnsavedState();
         return (isSSH || isWebDAV || isDocument);
+    }
+
+    private String doFavoriteSH(final ServletHttpRequest httpRequest, final String location, final String object)
+            throws IOException {
+        String locationUpdate = location;
+        final Xed xed = documentState.getSession(App.Servlet.FAVORITES).getXed();
+        final XedNav nav = new XedNav(xed);
+        final String xpath = String.format("/app:favorites/app:lshFavorites/app:lshFavorite[@name='%s']", object);
+        final XedCursor cursor = nav.findX(xpath);
+        if (cursor != null) {
+            final String context = cursor.getValue(cursor.getChildInstance(App.Settings.CONTEXT));
+            final String command = cursor.getValue(cursor.getChildInstance(App.Settings.COMMAND));
+            local.getProperties().setProperty(App.Settings.COMMAND, command);
+            locationUpdate = PathU.toDir(httpRequest.getBaseURI(), context);
+        }
+        return locationUpdate;
     }
 
     private String doLogOff(final ServletHttpRequest httpRequest) throws IOException {

@@ -29,6 +29,8 @@ public class AppMenuFactory implements MenuFactory {
             menuItem = createMenuBarNavPages(key, object2);
         } else if (Const.COMMAND.equals(type)) {
             menuItem = createMenuBarCommand(key);
+        } else if (Const.COMMAND_STICKY.equals(type)) {
+            menuItem = createMenuCommandSticky(key);
         } else if (Const.VISUALIZATION.equals(type)) {
             menuItem = createMenuBarVis(key);
         } else {
@@ -197,6 +199,10 @@ public class AppMenuFactory implements MenuFactory {
                 itemFileSystem);
     }
 
+    private static MenuItem createMenuCommandSticky(final String key) {
+        return new MenuItem("favorites", App.Target.USER_STATE, App.Action.MENU, key + "/favorites");
+    }
+
     private static MenuItem createMenuSession(final String key) {
         final String subject = App.Target.USER_STATE;
         final MenuItem itemClear = new MenuItem(App.Action.CLEAR, subject, App.Action.CLEAR);
@@ -223,6 +229,7 @@ public class AppMenuFactory implements MenuFactory {
         public static final String HEX = "hex";
         public static final String NAV = "nav";
         public static final String COMMAND = "cmd";
+        public static final String COMMAND_STICKY = "cmd-sticky";
         public static final String VISUALIZATION = "vis";
 
         public static final String FAVORITES = "favorites";

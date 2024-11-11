@@ -42,7 +42,7 @@ public class MenuItem extends ActionItem {
     public MenuItem(final String name, final String subject,
                     final String action, final String object, final MenuItem... menuItems) {
         super(name, subject, action, object, null);
-        this.menuItems = new ArrayList<MenuItem>();
+        this.menuItems = new ArrayList<>();
         Collections.addAll(this.menuItems, menuItems);
         this.open = false;
     }
@@ -50,8 +50,17 @@ public class MenuItem extends ActionItem {
     public MenuItem(final String name, final String subject,
                     final String action, final String object, final String object2, final MenuItem... menuItems) {
         super(name, subject, action, object, object2);
-        this.menuItems = new ArrayList<MenuItem>();
+        this.menuItems = new ArrayList<>();
         Collections.addAll(this.menuItems, menuItems);
+        this.open = false;
+    }
+
+    public MenuItem(final String name, final String subject,
+                    final String action, final String object, final String object2,
+                    final Collection<MenuItem> menuItems) {
+        super(name, subject, action, object, object2);
+        this.menuItems = new ArrayList<>();
+        this.menuItems.addAll(menuItems);
         this.open = false;
     }
 }

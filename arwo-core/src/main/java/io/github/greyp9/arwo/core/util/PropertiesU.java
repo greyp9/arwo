@@ -36,6 +36,14 @@ public final class PropertiesU {
         return Boolean.parseBoolean(properties.getProperty(key));
     }
 
+    public static void setBoolean(final Properties properties, final String key, final boolean value) {
+        properties.setProperty(key, Boolean.toString(value));
+    }
+
+    public static void clearStartsWith(final Properties properties, final String key) {
+        properties.entrySet().removeIf(entry -> entry.getKey().toString().startsWith(key));
+    }
+
     public static void toggleBoolean(final Properties properties, final String key) {
         properties.setProperty(key, Boolean.toString(!isBoolean(properties, key)));
     }

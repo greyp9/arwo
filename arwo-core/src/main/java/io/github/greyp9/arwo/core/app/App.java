@@ -185,6 +185,7 @@ public final class App {
         public static final String CERTIFICATE = "certificate";
         public static final String COMMAND = "command";
         public static final String COMMENT = "comment";
+        public static final String CONTEXT = "context";
         public static final String DATE_SCHEDULED = "dateScheduled";
         public static final String DRIVER_CLASS = "driverClass";
         public static final String ENABLED = "enabled";
@@ -294,6 +295,7 @@ public final class App {
     }
 
     public static class Target {
+        public static final String COMMAND = "command";
         public static final String DOCUMENT = "document";
         public static final String SESSION = "session";
         public static final String USER_STATE = "userState";

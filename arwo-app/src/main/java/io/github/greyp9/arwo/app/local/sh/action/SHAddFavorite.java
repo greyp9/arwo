@@ -27,7 +27,7 @@ public class SHAddFavorite {
     }
 
     public final String doAction() throws IOException {
-
+        final String context = request.getContext();
         final String command = request.getUserState().getLocal().getProperties().getProperty(App.Settings.COMMAND, "");
         final String comment = XsdDateU.toXSDZ(request.getHttpRequest().getDate());
         final boolean isData = Value.isData(command);
@@ -39,6 +39,8 @@ public class SHAddFavorite {
             final XedCursor cursorFavorites = nav.findX("/app:favorites/app:lshFavorites");  // i18n xpath
             final TypeInstance typeInstance = cursorFavorites.getChildInstance("lshFavorite");  // i18n xpath
             final NameTypeValues ntv = NameTypeValuesU.create(
+                    "lshFavorite.lshFavoriteType.enabled", Boolean.TRUE.toString(),
+                    "lshFavorite.lshFavoriteType.context", context,
                     "lshFavorite.lshFavoriteType.command", command,
                     "lshFavorite.lshFavoriteType.comment", comment);
             final ValueInstance valueInstance = ValueInstance.create(typeInstance, ntv);

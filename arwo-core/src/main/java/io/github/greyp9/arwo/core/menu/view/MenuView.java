@@ -71,8 +71,9 @@ public class MenuView {
             addHome(divMenu);
         }
         final String key = Value.join(Http.Token.DOT, App.CSS.MENU, item.getName());
-        final String title = bundle.getString(key + ".DETAIL");
-        final String label = String.format("[%s]", bundle.getString(key, item.getName()));
+        final String title = (bundle == null) ? null : bundle.getString(key + ".DETAIL");
+        final String label = String.format("[%s]", (bundle == null)
+                ? item.getName() : bundle.getString(key, item.getName()));
         if (top) {
             final SubmitToken token = new SubmitToken(
                     item.getSubject(), item.getAction(), item.getObject(), item.getObject2());
@@ -105,8 +106,8 @@ public class MenuView {
             itemOpen = ((itemIt.isOpen()) ? itemIt : itemOpen);
             final String parentName = (item.getName().equals(UTF16.MENU) ? null : item.getName());
             final String key = Value.join(".", App.CSS.MENU, parentName, itemIt.getName());
-            final String title = bundle.getString(key + ".DETAIL");
-            final String label = bundle.getString(key);
+            final String title = (bundle == null) ? null : bundle.getString(key + ".DETAIL");
+            final String label = (bundle == null) ? itemIt.getName() : bundle.getString(key);
             if (itemIt.getAction().equals(App.Action.HREF)) {
                 final String baseURI = httpRequest.getBaseURI();
                 final String pathInfo = httpRequest.getPathInfo();
