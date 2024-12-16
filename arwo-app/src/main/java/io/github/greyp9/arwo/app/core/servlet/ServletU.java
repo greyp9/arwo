@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 
+import javax.servlet.ServletConfig;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +21,18 @@ import java.util.Properties;
 public final class ServletU {
 
     private ServletU() {
+    }
+
+    public static Properties fromServletConfig(final ServletConfig config, final String prefix) {
+        final Properties properties = new Properties();
+        final Enumeration<?> initParameterNames = config.getInitParameterNames();
+        while (initParameterNames.hasMoreElements()) {
+            final String name = (String) initParameterNames.nextElement();
+            if (name.startsWith(prefix)) {
+                properties.setProperty(name.substring(prefix.length()), config.getInitParameter(name));
+            }
+        }
+        return properties;
     }
 
     private static NameTypeValues toHeaders(final HttpServletRequest request) {

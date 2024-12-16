@@ -27,6 +27,7 @@ public final class App {
         public static final QName QNAME_LOCALE = new QName(URI_ACTION, "locale", PREFIX_ACTION);
         public static final QName QNAME_MAIL = new QName(URI_ACTION, "mail", PREFIX_ACTION);
         public static final QName QNAME_REFRESH = new QName(URI_ACTION, "refresh", PREFIX_ACTION);
+        public static final QName QNAME_EMPTY = new QName(URI_ACTION, "empty", PREFIX_ACTION);
         public static final QName QNAME_SQL = new QName(URI_ACTION, "sql", PREFIX_ACTION);
         public static final QName QNAME_TEXT_EXPRESSION = new QName(URI_ACTION, "textExpression", PREFIX_ACTION);
         public static final QName QNAME_TEXT_FILTER = new QName(URI_ACTION, "textFilter", PREFIX_ACTION);

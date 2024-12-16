@@ -114,6 +114,12 @@
         </xsd:sequence>
     </xsd:complexType>
 
+    <xsd:element name='empty' type='action:emptyType'/>
+
+    <xsd:complexType name='emptyType'>
+        <xsd:sequence/>
+    </xsd:complexType>
+
     <xsd:element name='command' type='action:commandType'/>
 
     <xsd:complexType name='commandType'>

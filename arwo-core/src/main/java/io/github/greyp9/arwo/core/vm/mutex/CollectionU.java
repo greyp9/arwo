@@ -49,6 +49,12 @@ public final class CollectionU {
         return collectionTo;
     }
 
+    public static <T> int size(final Collection<T> collection) {
+        synchronized (collection) {
+            return collection.size();
+        }
+    }
+
     public static <T> void clear(final Collection<T> collection) {
         synchronized (collection) {
             collection.clear();

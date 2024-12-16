@@ -18,6 +18,7 @@
         <module>arwo-tomcat6</module>
         <module>arwo-tomcat7</module>
         <module>arwo-tomcat8</module>
+        <module>arwo-kafka</module>
         <module>arwo-kube</module>
     </modules>
 
