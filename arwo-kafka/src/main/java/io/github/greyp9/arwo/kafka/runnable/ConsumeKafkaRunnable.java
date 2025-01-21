@@ -19,6 +19,8 @@ public class ConsumeKafkaRunnable implements Runnable {
 
     private final ConsumeKafkaClient client;
 
+    private static final int MAX_RECORDS = 100;
+
     public ConsumeKafkaRunnable(final ConsumeKafkaClient client) {
         super();
         this.client = client;
@@ -31,14 +33,12 @@ public class ConsumeKafkaRunnable implements Runnable {
         try (KafkaConsumer<byte[], byte[]> consumer = client.getConsumer()) {
             consumer.subscribe(client.getTopics());
             while (reference.get() == null) {
-                final Collection<ConsumerRecord<byte[], byte[]>> consumerRecords =
-                        queryRecords(consumer, 1, Duration.ofSeconds(1));
-                logger.info(String.format("ConsumeKafka::records.size()=%d", consumerRecords.size()));
+                if (client.getRecords().size() < MAX_RECORDS) {
+                    client.addRecords(queryRecords(consumer, 1, Duration.ofSeconds(1)));
+                }
                 MutexU.wait(reference, DurationU.Const.ONE_SECOND_MILLIS);
-                logger.info("polling...");
             }
         }
-        reference.set(null);
         logger.exiting(getClass().getName(), Runnable.class.getName());
     }
 

@@ -17,11 +17,23 @@ public final class Value {
     }
 
     public static boolean isEmpty(final String value) {
-        return ((value == null) || (value.length() == 0));
+        return ((value == null) || (value.isEmpty()));
     }
 
     public static boolean isData(final String value) {
         return (!isEmpty(value));
+    }
+
+    public static String toStringEllipsis(final String value, final int max) {
+        final String valueOut;
+        if (value == null) {
+            valueOut = "null";
+        } else if (value.length() <= max) {
+            valueOut = value;
+        } else {
+            valueOut = value.substring(0, max) + "...";
+        }
+        return valueOut;
     }
 
     public static String defaultOnEmpty(final String... values) {
@@ -122,7 +134,7 @@ public final class Value {
     public static boolean notEmpty(final String... strings) {
         boolean notEmpty = true;
         for (final String s : strings) {
-            if ((s == null) || (s.length() == 0)) {
+            if ((s == null) || (s.isEmpty())) {
                 notEmpty = false;
             }
         }
