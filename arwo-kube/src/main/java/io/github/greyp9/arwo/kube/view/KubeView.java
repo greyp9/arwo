@@ -124,4 +124,17 @@ public abstract class KubeView {
      * @throws IOException on failures accessing requested resources
      */
     protected abstract HttpResponse addContentTo(Element html) throws IOException;
+
+    // kube context table views
+    static final String FIELD_SELECT = "select";
+    static final String FIELD_NAME = "name";
+    static final String FIELD_NAMESPACE = "namespace";
+    static final String FIELD_CREATED = "created";
+
+    static final String CONTEXT_CONTAINERS = "containers";
+    static final String CONTEXT_DESCRIBE = "describe";
+    static final String CONTEXT_LOGS = "logs";
+    static final String CONTEXT_NODES = "nodes";
+    static final String CONTEXT_PODS = "pods";
+
 }

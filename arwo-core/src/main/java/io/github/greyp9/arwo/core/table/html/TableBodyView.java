@@ -16,6 +16,7 @@ import io.github.greyp9.arwo.core.table.model.Table;
 import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.Row;
 import io.github.greyp9.arwo.core.table.state.ViewState;
+import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xml.ElementU;
@@ -198,11 +199,13 @@ public class TableBodyView {
     }
 
     private void addCell(final Element tr, final TableViewLinks tableViewLinks) {
-        final Element td = ElementU.addElement(tr, Html.TD, null, NameTypeValuesU.create(Html.CLASS, App.CSS.LINKS));
+        final NameTypeValues classLinks = NameTypeValuesU.create(Html.CLASS, App.CSS.LINKS);
+        final Element td = ElementU.addElement(tr, Html.TD, null, classLinks);
+        final Element span = ElementU.addElement(td, Html.SPAN, null, classLinks);
         final List<TableViewLink> links = tableViewLinks.getLinks();
         for (TableViewLink tableViewLink : links) {
             if (tableViewLink.getHref() != null) {
-                ElementU.addElement(td, Html.A, tableViewLink.getText(),
+                ElementU.addElement(span, Html.A, tableViewLink.getText(),
                         NameTypeValuesU.create(Html.CLASS, App.CSS.LINKS, Html.HREF, tableViewLink.getHref()));
             }
         }

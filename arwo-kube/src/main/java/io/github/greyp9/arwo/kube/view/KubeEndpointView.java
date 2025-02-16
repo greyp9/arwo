@@ -10,10 +10,12 @@ import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.lang.TypeU;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
+import io.github.greyp9.arwo.core.table.cell.TableViewLinks;
 import io.github.greyp9.arwo.core.table.insert.InsertRow;
 import io.github.greyp9.arwo.core.table.metadata.ColumnMetaData;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
 import io.github.greyp9.arwo.core.table.row.RowSet;
+import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
@@ -22,6 +24,7 @@ import org.w3c.dom.Element;
 
 import java.io.IOException;
 import java.sql.Types;
+import java.util.Arrays;
 import java.util.Collection;
 
 public class KubeEndpointView extends KubeView {
@@ -78,10 +81,13 @@ public class KubeEndpointView extends KubeView {
             final String comment = cursor.getValue(cursor.getChildInstance(FIELD_COMMENT));
             final String context = cursor.getValue(cursor.getChildInstance(FIELD_CONTEXT));
             final String namespace = cursor.getValue(cursor.getChildInstance(FIELD_NAMESPACE));
-            final String href = PathU.toDir(baseURI, name, CONTEXT_PODS);
+            final String hrefPods = PathU.toDir(baseURI, name, PODS);
+            final String hrefNodes = PathU.toDir(baseURI, name, NODES);
 
             final InsertRow insertRow = new InsertRow(rowSet);
-            insertRow.setNextColumn(new TableViewLink(UTF16.SELECT, name, href));
+            insertRow.setNextColumn(new TableViewLinks(Arrays.asList(
+                    new TableViewLink(Value.join(" ", UTF16.SELECT, ""), PODS, hrefPods),
+                    new TableViewLink(Value.join(" ", UTF16.SELECT, ""), NODES, hrefNodes))));
             insertRow.setNextColumn(name);
             insertRow.setNextColumn(comment);
             insertRow.setNextColumn(context);
@@ -96,6 +102,8 @@ public class KubeEndpointView extends KubeView {
     private static final String FIELD_ENABLED = "enabled";
     private static final String FIELD_CONTEXT = "context";
     private static final String FIELD_NAMESPACE = "namespace";
-    private static final String CONTEXT_PODS = "pods";
     private static final String TABLE_ID = "kubeEndpointType";
+
+    private static final String PODS = "pods";
+    private static final String NODES = "nodes";
 }

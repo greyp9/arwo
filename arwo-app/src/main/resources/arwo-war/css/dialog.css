@@ -77,6 +77,13 @@ tbody.dialog td.attr-value
 width: 100%;
 }
 
+tbody.table td.links span.links
+{
+display: inline-block;
+text-align: center;
+width: 100%;
+}
+
 tbody.table td.links a.links
 {
 display: inline;
