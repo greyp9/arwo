@@ -1,8 +1,5 @@
 package io.github.greyp9.arwo.kube.view;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
@@ -19,6 +16,9 @@ import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1Node;
 import org.w3c.dom.Element;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
 
 public class KubeNodeDescribeView extends KubeView {
     private final String nodeName;

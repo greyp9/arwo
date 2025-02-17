@@ -11,12 +11,12 @@ import io.github.greyp9.arwo.core.naming.AppNaming;
 import io.github.greyp9.arwo.kube.handler.KubeHandlerGet;
 import io.github.greyp9.arwo.kube.handler.KubeHandlerPost;
 
-import java.io.IOException;
 import javax.naming.Context;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
 
 public class KubeServlet extends javax.servlet.http.HttpServlet {
     private static final long serialVersionUID = 2646201175265843372L;

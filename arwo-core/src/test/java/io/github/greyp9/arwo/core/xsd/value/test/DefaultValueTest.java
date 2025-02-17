@@ -17,10 +17,10 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.w3c.dom.Document;
 
+import javax.xml.namespace.QName;
 import java.io.IOException;
 import java.net.URL;
 import java.util.logging.Logger;
-import javax.xml.namespace.QName;
 
 public class DefaultValueTest {
     private final Logger logger = Logger.getLogger(getClass().getName());

@@ -1,0 +1,12 @@
+{
+  "a": {
+    "name": "nameA",
+    "type": "type",
+    "value": "value"
+  },
+  "b": {
+    "name": "nameB",
+    "type": "type",
+    "value": "value"
+  }
+}

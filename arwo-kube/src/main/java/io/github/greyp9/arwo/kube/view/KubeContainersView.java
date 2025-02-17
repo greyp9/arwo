@@ -1,10 +1,5 @@
 package io.github.greyp9.arwo.kube.view;
 
-import java.io.IOException;
-import java.sql.Types;
-import java.util.List;
-import java.util.Objects;
-
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.table.UserStateTable;
 import io.github.greyp9.arwo.core.alert.Alert;
@@ -24,6 +19,11 @@ import io.kubernetes.client.openapi.models.V1Container;
 import io.kubernetes.client.openapi.models.V1Pod;
 import io.kubernetes.client.openapi.models.V1PodSpec;
 import org.w3c.dom.Element;
+
+import java.io.IOException;
+import java.sql.Types;
+import java.util.List;
+import java.util.Objects;
 
 public class KubeContainersView extends KubeView {
 

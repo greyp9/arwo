@@ -12,14 +12,14 @@ import io.github.greyp9.arwo.core.naming.AppNaming;
 import io.github.greyp9.arwo.kafka.client.ConsumeKafkaClient;
 import io.github.greyp9.arwo.kafka.handler.KafkaHandlerGet;
 
-import java.io.IOException;
-import java.util.concurrent.ExecutorService;
-import java.util.logging.Logger;
 import javax.naming.Context;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.concurrent.ExecutorService;
+import java.util.logging.Logger;
 
 public class KafkaServlet extends javax.servlet.http.HttpServlet {
     private static final long serialVersionUID = 263712868668644295L;

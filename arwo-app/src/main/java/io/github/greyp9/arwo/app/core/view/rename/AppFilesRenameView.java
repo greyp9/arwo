@@ -17,9 +17,9 @@ import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
 import io.github.greyp9.arwo.core.xed.view.html.PropertyPageHtmlView;
 import org.w3c.dom.Element;
 
+import javax.xml.namespace.QName;
 import java.io.IOException;
 import java.util.Collection;
-import javax.xml.namespace.QName;
 
 /**
  * XHTML (xed) for "rename files" action.

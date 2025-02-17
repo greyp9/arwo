@@ -1,10 +1,5 @@
 package io.github.greyp9.arwo.kube.view;
 
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.util.Map;
-import java.util.Set;
-
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -31,6 +26,11 @@ import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import io.kubernetes.client.openapi.models.V1Pod;
 import org.w3c.dom.Element;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.util.Map;
+import java.util.Set;
 
 public class KubePodDescribeView extends KubeView {
     private final String namespace;

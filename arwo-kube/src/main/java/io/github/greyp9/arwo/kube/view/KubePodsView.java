@@ -1,10 +1,5 @@
 package io.github.greyp9.arwo.kube.view;
 
-import java.io.IOException;
-import java.sql.Types;
-import java.time.OffsetDateTime;
-import java.util.Arrays;
-
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.table.UserStateTable;
 import io.github.greyp9.arwo.core.alert.Alert;
@@ -28,6 +23,11 @@ import io.kubernetes.client.openapi.models.V1Pod;
 import io.kubernetes.client.openapi.models.V1PodList;
 import io.kubernetes.client.openapi.models.V1PodSpec;
 import org.w3c.dom.Element;
+
+import java.io.IOException;
+import java.sql.Types;
+import java.time.OffsetDateTime;
+import java.util.Arrays;
 
 @SuppressWarnings("PMD.ExcessiveImports")
 public class KubePodsView extends KubeView {

@@ -1,10 +1,5 @@
 package io.github.greyp9.arwo.kube.view;
 
-import java.io.IOException;
-import java.sql.Types;
-import java.time.OffsetDateTime;
-import java.util.Arrays;
-
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.table.UserStateTable;
 import io.github.greyp9.arwo.core.alert.Alert;
@@ -26,6 +21,11 @@ import io.kubernetes.client.openapi.models.V1Node;
 import io.kubernetes.client.openapi.models.V1NodeList;
 import io.kubernetes.client.openapi.models.V1ObjectMeta;
 import org.w3c.dom.Element;
+
+import java.io.IOException;
+import java.sql.Types;
+import java.time.OffsetDateTime;
+import java.util.Arrays;
 
 public class KubeNodesView extends KubeView {
 
