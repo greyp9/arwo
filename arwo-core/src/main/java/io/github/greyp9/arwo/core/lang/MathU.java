@@ -13,6 +13,10 @@ public final class MathU {
         return Math.max(Math.min(value, max), min);
     }
 
+    public static boolean isInBound(final long min, final long value, final long max) {
+        return ((value >= min) && (value <= max));
+    }
+
     public static int roundUp(final int value, final int blockSize) {
         final int mod = value % blockSize;
         final int extra = ((mod == 0) ? 0 : (blockSize - mod));

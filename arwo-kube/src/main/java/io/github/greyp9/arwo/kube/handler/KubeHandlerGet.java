@@ -59,7 +59,7 @@ public class KubeHandlerGet {
     private static final Pattern PATTERN_NODE_PODS = Pattern.compile("/nodes/(.+)/pods/");
     private static final Pattern PATTERN_NODE_DESCRIBE = Pattern.compile("/nodes/(.+)/describe/");
     private static final Pattern PATTERN_PODS = Pattern.compile("/pods/");
-    private static final Pattern PATTERN_POD_DESCRIBE = Pattern.compile("/pods/(.+)/(.+)/describe/");
+    private static final Pattern PATTERN_POD_DESCRIBE = Pattern.compile("/pods/(.+)/(.+)/describe(/.+)*/");
     private static final Pattern PATTERN_CONTAINERS = Pattern.compile("/pods/(.+)/(.+)/containers/");
     private static final Pattern PATTERN_CONTAINER_LOGS = Pattern.compile("/pods/(.+)/(.+)/containers/(.+)/logs/");
 
@@ -88,8 +88,9 @@ public class KubeHandlerGet {
         } else if (matcherPodDescribe.matches()) {
             final String namespace = matcherPodDescribe.group(1);
             final String podName = matcherPodDescribe.group(2);
+            final String path = matcherPodDescribe.group(3);
             httpResponse = new KubePodDescribeView(
-                    httpRequest, userState, resource, namespace, podName).doGetResponse();
+                    httpRequest, userState, resource, namespace, podName, path).doGetResponse();
         } else if (matcherContainers.matches()) {
             final String namespace = matcherContainers.group(1);
             final String podName = matcherContainers.group(2);

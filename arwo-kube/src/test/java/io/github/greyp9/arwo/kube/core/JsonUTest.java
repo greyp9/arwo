@@ -1,5 +1,8 @@
 package io.github.greyp9.arwo.kube.core;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonPrimitive;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -33,6 +36,16 @@ public class JsonUTest {
         Assertions.assertEquals(NTV_PRETTY, json);
     }
 
+    @Test
+    void testToJsonTree() {
+        final JsonElement jsonTree = JsonU.fromJsonToTree(NTV);
+        final JsonObject jsonObject = Assertions.assertInstanceOf(JsonObject.class, jsonTree);
+
+        final JsonElement name = jsonObject.get("name");
+        final JsonPrimitive jsonPrimitive = Assertions.assertInstanceOf(JsonPrimitive.class, name);
+        Assertions.assertTrue(jsonPrimitive.isString());
+        Assertions.assertEquals("name", jsonPrimitive.getAsString());
+    }
 
     public static final String NTV = "{\"name\":\"name\",\"type\":\"type\",\"value\":\"value\"}";
     public static final String NTV_PRETTY =

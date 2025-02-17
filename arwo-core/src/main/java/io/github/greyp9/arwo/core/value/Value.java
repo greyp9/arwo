@@ -67,6 +67,14 @@ public final class Value {
         return ((value == null) ? defaultOnNull : Integer.parseInt(value));
     }
 
+    public static int parseInt(final String value, final int defaultOnNull) {
+        try {
+            return Integer.parseInt(value);
+        } catch (final NumberFormatException e) {
+            return defaultOnNull;
+        }
+    }
+
     public static <T> T defaultOnNull(final T t, final T defaultValue) {
         return ((t == null) ? defaultValue : t);
     }
