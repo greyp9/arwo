@@ -24,6 +24,14 @@ public final class URLCodec {
         return encode.replace("+", "%20");  // is this a bug in JRE?  // i18n JRE
     }
 
+    public static String encodeSafe(final String value) {
+        try {
+            return encode(value);
+        } catch (UnsupportedEncodingException e) {
+            return value;
+        }
+    }
+
     public static String decode(final String value) throws UnsupportedEncodingException {
         return URLDecoder.decode(value, UTF8Codec.Const.UTF8);
     }

@@ -44,7 +44,10 @@ public class KubeHandlerGet {
 
     private HttpResponse doGetInternal() throws IOException {
         final HttpResponse httpResponse;
-        final Pather patherEndpoint = new Pather(httpRequest.getPathInfo());
+        // we want the untranslated path info to enable JSON path traversal (handle "/" in key names)
+        final String pathInfoRaw = httpRequest.getHttpRequest().getResource()
+                .substring(httpRequest.getBaseURI().length());
+        final Pather patherEndpoint = new Pather(pathInfoRaw);  // new Pather(httpRequest.getPathInfo());
         final String kubeEndpoint = patherEndpoint.getLeftToken();
         final String kubeResource = patherEndpoint.getRight();
         if (Value.isEmpty(kubeEndpoint)) {

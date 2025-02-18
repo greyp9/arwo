@@ -13,6 +13,7 @@ import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.lang.MathU;
+import io.github.greyp9.arwo.core.url.URLCodec;
 import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xml.ElementU;
@@ -43,10 +44,12 @@ public final class JsonNav {
                                                final List<String> jsonKeys,
                                                final Element html) {
         final HttpResponse httpResponse;
-        if (jsonKeys.isEmpty()) {
+        if (jsonElement == null) {
+            httpResponse = HttpResponseU.to500("UNKNOWN-DATA");
+        } else if (jsonKeys.isEmpty()) {
             httpResponse = toHttpResponseAt(jsonElement, html);
         } else {
-            final String jsonKey = jsonKeys.remove(0);
+            final String jsonKey = URLCodec.decodeSafe(jsonKeys.remove(0));
             httpResponse = toHttpResponse(jsonElement, jsonKey, jsonKeys, html);
         }
         return httpResponse;
@@ -98,7 +101,8 @@ public final class JsonNav {
 
     private void addLink(final String text, final String href, final Element html) {
         final Element div = ElementU.addElement(html, Html.DIV, null);
-        ElementU.addElement(div, Html.A, text, NTV.create(Html.HREF, href + "/"));
+        final String hrefLocal = URLCodec.encodeSafe(href) + "/";
+        ElementU.addElement(div, Html.A, text, NTV.create(Html.HREF, hrefLocal));
     }
 
     private HttpResponse toHttpResponse(final JsonElement jsonElement,
