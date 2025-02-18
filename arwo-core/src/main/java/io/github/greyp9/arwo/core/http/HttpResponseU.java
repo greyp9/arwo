@@ -42,6 +42,10 @@ public final class HttpResponseU {
         return new HttpResponse(HttpURLConnection.HTTP_MOVED_TEMP, headers, (byte[]) null);
     }
 
+    public static HttpResponse to400(final String message) {
+        return toError(HttpURLConnection.HTTP_BAD_REQUEST, message);
+    }
+
     public static HttpResponse to404() {
         return toError(HttpURLConnection.HTTP_NOT_FOUND, null);
     }

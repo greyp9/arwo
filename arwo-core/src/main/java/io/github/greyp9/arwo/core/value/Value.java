@@ -67,11 +67,11 @@ public final class Value {
         return ((value == null) ? defaultOnNull : Integer.parseInt(value));
     }
 
-    public static int parseInt(final String value, final int defaultOnNull) {
+    public static int parseInt(final String value, final int defaultOnNotNumber) {
         try {
             return Integer.parseInt(value);
         } catch (final NumberFormatException e) {
-            return defaultOnNull;
+            return defaultOnNotNumber;
         }
     }
 
