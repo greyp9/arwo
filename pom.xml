@@ -240,7 +240,7 @@
                     <printSummary>false</printSummary>
                     <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <systemPropertyVariables>
-                        <java.util.logging.config.file>arwo-core/src/test/resources/logging.properties</java.util.logging.config.file>
+                        <java.util.logging.config.file>${build.testOutputDirectory}/logging.properties</java.util.logging.config.file>
                     </systemPropertyVariables>
                 </configuration>
             </plugin>
