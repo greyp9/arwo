@@ -41,10 +41,14 @@ public class KubeLogsView extends KubeView {
             final String string = api.readNamespacedPodLog(
                     podName, namespace, containerName, null, null, null, null, null, null, 100, null);
             final byte[] payload = UTF8Codec.toBytes(string);
-            final long lastModified = getHttpRequest().getDate().getTime() / DurationU.Const.ONE_SECOND_MILLIS;
-            final FileMetaData metaData = new FileMetaData(null, payload.length, lastModified, false);
-            return HttpResponseU.to200(new MetaFile(
-                    metaData, Http.Mime.TEXT_PLAIN_UTF8, new ByteArrayInputStream(payload)));
+            if (payload == null) {
+                return HttpResponseU.to404();
+            } else {
+                final long lastModified = getHttpRequest().getDate().getTime() / DurationU.Const.ONE_SECOND_MILLIS;
+                final FileMetaData metaData = new FileMetaData(null, payload.length, lastModified, false);
+                return HttpResponseU.to200(new MetaFile(
+                        metaData, Http.Mime.TEXT_PLAIN_UTF8, new ByteArrayInputStream(payload)));
+            }
         } catch (final ApiException e) {
             getUserState().getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
         }
