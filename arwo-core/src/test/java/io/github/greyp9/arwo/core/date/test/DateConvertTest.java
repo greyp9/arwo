@@ -19,4 +19,12 @@ public class DateConvertTest {
         logger.finest(dateXSD);
         Assertions.assertEquals("2000-01-01T00:00:00Z", dateXSD);
     }
+
+    @Test
+    public void testConversionFromSeconds() {
+        final Date date = new Date(1735689600000L);
+        final String dateXSD = XsdDateU.toXSDZ(date);
+        logger.finest(dateXSD);
+        Assertions.assertEquals("2025-01-01T00:00:00Z", dateXSD);
+    }
 }
