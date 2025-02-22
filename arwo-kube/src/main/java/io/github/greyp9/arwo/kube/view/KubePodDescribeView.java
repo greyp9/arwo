@@ -1,7 +1,9 @@
 package io.github.greyp9.arwo.kube.view;
 
+import com.google.gson.JsonElement;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.alert.Alert;
+import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
@@ -32,14 +34,23 @@ public class KubePodDescribeView extends KubeView {
 
     @Override
     protected final HttpResponse addContentTo(final Element html) throws IOException {
+        final ResourceCache cache = getUserState().getCache();  // "getCacheBlob()"?
+        final String cacheKey = String.join(Http.Token.SLASH, namespace, podName);
+        final Object cachedValue = cache.getObject(cacheKey, this::getJsonElement);
+        final JsonElement jsonElement = Value.asOptional(cachedValue, JsonElement.class).orElse(null);
+        return (jsonElement == null) ? null
+                : JsonNav.toHttpResponse(jsonElement, Value.split(Http.Token.SLASH, path), html);
+    }
+
+    private JsonElement getJsonElement() {
         final KubeConnectionResource resource = getResource();
         final CoreV1Api api = resource.getConnection().getCoreV1Api();
         try {
             final V1Pod v1Pod = api.readNamespacedPod(podName, namespace, null);
-            return JsonNav.toHttpResponse(JsonU.toJsonTree(v1Pod), Value.split(Http.Token.SLASH, path), html);
+            return JsonU.toJsonTree(v1Pod);
         } catch (final ApiException e) {
             getUserState().getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
+            return null;
         }
-        return null;
     }
 }

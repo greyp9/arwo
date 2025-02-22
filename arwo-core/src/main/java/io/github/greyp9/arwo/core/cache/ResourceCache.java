@@ -7,11 +7,13 @@ import io.github.greyp9.arwo.core.table.row.RowSet;
 import java.io.IOException;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.Supplier;
 
 public class ResourceCache {
     private final String endpoint;
     private final Map<String, RowSet> rowSets;
     private final Map<String, MetaFile> files;
+    private final Map<String, Object> objects;
 
     public final String getEndpoint() {
         return endpoint;
@@ -19,8 +21,9 @@ public class ResourceCache {
 
     public ResourceCache(final String endpoint) {
         this.endpoint = endpoint;
-        this.rowSets = new TreeMap<String, RowSet>();
-        this.files = new TreeMap<String, MetaFile>();
+        this.rowSets = new TreeMap<>();
+        this.files = new TreeMap<>();
+        this.objects = new TreeMap<>();
     }
 
     public final boolean containsRowSet(final String id) {
@@ -51,9 +54,23 @@ public class ResourceCache {
         files.put(id, file);
     }
 
+    public synchronized final Object getObject(final String id, final Supplier<Object> supplier) {
+        final Object o;
+        if (supplier == null) {
+            o = objects.remove(id);
+        } else if (objects.containsKey(id)) {
+            o = objects.get(id);
+        } else {
+            o = supplier.get();
+            objects.put(id, o);
+        }
+        return o;
+    }
+
     public final void clear() {
         rowSets.clear();
         files.clear();
+        objects.clear();
     }
 
     public final long getSize() throws IOException {
