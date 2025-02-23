@@ -40,17 +40,19 @@ public class KubeHandlerPost {
 
     private HttpResponse doPostInternal() throws IOException {
         final byte[] entity = StreamU.read(httpRequest.getHttpRequest().getEntity());
-        final NameTypeValues nameTypeValues = HttpArguments.toArguments(entity);
+        final NameTypeValues httpArguments = HttpArguments.toArguments(entity);
         final String submitID = userState.getSubmitID();
         HttpResponse httpResponse = HttpResponseU.to302(httpRequest.getURI());
-        for (final NameTypeValue nameTypeValue : nameTypeValues) {
+        for (final NameTypeValue nameTypeValue : httpArguments) {
             if (submitID.equals(nameTypeValue.getName())) {
                 final SubmitToken token = SubmitTokenU.fromString(nameTypeValue.getValueS());
                 if (token != null) {
                     final String subject = token.getSubject();
                     if (App.Target.VIEW_STATE.equals(subject)) {
                         final Bundle bundle = new Bundle(new AppText(userState.getLocus().getLocale()).getBundleCore());
-                        userState.getViewStates().apply(token, nameTypeValues, bundle, new Alerts());
+                        userState.getViewStates().apply(token, httpArguments, bundle, new Alerts());
+                    } else if (App.Target.USER_STATE.equals(subject)) {
+                        userState.applyPost(token, httpArguments, httpRequest, "");
                     }
                 }
             }

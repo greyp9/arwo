@@ -9,6 +9,7 @@ public final class UTF16 {
     public static final String ARROW_RIGHT = "\u25b6";
     public static final String ARROW_UP = "\u25b2";  // ▲
     public static final String BULLET = "\u2022";
+    public static final String CARAT_RIGHT = "\u276f";
     public static final String CHECK = "\u2713";
     public static final String CHECKBOX_FALSE = "\u2610";  // ☐
     public static final String CHECKBOX_TRUE = "\u2611";  // ☑
@@ -58,6 +59,7 @@ public final class UTF16 {
     private UTF16() {
     }
 
+    // https://www.unicode.org/charts/PDF/U2500.pdf
     // http://www.fileformat.info/info/unicode/char/1f4a9/index.htm
     // http://esham.io/2015/04/emoji-flags-redux
 }

@@ -6,15 +6,14 @@ import io.github.greyp9.arwo.core.alert.view.AlertsView;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppHtml;
 import io.github.greyp9.arwo.core.app.AppTitle;
-import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.config.Preferences;
 import io.github.greyp9.arwo.core.html.Html;
-import io.github.greyp9.arwo.core.html.upload.FileUpload;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
+import io.github.greyp9.arwo.core.menu.MenuSystem;
 import io.github.greyp9.arwo.core.menu.view.MenuView;
 import io.github.greyp9.arwo.core.text.filter.TextFilters;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
@@ -100,9 +99,12 @@ public abstract class KubeView {
 
     private void addHeaderView(final Element html, final AppTitle title) throws IOException {
         // context menu
-        final MenuView menuView = new MenuView(bundle, httpRequest, userState.getMenuSystem());
-        final Element divMenus = menuView.addContentTo(html, AppMenuFactory.Const.FILESYSTEM, true);
-        new FileUpload(httpRequest.getServletPath(), bundle).addContentTo(divMenus, menuView);
+        final MenuSystem menuSystem = new MenuSystem(userState.getSubmitID(), new KubeAppMenuFactory());
+        menuSystem.get(httpRequest.getServletPath(), KubeAppMenuFactory.KUBE);  // init (since it is dynamic)
+        menuSystem.applyState(userState.getMenuSystemState());  // apply state
+        final MenuView menuView = new MenuView(bundle, httpRequest, menuSystem);  // render
+        menuView.addContentTo(html, KubeAppMenuFactory.KUBE, true);
+        addMenuContext(html);
         menuView.addTitle(html, title);
         // settings property strips
         final Locale locale = userState.getLocus().getLocale();
@@ -124,6 +126,9 @@ public abstract class KubeView {
      * @throws IOException on failures accessing requested resources
      */
     protected abstract HttpResponse addContentTo(Element html) throws IOException;
+
+    protected void addMenuContext(final Element html) throws IOException {
+    }
 
     // kube context table views
     static final String FIELD_SELECT = "select";

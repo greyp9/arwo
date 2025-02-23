@@ -9,13 +9,13 @@ import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Supplier;
 
-public class ResourceCache {
+public final class ResourceCache {
     private final String endpoint;
     private final Map<String, RowSet> rowSets;
     private final Map<String, MetaFile> files;
     private final Map<String, Object> objects;
 
-    public final String getEndpoint() {
+    public String getEndpoint() {
         return endpoint;
     }
 
@@ -26,15 +26,15 @@ public class ResourceCache {
         this.objects = new TreeMap<>();
     }
 
-    public final boolean containsRowSet(final String id) {
+    public boolean containsRowSet(final String id) {
         return rowSets.containsKey(id);
     }
 
-    public final RowSet getRowSet(final String id) {
+    public RowSet getRowSet(final String id) {
         return rowSets.get(id);
     }
 
-    public final void putRowSet(final String id, final RowSet rowSet) {
+    public void putRowSet(final String id, final RowSet rowSet) {
         if (rowSet == null) {
             rowSets.remove(id);
         } else {
@@ -42,19 +42,19 @@ public class ResourceCache {
         }
     }
 
-    public final boolean containsFile(final String id) {
+    public boolean containsFile(final String id) {
         return files.containsKey(id);
     }
 
-    public final MetaFile getFile(final String id) {
+    public MetaFile getFile(final String id) {
         return files.get(id);
     }
 
-    public final void putFile(final String id, final MetaFile file) {
+    public void putFile(final String id, final MetaFile file) {
         files.put(id, file);
     }
 
-    public synchronized final Object getObject(final String id, final Supplier<Object> supplier) {
+    public synchronized Object getObject(final String id, final Supplier<Object> supplier) {
         final Object o;
         if (supplier == null) {
             o = objects.remove(id);
@@ -67,13 +67,13 @@ public class ResourceCache {
         return o;
     }
 
-    public final void clear() {
+    public void clear() {
         rowSets.clear();
         files.clear();
         objects.clear();
     }
 
-    public final long getSize() throws IOException {
+    public long getSize() throws IOException {
         long size = 0L;
         for (final MetaFile file : files.values()) {
             size += StreamU.read(file.getBytes()).length;

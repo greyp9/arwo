@@ -41,7 +41,8 @@ public final class PropertiesU {
     }
 
     public static void clearStartsWith(final Properties properties, final String key) {
-        properties.entrySet().removeIf(entry -> entry.getKey().toString().startsWith(key));
+        properties.entrySet().removeIf(entry ->
+                entry.getKey().toString().startsWith(key) && !entry.getKey().toString().equals(key));
     }
 
     public static void toggleBoolean(final Properties properties, final String key) {

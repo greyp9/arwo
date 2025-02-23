@@ -115,6 +115,11 @@ public class MenuView {
                 final String pathInfo1 = getPathInfo(pathInfo, object);
                 ElementU.addElement(divMenu, Html.A, label, NTV.create(Html.TITLE, title,
                         Html.CLASS, App.CSS.MENU, Html.HREF, (baseURI + pathInfo1)));
+            } else if (itemIt.getAction().equals(App.Action.HREF_ABS)) {
+                final String name = itemIt.getName();
+                final String object = itemIt.getObject();
+                ElementU.addElement(divMenu, Html.A, name, NTV.create(Html.TITLE, title,
+                        Html.CLASS, App.CSS.MENU, Html.HREF, object));
             } else {
                 final SubmitToken token = new SubmitToken(
                         itemIt.getSubject(), itemIt.getAction(), itemIt.getObject(), itemIt.getObject2());

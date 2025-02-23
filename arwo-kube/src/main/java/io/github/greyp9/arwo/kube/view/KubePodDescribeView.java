@@ -7,6 +7,8 @@ import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
+import io.github.greyp9.arwo.core.menu.MenuSystem;
+import io.github.greyp9.arwo.core.menu.view.MenuView;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.kube.connection.KubeConnectionResource;
 import io.github.greyp9.arwo.kube.core.JsonNav;
@@ -18,7 +20,7 @@ import org.w3c.dom.Element;
 
 import java.io.IOException;
 
-public class KubePodDescribeView extends KubeView {
+public final class KubePodDescribeView extends KubeView {
     private final String namespace;
     private final String podName;
     private final String path;
@@ -33,13 +35,31 @@ public class KubePodDescribeView extends KubeView {
     }
 
     @Override
-    protected final HttpResponse addContentTo(final Element html) throws IOException {
+    protected HttpResponse addContentTo(final Element html) throws IOException {
         final ResourceCache cache = getUserState().getCache();  // "getCacheBlob()"?
         final String cacheKey = String.join(Http.Token.SLASH, namespace, podName);
         final Object cachedValue = cache.getObject(cacheKey, this::getJsonElement);
         final JsonElement jsonElement = Value.asOptional(cachedValue, JsonElement.class).orElse(null);
         return (jsonElement == null) ? null
                 : JsonNav.toHttpResponse(jsonElement, Value.split(Http.Token.SLASH, path), html);
+    }
+
+    @Override
+    protected void addMenuContext(final Element html) throws IOException {
+        final ResourceCache cache = getUserState().getCache();  // "getCacheBlob()"?
+        final String cacheKey = String.join(Http.Token.SLASH, namespace, podName);
+        final String base = String.format("%s/%s/pods/%s/%s/describe/",
+                getHttpRequest().getBaseURI(), getResource().getName(), namespace, podName);
+        final Object cachedValue = cache.getObject(cacheKey, this::getJsonElement);
+        final JsonElement jsonElement = Value.asOptional(cachedValue, JsonElement.class).orElse(null);
+        if (jsonElement != null) {
+            final MenuSystem menuSystemD = new MenuSystem(
+                    getUserState().getSubmitID(), new KubeDocMenuFactory(base, jsonElement));
+            menuSystemD.get(getHttpRequest().getServletPath(), KubeAppMenuFactory.KUBE);  // init (since it is dynamic)
+            menuSystemD.applyState(getUserState().getMenuSystemState());
+            final MenuView menuView = new MenuView(null, getHttpRequest(), menuSystemD);  // render
+            menuView.addContentTo(html, KubeAppMenuFactory.KUBE, false);
+        }
     }
 
     private JsonElement getJsonElement() {
