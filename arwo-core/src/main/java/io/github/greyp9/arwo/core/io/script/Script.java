@@ -84,6 +84,14 @@ public final class Script {
         return ((finish == 0) ? null : new Date(finish));
     }
 
+    public synchronized void cancel() {
+        final long time = new Date().getTime();
+        if (!properties.containsKey(Const.START)) {
+            new PropertiesX(properties).setLong(Const.START, time);
+            new PropertiesX(properties).setLong(Const.FINISH, time);
+        }
+    }
+
     public synchronized void start() {
         new PropertiesX(properties).setLong(Const.START, new Date().getTime());
     }

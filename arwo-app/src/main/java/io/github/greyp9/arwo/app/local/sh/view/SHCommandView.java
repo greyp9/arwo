@@ -15,7 +15,6 @@ import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.script.History;
 import io.github.greyp9.arwo.core.io.script.Script;
 import io.github.greyp9.arwo.core.resource.PathU;
-import io.github.greyp9.arwo.core.util.CollectionU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.value.Value;
@@ -31,7 +30,10 @@ import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -75,8 +77,12 @@ public class SHCommandView extends SHView {
         final String qname = cursor.getTypeInstance().getQName().toString();
         final String submitID = userState.getSubmitID();
         final ActionFactory factory = new ActionFactory(submitID, bundle, App.Target.SESSION, qname, null);
-        final ActionButtons buttons = factory.create(
-                App.Action.COMMAND, false, CollectionU.toCollection(App.Action.COMMAND));
+        final List<String> actions = new ArrayList<>(Collections.singleton(App.Action.COMMAND));
+        final boolean notStarted = ((script != null) && (script.getStart() == null));
+        if (notStarted) {
+            actions.add(App.Action.CANCEL);
+        }
+        final ActionButtons buttons = factory.create(App.Action.COMMAND, false, actions);
         final XedRequest xedRequest = new XedRequest(httpRequest, null, userState.getDocumentState());
         new PropertyPageHtmlView(new XedPropertyPageView(null, cursor, buttons), xedRequest).addContentTo(html);
         // contextual content

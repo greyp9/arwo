@@ -108,6 +108,10 @@ public class SHHandlerPost {
         final String object = token.getObject();
         if (App.Action.COMMAND.equals(action)) {
             location = new SHQueueCommand(request).doAction(httpArguments);
+        } else if (App.Action.CANCEL.equals(action)) {
+            final boolean cancelled = userState.getUserExecutor().cancel(request.getScriptID());
+            final Alert.Severity severity = cancelled ? Alert.Severity.INFO : Alert.Severity.WARN;
+            request.getAlerts().add(new Alert(severity, "cancelled", request.getScriptID()));
         } else if (App.Action.FILESYSTEM.equals(action)) {
             location = PathU.toDir(httpRequest.getContextPath(), App.Servlet.LFS, App.Mode.VIEW);
         } else if (App.Action.TOGGLE.equals(action)) {

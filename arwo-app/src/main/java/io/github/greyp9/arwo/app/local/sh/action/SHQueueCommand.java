@@ -21,6 +21,7 @@ import io.github.greyp9.arwo.core.xed.action.XedActionCommand;
 import java.io.File;
 import java.io.IOException;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Future;
 
 public class SHQueueCommand {
     private final SHRequest request;
@@ -52,7 +53,8 @@ public class SHQueueCommand {
                 executorStream, resultsContext, pollInterval, new File(SystemU.userHome()));
         final ScriptRunnable runnable = new ScriptRunnable(script, context);
         userExecutor.getRunnables().add(runnable);
-        userExecutor.getExecutorCommand().execute(runnable);
+        final Future<?> future = userExecutor.getExecutorCommand().submit(runnable);
+        userExecutor.getFutures().put(id, future);
         // redirect to resource for execution monitor
         final DateX dateX = DateX.Factory.createFilenameMilli();
         final String commandID = dateX.toString(httpRequest.getDate());

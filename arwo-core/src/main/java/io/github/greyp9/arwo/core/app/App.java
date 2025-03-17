@@ -251,6 +251,7 @@ public final class App {
         public static final String HREF_ABS = "href-abs";
         public static final String REFRESH = "refresh";
         public static final String COMMAND = "command";
+        public static final String CANCEL = "cancel";
         public static final String SQL = "sql";
         public static final String MAIL = "mail";
         public static final String FILESYSTEM = "filesystem";
