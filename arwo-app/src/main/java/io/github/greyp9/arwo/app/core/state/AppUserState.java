@@ -11,6 +11,7 @@ import io.github.greyp9.arwo.app.core.subsystem.jdbc.SubsystemJDBC;
 import io.github.greyp9.arwo.app.core.subsystem.kube.SubsystemKube;
 import io.github.greyp9.arwo.app.core.subsystem.local.SubsystemLocal;
 import io.github.greyp9.arwo.app.core.subsystem.mail.SubsystemMail;
+import io.github.greyp9.arwo.app.core.subsystem.sh.SubsystemLSH;
 import io.github.greyp9.arwo.app.core.subsystem.ssh.SubsystemSSH;
 import io.github.greyp9.arwo.core.actiond.DeferredActions;
 import io.github.greyp9.arwo.core.alert.Alert;
@@ -108,6 +109,7 @@ public final class AppUserState {
     // widget subsystems
     private final SubsystemCron cron;
     private final SubsystemLocal local;
+    private final SubsystemLSH lsh;
     private final SubsystemKube kube;
     private final SubsystemSSH ssh;
     private final SubsystemJDBC jdbc;
@@ -218,6 +220,10 @@ public final class AppUserState {
         return local;
     }
 
+    public SubsystemLSH getLSH() {
+        return lsh;
+    }
+
     public SubsystemKube getKube() {
         return kube;
     }
@@ -317,6 +323,7 @@ public final class AppUserState {
         this.deferredActions = new DeferredActions();
         this.cron = new SubsystemCron(documentState.getFactory());
         this.local = new SubsystemLocal(alerts, this.userRoot);
+        this.lsh = new SubsystemLSH();
         this.kube = new SubsystemKube(alerts);
         this.ssh = new SubsystemSSH(alerts);
         this.jdbc = new SubsystemJDBC(alerts, this.userRoot);

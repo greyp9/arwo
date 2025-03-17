@@ -16,7 +16,7 @@ import io.github.greyp9.arwo.core.value.NameTypeValues;
 
 import java.io.IOException;
 
-public class AppHandlerPost {
+public abstract class AppHandlerPost {
     private final AppRequest request;
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
@@ -25,6 +25,14 @@ public class AppHandlerPost {
         this.request = userState.getAppRequest(httpRequest);
         this.httpRequest = httpRequest;
         this.userState = userState;
+    }
+
+    protected final ServletHttpRequest getHttpRequest() {
+        return httpRequest;
+    }
+
+    protected final AppUserState getUserState() {
+        return userState;
     }
 
     public final HttpResponse doPostSafe() throws IOException {
@@ -62,7 +70,12 @@ public class AppHandlerPost {
             location = userState.applyPost(token, httpArguments, httpRequest);
         } else if (App.Target.VIEW_STATE.equals(subject)) {
             userState.getViewStates().apply(token, httpArguments, request.getBundle(), userState.getAlerts());
+        } else if (App.Target.SESSION.equals(subject)) {
+            applySession(token, httpArguments, locationIn);
         }
         return location;
     }
+
+    protected abstract String applySession(
+            SubmitToken token, NameTypeValues httpArguments, String locationIn) throws IOException;
 }

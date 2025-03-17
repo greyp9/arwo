@@ -38,7 +38,6 @@ public class AppHistoryView {
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
 
-
     public AppHistoryView(final String tableID, final boolean includeContext, final Collection<Script> scripts,
                           final Bundle bundle, final ServletHttpRequest httpRequest, final AppUserState userState) {
         this.tableID = tableID;
