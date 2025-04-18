@@ -15,25 +15,31 @@ import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.script.History;
 import io.github.greyp9.arwo.core.io.script.Script;
 import io.github.greyp9.arwo.core.resource.PathU;
+import io.github.greyp9.arwo.core.util.CollectionU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.core.xed.action.XedAction;
 import io.github.greyp9.arwo.core.xed.action.XedActionCommand;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
+import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.op.OpUpdate;
 import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
 import io.github.greyp9.arwo.core.xed.view.html.PropertyPageHtmlView;
+import io.github.greyp9.arwo.core.xed.view.html.PropertyStripHtmlView;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
 import org.w3c.dom.Element;
 
+import javax.xml.namespace.QName;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.Properties;
 import java.util.stream.Collectors;
 
@@ -85,6 +91,17 @@ public class SHCommandView extends SHView {
         final ActionButtons buttons = factory.create(App.Action.COMMAND, false, actions);
         final XedRequest xedRequest = new XedRequest(httpRequest, null, userState.getDocumentState());
         new PropertyPageHtmlView(new XedPropertyPageView(null, cursor, buttons), xedRequest).addContentTo(html);
+        // stdin
+        final XedAction actionStdin = new XedAction(new QName(App.Actions.URI_ACTION, App.Action.STDIN,
+                App.Actions.PREFIX_ACTION), new XedFactory(), Locale.getDefault());
+        final Xed xedUIStdin = actionStdin.getXedUI(actionStdin.getXed().getLocale());
+        final XedPropertyPageView pageViewStdin = new XedPropertyPageView(null, new XedNav(xedUIStdin).getRoot());
+        final Bundle bundleXed = xedUIStdin.getBundle();
+        final ActionFactory factoryStdin = new ActionFactory(
+                userState.getSubmitID(), bundleXed, App.Target.SESSION, App.Action.STDIN, null);
+        final Collection<String> actionsStdin = CollectionU.toCollection(App.Action.STDIN);
+        final ActionButtons buttonsStdin = factoryStdin.create(App.Action.STDIN, false, actionsStdin);
+        new PropertyStripHtmlView(pageViewStdin, buttonsStdin).addContentDiv(html);
         // contextual content
         if (script == null) {
             final String context = request.getContext();

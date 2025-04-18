@@ -4,7 +4,6 @@ import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.alert.write.AlertWriter;
 import io.github.greyp9.arwo.core.bundle.Bundle;
-import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.io.buffer.ByteBuffer;
 import io.github.greyp9.arwo.core.io.command.CommandToDo;
 import io.github.greyp9.arwo.core.io.command.CommandWork;
@@ -23,6 +22,7 @@ import org.jinterop.dcom.core.JISession;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.concurrent.Future;
 import java.util.logging.Logger;
 
@@ -98,7 +98,7 @@ public class ScriptRunnable implements Runnable {
     private void runCommand(
             final WshShell shell, final CommandToDo commandToDo, final String dir) throws IOException, JIException {
         // start process
-        CommandWork commandWork = script.startCommand(commandToDo, UTF8Codec.Const.UTF8, dir);
+        CommandWork commandWork = script.startCommand(commandToDo, StandardCharsets.UTF_8, dir);
         final WshScriptExec exec = shell.exec(commandWork.getStdin());
         if (exec != null) {
             commandWork = script.updateCommand(commandWork, (long) exec.getPID());

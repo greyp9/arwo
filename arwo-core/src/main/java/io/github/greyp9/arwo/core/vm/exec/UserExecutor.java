@@ -2,6 +2,8 @@ package io.github.greyp9.arwo.core.vm.exec;
 
 import io.github.greyp9.arwo.core.command.local.ScriptRunnable;
 import io.github.greyp9.arwo.core.date.Interval;
+import io.github.greyp9.arwo.core.io.command.CommandWork;
+import io.github.greyp9.arwo.core.lang.SystemU;
 
 import java.io.File;
 import java.security.Principal;
@@ -79,6 +81,27 @@ public class UserExecutor {
             }
         }
         return cancelled;
+    }
+
+    public final boolean stdin(final String scriptID, final String stdin) {
+        boolean sent = false;
+        final Optional<ScriptRunnable> runnable = runnables.stream()
+                .filter(r -> r instanceof ScriptRunnable)
+                .map(ScriptRunnable.class::cast)
+                .filter(r -> r.getScript().getID().equals(scriptID))
+                .findFirst();
+        if (runnable.isPresent()) {
+            ScriptRunnable scriptRunnable = runnable.get();
+            final Optional<CommandWork> commandWork = scriptRunnable.getScript().getCommands().stream()
+                    .filter(c -> c instanceof CommandWork)
+                    .map(CommandWork.class::cast)
+                    .findFirst();
+            if (commandWork.isPresent()) {
+                commandWork.get().getByteBufferStdin().addString(stdin + SystemU.eol());
+                sent = true;
+            }
+        }
+        return sent;
     }
 
     public final Interval getInterval() {

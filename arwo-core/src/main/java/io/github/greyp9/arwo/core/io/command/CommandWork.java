@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.io.command;
 import io.github.greyp9.arwo.core.io.buffer.ByteBuffer;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.Date;
 
 public class CommandWork extends Command {
@@ -79,7 +80,7 @@ public class CommandWork extends Command {
         return byteBufferStderr;
     }
 
-    public CommandWork(final String dir, final String stdin, final String charset,
+    public CommandWork(final String dir, final String stdin, final Charset charset,
                        final String name, final Date dateScheduled, final Date dateStart, final Long pid) {
         super(dateScheduled);
         this.dir = dir;

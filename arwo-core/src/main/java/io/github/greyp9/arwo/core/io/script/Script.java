@@ -9,6 +9,7 @@ import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.util.PropertiesX;
 
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
@@ -120,7 +121,7 @@ public final class Script {
     }
 
     public synchronized CommandWork startCommand(
-            final CommandToDo command, final String charset, final String dir) {
+            final CommandToDo command, final Charset charset, final String dir) {
         final CommandWork commandWork = new CommandWork(
                 dir, command.getStdin(), charset, getID(), command.getScheduled(), new Date(), null);
         commandsToDo.remove(command);

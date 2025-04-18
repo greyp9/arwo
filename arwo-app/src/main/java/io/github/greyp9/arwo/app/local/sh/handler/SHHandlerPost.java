@@ -22,6 +22,7 @@ import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.core.xed.action.XedActionStdin;
 
 import java.io.IOException;
 
@@ -112,6 +113,12 @@ public class SHHandlerPost {
             final boolean cancelled = userState.getUserExecutor().cancel(request.getScriptID());
             final Alert.Severity severity = cancelled ? Alert.Severity.INFO : Alert.Severity.WARN;
             request.getAlerts().add(new Alert(severity, "cancelled", request.getScriptID()));
+        } else if (App.Action.STDIN.equals(action)) {
+            final String stdin = new XedActionStdin(userState.getXedFactory()).getStdin(httpArguments);
+            final boolean sent = userState.getUserExecutor().stdin(request.getScriptID(), stdin);
+            final Alert.Severity severity = sent ? Alert.Severity.INFO : Alert.Severity.WARN;
+            final String detail = String.format("[%s][%s]", request.getScriptID(), stdin);
+            request.getAlerts().add(new Alert(severity, "stdin", detail));
         } else if (App.Action.FILESYSTEM.equals(action)) {
             location = PathU.toDir(httpRequest.getContextPath(), App.Servlet.LFS, App.Mode.VIEW);
         } else if (App.Action.TOGGLE.equals(action)) {

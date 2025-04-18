@@ -74,6 +74,7 @@ public class OutputStreamRunnable implements Runnable {
         if (length > 0) {
             final byte[] bytes = byteBuffer.getBytes(true);
             os.write(bytes);
+            os.flush();
             MutexU.notifyAll(this);
         }
     }

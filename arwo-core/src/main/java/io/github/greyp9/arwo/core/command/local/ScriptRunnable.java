@@ -4,7 +4,6 @@ import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.alert.write.AlertWriter;
 import io.github.greyp9.arwo.core.bundle.Bundle;
-import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.file.FileU;
 import io.github.greyp9.arwo.core.io.buffer.ByteBuffer;
 import io.github.greyp9.arwo.core.io.command.CommandToDo;
@@ -26,6 +25,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.OutputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
@@ -103,7 +103,7 @@ public class ScriptRunnable implements Runnable {
 
     private void runCommand(final CommandToDo commandToDo) throws IOException {
         final File dir = Value.defaultOnNull(context.getUserDir(), new File(SystemU.userDir()));
-        CommandWork commandWork = script.startCommand(commandToDo, UTF8Codec.Const.UTF8, FileU.fromFile(dir));
+        CommandWork commandWork = script.startCommand(commandToDo, StandardCharsets.UTF_8, FileU.fromFile(dir));
         Integer exitValue = null;
         try {
             final String[] commandArray = ShellU.toCommandArray(commandWork.getStdin());

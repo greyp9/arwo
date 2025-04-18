@@ -28,6 +28,7 @@ public final class App {
         public static final QName QNAME_MAIL = new QName(URI_ACTION, "mail", PREFIX_ACTION);
         public static final QName QNAME_REFRESH = new QName(URI_ACTION, "refresh", PREFIX_ACTION);
         public static final QName QNAME_EMPTY = new QName(URI_ACTION, "empty", PREFIX_ACTION);
+        public static final QName QNAME_STDIN = new QName(URI_ACTION, "stdin", PREFIX_ACTION);
         public static final QName QNAME_SQL = new QName(URI_ACTION, "sql", PREFIX_ACTION);
         public static final QName QNAME_TEXT_EXPRESSION = new QName(URI_ACTION, "textExpression", PREFIX_ACTION);
         public static final QName QNAME_TEXT_FILTER = new QName(URI_ACTION, "textFilter", PREFIX_ACTION);
@@ -251,6 +252,7 @@ public final class App {
         public static final String HREF_ABS = "href-abs";
         public static final String REFRESH = "refresh";
         public static final String COMMAND = "command";
+        public static final String STDIN = "stdin";
         public static final String CANCEL = "cancel";
         public static final String SQL = "sql";
         public static final String MAIL = "mail";

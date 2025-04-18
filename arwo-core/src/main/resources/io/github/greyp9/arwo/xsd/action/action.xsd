@@ -128,6 +128,14 @@
         </xsd:sequence>
     </xsd:complexType>
 
+    <xsd:element name='stdin' type='action:stdinType'/>
+
+    <xsd:complexType name='stdinType'>
+        <xsd:sequence>
+            <xsd:element name='stdin' type='xsd:string'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
     <xsd:element name='sql' type='action:sqlType'/>
 
     <xsd:complexType name='sqlType'>

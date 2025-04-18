@@ -19,6 +19,7 @@ import io.github.greyp9.arwo.core.vm.mutex.MutexU;
 import io.github.greyp9.arwo.core.xed.model.XedFactory;
 
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,7 +37,7 @@ public class CronServiceTester {
         // execute
         ExecutorService executorService = ExecutorServiceFactory.create(2, getClass().getSimpleName());
         // start monitor
-        ByteBuffer byteBuffer = new ByteBuffer(UTF8Codec.Const.UTF8);
+        ByteBuffer byteBuffer = new ByteBuffer(StandardCharsets.UTF_8);
         InputStreamRunnable isr = new InputStreamRunnable(System.in, byteBuffer, DurationU.toMillis("PT1S"));
         executorService.execute(isr);
         // start runner

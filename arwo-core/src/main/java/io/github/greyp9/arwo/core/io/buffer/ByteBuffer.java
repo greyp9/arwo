@@ -2,20 +2,21 @@ package io.github.greyp9.arwo.core.io.buffer;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.ArrayList;
 import java.util.Collection;
 
 @SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
 public class ByteBuffer {
-    private final String charset;
+    private final Charset charset;
     private final Collection<byte[]> byteBuffers;
 
-    public ByteBuffer(final String charset) {
+    public ByteBuffer(final Charset charset) {
         this.charset = charset;
         this.byteBuffers = new ArrayList<byte[]>();
     }
 
-    public final String getCharset() {
+    public final Charset getCharset() {
         return charset;
     }
 
@@ -42,11 +43,11 @@ public class ByteBuffer {
         return os.toByteArray();
     }
 
-    public final synchronized void addBytes(final byte[] bytes) throws IOException {
+    public final synchronized void addBytes(final byte[] bytes) {
         byteBuffers.add(bytes);
     }
 
-    public final synchronized void addString(final String string) throws IOException {
+    public final synchronized void addString(final String string) {
         byteBuffers.add(string.getBytes(charset));
     }
 
