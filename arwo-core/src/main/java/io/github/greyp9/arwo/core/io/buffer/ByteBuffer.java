@@ -32,10 +32,14 @@ public class ByteBuffer {
         return getBytes(false);
     }
 
-    public final synchronized byte[] getBytes(final boolean reset) throws IOException {
+    public final synchronized byte[] getBytes(final boolean reset) {
         final ByteArrayOutputStream os = new ByteArrayOutputStream();
         for (final byte[] byteBuffer : byteBuffers) {
-            os.write(byteBuffer);
+            try {
+                os.write(byteBuffer);
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
         }
         if (reset) {
             reset();
@@ -43,12 +47,12 @@ public class ByteBuffer {
         return os.toByteArray();
     }
 
-    public final synchronized void addBytes(final byte[] bytes) {
-        byteBuffers.add(bytes);
+    public final synchronized boolean addBytes(final byte[] bytes) {
+        return byteBuffers.add(bytes);
     }
 
-    public final synchronized void addString(final String string) {
-        byteBuffers.add(string.getBytes(charset));
+    public final synchronized boolean addString(final String string) {
+        return byteBuffers.add(string.getBytes(charset));
     }
 
     public final synchronized void reset() {

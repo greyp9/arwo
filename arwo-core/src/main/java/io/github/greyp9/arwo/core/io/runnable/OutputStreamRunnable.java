@@ -51,13 +51,14 @@ public class OutputStreamRunnable implements Runnable {
 
     @Override
     public final void run() {
-        logger.entering(getClass().getName(), Runnable.class.getName());
+        final String threadName = Thread.currentThread().getName();
+        logger.entering(getClass().getName(), threadName);
         try {
             runInner();
         } catch (IOException e) {
             setException(e);
         } finally {
-            logger.exiting(getClass().getName(), Runnable.class.getName());
+            logger.exiting(getClass().getName(), threadName);
         }
     }
 
