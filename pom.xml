@@ -51,7 +51,7 @@
         <maven.surefire.plugin.version>3.5.1</maven.surefire.plugin.version>
 
         <checkstyle.version>9.3</checkstyle.version>  <!-- 2022-01-30 -->
-        <pmd.version>7.5.0</pmd.version>  <!-- 2024-08-30 -->
+        <pmd.version>7.12.0</pmd.version>  <!-- 2025-03-28 -->
     </properties>
 
     <dependencyManagement>
