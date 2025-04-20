@@ -79,7 +79,7 @@ public class TaskRunnerTest {
     @Test
     void testAdditionalStdin() {
         final TaskRunner taskRunner = new TaskRunner(getClass().getSimpleName(), N_THREADS, POLL_INTERVAL);
-        final CommandTask task = taskRunner.submit(new Command("read"));  // waits for input
+        final CommandTask task = taskRunner.submit(new Command("read LABEL"));  // waits for input
         logger.fine(String.format("AWAIT=%s", task.getCommand().getInput()));
         final boolean await = task.await(1, TimeUnit.SECONDS);
         Assertions.assertFalse(await);
