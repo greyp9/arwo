@@ -414,7 +414,9 @@ public final class AppUserState {
             final String parent = object.replace(object2, "");
             PropertiesU.clearStartsWith(menuSystemState, parent);
             PropertiesU.setBoolean(menuSystemState, object, !stateFrom);  // store for dynamic menus
-            location = PathU.toDir(httpRequest.getBaseURI(), object2);
+            if (!Value.isEmpty(object2)) {
+                location = PathU.toDir(httpRequest.getBaseURI(), object2);
+            }
         } else if (App.Action.TOGGLE.equals(action)) {
             PropertiesU.toggleBoolean(properties, object);
         } else if (App.Action.MIME_TYPE.equals(action)) {

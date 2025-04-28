@@ -1,5 +1,7 @@
 package io.github.greyp9.arwo.core.submit;
 
+import io.github.greyp9.arwo.core.value.Value;
+
 public class SubmitToken {
     private final String subject;
     private final String action;
@@ -39,6 +41,6 @@ public class SubmitToken {
 
     // encoder
     public final String toString() {
-        return String.format("[%s][%s][%s][%s]", subject, action, object, object2);
+        return String.format("[%s][%s][%s][%s]", subject, action, object, Value.defaultOnNull(object2, ""));
     }
 }
