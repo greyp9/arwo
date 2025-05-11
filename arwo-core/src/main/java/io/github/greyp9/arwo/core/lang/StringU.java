@@ -1,6 +1,8 @@
 package io.github.greyp9.arwo.core.lang;
 
 import java.util.Arrays;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class StringU {
 
@@ -59,6 +61,15 @@ public final class StringU {
 
     public static String[] tokenize(final String input, final String regex) {
         return input.split(regex);
+    }
+
+    public static String replaceGroup(final Pattern pattern,
+                                      final String input,
+                                      final int group,
+                                      final String replacement) {
+        final Matcher matcher = pattern.matcher(input);
+        return (matcher.matches())
+                ? input.substring(0, matcher.start(group)) + replacement + input.substring(matcher.end(group)) : input;
     }
 
     public static class Const {
