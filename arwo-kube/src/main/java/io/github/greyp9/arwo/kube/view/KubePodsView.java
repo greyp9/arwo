@@ -18,16 +18,21 @@ import io.github.greyp9.arwo.kube.connection.KubeConnectionResource;
 import io.github.greyp9.arwo.kube.core.KubeU;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
+import io.kubernetes.client.openapi.models.V1ContainerStatus;
 import io.kubernetes.client.openapi.models.V1ObjectMeta;
 import io.kubernetes.client.openapi.models.V1Pod;
 import io.kubernetes.client.openapi.models.V1PodList;
 import io.kubernetes.client.openapi.models.V1PodSpec;
+import io.kubernetes.client.openapi.models.V1PodStatus;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
 import java.sql.Types;
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
 
 @SuppressWarnings("PMD.ExcessiveImports")
 public class KubePodsView extends KubeView {
@@ -84,6 +89,10 @@ public class KubePodsView extends KubeView {
                 new ColumnMetaData(FIELD_SELECT, Types.DATALINK),
                 new ColumnMetaData(FIELD_NAME, Types.VARCHAR, true),
                 new ColumnMetaData(FIELD_NAMESPACE, Types.VARCHAR),
+                new ColumnMetaData(FIELD_READY, Types.VARCHAR),
+                new ColumnMetaData(FIELD_STATUS, Types.VARCHAR),
+                new ColumnMetaData(FIELD_POD_IP, Types.VARCHAR),
+                new ColumnMetaData(FIELD_HOST_IP, Types.VARCHAR),
                 new ColumnMetaData(FIELD_CREATED, Types.TIMESTAMP),
         };
         return new RowSetMetaData(TABLE_ID, columns);
@@ -93,6 +102,16 @@ public class KubePodsView extends KubeView {
         final String endpoint = getResource().getName();
         final V1ObjectMeta metadata = pod.getMetadata();
         final V1PodSpec spec = pod.getSpec();
+        final V1PodStatus status = pod.getStatus();
+        final List<V1ContainerStatus> containerStatuses = (status == null)
+                ? new ArrayList<>() : status.getContainerStatuses();
+        final List<V1ContainerStatus> containerStatuses1 = Optional.ofNullable(containerStatuses)
+                .orElse(new ArrayList<>());
+        final long countReady = containerStatuses1.stream().filter(V1ContainerStatus::getReady).count();
+        final String ready = String.format("%d/%d", countReady, containerStatuses1.size());
+        final String podIP = (status == null) ? null : status.getPodIP();
+        final String hostIP = (status == null) ? null : status.getHostIP();
+        final String statusText = (status == null) ? null : status.getPhase();
         final String namespace = (metadata == null) ? null : metadata.getNamespace();
         final String name = (metadata == null) ? null : metadata.getName();
         final String nodeName = (spec == null) ? null : spec.getNodeName();
@@ -108,6 +127,10 @@ public class KubePodsView extends KubeView {
                 new TableViewLink(UTF16.SELECT, CONTEXT_NODES, hrefNode))));
         insertRow.setNextColumn((metadata == null) ? null : metadata.getName());
         insertRow.setNextColumn((metadata == null) ? null : namespace);
+        insertRow.setNextColumn(ready);
+        insertRow.setNextColumn(statusText);
+        insertRow.setNextColumn((metadata == null) ? null : podIP);
+        insertRow.setNextColumn((metadata == null) ? null : hostIP);
         insertRow.setNextColumn((metadata == null) ? null : KubeU.toDate(creationTimestamp));
         rowSet.add(insertRow.getRow());
     }
