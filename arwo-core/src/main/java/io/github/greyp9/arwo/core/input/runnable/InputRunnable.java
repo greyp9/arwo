@@ -38,7 +38,7 @@ public class InputRunnable implements Runnable {
                     input.add(UTF8Codec.toString(StreamU.read(inputStream, inputStream.available())));
                 }
                 if (!input.isEmpty()) {
-                    MutexU.notifyAll(reference);
+                    MutexU.notifyAll(input);
                 }
                 if (reference.get() == null) {
                     MutexU.wait(reference, interval);
