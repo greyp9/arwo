@@ -20,6 +20,7 @@
         <module>arwo-tomcat8</module>
         <module>arwo-kafka</module>
         <module>arwo-kube</module>
+        <module>arwo-slack</module>
     </modules>
 
     <!--
