@@ -40,6 +40,10 @@ public class TableHeaderView {
         final Element tr = ElementU.addElement(thead, Html.TR, null, NTV.create(Html.CLASS, App.CSS.HEADER));
         final Element th = ElementU.addElement(tr, Html.TH, null, NTV.create(
                 Html.COLSPAN, Integer.toString(table.getMetaData().size())));
+        if (context.getRefreshControl()) {
+            final SubmitToken token = new SubmitToken(App.Target.USER_STATE, App.Action.REFRESH, App.Object.TABLE);
+            addControl(th, UTF16.REFRESH, token, App.CSS.HEADER_L, "table.header.DETAIL", Html.VALUE_2);
+        }
         final SubmitToken token = new SubmitToken(App.Target.VIEW_STATE, ViewState.Toggle.RIBBON, table.getID());
         // (for sftp view, "title" is fs path, but viewState.getName() should be used for button)
         addControl(th, title, token, App.CSS.HEADER, "table.header.DETAIL", Html.VALUE_2);

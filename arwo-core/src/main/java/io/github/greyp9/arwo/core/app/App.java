@@ -131,6 +131,7 @@ public final class App {
         public static final String EXTRA = "extra";
         public static final String FOOTER = "footer";
         public static final String HEADER = "header";
+        public static final String HEADER_L = "headerL";
         public static final String LABEL = "label";
         public static final String LEFT = "left";
         public static final String LEVEL = "level";
@@ -291,6 +292,10 @@ public final class App {
         public static final String CLIP_CUT = "cut";
         public static final String CLIP_COPY = "copy";
         public static final String CLIP_PASTE = "paste";
+    }
+
+    public static class Object {
+        public static final String TABLE = "table";
     }
 
     public static class Hex {

@@ -406,6 +406,8 @@ public final class AppUserState {
             new XedActionTextFilter(getXedFactory(), getLocale()).updateTextFilters(textFiltersOp, httpArguments);
         } else if (App.Action.CLEAR.equals(action)) {
             doClearCache();
+        } else if (App.Action.REFRESH.equals(action) && (App.Object.TABLE.equals(object))) {
+            cache.putRowSet(httpRequest.getURI(), null);
         } else if (App.Action.REFRESH.equals(action)) {
             PropertiesU.toggleBoolean(properties, action);
         } else if (App.Action.MENU.equals(action)) {

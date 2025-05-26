@@ -20,11 +20,16 @@ background-color: Highlight;
 color: HighlightText;
 }
 
-thead.table tr.header th button  /* TABLE TITLE BAR */
+thead.table tr.header th button.headerL
 {
 text-align: left;
-display: block;
-width: 100%;
+width: 1em;
+}
+
+thead.table tr.header th button.header  /* TABLE TITLE BAR */
+{
+text-align: left;
+width: calc(100% - 2.2em);
 }
 
 thead.table tr.label th.label button  /* TABLE COLUMN SORT */
@@ -121,6 +126,7 @@ text-align: left;
 }
 
 thead.table tr.header button.header,
+thead.table tr.header button.headerL,
 thead.table tr.header span.header
 {
 font-size: larger;

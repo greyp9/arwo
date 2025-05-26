@@ -17,11 +17,18 @@ public final class UserStateTable {
     private final AppUserState userState;
     private final String title;
     private final Date date;
+    private final boolean refreshControl;
 
     public UserStateTable(final AppUserState userState, final String title, final Date date) {
+        this(userState, title, date, false);
+    }
+
+    public UserStateTable(final AppUserState userState, final String title, final Date date,
+                          final boolean refreshControl) {
         this.userState = userState;
         this.title = title;
         this.date = date;
+        this.refreshControl = refreshControl;
     }
 
     public TableView toTableView(final RowSet rowSet) throws IOException {
@@ -31,7 +38,7 @@ public final class UserStateTable {
         TableU.addFooterStandard(table, userState.getBundle());
         final XedActionFilter filter = new XedActionFilter(userState.getXedFactory(), userState.getLocale());
         final TableContext tableContext = new TableContext(viewState, filter, userState.getSubmitID(),
-                App.CSS.TABLE, userState.getBundle(), userState.getLocus(), date);
+                App.CSS.TABLE, refreshControl, userState.getBundle(), userState.getLocus(), date);
         return new TableView(table, tableContext);
     }
 }
