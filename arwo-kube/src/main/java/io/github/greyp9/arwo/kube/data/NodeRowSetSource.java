@@ -10,6 +10,7 @@ import io.github.greyp9.arwo.core.table.metadata.ColumnMetaData;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.row.RowSetSource;
+import io.github.greyp9.arwo.kube.connection.KubeConnection;
 import io.github.greyp9.arwo.kube.core.KubeU;
 import io.kubernetes.client.custom.Quantity;
 import io.kubernetes.client.openapi.ApiException;
@@ -26,21 +27,22 @@ import io.kubernetes.client.openapi.models.V1Taint;
 import java.sql.Types;
 import java.time.OffsetDateTime;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.TreeMap;
 
 public final class NodeRowSetSource implements RowSetSource {
-    private final CoreV1Api api;
+    private final KubeConnection connection;
     private final String baseURI;
     private final String endpoint;
 
     public NodeRowSetSource(
-            final CoreV1Api api,
+            final KubeConnection connection,
             final String baseURI,
             final String endpoint) {
-        this.api = api;
+        this.connection = connection;
         this.baseURI = baseURI;
         this.endpoint = endpoint;
     }
@@ -51,8 +53,11 @@ public final class NodeRowSetSource implements RowSetSource {
     }
 
     public RowSet getRowSet() throws ApiException {
+        final CoreV1Api api = connection.getCoreV1Api();
+        final Date date = new Date();
         final V1NodeList nodeList = api.listNode(
                 null, null, null, null, null, null, null, null, null, null, null);
+        connection.update(date);
         return loadRowSet(createMetaData(), nodeList);
     }
 

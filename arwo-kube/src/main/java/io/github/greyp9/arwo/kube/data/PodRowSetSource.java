@@ -10,6 +10,7 @@ import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.row.RowSetSource;
 import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.kube.connection.KubeConnection;
 import io.github.greyp9.arwo.kube.core.KubeU;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
@@ -24,23 +25,24 @@ import java.sql.Types;
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
 public final class PodRowSetSource implements RowSetSource {
-    private final CoreV1Api api;
+    private final KubeConnection connection;
     private final String nodeId;
     private final String namespace;
     private final String baseURI;
     private final String endpoint;
 
     public PodRowSetSource(
-            final CoreV1Api api,
+            final KubeConnection connection,
             final String nodeId,
             final String namespace,
             final String baseURI,
             final String endpoint) {
-        this.api = api;
+        this.connection = connection;
         this.nodeId = nodeId;
         this.namespace = namespace;
         this.baseURI = baseURI;
@@ -54,6 +56,8 @@ public final class PodRowSetSource implements RowSetSource {
 
     public RowSet getRowSet() throws ApiException {
         final V1PodList podList;
+        final CoreV1Api api = connection.getCoreV1Api();
+        final Date date = new Date();
         if (nodeId != null) {
             final String fieldSelector = String.format(FIELD_SELECTOR_NODE_NAME, nodeId);
             podList = api.listPodForAllNamespaces(
@@ -65,6 +69,7 @@ public final class PodRowSetSource implements RowSetSource {
             podList = api.listNamespacedPod(
                     namespace, null, null, null, null, null, null, null, null, null, null, null);
         }
+        connection.update(date);
         return loadRowSet(createMetaData(), podList);
     }
 

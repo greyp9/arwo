@@ -48,12 +48,12 @@ public final class KubeConnectionResource implements ConnectionResource, Compara
 
     @Override
     public long getCount() {
-        return 0;
+        return connection.getCount();
     }
 
     @Override
     public long getMillis() {
-        return 0;
+        return connection.getMillis();
     }
 
     @Override

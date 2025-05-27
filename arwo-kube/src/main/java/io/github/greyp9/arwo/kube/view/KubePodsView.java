@@ -8,10 +8,10 @@ import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.row.RowSetSource;
+import io.github.greyp9.arwo.kube.connection.KubeConnection;
 import io.github.greyp9.arwo.kube.connection.KubeConnectionResource;
 import io.github.greyp9.arwo.kube.data.PodRowSetSource;
 import io.kubernetes.client.openapi.ApiException;
-import io.kubernetes.client.openapi.apis.CoreV1Api;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
@@ -32,14 +32,14 @@ public class KubePodsView extends KubeView {
     @Override
     protected final HttpResponse addContentTo(final Element html) throws IOException {
         final KubeConnectionResource resource = getResource();
-        final CoreV1Api api = resource.getConnection().getCoreV1Api();
+        final KubeConnection connection = resource.getConnection();
         // https://javadoc.io/doc/io.kubernetes/client-java-api/19.0.1/io/kubernetes/client/openapi/apis/CoreV1Api.html
         final String namespace = resource.getNamespace();
         final String baseURI = getHttpRequest().getBaseURI();
         final String endpoint = getResource().getName();
         final String rowSetId = getHttpRequest().getURI();
         final RowSetSource rowSetSource = new CacheRowSetSource(getUserState().getCache(),
-                new PodRowSetSource(api, nodeId, namespace, baseURI, endpoint), rowSetId);
+                new PodRowSetSource(connection, nodeId, namespace, baseURI, endpoint), rowSetId);
         try {
             final RowSet rowSet = rowSetSource.getRowSet();
             final UserStateTable table = new UserStateTable(getUserState(), null, getHttpRequest().getDate(), true);
