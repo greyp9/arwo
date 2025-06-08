@@ -87,6 +87,14 @@ public final class URLCodec {
         }
     }
 
+    public static URI toURI(final String scheme, final String host, final int port) throws IOException {
+        try {
+            return new URI(scheme, null, host, port, null, null, null);
+        } catch (URISyntaxException e) {
+            throw new IOException(e);
+        }
+    }
+
     public static String toExternalForm(final URL url) {
         return ((url == null) ? null : url.toExternalForm());
     }
