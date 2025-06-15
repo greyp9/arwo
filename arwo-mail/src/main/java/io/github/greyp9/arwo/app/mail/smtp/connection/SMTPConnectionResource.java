@@ -40,6 +40,11 @@ public class SMTPConnectionResource implements ConnectionResource, Comparable<Co
     }
 
     @Override
+    public String getTimeout() {
+        return null;
+    }
+
+    @Override
     public final long getCount() {
         return connection.getCount();
     }

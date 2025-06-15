@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.kube.view;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.table.UserStateTable;
 import io.github.greyp9.arwo.core.alert.Alert;
+import io.github.greyp9.arwo.core.alert.action.AlertActions;
 import io.github.greyp9.arwo.core.cache.CacheRowSetSource;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
@@ -38,6 +39,7 @@ public class KubePodsView extends KubeView {
         final String baseURI = getHttpRequest().getBaseURI();
         final String endpoint = getResource().getName();
         final String rowSetId = getHttpRequest().getURI();
+        // getUserState().getCache().clear();  // if table isn't cached, then client will refetch it (keep-alive)
         final RowSetSource rowSetSource = new CacheRowSetSource(getUserState().getCache(),
                 new PodRowSetSource(connection, nodeId, namespace, baseURI, endpoint), rowSetId);
         try {
@@ -45,7 +47,10 @@ public class KubePodsView extends KubeView {
             final UserStateTable table = new UserStateTable(getUserState(), null, getHttpRequest().getDate(), true);
             table.toTableView(rowSet).addContentTo(html);
         } catch (final ApiException e) {
-            getUserState().getAlerts().add(new Alert(Alert.Severity.ERR, e.getResponseBody()));
+            // final String id = "kube.ok-" + XsdDateU.toXSDZMillis(getHttpRequest().getDate());
+            // final AlertActions alertActions = new AlertActions(id, "kube.ok");
+            final AlertActions alertActions = null;  // persistent to aid diagnosis
+            getUserState().getAlerts().add(new Alert(Alert.Severity.ERR, e.getResponseBody(), alertActions));
         } catch (final Exception e) {
             getUserState().getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
         }

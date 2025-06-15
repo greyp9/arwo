@@ -12,6 +12,8 @@ public interface ConnectionResource {
 
     Date getDateLast();
 
+    String getTimeout();
+
     long getCount();
 
     long getMillis();

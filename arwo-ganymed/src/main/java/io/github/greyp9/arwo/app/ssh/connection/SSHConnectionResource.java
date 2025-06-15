@@ -40,6 +40,11 @@ public class SSHConnectionResource implements ConnectionResource, Comparable<Con
     }
 
     @Override
+    public String getTimeout() {
+        return null;
+    }
+
+    @Override
     public final long getCount() {
         return connection.getCount();
     }

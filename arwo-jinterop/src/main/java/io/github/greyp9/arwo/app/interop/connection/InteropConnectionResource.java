@@ -43,6 +43,11 @@ public class InteropConnectionResource implements ConnectionResource, Comparable
     }
 
     @Override
+    public String getTimeout() {
+        return null;
+    }
+
+    @Override
     public final long getCount() {
         return connection.getCount();
     }

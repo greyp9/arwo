@@ -40,6 +40,11 @@ public class CIFSConnectionResource implements ConnectionResource, Comparable<Co
     }
 
     @Override
+    public String getTimeout() {
+        return null;
+    }
+
+    @Override
     public final long getCount() {
         return connection.getCount();
     }

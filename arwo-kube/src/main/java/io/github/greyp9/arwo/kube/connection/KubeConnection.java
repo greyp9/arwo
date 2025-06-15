@@ -49,7 +49,7 @@ public final class KubeConnection {
     }
 
     public void update(final Date date) {
-        propertiesX.setLong(App.Connection.DATE_LAST, date.getTime());
+        // propertiesX.setLong(App.Connection.DATE_LAST, date.getTime());  // enable connection refresh via timeout
         propertiesX.addLong(App.Connection.COUNT, 1L);
         final long millis = SystemU.currentTimeMillis() - date.getTime();
         propertiesX.addLong(App.Connection.MILLIS, millis);

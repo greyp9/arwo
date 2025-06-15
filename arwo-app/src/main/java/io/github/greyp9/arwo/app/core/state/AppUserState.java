@@ -451,11 +451,24 @@ public final class AppUserState {
         return location;
     }
 
+    public Collection<ConnectionCache> getConnectionCaches() {
+        return Arrays.asList(
+                kube.getCache(),
+                ssh.getCache(),
+                jdbc.getCache(),
+                mail.getCacheSMTP(),
+                mail.getCacheIMAP(),
+                mail.getCachePOP3(),
+                cifs.getCache(),
+                interop.getCache(),
+                webDAV.getCache());
+    }
+
     public void close(final Date date) throws IOException {
         doClearCache();
         interval.setDateFinish(date);
-        final ConnectionCache[] caches = { ssh.getCache() };
-        for (final ConnectionCache cacheIt : caches) {
+        final Collection<ConnectionCache> connectionCaches = getConnectionCaches();
+        for (final ConnectionCache cacheIt : connectionCaches) {
             while (!cacheIt.getResources().isEmpty()) {
                 final String name = cacheIt.getResources().iterator().next().getName();
                 cacheIt.removeResource(name);

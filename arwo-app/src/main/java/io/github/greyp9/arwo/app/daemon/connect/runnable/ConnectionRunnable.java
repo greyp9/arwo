@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.Date;
 import java.util.Iterator;
+import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
@@ -35,12 +36,12 @@ public class ConnectionRunnable implements Runnable {
         logger.entering(getClass().getName(), Runnable.class.getName());
         Date date = new Date();
         while (reference.get() == null) {
-            date = getNextTime(date, Const.DURATION);
-            logger.finest("pause");  // i18n log
+            date = getNextTime(date, Const.DURATION_LOOP);
+            logger.finest(String.format("pause:[%s]", XsdDateU.toXSDZMillis(date)));
             MutexU.waitUntil(reference, date);
-            logger.finest("resume");  // i18n log
+            logger.finest(String.format("resume:[%s]", XsdDateU.toXSDZMillis(date)));
             if (reference.get() == null) {
-                runMonitor(date, Const.DURATION);  // at PT14M59S, age out PT15M stale connections
+                runMonitor(date);
                 date = new Date();
             }
         }
@@ -59,41 +60,52 @@ public class ConnectionRunnable implements Runnable {
 
     private Date getNextTime(final Date dateNext, final String duration, final AppUserState userState) {
         Date dateNextIt = dateNext;
-        final ConnectionCache cache = userState.getSSH().getCache();
-        for (final ConnectionResource resource : cache.getResources()) {
-            final Date dateIdle = DurationU.add(resource.getDateLast(), DateU.Const.TZ_GMT, duration);
-            dateNextIt = DateU.min(dateNext, dateIdle);
+        logger.finest(String.format("dateNext:BEGIN:[%s][%s]",
+                userState.getPrincipal().getName(), XsdDateU.toXSDZMillis(dateNextIt)));
+        final Collection<ConnectionCache> connectionCaches = userState.getConnectionCaches();
+        for (final ConnectionCache connectionCache : connectionCaches) {
+            for (final ConnectionResource resource : connectionCache.getResources()) {
+                final String timeout = Optional.ofNullable(resource.getTimeout()).orElse(Const.DURATION_TIMEOUT);
+                final Date dateIdle = DurationU.add(resource.getDateLast(), DateU.Const.TZ_GMT, timeout);
+                dateNextIt = DateU.min(dateNext, dateIdle);
+            }
         }
+        logger.finest(String.format("dateNext:END:[%s][%s]",
+                userState.getPrincipal().getName(), XsdDateU.toXSDZMillis(dateNextIt)));
         return dateNextIt;
     }
 
-    private void runMonitor(final Date date, final String duration) {
+    private void runMonitor(final Date date) {
         final Iterator<AppUserState> it = appState.getIterator();
         while (it.hasNext()) {
-            runMonitorUserState(date, duration, it.next());
+            runMonitorUserState(date, it.next());
         }
     }
 
-    private void runMonitorUserState(final Date date, final String duration, final AppUserState userState) {
-        runMonitorCache(date, duration, userState.getSSH().getCache());
-        runMonitorCache(date, duration, userState.getCIFS().getCache());
-        runMonitorCache(date, duration, userState.getInterop().getCache());
-        runMonitorCache(date, duration, userState.getWebDAV().getCache());
-        runMonitorCache(date, duration, userState.getJDBC().getCache());
-        runMonitorCache(date, duration, userState.getMail().getCacheSMTP());
-        runMonitorCache(date, duration, userState.getMail().getCacheIMAP());
+    private void runMonitorUserState(final Date date, final AppUserState userState) {
+        final Collection<ConnectionCache> connectionCaches = userState.getConnectionCaches();
+        // logger.finest(String.format("runMonitorUserState:BEGIN:[%s]", userState.getPrincipal().getName()));
+        for (final ConnectionCache connectionCache : connectionCaches) {
+            runMonitorCache(date, userState.getPrincipal().getName(), connectionCache);
+        }
+        // logger.finest(String.format("runMonitorUserState:END:[%s]", userState.getPrincipal().getName()));
     }
 
-    private void runMonitorCache(final Date date, final String duration, final ConnectionCache cache) {
+    private void runMonitorCache(final Date date, final String name, final ConnectionCache cache) {
+        // logger.info(String.format("runMonitorCache:BEGIN:[%s][%s][%s]",
+        //        name, cache.getName(), XsdDateU.toXSDZMillis(date)));
         final Collection<ConnectionResource> resources = cache.getResources();
         for (final ConnectionResource resource : resources) {
-            final Date dateIdle = DurationU.add(resource.getDateLast(), DateU.Const.TZ_GMT, duration);
-            if (date.before(dateIdle)) {
-                resource.getClass();
-            } else {
+            final String timeout = Optional.ofNullable(resource.getTimeout()).orElse(Const.DURATION_TIMEOUT);
+            final Date dateIdle = DurationU.add(resource.getDateLast(), DateU.Const.TZ_GMT, timeout);
+            // logger.info(String.format("[%s][%s][%s]", resource.getName(),
+            //        XsdDateU.toXSDZMillis(dateIdle), XsdDateU.toXSDZMillis(dateIdle)));
+            if (date.compareTo(dateIdle) >= 0) {
                 close(cache, resource, resource.getDateLast());
             }
         }
+        // logger.info(String.format("runMonitorCache:END:[%s][%s][%s]",
+        //        name, cache.getName(), XsdDateU.toXSDZMillis(date)));
     }
 
     private void close(final ConnectionCache cache, final ConnectionResource resource, final Date dateLast) {
@@ -106,6 +118,7 @@ public class ConnectionRunnable implements Runnable {
     }
 
     private static class Const {
-        private static final String DURATION = "PT15M";  // i18n
+        private static final String DURATION_LOOP = "PT5M";  // i18n
+        private static final String DURATION_TIMEOUT = "PT15M";  // i18n
     }
 }

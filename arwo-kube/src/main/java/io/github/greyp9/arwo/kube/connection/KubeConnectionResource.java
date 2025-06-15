@@ -47,6 +47,11 @@ public final class KubeConnectionResource implements ConnectionResource, Compara
     }
 
     @Override
+    public String getTimeout() {
+        return "PT12M";
+    }
+
+    @Override
     public long getCount() {
         return connection.getCount();
     }
@@ -58,6 +63,7 @@ public final class KubeConnectionResource implements ConnectionResource, Compara
 
     @Override
     public void close() throws IOException {
+        connection.getCoreV1Api().getApiClient().getHttpClient().connectionPool().evictAll();
     }
 
     @Override
