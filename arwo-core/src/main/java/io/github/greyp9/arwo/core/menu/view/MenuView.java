@@ -21,6 +21,7 @@ import org.w3c.dom.Element;
 
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 
 public class MenuView {
     private final Bundle bundle;
@@ -44,18 +45,21 @@ public class MenuView {
     }
 
     public final Element addMenusTo(final Element html) {
-        for (MenuItem menuItem : menuContext.getMenuItems()) {
-            addContentTo(html, menuItem);
+        final List<MenuItem> menuItems = menuContext.getMenuItems();
+        final MenuItem menuItemFirst = menuItems.stream().findFirst().orElse(null);
+        for (MenuItem menuItem : menuItems) {
+            final boolean home = menuItem.equals(menuItemFirst);  // home link on first menu
+            addContentTo(html, menuItem, home);
         }
         return html;
     }
 
-    public final Element addContentTo(final Element html, final MenuItem menuItem) {
+    public final Element addContentTo(final Element html, final MenuItem menuItem, final boolean home) {
         final Element divMenus = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENUS));
         final NameTypeValues attrs = NTV.create(Html.METHOD, Html.POST, Html.ACTION, Html.EMPTY);
         final Element form = ElementU.addElement(divMenus, Html.FORM, null, attrs);
         final Element divForm = ElementU.addElement(form, Html.DIV);
-        addMenu(divForm, menuItem, false, true, null, null);
+        addMenu(divForm, menuItem, home, true, null, null);
         return divMenus;
     }
 
