@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.xml;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
+import io.github.greyp9.arwo.core.value.Value;
 import org.w3c.dom.Attr;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -264,6 +265,11 @@ public final class ElementU {
     public static void importNode(final Node child, final Node parentNode) {
         final Node toInsertNew = parentNode.getOwnerDocument().importNode(child, true);
         parentNode.appendChild(toInsertNew);
+    }
+
+    public static Element getParent(final Element element) {
+        final Node parentNode = (element == null) ? null : element.getParentNode();
+        return Value.as(parentNode, Element.class);
     }
 
     public static Element getPreviousElement(final Element element) {

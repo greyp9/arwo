@@ -10,6 +10,7 @@ import io.github.greyp9.arwo.core.menu.MenuItem;
 import io.github.greyp9.arwo.core.menu.view.MenuView;
 import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.xml.ElementU;
+import io.github.greyp9.arwo.core.xpath.XPather;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
@@ -24,12 +25,16 @@ public class FileUpload {
     }
 
     public final HttpResponse addContentTo(final Element html, final MenuView menuView) throws IOException {
+        // find the document insert point for the upload menu
+        final Element divMenuFileUpload = new XPather(html.getOwnerDocument(), null)
+                .getElement("/html/body//div[button/text()[contains(.,'Upload')]]");
         final MenuItem itemRoot = menuView.getMenuSystem().get(servletPath, AppMenuFactory.Const.FILESYSTEM);
         final MenuItem itemFile = itemRoot.getMenuItem(Const.FILE);
         final MenuItem itemUpload = itemFile.getMenuItem(Const.UPLOAD);
-        if (itemRoot.isOpen() && itemFile.isOpen() && itemUpload.isOpen()) {
+        if ((divMenuFileUpload != null) && itemRoot.isOpen() && itemFile.isOpen() && itemUpload.isOpen()) {
             final String labelMenu = bundle.getString(Const.MENU_FILE_UPLOAD);
-            final Element form = ElementU.addElement(html, Html.FORM, null, NTV.create(
+            final Element parent = ElementU.getParent(ElementU.getParent(ElementU.getParent(divMenuFileUpload)));
+            final Element form = ElementU.addElement(parent, Html.FORM, null, NTV.create(
                     Html.METHOD, Html.POST, Html.ACTION, Html.EMPTY, Html.ENCTYPE, Http.Mime.FORM_MULTIPART));
             final Element divMenu = ElementU.addElement(form, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENU));
             ElementU.addElement(divMenu, Html.SPAN, String.format("[%s]", labelMenu), NTV.create(

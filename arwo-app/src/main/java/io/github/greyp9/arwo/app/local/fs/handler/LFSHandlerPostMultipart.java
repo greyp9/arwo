@@ -8,6 +8,7 @@ import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.codec.hex.HexCodec;
+import io.github.greyp9.arwo.core.file.FileU;
 import io.github.greyp9.arwo.core.file.FileX;
 import io.github.greyp9.arwo.core.hash.secure.HashU;
 import io.github.greyp9.arwo.core.http.form.MimeHeader;
@@ -74,11 +75,14 @@ public class LFSHandlerPostMultipart {
         // put data to remote
         final FileX fileX = new FileX(Value.join("", request.getPath(), filename));
         final File folderBase = LFSResource.getFolderBase(request);
-        final LFSDataSource source = new LFSDataSource(request, folderBase);
-        source.write(bytes, fileX.getFolder(), fileX.getFilename());
-        // info alert
-        final String hash = HexCodec.encode(HashU.md5(bytes));
-        alerts.add(new Alert(Alert.Severity.INFO, bundle.format(
-                "SFTPHandlerPostMultipart.file.target", fileX.getFolderSlash(), bytes.length, hash)));
+        if (FileU.isDirectory(folderBase)) {
+            final LFSDataSource source = new LFSDataSource(request, folderBase);
+            source.write(bytes, fileX.getFolder(), fileX.getFilename());
+            final String hash = HexCodec.encode(HashU.md5(bytes));
+            alerts.add(new Alert(Alert.Severity.INFO, bundle.format(
+                    "SFTPHandlerPostMultipart.file.target", fileX.getFolderSlash(), bytes.length, hash)));
+        } else {
+            alerts.add(new Alert(Alert.Severity.WARN, "SFTPHandlerPostMultipart.folder.target"));
+        }
     }
 }

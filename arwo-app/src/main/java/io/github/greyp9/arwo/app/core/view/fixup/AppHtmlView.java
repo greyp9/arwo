@@ -9,6 +9,7 @@ import io.github.greyp9.arwo.core.app.AppTitle;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.config.Preferences;
 import io.github.greyp9.arwo.core.html.Html;
+import io.github.greyp9.arwo.core.html.upload.FileUpload;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
@@ -66,6 +67,13 @@ public class AppHtmlView {
         // menus; title
         final MenuView menuView = new MenuView(userState.getBundle(), httpRequest, menuContext);  // render
         menuView.addMenusTo(header);
+        // upload menu
+        final Element divMenuFile = new XPather(html, null).getElement(
+                "/html/body//div[button/text()[contains(.,'Upload')]]");
+        if (divMenuFile != null) {
+            new FileUpload(httpRequest.getServletPath(), userState.getBundle())
+                    .addContentTo((Element) divMenuFile.getParentNode(), menuView);
+        }
         menuView.addTitle(header, title);
         addTextFiltersView(header);
         // settings property strips
@@ -131,4 +139,5 @@ public class AppHtmlView {
 
     public static final String LOCALE = "locale";
     public static final String EXPRESSION = "expression";
+    public static final String UPLOAD = "upload";
 }

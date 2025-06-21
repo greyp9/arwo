@@ -12,6 +12,7 @@ import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.config.Preferences;
 import io.github.greyp9.arwo.core.date.Interval;
+import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.locus.Locus;
@@ -26,6 +27,8 @@ import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.state.ViewState;
 import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
+import io.github.greyp9.arwo.core.xpath.XPather;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.File;
@@ -41,15 +44,21 @@ public class LFSFolderView extends LFSView {
 
     @Override
     protected final HttpResponse addContentTo(final Element html) throws IOException {
+        final Document document = html.getOwnerDocument();
+        final Element header = new XPather(document, null).getElement(Html.XPath.HEADER);
+        final Element content = new XPather(document, null).getElement(Html.XPath.CONTENT);
+
+        super.addMenusLFS(header);
+
         final LFSRequest request = getRequest();
         final String mode = request.getMode();
         // resource access (read versus write)
         if (App.Mode.CREATE_F.equals(mode)) {
-            doGetFileCreate(html);
+            doGetFileCreate(header);
         } else if (App.Mode.CREATE_D.equals(mode)) {
-            doGetFolderCreate(html);
+            doGetFolderCreate(header);
         }
-        return doGetFolder(html);
+        return doGetFolder(content);
     }
 
     private HttpResponse doGetFileCreate(final Element html) throws IOException {

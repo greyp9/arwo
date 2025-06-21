@@ -7,6 +7,7 @@ import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.config.CursorFolder;
 import io.github.greyp9.arwo.core.config.CursorSetFolder;
 import io.github.greyp9.arwo.core.glyph.UTF16;
+import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.locus.Locus;
@@ -24,6 +25,8 @@ import io.github.greyp9.arwo.core.table.state.ViewState;
 import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
+import io.github.greyp9.arwo.core.xpath.XPather;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
@@ -45,6 +48,12 @@ public class LFSInventoryView extends LFSView {
 
     @Override
     protected final HttpResponse addContentTo(final Element html) throws IOException {
+        final Document document = html.getOwnerDocument();
+        final Element header = new XPather(document, null).getElement(Html.XPath.HEADER);
+        final Element content = new XPather(document, null).getElement(Html.XPath.CONTENT);
+
+        super.addMenusLFS(header);
+
         final Xed xed = userState.getDocumentState().getSession(App.Servlet.SETTINGS).getXed();
         final Xed xedX = userState.getXedFactory().getXedUI(xed, userState.getLocale());
         final RowSetMetaData metaData = createMetaData();
@@ -58,7 +67,7 @@ public class LFSInventoryView extends LFSView {
         final TableContext tableContext = new TableContext(
                 viewState, filter, userState.getSubmitID(), App.CSS.TABLE, bundle, locus);
         final TableView tableView = new TableView(table, tableContext);
-        tableView.addContentTo(html);
+        tableView.addContentTo(content);
         return null;
     }
 

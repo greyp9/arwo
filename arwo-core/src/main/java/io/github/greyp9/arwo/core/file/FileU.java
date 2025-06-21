@@ -79,6 +79,10 @@ public final class FileU {
         return file.delete();
     }
 
+    public static boolean isDirectory(final File file) {
+        return (file != null) && (file.isDirectory());
+    }
+
     public static boolean isLink(final File file) {
         final Logger logger = Logger.getLogger(FileU.class.getName());
         boolean isLink = false;

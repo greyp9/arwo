@@ -9,7 +9,6 @@ import io.github.greyp9.arwo.core.resource.Pather;
 import io.github.greyp9.arwo.core.url.URLCodec;
 import io.github.greyp9.arwo.core.value.Value;
 
-import java.io.UnsupportedEncodingException;
 import java.util.Locale;
 
 public class LFSRequest {
@@ -70,7 +69,7 @@ public class LFSRequest {
         return Value.defaultOnNull(path, "");
     }
 
-    public final String getTitlePath() throws UnsupportedEncodingException {
-        return URLCodec.decode(Value.join("", patherFolder.getLeft(), getPath()));
+    public final String getTitlePath() {
+        return URLCodec.decodeSafe(Value.join("", patherFolder.getLeft(), getPath()));
     }
 }
