@@ -6,6 +6,9 @@ import io.github.greyp9.arwo.core.date.DateU;
 
 import java.util.Date;
 
+/**
+ * To instantiate a persistent alert, specify {@link AlertActions}.
+ */
 public class Alert {
     private final Date date;
     private final Severity severity;

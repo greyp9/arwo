@@ -35,6 +35,8 @@ public class ConnectionCache {
         if ((resource == null) && (factory != null)) {
             resource = factory.create(name);
             if (resource != null) {
+                //final AlertActions actions = new AlertActions(XsdDateU.toXSDZMillis(new Date()), "Dismiss");
+                //alerts.add(new Alert(Alert.Severity.INFO, String.format("[+%s] %s", cacheName, name), actions));
                 alerts.add(new Alert(Alert.Severity.INFO, String.format("[+%s] %s", cacheName, name)));
                 resources.add(resource);
             }
@@ -45,7 +47,9 @@ public class ConnectionCache {
     public final synchronized ConnectionResource removeResource(final String name) throws IOException {
         final ConnectionResource resource = findResource(name);
         if (resource != null) {
-            alerts.add(new Alert(Alert.Severity.INFO, String.format("[-%s] %s", cacheName, name)));
+            //final AlertActions actions = new AlertActions(XsdDateU.toXSDZMillis(new Date()), "Dismiss"); // persistent
+            //alerts.add(new Alert(Alert.Severity.INFO, String.format("[-%s] %s", cacheName, name), actions));
+            alerts.add(new Alert(Alert.Severity.INFO, String.format("[-%s] %s", cacheName, name)));  // transient
             resources.remove(resource);
             resource.close();
         }
