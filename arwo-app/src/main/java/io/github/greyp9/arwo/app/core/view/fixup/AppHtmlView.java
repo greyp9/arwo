@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.core.alert.view.AlertsView;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppHtml;
 import io.github.greyp9.arwo.core.app.AppTitle;
+import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.config.Preferences;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.Http;
@@ -14,6 +15,7 @@ import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.menu.MenuContext;
 import io.github.greyp9.arwo.core.menu.view.MenuView;
 import io.github.greyp9.arwo.core.text.filter.TextFilters;
+import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
@@ -23,6 +25,7 @@ import io.github.greyp9.arwo.core.xed.action.XedActionRefresh;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextExpression;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
 import io.github.greyp9.arwo.core.xml.DocumentU;
+import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -30,6 +33,9 @@ import org.w3c.dom.Element;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
+import java.text.MessageFormat;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -61,6 +67,7 @@ public class AppHtmlView {
         final MenuView menuView = new MenuView(userState.getBundle(), httpRequest, menuContext);  // render
         menuView.addMenusTo(header);
         menuView.addTitle(header, title);
+        addTextFiltersView(header);
         // settings property strips
         final Locale locale = userState.getLocus().getLocale();
         final String submitID = userState.getSubmitID();
@@ -92,6 +99,34 @@ public class AppHtmlView {
         final NameTypeValue contentLength = new NameTypeValue(Http.Header.CONTENT_LENGTH, entity.length);
         final NameTypeValues headers = new NameTypeValues(contentType, contentLength);
         return new HttpResponse(HttpURLConnection.HTTP_OK, headers, new ByteArrayInputStream(entity));
+    }
+
+    private void addTextFiltersView(final Element html) {
+        final Bundle bundle = userState.getBundle();
+        final TextFilters textFilters = userState.getTextFilters("");
+        boolean isIncludes = !textFilters.getIncludes().isEmpty();
+        boolean isExcludes = !textFilters.getExcludes().isEmpty();
+        boolean isExpression = !textFilters.getExpressions().isEmpty();
+        final Collection<String> tokens = new ArrayList<>();
+        if (isExpression) {
+            tokens.addAll(textFilters.getExpressions());
+        } else if (isIncludes || isExcludes) {
+            // label
+            tokens.add(bundle.getString("menu.view.textFilter"));
+            final String patternInclude = bundle.getString("SFTPView.include");
+            for (final String include : textFilters.getIncludes()) {
+                tokens.add(MessageFormat.format(patternInclude, include));
+            }
+            final String patternExclude = bundle.getString("SFTPView.exclude");
+            for (final String exclude : textFilters.getExcludes()) {
+                tokens.add(MessageFormat.format(patternExclude, exclude));
+            }
+        }
+        // render
+        final Element divToolbar = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENU));
+        for (final String token : tokens) {
+            ElementU.addElement(divToolbar, Html.SPAN, token, NTV.create(Html.CLASS, App.CSS.MENU));
+        }
     }
 
     public static final String LOCALE = "locale";
