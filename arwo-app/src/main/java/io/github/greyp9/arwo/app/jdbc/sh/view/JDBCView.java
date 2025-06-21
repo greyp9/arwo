@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.app.jdbc.sh.view;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.fixup.AppHtmlView;
 import io.github.greyp9.arwo.app.jdbc.sh.core.JDBCRequest;
+import io.github.greyp9.arwo.core.app.AppTitle;
 import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.HttpResponse;
@@ -11,6 +12,7 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.menu.MenuContext;
 import io.github.greyp9.arwo.core.menu.MenuItem;
 import io.github.greyp9.arwo.core.menu.MenuSystem;
+import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import org.w3c.dom.Document;
@@ -25,6 +27,7 @@ public abstract class JDBCView {
     private final JDBCRequest request;
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
+    private final AppTitle title;
     private final MenuContext menuContext;
 
     public final JDBCRequest getRequest() {
@@ -40,6 +43,8 @@ public abstract class JDBCView {
         this.httpRequest = request.getHttpRequest();
         this.userState = userState;
 
+        final String labelContext = Value.wrap("[", "]", request.getTitlePath());
+        this.title = AppTitle.Factory.getResourceLabel(httpRequest, userState.getBundle(), labelContext);
         final MenuSystem menuSystem = userState.getMenuSystem();
         final MenuItem menuItem = menuSystem.get(httpRequest.getServletPath(), AppMenuFactory.Const.COMMAND);
         this.menuContext = new MenuContext(menuSystem, Collections.singletonList(menuItem));
@@ -50,7 +55,7 @@ public abstract class JDBCView {
         final Element body = new XPather(html, null).getElement(Html.XPath.CONTENT);
         final HttpResponse httpResponse = addContentTo(body);
         return Optional.ofNullable(httpResponse)
-                .orElse(new AppHtmlView(httpRequest, userState, menuContext).fixup(html));
+                .orElse(new AppHtmlView(httpRequest, userState, title, menuContext, "").fixup(html));
     }
 
     protected abstract HttpResponse addContentTo(Element html) throws IOException;

@@ -36,14 +36,20 @@ import java.util.Properties;
 public class AppHtmlView {
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
+    private final AppTitle title;
     private final MenuContext menuContext;
+    private final String augments;
 
     public AppHtmlView(final ServletHttpRequest httpRequest,
                        final AppUserState userState,
-                       final MenuContext menuContext) {
+                       final AppTitle title,
+                       final MenuContext menuContext,
+                       final String augments) {
         this.httpRequest = httpRequest;
         this.userState = userState;
+        this.title = title;
         this.menuContext = menuContext;
+        this.augments = augments;
     }
 
     public final HttpResponse fixup(final Document html) throws IOException {
@@ -54,18 +60,21 @@ public class AppHtmlView {
         // menus; title
         final MenuView menuView = new MenuView(userState.getBundle(), httpRequest, menuContext);  // render
         menuView.addMenusTo(header);
-        final AppTitle title = AppTitle.Factory.getHostLabel(httpRequest, userState.getBundle());  // title div
         menuView.addTitle(header, title);
         // settings property strips
         final Locale locale = userState.getLocus().getLocale();
         final String submitID = userState.getSubmitID();
         final Properties properties = userState.getProperties();
-        new XedActionLocale(userState.getXedFactory(), locale).addContentTo(header, submitID, properties);
+        if (augments.contains(LOCALE)) {
+            new XedActionLocale(userState.getXedFactory(), locale).addContentTo(header, submitID, properties);
+        }
         new XedActionRefresh(userState.getXedFactory(), locale).addContentTo(header, submitID, properties);
-        final TextFilters textFilters = userState.getTextFilters("");
-        new XedActionTextExpression(userState.getXedFactory(), locale, textFilters).addContentTo(
-                header, userState.getFiltersRecent(), submitID, properties);
-        new XedActionTextFilter(userState.getXedFactory(), locale).addContentTo(header, submitID, properties);
+        if (augments.contains(EXPRESSION)) {
+            final TextFilters textFilters = userState.getTextFilters("");
+            new XedActionTextExpression(userState.getXedFactory(), locale, textFilters).addContentTo(
+                    header, userState.getFiltersRecent(), submitID, properties);
+            new XedActionTextFilter(userState.getXedFactory(), locale).addContentTo(header, submitID, properties);
+        }
         // alerts
         final boolean displayAlerts = (httpRequest.getHttpRequest().getHeader(App.Header.RESULT) == null);
         new AlertsView(displayAlerts, userState.getAlerts(), userState.getLocus(), userState.getBundle(),
@@ -84,4 +93,7 @@ public class AppHtmlView {
         final NameTypeValues headers = new NameTypeValues(contentType, contentLength);
         return new HttpResponse(HttpURLConnection.HTTP_OK, headers, new ByteArrayInputStream(entity));
     }
+
+    public static final String LOCALE = "locale";
+    public static final String EXPRESSION = "expression";
 }

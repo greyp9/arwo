@@ -2,7 +2,7 @@ package io.github.greyp9.arwo.kube.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.fixup.AppHtmlView;
-import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.app.AppTitle;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
@@ -10,6 +10,7 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.menu.MenuContext;
 import io.github.greyp9.arwo.core.menu.MenuItem;
 import io.github.greyp9.arwo.core.menu.MenuSystem;
+import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import io.github.greyp9.arwo.kube.connection.KubeConnectionResource;
@@ -25,7 +26,7 @@ public abstract class KubeView {
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
     private final KubeConnectionResource resource;
-    private final Bundle bundle;
+    private final AppTitle title;
     private final MenuContext menuContext;
 
     public final ServletHttpRequest getHttpRequest() {
@@ -40,18 +41,15 @@ public abstract class KubeView {
         return resource;
     }
 
-    public final Bundle getBundle() {
-        return bundle;
-    }
-
     public KubeView(final ServletHttpRequest httpRequest,
                     final AppUserState userState,
                     final KubeConnectionResource resource) {
         this.httpRequest = httpRequest;
         this.userState = userState;
         this.resource = resource;
-        this.bundle = userState.getBundle();
-
+        final String labelContext = Value.wrap("[", "]",
+                Optional.ofNullable(resource).map(KubeConnectionResource::getName).orElse(""));
+        this.title = AppTitle.Factory.getResourceLabel(httpRequest, userState.getBundle(), labelContext);
         final MenuSystem menuSystem = new MenuSystem(userState.getSubmitID(), new KubeAppMenuFactory());
         final MenuItem menuItem = menuSystem.get(httpRequest.getServletPath(), KubeAppMenuFactory.KUBE); // init
         menuSystem.applyState(userState.getMenuSystemState());  // apply state
@@ -63,7 +61,7 @@ public abstract class KubeView {
         final Element body = new XPather(html, null).getElement(Html.XPath.CONTENT);
         final HttpResponse httpResponse = addContentTo(body);
         return Optional.ofNullable(httpResponse)
-                .orElse(new AppHtmlView(httpRequest, userState, menuContext).fixup(html));
+                .orElse(new AppHtmlView(httpRequest, userState, title, menuContext, "").fixup(html));
     }
 
     /**

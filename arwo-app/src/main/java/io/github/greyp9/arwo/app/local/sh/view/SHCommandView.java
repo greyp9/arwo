@@ -5,10 +5,13 @@ import io.github.greyp9.arwo.app.core.subsystem.local.SubsystemLocal;
 import io.github.greyp9.arwo.app.core.view.history.AppHistoryView;
 import io.github.greyp9.arwo.app.core.view.script.AppScriptView;
 import io.github.greyp9.arwo.app.local.sh.core.SHRequest;
+import io.github.greyp9.arwo.app.local.sh.favorite.FavoriteMenu;
 import io.github.greyp9.arwo.core.action.ActionButtons;
 import io.github.greyp9.arwo.core.action.ActionFactory;
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
@@ -30,7 +33,9 @@ import io.github.greyp9.arwo.core.xed.request.XedRequest;
 import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
 import io.github.greyp9.arwo.core.xed.view.html.PropertyPageHtmlView;
 import io.github.greyp9.arwo.core.xed.view.html.PropertyStripHtmlView;
+import io.github.greyp9.arwo.core.xpath.XPather;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
+import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import javax.xml.namespace.QName;
@@ -65,6 +70,11 @@ public class SHCommandView extends SHView {
     }
 
     private HttpResponse addContentTo(final Element html, final Script script) throws IOException {
+        final Document document = html.getOwnerDocument();
+        final Element header = new XPather(document, null).getElement(Html.XPath.HEADER);
+        final Element content = new XPather(document, null).getElement(Html.XPath.CONTENT);
+        new FavoriteMenu(getRequest(), getUserState(), AppMenuFactory.Const.COMMAND_STICKY).addContentTo(header);
+
         final SHRequest request = getRequest();
         final ServletHttpRequest httpRequest = request.getHttpRequest();
         final AppUserState userState = request.getUserState();
@@ -90,7 +100,7 @@ public class SHCommandView extends SHView {
         }
         final ActionButtons buttons = factory.create(App.Action.COMMAND, false, actions);
         final XedRequest xedRequest = new XedRequest(httpRequest, null, userState.getDocumentState());
-        new PropertyPageHtmlView(new XedPropertyPageView(null, cursor, buttons), xedRequest).addContentTo(html);
+        new PropertyPageHtmlView(new XedPropertyPageView(null, cursor, buttons), xedRequest).addContentTo(content);
         // stdin
         final XedAction actionStdin = new XedAction(new QName(App.Actions.URI_ACTION, App.Action.STDIN,
                 App.Actions.PREFIX_ACTION), new XedFactory(), Locale.getDefault());
@@ -101,7 +111,7 @@ public class SHCommandView extends SHView {
                 userState.getSubmitID(), bundleXed, App.Target.SESSION, App.Action.STDIN, null);
         final Collection<String> actionsStdin = CollectionU.toCollection(App.Action.STDIN);
         final ActionButtons buttonsStdin = factoryStdin.create(App.Action.STDIN, false, actionsStdin);
-        new PropertyStripHtmlView(pageViewStdin, buttonsStdin).addContentDiv(html);
+        new PropertyStripHtmlView(pageViewStdin, buttonsStdin).addContentDiv(content);
         // contextual content
         if (script == null) {
             final String context = request.getContext();
@@ -112,9 +122,9 @@ public class SHCommandView extends SHView {
                     ? scripts.stream().filter(s -> Value.equal(context, s.getContext())).collect(Collectors.toList())
                     : scripts;
             new AppHistoryView("lshHistoryType", true, scriptsDisplay, bundle,  // i18n metadata
-                    httpRequest, userState).addContentTo(html);
+                    httpRequest, userState).addContentTo(content);
         } else {
-            new AppScriptView(script, userState.getLocus()).addContentTo(html);
+            new AppScriptView(script, userState.getLocus()).addContentTo(content);
         }
         return null;
     }
