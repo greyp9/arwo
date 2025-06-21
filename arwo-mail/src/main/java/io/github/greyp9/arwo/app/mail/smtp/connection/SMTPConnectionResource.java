@@ -40,7 +40,7 @@ public class SMTPConnectionResource implements ConnectionResource, Comparable<Co
     }
 
     @Override
-    public String getTimeout() {
+    public final String getTimeout() {
         return null;
     }
 

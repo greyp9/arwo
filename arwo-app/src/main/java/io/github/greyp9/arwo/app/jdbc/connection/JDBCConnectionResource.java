@@ -40,7 +40,7 @@ public class JDBCConnectionResource implements ConnectionResource, Comparable<Co
     }
 
     @Override
-    public String getTimeout() {
+    public final String getTimeout() {
         return null;
     }
 

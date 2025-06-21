@@ -36,7 +36,7 @@ public class ConnectionRunnable implements Runnable {
         logger.entering(getClass().getName(), Runnable.class.getName());
         Date date = new Date();
         while (reference.get() == null) {
-            date = getNextTime(date, Const.DURATION_LOOP);
+            date = getNextTime(date);
             logger.finest(String.format("pause:[%s]", XsdDateU.toXSDZMillis(date)));
             MutexU.waitUntil(reference, date);
             logger.finest(String.format("resume:[%s]", XsdDateU.toXSDZMillis(date)));
@@ -49,16 +49,16 @@ public class ConnectionRunnable implements Runnable {
         logger.exiting(getClass().getName(), Runnable.class.getName());
     }
 
-    private Date getNextTime(final Date date, final String duration) {
-        Date dateNext = DurationU.add(date, DateU.Const.TZ_GMT, duration);
+    private Date getNextTime(final Date date) {
+        Date dateNext = DurationU.add(date, DateU.Const.TZ_GMT, Const.DURATION_LOOP);
         final Iterator<AppUserState> it = appState.getIterator();
         while (it.hasNext()) {
-            dateNext = DateU.min(dateNext, getNextTime(dateNext, duration, it.next()));
+            dateNext = DateU.min(dateNext, getNextTime(dateNext, it.next()));
         }
         return dateNext;
     }
 
-    private Date getNextTime(final Date dateNext, final String duration, final AppUserState userState) {
+    private Date getNextTime(final Date dateNext, final AppUserState userState) {
         Date dateNextIt = dateNext;
         logger.finest(String.format("dateNext:BEGIN:[%s][%s]",
                 userState.getPrincipal().getName(), XsdDateU.toXSDZMillis(dateNextIt)));
@@ -86,14 +86,14 @@ public class ConnectionRunnable implements Runnable {
         final Collection<ConnectionCache> connectionCaches = userState.getConnectionCaches();
         // logger.finest(String.format("runMonitorUserState:BEGIN:[%s]", userState.getPrincipal().getName()));
         for (final ConnectionCache connectionCache : connectionCaches) {
-            runMonitorCache(date, userState.getPrincipal().getName(), connectionCache);
+            runMonitorCache(date, connectionCache);
         }
         // logger.finest(String.format("runMonitorUserState:END:[%s]", userState.getPrincipal().getName()));
     }
 
-    private void runMonitorCache(final Date date, final String name, final ConnectionCache cache) {
+    private void runMonitorCache(final Date date, final ConnectionCache cache) {
         // logger.info(String.format("runMonitorCache:BEGIN:[%s][%s][%s]",
-        //        name, cache.getName(), XsdDateU.toXSDZMillis(date)));
+        //        cache.getName(), XsdDateU.toXSDZMillis(date)));
         final Collection<ConnectionResource> resources = cache.getResources();
         for (final ConnectionResource resource : resources) {
             final String timeout = Optional.ofNullable(resource.getTimeout()).orElse(Const.DURATION_TIMEOUT);
@@ -105,7 +105,7 @@ public class ConnectionRunnable implements Runnable {
             }
         }
         // logger.info(String.format("runMonitorCache:END:[%s][%s][%s]",
-        //        name, cache.getName(), XsdDateU.toXSDZMillis(date)));
+        //        cache.getName(), XsdDateU.toXSDZMillis(date)));
     }
 
     private void close(final ConnectionCache cache, final ConnectionResource resource, final Date dateLast) {

@@ -84,5 +84,8 @@ public final class Html {
     public static class XPath {
         public static final String HEAD = "/html/head";
         public static final String BODY = "/html/body";
+        public static final String HEADER = "/html/body/div[@class='header']";
+        public static final String CONTENT = "/html/body/div[@class='content']";
+        public static final String FOOTER = "/html/body/div[@class='footer']";
     }
 }

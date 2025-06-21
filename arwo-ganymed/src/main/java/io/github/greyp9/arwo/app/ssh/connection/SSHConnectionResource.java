@@ -40,7 +40,7 @@ public class SSHConnectionResource implements ConnectionResource, Comparable<Con
     }
 
     @Override
-    public String getTimeout() {
+    public final String getTimeout() {
         return null;
     }
 

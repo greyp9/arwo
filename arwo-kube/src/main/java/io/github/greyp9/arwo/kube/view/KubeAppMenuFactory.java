@@ -10,10 +10,10 @@ public final class KubeAppMenuFactory implements MenuFactory {
     @Override
     public MenuItem create(final String id, final String type, final String object2) {
         final String subject = App.Target.USER_STATE;
-        final MenuItem[] menuItems = new MenuItem[] {
-                new MenuItem(App.Action.CLEAR, subject, App.Action.CLEAR),
-        };
-        return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, KUBE, menuItems);
+        final MenuItem itemClear = new MenuItem(App.Action.CLEAR, subject, App.Action.CLEAR);
+        final MenuItem menuItemsSession = new MenuItem(
+                "session", subject, App.Action.MENU, KUBE + "/session", itemClear);
+        return new MenuItem(UTF16.MENU, subject, App.Action.MENU, menuItemsSession);
     }
 
     public static final String KUBE = "kube";

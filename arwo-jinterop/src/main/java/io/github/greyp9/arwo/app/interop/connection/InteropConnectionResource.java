@@ -43,7 +43,7 @@ public class InteropConnectionResource implements ConnectionResource, Comparable
     }
 
     @Override
-    public String getTimeout() {
+    public final String getTimeout() {
         return null;
     }
 

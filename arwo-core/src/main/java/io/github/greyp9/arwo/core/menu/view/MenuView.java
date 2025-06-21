@@ -8,6 +8,7 @@ import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.html.HtmlU;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
+import io.github.greyp9.arwo.core.menu.MenuContext;
 import io.github.greyp9.arwo.core.menu.MenuItem;
 import io.github.greyp9.arwo.core.menu.MenuSystem;
 import io.github.greyp9.arwo.core.resource.Pather;
@@ -19,20 +20,43 @@ import io.github.greyp9.arwo.core.xml.ElementU;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
+import java.util.Collections;
 
 public class MenuView {
     private final Bundle bundle;
     private final ServletHttpRequest httpRequest;
-    private final MenuSystem menuSystem;
+    private final MenuContext menuContext;
 
     public final MenuSystem getMenuSystem() {
-        return menuSystem;
+        return menuContext.getMenuSystem();
     }
 
     public MenuView(final Bundle bundle, final ServletHttpRequest httpRequest, final MenuSystem menuSystem) {
+        this(bundle, httpRequest, new MenuContext(menuSystem, Collections.emptyList()));
+    }
+
+    public MenuView(final Bundle bundle,
+                    final ServletHttpRequest httpRequest,
+                    final MenuContext menuContext) {
         this.bundle = bundle;
         this.httpRequest = httpRequest;
-        this.menuSystem = menuSystem;
+        this.menuContext = menuContext;
+    }
+
+    public final Element addMenusTo(final Element html) {
+        for (MenuItem menuItem : menuContext.getMenuItems()) {
+            addContentTo(html, menuItem);
+        }
+        return html;
+    }
+
+    public final Element addContentTo(final Element html, final MenuItem menuItem) {
+        final Element divMenus = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENUS));
+        final NameTypeValues attrs = NTV.create(Html.METHOD, Html.POST, Html.ACTION, Html.EMPTY);
+        final Element form = ElementU.addElement(divMenus, Html.FORM, null, attrs);
+        final Element divForm = ElementU.addElement(form, Html.DIV);
+        addMenu(divForm, menuItem, false, true, null, null);
+        return divMenus;
     }
 
     public final Element addContentTo(final Element html, final String type, final boolean home) throws IOException {
@@ -46,7 +70,7 @@ public class MenuView {
 
     public final Element addContentTo(final Element html, final String type, final String object2, final boolean home,
                                       final boolean top, final String accessKey, final String text) throws IOException {
-        final MenuItem menuItem = menuSystem.get(httpRequest.getServletPath(), type, object2);
+        final MenuItem menuItem = menuContext.getMenuSystem().get(httpRequest.getServletPath(), type, object2);
         final Element divMenus = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENUS));
         final NameTypeValues attrs = NTV.create(Html.METHOD, Html.POST, Html.ACTION, Html.EMPTY);
         final Element form = ElementU.addElement(divMenus, Html.FORM, null, attrs);
@@ -77,7 +101,8 @@ public class MenuView {
         if (top) {
             final SubmitToken token = new SubmitToken(
                     item.getSubject(), item.getAction(), item.getObject(), item.getObject2());
-            HtmlU.addButton(divMenu, label, menuSystem.getSubmitID(), token.toString(), App.CSS.MENU, title, accessKey);
+            HtmlU.addButton(divMenu, label, menuContext.getMenuSystem().getSubmitID(),
+                    token.toString(), App.CSS.MENU, title, accessKey);
         } else {
             ElementU.addElement(divMenu, Html.SPAN, label, NTV.create(Html.CLASS, App.CSS.MENU));
         }
@@ -125,7 +150,7 @@ public class MenuView {
                         itemIt.getSubject(), itemIt.getAction(), itemIt.getObject(), itemIt.getObject2());
                 final String htmlClass = Value.join(Html.SPACE, App.CSS.MENU, App.CSS.MIN,
                         (itemIt.isOpen() ? App.CSS.ACTIVE : null));
-                HtmlU.addButton(divMenu, label, menuSystem.getSubmitID(), token.toString(),
+                HtmlU.addButton(divMenu, label, menuContext.getMenuSystem().getSubmitID(), token.toString(),
                         htmlClass, title, accessKey);
             }
         }

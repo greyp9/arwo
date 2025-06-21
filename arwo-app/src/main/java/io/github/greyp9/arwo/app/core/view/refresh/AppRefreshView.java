@@ -12,6 +12,9 @@ import org.w3c.dom.Element;
 import java.io.IOException;
 import java.util.Properties;
 
+/**
+ * Configure rendered HTML to <a href="https://en.wikipedia.org/wiki/Meta_refresh">auto refresh</a>.
+ */
 public class AppRefreshView {
     private final Properties properties;
 
