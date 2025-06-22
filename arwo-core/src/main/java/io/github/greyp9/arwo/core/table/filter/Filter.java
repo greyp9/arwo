@@ -17,7 +17,7 @@ public class Filter {
         this.name = name;
         this.operator = operator;
         this.value = value;
-        this.valuePattern = ((Operator.REGEX == operator) ? Pattern.compile(value.toString()) : null);
+        this.valuePattern = ((Operator.REGEX == operator) ? Pattern.compile(value.toString(), Pattern.DOTALL) : null);
     }
 
     public final int getIndex() {
