@@ -1,9 +1,9 @@
-package io.github.greyp9.arwo.app.jdbc.sh.view;
+package io.github.greyp9.arwo.app.local.sh.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.table.UserStateTable;
-import io.github.greyp9.arwo.app.jdbc.sh.core.JDBCRequest;
-import io.github.greyp9.arwo.app.jdbc.sh.data.JDBCHistoryRowSetSource;
+import io.github.greyp9.arwo.app.local.sh.core.SHRequest;
+import io.github.greyp9.arwo.app.local.sh.data.LSHHistoryRowSetSource;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.cache.CacheRowSetSource;
@@ -20,29 +20,28 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
-public class JDBCSearchView extends JDBCView {
+@SuppressWarnings("PMD.ExcessiveImports")
+public class SHSearchView extends SHView {
 
-    public JDBCSearchView(final JDBCRequest request, final AppUserState userState) {
+    public SHSearchView(final SHRequest request, final AppUserState userState) {
         super(request, userState);
     }
 
     @Override
     protected final HttpResponse addContentTo(final Element html) throws IOException {
-        // request context
         final ServletHttpRequest httpRequest = getRequest().getHttpRequest();
         final AppUserState userState = getUserState();
         final Alerts alerts = userState.getAlerts();
-        // query data store
-        final File folderHistory = new File(userState.getUserRoot(), "result/jdbc");
+        final File folderHistory = new File(userState.getUserRoot(), "result/lsh");
         final FindInFolderQuery findInFolderQuery = new FindInFolderQuery(folderHistory, "*.results", true);
         final List<File> files = new ArrayList<>(findInFolderQuery.getFound());
         // sort by date DESC, so we get most recent usage of each command
         files.sort(Comparator.comparing(File::lastModified).reversed());
-        alerts.add(new Alert(Alert.Severity.INFO, String.format("Query JDBC History; %d entries", files.size())));
+        alerts.add(new Alert(Alert.Severity.INFO, String.format("Query LSH History; %d entries", files.size())));
         // render history table
         try {
             final RowSetSource rowSetSource = new CacheRowSetSource(getUserState().getCache(),
-                    new JDBCHistoryRowSetSource(files), httpRequest.getURI());
+                    new LSHHistoryRowSetSource(files), httpRequest.getURI());
             final RowSet rowSet = rowSetSource.getRowSet();
             final UserStateTable table = new UserStateTable(getUserState(), null, httpRequest.getDate(), true);
             table.toTableView(rowSet).addContentTo(html);

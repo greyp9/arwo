@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.app.local.sh.handler;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.local.sh.core.SHRequest;
 import io.github.greyp9.arwo.app.local.sh.view.SHCommandView;
+import io.github.greyp9.arwo.app.local.sh.view.SHSearchView;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.file.meta.FileMetaData;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
@@ -61,6 +62,8 @@ public class SHHandlerGet {
             httpResponse = doGetResults();
         } else if (isQuery) {
             httpResponse = HttpResponseU.to302(httpRequest.getURI());
+        } else if ("search".equals(request.getContext())) {
+            httpResponse = new SHSearchView(request, userState).doGetResponse();
         } else {
             httpResponse = new SHCommandView(request, userState).doGetResponse();
         }
