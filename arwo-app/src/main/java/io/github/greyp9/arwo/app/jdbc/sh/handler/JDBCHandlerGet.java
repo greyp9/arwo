@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.jdbc.sh.core.JDBCRequest;
 import io.github.greyp9.arwo.app.jdbc.sh.view.JDBCCommandView;
 import io.github.greyp9.arwo.app.jdbc.sh.view.JDBCInventoryXView;
+import io.github.greyp9.arwo.app.jdbc.sh.view.JDBCSearchView;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
@@ -52,6 +53,8 @@ public class JDBCHandlerGet {
             httpResponse = HttpResponseU.to302(PathU.toDir(httpRequest.getURI()));
         } else if (isQuery) {
             httpResponse = HttpResponseU.to302(httpRequest.getURI());
+        } else if ("search".equals(request.getServer())) {
+            httpResponse = new JDBCSearchView(request, userState).doGetResponse();
         } else if (Value.isEmpty(request.getServer())) {
             httpResponse = new JDBCInventoryXView(request, userState).doGetResponse();
         } else {
