@@ -89,7 +89,7 @@ public abstract class LFSView {
         final Element body = new XPather(html, null).getElement(Html.XPath.CONTENT);
         final HttpResponse httpResponse = addContentTo(body);
         return Optional.ofNullable(httpResponse)
-                .orElse(new AppHtmlView(httpRequest, userState, title, menuContext, "").fixup(html));
+                .orElse(new AppHtmlView(httpRequest, userState, title, menuContext, AUGMENTS).fixup(html));
     }
 
     protected final void addMenusLFS(final Element html) throws IOException {
@@ -134,4 +134,6 @@ public abstract class LFSView {
      * @throws IOException on failures accessing requested resources
      */
     protected abstract HttpResponse addContentTo(Element html) throws IOException;
+
+    private static final String AUGMENTS = Value.join(",", AppHtmlView.EXPRESSION);
 }
