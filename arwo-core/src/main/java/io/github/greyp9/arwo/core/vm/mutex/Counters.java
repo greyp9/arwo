@@ -1,8 +1,11 @@
 package io.github.greyp9.arwo.core.vm.mutex;
 
+import io.github.greyp9.arwo.core.value.Value;
+
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 public final class Counters {
     private final Map<String, Counter> entries;
@@ -43,6 +46,12 @@ public final class Counters {
         }
     }
 
+    @Override
+    public String toString() {
+        return Value.joinCollection(",", entries.values().stream()
+                .map(Counter::toString).collect(Collectors.toList()));
+    }
+
     public static final class Counter implements Comparable<Counter> {
         private final String name;
         private int value;
@@ -77,6 +86,11 @@ public final class Counters {
         @Override
         public int hashCode() {
             return Objects.hash(name);
+        }
+
+        @Override
+        public String toString() {
+            return String.format("[%s=%s]", name, value);
         }
     }
 }

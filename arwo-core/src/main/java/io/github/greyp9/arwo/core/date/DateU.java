@@ -27,6 +27,10 @@ public final class DateU {
         return (left.before(right) ? left : right);
     }
 
+    public static Date max(final Date left, final Date right) {
+        return (left.after(right) ? left : right);
+    }
+
     public static Date ceiling(final Date date, final String interval) {
         return DurationU.add(floor(date, interval), Const.TZ_GMT, interval);
     }

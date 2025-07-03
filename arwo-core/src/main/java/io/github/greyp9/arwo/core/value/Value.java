@@ -24,6 +24,10 @@ public final class Value {
         return (!isEmpty(value));
     }
 
+    public static boolean contains(final String value, final CharSequence s) {
+        return (!isEmpty(value) && value.contains(s));
+    }
+
     public static String toStringEllipsis(final String value, final int max) {
         final String valueOut;
         if (value == null) {
