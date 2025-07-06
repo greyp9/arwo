@@ -138,12 +138,12 @@ public class SHHandlerGet {
 
         private RowSetMetaData createMetaData() {
             final ColumnMetaData[] columns = new ColumnMetaData[] {
-                    new ColumnMetaData("date", Types.TIMESTAMP, true),  // i18n metadata
+                    new ColumnMetaData("dateSubmit", Types.TIMESTAMP, true),  // i18n metadata
                     new ColumnMetaData("in", Types.VARCHAR),  // i18n metadata
                     new ColumnMetaData("out", Types.VARCHAR),  // i18n metadata
                     new ColumnMetaData("dateFinish", Types.TIMESTAMP),  // i18n metadata
             };
-            return new RowSetMetaData("lsh2HistoryView", columns);
+            return new RowSetMetaData("lsh2HistoryType", columns);
         }
 
         private RowSet createRowSet(final RowSetMetaData metaData) {
