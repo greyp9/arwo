@@ -24,10 +24,11 @@ public final class FileU {
         }
     }
 
-    public static void ensureFolder(final File folder) {
+    public static File ensureFolder(final File folder) {
         if (!folder.exists()) {
             mkdir(folder);
         }
+        return folder;
     }
 
     private static void mkdir(final File folder) {
