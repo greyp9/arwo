@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.local.sh2.handler.SHHandlerGet;
 import io.github.greyp9.arwo.app.local.sh2.handler.SHHandlerPost;
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.exec.AppExecutorService;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.gz.HttpResponseGZipU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
@@ -22,6 +23,7 @@ public class SH2Servlet extends javax.servlet.http.HttpServlet {
     private static final long serialVersionUID = -1860523744889746061L;
 
     private transient AppState appState;
+    private transient AppExecutorService executor;
 
     @Override
     public final void init(final ServletConfig config) throws ServletException {
@@ -29,12 +31,14 @@ public class SH2Servlet extends javax.servlet.http.HttpServlet {
         final Context context = AppNaming.lookupSubcontext(getServletContext().getContextPath());
         synchronized (this) {
             this.appState = (AppState) AppNaming.lookup(context, App.Naming.APP_STATE);
+            this.executor = (AppExecutorService) AppNaming.lookup(context, App.Naming.EXECUTOR);
         }
     }
 
     @Override
     public final void destroy() {
         synchronized (this) {
+            this.executor = null;
             this.appState = null;
         }
     }
@@ -59,8 +63,7 @@ public class SH2Servlet extends javax.servlet.http.HttpServlet {
         final ServletHttpRequest httpRequest = ServletU.read(request);
         // process request
         AppUserState userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
-        //final HttpResponse httpResponse = new SHHandlerPost(httpRequest, userState).doPostSafe();
-        final HttpResponse httpResponse = new SHHandlerPost(httpRequest, userState).doPostSafe();
+        final HttpResponse httpResponse = new SHHandlerPost(httpRequest, userState, executor).doPostSafe();
         // send response
         ServletU.write(httpResponse, response);
     }

@@ -12,23 +12,16 @@ import java.io.IOException;
 import java.util.Collection;
 import java.util.List;
 import java.util.Optional;
-import java.util.Properties;
 import java.util.stream.Collectors;
 
 public class SubsystemLocal {
     // usage history
     private final History history;
-    // properties
-    private final Properties properties;
     // persistence
     private final File folderResultLSH;
 
     public final History getHistory() {
         return history;
-    }
-
-    public final Properties getProperties() {
-        return properties;
     }
 
     public final File getFolderResultLSH() {
@@ -37,7 +30,6 @@ public class SubsystemLocal {
 
     public SubsystemLocal(final Alerts alerts, final File folder) {
         this.history = new History();
-        this.properties = new Properties();
         this.folderResultLSH = new File(folder, "result/lsh");
         loadRecent(alerts, folderResultLSH);
     }

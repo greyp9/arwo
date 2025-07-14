@@ -110,6 +110,7 @@ public final class App {
     public static class Naming {
         public static final String APP_STATE = "javax.naming.Name-io.github.greyp9.arwo.app.core.state.AppState";
         public static final String EXECUTOR_SERVICE = "javax.naming.Name-java.util.concurrent.ExecutorService";
+        public static final String EXECUTOR = "javax.naming.Name-io.github.greyp9.arwo.core.exec.AppExecutorService";
     }
 
     public static class CSS {

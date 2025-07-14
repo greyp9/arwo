@@ -323,7 +323,7 @@ public final class AppUserState {
         this.deferredActions = new DeferredActions();
         this.cron = new SubsystemCron(documentState.getFactory());
         this.local = new SubsystemLocal(alerts, this.userRoot);
-        this.lsh = new SubsystemLSH();
+        this.lsh = new SubsystemLSH(alerts, this.userRoot);
         this.kube = new SubsystemKube(alerts);
         this.ssh = new SubsystemSSH(alerts);
         this.jdbc = new SubsystemJDBC(alerts, this.userRoot);
@@ -494,7 +494,7 @@ public final class AppUserState {
         if (cursor != null) {
             final String context = cursor.getValue(cursor.getChildInstance(App.Settings.CONTEXT));
             final String command = cursor.getValue(cursor.getChildInstance(App.Settings.COMMAND));
-            local.getProperties().setProperty(App.Settings.COMMAND, command);
+            getProperties().setProperty(App.Settings.COMMAND, command);
             locationUpdate = PathU.toDir(httpRequest.getBaseURI(), context);
         }
         return locationUpdate;

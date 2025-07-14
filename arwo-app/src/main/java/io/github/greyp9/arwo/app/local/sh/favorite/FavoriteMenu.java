@@ -1,9 +1,9 @@
 package io.github.greyp9.arwo.app.local.sh.favorite;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
-import io.github.greyp9.arwo.app.local.sh.core.SHRequest;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
+import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.menu.MenuSystem;
 import io.github.greyp9.arwo.core.menu.factory.MenuFactory;
 import io.github.greyp9.arwo.core.menu.view.MenuView;
@@ -13,12 +13,12 @@ import org.w3c.dom.Element;
 import java.io.IOException;
 
 public class FavoriteMenu {
-    private final SHRequest request;
+    private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
     private final String type;
 
-    public FavoriteMenu(final SHRequest request, final AppUserState userState, final String type) {
-        this.request = request;
+    public FavoriteMenu(final ServletHttpRequest httpRequest, final AppUserState userState, final String type) {
+        this.httpRequest = httpRequest;
         this.userState = userState;
         this.type = type;
     }
@@ -31,9 +31,9 @@ public class FavoriteMenu {
         final Xed xed = userState.getDocumentState().getSession(App.Servlet.FAVORITES).getXed();
         final MenuFactory menuFactory = new FavoriteMenuFactory(xed);
         final MenuSystem menuSystem = new MenuSystem(userState.getSubmitID(), menuFactory);
-        /* final MenuItem menuItem = */ menuSystem.get("/lsh", "cmd-sticky");
+        /* MenuItem menuItem = */ menuSystem.get(httpRequest.getServletPath(), AppMenuFactory.Const.COMMAND_STICKY);
         menuSystem.applyState(userState.getMenuSystemState());
-        final MenuView menuView = new MenuView(null, request.getHttpRequest(), menuSystem);
+        final MenuView menuView = new MenuView(null, httpRequest, menuSystem);
         menuView.addContentTo(html, AppMenuFactory.Const.COMMAND_STICKY, null, false, true, "f");
     }
 }

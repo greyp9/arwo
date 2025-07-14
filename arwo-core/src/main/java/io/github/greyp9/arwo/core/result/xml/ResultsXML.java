@@ -29,9 +29,12 @@ public class ResultsXML {
     protected static final String E_LONG = Long.class.getSimpleName();
     protected static final String E_DATE = Date.class.getSimpleName();
     protected static final String E_TABLE_LINK = TableViewLink.class.getSimpleName();
+    protected static final String E_STDOUT = "stdout";
+    protected static final String E_STDERR = "stderr";
 
     protected static final String A_COMMAND = "command";
     protected static final String A_CONTEXT = "context";
+    protected static final String A_SUBMIT = "submit";
     protected static final String A_START = "start";
     protected static final String A_FINISH = "finish";
     protected static final String A_ID = "id";
@@ -42,6 +45,7 @@ public class ResultsXML {
     protected static final String A_TEXT = "text";
     protected static final String A_TITLE = "title";
     protected static final String A_HREF = "href";
+    protected static final String A_EXIT_VALUE = "exitValue";
 
     protected ResultsXML() {
         // checkstyle: "Utility classes should not have a public or default constructor."

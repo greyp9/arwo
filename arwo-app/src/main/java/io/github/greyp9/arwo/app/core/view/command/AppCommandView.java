@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.app.core.view.command;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.date.DurationU;
+import io.github.greyp9.arwo.core.exec.script.ScriptContext;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.HttpResponse;
@@ -19,24 +20,47 @@ import java.io.IOException;
 import java.util.Date;
 
 public class AppCommandView {
-    private final Command command;
+    private final String stdin;
+    private final String stdout;
+    private final String stderr;
+    private final Date dateStart;
+    private final Date dateFinish;
+    private final Long pid;
+    private final Integer exitValue;
     private final DateX dateX;
 
+    public AppCommandView(final ScriptContext script, final Locus locus) throws IOException {
+        this.stdin = script.getCommand();
+        this.stdout = script.getStdoutText();
+        this.stderr = script.getStderrText();
+        this.dateStart = script.getDateStart();
+        this.dateFinish = script.getDateFinish();
+        this.pid = script.getPid();
+        this.exitValue = script.getExitValue();
+        this.dateX = locus.getDateX();
+    }
+
     public AppCommandView(final Command command, final Locus locus) {
-        this.command = command;
+        this.stdin = command.getStdin();
+        this.stdout = command.getStdout();
+        this.stderr = command.getStderr();
+        this.dateStart = command.getStart();
+        this.dateFinish = command.getFinish();
+        this.pid = command.getPID();
+        this.exitValue = command.getExitValue();
         this.dateX = locus.getDateX();
     }
 
     public final HttpResponse addContentTo(final Element html) throws IOException {
-        final Long elapsed = DurationU.toDuration(command.getStart(), command.getFinish(), new Date());
+        final Long elapsed = DurationU.toDuration(dateStart, dateFinish, new Date());
         final Element divCommand = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.COMMAND));
-        renderHeader(divCommand, command.getStart(), command.getStdin());
+        renderHeader(divCommand);
         renderBody(divCommand);
-        renderFooter(divCommand, command.getFinish(), elapsed);
+        renderFooter(divCommand, elapsed);
         return null;
     }
 
-    private void renderHeader(final Element html, final Date dateStart, final String stdin) throws IOException {
+    private void renderHeader(final Element html) throws IOException {
         final String dateText = ((dateStart == null) ? null : String.format("[@%s]", dateX.toString(dateStart)));
         final String stdinText = ((stdin == null) ? null : String.format("$ %s", stdin));
         final String text = Value.join(Html.SPACE, dateText, stdinText);
@@ -47,12 +71,12 @@ public class AppCommandView {
         final Element divB = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.COMMAND_BODY));
         final Element divR = ElementU.addElement(divB, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.TEXT_RESULT));
         // stderr
-        final TextRenderer rendererStderr = new TextRenderer(command.getStderr());
+        final TextRenderer rendererStderr = new TextRenderer(stderr);
         final String cssStderr = Value.join(Html.SPACE, App.CSS.TEXT_RESULT_BODY, App.CSS.STDERR);
         final Element divStderr = ElementU.addElement(divR, Html.DIV, null, NTV.create(Html.CLASS, cssStderr));
         toOutputText(divStderr, rendererStderr.render(TextRenderer.Const.SCROLLBACK_LINES));
         // stdout
-        final TextRenderer rendererStdout = new TextRenderer(command.getStdout());
+        final TextRenderer rendererStdout = new TextRenderer(stdout);
         final String cssStdout = Value.join(Html.SPACE, App.CSS.TEXT_RESULT_BODY, App.CSS.STDOUT);
         final Element divStdout = ElementU.addElement(divR, Html.DIV, null, NTV.create(Html.CLASS, cssStdout));
         toOutputText(divStdout, rendererStdout.render(TextRenderer.Const.SCROLLBACK_LINES));
@@ -62,7 +86,7 @@ public class AppCommandView {
         toOutputText(divExtra, toExtraInfo(rendererStderr, rendererStdout));
     }
 
-    private void renderFooter(final Element html, final Date dateFinish, final Long elapsed) throws IOException {
+    private void renderFooter(final Element html, final Long elapsed) throws IOException {
         final String dateText = ((dateFinish == null) ? null : String.format("[@%s]", dateX.toString(dateFinish)));
         final String elapsedText = (elapsed == null) ? null : String.format("[%s]", DurationU.durationXSD(elapsed));
         final String text = Value.defaultOnEmpty(Value.join(Html.SPACE, dateText, elapsedText), UTF16.PAUSE);
@@ -78,9 +102,7 @@ public class AppCommandView {
     }
 
     private String toExtraInfo(final TextRenderer rendererStderr, final TextRenderer rendererStdout) {
-        final Long pid = command.getPID();
         final String pidText = (pid == null) ? null : String.format("[PID:%s]", pid);
-        final Integer exitValue = command.getExitValue();
         final String exitValueText = (exitValue == null) ? null : String.format("[EXIT:%s]", exitValue);
         final String stderrText = toExtraInfo(rendererStderr, "STDERR");  // i18n internal
         final String stdoutText = toExtraInfo(rendererStdout, "STDOUT");  // i18n internal

@@ -16,6 +16,14 @@ public final class NumberU {
         return (l == null) ? defaultOnNull : l;
     }
 
+    public static Integer toInteger(final String s) {
+        try {
+            return ((s == null) ? null : Integer.valueOf(s));
+        } catch (NumberFormatException e) {
+            return null;
+        }
+    }
+
     @SuppressWarnings("PMD.OnlyOneReturn")
     public static int toInt(final String s, final int defaultInt) {
         try {

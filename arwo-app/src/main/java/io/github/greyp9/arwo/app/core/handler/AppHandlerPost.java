@@ -71,7 +71,7 @@ public abstract class AppHandlerPost {
         } else if (App.Target.VIEW_STATE.equals(subject)) {
             userState.getViewStates().apply(token, httpArguments, request.getBundle(), userState.getAlerts());
         } else if (App.Target.SESSION.equals(subject)) {
-            applySession(token, httpArguments, locationIn);
+            location = applySession(token, httpArguments, locationIn);
         }
         return location;
     }

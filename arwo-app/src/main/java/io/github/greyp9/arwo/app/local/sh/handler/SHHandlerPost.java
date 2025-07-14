@@ -126,7 +126,7 @@ public class SHHandlerPost {
         } else if (App.Action.ADD_FAV.equals(action)) {
             new SHAddFavorite(request).doAction();
         } else if (App.Action.SELECT_FAV.equals(action)) {
-            location = new SHSelectFavorite(request).doAction(token);
+            location = new SHSelectFavorite(httpRequest, userState).doAction(token);
         } else {
             request.getAlerts().add(new Alert(Alert.Severity.WARN, message, token.toString()));
         }

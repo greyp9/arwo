@@ -73,12 +73,11 @@ public class SHCommandView extends SHView {
         final Document document = html.getOwnerDocument();
         final Element header = new XPather(document, null).getElement(Html.XPath.HEADER);
         final Element content = new XPather(document, null).getElement(Html.XPath.CONTENT);
-        new FavoriteMenu(getRequest(), getUserState(), AppMenuFactory.Const.COMMAND_STICKY).addContentTo(header);
-
         final SHRequest request = getRequest();
         final ServletHttpRequest httpRequest = request.getHttpRequest();
         final AppUserState userState = request.getUserState();
-        final Properties properties = local.getProperties();
+        final Properties properties = userState.getProperties();
+        new FavoriteMenu(httpRequest, getUserState(), AppMenuFactory.Const.COMMAND_STICKY).addContentTo(header);
         // command input form (prep)
         final String command = (script == null) ? properties.getProperty(App.Settings.COMMAND, "") : script.getText();
         properties.setProperty(App.Settings.COMMAND, command);

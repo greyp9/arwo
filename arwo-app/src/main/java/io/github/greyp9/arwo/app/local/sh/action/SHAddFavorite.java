@@ -28,7 +28,7 @@ public class SHAddFavorite {
 
     public final String doAction() throws IOException {
         final String context = request.getContext();
-        final String command = request.getUserState().getLocal().getProperties().getProperty(App.Settings.COMMAND, "");
+        final String command = request.getUserState().getProperties().getProperty(App.Settings.COMMAND, "");
         final String comment = XsdDateU.toXSDZ(request.getHttpRequest().getDate());
         final boolean isData = Value.isData(command);
         if (isData) {
