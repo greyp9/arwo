@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.url.URLCodec;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.value.Value;
 
 import java.io.UnsupportedEncodingException;
 
@@ -21,7 +22,7 @@ public final class HttpArguments {
         final String[] queryTokens = ((queryString == null)
                 ? new String[0] : queryString.split(Http.Token.BACKSLASH + Http.Token.AMP));
         for (final String queryToken : queryTokens) {
-            if (queryToken.length() > 0) {
+            if (!queryToken.isEmpty()) {
                 final String queryTokenDecoded = URLCodec.decodeSafe(queryToken);
                 final int indexOf = queryTokenDecoded.indexOf(Http.Token.EQUALS);
                 if (indexOf >= 0) {
@@ -41,12 +42,19 @@ public final class HttpArguments {
     }
 
     public static String toQueryString(final NameTypeValues httpArguments) throws UnsupportedEncodingException {
+        return toQueryString(httpArguments, true);
+    }
+
+    public static String toQueryString(final NameTypeValues httpArguments,
+                                       final boolean urlEncode) throws UnsupportedEncodingException {
         final StringBuilder buffer = new StringBuilder();
         for (final NameTypeValue httpArgument : httpArguments) {
-            buffer.append((buffer.length() == 0) ? "" : Http.Token.AMP);
-            buffer.append(URLCodec.encode(httpArgument.getName()));
-            buffer.append(Http.Token.EQUALS);
-            buffer.append(URLCodec.encode(httpArgument.getValueS()));
+            if (Value.isData(httpArgument.getName(), httpArgument.getValueS())) {
+                buffer.append((buffer.length() == 0) ? "" : Http.Token.AMP);
+                buffer.append(urlEncode ? URLCodec.encode(httpArgument.getName()) : httpArgument.getName());
+                buffer.append(Http.Token.EQUALS);
+                buffer.append(urlEncode ? URLCodec.encode(httpArgument.getValueS()) : httpArgument.getValueS());
+            }
         }
         return buffer.toString();
     }

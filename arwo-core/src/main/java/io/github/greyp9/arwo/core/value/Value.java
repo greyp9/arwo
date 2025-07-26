@@ -24,6 +24,14 @@ public final class Value {
         return (!isEmpty(value));
     }
 
+    public static boolean isData(final String... values) {
+        boolean isData = (values.length > 0);
+        for (final String value : values) {
+            isData &= isData(value);
+        }
+        return isData;
+    }
+
     public static boolean contains(final String value, final CharSequence s) {
         return (!isEmpty(value) && value.contains(s));
     }
