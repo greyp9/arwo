@@ -11,6 +11,7 @@ import io.github.greyp9.arwo.app.core.subsystem.jdbc.SubsystemJDBC;
 import io.github.greyp9.arwo.app.core.subsystem.kube.SubsystemKube;
 import io.github.greyp9.arwo.app.core.subsystem.local.SubsystemLocal;
 import io.github.greyp9.arwo.app.core.subsystem.mail.SubsystemMail;
+import io.github.greyp9.arwo.app.core.subsystem.s3.SubsystemS3;
 import io.github.greyp9.arwo.app.core.subsystem.sh.SubsystemLSH;
 import io.github.greyp9.arwo.app.core.subsystem.ssh.SubsystemSSH;
 import io.github.greyp9.arwo.core.actiond.DeferredActions;
@@ -111,6 +112,7 @@ public final class AppUserState {
     private final SubsystemLocal local;
     private final SubsystemLSH lsh;
     private final SubsystemKube kube;
+    private final SubsystemS3 s3;
     private final SubsystemSSH ssh;
     private final SubsystemJDBC jdbc;
     private final SubsystemMail mail;
@@ -228,6 +230,10 @@ public final class AppUserState {
         return kube;
     }
 
+    public SubsystemS3 getS3() {
+        return s3;
+    }
+
     public SubsystemSSH getSSH() {
         return ssh;
     }
@@ -325,6 +331,7 @@ public final class AppUserState {
         this.local = new SubsystemLocal(alerts, this.userRoot);
         this.lsh = new SubsystemLSH(alerts, this.userRoot);
         this.kube = new SubsystemKube(alerts);
+        this.s3 = new SubsystemS3(alerts);
         this.ssh = new SubsystemSSH(alerts);
         this.jdbc = new SubsystemJDBC(alerts, this.userRoot);
         this.mail = new SubsystemMail(alerts);

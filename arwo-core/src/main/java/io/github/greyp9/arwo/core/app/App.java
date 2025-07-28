@@ -82,6 +82,7 @@ public final class App {
         public static final String LFS = "lfs";
         public static final String LSH = "lsh";
         public static final String POP3 = "pop3";
+        public static final String S3 = "s3";
         public static final String SMTP = "smtp";
         public static final String SSH = "ssh";
         public static final String DAV = "webdav";
