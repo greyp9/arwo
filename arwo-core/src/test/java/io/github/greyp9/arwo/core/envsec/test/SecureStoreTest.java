@@ -51,6 +51,7 @@ public class SecureStoreTest {
         final String string = UUID.randomUUID().toString();
         secureStore.setPropertyProtect(string, string);
         Assertions.assertEquals(string, secureStore.getProperty(string));
+        Assertions.assertEquals(1, secureStore.getProperties().size());
     }
 
     @Test

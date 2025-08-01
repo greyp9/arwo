@@ -17,6 +17,10 @@ public final class MathU {
         return ((value >= min) && (value <= max));
     }
 
+    public static boolean isInBound(final double min, final double value, final double max) {
+        return ((value >= min) && (value <= max));
+    }
+
     public static int roundUp(final int value, final int blockSize) {
         final int mod = value % blockSize;
         final int extra = ((mod == 0) ? 0 : (blockSize - mod));

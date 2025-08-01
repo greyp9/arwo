@@ -46,6 +46,10 @@ public final class SecureStore {
         return exception;
     }
 
+    public Properties getProperties() {
+        return properties;
+    }
+
     public void setProperty(final String key, final String value) {
         PropertiesU.setProperty(properties, key, value);
     }
