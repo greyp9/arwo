@@ -22,6 +22,7 @@ import io.github.greyp9.arwo.core.codec.gz.GZipCodec;
 import io.github.greyp9.arwo.core.config.Preferences;
 import io.github.greyp9.arwo.core.date.HttpDateU;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
+import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
@@ -44,6 +45,7 @@ import java.io.File;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.Date;
+import java.util.UUID;
 
 @SuppressWarnings("PMD.ExcessiveImports")
 public class LFSFileView extends LFSView {
@@ -80,6 +82,8 @@ public class LFSFileView extends LFSView {
         final boolean isModeTGZ = App.Mode.VIEW_TGZ.equals(mode);
         // resource interpret (binary, view hex representation)
         final boolean isHex = App.Mode.VIEW_HEX.equals(mode);
+        // resource interpret (save to cache)
+        final boolean isCache = App.Mode.VIEW_CACHE.equals(mode);
         // resource interpret (webapp results)
         final boolean isResults = App.Mode.VIEW_R.equals(mode);
         // properties of cursor resource
@@ -114,7 +118,7 @@ public class LFSFileView extends LFSView {
         } else if (isResults) {
             httpResponse = new AppResultsView(httpRequest, userState).addContentTo(html, metaFile);
         } else {
-            httpResponse = doGetFile(metaFile, charset, isModeGZ);
+            httpResponse = doGetFile(metaFile, charset, isModeGZ, isCache);
         }
         return httpResponse;
     }
@@ -142,8 +146,15 @@ public class LFSFileView extends LFSView {
     }
 
     private HttpResponse doGetFile(
-            final MetaFile file, final String charset, final boolean isGZ) throws IOException {
+            final MetaFile file, final String charset, final boolean isGZ, final boolean isCache) throws IOException {
         byte[] bytes = getBytes(file, isGZ);
+        if (isCache) {
+            final ResourceCache resourceCache = getUserState().getCache();
+            final String baseURI = getRequest().getHttpRequest().getHttpRequest().getResource();
+            final String id = Http.Token.SLASH + UUID.nameUUIDFromBytes(UTF8Codec.toBytes(baseURI));
+            file.getMetaData().getProperties().setProperty(Html.HREF, baseURI + Http.Token.QUERY + App.Action.CACHE);
+            resourceCache.putFile(id, file);
+        }
         final String path = file.getMetaData().getPath();
         final String lastModified = HttpDateU.toHttpZ(new Date(file.getMetaData().getLastModified()));
         final NameTypeValues headers = new NameTypeValues(new NameTypeValue(Http.Header.LAST_MODIFIED, lastModified));

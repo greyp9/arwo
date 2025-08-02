@@ -1,33 +1,35 @@
 package io.github.greyp9.arwo.app.cache.handler;
 
+import io.github.greyp9.arwo.app.cache.view.MetaFileInventoryView;
+import io.github.greyp9.arwo.app.cache.view.MetaFileView;
+import io.github.greyp9.arwo.app.cache.view.RowSetView;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.alert.Alert;
-import io.github.greyp9.arwo.core.app.App;
-import io.github.greyp9.arwo.core.file.meta.MetaFile;
+import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
-import io.github.greyp9.arwo.core.value.NameTypeValue;
-import io.github.greyp9.arwo.core.value.NameTypeValues;
-import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.core.resource.Pather;
 
 import java.io.IOException;
-import java.net.HttpURLConnection;
 
 public class CacheHandlerGet {
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
+    private final ResourceCache cache;
 
     public CacheHandlerGet(final ServletHttpRequest httpRequest, final AppUserState userState) {
         this.httpRequest = httpRequest;
         this.userState = userState;
+        //final String servletPath = httpRequest.getServletPath();  // possible means to resolve relevant cache
+        this.cache = userState.getCache();
     }
 
-    public final HttpResponse doGetSafe() throws IOException {
+    public final HttpResponse doGet() throws IOException {
         HttpResponse httpResponse;
         try {
-            httpResponse = doGet();
+            httpResponse = doGet2();
         } catch (IOException e) {
             userState.getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
             httpResponse = HttpResponseU.to500(e.getMessage());
@@ -35,16 +37,36 @@ public class CacheHandlerGet {
         return httpResponse;
     }
 
-    private HttpResponse doGet() throws IOException {
+    private HttpResponse doGet2() throws IOException {
         HttpResponse httpResponse;
-        final MetaFile metaFile = userState.getCacheBlob().getFile(httpRequest.getPathInfo());
-        if (metaFile == null) {
+        final Pather pather = new Pather(httpRequest.getPathInfo());
+        final String view = pather.getLeftToken();
+        if ("f".equals(view)) {
+            httpResponse = doGetMetaFile(pather.getRight());
+        } else if ("r".equals(view)) {
+            httpResponse = doGetRowSet(pather.getRight());
+        } else {
+            httpResponse = HttpResponseU.to302(httpRequest.getBaseURI() + "/f/");
+        }
+        return httpResponse;
+    }
+
+    private HttpResponse doGetMetaFile(final String pathInfo) throws IOException {
+        final HttpResponse httpResponse;
+        if (Http.Token.SLASH.equals(pathInfo)) {
+            httpResponse = new MetaFileInventoryView(httpRequest, userState, cache).render();
+        } else {
+            httpResponse = new MetaFileView(httpRequest, userState, cache).render(pathInfo);
+        }
+        return httpResponse;
+    }
+
+    private HttpResponse doGetRowSet(final String pathInfo) throws IOException {
+        final HttpResponse httpResponse;
+        if (!cache.containsRowSet(pathInfo)) {
             httpResponse = HttpResponseU.to404();
         } else {
-            final String mimeType = Value.defaultOnEmpty(metaFile.getContentType(),
-                    userState.getProperties().getProperty(App.Action.MIME_TYPE), Http.Mime.TEXT_PLAIN_UTF8);
-            final NameTypeValues headers = new NameTypeValues(new NameTypeValue(Http.Header.CONTENT_TYPE, mimeType));
-            httpResponse = new HttpResponse(HttpURLConnection.HTTP_OK, headers, metaFile.getBytes());
+            httpResponse = new RowSetView(httpRequest, userState, cache.getRowSet(pathInfo)).render();
         }
         return httpResponse;
     }

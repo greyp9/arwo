@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.Supplier;
@@ -40,6 +41,10 @@ public final class ResourceCache {
         } else {
             rowSets.put(id, rowSet);
         }
+    }
+
+    public Iterator<Map.Entry<String, MetaFile>> getFiles() {
+        return files.entrySet().iterator();
     }
 
     public boolean containsFile(final String id) {

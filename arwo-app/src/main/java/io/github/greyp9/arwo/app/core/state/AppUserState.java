@@ -340,8 +340,8 @@ public final class AppUserState {
         this.webDAV = new SubsystemWebDAV(alerts);
         this.menuSystem = new MenuSystem(submitID, new AppMenuFactory());
         this.menuSystemState = new Properties();
-        this.cache = new ResourceCache(null);
-        this.cacheBlob = new ResourceCache(appState.getContextPath() + App.Servlet.CACHE);
+        this.cache = new ResourceCache(appState.getContextPath() + App.Servlet.CACHE);
+        this.cacheBlob = new ResourceCache(null);
         this.pageViewHex = Page.Factory.initPage(Const.PAGE_HEX_VIEW, new Properties());
         this.pageVisualization = Page.Factory.initPage(Const.PAGE_VISUALIZATION, new Properties());
     }
@@ -417,6 +417,8 @@ public final class AppUserState {
             cacheBlob.putRowSet(httpRequest.getURI(), null);
         } else if (App.Action.REFRESH.equals(action)) {
             PropertiesU.toggleBoolean(properties, action);
+        } else if (App.Action.RELOAD.equals(action)) {
+            location = object;
         } else if (App.Action.MENU.equals(action)) {
             menuSystem.toggle(object);  // store for fixed menus
             final boolean stateFrom = PropertiesU.isBoolean(menuSystemState, object);

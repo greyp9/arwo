@@ -3,15 +3,18 @@ package io.github.greyp9.arwo.s3.handler;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.fixup.AppHtmlView;
 import io.github.greyp9.arwo.app.core.view.table.UserStateTable;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppTitle;
 import io.github.greyp9.arwo.core.cache.CacheRowSetSource;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
+import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.config.Preferences;
 import io.github.greyp9.arwo.core.connect.ConnectionCache;
 import io.github.greyp9.arwo.core.file.meta.FileMetaData;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.Http;
+import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
@@ -20,6 +23,7 @@ import io.github.greyp9.arwo.core.menu.MenuContext;
 import io.github.greyp9.arwo.core.menu.MenuSystem;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.row.RowSetSource;
+import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
@@ -37,6 +41,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.Properties;
+import java.util.UUID;
 
 public class S3HandlerGet {
     private final ServletHttpRequest httpRequest;
@@ -77,7 +82,17 @@ public class S3HandlerGet {
         // serve resource
         final byte[] payload = objectAsBytes.asByteArray();
         final long lastModified = objectAsBytes.response().lastModified().toEpochMilli();
-        final FileMetaData metaData = new FileMetaData(null, payload.length, lastModified, false);
+        final String baseURI = httpRequest.getHttpRequest().getResource();
+        final FileMetaData metaData = new FileMetaData(baseURI, payload.length, lastModified, 0L, false);
+        // optionally cache response payload
+        final NameTypeValues query = HttpArguments.toArguments(httpRequest.getQuery());
+        if (Value.isNotNull(query.getValue(App.Action.CACHE))) {
+            final ResourceCache resourceCache = userState.getCache();
+            final String id = Http.Token.SLASH + UUID.nameUUIDFromBytes(UTF8Codec.toBytes(baseURI));
+            metaData.getProperties().setProperty(Html.HREF, baseURI + Http.Token.QUERY + App.Action.CACHE);
+            resourceCache.putFile(id, new MetaFile(metaData, null, new ByteArrayInputStream(payload)));
+        }
+        // serve response payload
         final Preferences preferences = new Preferences(userState.getConfig());
         final String mimeType = Value.defaultOnEmpty(preferences.getMIMEType(prefix), Http.Mime.TEXT_PLAIN_UTF8);
         return HttpResponseU.to200(new MetaFile(metaData, mimeType, new ByteArrayInputStream(payload)));

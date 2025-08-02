@@ -20,6 +20,10 @@ public final class Value {
         return ((value == null) || (value.isEmpty()));
     }
 
+    public static boolean isNotNull(final String value) {
+        return (value != null);
+    }
+
     public static boolean isData(final String value) {
         return (!isEmpty(value));
     }

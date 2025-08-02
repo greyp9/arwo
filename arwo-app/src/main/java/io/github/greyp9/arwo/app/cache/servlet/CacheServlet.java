@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.app.cache.servlet;
 
 import io.github.greyp9.arwo.app.cache.handler.CacheHandlerGet;
+import io.github.greyp9.arwo.app.cache.handler.CacheHandlerPost;
 import io.github.greyp9.arwo.app.core.servlet.ServletU;
 import io.github.greyp9.arwo.app.core.state.AppState;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
@@ -48,9 +49,24 @@ public class CacheServlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
         }
-        final HttpResponse httpResponse = new CacheHandlerGet(httpRequest, userState).doGetSafe();
+        // getInitParameter("cache");  // possible means to resolve relevant cache
+        final HttpResponse httpResponse = new CacheHandlerGet(httpRequest, userState).doGet();
         // send response
         final HttpResponse httpResponseGZ = HttpResponseGZipU.toHttpResponseGZip(httpRequest, httpResponse);
         ServletU.write(httpResponseGZ, response);
+    }
+
+    @Override
+    protected final void doPost(final HttpServletRequest request, final HttpServletResponse response)
+            throws ServletException, IOException {
+        // get request context
+        final ServletHttpRequest httpRequest = ServletU.read(request);
+        // process request
+        AppUserState userState;
+        synchronized (this) {
+            userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
+        }
+        final HttpResponse httpResponse = new CacheHandlerPost(httpRequest, userState).doPostSafe();
+        ServletU.write(httpResponse, response);
     }
 }

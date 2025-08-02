@@ -127,6 +127,7 @@ public class AppMenuFactory implements MenuFactory {
         final MenuItem itemViewGZ = new MenuItem(App.Mode.VIEW_GZ, null, App.Action.HREF, App.Mode.VIEW_GZ);
         final MenuItem itemViewZIP = new MenuItem(App.Mode.VIEW_ZIP, null, App.Action.HREF, App.Mode.VIEW_ZIP);
         final MenuItem itemViewTGZ = new MenuItem(App.Mode.VIEW_TGZ, null, App.Action.HREF, App.Mode.VIEW_TGZ);
+        final MenuItem itemViewCache = new MenuItem(App.Mode.VIEW_CACHE, null, App.Action.HREF, App.Mode.VIEW_CACHE);
         final MenuItem itemViewHex = new MenuItem(App.Mode.VIEW_HEX, null, App.Action.HREF, App.Mode.VIEW_HEX);
         final MenuItem itemViewR = new MenuItem(App.Mode.VIEW_R, null, App.Action.HREF, App.Mode.VIEW_R);
         final MenuItem itemViewDot = new MenuItem(
@@ -134,7 +135,7 @@ public class AppMenuFactory implements MenuFactory {
         return new MenuItem(App.Mode.VIEW, App.Target.USER_STATE, App.Action.MENU,
                 Value.join(Http.Token.SLASH, key, App.Mode.VIEW),
                 itemView, itemViewHead, itemViewTail, itemViewGZ, itemViewZIP,
-                itemViewTGZ, itemViewHex, itemViewR, itemViewDot);
+                itemViewTGZ, itemViewCache, itemViewHex, itemViewR, itemViewDot);
     }
 
     private static MenuItem createMenuViewMime(final String key) {

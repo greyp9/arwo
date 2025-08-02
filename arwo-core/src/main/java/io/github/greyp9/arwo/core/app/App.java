@@ -176,6 +176,7 @@ public final class App {
         public static final String VIEW_GZ = "viewGZ";
         public static final String VIEW_ZIP = "viewZIP";
         public static final String VIEW_TGZ = "viewTGZ";
+        public static final String VIEW_CACHE = "viewCache";
         public static final String VIEW_HEX = "viewHex";
         public static final String VIEW_HTML = "viewHtml";
         public static final String VIEW_TEXT = "viewText";
@@ -229,6 +230,7 @@ public final class App {
 
     public static class Action {
         public static final String ALERT = "alert";
+        public static final String CACHE = "cache";
         public static final String CLEAR = "clear";
         public static final String STOP = "stop";
         public static final String RESTART = "restart";
