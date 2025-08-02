@@ -40,7 +40,7 @@ public class SHSearchView extends SHView {
         alerts.add(new Alert(Alert.Severity.INFO, String.format("Query LSH History; %d entries", files.size())));
         // render history table
         try {
-            final RowSetSource rowSetSource = new CacheRowSetSource(getUserState().getCache(),
+            final RowSetSource rowSetSource = new CacheRowSetSource(getUserState().getCacheBlob(),
                     new LSHHistoryRowSetSource(files), httpRequest.getURI());
             final RowSet rowSet = rowSetSource.getRowSet();
             final UserStateTable table = new UserStateTable(getUserState(), null, httpRequest.getDate(), true);

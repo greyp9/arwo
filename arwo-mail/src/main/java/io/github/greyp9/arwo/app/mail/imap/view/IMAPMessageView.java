@@ -51,7 +51,7 @@ public class IMAPMessageView extends IMAPView {
         MetaFile message;
         final IMAPRequest request = getRequest();
         final AppUserState userState = request.getUserState();
-        final ResourceCache cache = userState.getCache();
+        final ResourceCache cache = userState.getCacheBlob();
         final String path = request.getHttpRequest().getURI();
         if (isConnected) {
             final IMAPDataSource source = getDataSource();

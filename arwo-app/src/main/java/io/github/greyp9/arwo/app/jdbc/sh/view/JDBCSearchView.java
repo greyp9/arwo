@@ -41,7 +41,7 @@ public class JDBCSearchView extends JDBCView {
         alerts.add(new Alert(Alert.Severity.INFO, String.format("Query JDBC History; %d entries", files.size())));
         // render history table
         try {
-            final RowSetSource rowSetSource = new CacheRowSetSource(getUserState().getCache(),
+            final RowSetSource rowSetSource = new CacheRowSetSource(getUserState().getCacheBlob(),
                     new JDBCHistoryRowSetSource(files), httpRequest.getURI());
             final RowSet rowSet = rowSetSource.getRowSet();
             final UserStateTable table = new UserStateTable(getUserState(), null, httpRequest.getDate(), true);

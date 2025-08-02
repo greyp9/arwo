@@ -116,7 +116,7 @@ public class SFTPFileView extends SFTPView {
         final SFTPRequest request = getRequest();
         final SSHConnectionResource resource = getResource();
         final SFTPDataSource source = new SFTPDataSource(request, resource.getConnection());
-        final ResourceCache cache = getUserState().getCache();
+        final ResourceCache cache = getUserState().getCacheBlob();
         final String pathRaw = request.getPath();
         final String path = pathRaw.contains("!/")
                 ? pathRaw.substring(0, pathRaw.indexOf("!/")) : pathRaw;

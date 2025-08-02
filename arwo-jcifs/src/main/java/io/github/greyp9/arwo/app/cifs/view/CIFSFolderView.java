@@ -109,7 +109,7 @@ public class CIFSFolderView extends CIFSView {
         final AppUserState userState = getUserState();
         final CIFSConnectionResource resource = getResource();
         final CIFSConnection connection = resource.getConnection();
-        final ResourceCache cache = userState.getCache();
+        final ResourceCache cache = userState.getCacheBlob();
         final String path = request.getPath();
 
         // if disconnected, resource will only be fetched if no cached copy is available

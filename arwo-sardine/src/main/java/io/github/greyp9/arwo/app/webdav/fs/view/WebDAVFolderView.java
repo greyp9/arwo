@@ -111,7 +111,7 @@ public class WebDAVFolderView extends WebDAVView {
         final AppUserState userState = getUserState();
         final WebDAVConnectionResource resource = getResource();
         final WebDAVConnection connection = resource.getConnection();
-        final ResourceCache cache = userState.getCache();
+        final ResourceCache cache = userState.getCacheBlob();
         final String path = request.getPathURL();
 
         // if disconnected, resource will only be fetched if no cached copy is available
@@ -135,7 +135,7 @@ public class WebDAVFolderView extends WebDAVView {
         RowSet rowSet;
         final WebDAVRequest request = getRequest();
         final AppUserState userState = getUserState();
-        final ResourceCache cache = userState.getCache();
+        final ResourceCache cache = userState.getCacheBlob();
         final String path = request.getPathURL();
         // if disconnected, resource will only be fetched if no cached copy is available
         if (viewState.isConnected()) {

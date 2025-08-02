@@ -128,7 +128,7 @@ public class SFTPFolderView extends SFTPView {
         final UserExecutor userExecutor = userState.getUserExecutor();
         final ExecutorService executorStream = userExecutor.getExecutorStream();
         final SSHConnectionX sshConnectionX = new SSHConnectionX(connection, executorStream);
-        final ResourceCache cache = userState.getCache();
+        final ResourceCache cache = userState.getCacheBlob();
         final String path = request.getPath();
         // if disconnected, resource will only be fetched if no cached copy is available
         if (viewState.isConnected()) {
@@ -151,7 +151,7 @@ public class SFTPFolderView extends SFTPView {
         RowSet rowSet;
         final SFTPRequest request = getRequest();
         final AppUserState userState = getUserState();
-        final ResourceCache cache = userState.getCache();
+        final ResourceCache cache = userState.getCacheBlob();
         final String path = request.getPath();
         // if disconnected, resource will only be fetched if no cached copy is available
         if (viewState.isConnected()) {

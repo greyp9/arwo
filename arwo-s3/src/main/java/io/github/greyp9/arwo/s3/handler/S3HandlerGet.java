@@ -90,7 +90,7 @@ public class S3HandlerGet {
         final ConnectionCache cache = userState.getS3().getCache();
         final S3ConnectionResource resource = (S3ConnectionResource) cache.getResource("", factory);
         final S3Client s3Client = resource.getConnection().getS3Client();
-        final ResourceCache cache1 = userState.getCache();
+        final ResourceCache cache1 = userState.getCacheBlob();
         final RowSetSource rowSetSource = new CacheRowSetSource(cache1, new S3RowSetSource(
                 s3Client, httpRequest.getBaseURI(), bucketName, prefix), prefix);
         final RowSet rowSet;

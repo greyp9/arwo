@@ -80,13 +80,13 @@ public class AppZipView {
             final Element html, final MetaFile metaFile, final Bundle bundle) throws IOException {
         final String id = metaFile.getMetaData().getPath();
         final RowSet rowSet;
-        if (userState.getCache().containsRowSet(id)) {
-            rowSet = userState.getCache().getRowSet(id);
+        if (userState.getCacheBlob().containsRowSet(id)) {
+            rowSet = userState.getCacheBlob().getRowSet(id);
         } else {
             final RowSetMetaData metaData = createMetaData();
             final byte[] bytes = StreamU.read(metaFile.getBytes());
             rowSet = createRowSet(metaData, bytes);
-            userState.getCache().putRowSet(id, rowSet);
+            userState.getCacheBlob().putRowSet(id, rowSet);
         }
         final RowSetMetaData metaData = rowSet.getMetaData();
         final Locus locus = userState.getLocus();

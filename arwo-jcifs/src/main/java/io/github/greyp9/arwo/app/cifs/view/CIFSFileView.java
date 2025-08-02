@@ -116,7 +116,7 @@ public class CIFSFileView extends CIFSView {
         final CIFSRequest request = getRequest();
         final CIFSConnectionResource resource = getResource();
         final CIFSDataSource source = new CIFSDataSource(request, resource.getConnection());
-        final ResourceCache cache = getUserState().getCache();
+        final ResourceCache cache = getUserState().getCacheBlob();
         final String pathRaw = request.getPath();
         final String path = pathRaw.contains("!/")
                 ? pathRaw.substring(0, pathRaw.indexOf("!/")) : pathRaw;

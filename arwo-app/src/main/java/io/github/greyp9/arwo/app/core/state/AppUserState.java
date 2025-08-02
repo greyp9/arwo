@@ -414,7 +414,7 @@ public final class AppUserState {
         } else if (App.Action.CLEAR.equals(action)) {
             doClearCache();
         } else if (App.Action.REFRESH.equals(action) && (App.Object.TABLE.equals(object))) {
-            cache.putRowSet(httpRequest.getURI(), null);
+            cacheBlob.putRowSet(httpRequest.getURI(), null);
         } else if (App.Action.REFRESH.equals(action)) {
             PropertiesU.toggleBoolean(properties, action);
         } else if (App.Action.MENU.equals(action)) {

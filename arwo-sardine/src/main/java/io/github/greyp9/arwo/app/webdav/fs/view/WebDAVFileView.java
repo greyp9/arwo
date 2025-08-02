@@ -116,7 +116,7 @@ public class WebDAVFileView extends WebDAVView {
         final WebDAVRequest request = getRequest();
         final WebDAVConnectionResource resource = getResource();
         final WebDAVDataSource source = new WebDAVDataSource(request, resource.getConnection());
-        final ResourceCache cache = getUserState().getCache();
+        final ResourceCache cache = getUserState().getCacheBlob();
         final String path = request.getPathURL();
         // if disconnected, resource will only be fetched if no cached copy is available
         if (viewState.isConnected()) {

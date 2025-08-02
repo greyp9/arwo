@@ -58,7 +58,7 @@ public class POP3MessagesView extends POP3View {
         RowSet rowSet;
         final POP3Request request = getRequest();
         final AppUserState userState = request.getUserState();
-        final ResourceCache cache = userState.getCache();
+        final ResourceCache cache = userState.getCacheBlob();
         final String path = request.getHttpRequest().getURI();
         if (isConnected) {
             final POP3DataSource source = getDataSource();

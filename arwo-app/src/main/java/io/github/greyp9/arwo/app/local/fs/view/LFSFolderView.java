@@ -126,7 +126,7 @@ public class LFSFolderView extends LFSView {
         final AppUserState userState = getUserState();
         final File folderBase = getFolderBase();
         final LFSDataSource source = new LFSDataSource(request, folderBase);
-        final ResourceCache cache = userState.getCache();
+        final ResourceCache cache = userState.getCacheBlob();
         final String path = request.getPath();
         final boolean viewDot = PropertiesU.isBoolean(userState.getProperties(), App.Mode.VIEW_DOT);
         // on view state change, userState at next HTTP/GET will contain USE_CACHE directive
