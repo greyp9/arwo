@@ -131,9 +131,11 @@ public class AppHtmlView {
             }
         }
         // render
-        final Element divToolbar = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENU));
-        for (final String token : tokens) {
-            ElementU.addElement(divToolbar, Html.SPAN, token, NTV.create(Html.CLASS, App.CSS.MENU));
+        if (!tokens.isEmpty()) {
+            final Element divToolbar = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENU));
+            for (final String token : tokens) {
+                ElementU.addElement(divToolbar, Html.SPAN, token, NTV.create(Html.CLASS, App.CSS.MENU));
+            }
         }
     }
 
