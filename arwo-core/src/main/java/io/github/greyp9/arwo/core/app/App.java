@@ -221,7 +221,7 @@ public final class App {
         public static final String SYMLINKS = "symlinks";
 
         /**
-         * @see ch.ethz.ssh2.SFTPv3FileAttributes
+         * @see ch.ethz.ssh2 SFTPv3FileAttributes
          */
         public static final int S_IFLNK = 0120000;
         public static final int S_IFREG = 0100000;
@@ -258,6 +258,7 @@ public final class App {
         public static final String REFRESH = "refresh";
         public static final String COMMAND = "command";
         public static final String STDIN = "stdin";
+        public static final String SIGNAL = "signal";
         public static final String CANCEL = "cancel";
         public static final String SQL = "sql";
         public static final String MAIL = "mail";

@@ -16,6 +16,7 @@ public final class AppExecutorService {
 
     private final File persistDir;
     private final ExecutorService executorService;
+    private final List<Runnable> runnables;
     private final List<Future<?>> futures;
 
     public File getPersistDir() {
@@ -24,6 +25,10 @@ public final class AppExecutorService {
 
     public ExecutorService getExecutorService() {
         return executorService;
+    }
+
+    public List<Runnable> getRunnables() {
+        return runnables;
     }
 
     public List<Future<?>> getFutures() {
@@ -37,12 +42,14 @@ public final class AppExecutorService {
     public AppExecutorService(final File persistDir, final int nThreads) {
         this.persistDir = persistDir;
         this.executorService = ExecutorServiceFactory.create(nThreads, getClass().getSimpleName());
+        this.runnables = new ArrayList<>();
         this.futures = new ArrayList<>();
         logger.info("READY");
     }
 
 
     public void submit(final Runnable runnable) {
+        runnables.add(runnable);
         final Future<?> future = executorService.submit(runnable);
         futures.add(future);
         logger.info(String.format("SUBMIT: %s", future));
@@ -50,8 +57,8 @@ public final class AppExecutorService {
 
     public boolean shutdownNow(final int secondsWait) {
         logger.info("STOP");
-        final List<Runnable> runnables = this.executorService.shutdownNow();
-        logger.info(String.format("STOP, wait for %d runnables", runnables.size()));
+        final List<Runnable> runnablesWait = this.executorService.shutdownNow();
+        logger.info(String.format("STOP, wait for %d runnables", runnablesWait.size()));
         boolean awaitTermination = false;
         try {
             awaitTermination = executorService.awaitTermination(secondsWait, TimeUnit.SECONDS);

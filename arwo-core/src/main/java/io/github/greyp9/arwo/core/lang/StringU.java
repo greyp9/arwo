@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.lang;
 
 import java.util.Arrays;
+import java.util.LinkedList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -72,7 +73,24 @@ public final class StringU {
                 ? input.substring(0, matcher.start(group)) + replacement + input.substring(matcher.end(group)) : input;
     }
 
+    public static String unescape(final String input) {
+        final Pattern pattern = Pattern.compile(Const.UNICODE_CHAR);
+        final LinkedList<Integer[]> matches = new LinkedList<>();
+        final Matcher matcher = pattern.matcher(input);
+        while (matcher.find()) {
+            final int character = Integer.parseInt(matcher.group(1), NumberU.Const.RADIX_HEX);
+            matches.push(new Integer[] { matcher.start(), character, matcher.end()});
+        }
+        String output = input;
+        while (!matches.isEmpty()) {
+            final Integer[] match = matches.pop();
+            output = output.substring(0, match[0]) + ((char) match[1].intValue()) + output.substring(match[2]);
+        }
+        return output;
+    }
+
     public static class Const {
         public static final String WHITESPACE = "\\s+";  // i18n internal
+        public static final String UNICODE_CHAR = "\\\\u([0-9a-f]{4})";  // i18n internal
     }
 }

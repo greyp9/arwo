@@ -4,10 +4,13 @@ import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.command.AppCommandView;
 import io.github.greyp9.arwo.app.local.sh.favorite.FavoriteMenu;
 import io.github.greyp9.arwo.app.local.sh2.view.demo.TextAreaLSH;
+import io.github.greyp9.arwo.core.action.ActionButtons;
+import io.github.greyp9.arwo.core.action.ActionFactory;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppHtml;
 import io.github.greyp9.arwo.core.app.AppTitle;
 import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
+import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.config.Preferences;
 import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.exec.script.ScriptContext;
@@ -21,18 +24,26 @@ import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.vm.mutex.CollectionU;
+import io.github.greyp9.arwo.core.xed.action.XedAction;
+import io.github.greyp9.arwo.core.xed.model.Xed;
+import io.github.greyp9.arwo.core.xed.model.XedFactory;
+import io.github.greyp9.arwo.core.xed.nav.XedNav;
+import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
+import io.github.greyp9.arwo.core.xed.view.html.PropertyStripHtmlView;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import javax.xml.namespace.QName;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
+import java.util.Locale;
 
 public class SHScriptView {
     private final ServletHttpRequest httpRequest;
@@ -57,8 +68,22 @@ public class SHScriptView {
 
         final String command = userState.getProperties().getProperty(App.Settings.COMMAND, "");
         new TextAreaLSH(httpRequest, userState).addTextArea(body, command);
-        final Collection<ScriptContext> scripts = CollectionU.copy(new ArrayList<>(), userState.getLSH().getScripts());
 
+        // stdin
+        final XedAction actionStdin = new XedAction(new QName(App.Actions.URI_ACTION, App.Action.STDIN,
+                App.Actions.PREFIX_ACTION), new XedFactory(), Locale.getDefault());
+        final Xed xedUIStdin = actionStdin.getXedUI(actionStdin.getXed().getLocale());
+        final XedPropertyPageView pageViewStdin = new XedPropertyPageView(null, new XedNav(xedUIStdin).getRoot());
+        final Bundle bundleXed = xedUIStdin.getBundle();
+        final ActionFactory factoryStdin = new ActionFactory(
+                userState.getSubmitID(), bundleXed, App.Target.SESSION, App.Action.STDIN, null);
+        final Collection<String> actionsStdin =
+                io.github.greyp9.arwo.core.util.CollectionU.toCollection(App.Action.STDIN, App.Action.SIGNAL);
+        final ActionButtons buttonsStdin = factoryStdin.create(App.Action.STDIN, false, actionsStdin);
+        new PropertyStripHtmlView(pageViewStdin, buttonsStdin).addContentDiv(body);
+
+        // history
+        final Collection<ScriptContext> scripts = CollectionU.copy(new ArrayList<>(), userState.getLSH().getScripts());
         final Element divContent = ElementU.addElement(body, Html.DIV, null, NTV.create(Html.CLASS, "content"));
         final Date dateSubmit = DateX.Factory.createFilenameMilli().toDate(scriptID);
         final ScriptContext script = scripts.stream()

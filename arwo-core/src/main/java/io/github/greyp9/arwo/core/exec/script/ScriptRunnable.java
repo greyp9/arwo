@@ -11,16 +11,23 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Date;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.atomic.AtomicReference;
 import java.util.logging.Logger;
 
 public final class ScriptRunnable implements Runnable {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
     private final ScriptContext scriptContext;
+    private final AtomicReference<String> signal;
     private final ExecutorService executorServiceStreams;
+
+    public ScriptContext getContext() {
+        return scriptContext;
+    }
 
     public ScriptRunnable(final ScriptContext scriptContext, final ExecutorService executorServiceStreams) {
         this.scriptContext = scriptContext;
+        this.signal = new AtomicReference<>();
         this.executorServiceStreams = executorServiceStreams;
     }
 
@@ -43,6 +50,11 @@ public final class ScriptRunnable implements Runnable {
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    public void signal(final String value) {
+        signal.set(value);
+        logger.info(String.format("signal(%s)", value));
     }
 
     private Integer monitor(final Process process) throws IOException {
@@ -68,6 +80,9 @@ public final class ScriptRunnable implements Runnable {
         while (exitValue == null) {
             ThreadU.sleepMillis(POLL_INTERVAL);
             exitValue = isProcessFinished(process);
+            if (signal.get() != null) {
+                process.destroy();
+            }
         }
         // allow process complete
         runnableStdin.stop();

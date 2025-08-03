@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.exec.script;
 
+import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.io.buffer.ByteBuffer;
 
 import java.io.File;
@@ -9,6 +10,7 @@ import java.nio.charset.StandardCharsets;
 import java.util.Date;
 
 public final class ScriptContext {
+    private final String id;
     private final String context;
     private final String command;
     private final Charset charset;
@@ -24,6 +26,7 @@ public final class ScriptContext {
     private Integer exitValue;
 
     public ScriptContext(final String context, final String command, final Date dateSubmit, final File persistDir) {
+        this.id = DateX.Factory.createFilenameMilli().toString(dateSubmit);
         this.context = context;
         this.command = command;
         this.charset = StandardCharsets.UTF_8;
@@ -32,6 +35,10 @@ public final class ScriptContext {
         this.stderr = new ByteBuffer(charset);
         this.dateSubmit = dateSubmit;
         this.persistDir = persistDir;
+    }
+
+    public String getID() {
+        return id;
     }
 
     public String getContext() {
