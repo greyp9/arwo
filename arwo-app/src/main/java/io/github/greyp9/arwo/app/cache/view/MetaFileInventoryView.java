@@ -41,10 +41,11 @@ public final class MetaFileInventoryView {
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
         final Element body = new XPather(html, null).getElement(Html.XPath.CONTENT);
         final Iterator<Map.Entry<String, MetaFile>> files = cache.getFiles();
-        final RowSet rowSet = new MetaFileRowSet("", userState.getSubmitID(), "/arwo/cache/f", files).getRowSet();
-        final UserStateTable table = new UserStateTable(userState, null, httpRequest.getDate(), true);
+        final RowSet rowSet = new MetaFileRowSet(
+                "cacheType", userState.getSubmitID(), "/arwo/cache/f", files).getRowSet();
+        final UserStateTable table = new UserStateTable(userState, null, httpRequest.getDate());
         table.toTableView(rowSet).addContentTo(body);
-        final String labelContext = Value.wrap("[", "]", "label");
+        final String labelContext = Value.wrap("[", "]", httpRequest.getServletPath());
         final AppTitle appTitle = AppTitle.Factory.getResourceLabel(httpRequest, userState.getBundle(), labelContext);
         final MenuSystem menuSystem = userState.getMenuSystem();
         final MenuContext menuContext = new MenuContext(menuSystem, Collections.emptyList());

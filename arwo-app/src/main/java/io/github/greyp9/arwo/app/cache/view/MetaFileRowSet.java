@@ -49,9 +49,9 @@ public final class MetaFileRowSet {
                 new ColumnMetaData("select", Types.DATALINK),
                 new ColumnMetaData("refresh", Types.DATALINK),
                 new ColumnMetaData("name", Types.VARCHAR, true),
-                new ColumnMetaData("timestamp", Types.TIMESTAMP),
+                new ColumnMetaData("mtime", Types.TIMESTAMP),
                 new ColumnMetaData("extension", Types.VARCHAR),
-                new ColumnMetaData("length", Types.INTEGER),
+                new ColumnMetaData("size", Types.INTEGER),
         };
         return new RowSetMetaData(tableId, columns);
     }

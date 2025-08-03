@@ -5,11 +5,11 @@ import io.github.greyp9.arwo.app.core.state.AppState;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.http.HttpResponse;
-import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.gz.HttpResponseGZipU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.naming.AppNaming;
 import io.github.greyp9.arwo.s3.handler.S3HandlerGet;
+import io.github.greyp9.arwo.s3.handler.S3HandlerPost;
 
 import javax.naming.Context;
 import javax.servlet.ServletConfig;
@@ -17,7 +17,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.net.HttpURLConnection;
 import java.util.Properties;
 import java.util.logging.Logger;
 
@@ -65,10 +64,15 @@ public class S3Servlet extends javax.servlet.http.HttpServlet {
 
     @Override
     protected final void doPost(final HttpServletRequest request, final HttpServletResponse response)
-            throws IOException {
-        logger.info("doPost()");
-        final HttpResponse httpResponse = HttpResponseU.toError(
-                HttpURLConnection.HTTP_NOT_IMPLEMENTED, "HTTP_NOT_IMPLEMENTED");
+            throws ServletException, IOException {
+        // get request context
+        final ServletHttpRequest httpRequest = ServletU.read(request);
+        // process request
+        AppUserState userState;
+        synchronized (this) {
+            userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
+        }
+        final HttpResponse httpResponse = new S3HandlerPost(httpRequest, userState).doPostSafe();
         ServletU.write(httpResponse, response);
     }
 }

@@ -49,27 +49,31 @@ public final class MetaFileView {
             httpResponse = renderEntry(path, metaFile, right);
         } else if (path.endsWith(".tar.gz")) {
             httpResponse = renderTGZ(pathInfo, metaFile);
+        } else if (path.endsWith(".gz")) {
+            httpResponse = render(pathInfo, metaFile, Http.Header.GZIP);
         } else {
-            httpResponse = render(pathInfo, metaFile);
+            httpResponse = render(pathInfo, metaFile, null);
         }
         return httpResponse;
     }
 
-    private HttpResponse render(final String path, final MetaFile metaFile) throws IOException {
+    private HttpResponse render(final String path,
+                                final MetaFile metaFile,
+                                final String contentEncoding) throws IOException {
         final String contentType = Value.defaultOnEmpty(
                 metaFile.getContentType(),
                 userState.getProperties().getProperty(App.Action.MIME_TYPE),
                 new Preferences(userState.getConfig()).getMIMEType(path),
                 Http.Mime.TEXT_PLAIN_UTF8);
         final NameTypeValues headers = new NameTypeValues(
+                new NameTypeValue(Http.Header.CONTENT_ENCODING, contentEncoding),
                 new NameTypeValue(Http.Header.CONTENT_TYPE, contentType));
         return new HttpResponse(HttpURLConnection.HTTP_OK, headers, metaFile.getBytes());
     }
 
-    private HttpResponse renderEntry(
-            final String path,
-            final MetaFile metaFile,
-            final String right) throws IOException {
+    private HttpResponse renderEntry(final String path,
+                                     final MetaFile metaFile,
+                                     final String right) throws IOException {
         final Pather pather = new Pather(right);
         final String filename = pather.getLeftToken();
         final TarVolume tarVolume = new TarVolume(metaFile.getBytes());
@@ -77,7 +81,7 @@ public final class MetaFileView {
         for (TarMetaData tarMetaData : tarVolumeEntries) {
             if (Value.equal(filename, tarMetaData.getPath())) {
                 final MetaFile metaFileEntry = tarVolume.getEntry(filename);
-                return render(metaFileEntry.getMetaData().getPath(), metaFileEntry);
+                return render(metaFileEntry.getMetaData().getPath(), metaFileEntry, null);
             }
         }
         return HttpResponseU.toError(HttpURLConnection.HTTP_NOT_IMPLEMENTED, path);

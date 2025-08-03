@@ -38,7 +38,7 @@ public final class S3RowSetSource implements RowSetSource {
 
     @Override
     public String getRowSetId() {
-        return "";
+        return "s3ObjectType";
     }
 
     @Override
@@ -48,7 +48,7 @@ public final class S3RowSetSource implements RowSetSource {
         final ListObjectsV2Request listObjectsRequest = ListObjectsV2Request.builder()
                 .bucket(bucket).prefix(prefix).delimiter("/").build();
         final ListObjectsV2Response listObjectsResponse = s3Client.listObjectsV2(listObjectsRequest);
-        final RowSet rowSet = loadRowSet(createMetaData(""), listObjectsResponse);
+        final RowSet rowSet = loadRowSet(createMetaData(getRowSetId()), listObjectsResponse);
         connection.update(date);
         return rowSet;
     }
@@ -70,10 +70,10 @@ public final class S3RowSetSource implements RowSetSource {
         final ColumnMetaData[] columns = new ColumnMetaData[]{
                 new ColumnMetaData("select", Types.DATALINK),
                 new ColumnMetaData("name", Types.VARCHAR, true),
-                new ColumnMetaData("timestamp", Types.TIMESTAMP),
+                new ColumnMetaData("mtime", Types.TIMESTAMP),
                 new ColumnMetaData("etag", Types.VARCHAR),
                 new ColumnMetaData("extension", Types.VARCHAR),
-                new ColumnMetaData("length", Types.INTEGER),
+                new ColumnMetaData("size", Types.INTEGER),
         };
         return new RowSetMetaData(tableId, columns);
     }

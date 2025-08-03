@@ -128,7 +128,7 @@ public class S3HandlerGet {
             throw new IOException(e);
         }
         // cache1.clear();  // debugging aid
-        final UserStateTable table = new UserStateTable(userState, null, httpRequest.getDate(), true);
+        final UserStateTable table = new UserStateTable(userState, httpRequest.getPathInfo(), httpRequest.getDate());
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
         final Element body = new XPather(html, null).getElement(Html.XPath.CONTENT);
         table.toTableView(rowSet).addContentTo(body);
