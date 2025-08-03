@@ -77,8 +77,9 @@ public abstract class LFSView {
         this.file = file;
 
         final String modeKey = Value.join(Http.Token.DOT, App.Action.MENU, App.Mode.VIEW, request.getMode());
-        this.title = AppTitle.Factory.getResourceLabel(
-                httpRequest, bundle, request.getTitlePath(), userState.getCharset(), modeKey);
+        final boolean cacheItem = PropertiesU.isBoolean(userState.getProperties(), App.Action.CACHE);
+        this.title = AppTitle.Factory.getResourceLabel(httpRequest, bundle,
+                request.getTitlePath(), userState.getCharset(), modeKey, String.format("cache=%s", cacheItem));
         final MenuSystem menuSystem = userState.getMenuSystem();
         final MenuItem menuItem = menuSystem.get(httpRequest.getServletPath(), AppMenuFactory.Const.FILESYSTEM);
         this.menuContext = new MenuContext(menuSystem, Collections.singletonList(menuItem));

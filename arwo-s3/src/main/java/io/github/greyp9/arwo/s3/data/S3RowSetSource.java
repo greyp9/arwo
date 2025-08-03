@@ -10,6 +10,7 @@ import io.github.greyp9.arwo.core.table.metadata.ColumnMetaData;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.row.RowSetSource;
+import io.github.greyp9.arwo.s3.connection.S3Connection;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.CommonPrefix;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
@@ -20,13 +21,16 @@ import java.sql.Types;
 import java.util.Date;
 
 public final class S3RowSetSource implements RowSetSource {
-    private final S3Client s3Client;
+    private final S3Connection connection;
     private final String baseURI;
     private final String bucket;
     private final String prefix;
 
-    public S3RowSetSource(final S3Client s3Client, final String baseURI, final String bucket, final String prefix) {
-        this.s3Client = s3Client;
+    public S3RowSetSource(final S3Connection connection,
+                          final String baseURI,
+                          final String bucket,
+                          final String prefix) {
+        this.connection = connection;
         this.baseURI = baseURI;
         this.bucket = bucket;
         this.prefix = prefix;
@@ -39,10 +43,14 @@ public final class S3RowSetSource implements RowSetSource {
 
     @Override
     public RowSet getRowSet() {
+        final S3Client s3Client = connection.getS3Client();
+        final Date date = new Date();
         final ListObjectsV2Request listObjectsRequest = ListObjectsV2Request.builder()
                 .bucket(bucket).prefix(prefix).delimiter("/").build();
         final ListObjectsV2Response listObjectsResponse = s3Client.listObjectsV2(listObjectsRequest);
-        return loadRowSet(createMetaData(""), listObjectsResponse);
+        final RowSet rowSet = loadRowSet(createMetaData(""), listObjectsResponse);
+        connection.update(date);
+        return rowSet;
     }
 
     private RowSet loadRowSet(final RowSetMetaData metaData, final ListObjectsV2Response listObjects) {

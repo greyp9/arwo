@@ -1,62 +1,68 @@
 package io.github.greyp9.arwo.s3.connection;
 
 import io.github.greyp9.arwo.core.connect.ConnectionResource;
+import io.github.greyp9.arwo.core.lang.CompareU;
 
 import java.io.IOException;
 import java.util.Date;
 
 public final class S3ConnectionResource implements ConnectionResource, Comparable<ConnectionResource> {
-    private final S3Connection s3Connection;
+    private final String region;
+    private final String bucket;
+    private final S3Connection connection;
 
-    public S3ConnectionResource(final S3Connection s3Connection) {
-        this.s3Connection = s3Connection;
+    public S3ConnectionResource(final String region, final String bucket, final S3Connection connection) {
+        this.region = region;
+        this.bucket = bucket;
+        this.connection = connection;
     }
 
     public S3Connection getConnection() {
-        return s3Connection;
+        return connection;
     }
 
     @Override
     public String getName() {
-        return "";
+        return String.format("%s/%s", region, bucket);
     }
 
     @Override
     public String getID() {
-        return "";
+        return Integer.toHexString(connection.hashCode());
     }
 
     @Override
     public Date getDateOpen() {
-        return null;
+        return connection.getDateOpen();
     }
 
     @Override
     public Date getDateLast() {
-        return null;
+        return connection.getDateLast();
     }
 
     @Override
     public String getTimeout() {
-        return "";
+        return null;
     }
 
     @Override
     public long getCount() {
-        return 0;
+        return connection.getCount();
     }
 
     @Override
     public long getMillis() {
-        return 0;
+        return connection.getMillis();
     }
 
     @Override
     public void close() throws IOException {
+        connection.getS3Client().close();
     }
 
     @Override
-    public int compareTo(final ConnectionResource o) {
-        return 0;
+    public int compareTo(final ConnectionResource resource) {
+        return CompareU.compare(getName(), resource.getName());
     }
 }

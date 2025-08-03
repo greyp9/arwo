@@ -557,6 +557,8 @@ public final class AppUserState {
             jdbc.getCache().removeResource(resourceName);
         } else if (App.Cache.KUBE.equals(cacheName)) {
             kube.getCache().removeResource(resourceName);
+        } else if (App.Cache.S3.equals(cacheName)) {
+            s3.getCache().removeResource(resourceName);
         } else if (App.Cache.SSH.equals(cacheName)) {
             ssh.getCache().removeResource(resourceName);
         } else if (App.Cache.DAV.equals(cacheName)) {

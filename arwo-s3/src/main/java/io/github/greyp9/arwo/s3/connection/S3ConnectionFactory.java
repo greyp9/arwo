@@ -11,9 +11,11 @@ import java.io.IOException;
 
 public class S3ConnectionFactory implements ConnectionFactory {
     private final String region;
+    private final String bucket;
 
-    public S3ConnectionFactory(final String region) {
+    public S3ConnectionFactory(final String region, final String bucket) {
         this.region = region;
+        this.bucket = bucket;
     }
 
     @Override
@@ -21,6 +23,6 @@ public class S3ConnectionFactory implements ConnectionFactory {
         final S3ClientBuilder s3ClientBuilder = S3Client.builder()
                 .credentialsProvider(DefaultCredentialsProvider.builder().build())  // "~/.aws/credentials"?
                 .region(Region.of(region));
-        return new S3ConnectionResource(new S3Connection(s3ClientBuilder.build()));
+        return new S3ConnectionResource(region, bucket, new S3Connection(s3ClientBuilder.build()));
     }
 }

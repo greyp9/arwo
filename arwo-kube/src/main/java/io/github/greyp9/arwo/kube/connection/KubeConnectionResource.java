@@ -2,7 +2,6 @@ package io.github.greyp9.arwo.kube.connection;
 
 import io.github.greyp9.arwo.core.connect.ConnectionResource;
 import io.github.greyp9.arwo.core.lang.CompareU;
-import org.jetbrains.annotations.NotNull;
 
 import java.io.IOException;
 import java.util.Date;
@@ -67,7 +66,7 @@ public final class KubeConnectionResource implements ConnectionResource, Compara
     }
 
     @Override
-    public int compareTo(@NotNull final ConnectionResource resource) {
+    public int compareTo(final ConnectionResource resource) {
         return CompareU.compare(getName(), resource.getName());
     }
 }

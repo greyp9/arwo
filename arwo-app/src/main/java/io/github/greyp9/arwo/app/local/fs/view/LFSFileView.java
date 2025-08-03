@@ -82,8 +82,6 @@ public class LFSFileView extends LFSView {
         final boolean isModeTGZ = App.Mode.VIEW_TGZ.equals(mode);
         // resource interpret (binary, view hex representation)
         final boolean isHex = App.Mode.VIEW_HEX.equals(mode);
-        // resource interpret (save to cache)
-        final boolean isCache = App.Mode.VIEW_CACHE.equals(mode);
         // resource interpret (webapp results)
         final boolean isResults = App.Mode.VIEW_R.equals(mode);
         // properties of cursor resource
@@ -118,7 +116,7 @@ public class LFSFileView extends LFSView {
         } else if (isResults) {
             httpResponse = new AppResultsView(httpRequest, userState).addContentTo(html, metaFile);
         } else {
-            httpResponse = doGetFile(metaFile, charset, isModeGZ, isCache);
+            httpResponse = doGetFile(metaFile, charset, isModeGZ);
         }
         return httpResponse;
     }
@@ -146,9 +144,10 @@ public class LFSFileView extends LFSView {
     }
 
     private HttpResponse doGetFile(
-            final MetaFile file, final String charset, final boolean isGZ, final boolean isCache) throws IOException {
+            final MetaFile file, final String charset, final boolean isGZ) throws IOException {
         byte[] bytes = getBytes(file, isGZ);
-        if (isCache) {
+        final boolean cacheItem = PropertiesU.isBoolean(getUserState().getProperties(), App.Action.CACHE);
+        if (cacheItem) {
             final ResourceCache resourceCache = getUserState().getCache();
             final String baseURI = getRequest().getHttpRequest().getHttpRequest().getResource();
             final String id = Http.Token.SLASH + UUID.nameUUIDFromBytes(UTF8Codec.toBytes(baseURI));

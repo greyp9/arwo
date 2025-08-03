@@ -95,6 +95,7 @@ public class DashView {
         new ClasspathView(httpRequest, userState, getClass()).addContent(html);
         new CronActiveView(userState.getCronService(), request, userState).addContent(html, false);
         new AppConnectionView(httpRequest, userState, userState.getKube().getCache()).addContentTo(html, false);
+        new AppConnectionView(httpRequest, userState, userState.getS3().getCache()).addContentTo(html, false);
         new AppConnectionView(httpRequest, userState, userState.getSSH().getCache()).addContentTo(html, false);
         new AppConnectionView(httpRequest, userState, userState.getCIFS().getCache()).addContentTo(html, false);
         new AppConnectionView(httpRequest, userState, userState.getInterop().getCache()).addContentTo(html, false);
