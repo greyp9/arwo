@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.app.core.view.table.UserStateTable;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppTitle;
+import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.cache.CacheRowSetSource;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
@@ -20,6 +21,7 @@ import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.menu.MenuContext;
+import io.github.greyp9.arwo.core.menu.MenuItem;
 import io.github.greyp9.arwo.core.menu.MenuSystem;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.row.RowSetSource;
@@ -40,6 +42,7 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.List;
 import java.util.Properties;
 import java.util.UUID;
 
@@ -137,7 +140,10 @@ public class S3HandlerGet {
         final AppTitle appTitle = AppTitle.Factory.getResourceLabel(httpRequest, userState.getBundle(),
                 labelContext, regionName, bucketName, String.format("cache=%s", cacheItem));
         final MenuSystem menuSystem = userState.getMenuSystem();
-        final MenuContext menuContext = new MenuContext(menuSystem, Collections.emptyList());
+        final List<MenuItem> menuItems = Collections.singletonList(
+                menuSystem.get(httpRequest.getServletPath(), AppMenuFactory.Const.DASHBOARD)
+        );
+        final MenuContext menuContext = new MenuContext(menuSystem, menuItems);
         return new AppHtmlView(httpRequest, userState, appTitle, menuContext, "").fixup(html);
     }
 }
