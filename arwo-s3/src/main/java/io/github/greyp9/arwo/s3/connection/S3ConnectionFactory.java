@@ -21,7 +21,7 @@ public class S3ConnectionFactory implements ConnectionFactory {
     @Override
     public final ConnectionResource create(final String name) throws IOException {
         final S3ClientBuilder s3ClientBuilder = S3Client.builder()
-                .credentialsProvider(DefaultCredentialsProvider.builder().build())  // "~/.aws/credentials"?
+                .credentialsProvider(DefaultCredentialsProvider.builder().build())  // [~/.aws/credentials]?
                 .region(Region.of(region));
         return new S3ConnectionResource(region, bucket, new S3Connection(s3ClientBuilder.build()));
     }

@@ -3,6 +3,8 @@ package io.github.greyp9.arwo.core.table.metadata;
 import java.io.Serializable;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class RowSetMetaData implements Serializable {
     private static final long serialVersionUID = 5395030489971059299L;
@@ -35,6 +37,10 @@ public class RowSetMetaData implements Serializable {
 
     public final String getIdentity() {
         return getIdentity(columns);
+    }
+
+    public final List<String> columnNames() {
+        return Arrays.stream(columns).map(ColumnMetaData::getName).collect(Collectors.toList());
     }
 
     public final Iterator<ColumnMetaData> iterator() {

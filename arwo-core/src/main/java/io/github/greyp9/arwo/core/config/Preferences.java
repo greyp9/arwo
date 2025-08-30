@@ -1,14 +1,17 @@
 package io.github.greyp9.arwo.core.config;
 
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.file.FileX;
 import io.github.greyp9.arwo.core.lang.NumberU;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
+import io.github.greyp9.arwo.core.xml.ElementU;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Locale;
 
 // i18nf
@@ -26,6 +29,19 @@ public final class Preferences {
 
     public String getSetting(final String xpath) throws IOException {
         return cursor.getXed().getXPather().getText(Const.PREFERENCES + xpath);
+    }
+
+    public String getMIMETypeIt(final String path) throws IOException {
+        final String uri = App.Config.QNAME_APP.getNamespaceURI();
+        final List<Element> elements = cursor.getXed().getXPather().getElements(Const.MIME_TYPE_SET);
+        for (Element element : elements) {
+            final String extension = ElementU.getTextContent(ElementU.getChild(element, App.Settings.EXTENSION, uri));
+            final String mimeType = ElementU.getTextContent(ElementU.getChild(element, App.Settings.TYPE, uri));
+            if (path.endsWith(extension)) {
+                return mimeType;
+            }
+        }
+        return getDefaultMIMEType();
     }
 
     public String getMIMEType(final String path) throws IOException {
@@ -74,6 +90,7 @@ public final class Preferences {
     private static class Const {
         private static final String PREFERENCES = "/app:app/app:preferences";
         private static final String MIME_TYPES = PREFERENCES + "/app:mimeTypes";
+        private static final String MIME_TYPE_SET = MIME_TYPES + "/app:mimeType";
         private static final String MIME_TYPE_FOR_EXT = MIME_TYPES + "/app:mimeType[app:extension='%s']/app:type";
         //private static final String LOCALIZATION = PREFERENCES + "/app:localization";
         //private static final String TZ = LOCALIZATION + "/app:tz";

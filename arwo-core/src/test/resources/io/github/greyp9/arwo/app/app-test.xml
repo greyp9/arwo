@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<app xmlns="urn:arwo:app">
+    <folders/>
+    <s3Endpoints/>
+    <kubes/>
+    <sshServers/>
+    <cifsServers/>
+    <webdavServers/>
+    <jdbcServers/>
+    <smtpServers/>
+    <imapServers/>
+    <pop3Servers/>
+    <cron/>
+    <documents/>
+    <preferences>
+        <mimeTypes>
+            <mimeType>
+                <extension>zip</extension>
+                <type>application/zip</type>
+            </mimeType>
+            <mimeType>
+                <extension>jar</extension>
+                <type>application/zip</type>
+            </mimeType>
+            <mimeType>
+                <extension>tgz</extension>
+                <type>application/tar+gzip</type>
+            </mimeType>
+            <mimeType>
+                <extension>tar.gz</extension>
+                <type>application/tar+gzip</type>
+            </mimeType>
+            <mimeType>
+                <extension>gz</extension>
+                <type>application/gzip</type>
+            </mimeType>
+            <mimeDefaultType>text/plain; charset='UTF-8'</mimeDefaultType>
+        </mimeTypes>
+        <localization>
+            <tz>GMT</tz>
+            <dateFormat>EEE, dd MMM yyyy HH:mm:ss.SSS zzz</dateFormat>
+            <language>EN</language>
+        </localization>
+        <view>
+            <headSize>1000000</headSize>
+            <tailSize>1000000</tailSize>
+        </view>
+        <table>
+            <pageSize>100</pageSize>
+        </table>
+        <ui>
+            <shortcut>red</shortcut>
+            <theme>default</theme>
+        </ui>
+    </preferences>
+</app>

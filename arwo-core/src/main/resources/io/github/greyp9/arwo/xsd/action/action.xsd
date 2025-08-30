@@ -114,6 +114,17 @@
         </xsd:sequence>
     </xsd:complexType>
 
+    <xsd:element name='kubeLog' type='action:kubeLogType'/>
+
+    <xsd:complexType name='kubeLogType'>
+        <xsd:sequence>
+            <xsd:element name='pretty' type='xsd:boolean'/> <!--boolean-->
+            <xsd:element name='previous' type='xsd:boolean'/>
+            <xsd:element name='tailLines' type='xsd:unsignedInt' default='100'/>
+            <xsd:element name='timestamps' type='xsd:boolean'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
     <xsd:element name='empty' type='action:emptyType'/>
 
     <xsd:complexType name='emptyType'>

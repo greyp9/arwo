@@ -9,9 +9,11 @@ import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.xed.bundle.XsdBundle;
 import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
+import io.github.greyp9.arwo.core.xed.view.html.type.BooleanHtmlView;
 import io.github.greyp9.arwo.core.xed.view.html.type.EnumHtmlView;
 import io.github.greyp9.arwo.core.xed.view.html.type.TextHtmlView;
 import io.github.greyp9.arwo.core.xed.view.type.ViewInstance;
+import io.github.greyp9.arwo.core.xed.view.type.ViewInstanceBoolean;
 import io.github.greyp9.arwo.core.xed.view.type.ViewInstanceDrillDown;
 import io.github.greyp9.arwo.core.xed.view.type.ViewInstanceEnum;
 import io.github.greyp9.arwo.core.xed.view.type.ViewInstanceText;
@@ -75,6 +77,8 @@ public class PropertyStripHtmlView {
             viewInstance.getClass();
         } else if (viewInstance instanceof ViewInstanceEnum) {
             addViewInstanceValueEnum((ViewInstanceEnum) viewInstance, td);
+        } else if (viewInstance instanceof ViewInstanceBoolean) {
+            addViewInstanceValueBoolean((ViewInstanceBoolean) viewInstance, td);
         } else {
             addViewInstanceValueText((ViewInstanceText) viewInstance, td);
         }
@@ -82,6 +86,10 @@ public class PropertyStripHtmlView {
 
     private void addViewInstanceValueEnum(final ViewInstanceEnum viewInstance, final Element tr) {
         new EnumHtmlView(viewInstance).addContentToStrip(tr);
+    }
+
+    private void addViewInstanceValueBoolean(final ViewInstanceBoolean viewInstance, final Element tr) {
+        new BooleanHtmlView(viewInstance).addContentTo(tr);
     }
 
     private void addViewInstanceValueText(final ViewInstanceText viewInstance, final Element tr) {

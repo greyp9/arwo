@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.s3.data;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.file.FileX;
 import io.github.greyp9.arwo.core.glyph.UTF16;
+import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
 import io.github.greyp9.arwo.core.table.insert.InsertRow;
@@ -11,6 +12,7 @@ import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.row.RowSetSource;
 import io.github.greyp9.arwo.s3.connection.S3Connection;
+import io.github.greyp9.arwo.s3.core.S3;
 import software.amazon.awssdk.services.s3.S3Client;
 import software.amazon.awssdk.services.s3.model.CommonPrefix;
 import software.amazon.awssdk.services.s3.model.ListObjectsV2Request;
@@ -38,7 +40,7 @@ public final class S3RowSetSource implements RowSetSource {
 
     @Override
     public String getRowSetId() {
-        return "s3ObjectType";
+        return S3.OBJECT_TYPE;
     }
 
     @Override
@@ -46,7 +48,7 @@ public final class S3RowSetSource implements RowSetSource {
         final S3Client s3Client = connection.getS3Client();
         final Date date = new Date();
         final ListObjectsV2Request listObjectsRequest = ListObjectsV2Request.builder()
-                .bucket(bucket).prefix(prefix).delimiter("/").build();
+                .bucket(bucket).prefix(prefix).delimiter(Http.Token.SLASH).build();
         final ListObjectsV2Response listObjectsResponse = s3Client.listObjectsV2(listObjectsRequest);
         final RowSet rowSet = loadRowSet(createMetaData(getRowSetId()), listObjectsResponse);
         connection.update(date);
@@ -68,18 +70,18 @@ public final class S3RowSetSource implements RowSetSource {
 
     private RowSetMetaData createMetaData(final String tableId) {
         final ColumnMetaData[] columns = new ColumnMetaData[]{
-                new ColumnMetaData("select", Types.DATALINK),
-                new ColumnMetaData("name", Types.VARCHAR, true),
-                new ColumnMetaData("mtime", Types.TIMESTAMP),
-                new ColumnMetaData("etag", Types.VARCHAR),
-                new ColumnMetaData("extension", Types.VARCHAR),
-                new ColumnMetaData("size", Types.INTEGER),
+                new ColumnMetaData(App.Attr.SELECT, Types.DATALINK),
+                new ColumnMetaData(App.Attr.NAME, Types.VARCHAR, true),
+                new ColumnMetaData(App.Attr.MTIME, Types.TIMESTAMP),
+                new ColumnMetaData(S3.ATTR_ETAG, Types.VARCHAR),
+                new ColumnMetaData(App.Settings.EXTENSION, Types.VARCHAR),
+                new ColumnMetaData(App.Attr.SIZE, Types.INTEGER),
         };
         return new RowSetMetaData(tableId, columns);
     }
 
     private void loadRow(final RowSet rowSet, final CommonPrefix commonPrefix) {
-        final String href = PathU.toPath(baseURI, commonPrefix.prefix());
+        final String href = PathU.toPath(baseURI, bucket, commonPrefix.prefix());
         final InsertRow insertRow = new InsertRow(rowSet);
         insertRow.setNextColumn(new TableViewLink(UTF16.SELECT, App.Action.SELECT, href));
         insertRow.setNextColumn(commonPrefix.prefix().substring(prefix.length()));
@@ -87,7 +89,7 @@ public final class S3RowSetSource implements RowSetSource {
     }
 
     private void loadRow(final RowSet rowSet, final S3Object s3Object) {
-        final String href = PathU.toPath(baseURI, s3Object.key());
+        final String href = PathU.toPath(baseURI, bucket, s3Object.key());
         final String extension = new FileX(s3Object.key()).getExtension();
         final InsertRow insertRow = new InsertRow(rowSet);
         insertRow.setNextColumn(new TableViewLink(UTF16.SELECT, App.Action.SELECT, href));

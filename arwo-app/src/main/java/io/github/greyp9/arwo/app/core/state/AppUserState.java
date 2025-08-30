@@ -99,7 +99,7 @@ public final class AppUserState {
     private final ViewStates viewStates;
     // local cache of remote resources
     private final ResourceCache cache;
-    private final ResourceCache cacheBlob;
+    // private final ResourceCache cacheBlob;  // are two of these really needed?
     // user alerts
     private final Alerts alerts;
     // text filters (for file display)
@@ -185,8 +185,11 @@ public final class AppUserState {
         return cache;
     }
 
+    /**
+     * @deprecated convert usages to {@link #getCache()}; consolidation of two caches
+     */
     public ResourceCache getCacheBlob() {
-        return cacheBlob;
+        return cache;
     }
 
     public Alerts getAlerts() {
@@ -341,7 +344,7 @@ public final class AppUserState {
         this.menuSystem = new MenuSystem(submitID, new AppMenuFactory());
         this.menuSystemState = new Properties();
         this.cache = new ResourceCache(appState.getContextPath() + App.Servlet.CACHE);
-        this.cacheBlob = new ResourceCache(null);
+        // this.cacheBlob = new ResourceCache(null); // needed?
         this.pageViewHex = Page.Factory.initPage(Const.PAGE_HEX_VIEW, new Properties());
         this.pageVisualization = Page.Factory.initPage(Const.PAGE_VISUALIZATION, new Properties());
     }
@@ -414,7 +417,7 @@ public final class AppUserState {
         } else if (App.Action.CLEAR.equals(action)) {
             doClearCache();
         } else if (App.Action.REFRESH.equals(action) && (App.Object.TABLE.equals(object))) {
-            cacheBlob.putRowSet(httpRequest.getURI(), null);
+            cache.putRowSet(httpRequest.getURI(), null);
         } else if (App.Action.REFRESH.equals(action)) {
             PropertiesU.toggleBoolean(properties, action);
         } else if (App.Action.RELOAD.equals(action)) {
@@ -575,7 +578,7 @@ public final class AppUserState {
     }
 
     private void doClearCache() throws IOException {
-        final ActionCacheClear action = new ActionCacheClear(cache, cacheBlob);
+        final ActionCacheClear action = new ActionCacheClear(cache);  // (cache, cacheBlob)
         deferredActions.add(action);
         final String message = getBundle().format("AppUserState.cache.clear.message");
         alerts.add(new Alert(Alert.Severity.QUESTION, message, null, null, action.getActions()));

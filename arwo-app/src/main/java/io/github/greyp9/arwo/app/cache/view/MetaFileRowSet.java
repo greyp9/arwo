@@ -5,6 +5,7 @@ import io.github.greyp9.arwo.core.file.FileX;
 import io.github.greyp9.arwo.core.file.meta.FileMetaData;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.glyph.UTF16;
+import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
 import io.github.greyp9.arwo.core.table.cell.TableViewButton;
@@ -46,19 +47,19 @@ public final class MetaFileRowSet {
 
     private RowSetMetaData createMetaData() {
         final ColumnMetaData[] columns = new ColumnMetaData[]{
-                new ColumnMetaData("select", Types.DATALINK),
-                new ColumnMetaData("refresh", Types.DATALINK),
-                new ColumnMetaData("name", Types.VARCHAR, true),
-                new ColumnMetaData("mtime", Types.TIMESTAMP),
-                new ColumnMetaData("extension", Types.VARCHAR),
-                new ColumnMetaData("size", Types.INTEGER),
+                new ColumnMetaData(App.Attr.SELECT, Types.DATALINK),
+                new ColumnMetaData(App.Action.REFRESH, Types.DATALINK),
+                new ColumnMetaData(App.Attr.NAME, Types.VARCHAR, true),
+                new ColumnMetaData(App.Attr.MTIME, Types.TIMESTAMP),
+                new ColumnMetaData(App.Attr.EXTENSION, Types.VARCHAR),
+                new ColumnMetaData(App.Attr.SIZE, Types.INTEGER),
         };
         return new RowSetMetaData(tableId, columns);
     }
 
     private void addRow(final RowSet rowSet, final String key, final MetaFile metaFile) {
         final String hrefSelect = PathU.toPath(baseURI, key);
-        final String hrefRefresh = metaFile.getMetaData().getProperties().getProperty("href");
+        final String hrefRefresh = metaFile.getMetaData().getProperties().getProperty(Html.HREF);
         final SubmitToken tokenRefresh = new SubmitToken(App.Target.USER_STATE, App.Action.RELOAD, hrefRefresh);
         final FileMetaData metaData = metaFile.getMetaData();
 

@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.app.cache.view;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.fixup.AppHtmlView;
 import io.github.greyp9.arwo.app.core.view.table.UserStateTable;
+import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppTitle;
 import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.html.Html;
@@ -13,7 +14,7 @@ import io.github.greyp9.arwo.core.menu.MenuContext;
 import io.github.greyp9.arwo.core.menu.MenuItem;
 import io.github.greyp9.arwo.core.menu.MenuSystem;
 import io.github.greyp9.arwo.core.table.row.RowSet;
-import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.core.text.TextU;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import org.w3c.dom.Document;
@@ -41,13 +42,13 @@ public final class RowSetView {
         final Element body = new XPather(html, null).getElement(Html.XPath.CONTENT);
         final UserStateTable table = new UserStateTable(userState, null, httpRequest.getDate());
         table.toTableView(rowSet).addContentTo(body);
-        final String labelContext = Value.wrap("[", "]", rowSet.getMetaData().getID());
+        final String labelContext = TextU.wrapBracket(rowSet.getMetaData().getID());
         final AppTitle appTitle = AppTitle.Factory.getResourceLabel(httpRequest, userState.getBundle(), labelContext);
         final MenuSystem menuSystem = userState.getMenuSystem();
         final List<MenuItem> menuItems = Collections.singletonList(
                 menuSystem.get(httpRequest.getServletPath(), AppMenuFactory.Const.DASHBOARD)
         );
         final MenuContext menuContext = new MenuContext(menuSystem, menuItems);
-        return new AppHtmlView(httpRequest, userState, appTitle, menuContext, "").fixup(html);
+        return new AppHtmlView(httpRequest, userState, appTitle, menuContext, App.Token.EMPTY).fixup(html);
     }
 }

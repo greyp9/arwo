@@ -11,6 +11,7 @@
     <xsd:complexType name='appType'>
         <xsd:sequence>
             <xsd:element name='folders' type='app:localFoldersType'/>
+            <xsd:element name='s3Endpoints' type='app:s3EndpointsType'/>
             <xsd:element name='kubes' type='app:kubeConfigsType'/>
             <xsd:element name='sshServers' type='app:sshServersType'/>
             <xsd:element name='cifsServers' type='app:cifsServersType'/>
@@ -37,6 +38,22 @@
             <xsd:element name='comment' type='xsd:string'/>
             <xsd:element name='enabled' type='xsd:boolean'/>
             <xsd:element name='folder' type='xsd:string'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name='s3EndpointsType'>
+        <xsd:sequence>
+            <xsd:element name='s3' type='app:s3EndpointType' minOccurs='0' maxOccurs='unbounded'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name='s3EndpointType'>
+        <xsd:sequence>
+            <xsd:element name='name' type='xsd:string'/>
+            <xsd:element name='comment' type='xsd:string'/>
+            <xsd:element name='enabled' type='xsd:boolean'/>
+            <xsd:element name='region' type='xsd:string'/>
+            <xsd:element name='bucket' type='xsd:string'/>
         </xsd:sequence>
     </xsd:complexType>
 

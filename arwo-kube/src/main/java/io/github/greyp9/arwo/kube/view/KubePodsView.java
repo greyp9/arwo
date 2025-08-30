@@ -40,7 +40,7 @@ public class KubePodsView extends KubeView {
         final String endpoint = getResource().getName();
         final String rowSetId = getHttpRequest().getURI();
         // getUserState().getCache().clear();  // if table isn't cached, then client will refetch it (keep-alive)
-        final RowSetSource rowSetSource = new CacheRowSetSource(getUserState().getCacheBlob(),
+        final RowSetSource rowSetSource = new CacheRowSetSource(getUserState().getCache(),
                 new PodRowSetSource(connection, nodeId, namespace, baseURI, endpoint), rowSetId);
         try {
             final RowSet rowSet = rowSetSource.getRowSet();

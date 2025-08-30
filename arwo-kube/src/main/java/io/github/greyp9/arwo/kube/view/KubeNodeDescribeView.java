@@ -31,7 +31,7 @@ public class KubeNodeDescribeView extends KubeView {
 
     @Override
     protected final HttpResponse addContentTo(final Element html) throws IOException {
-        final ResourceCache cache = getUserState().getCacheBlob();  // "getCacheBlob()"?
+        final ResourceCache cache = getUserState().getCache();
         final Object cachedValue = cache.getObject(nodeName, this::getJsonElement);
         final JsonElement jsonElement = Value.as(cachedValue, JsonElement.class);
         return (jsonElement == null) ? null

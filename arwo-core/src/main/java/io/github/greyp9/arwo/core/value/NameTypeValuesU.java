@@ -11,7 +11,9 @@ public final class NameTypeValuesU {
             final boolean isValue = ((i + 1) < args.length);
             final String name = args[i];
             final String value = (isValue ? args[i + 1] : null);
-            nameTypeValues.add(NameTypeValue.U.create(name, value));
+            if ((name != null) && (value != null)) {
+                nameTypeValues.add(NameTypeValue.U.create(name, value));
+            }
         }
         return nameTypeValues;
     }

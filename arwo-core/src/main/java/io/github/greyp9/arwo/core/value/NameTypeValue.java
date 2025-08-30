@@ -40,6 +40,10 @@ public class NameTypeValue {
         return String.format("[%s:%s]=[%s]", type, name, value);
     }
 
+    public final String toStringNV() {
+        return String.format("%s=%s", name, value);
+    }
+
     public static final class U {
         private U() {
         }

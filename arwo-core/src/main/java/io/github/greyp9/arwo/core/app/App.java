@@ -24,6 +24,7 @@ public final class App {
         public static final QName QNAME_FOLDER_NEW = new QName(URI_ACTION, "folderNew", PREFIX_ACTION);
         public static final QName QNAME_FILES_RENAME = new QName(URI_ACTION, "filesRename", PREFIX_ACTION);
         public static final QName QNAME_FILTER = new QName(URI_ACTION, "filter", PREFIX_ACTION);
+        public static final QName QNAME_KUBE_LOG = new QName(URI_ACTION, "kubeLog", PREFIX_ACTION);
         public static final QName QNAME_LOCALE = new QName(URI_ACTION, "locale", PREFIX_ACTION);
         public static final QName QNAME_MAIL = new QName(URI_ACTION, "mail", PREFIX_ACTION);
         public static final QName QNAME_REFRESH = new QName(URI_ACTION, "refresh", PREFIX_ACTION);
@@ -184,10 +185,32 @@ public final class App {
         public static final String VIEW_DOT = "viewDot";
     }
 
+    public static class Token {
+        public static final String BANG = "!";
+        public static final String BANG_SLASH = "!/";
+        public static final String BRACE_OPEN = "{";
+        public static final String BRACE_CLOSE = "}";
+        public static final String BRACKET_OPEN = "[";
+        public static final String BRACKET_CLOSE = "]";
+        public static final String EMPTY = "";
+    }
+
+    public static class Attr {
+        public static final String ATTR = "attr";
+        public static final String EXTENSION = "extension";
+        public static final String MTIME = "mtime";
+        public static final String NAME = "name";
+        public static final String RESOURCE = "resource";
+        public static final String SELECT = "select";
+        public static final String SIZE = "size";
+        public static final String TYPE = "type";
+    }
+
     public static class Settings {
         public static final String ALGORITHM = "algorithm";
         public static final String AUTH_PASSWORD = "authPassword";
         public static final String AUTH_PUBLIC_KEY = "authPublicKey";
+        public static final String BUCKET = "bucket";
         public static final String CERTIFICATE = "certificate";
         public static final String COMMAND = "command";
         public static final String COMMENT = "comment";
@@ -195,6 +218,7 @@ public final class App {
         public static final String DATE_SCHEDULED = "dateScheduled";
         public static final String DRIVER_CLASS = "driverClass";
         public static final String ENABLED = "enabled";
+        public static final String EXTENSION = "extension";
         public static final String FOLDER = "folder";
         public static final String HOST = "host";
         public static final String NAME = "name";
@@ -203,11 +227,13 @@ public final class App {
         public static final String PROTOCOL = "protocol";
         public static final String PROXY = "proxy";
         public static final String PUBLIC_KEY = "publicKey";
+        public static final String REGION = "region";
         public static final String RESOURCE = "resource";
         public static final String SERVER = "server";
         public static final String SHARE = "share";
         public static final String SQL = "sql";
         public static final String TERM = "term";
+        public static final String TYPE = "type";
         public static final String URL = "url";
         public static final String USER = "user";
         public static final String PASSWORD = "password";

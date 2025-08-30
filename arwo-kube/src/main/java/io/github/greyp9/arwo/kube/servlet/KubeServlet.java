@@ -65,7 +65,7 @@ public class KubeServlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
         }
-        final HttpResponse httpResponse = new KubeHandlerPost(httpRequest, userState).doPost();
+        final HttpResponse httpResponse = new KubeHandlerPost(httpRequest, userState).doPostSafe();
         // send response
         ServletU.write(httpResponse, response);
     }

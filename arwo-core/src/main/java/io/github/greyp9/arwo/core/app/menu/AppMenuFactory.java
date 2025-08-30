@@ -208,6 +208,7 @@ public class AppMenuFactory implements MenuFactory {
 
     private static MenuItem createMenuSession(final String key) {
         final String subject = App.Target.USER_STATE;
+        final MenuItem itemCache = new MenuItem(App.Action.CACHE, subject, App.Action.TOGGLE, App.Action.CACHE);
         final MenuItem itemClear = new MenuItem(App.Action.CLEAR, subject, App.Action.CLEAR);
         final MenuItem itemRefresh = new MenuItem(App.Action.REFRESH, subject, App.Action.REFRESH);
         final MenuItem itemCronOn = new MenuItem(App.Action.CRON_ON, subject, App.Action.CRON_ON);
@@ -216,7 +217,7 @@ public class AppMenuFactory implements MenuFactory {
         final MenuItem itemRestart = new MenuItem(App.Action.RESTART, subject, App.Action.RESTART);
         final MenuItem itemStop = new MenuItem(App.Action.STOP, subject, App.Action.STOP);
         return new MenuItem("session", subject, App.Action.MENU, key + "/session",
-                itemClear, itemRefresh, itemCronOn, itemCronOff, itemReset, itemRestart, itemStop);
+                itemCache, itemClear, itemRefresh, itemCronOn, itemCronOff, itemReset, itemRestart, itemStop);
     }
 
     private static MenuItem createMenuFavorites(final String key) {

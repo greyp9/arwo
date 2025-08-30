@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.s3.handler;
 
+import io.github.greyp9.arwo.app.cache.core.Cache;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.fixup.AppHtmlView;
 import io.github.greyp9.arwo.app.core.view.table.UserStateTable;
@@ -10,6 +11,7 @@ import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.cache.CacheRowSetSource;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
+import io.github.greyp9.arwo.core.config.CursorS3;
 import io.github.greyp9.arwo.core.config.Preferences;
 import io.github.greyp9.arwo.core.connect.ConnectionCache;
 import io.github.greyp9.arwo.core.file.meta.FileMetaData;
@@ -23,15 +25,21 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.menu.MenuContext;
 import io.github.greyp9.arwo.core.menu.MenuItem;
 import io.github.greyp9.arwo.core.menu.MenuSystem;
+import io.github.greyp9.arwo.core.resource.PathU;
+import io.github.greyp9.arwo.core.resource.Pather;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.row.RowSetSource;
+import io.github.greyp9.arwo.core.text.TextU;
 import io.github.greyp9.arwo.core.util.PropertiesU;
+import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import io.github.greyp9.arwo.s3.connection.S3ConnectionFactory;
 import io.github.greyp9.arwo.s3.connection.S3ConnectionResource;
 import io.github.greyp9.arwo.s3.data.S3RowSetSource;
+import io.github.greyp9.arwo.s3.view.EndpointRowSet;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import software.amazon.awssdk.core.ResponseBytes;
@@ -43,20 +51,18 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
 import java.util.UUID;
 
 public class S3HandlerGet {
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
-    private final Properties properties;
+    //private final Properties properties;
 
     public S3HandlerGet(final ServletHttpRequest httpRequest,
-                        final AppUserState userState,
-                        final Properties properties) {
+                        final AppUserState userState) {
         this.httpRequest = httpRequest;
         this.userState = userState;
-        this.properties = properties;
+        //this.properties = properties;
     }
 
     public final HttpResponse doGet() throws IOException {
@@ -74,76 +80,116 @@ public class S3HandlerGet {
         final HttpResponse httpResponse;
         final String pathInfo = httpRequest.getPathInfo();
         final boolean isFolder = pathInfo.endsWith(Http.Token.SLASH);
-        if (isFolder) {
-            httpResponse = doGetFolder(pathInfo.substring(Http.Token.SLASH.length()));
+        final Pather pather = new Pather(pathInfo);
+        final String endpoint = pather.getLeftToken();
+        final String resource = pather.getRight();
+        if (Value.isEmpty(endpoint)) {
+            httpResponse = doGetInventory();
+        } else if (resource == null) {
+            httpResponse = HttpResponseU.to302(httpRequest.getBaseURI() + pather.getLeft() + Http.Token.SLASH);
+        } else if (isFolder) {
+            httpResponse = doGetFolder(endpoint, resource.substring(Http.Token.SLASH.length()));
         } else {
-            httpResponse = doGetFile(pathInfo.substring(Http.Token.SLASH.length()));
+            httpResponse = doGetFile(endpoint, resource.substring(Http.Token.SLASH.length()));
         }
         return httpResponse;
     }
 
-    private HttpResponse doGetFile(final String prefix) throws IOException {
-        final String bucketName = properties.getProperty("bucket");
-        final String regionName = properties.getProperty("region");
+    private HttpResponse doGetInventory() throws IOException {
+        final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
+        final Element body = new XPather(html, null).getElement(Html.XPath.CONTENT);
+        final UserStateTable table = new UserStateTable(userState, httpRequest.getPathInfo(), httpRequest.getDate());
+        table.toTableView(new EndpointRowSet(httpRequest, userState).getRowSet()).addContentTo(body);
+        final String labelContext = TextU.wrapBracket(httpRequest.getPathInfo());
+        final NameTypeValue facetCacheEnabled = new NameTypeValue(
+                App.Action.CACHE, PropertiesU.isBoolean(userState.getProperties(), App.Action.CACHE));
+        final AppTitle appTitle = AppTitle.Factory.getResourceLabel(httpRequest, userState.getBundle(),
+                labelContext, facetCacheEnabled.toStringNV());
+        final MenuSystem menuSystem = userState.getMenuSystem();
+        final List<MenuItem> menuItems = Collections.singletonList(
+                menuSystem.get(httpRequest.getServletPath(), AppMenuFactory.Const.DASHBOARD)
+        );
+        final MenuContext menuContext = new MenuContext(menuSystem, menuItems);
+        return new AppHtmlView(httpRequest, userState, appTitle, menuContext, App.Token.EMPTY).fixup(html);
+    }
+
+    private HttpResponse doGetFile(final String endpoint, final String prefix) throws IOException {
+        final Xed xed = userState.getDocumentState().getSession(App.Servlet.SETTINGS).getXed();
+        final CursorS3 cursorS3 = new CursorS3(xed, endpoint);
+        final String regionName = cursorS3.getRegion();
+        final String bucketName = cursorS3.getBucket();
         // get remote connection
-        final S3ConnectionFactory factory = new S3ConnectionFactory(regionName, bucketName);
         final ConnectionCache cache = userState.getS3().getCache();
-        final String resourceName = String.format("%s/%s", regionName, bucketName);
-        final S3ConnectionResource resource = (S3ConnectionResource) cache.getResource(resourceName, factory);
-        final S3Client s3Client = resource.getConnection().getS3Client();
+        final String connectionName = Value.join(Http.Token.SLASH, regionName, bucketName);
+        final S3ConnectionFactory connectionFactory = new S3ConnectionFactory(regionName, bucketName);
+        final S3ConnectionResource resource =
+                (S3ConnectionResource) cache.getResource(connectionName, connectionFactory);
         // get remote resource
+        final S3Client s3Client = resource.getConnection().getS3Client();
         final GetObjectRequest getObjectRequest = GetObjectRequest.builder()
                 .bucket(bucketName).key(prefix).build();
         final ResponseBytes<GetObjectResponse> objectAsBytes = s3Client.getObjectAsBytes(getObjectRequest);
-        // serve resource
+        // prep resource for inclusion in response payload
         final byte[] payload = objectAsBytes.asByteArray();
         final long lastModified = objectAsBytes.response().lastModified().toEpochMilli();
         final String baseURI = httpRequest.getHttpRequest().getResource();
         final FileMetaData metaData = new FileMetaData(baseURI, payload.length, lastModified, 0L, false);
         // optionally cache response payload
+        final Preferences preferences = new Preferences(userState.getConfig());
+        final String mimeType = Value.defaultOnEmpty(preferences.getMIMETypeIt(prefix), Http.Mime.TEXT_PLAIN_UTF8);
+        final HttpResponse httpResponse;
         final boolean cacheItem = PropertiesU.isBoolean(userState.getProperties(), App.Action.CACHE);
         if (cacheItem) {
             final ResourceCache resourceCache = userState.getCache();
             final String id = Http.Token.SLASH + UUID.nameUUIDFromBytes(UTF8Codec.toBytes(baseURI));
             metaData.getProperties().setProperty(Html.HREF, baseURI + Http.Token.QUERY + App.Action.CACHE);
-            resourceCache.putFile(id, new MetaFile(metaData, null, new ByteArrayInputStream(payload)));
+            resourceCache.putFile(id, new MetaFile(metaData, mimeType, new ByteArrayInputStream(payload)));
+            httpResponse = HttpResponseU.to302(PathU.toPath(resourceCache.getEndpoint(), Cache.CONTEXT_METAFILES, id));
+        } else {
+            httpResponse = HttpResponseU.to200(new MetaFile(metaData, mimeType, new ByteArrayInputStream(payload)));
         }
-        // serve response payload
-        final Preferences preferences = new Preferences(userState.getConfig());
-        final String mimeType = Value.defaultOnEmpty(preferences.getMIMEType(prefix), Http.Mime.TEXT_PLAIN_UTF8);
-        return HttpResponseU.to200(new MetaFile(metaData, mimeType, new ByteArrayInputStream(payload)));
+        return httpResponse;
     }
 
-    private HttpResponse doGetFolder(final String prefix) throws IOException {
-        final String regionName = properties.getProperty("region");
-        final String bucketName = properties.getProperty("bucket");
-        final String resourceName = String.format("%s/%s", regionName, bucketName);
-        final S3ConnectionFactory factory = new S3ConnectionFactory(regionName, bucketName);
-        final ConnectionCache cache = userState.getS3().getCache();
-        final S3ConnectionResource resource = (S3ConnectionResource) cache.getResource(resourceName, factory);
-        final ResourceCache cache1 = userState.getCacheBlob();
-        final RowSetSource rowSetSource = new CacheRowSetSource(cache1, new S3RowSetSource(
-                resource.getConnection(), httpRequest.getBaseURI(), bucketName, prefix), prefix);
+    private HttpResponse doGetFolder(final String endpoint, final String prefix) throws IOException {
+        final Xed xed = userState.getDocumentState().getSession(App.Servlet.SETTINGS).getXed();
+        final CursorS3 cursorS3 = new CursorS3(xed, endpoint);
+        final String regionName = cursorS3.getRegion();
+        final String bucketName = cursorS3.getBucket();
+        // get remote connection
+        final ConnectionCache connectionCache = userState.getS3().getCache();
+        final String connectionName = Value.join(Http.Token.SLASH, regionName, bucketName);
+        final S3ConnectionFactory connectionFactory = new S3ConnectionFactory(regionName, bucketName);
+        final S3ConnectionResource resource =
+                (S3ConnectionResource) connectionCache.getResource(connectionName, connectionFactory);
+        // get remote resource (or cached copy, if present)
+        final ResourceCache resourceCache = userState.getCache();
+        final RowSetSource rowSetSourceS3 = new S3RowSetSource(
+                resource.getConnection(), httpRequest.getBaseURI(), bucketName, prefix);
+        final RowSetSource rowSetSource = new CacheRowSetSource(
+                resourceCache, rowSetSourceS3, httpRequest.getHttpRequest().getResource());
         final RowSet rowSet;
         try {
             rowSet = rowSetSource.getRowSet();
         } catch (Exception e) {
             throw new IOException(e);
         }
-        // cache1.clear();  // debugging aid
-        final UserStateTable table = new UserStateTable(userState, httpRequest.getPathInfo(), httpRequest.getDate());
+        // resourceCache.clear();  // debugging aid
+        // render resource
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
         final Element body = new XPather(html, null).getElement(Html.XPath.CONTENT);
+        final UserStateTable table = new UserStateTable(userState, httpRequest.getPathInfo(), httpRequest.getDate());
         table.toTableView(rowSet).addContentTo(body);
-        final String labelContext = Value.wrap("[", "]", httpRequest.getPathInfo());
-        final boolean cacheItem = PropertiesU.isBoolean(userState.getProperties(), App.Action.CACHE);
+        final String labelContext = TextU.wrapBracket(httpRequest.getPathInfo());
+        final NameTypeValue facetCacheEnabled = new NameTypeValue(
+                App.Action.CACHE, PropertiesU.isBoolean(userState.getProperties(), App.Action.CACHE));
         final AppTitle appTitle = AppTitle.Factory.getResourceLabel(httpRequest, userState.getBundle(),
-                labelContext, regionName, bucketName, String.format("cache=%s", cacheItem));
+                labelContext, regionName, bucketName, facetCacheEnabled.toStringNV());
         final MenuSystem menuSystem = userState.getMenuSystem();
         final List<MenuItem> menuItems = Collections.singletonList(
                 menuSystem.get(httpRequest.getServletPath(), AppMenuFactory.Const.DASHBOARD)
         );
         final MenuContext menuContext = new MenuContext(menuSystem, menuItems);
-        return new AppHtmlView(httpRequest, userState, appTitle, menuContext, "").fixup(html);
+        return new AppHtmlView(httpRequest, userState, appTitle, menuContext, App.Token.EMPTY).fixup(html);
     }
 }

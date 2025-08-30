@@ -1,5 +1,7 @@
 package io.github.greyp9.arwo.app.cache.handler;
 
+import io.github.greyp9.arwo.app.cache.core.Cache;
+import io.github.greyp9.arwo.app.cache.view.CacheInventoryView;
 import io.github.greyp9.arwo.app.cache.view.MetaFileInventoryView;
 import io.github.greyp9.arwo.app.cache.view.MetaFileView;
 import io.github.greyp9.arwo.app.cache.view.RowSetView;
@@ -41,12 +43,12 @@ public class CacheHandlerGet {
         HttpResponse httpResponse;
         final Pather pather = new Pather(httpRequest.getPathInfo());
         final String view = pather.getLeftToken();
-        if ("f".equals(view)) {
+        if (Cache.CONTEXT_METAFILES.equals(view)) {
             httpResponse = doGetMetaFile(pather.getRight());
-        } else if ("r".equals(view)) {
+        } else if (Cache.CONTEXT_ROWSETS.equals(view)) {
             httpResponse = doGetRowSet(pather.getRight());
         } else {
-            httpResponse = HttpResponseU.to302(httpRequest.getBaseURI() + "/f/");
+            httpResponse = new CacheInventoryView(httpRequest, userState, userState.getCache()).render();
         }
         return httpResponse;
     }

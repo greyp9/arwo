@@ -64,4 +64,11 @@
         </xsl:copy>
     </xsl:template>
 
+    <xsl:template match='/xsd:schema/xsd:complexType[@name="kubeLogType"]//xsd:element[@name="tailLines"]'>
+        <xsl:copy>
+            <xsl:attribute name='xed:size'>12</xsl:attribute>
+            <xsl:apply-templates select='@*|node()'/>
+        </xsl:copy>
+    </xsl:template>
+
 </xsl:stylesheet>

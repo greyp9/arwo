@@ -1,5 +1,7 @@
 package io.github.greyp9.arwo.core.xed.action;
 
+import io.github.greyp9.arwo.core.action.ActionButtons;
+import io.github.greyp9.arwo.core.action.ActionFactory;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
@@ -8,11 +10,16 @@ import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.op.OpUpdate;
+import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
+import io.github.greyp9.arwo.core.xed.view.html.PropertyStripHtmlView;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
+import org.w3c.dom.Element;
 
 import javax.xml.namespace.QName;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Locale;
 
 public class XedAction {
@@ -42,5 +49,15 @@ public class XedAction {
         final ValueInstance valueInstance = ValueInstance.create(cursor.getTypeInstance(), nameTypeValues);
         new OpUpdate(null, xed).apply(cursor.getElement(), valueInstance);
         return xed;
+    }
+
+    public final void addPropertyStripTo(final Element html, final String submitID) throws IOException {
+        final Xed xedUI = getXedUI(xed.getLocale());
+        final XedPropertyPageView pageView = new XedPropertyPageView(null, new XedNav(xedUI).getRoot());
+        final ActionFactory actionFactory = new ActionFactory(
+                submitID, xedUI.getBundle(), App.Target.SESSION, App.Action.UPDATE, null);
+        final Collection<String> actions = Collections.singletonList(App.Action.UPDATE);
+        final ActionButtons buttons = actionFactory.create(App.Action.REFRESH, false, actions);
+        new PropertyStripHtmlView(pageView, buttons).addContentDiv(html);
     }
 }

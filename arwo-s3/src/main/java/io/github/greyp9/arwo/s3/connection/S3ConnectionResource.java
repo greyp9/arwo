@@ -1,7 +1,9 @@
 package io.github.greyp9.arwo.s3.connection;
 
 import io.github.greyp9.arwo.core.connect.ConnectionResource;
+import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.lang.CompareU;
+import io.github.greyp9.arwo.core.value.Value;
 
 import java.io.IOException;
 import java.util.Date;
@@ -23,7 +25,7 @@ public final class S3ConnectionResource implements ConnectionResource, Comparabl
 
     @Override
     public String getName() {
-        return String.format("%s/%s", region, bucket);
+        return Value.join(Http.Token.SLASH, region, bucket);
     }
 
     @Override

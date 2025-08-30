@@ -10,13 +10,17 @@ import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
+import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.kube.connection.KubeConnectionResource;
+import io.github.greyp9.arwo.kube.xed.widget.XedWidgetKubeLog;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 import org.w3c.dom.Element;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Locale;
+import java.util.Properties;
 
 public class KubeLogsView extends KubeView {
 
@@ -38,9 +42,18 @@ public class KubeLogsView extends KubeView {
         final KubeConnectionResource resource = getResource();
         final CoreV1Api api = resource.getConnection().getCoreV1Api();
         try {
-            final String string = api.readNamespacedPodLog(
-                    podName, namespace, containerName, null, null, null, null, null, null, 100, null);
-            final byte[] payload = UTF8Codec.toBytes(string);
+            final XedFactory xedFactory = getUserState().getXedFactory();
+            final Locale locale = getUserState().getLocale();
+            final XedWidgetKubeLog xedWidgetKubeLog = new XedWidgetKubeLog(xedFactory, locale);
+            final Properties properties = getUserState().getKube().getProperties();
+            xedWidgetKubeLog.applyFrom(properties);
+            final byte[] payload = UTF8Codec.toBytes(api.readNamespacedPodLog(
+                    podName, namespace, containerName, null, null, null,
+                    Boolean.toString(xedWidgetKubeLog.getValueBoolean("/action:kubeLog/action:pretty")),
+                    xedWidgetKubeLog.getValueBoolean("/action:kubeLog/action:previous"),
+                    null,
+                    xedWidgetKubeLog.getValueInt("/action:kubeLog/action:tailLines"),
+                    xedWidgetKubeLog.getValueBoolean("/action:kubeLog/action:timestamps")));
             if (payload == null) {
                 return HttpResponseU.to404();
             } else {

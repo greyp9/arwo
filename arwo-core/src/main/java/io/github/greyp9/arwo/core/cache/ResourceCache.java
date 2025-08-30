@@ -27,6 +27,10 @@ public final class ResourceCache {
         this.objects = new TreeMap<>();
     }
 
+    public Iterator<Map.Entry<String, RowSet>> getRowSets() {
+        return rowSets.entrySet().iterator();
+    }
+
     public boolean containsRowSet(final String id) {
         return rowSets.containsKey(id);
     }
@@ -57,6 +61,10 @@ public final class ResourceCache {
 
     public void putFile(final String id, final MetaFile file) {
         files.put(id, file);
+    }
+
+    public Iterator<Map.Entry<String, Object>> getObjects() {
+        return objects.entrySet().iterator();
     }
 
     public synchronized Object getObject(final String id, final Supplier<Object> supplier) {

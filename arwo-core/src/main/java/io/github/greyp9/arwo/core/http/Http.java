@@ -60,6 +60,9 @@ public final class Http {
 
         public static final String APP_CERT = "application/pkix-cert";
         public static final String APP_JSON = "application/json";
+        public static final String APP_ZIP = "application/zip";
+        public static final String APP_GZIP = "application/gzip";
+        public static final String APP_TGZ = "application/tar+gzip";
 
         public static final String FORM_URL_ENCODED = "application/x-www-form-urlencoded";
         public static final String FORM_MULTIPART = "multipart/form-data";

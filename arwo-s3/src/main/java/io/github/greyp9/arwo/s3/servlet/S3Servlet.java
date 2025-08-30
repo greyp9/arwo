@@ -35,6 +35,7 @@ public class S3Servlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             this.appState = (AppState) AppNaming.lookup(context, App.Naming.APP_STATE);
             this.properties = ServletU.fromServletConfig(config, "s3.");
+            this.properties.forEach((key, value) -> logger.finest(String.format("[%s][%s]", key, value.toString())));
         }
         logger.info("init()");
     }
@@ -57,14 +58,14 @@ public class S3Servlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
         }
-        final HttpResponse httpResponse = new S3HandlerGet(httpRequest, userState, properties).doGet();
+        final HttpResponse httpResponse = new S3HandlerGet(httpRequest, userState).doGet();
         final HttpResponse httpResponseGZ = HttpResponseGZipU.toHttpResponseGZip(httpRequest, httpResponse);
         ServletU.write(httpResponseGZ, response);
     }
 
     @Override
     protected final void doPost(final HttpServletRequest request, final HttpServletResponse response)
-            throws ServletException, IOException {
+            throws IOException {
         // get request context
         final ServletHttpRequest httpRequest = ServletU.read(request);
         // process request
