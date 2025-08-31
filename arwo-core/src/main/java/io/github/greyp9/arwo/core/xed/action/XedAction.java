@@ -3,6 +3,8 @@ package io.github.greyp9.arwo.core.xed.action;
 import io.github.greyp9.arwo.core.action.ActionButtons;
 import io.github.greyp9.arwo.core.action.ActionFactory;
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
@@ -10,7 +12,10 @@ import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xed.op.OpUpdate;
+import io.github.greyp9.arwo.core.xed.request.XedRequest;
+import io.github.greyp9.arwo.core.xed.state.XedUserState;
 import io.github.greyp9.arwo.core.xed.view.XedPropertyPageView;
+import io.github.greyp9.arwo.core.xed.view.html.PropertyPageHtmlView;
 import io.github.greyp9.arwo.core.xed.view.html.PropertyStripHtmlView;
 import io.github.greyp9.arwo.core.xsd.value.ValueInstance;
 import org.w3c.dom.Element;
@@ -49,6 +54,22 @@ public class XedAction {
         final ValueInstance valueInstance = ValueInstance.create(cursor.getTypeInstance(), nameTypeValues);
         new OpUpdate(null, xed).apply(cursor.getElement(), valueInstance);
         return xed;
+    }
+
+    public final void addPropertyPageTo(final Element html,
+                                        final String submitID,
+                                        final ServletHttpRequest httpRequest,
+                                        final XedUserState userState,
+                                        final Collection<String> actions) throws IOException {
+        final Xed xedUI = getXedUI(xed.getLocale());
+        final XedCursor cursor = new XedNav(xedUI).getRoot();
+        final Bundle bundle = cursor.getXed().getBundle();
+        final QName qname = cursor.getTypeInstance().getQName();
+        final String cursorType = qname.toString();
+        final ActionFactory actionFactory = new ActionFactory(submitID, bundle, App.Target.SESSION, cursorType, null);
+        final ActionButtons buttons = actionFactory.create(qname.getLocalPart(), false, actions);
+        final XedRequest xedRequest = new XedRequest(httpRequest, null, userState);
+        new PropertyPageHtmlView(new XedPropertyPageView(null, cursor, buttons), xedRequest).addContentTo(html);
     }
 
     public final void addPropertyStripTo(final Element html, final String submitID) throws IOException {
