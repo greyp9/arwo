@@ -17,8 +17,8 @@ import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.resource.Pather;
-import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.value.Value;
 
 import java.io.IOException;
@@ -77,9 +77,10 @@ public final class MetaFileView {
                 userState.getProperties().getProperty(App.Action.MIME_TYPE),
                 new Preferences(userState.getConfig()).getMIMETypeIt(path),
                 Http.Mime.TEXT_PLAIN_UTF8);
-        final NameTypeValues headers = new NameTypeValues(
-                new NameTypeValue(Http.Header.CONTENT_ENCODING, contentEncoding),
-                new NameTypeValue(Http.Header.CONTENT_TYPE, contentType));
+        final NameTypeValues headers = NameTypeValuesU.create(
+                Http.Header.CONTENT_ENCODING, contentEncoding,
+                Http.Header.CONTENT_TYPE, contentType,
+                Http.Header.CONTENT_LENGTH, Long.toString(metaFile.getMetaData().getLength()));
         return new HttpResponse(HttpURLConnection.HTTP_OK, headers, metaFile.getBytes());
     }
 

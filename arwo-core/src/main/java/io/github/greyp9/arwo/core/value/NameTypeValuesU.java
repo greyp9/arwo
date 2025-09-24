@@ -1,5 +1,8 @@
 package io.github.greyp9.arwo.core.value;
 
+import java.util.Arrays;
+import java.util.List;
+
 public final class NameTypeValuesU {
 
     private NameTypeValuesU() {
@@ -18,10 +21,11 @@ public final class NameTypeValuesU {
         return nameTypeValues;
     }
 
-    public static NameTypeValues filterOut(final NameTypeValues nameTypeValuesIn, final String name) {
+    public static NameTypeValues filterOut(final NameTypeValues nameTypeValuesIn, final String... names) {
+        final List<String> listNames = Arrays.asList(names);
         final NameTypeValues nameTypeValues = new NameTypeValues();
         for (final NameTypeValue nameTypeValueIt : nameTypeValuesIn) {
-            if (!nameTypeValueIt.getName().equals(name)) {
+            if (!listNames.contains(nameTypeValueIt.getName())) {
                 nameTypeValues.add(nameTypeValueIt);
             }
         }
