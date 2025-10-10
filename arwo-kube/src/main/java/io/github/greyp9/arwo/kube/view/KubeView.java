@@ -110,6 +110,7 @@ public abstract class KubeView {
     static final String CONTEXT_CONTAINERS = "containers";
     static final String CONTEXT_DESCRIBE = "describe";
     static final String CONTEXT_LOGS = "logs";
+    static final String CONTEXT_KFS = "kfs";
     static final String CONTEXT_NODES = "nodes";
     static final String CONTEXT_PODS = "pods";
 

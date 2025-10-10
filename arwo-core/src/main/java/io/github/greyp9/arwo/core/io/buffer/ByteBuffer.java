@@ -28,6 +28,10 @@ public class ByteBuffer {
         return length;
     }
 
+    public final synchronized String getString() throws IOException {
+        return new String(getBytes(), charset);
+    }
+
     public final synchronized byte[] getBytes() throws IOException {
         return getBytes(false);
     }

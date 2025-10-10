@@ -63,6 +63,6 @@ public class KubeConnectionFactory implements ConnectionFactory {
         }
         final ApiClient apiClient = ClientBuilder.kubeconfig(kubeConfig).build();
         final CoreV1Api api = new CoreV1Api(apiClient);
-        return new KubeConnectionResource(name, namespace, new KubeConnection(api));
+        return new KubeConnectionResource(name, namespace, new KubeConnection(apiClient, api));
     }
 }

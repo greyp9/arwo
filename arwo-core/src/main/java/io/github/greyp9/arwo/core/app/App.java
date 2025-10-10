@@ -197,6 +197,7 @@ public final class App {
 
     public static class Attr {
         public static final String ATTR = "attr";
+        public static final String ENCODING = "encoding";
         public static final String EXTENSION = "extension";
         public static final String MTIME = "mtime";
         public static final String NAME = "name";

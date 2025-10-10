@@ -1,11 +1,8 @@
 package io.github.greyp9.arwo.core.exec.script;
 
-import io.github.greyp9.arwo.core.io.runnable.InputStreamRunnable;
-import io.github.greyp9.arwo.core.io.runnable.OutputStreamRunnable;
 import io.github.greyp9.arwo.core.lang.ShellU;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.vm.process.ProcessU;
-import io.github.greyp9.arwo.core.vm.thread.ThreadU;
 
 import java.io.File;
 import java.io.IOException;
@@ -42,7 +39,9 @@ public final class ScriptRunnable implements Runnable {
             final Long processId = ProcessU.getProcessId(process);
             scriptContext.setPid(processId);
             logger.info(String.format("PID=%d", processId));
-            final Integer exitValue = monitor(process);
+            final ProcessMonitor processMonitor = new ProcessMonitor(
+                    scriptContext, executorServiceStreams, signal, POLL_INTERVAL);
+            final Integer exitValue = processMonitor.monitor(process);
             scriptContext.setExitValue(exitValue);
             scriptContext.setDateFinish(new Date());
             logger.info(String.format("PID=%d, EXIT_VALUE=%d", processId, exitValue));
@@ -57,6 +56,7 @@ public final class ScriptRunnable implements Runnable {
         logger.info(String.format("signal(%s)", value));
     }
 
+/* migrated to "io.github.greyp9.arwo.core.exec.script.ProcessMonitor"
     private Integer monitor(final Process process) throws IOException {
         // monitor process streams (allow for supplemental process input)
         final OutputStreamRunnable runnableStdin = new OutputStreamRunnable(
@@ -100,6 +100,7 @@ public final class ScriptRunnable implements Runnable {
             return null;
         }
     }
+*/
 
     private static final long POLL_INTERVAL = 10L;
 }

@@ -8,6 +8,7 @@ import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
+import io.github.greyp9.arwo.core.table.cell.TableViewLinks;
 import io.github.greyp9.arwo.core.table.insert.InsertRow;
 import io.github.greyp9.arwo.core.table.metadata.ColumnMetaData;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
@@ -28,6 +29,7 @@ import org.w3c.dom.Element;
 import java.io.IOException;
 import java.sql.Types;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -110,7 +112,8 @@ public class KubeContainersView extends KubeView {
     private void loadRow(final RowSet rowSet, final String baseURI, final boolean isInit,
                          final V1ContainerStatus v1ContainerStatus, final V1Container container) {
         final String name = container.getName();
-        final String href = PathU.toDir(baseURI, name, CONTEXT_LOGS);
+        final String hrefLogs = PathU.toDir(baseURI, name, CONTEXT_LOGS);
+        final String hrefFS = PathU.toDir(baseURI, name, CONTEXT_KFS);
         final List<V1ContainerPort> ports = Optional.ofNullable(container.getPorts()).orElse(new ArrayList<>());
         final String portsText = ports.stream()
                 .map(V1ContainerPort::getContainerPort).collect(Collectors.toList()).toString();
@@ -118,7 +121,9 @@ public class KubeContainersView extends KubeView {
         final V1ContainerState state = v1ContainerStatus1.map(V1ContainerStatus::getState).orElse(null);
 
         final InsertRow insertRow = new InsertRow(rowSet);
-        insertRow.setNextColumn(new TableViewLink(UTF16.SELECT, name, href));
+        insertRow.setNextColumn(new TableViewLinks(Arrays.asList(
+                new TableViewLink(UTF16.SELECT, name, hrefLogs),
+                new TableViewLink(UTF16.SELECT, name, hrefFS))));
         insertRow.setNextColumn(container.getName());
         insertRow.setNextColumn(container.getImage());
         insertRow.setNextColumn(Boolean.toString(v1ContainerStatus1.map(V1ContainerStatus::getReady).orElse(false)));

@@ -3,7 +3,6 @@ package io.github.greyp9.arwo.core.http;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
 
 public class HttpRequest {
     private final String method;
@@ -33,7 +32,7 @@ public class HttpRequest {
     }
 
     public HttpRequest(final String method, final String resource, final String query,
-                       final NameTypeValues headers, final ByteArrayInputStream entity) throws IOException {
+                       final NameTypeValues headers, final ByteArrayInputStream entity) {
         this.method = method;
         this.resource = resource;
         this.query = query;

@@ -3,16 +3,22 @@ package io.github.greyp9.arwo.kube.connection;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.util.PropertiesX;
+import io.kubernetes.client.openapi.ApiClient;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
 
 import java.util.Date;
 import java.util.Properties;
 
 public final class KubeConnection {
+    private final ApiClient apiClient;
     private final CoreV1Api coreV1Api;
     private final long dateOpen;
     private final Properties properties;
     private final PropertiesX propertiesX;
+
+    public ApiClient getApiClient() {
+        return apiClient;
+    }
 
     public CoreV1Api getCoreV1Api() {
         return coreV1Api;
@@ -26,7 +32,8 @@ public final class KubeConnection {
         return properties;
     }
 
-    public KubeConnection(final CoreV1Api coreV1Api) {
+    public KubeConnection(final ApiClient apiClient, final CoreV1Api coreV1Api) {
+        this.apiClient = apiClient;
         this.coreV1Api = coreV1Api;
         this.dateOpen = new Date().getTime();
         this.properties = new Properties();

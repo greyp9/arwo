@@ -59,26 +59,25 @@ public final class MetaFileView {
             httpResponse = renderTGZ(pathInfo, metaFile);
         } else if (Http.Mime.APP_ZIP.equals(mimeType)) {
             httpResponse = renderZip(pathInfo, metaFile);
+/*
         } else if (Http.Mime.APP_GZIP.equals(mimeType)) {
             httpResponse = render(pathInfo, metaFile, Http.Header.GZIP);
+*/
         } else {
-            httpResponse = render(pathInfo, metaFile, null);
+            httpResponse = render(pathInfo, metaFile);
         }
         return httpResponse;
     }
 
     private HttpResponse render(final String path,
-                                final MetaFile metaFile,
-                                final String contentEncoding) throws IOException {
-        final boolean mimeOverride =
-                (Http.Header.GZIP.equals(contentEncoding) && Http.Mime.APP_GZIP.equals(metaFile.getContentType()));
+                                final MetaFile metaFile) throws IOException {
         final String contentType = Value.defaultOnEmpty(
-                mimeOverride ? Http.Mime.TEXT_PLAIN_UTF8 : metaFile.getContentType(),
+                metaFile.getContentType(),
                 userState.getProperties().getProperty(App.Action.MIME_TYPE),
                 new Preferences(userState.getConfig()).getMIMETypeIt(path),
                 Http.Mime.TEXT_PLAIN_UTF8);
         final NameTypeValues headers = NameTypeValuesU.create(
-                Http.Header.CONTENT_ENCODING, contentEncoding,
+                Http.Header.CONTENT_ENCODING, metaFile.getContentEncoding(),
                 Http.Header.CONTENT_TYPE, contentType,
                 Http.Header.CONTENT_LENGTH, Long.toString(metaFile.getMetaData().getLength()));
         return new HttpResponse(HttpURLConnection.HTTP_OK, headers, metaFile.getBytes());
@@ -94,7 +93,7 @@ public final class MetaFileView {
         } else if (Http.Mime.APP_ZIP.equals(metaFile.getContentType())) {
             httpResponse = renderEntryZip(path, metaFile, entry);
         } else {
-            httpResponse = render(path, metaFile, right);
+            httpResponse = render(path, metaFile);
         }
         return httpResponse;
     }
@@ -107,7 +106,7 @@ public final class MetaFileView {
         for (TarMetaData metaData : volumeEntries) {
             if (Value.equal(entryTGZ, metaData.getPath())) {
                 final MetaFile metaFileEntry = volume.getEntry(entryTGZ);
-                return render(metaFileEntry.getMetaData().getPath(), metaFileEntry, null);
+                return render(metaFileEntry.getMetaData().getPath(), metaFileEntry);
             }
         }
         return HttpResponseU.toError(HttpURLConnection.HTTP_NOT_FOUND, path);
@@ -121,7 +120,7 @@ public final class MetaFileView {
         for (ZipMetaData metaData : volumeEntries) {
             if (Value.equal(entryZip, metaData.getPath())) {
                 final MetaFile metaFileEntry = volume.getEntry(entryZip);
-                return render(metaFileEntry.getMetaData().getPath(), metaFileEntry, null);
+                return render(metaFileEntry.getMetaData().getPath(), metaFileEntry);
             }
         }
         return HttpResponseU.toError(HttpURLConnection.HTTP_NOT_FOUND, path);

@@ -103,6 +103,7 @@ public final class CacheInventoryView {
                 new ColumnMetaData(App.Attr.SELECT, Types.DATALINK),
                 new ColumnMetaData(App.Attr.NAME, Types.VARCHAR, true),
                 new ColumnMetaData(App.Attr.TYPE, Types.VARCHAR),
+                new ColumnMetaData(App.Attr.ENCODING, Types.VARCHAR),
                 new ColumnMetaData(App.Attr.RESOURCE, Types.VARCHAR),
                 new ColumnMetaData(App.Attr.ATTR, Types.VARCHAR),
                 new ColumnMetaData(App.Attr.MTIME, Types.TIMESTAMP),
@@ -118,6 +119,7 @@ public final class CacheInventoryView {
             insertRow.setNextColumn(new TableViewLink(UTF16.SELECT, App.Action.SELECT, href));
             insertRow.setNextColumn(entry.getKey());
             insertRow.setNextColumn(value.getContentType());
+            insertRow.setNextColumn(value.getContentEncoding());
             insertRow.setNextColumn(new FileX(value.getMetaData().getPath()).getFilename());
             insertRow.setNextColumn(value.getMetaData().getProperties().stringPropertyNames());
             insertRow.setNextColumn(new Date(value.getMetaData().getLastModified()));

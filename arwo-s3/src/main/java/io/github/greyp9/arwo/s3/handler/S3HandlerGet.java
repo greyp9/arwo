@@ -113,7 +113,7 @@ public class S3HandlerGet {
         return new AppHtmlView(httpRequest, userState, appTitle, menuContext, App.Token.EMPTY).fixup(html);
     }
 
-    private HttpResponse doGetFile(final String endpoint, final String prefix) throws IOException {
+    private HttpResponse doGetFile(final String endpoint, final String path) throws IOException {
         final Xed xed = userState.getDocumentState().getSession(App.Servlet.SETTINGS).getXed();
         final CursorS3 cursorS3 = new CursorS3(xed, endpoint);
         final String regionName = cursorS3.getRegion();
@@ -127,31 +127,44 @@ public class S3HandlerGet {
         // get remote resource
         final S3Client s3Client = resource.getConnection().getS3Client();
         final GetObjectRequest getObjectRequest = GetObjectRequest.builder()
-                .bucket(bucketName).key(prefix).build();
+                .bucket(bucketName).key(path).build();
         final ResponseBytes<GetObjectResponse> objectAsBytes = s3Client.getObjectAsBytes(getObjectRequest);
         // prep resource for inclusion in response payload
         final byte[] payload = objectAsBytes.asByteArray();
         final long lastModified = objectAsBytes.response().lastModified().toEpochMilli();
         final String baseURI = httpRequest.getHttpRequest().getResource();
         final FileMetaData metaData = new FileMetaData(baseURI, payload.length, lastModified, 0L, false);
+        final MetaFile metaFile = toMetaFile(metaData, new ByteArrayInputStream(payload));
         // optionally cache response payload
-        final Preferences preferences = new Preferences(userState.getConfig());
-        final String mimeType = Value.defaultOnEmpty(preferences.getMIMETypeIt(prefix), Http.Mime.TEXT_PLAIN_UTF8);
         final HttpResponse httpResponse;
         final boolean cacheItem = PropertiesU.isBoolean(userState.getProperties(), App.Action.CACHE);
         if (cacheItem) {
             final ResourceCache resourceCache = userState.getCache();
             final String id = Http.Token.SLASH + UUID.nameUUIDFromBytes(UTF8Codec.toBytes(baseURI));
             metaData.getProperties().setProperty(Html.HREF, baseURI + Http.Token.QUERY + App.Action.CACHE);
-            resourceCache.putFile(id, new MetaFile(metaData, mimeType, new ByteArrayInputStream(payload)));
+            resourceCache.putFile(id, metaFile);
             httpResponse = HttpResponseU.to302(PathU.toPath(resourceCache.getEndpoint(), Cache.CONTEXT_METAFILES, id));
         } else {
-            httpResponse = HttpResponseU.to200(new MetaFile(metaData, mimeType, new ByteArrayInputStream(payload)));
+            httpResponse = HttpResponseU.to200(metaFile);
         }
         return httpResponse;
     }
 
-    private HttpResponse doGetFolder(final String endpoint, final String prefix) throws IOException {
+    private MetaFile toMetaFile(final FileMetaData metaData, final ByteArrayInputStream is) throws IOException {
+        final String tgzExtension = ".tar.gz";
+        final String gzipExtension = ".gz";
+        final String path = metaData.getPath();
+        final boolean isGZ = (path.endsWith(gzipExtension) && !path.endsWith(tgzExtension));
+        final String contentEncoding = isGZ ? Http.Header.GZIP : null;
+        final int endIndex = isGZ ? (path.length() - gzipExtension.length()) : path.length();
+        final String pathEffective = path.substring(0, endIndex);
+        final Preferences preferences = new Preferences(userState.getConfig());
+        final String contentType = Value.defaultOnEmpty(
+                preferences.getMIMETypeIt(pathEffective), Http.Mime.TEXT_PLAIN_UTF8);
+        return new MetaFile(metaData, contentType, contentEncoding, is);
+    }
+
+    private HttpResponse doGetFolder(final String endpoint, final String path) throws IOException {
         final Xed xed = userState.getDocumentState().getSession(App.Servlet.SETTINGS).getXed();
         final CursorS3 cursorS3 = new CursorS3(xed, endpoint);
         final String regionName = cursorS3.getRegion();
@@ -165,7 +178,7 @@ public class S3HandlerGet {
         // get remote resource (or cached copy, if present)
         final ResourceCache resourceCache = userState.getCache();
         final RowSetSource rowSetSourceS3 = new S3RowSetSource(
-                resource.getConnection(), httpRequest.getBaseURI(), bucketName, prefix);
+                resource.getConnection(), httpRequest.getBaseURI(), bucketName, path);
         final RowSetSource rowSetSource = new CacheRowSetSource(
                 resourceCache, rowSetSourceS3, httpRequest.getHttpRequest().getResource());
         final RowSet rowSet;

@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.kube.handler;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.connect.ConnectionCache;
+import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
@@ -12,6 +13,7 @@ import io.github.greyp9.arwo.kube.connection.KubeConnectionFactory;
 import io.github.greyp9.arwo.kube.connection.KubeConnectionResource;
 import io.github.greyp9.arwo.kube.view.KubeContainersView;
 import io.github.greyp9.arwo.kube.view.KubeEndpointView;
+import io.github.greyp9.arwo.kube.view.KubeFSView;
 import io.github.greyp9.arwo.kube.view.KubeLogsView;
 import io.github.greyp9.arwo.kube.view.KubeNodeDescribeView;
 import io.github.greyp9.arwo.kube.view.KubeNodesView;
@@ -65,6 +67,7 @@ public class KubeHandlerGet {
     private static final Pattern PATTERN_POD_DESCRIBE = Pattern.compile("/pods/(.+)/(.+)/describe(/.+)*/");
     private static final Pattern PATTERN_CONTAINERS = Pattern.compile("/pods/(.+)/(.+)/containers/");
     private static final Pattern PATTERN_CONTAINER_LOGS = Pattern.compile("/pods/(.+)/(.+)/containers/(.+)/logs/");
+    private static final Pattern PATTERN_CONTAINER_KFS = Pattern.compile("/pods/(.+)/(.+)/containers/(.+)/kfs/(.*)");
 
     private HttpResponse doGet(final String kubeEndpoint, final String kubeResource) throws IOException {
         final KubeConnectionFactory factory = new KubeConnectionFactory(httpRequest, userState);
@@ -78,6 +81,7 @@ public class KubeHandlerGet {
         final Matcher matcherPods = PATTERN_PODS.matcher(kubeResource);
         final Matcher matcherContainers = PATTERN_CONTAINERS.matcher(kubeResource);
         final Matcher matcherContainerLogs = PATTERN_CONTAINER_LOGS.matcher(kubeResource);
+        final Matcher matcherContainerKFS = PATTERN_CONTAINER_KFS.matcher(kubeResource);
 
         final HttpResponse httpResponse;
         if (resource == null) {
@@ -88,6 +92,13 @@ public class KubeHandlerGet {
             final String containerName = matcherContainerLogs.group(3);
             httpResponse = new KubeLogsView(
                     httpRequest, userState, resource, namespace, podName, containerName).doGetResponse();
+        } else if (matcherContainerKFS.matches()) {
+            final String namespace = matcherContainerKFS.group(1);
+            final String podName = matcherContainerKFS.group(2);
+            final String containerName = matcherContainerKFS.group(3);
+            final String path = Http.Token.SLASH + matcherContainerKFS.group(4);
+            httpResponse = new KubeFSView(
+                    httpRequest, userState, resource, namespace, podName, containerName, path).doGetResponse();
         } else if (matcherPodDescribe.matches()) {
             final String namespace = matcherPodDescribe.group(1);
             final String podName = matcherPodDescribe.group(2);
