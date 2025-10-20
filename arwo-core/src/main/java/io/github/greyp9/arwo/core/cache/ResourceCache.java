@@ -80,6 +80,10 @@ public final class ResourceCache {
         return o;
     }
 
+    public void putObject(final String id, final Object object) {
+        objects.put(id, object);
+    }
+
     public void clear() {
         rowSets.clear();
         files.clear();

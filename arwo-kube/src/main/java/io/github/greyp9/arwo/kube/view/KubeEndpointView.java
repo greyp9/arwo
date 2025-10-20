@@ -83,11 +83,13 @@ public class KubeEndpointView extends KubeView {
             final String namespace = cursor.getValue(cursor.getChildInstance(FIELD_NAMESPACE));
             final String hrefPods = PathU.toDir(baseURI, name, PODS);
             final String hrefNodes = PathU.toDir(baseURI, name, NODES);
+            final String hrefSecrets = PathU.toDir(baseURI, name, SECRETS);
 
             final InsertRow insertRow = new InsertRow(rowSet);
             insertRow.setNextColumn(new TableViewLinks(Arrays.asList(
                     new TableViewLink(Value.join(" ", UTF16.SELECT, ""), PODS, hrefPods),
-                    new TableViewLink(Value.join(" ", UTF16.SELECT, ""), NODES, hrefNodes))));
+                    new TableViewLink(Value.join(" ", UTF16.SELECT, ""), NODES, hrefNodes),
+                    new TableViewLink(Value.join(" ", UTF16.SELECT, ""), SECRETS, hrefSecrets))));
             insertRow.setNextColumn(name);
             insertRow.setNextColumn(comment);
             insertRow.setNextColumn(context);
@@ -106,4 +108,5 @@ public class KubeEndpointView extends KubeView {
 
     private static final String PODS = "pods";
     private static final String NODES = "nodes";
+    private static final String SECRETS = "secrets";
 }

@@ -19,6 +19,8 @@ import io.github.greyp9.arwo.kube.view.KubeNodeDescribeView;
 import io.github.greyp9.arwo.kube.view.KubeNodesView;
 import io.github.greyp9.arwo.kube.view.KubePodDescribeView;
 import io.github.greyp9.arwo.kube.view.KubePodsView;
+import io.github.greyp9.arwo.kube.view.KubeSecretView;
+import io.github.greyp9.arwo.kube.view.KubeSecretsView;
 
 import java.io.IOException;
 import java.util.regex.Matcher;
@@ -68,6 +70,10 @@ public class KubeHandlerGet {
     private static final Pattern PATTERN_CONTAINERS = Pattern.compile("/pods/(.+)/(.+)/containers/");
     private static final Pattern PATTERN_CONTAINER_LOGS = Pattern.compile("/pods/(.+)/(.+)/containers/(.+)/logs/");
     private static final Pattern PATTERN_CONTAINER_KFS = Pattern.compile("/pods/(.+)/(.+)/containers/(.+)/kfs/(.*)");
+    private static final Pattern PATTERN_SECRET_DATA = Pattern.compile("/secrets/(.+)/(.+)/(.+)");
+    private static final Pattern PATTERN_SECRET = Pattern.compile("/secrets/(.+)/(.+)/");
+    private static final Pattern PATTERN_SECRETS_NS = Pattern.compile("/secrets/(.+)/");
+    private static final Pattern PATTERN_SECRETS = Pattern.compile("/secrets/");
 
     private HttpResponse doGet(final String kubeEndpoint, final String kubeResource) throws IOException {
         final KubeConnectionFactory factory = new KubeConnectionFactory(httpRequest, userState);
@@ -82,6 +88,10 @@ public class KubeHandlerGet {
         final Matcher matcherContainers = PATTERN_CONTAINERS.matcher(kubeResource);
         final Matcher matcherContainerLogs = PATTERN_CONTAINER_LOGS.matcher(kubeResource);
         final Matcher matcherContainerKFS = PATTERN_CONTAINER_KFS.matcher(kubeResource);
+        final Matcher matcherSecretData = PATTERN_SECRET_DATA.matcher(kubeResource);
+        final Matcher matcherSecret = PATTERN_SECRET.matcher(kubeResource);
+        final Matcher matcherSecretsNS = PATTERN_SECRETS_NS.matcher(kubeResource);
+        final Matcher matcherSecrets = PATTERN_SECRETS.matcher(kubeResource);
 
         final HttpResponse httpResponse;
         if (resource == null) {
@@ -112,6 +122,22 @@ public class KubeHandlerGet {
                     httpRequest, userState, resource, namespace, podName).doGetResponse();
         } else if (matcherPods.matches()) {
             httpResponse = new KubePodsView(httpRequest, userState, resource, null).doGetResponse();
+        } else if (matcherSecretData.matches()) {
+            final String namespace = matcherSecretData.group(1);
+            final String name = matcherSecretData.group(2);
+            final String datum = matcherSecretData.group(3);
+            httpResponse = new KubeSecretView(
+                    httpRequest, userState, resource, kubeEndpoint, namespace, name, datum).doGetResponse();
+        } else if (matcherSecret.matches()) {
+            final String namespace = matcherSecret.group(1);
+            final String name = matcherSecret.group(2);
+            httpResponse = new KubeSecretView(
+                    httpRequest, userState, resource, kubeEndpoint, namespace, name, null).doGetResponse();
+        } else if (matcherSecretsNS.matches()) {
+            final String namespace = matcherSecretsNS.group(1);
+            httpResponse = new KubeSecretsView(httpRequest, userState, resource, namespace).doGetResponse();
+        } else if (matcherSecrets.matches()) {
+            httpResponse = new KubeSecretsView(httpRequest, userState, resource, null).doGetResponse();
         } else if (matcherNodeDescribe.matches()) {
             final String nodeName = matcherNodeDescribe.group(1);
             final String path = matcherNodeDescribe.group(2);

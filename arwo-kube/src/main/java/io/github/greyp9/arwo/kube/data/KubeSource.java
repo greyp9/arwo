@@ -9,6 +9,7 @@ public final class KubeSource {
     static final String FIELD_SELECT = "select";
     static final String FIELD_CREATED = "created";
     static final String FIELD_CPU = "cpu";
+    static final String FIELD_DATA = "data";
     static final String FIELD_FINALIZERS = "finalizers";
     static final String FIELD_HOST_IP = "hostIP";
     static final String FIELD_IMAGE = "image";
@@ -24,6 +25,7 @@ public final class KubeSource {
     static final String FIELD_STATUS = "status";
     static final String FIELD_STORAGE = "storage";
     static final String FIELD_TAINTS = "taints";
+    static final String FIELD_TYPE = "type";
     static final String FIELD_VERSION = "version";
 
     static final String STATUS_CPU = "cpu";
@@ -35,4 +37,5 @@ public final class KubeSource {
     static final String CONTEXT_LOGS = "logs";
     static final String CONTEXT_NODES = "nodes";
     static final String CONTEXT_PODS = "pods";
+    static final String CONTEXT_SECRETS = "secrets";
 }
