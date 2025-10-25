@@ -14,6 +14,7 @@ import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.kube.connection.KubeConnectionResource;
+import io.github.greyp9.arwo.kube.core.KubeU;
 import io.github.greyp9.arwo.kube.data.SecretDataRowSetSource;
 import io.kubernetes.client.openapi.ApiException;
 import io.kubernetes.client.openapi.apis.CoreV1Api;
@@ -42,15 +43,14 @@ public class KubeSecretView extends KubeView {
 
     @Override
     protected final HttpResponse addContentTo(final Element html) throws IOException {
-        final String key = String.format("%s/%s/%s", endpoint, namespace, name);
+        final String key = KubeU.toCacheKey(endpoint, namespace, name);
         final ResourceCache cache = getUserState().getCache();
         final Object object = cache.getObject(key, this::getSecret);
         final V1Secret v1Secret = Value.as(object, V1Secret.class);
-
         return (datum == null) ? addSecretTo(v1Secret, html) : addDatumTo(v1Secret);
     }
 
-    protected final HttpResponse addSecretTo(final V1Secret v1Secret, final Element html) throws IOException {
+    private HttpResponse addSecretTo(final V1Secret v1Secret, final Element html) {
         final SecretDataRowSetSource rowSetSource =
                 new SecretDataRowSetSource(getHttpRequest().getBaseURI(), endpoint, v1Secret);
         try {

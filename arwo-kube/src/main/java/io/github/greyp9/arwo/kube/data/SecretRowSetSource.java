@@ -87,16 +87,16 @@ public final class SecretRowSetSource implements RowSetSource {
     private void loadRow(final RowSet rowSet, final V1Secret secret) {
         final V1ObjectMeta metadata = secret.getMetadata();
         final Map<String, byte[]> data = secret.getData();
-        // final String namespace = (metadata == null) ? null : metadata.getNamespace();
+        final String namespaceRow = (metadata == null) ? null : metadata.getNamespace();
         final String name = (metadata == null) ? null : metadata.getName();
         final OffsetDateTime creationTimestamp = (metadata == null) ? null : metadata.getCreationTimestamp();
         final String hrefDescribe = PathU.toDir(
-                baseURI, endpoint, KubeSource.CONTEXT_SECRETS, namespace, name);
+                baseURI, endpoint, KubeSource.CONTEXT_SECRETS, namespaceRow, name);
 
         final InsertRow insertRow = new InsertRow(rowSet);
         insertRow.setNextColumn(
                 new TableViewLink(UTF16.SELECT, KubeSource.CONTEXT_NODES, hrefDescribe));
-        insertRow.setNextColumn(namespace);
+        insertRow.setNextColumn(namespaceRow);
         insertRow.setNextColumn(name);
         insertRow.setNextColumn(secret.getType());
         insertRow.setNextColumn((data == null) ? 0 : data.size());

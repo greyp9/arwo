@@ -43,7 +43,6 @@ public class KubeSecretsView extends KubeView {
         // getUserState().getCache().clear();  // if table isn't cached, then client will refetch it (keep-alive)
         final RowSetSource rowSetSource = new CacheRowSetSource(getUserState().getCache(),
                 new SecretRowSetSource(cacher, connection, namespace, baseURI, endpoint), rowSetId);
-        // new CacheRowSetSource(getUserState().getCache(), xxx, rowSetId);
         try {
             final RowSet rowSet = rowSetSource.getRowSet();
             final UserStateTable table = new UserStateTable(getUserState(), null, getHttpRequest().getDate(), true);
