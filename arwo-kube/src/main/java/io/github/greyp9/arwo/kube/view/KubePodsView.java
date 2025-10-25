@@ -9,6 +9,7 @@ import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.row.RowSetSource;
+import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.kube.connection.KubeConnection;
 import io.github.greyp9.arwo.kube.connection.KubeConnectionResource;
 import io.github.greyp9.arwo.kube.data.PodRowSetSource;
@@ -49,8 +50,9 @@ public class KubePodsView extends KubeView {
         } catch (final ApiException e) {
             // final String id = "kube.ok-" + XsdDateU.toXSDZMillis(getHttpRequest().getDate());
             // final AlertActions alertActions = new AlertActions(id, "kube.ok");
+            final String message = Value.defaultOnEmpty(e.getResponseBody(), e.getMessage());
             final AlertActions alertActions = null;  // persistent to aid diagnosis
-            getUserState().getAlerts().add(new Alert(Alert.Severity.ERR, e.getResponseBody(), alertActions));
+            getUserState().getAlerts().add(new Alert(Alert.Severity.ERR, message, alertActions));
         } catch (final Exception e) {
             getUserState().getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
         }
