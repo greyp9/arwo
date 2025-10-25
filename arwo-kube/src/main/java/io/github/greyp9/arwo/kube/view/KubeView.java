@@ -12,6 +12,7 @@ import io.github.greyp9.arwo.core.menu.MenuContext;
 import io.github.greyp9.arwo.core.menu.MenuItem;
 import io.github.greyp9.arwo.core.menu.MenuSystem;
 import io.github.greyp9.arwo.core.text.TextU;
+import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.core.xml.DocumentU;
@@ -75,10 +76,11 @@ public abstract class KubeView {
                 new NameTypeValue("timestamps", widget.getValue("/action:kubeLog/action:timestamps")).toStringNV());
 
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
-        final Element header = new XPather(html, null).getElement(Html.XPath.HEADER);
         final Element body = new XPather(html, null).getElement(Html.XPath.CONTENT);
+        if (PropertiesU.isBoolean(userState.getProperties(), KubeAppMenuFactory.KUBE_LOG_OPTIONS)) {
+            widget.addPropertyStripTo(body, userState.getSubmitID());
+        }
         final HttpResponse httpResponse = addContentTo(body);
-        widget.addPropertyStripTo(header, userState.getSubmitID());
         return Optional.ofNullable(httpResponse)
                 .orElse(new AppHtmlView(httpRequest, userState, appTitle, menuContext, App.Token.EMPTY).fixup(html));
     }
