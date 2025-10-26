@@ -10,6 +10,8 @@ import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
+import io.github.greyp9.arwo.core.text.filter.TextFilters;
+import io.github.greyp9.arwo.core.text.filter.TextLineFilter;
 import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.kube.connection.KubeConnectionResource;
 import io.github.greyp9.arwo.kube.xed.widget.XedWidgetKubeLog;
@@ -19,6 +21,7 @@ import org.w3c.dom.Element;
 
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -47,7 +50,7 @@ public class KubeLogsView extends KubeView {
             final XedWidgetKubeLog xedWidgetKubeLog = new XedWidgetKubeLog(xedFactory, locale);
             final Properties properties = getUserState().getKube().getProperties();
             xedWidgetKubeLog.applyFrom(properties);
-            final byte[] payload = UTF8Codec.toBytes(api.readNamespacedPodLog(
+            byte[] payload = UTF8Codec.toBytes(api.readNamespacedPodLog(
                     podName, namespace, containerName, null, null, null,
                     Boolean.toString(xedWidgetKubeLog.getValueBoolean("/action:kubeLog/action:pretty")),
                     xedWidgetKubeLog.getValueBoolean("/action:kubeLog/action:previous"),
@@ -57,6 +60,10 @@ public class KubeLogsView extends KubeView {
             if (payload == null) {
                 return HttpResponseU.to404();
             } else {
+                final TextFilters textFilters = getUserState().getTextFilters("");
+                if (textFilters.isData()) {
+                    payload = new TextLineFilter(textFilters).doFilter(payload, StandardCharsets.UTF_8.name());
+                }
                 final long lastModified = getHttpRequest().getDate().getTime() / DurationU.Const.ONE_SECOND_MILLIS;
                 final FileMetaData metaData = new FileMetaData(null, payload.length, lastModified, false);
                 return HttpResponseU.to200(new MetaFile(

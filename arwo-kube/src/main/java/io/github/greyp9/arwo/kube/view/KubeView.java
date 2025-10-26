@@ -14,6 +14,7 @@ import io.github.greyp9.arwo.core.menu.MenuSystem;
 import io.github.greyp9.arwo.core.text.TextU;
 import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
+import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
@@ -82,7 +83,7 @@ public abstract class KubeView {
         }
         final HttpResponse httpResponse = addContentTo(body);
         return Optional.ofNullable(httpResponse)
-                .orElse(new AppHtmlView(httpRequest, userState, appTitle, menuContext, App.Token.EMPTY).fixup(html));
+                .orElse(new AppHtmlView(httpRequest, userState, appTitle, menuContext, AUGMENTS).fixup(html));
     }
 
     /**
@@ -116,4 +117,5 @@ public abstract class KubeView {
     static final String CONTEXT_NODES = "nodes";
     static final String CONTEXT_PODS = "pods";
 
+    private static final String AUGMENTS = Value.join(",", AppHtmlView.EXPRESSION);
 }
