@@ -219,6 +219,7 @@ public final class App {
         public static final String DATE_SCHEDULED = "dateScheduled";
         public static final String DRIVER_CLASS = "driverClass";
         public static final String ENABLED = "enabled";
+        public static final String EXPRESSION = "expression";
         public static final String EXTENSION = "extension";
         public static final String FOLDER = "folder";
         public static final String HOST = "host";

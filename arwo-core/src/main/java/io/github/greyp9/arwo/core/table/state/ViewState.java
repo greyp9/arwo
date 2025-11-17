@@ -173,6 +173,7 @@ public class ViewState {
         // column actions
         public static final String SORT = "sort";  // add a sort to the table ViewState
         public static final String FILTER = "filter";  // add a filter to the table ViewState (filter form)
+        public static final String APPLY_FILTER = "applyFilter";  // add a filter to the table ViewState (favorite)
         public static final String HIDE = "hide";  // add a hidden column to the table ViewState
     }
 

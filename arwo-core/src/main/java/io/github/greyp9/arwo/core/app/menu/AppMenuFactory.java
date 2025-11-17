@@ -237,5 +237,6 @@ public class AppMenuFactory implements MenuFactory {
         public static final String VISUALIZATION = "vis";
 
         public static final String FAVORITES = "favorites";
+        public static final String FILTERS = "filters";
     }
 }

@@ -459,6 +459,7 @@
             <xsd:element name='cifsFavorites' type='app:cifsFavoritesType'/>
             <xsd:element name='webdavFavorites' type='app:webdavFavoritesType'/>
             <xsd:element name='jdbcFavorites' type='app:jdbcFavoritesType'/>
+            <xsd:element name='filters' type='app:filtersType'/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -507,6 +508,12 @@
     <xsd:complexType name='jdbcFavoritesType'>
         <xsd:sequence>
             <xsd:element name='jdbcFavorite' type='app:jdbcFavoriteType' minOccurs='0' maxOccurs='unbounded'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
+    <xsd:complexType name='filtersType'>
+        <xsd:sequence>
+            <xsd:element name='filter' type='app:filterType' minOccurs='0' maxOccurs='unbounded'/>
         </xsd:sequence>
     </xsd:complexType>
 
@@ -560,6 +567,14 @@
         <xsd:attribute name='server' type='xsd:string'/>
         <xsd:attribute name='sql' type='xsd:string'/>
         <xsd:attribute name='comment' type='xsd:string'/>
+    </xsd:complexType>
+
+    <xsd:complexType name="filterType">
+        <xsd:sequence>
+            <xsd:element name='context' type='xsd:string'/>
+            <xsd:element name='name' type='xsd:string'/>
+            <xsd:element name='expression' type='xsd:string'/>
+        </xsd:sequence>
     </xsd:complexType>
 
 </xsd:schema>

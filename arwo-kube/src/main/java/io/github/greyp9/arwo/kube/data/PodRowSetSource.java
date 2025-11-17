@@ -136,5 +136,5 @@ public final class PodRowSetSource implements RowSetSource {
 
     private static final String FIELD_SELECTOR_NODE_NAME = "spec.nodeName=%s";
 
-    private static final String TABLE_ID = "kubePodListType";
+    public static final String TABLE_ID = "kubePodListType";
 }

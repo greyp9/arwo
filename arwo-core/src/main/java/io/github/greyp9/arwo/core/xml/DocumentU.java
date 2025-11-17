@@ -21,6 +21,7 @@ import javax.xml.transform.stream.StreamResult;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.util.Properties;
 
 @SuppressWarnings("PMD.TooManyMethods")
 public final class DocumentU {
@@ -33,21 +34,36 @@ public final class DocumentU {
     }
 
     public static byte[] toXml(final Node node) throws IOException {
-        return (node == null) ? null : toXmlNN(node);
+        return (node == null) ? null : toXmlNN(node, transformerConfigXml(false));
     }
 
-    private static byte[] toXmlNN(final Node node) throws IOException {
+    public static byte[] toXml(final Node node, final Properties transformerConfig) throws IOException {
+        return (node == null) ? null : toXmlNN(node, transformerConfig);
+    }
+
+    public static Properties transformerConfigXml(final boolean min) {
+        final Properties properties = new Properties();
+        if (min) {
+            properties.setProperty(OutputKeys.OMIT_XML_DECLARATION, "yes");
+            properties.setProperty(OutputKeys.INDENT, "no");
+        } else {
+            //properties.setProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
+            properties.setProperty(OutputKeys.INDENT, "yes");
+            //transformer.setOutputProperty(OutputKeys.METHOD, "xml");
+            //transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
+            //transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+        }
+        return properties;
+    }
+
+    private static byte[] toXmlNN(final Node node, final Properties transformerConfigXml) throws IOException {
         final Source source = new DOMSource(node);
         final ByteArrayOutputStream bos = new ByteArrayOutputStream();
         final Result result = new StreamResult(bos);
         final TransformerFactory factory = TransformerFactory.newInstance();
         try {
             final Transformer transformer = factory.newTransformer();
-            //transformer.setOutputProperty(OutputKeys.OMIT_XML_DECLARATION, "no");
-            //transformer.setOutputProperty(OutputKeys.METHOD, "xml");
-            transformer.setOutputProperty(OutputKeys.INDENT, "yes");  // i18n
-            //transformer.setOutputProperty(OutputKeys.ENCODING, "UTF-8");
-            //transformer.setOutputProperty("{http://xml.apache.org/xslt}indent-amount", "2");
+            transformerConfigXml.forEach((k, v) -> transformer.setOutputProperty((String) k, (String) v));
             transformer.transform(source, result);
             return bos.toByteArray();
         } catch (TransformerException e) {

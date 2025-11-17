@@ -1,9 +1,11 @@
 package io.github.greyp9.arwo.kube.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.core.view.filter.FilterMenu;
 import io.github.greyp9.arwo.app.core.view.table.UserStateTable;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.action.AlertActions;
+import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.cache.CacheRowSetSource;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
@@ -33,6 +35,9 @@ public class KubePodsView extends KubeView {
 
     @Override
     protected final HttpResponse addContentTo(final Element html) throws IOException {
+        new FilterMenu(getHttpRequest(), getUserState(), AppMenuFactory.Const.FILTERS,
+                "/app:favorites/app:filters", "filter", PodRowSetSource.TABLE_ID).addContentTo(html);
+
         final KubeConnectionResource resource = getResource();
         final KubeConnection connection = resource.getConnection();
         // https://javadoc.io/doc/io.kubernetes/client-java-api/19.0.1/io/kubernetes/client/openapi/apis/CoreV1Api.html
