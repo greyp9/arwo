@@ -14,7 +14,7 @@ import java.util.regex.Pattern;
 
 public final class LS {
     private static final String REGEX_LS_ENTRY
-            = "(.{10})\\s+(\\d+)\\s+(\\w+)\\s+(\\w+)\\s+(\\d+)\\s(.{12})\\s(\\S+)(\\s.*)?";
+            = "(.{10,11})\\s+(\\d+)\\s+(\\w+)\\s+(\\w+)\\s+(\\d+)\\s(.{12})\\s(\\S+)(\\s.*)?";
     private static final String TYPE_DIRECTORY = "d";
     private static final String TYPE_LINK = "l";
     private static final int INDEX_PERMS = 1;

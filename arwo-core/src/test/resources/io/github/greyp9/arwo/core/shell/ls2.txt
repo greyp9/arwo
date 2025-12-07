@@ -1,0 +1,16 @@
+total 8
+lrwxrwxrwx.   1 root root      7 Jun 25  2024 bin -> usr/bin
+dr-xr-xr-x.   2 root root      6 Jun 25  2024 boot
+drwxr-xr-x.   5 root root    360 Dec  6 18:08 dev
+drwxr-xr-x.   1 root root     55 Dec  6 18:08 etc
+drwxr-xr-x.   1 root root     18 Dec  6 08:28 home
+lrwxrwxrwx.   1 root root      7 Jun 25  2024 lib -> usr/lib
+lrwxrwxrwx.   1 root root      9 Jun 25  2024 lib64 -> usr/lib64
+drwxr-xr-x.   1 root root     18 Dec  6 08:26 opt
+dr-xr-xr-x. 489 root root      0 Dec  6 18:08 proc
+dr-xr-x---.   1 root root     18 Dec  6 08:27 root
+lrwxrwxrwx.   1 root root      8 Jun 25  2024 sbin -> usr/sbin
+dr-xr-xr-x.  13 root root      0 Dec  4 23:18 sys
+drwxrwxrwt.   1 root root     29 Dec  6 18:17 tmp
+drwxr-xr-x.   1 root root     82 Oct 15 08:06 usr
+drwxr-xr-x.   1 root root     30 Oct 15 08:06 var
