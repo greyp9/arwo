@@ -40,4 +40,6 @@ public class Bundle {
         }
         return ((keys.length == 0) ? null : values.toString());
     }
+
+    public static final String DETAIL = ".DETAIL";
 }
