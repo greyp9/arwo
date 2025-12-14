@@ -15,7 +15,7 @@ import org.w3c.dom.Element;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.Set;
+import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
@@ -30,16 +30,17 @@ public class FavoriteMenuFactory implements MenuFactory {
     public final MenuItem create(final String id, final String type, final String object2) {
         final Collection<NameTypeValue> nameTypeValues = getFavorites();
         final Collection<MenuItem> menuItems = new ArrayList<>();
-        final Set<String> contexts = nameTypeValues.stream()
+        final List<String> contexts = nameTypeValues.stream()
                 .map(NameTypeValue::getType)
                 .filter(t -> !Value.isEmpty(t))
-                .collect(Collectors.toSet());
+                .distinct()
+                .collect(Collectors.toList());
         for (String context : contexts) {
             final Collection<MenuItem> menuItemsContext = new ArrayList<>();
-            final Set<String> namesForContext = nameTypeValues.stream()
+            final List<String> namesForContext = nameTypeValues.stream()
                     .filter(ntv -> ntv.getType().equals(context))
                     .map(NameTypeValue::getName)
-                    .collect(Collectors.toSet());
+                    .collect(Collectors.toList());
             for (String name : namesForContext) {
                 menuItemsContext.add(new MenuItem(name, App.Target.SESSION, App.Action.SELECT_FAV, context, name));
             }
