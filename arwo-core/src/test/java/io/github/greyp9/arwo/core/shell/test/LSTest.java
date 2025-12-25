@@ -40,8 +40,8 @@ class LSTest {
         Assertions.assertEquals(LineU.toLines(text).size() - 1, metaFolder.getFiles().size());
         final List<FileMetaData> files = metaFolder.getFiles();
         for (FileMetaData file : files) {
-            logger.finest(String.format("NAME:[%s] SIZE:[%d] DIR:[%s]",
-                    file.getPath(), file.getLength(), file.isDirectory()));
+            logger.finest(String.format("NAME:[%s] MTIME:[%d] SIZE:[%d] DIR:[%s]",
+                    file.getPath(), file.getLastModified(), file.getLength(), file.isDirectory()));
         }
     }
 }

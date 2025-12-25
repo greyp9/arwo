@@ -11,6 +11,7 @@ import io.github.greyp9.arwo.core.value.Value;
 
 import java.io.IOException;
 import java.sql.Types;
+import java.util.Date;
 
 public final class MetaFolderRowSetSource implements RowSetSource {
 
@@ -43,6 +44,7 @@ public final class MetaFolderRowSetSource implements RowSetSource {
                 new ColumnMetaData("perms", Types.VARCHAR),
                 new ColumnMetaData("owner", Types.VARCHAR),
                 new ColumnMetaData("group", Types.VARCHAR),
+                new ColumnMetaData("mtime", Types.TIMESTAMP),
                 new ColumnMetaData("size", Types.INTEGER),
         };
         return new RowSetMetaData(rowSetId, columns);
@@ -67,6 +69,7 @@ public final class MetaFolderRowSetSource implements RowSetSource {
         insertRow.setNextColumn(file.getProperty(FileMetaData.PERMS));
         insertRow.setNextColumn(file.getProperty(FileMetaData.OWNER));
         insertRow.setNextColumn(file.getProperty(FileMetaData.GROUP));
+        insertRow.setNextColumn(new Date(file.getLastModified()));
         insertRow.setNextColumn(file.getLength());
         rowSet.add(insertRow.getRow());
     }

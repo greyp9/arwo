@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.kube.view;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.table.UserStateTable;
 import io.github.greyp9.arwo.core.alert.Alert;
+import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.exec.script.ProcessMonitor;
 import io.github.greyp9.arwo.core.exec.script.ScriptContext;
 import io.github.greyp9.arwo.core.file.meta.FileMetaData;
@@ -30,6 +31,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.atomic.AtomicReference;
+import java.util.function.Consumer;
 import java.util.logging.Logger;
 
 public class KubeFSView extends KubeView {
@@ -58,6 +60,7 @@ public class KubeFSView extends KubeView {
             if (!path.endsWith(Http.Token.SLASH)) {
                 // treat as request for file
                 final Copy copy = new Copy(apiClient);
+                copy.setOnUnhandledError(getThrowableConsumer());
                 final InputStream inputStream = copy.copyFileFromPod(namespace, podName, containerName, path);
                 final ByteArrayOutputStream bos = new ByteArrayOutputStream();
                 StreamU.writeFully(inputStream, bos);
@@ -68,15 +71,16 @@ public class KubeFSView extends KubeView {
             } else {
                 // treat as request for directory listing
                 final Exec exec = new Exec(apiClient);
-                final String[] command = {"ls", "-l", path};
+                exec.setOnUnhandledError(getThrowableConsumer());
+                final String[] command = {"ls", "-l", "--full-time", path};
                 logger.info(String.format("LIST=%s", path));
                 final Process process = exec.exec(namespace, podName, command, containerName, false, false);
-                logger.info(String.format("PROCESS=%s", process.getClass().getName()));
+                logger.info(String.format("PROCESS=%s:%s", process.getClass().getName(), process.isAlive()));
                 final ScriptContext scriptContext = new ScriptContext(null, null, null, null);
                 final ExecutorService executorServiceStreams = getUserState().getUserExecutor().getExecutorStream();
                 final AtomicReference<String> reference = new AtomicReference<>();  // wire this up to app reference?
                 final ProcessMonitor processMonitor = new ProcessMonitor(
-                        scriptContext, executorServiceStreams, reference, POLL_INTERVAL);
+                        scriptContext, executorServiceStreams, reference, DurationU.Const.HUNDRED_MILLIS);
                 final Integer exitValue = processMonitor.monitor(process);
                 logger.info(String.format("LIST=%s, HAS-EXITED=%s EXIT-CODE=%x", path, "-", exitValue));
                 final String stdout = scriptContext.getStdout().getString();
@@ -93,10 +97,14 @@ public class KubeFSView extends KubeView {
                 table.toTableView(rowSet).addContentTo(html);
             }
         } catch (final ApiException e) {
-            getUserState().getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));
+            getUserState().getAlerts().add(new Alert(Alert.Severity.ERR,
+                    String.format("%s:%s", e.getClass().getName(), e.getMessage())));
         }
         return null;
     }
 
-    private static final long POLL_INTERVAL = 100L;
+    private Consumer<Throwable> getThrowableConsumer() {
+        return t -> getUserState().getAlerts().add(new Alert(Alert.Severity.ERR,
+                String.format("%s:%s", t.getClass().getName(), t.getMessage())));
+    }
 }

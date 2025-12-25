@@ -35,6 +35,14 @@ public class XsdDateUTest {
     }
 
     @Test
+    public void testConversionISO() {
+        final String dateString = "1970-01-01 00:00:01 +0000";
+        final Date date = XsdDateU.fromISO(dateString);
+        logger.info(XsdDateU.toXSDZMillis(date));
+        Assertions.assertEquals(DurationU.Const.ONE_SECOND_MILLIS, date.getTime());
+    }
+
+    @Test
     public void testConversionTZNoDST() {
         final Date date = XsdDateU.fromXSDZ(MILLENIUM_SECONDS_Z);
         final TimeZone tz = TimeZone.getTimeZone(TZ_NY);
