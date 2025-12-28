@@ -422,6 +422,10 @@ public final class AppUserState {
             PropertiesU.toggleBoolean(properties, action);
         } else if (App.Action.RELOAD.equals(action)) {
             location = object;
+        } else if (App.Action.MENU2.equals(action)) {
+            final boolean stateFrom = PropertiesU.isBoolean(menuSystemState, object);
+            PropertiesU.clearStartsWith(menuSystemState, Pather.getParent(object));
+            PropertiesU.setBoolean(menuSystemState, object, !stateFrom);  // store for dynamic menus
         } else if (App.Action.MENU.equals(action)) {
             menuSystem.toggle(object);  // store for fixed menus
             final boolean stateFrom = PropertiesU.isBoolean(menuSystemState, object);

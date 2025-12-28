@@ -168,6 +168,7 @@ public final class App {
     public static class Mode {
         public static final String CREATE_F = "createF";
         public static final String CREATE_D = "createD";
+        public static final String RENAME_F = "renameF";
         public static final String EDIT = "edit";
         public static final String DELETE = "delete";
         public static final String FIND = "find";
@@ -265,11 +266,13 @@ public final class App {
         public static final String CLOSE = "close";
         public static final String LOAD_REVISION = "loadRevision";
         public static final String MENU = "menu";
+        public static final String MENU2 = "menu2";
         //public static final String NAVIGATE = "navigate";
         public static final String PRETTY = "pretty";
         public static final String RELOAD = "reload";
         public static final String RESET = "reset";
         public static final String SAVE = "save";
+        public static final String UPLOAD = "upload";
         public static final String COMMIT = "commit";
         public static final String TOGGLE = "toggle";
         public static final String VALIDATE = "validate";
@@ -328,6 +331,7 @@ public final class App {
     }
 
     public static class Object {
+        public static final String FILE = "file";
         public static final String TABLE = "table";
     }
 

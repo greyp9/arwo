@@ -9,6 +9,12 @@ public final class MenuState {
         this.menuState = menuState;
     }
 
+    public void applyTo(final MenuItem... menuItems) {
+        for (MenuItem menuItem : menuItems) {
+            applyTo(menuItem);
+        }
+    }
+
     public void applyTo(final MenuItem menuItem) {
         if (Boolean.parseBoolean(menuState.getProperty(menuItem.getObject()))) {
             menuItem.setOpen(true);

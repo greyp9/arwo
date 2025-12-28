@@ -1,14 +1,14 @@
 package io.github.greyp9.arwo.app.local.fs.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
-import io.github.greyp9.arwo.app.core.view.favorite.FavoriteMenu;
 import io.github.greyp9.arwo.app.core.view.fixup.AppHtmlView;
 import io.github.greyp9.arwo.app.core.view.props.AppPropertiesView;
 import io.github.greyp9.arwo.app.core.view.rename.AppFilesRenameView;
 import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
+import io.github.greyp9.arwo.app.local.fs.menu.MenuFavLFS;
+import io.github.greyp9.arwo.app.local.fs.menu.MenuLFS;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppTitle;
-import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.html.Html;
@@ -17,15 +17,13 @@ import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.menu.MenuContext;
-import io.github.greyp9.arwo.core.menu.MenuItem;
 import io.github.greyp9.arwo.core.menu.MenuSystem;
-import io.github.greyp9.arwo.core.menu.view.MenuView;
+import io.github.greyp9.arwo.core.menu2.model.MenuItem;
+import io.github.greyp9.arwo.core.menu2.model.MenuState;
+import io.github.greyp9.arwo.core.menu2.view.MenuHtml;
 import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
-import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
-import io.github.greyp9.arwo.core.xed.model.Xed;
-import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import org.w3c.dom.Document;
@@ -81,8 +79,11 @@ public abstract class LFSView {
         this.title = AppTitle.Factory.getResourceLabel(httpRequest, bundle,
                 request.getTitlePath(), userState.getCharset(), modeKey, String.format("cache=%s", cacheItem));
         final MenuSystem menuSystem = userState.getMenuSystem();
-        final MenuItem menuItem = menuSystem.get(httpRequest.getServletPath(), AppMenuFactory.Const.FILESYSTEM);
-        this.menuContext = new MenuContext(menuSystem, Collections.singletonList(menuItem));
+/* avoid use of io.github.greyp9.arwo.core.app.menu.AppMenuFactory
+        this.menuContext = new MenuContext(menuSystem, Collections.singletonList(
+                menuSystem.get(httpRequest.getServletPath(), AppMenuFactory.Const.FILESYSTEM)));
+*/
+        this.menuContext = new MenuContext(menuSystem, Collections.emptyList());
     }
 
     public final HttpResponse doGetResponse() throws IOException {
@@ -94,19 +95,13 @@ public abstract class LFSView {
     }
 
     protected final void addMenusLFS(final Element html) throws IOException {
-        // context menu
-        final MenuView menuView = new MenuView(bundle, httpRequest, userState.getMenuSystem());
-        final Element divMenusSticky = menuView.addContentTo(
-                html, AppMenuFactory.Const.FILESYSTEM_STICKY, null, false, true, "v");
-        // favorites (if toggled)
-        final Xed xed = userState.getDocumentState().getSession(App.Servlet.FAVORITES).getXed();
-        final Xed xedUI = userState.getXedFactory().getXedUI(xed, userState.getLocus().getLocale());
-        final XedNav nav = new XedNav(xedUI);
-        final XedCursor cursorFavorites = nav.findX("/app:favorites/app:lfsFavorites");  // i18n xpath
-        final XedCursor cursorType = nav.find("lfsFavorite", cursorFavorites);  // i18n xpath
-        // replacing table with menu bar
-        new FavoriteMenu(getRequest(), userState, cursorType, AppMenuFactory.Const.FILESYSTEM_STICKY)
-                .addContentTo(divMenusSticky);
+        final MenuItem menuFavorites = new MenuFavLFS(request.getBaseURIMode(), userState).toMenuItem();
+        final MenuItem menu = new MenuLFS().toMenuItem();
+        new MenuState(userState.getMenuSystemState()).applyTo(menuFavorites, menu);
+        final MenuHtml menuHtml = new MenuHtml(
+                httpRequest, userState.getBundle(), userState.getSubmitID(), "background-color: brown; color: white;");
+        menuHtml.addTo(html, false, "v", Collections.singletonList(menuFavorites));
+        menuHtml.addTo(html, true, "m", Collections.singletonList(menu));
     }
 
     protected final void addFileProperties(final Element html, final MetaFile metaFile) throws IOException {
@@ -117,7 +112,7 @@ public abstract class LFSView {
     }
 
     protected final void addFilesRename(final Element html) throws IOException {
-        if (PropertiesU.isBoolean(userState.getProperties(), App.Action.FILES_RENAME)) {
+        if (PropertiesU.isBoolean(userState.getProperties(), App.Mode.RENAME_F)) {
             final AppFilesRenameView view = new AppFilesRenameView(request.getHttpRequest(), userState);  // i18n meta
             view.addContentTo(html);
         }

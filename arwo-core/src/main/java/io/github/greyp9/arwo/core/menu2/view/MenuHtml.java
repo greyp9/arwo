@@ -22,32 +22,53 @@ public final class MenuHtml {
     private final ServletHttpRequest httpRequest;
     private final Bundle bundle;
     private final String submitID;
+    private final String styleHome;
 
     public MenuHtml(final ServletHttpRequest httpRequest,
                     final Bundle bundle,
-                    final String submitID) {
+                    final String submitID,
+                    final String styleHome) {
         this.httpRequest = httpRequest;
         this.bundle = bundle;
         this.submitID = submitID;
+        this.styleHome = styleHome;
     }
 
-    public Element addTo(final Element html, final List<MenuItem> menuItems) {
+    public Element addTo(final Element html,
+                         final boolean home,
+                         final String accessKey,
+                         final List<MenuItem> menuItems) {
+        final MenuItem menuItem1 = menuItems.stream().findFirst().orElse(null);
         for (MenuItem menuItem : menuItems) {
-            addTo(html, menuItem);
+            addTo(html, home, accessKey, menuItem, menuItem.equals(menuItem1));
         }
         return html;
     }
 
-    private Element addTo(final Element html, final MenuItem menuItem) {
+    private Element addTo(final Element html,
+                          final boolean home,
+                          final String accessKey,
+                          final MenuItem menuItem,
+                          final boolean first) {
         final Element divMenus = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENUS));
         final NameTypeValues attrs = NTV.create(Html.METHOD, Html.POST, Html.ACTION, Html.EMPTY);
         final Element form = ElementU.addElement(divMenus, Html.FORM, null, attrs);
         final Element divForm = ElementU.addElement(form, Html.DIV);
-        addMenu(divForm, menuItem, true, null, null);
+        addMenu(divForm, menuItem, home, first, accessKey, null);
         return divMenus;
     }
 
-    private void addMenu(final Element html, final MenuItem item,
+    private void addHome(final Element html) {
+        final Element divNav = ElementU.addElement(html, Html.DIV, null, NTV.create(
+                Html.STYLE, styleHome,
+                Html.CLASS, App.CSS.RIGHT));
+        final String title = bundle.getString("menu.home.DETAIL");
+        final String label = String.format("[%s]", UTF16.HOME);
+        ElementU.addElement(divNav, Html.A, label, NTV.create(Html.TITLE, title,
+                Html.CLASS, App.CSS.MENU, Html.HREF, httpRequest.getContextPath()));
+    }
+
+    private void addMenu(final Element html, final MenuItem item, final boolean home,
                          final boolean topRow, final String accessKey, final String text) {
         final Element divMenu = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENU));
         final String key = Value.join(Http.Token.DOT, App.CSS.MENU, item.getName());
@@ -55,6 +76,7 @@ public final class MenuHtml {
         final String label = String.format("[%s]", (bundle == null)
                 ? item.getName() : bundle.getString(key, item.getName()));
         if (topRow) {
+            Value.doIf(home, () -> addHome(divMenu));
             final SubmitToken token = new SubmitToken(
                     item.getSubject(), item.getAction(), item.getObject(), item.getObject2());
             HtmlU.addButton(divMenu, label, submitID,
@@ -102,7 +124,7 @@ public final class MenuHtml {
             }
         }
         if ((itemOpen != null) && (!itemOpen.getMenuItems().isEmpty())) {
-            addMenu(html, itemOpen, false, accessKey, null);
+            addMenu(html, itemOpen, false, false, accessKey, null);
         }
     }
 
