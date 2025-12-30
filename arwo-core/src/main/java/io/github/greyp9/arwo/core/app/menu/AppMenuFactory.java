@@ -1,7 +1,6 @@
 package io.github.greyp9.arwo.core.app.menu;
 
 import io.github.greyp9.arwo.core.app.App;
-import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.menu.MenuItem;
@@ -20,17 +19,21 @@ public class AppMenuFactory implements MenuFactory {
         if (Const.DASHBOARD.equals(type)) {
             menuItem = createMenuBarDash(key);
         } else if (Const.FILESYSTEM.equals(type)) {
-            menuItem = createMenuBarFileSystem(key);
+            // menuItem = createMenuBarFileSystem(key);  // deprecated
+            throw new IllegalStateException(Const.FILESYSTEM);
         } else if (Const.FILESYSTEM_STICKY.equals(type)) {
-            menuItem = createMenuFilesystemSticky(key);
+            // menuItem = createMenuFilesystemSticky(key);  // deprecated
+            throw new IllegalStateException(Const.FILESYSTEM_STICKY);
         } else if (Const.HEX.equals(type)) {
             menuItem = createMenuBarHex(key);
         } else if (Const.NAV.equals(type)) {
             menuItem = createMenuBarNavPages(key, object2);
         } else if (Const.COMMAND.equals(type)) {
-            menuItem = createMenuBarCommand(key);
+            // menuItem = createMenuBarCommand(key);  // deprecated
+            throw new IllegalStateException(Const.COMMAND);
         } else if (Const.COMMAND_STICKY.equals(type)) {
-            menuItem = createMenuCommandSticky(key);
+            // menuItem = createMenuCommandSticky(key);  // deprecated
+            throw new IllegalStateException(Const.COMMAND_STICKY);
         } else if (Const.VISUALIZATION.equals(type)) {
             menuItem = createMenuBarVis(key);
         } else {
@@ -45,6 +48,7 @@ public class AppMenuFactory implements MenuFactory {
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
     }
 
+/*
     private static MenuItem createMenuBarFileSystem(final String key) {
         final MenuItem itemParent = new MenuItem(App.Action.NAV_PARENT, App.Target.USER_STATE, App.Action.NAV_PARENT);
         final MenuItem[] menuItems = new MenuItem[] {
@@ -52,6 +56,7 @@ public class AppMenuFactory implements MenuFactory {
                 createMenuFileSystem(key), createMenuSession(key), createMenuFavorites(key) };
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
     }
+*/
 
     private static MenuItem createMenuBarHex(final String key) {
         final String subject = App.Target.USER_STATE;
@@ -82,11 +87,13 @@ public class AppMenuFactory implements MenuFactory {
         return menu;
     }
 
+/*
     private static MenuItem createMenuBarCommand(final String key) {
         final MenuItem[] menuItems = new MenuItem[] {
                 createMenuConnection(key), createMenuCommand(key), createMenuSession(key), createMenuFavorites(key) };
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
     }
+*/
 
     private static MenuItem createMenuBarVis(final String key) {
         final MenuItem[] menuItems = new MenuItem[] {
@@ -94,6 +101,7 @@ public class AppMenuFactory implements MenuFactory {
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
     }
 
+/*
     private static MenuItem createMenuFile(final String key) {
         final MenuItem itemFileNew = new MenuItem(App.Mode.CREATE_F, App.Target.USER_STATE, App.Mode.CREATE_F);
         final MenuItem itemFolderNew = new MenuItem(App.Mode.CREATE_D, App.Target.USER_STATE, App.Mode.CREATE_D);
@@ -159,6 +167,7 @@ public class AppMenuFactory implements MenuFactory {
         return new MenuItem("viewCharset", subject, App.Action.MENU, key + "/viewCharset",
                 itemUTF8, itemUTF16);
     }
+*/
 
     private static MenuItem createMenuViewVis(final String key) {
         final String subject = App.Target.SESSION;
@@ -177,6 +186,7 @@ public class AppMenuFactory implements MenuFactory {
                 itemViewLog15, itemViewLog2, itemViewLog3);
     }
 
+/* deprecated
     private static MenuItem createMenuConnection(final String key) {
         final String properties = App.Action.PROPERTIES;
         final MenuItem itemProps = new MenuItem(properties, App.Target.SESSION, App.Action.TOGGLE, properties);
@@ -205,6 +215,7 @@ public class AppMenuFactory implements MenuFactory {
     private static MenuItem createMenuCommandSticky(final String key) {
         return new MenuItem("favorites", App.Target.USER_STATE, App.Action.MENU, key + "/favorites");
     }
+*/
 
     private static MenuItem createMenuSession(final String key) {
         final String subject = App.Target.USER_STATE;
@@ -220,20 +231,22 @@ public class AppMenuFactory implements MenuFactory {
                 itemCache, itemClear, itemRefresh, itemCronOn, itemCronOff, itemReset, itemRestart, itemStop);
     }
 
+/*
     private static MenuItem createMenuFavorites(final String key) {
         final MenuItem itemAddFavorite = new MenuItem(App.Action.ADD_FAV, App.Target.SESSION, App.Action.ADD_FAV);
         return new MenuItem(Const.FAVORITES, App.Target.USER_STATE, App.Action.MENU, key + "/favorites",
                 itemAddFavorite);
     }
+*/
 
     public static class Const {
         public static final String DASHBOARD = "dash";
-        public static final String FILESYSTEM = "fs";
-        public static final String FILESYSTEM_STICKY = "fs-sticky";
+        public static final String FILESYSTEM = "fs";  // deprecated
+        public static final String FILESYSTEM_STICKY = "fs-sticky";  // deprecated
         public static final String HEX = "hex";
         public static final String NAV = "nav";
-        public static final String COMMAND = "cmd";
-        public static final String COMMAND_STICKY = "cmd-sticky";
+        public static final String COMMAND = "cmd";  // deprecated
+        public static final String COMMAND_STICKY = "cmd-sticky";  // deprecated
         public static final String VISUALIZATION = "vis";
 
         public static final String FAVORITES = "favorites";

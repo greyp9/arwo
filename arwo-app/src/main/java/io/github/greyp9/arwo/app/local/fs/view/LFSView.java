@@ -16,8 +16,6 @@ import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
-import io.github.greyp9.arwo.core.menu.MenuContext;
-import io.github.greyp9.arwo.core.menu.MenuSystem;
 import io.github.greyp9.arwo.core.menu2.model.MenuItem;
 import io.github.greyp9.arwo.core.menu2.model.MenuState;
 import io.github.greyp9.arwo.core.menu2.view.MenuHtml;
@@ -43,7 +41,6 @@ public abstract class LFSView {
     private final Bundle bundle;
     private final File file;
     private final AppTitle title;
-    private final MenuContext menuContext;
 
     public final LFSRequest getRequest() {
         return request;
@@ -78,30 +75,37 @@ public abstract class LFSView {
         final boolean cacheItem = PropertiesU.isBoolean(userState.getProperties(), App.Action.CACHE);
         this.title = AppTitle.Factory.getResourceLabel(httpRequest, bundle,
                 request.getTitlePath(), userState.getCharset(), modeKey, String.format("cache=%s", cacheItem));
-        final MenuSystem menuSystem = userState.getMenuSystem();
-/* avoid use of io.github.greyp9.arwo.core.app.menu.AppMenuFactory
-        this.menuContext = new MenuContext(menuSystem, Collections.singletonList(
-                menuSystem.get(httpRequest.getServletPath(), AppMenuFactory.Const.FILESYSTEM)));
-*/
-        this.menuContext = new MenuContext(menuSystem, Collections.emptyList());
     }
 
     public final HttpResponse doGetResponse() throws IOException {
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
+        final Element header = new XPather(html, null).getElement(Html.XPath.HEADER);
         final Element body = new XPather(html, null).getElement(Html.XPath.CONTENT);
+        final Element footer = new XPather(html, null).getElement(Html.XPath.FOOTER);
         final HttpResponse httpResponse = addContentTo(body);
-        return Optional.ofNullable(httpResponse)
-                .orElse(new AppHtmlView(httpRequest, userState, title, menuContext, AUGMENTS).fixup(html));
+        return Optional.ofNullable(httpResponse).orElse(
+                new AppHtmlView(httpRequest, userState, title, null, null)
+                        .appRefreshView(html)
+                        .uploadFile(html, userState.getMenuSystemState().getProperty("/lfs/fs/file/upload"))
+                        .title(header)
+                        .addTextFiltersView(header)
+                        .propertyStrips(header)
+                        .actionRefresh(header)
+                        .actionTextExpression(header)
+                        .alerts(header)
+                        .statusBar(footer)
+                        .appHtml(html)
+                        .toHttpResponse(html));
     }
 
-    protected final void addMenusLFS(final Element html) throws IOException {
+    protected final void addMenusLFS(final Element header) throws IOException {
         final MenuItem menuFavorites = new MenuFavLFS(request.getBaseURIMode(), userState).toMenuItem();
         final MenuItem menu = new MenuLFS().toMenuItem();
         new MenuState(userState.getMenuSystemState()).applyTo(menuFavorites, menu);
         final MenuHtml menuHtml = new MenuHtml(
                 httpRequest, userState.getBundle(), userState.getSubmitID(), "background-color: brown; color: white;");
-        menuHtml.addTo(html, false, "v", Collections.singletonList(menuFavorites));
-        menuHtml.addTo(html, true, "m", Collections.singletonList(menu));
+        menuHtml.addTo(header, false, "v", Collections.singletonList(menuFavorites));
+        menuHtml.addTo(header, true, "m", Collections.singletonList(menu));
     }
 
     protected final void addFileProperties(final Element html, final MetaFile metaFile) throws IOException {
@@ -130,6 +134,4 @@ public abstract class LFSView {
      * @throws IOException on failures accessing requested resources
      */
     protected abstract HttpResponse addContentTo(Element html) throws IOException;
-
-    private static final String AUGMENTS = Value.join(",", AppHtmlView.EXPRESSION);
 }

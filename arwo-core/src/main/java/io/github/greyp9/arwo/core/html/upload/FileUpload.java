@@ -25,13 +25,22 @@ public class FileUpload {
     }
 
     public final HttpResponse addContentTo(final Element html, final MenuView menuView) throws IOException {
-        // find the document insert point for the upload menu
-        final Element divMenuFileUpload = new XPather(html.getOwnerDocument(), null)
-                .getElement("/html/body//div[button/text()[contains(.,'Upload')]]");
         final MenuItem itemRoot = menuView.getMenuSystem().get(servletPath, AppMenuFactory.Const.FILESYSTEM);
         final MenuItem itemFile = itemRoot.getMenuItem(Const.FILE);
         final MenuItem itemUpload = itemFile.getMenuItem(Const.UPLOAD);
-        if ((divMenuFileUpload != null) && itemRoot.isOpen() && itemFile.isOpen() && itemUpload.isOpen()) {
+        final boolean isOpen = itemRoot.isOpen() && itemFile.isOpen() && itemUpload.isOpen();
+        return addContentTo(html, isOpen);
+    }
+
+    public final HttpResponse addContentTo(final Element html, final String isOpen) throws IOException {
+        return addContentTo(html, Boolean.parseBoolean(isOpen));
+    }
+
+    public final HttpResponse addContentTo(final Element html, final boolean isOpen) throws IOException {
+        // find the document insert point for the upload menu
+        final Element divMenuFileUpload = new XPather(html.getOwnerDocument(), null)
+                .getElement("/html/body//div[button/text()[contains(.,'Upload')]]");
+        if ((divMenuFileUpload != null) && isOpen) {
             final String labelMenu = bundle.getString(Const.MENU_FILE_UPLOAD);
             final Element parent = ElementU.getParent(ElementU.getParent(ElementU.getParent(divMenuFileUpload)));
             final Element form = ElementU.addElement(parent, Html.FORM, null, NTV.create(
