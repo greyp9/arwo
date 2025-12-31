@@ -7,7 +7,6 @@ import io.github.greyp9.arwo.app.core.view.table.UserStateTable;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppTitle;
-import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.cache.CacheRowSetSource;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
@@ -16,15 +15,16 @@ import io.github.greyp9.arwo.core.config.Preferences;
 import io.github.greyp9.arwo.core.connect.ConnectionCache;
 import io.github.greyp9.arwo.core.file.meta.FileMetaData;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
+import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
-import io.github.greyp9.arwo.core.menu.MenuContext;
-import io.github.greyp9.arwo.core.menu.MenuItem;
-import io.github.greyp9.arwo.core.menu.MenuSystem;
+import io.github.greyp9.arwo.core.menu2.core.MenuSession;
+import io.github.greyp9.arwo.core.menu2.model.MenuItem;
+import io.github.greyp9.arwo.core.menu2.view.MenuHtml;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.resource.Pather;
 import io.github.greyp9.arwo.core.table.row.RowSet;
@@ -50,7 +50,6 @@ import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 import java.util.UUID;
 
 public class S3HandlerGet {
@@ -97,20 +96,15 @@ public class S3HandlerGet {
 
     private HttpResponse doGetInventory() throws IOException {
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
-        final Element body = new XPather(html, null).getElement(Html.XPath.CONTENT);
+        final Element content = new XPather(html, null).getElement(Html.XPath.CONTENT);
         final UserStateTable table = new UserStateTable(userState, httpRequest.getPathInfo(), httpRequest.getDate());
-        table.toTableView(new EndpointRowSet(httpRequest, userState).getRowSet()).addContentTo(body);
+        table.toTableView(new EndpointRowSet(httpRequest, userState).getRowSet()).addContentTo(content);
         final String labelContext = TextU.wrapBracket(httpRequest.getPathInfo());
         final NameTypeValue facetCacheEnabled = new NameTypeValue(
                 App.Action.CACHE, PropertiesU.isBoolean(userState.getProperties(), App.Action.CACHE));
         final AppTitle appTitle = AppTitle.Factory.getResourceLabel(httpRequest, userState.getBundle(),
                 labelContext, facetCacheEnabled.toStringNV());
-        final MenuSystem menuSystem = userState.getMenuSystem();
-        final List<MenuItem> menuItems = Collections.singletonList(
-                menuSystem.get(httpRequest.getServletPath(), AppMenuFactory.Const.DASHBOARD)
-        );
-        final MenuContext menuContext = new MenuContext(menuSystem, menuItems);
-        return new AppHtmlView(httpRequest, userState, appTitle, menuContext, App.Token.EMPTY).fixup(html);
+        return toHttpResponse(html, appTitle);
     }
 
     private HttpResponse doGetFile(final String endpoint, final String path) throws IOException {
@@ -198,11 +192,30 @@ public class S3HandlerGet {
                 App.Action.CACHE, PropertiesU.isBoolean(userState.getProperties(), App.Action.CACHE));
         final AppTitle appTitle = AppTitle.Factory.getResourceLabel(httpRequest, userState.getBundle(),
                 labelContext, regionName, bucketName, facetCacheEnabled.toStringNV());
-        final MenuSystem menuSystem = userState.getMenuSystem();
-        final List<MenuItem> menuItems = Collections.singletonList(
-                menuSystem.get(httpRequest.getServletPath(), AppMenuFactory.Const.DASHBOARD)
-        );
-        final MenuContext menuContext = new MenuContext(menuSystem, menuItems);
-        return new AppHtmlView(httpRequest, userState, appTitle, menuContext, App.Token.EMPTY).fixup(html);
+        return toHttpResponse(html, appTitle);
     }
+
+    private void addMenus(final Element header) {
+        final MenuItem menu = new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU2, MENU_KEY, null,
+                new MenuSession().toMenuItem(PathU.toPath(MENU_KEY, App.Target.SESSION)))
+                .applyFrom(userState.getMenuSystemState());
+        new MenuHtml(httpRequest, userState.getBundle(), userState.getSubmitID(), STYLE_HOME)
+                .addTo(header, true, "m", Collections.singletonList(menu));
+    }
+
+    private HttpResponse toHttpResponse(final Document html, final AppTitle appTitle) throws IOException {
+        final Element header = new XPather(html, null).getElement(Html.XPath.HEADER);
+        final Element footer = new XPather(html, null).getElement(Html.XPath.FOOTER);
+        addMenus(header);
+        return new AppHtmlView(httpRequest, userState, appTitle, null, null)
+                .title(header)
+                .alerts(header)
+                .actionLocale(header)
+                .statusBar(footer)
+                .appHtml(html)
+                .toHttpResponse(html);
+    }
+
+    private static final String MENU_KEY = "/menu2/s3";
+    private static final String STYLE_HOME = "background-color: brown; color: white;";
 }

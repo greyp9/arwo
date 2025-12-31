@@ -6,7 +6,6 @@ import io.github.greyp9.arwo.app.core.view.fixup.AppHtmlView;
 import io.github.greyp9.arwo.app.core.view.table.UserStateTable;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppTitle;
-import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.file.FileX;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
@@ -15,9 +14,9 @@ import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
-import io.github.greyp9.arwo.core.menu.MenuContext;
-import io.github.greyp9.arwo.core.menu.MenuItem;
-import io.github.greyp9.arwo.core.menu.MenuSystem;
+import io.github.greyp9.arwo.core.menu2.core.MenuSession;
+import io.github.greyp9.arwo.core.menu2.model.MenuItem;
+import io.github.greyp9.arwo.core.menu2.view.MenuHtml;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
 import io.github.greyp9.arwo.core.table.insert.InsertRow;
@@ -35,7 +34,6 @@ import java.sql.Types;
 import java.util.Collections;
 import java.util.Date;
 import java.util.Iterator;
-import java.util.List;
 import java.util.Map;
 
 public final class CacheInventoryView {
@@ -53,22 +51,36 @@ public final class CacheInventoryView {
 
     public HttpResponse render() throws IOException {
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
-        final Element body = new XPather(html, null).getElement(Html.XPath.CONTENT);
+        final Element header = new XPather(html, null).getElement(Html.XPath.HEADER);
+        final Element content = new XPather(html, null).getElement(Html.XPath.CONTENT);
+        final Element footer = new XPather(html, null).getElement(Html.XPath.FOOTER);
         final UserStateTable table = new UserStateTable(userState, null, httpRequest.getDate());
-
-        table.toTableView(getRowSetR(resourceCache.getRowSets())).addContentTo(body);
-        table.toTableView(getRowSetF(resourceCache.getFiles())).addContentTo(body);
-        table.toTableView(getRowSetO(resourceCache.getObjects())).addContentTo(body);
+        table.toTableView(getRowSetR(resourceCache.getRowSets())).addContentTo(content);
+        table.toTableView(getRowSetF(resourceCache.getFiles())).addContentTo(content);
+        table.toTableView(getRowSetO(resourceCache.getObjects())).addContentTo(content);
 
         final String labelContext = TextU.wrapBracket(httpRequest.getBaseURI());
         final AppTitle appTitle = AppTitle.Factory.getResourceLabel(httpRequest, userState.getBundle(), labelContext);
-        final MenuSystem menuSystem = userState.getMenuSystem();
-        final List<MenuItem> menuItems = Collections.singletonList(
-                menuSystem.get(httpRequest.getServletPath(), AppMenuFactory.Const.DASHBOARD)
-        );
-        final MenuContext menuContext = new MenuContext(menuSystem, menuItems);
-        return new AppHtmlView(httpRequest, userState, appTitle, menuContext, App.Token.EMPTY).fixup(html);
+        addMenus(header);
+        return new AppHtmlView(httpRequest, userState, appTitle, null, null)
+                .title(header)
+                .alerts(header)
+                .actionLocale(header)
+                .statusBar(footer)
+                .appHtml(html)
+                .toHttpResponse(html);
     }
+
+    private void addMenus(final Element header) {
+        final MenuItem menu = new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU2, MENU_KEY, null,
+                new MenuSession().toMenuItem(PathU.toPath(MENU_KEY, App.Target.SESSION)))
+                .applyFrom(userState.getMenuSystemState());
+        new MenuHtml(httpRequest, userState.getBundle(), userState.getSubmitID(), STYLE_HOME)
+                .addTo(header, true, "m", Collections.singletonList(menu));
+    }
+
+    private static final String MENU_KEY = "/menu2/cache";
+    private static final String STYLE_HOME = "background-color: brown; color: white;";
 
     private RowSet getRowSetR(final Iterator<Map.Entry<String, RowSet>> iterator) {
         final ColumnMetaData[] columns = new ColumnMetaData[] {

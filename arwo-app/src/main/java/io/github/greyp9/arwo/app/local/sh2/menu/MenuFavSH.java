@@ -67,5 +67,5 @@ public final class MenuFavSH {
         return new MenuItem("Favorites", App.Target.USER_STATE, App.Action.MENU2, MENU_STATE_BASE, null, menuItemsC);
     }
 
-    private static final String MENU_STATE_BASE = "/test/menuFavoritesSH";
+    private static final String MENU_STATE_BASE = "/menu2/sh/favorites";
 }

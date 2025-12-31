@@ -44,7 +44,8 @@ public final class MenuFavLFS {
                 menuItems.add(new MenuItem(name, null, App.Action.HREF_ABS, href, null));
             }
         }
-        return new MenuItem("Favorites", App.Target.USER_STATE,
-                App.Action.MENU2, "/test/menuFavorites", null, menuItems);
+        return new MenuItem("Favorites", App.Target.USER_STATE, App.Action.MENU2, MENU_STATE_BASE, null, menuItems);
     }
+
+    private static final String MENU_STATE_BASE = "/menu2/lfs/favorites";
 }

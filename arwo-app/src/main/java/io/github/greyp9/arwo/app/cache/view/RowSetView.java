@@ -5,14 +5,15 @@ import io.github.greyp9.arwo.app.core.view.fixup.AppHtmlView;
 import io.github.greyp9.arwo.app.core.view.table.UserStateTable;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppTitle;
-import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
+import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
-import io.github.greyp9.arwo.core.menu.MenuContext;
-import io.github.greyp9.arwo.core.menu.MenuItem;
-import io.github.greyp9.arwo.core.menu.MenuSystem;
+import io.github.greyp9.arwo.core.menu2.core.MenuSession;
+import io.github.greyp9.arwo.core.menu2.model.MenuItem;
+import io.github.greyp9.arwo.core.menu2.view.MenuHtml;
+import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.text.TextU;
 import io.github.greyp9.arwo.core.xml.DocumentU;
@@ -22,7 +23,6 @@ import org.w3c.dom.Element;
 
 import java.io.IOException;
 import java.util.Collections;
-import java.util.List;
 
 public final class RowSetView {
     private final ServletHttpRequest httpRequest;
@@ -39,16 +39,31 @@ public final class RowSetView {
 
     public HttpResponse render() throws IOException {
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
-        final Element body = new XPather(html, null).getElement(Html.XPath.CONTENT);
+        final Element header = new XPather(html, null).getElement(Html.XPath.HEADER);
+        final Element content = new XPather(html, null).getElement(Html.XPath.CONTENT);
+        final Element footer = new XPather(html, null).getElement(Html.XPath.FOOTER);
         final UserStateTable table = new UserStateTable(userState, null, httpRequest.getDate());
-        table.toTableView(rowSet).addContentTo(body);
+        table.toTableView(rowSet).addContentTo(content);
         final String labelContext = TextU.wrapBracket(rowSet.getMetaData().getID());
         final AppTitle appTitle = AppTitle.Factory.getResourceLabel(httpRequest, userState.getBundle(), labelContext);
-        final MenuSystem menuSystem = userState.getMenuSystem();
-        final List<MenuItem> menuItems = Collections.singletonList(
-                menuSystem.get(httpRequest.getServletPath(), AppMenuFactory.Const.DASHBOARD)
-        );
-        final MenuContext menuContext = new MenuContext(menuSystem, menuItems);
-        return new AppHtmlView(httpRequest, userState, appTitle, menuContext, App.Token.EMPTY).fixup(html);
+        addMenus(header);
+        return new AppHtmlView(httpRequest, userState, appTitle, null, null)
+                .title(header)
+                .alerts(header)
+                .actionLocale(header)
+                .statusBar(footer)
+                .appHtml(html)
+                .toHttpResponse(html);
     }
+
+    private void addMenus(final Element header) {
+        final MenuItem menu = new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU2, MENU_KEY, null,
+                new MenuSession().toMenuItem(PathU.toPath(MENU_KEY, App.Target.SESSION)))
+                .applyFrom(userState.getMenuSystemState());
+        new MenuHtml(httpRequest, userState.getBundle(), userState.getSubmitID(), STYLE_HOME)
+                .addTo(header, true, "m", Collections.singletonList(menu));
+    }
+
+    private static final String MENU_KEY = "/menu2/rowset";
+    private static final String STYLE_HOME = "background-color: brown; color: white;";
 }

@@ -17,7 +17,6 @@ import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.menu2.model.MenuItem;
-import io.github.greyp9.arwo.core.menu2.model.MenuState;
 import io.github.greyp9.arwo.core.menu2.view.MenuHtml;
 import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
@@ -80,13 +79,13 @@ public abstract class LFSView {
     public final HttpResponse doGetResponse() throws IOException {
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
         final Element header = new XPather(html, null).getElement(Html.XPath.HEADER);
-        final Element body = new XPather(html, null).getElement(Html.XPath.CONTENT);
+        final Element content = new XPather(html, null).getElement(Html.XPath.CONTENT);
         final Element footer = new XPather(html, null).getElement(Html.XPath.FOOTER);
-        final HttpResponse httpResponse = addContentTo(body);
+        final HttpResponse httpResponse = addContentTo(content);
         return Optional.ofNullable(httpResponse).orElse(
                 new AppHtmlView(httpRequest, userState, title, null, null)
                         .appRefreshView(html)
-                        .uploadFile(html, userState.getMenuSystemState().getProperty("/lfs/fs/file/upload"))
+                        .uploadFile(html, userState.getMenuSystemState().getProperty(MENU_KEY_FILE_UPLOAD))
                         .title(header)
                         .addTextFiltersView(header)
                         .propertyStrips(header)
@@ -99,14 +98,17 @@ public abstract class LFSView {
     }
 
     protected final void addMenusLFS(final Element header) throws IOException {
-        final MenuItem menuFavorites = new MenuFavLFS(request.getBaseURIMode(), userState).toMenuItem();
-        final MenuItem menu = new MenuLFS().toMenuItem();
-        new MenuState(userState.getMenuSystemState()).applyTo(menuFavorites, menu);
-        final MenuHtml menuHtml = new MenuHtml(
-                httpRequest, userState.getBundle(), userState.getSubmitID(), "background-color: brown; color: white;");
+        final MenuItem menuFavorites = new MenuFavLFS(request.getBaseURIMode(), userState).toMenuItem()
+                .applyFrom(userState.getMenuSystemState());
+        final MenuItem menu = new MenuLFS().toMenuItem()
+                .applyFrom(userState.getMenuSystemState());
+        final MenuHtml menuHtml = new MenuHtml(httpRequest, userState.getBundle(), userState.getSubmitID(), STYLE_HOME);
         menuHtml.addTo(header, false, "v", Collections.singletonList(menuFavorites));
         menuHtml.addTo(header, true, "m", Collections.singletonList(menu));
     }
+
+    private static final String MENU_KEY_FILE_UPLOAD = "/menu2/lfs/file/upload";
+    private static final String STYLE_HOME = "background-color: brown; color: white;";
 
     protected final void addFileProperties(final Element html, final MetaFile metaFile) throws IOException {
         if (PropertiesU.isBoolean(userState.getProperties(), App.Action.PROPERTIES)) {

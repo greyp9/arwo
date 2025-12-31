@@ -17,7 +17,8 @@ public class AppMenuFactory implements MenuFactory {
         MenuItem menuItem;
         final String key = Value.join(Http.Token.SLASH, id, type);
         if (Const.DASHBOARD.equals(type)) {
-            menuItem = createMenuBarDash(key);
+            // menuItem = createMenuBarDash(key);  // deprecated
+            throw new IllegalStateException(Const.DASHBOARD);
         } else if (Const.FILESYSTEM.equals(type)) {
             // menuItem = createMenuBarFileSystem(key);  // deprecated
             throw new IllegalStateException(Const.FILESYSTEM);
@@ -42,13 +43,13 @@ public class AppMenuFactory implements MenuFactory {
         return menuItem;
     }
 
+/*
     private static MenuItem createMenuBarDash(final String key) {
         final MenuItem[] menuItems = new MenuItem[] {
                 createMenuSession(key) };
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
     }
 
-/*
     private static MenuItem createMenuBarFileSystem(final String key) {
         final MenuItem itemParent = new MenuItem(App.Action.NAV_PARENT, App.Target.USER_STATE, App.Action.NAV_PARENT);
         final MenuItem[] menuItems = new MenuItem[] {
@@ -240,7 +241,7 @@ public class AppMenuFactory implements MenuFactory {
 */
 
     public static class Const {
-        public static final String DASHBOARD = "dash";
+        public static final String DASHBOARD = "dash";  // deprecated
         public static final String FILESYSTEM = "fs";  // deprecated
         public static final String FILESYSTEM_STICKY = "fs-sticky";  // deprecated
         public static final String HEX = "hex";

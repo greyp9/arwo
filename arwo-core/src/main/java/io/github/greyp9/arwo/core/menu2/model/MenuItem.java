@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.Properties;
 
 public class MenuItem extends ActionItem {
     private final List<MenuItem> menuItems;
@@ -58,5 +59,10 @@ public class MenuItem extends ActionItem {
         super(name, subject, action, object, object2);
         this.menuItems = new ArrayList<>(menuItems);
         this.open = false;
+    }
+
+    public final MenuItem applyFrom(final Properties menuSystemState) {
+        new MenuState(menuSystemState).applyTo(this);
+        return this;
     }
 }

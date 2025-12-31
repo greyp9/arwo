@@ -12,7 +12,6 @@ import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.menu2.model.MenuItem;
-import io.github.greyp9.arwo.core.menu2.model.MenuState;
 import io.github.greyp9.arwo.core.menu2.view.MenuHtml;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.vm.mutex.CollectionU;
@@ -44,8 +43,8 @@ public class SHHistoryView {
         final Element content = new XPather(html, null).getElement(Html.XPath.CONTENT);
         final Element footer = new XPather(html, null).getElement(Html.XPath.FOOTER);
 
-        final MenuItem menuFavorites = new MenuFavSH(httpRequest.getBaseURI(), userState).toMenuItem();
-        new MenuState(userState.getMenuSystemState()).applyTo(menuFavorites);
+        final MenuItem menuFavorites = new MenuFavSH(httpRequest.getBaseURI(), userState).toMenuItem()
+                .applyFrom(userState.getMenuSystemState());
         new MenuHtml(httpRequest, null, userState.getSubmitID(), STYLE_HOME)
                 .addTo(header, false, "v", Collections.singletonList(menuFavorites));
 

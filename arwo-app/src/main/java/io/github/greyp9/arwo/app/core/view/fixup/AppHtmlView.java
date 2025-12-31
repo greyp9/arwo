@@ -99,6 +99,14 @@ public class AppHtmlView {
         return this;
     }
 
+    public final AppHtmlView actionLocale(final Element header) throws IOException {
+        final Locale locale = userState.getLocus().getLocale();
+        final String submitID = userState.getSubmitID();
+        final Properties properties = userState.getProperties();
+        new XedActionLocale(userState.getXedFactory(), locale).addContentTo(header, submitID, properties);
+        return this;
+    }
+
     public final AppHtmlView actionTextExpression(final Element header) throws IOException {
         final Locale locale = userState.getLocus().getLocale();
         final String submitID = userState.getSubmitID();
