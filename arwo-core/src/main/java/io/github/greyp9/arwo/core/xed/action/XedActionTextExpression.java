@@ -41,7 +41,7 @@ public class XedActionTextExpression extends XedAction {
                                    final String submitID, final Properties properties) throws IOException {
         final boolean isToggle = PropertiesU.isBoolean(properties, App.Action.TEXT_EXPRESSION);
         if (isToggle) {
-            final Element divToolbar = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENU));
+            final Element divToolbar = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENUS));
             for (final String filterRecent : filtersRecent) {
                 ElementU.addElement(divToolbar, Html.DIV, filterRecent, NTV.create(Html.CLASS, App.CSS.MENU));
             }
@@ -57,7 +57,7 @@ public class XedActionTextExpression extends XedAction {
                     submitID, bundle, App.Target.USER_STATE, App.Action.TEXT_EXPRESSION, null);
             final Collection<String> actions = CollectionU.toCollection(App.Action.TEXT_EXPRESSION);
             final ActionButtons buttons = factory.create(App.Action.TEXT_EXPRESSION, false, actions);
-            new PropertyStripHtmlView(pageView, buttons).addContentDiv(html);
+            new PropertyStripHtmlView(pageView, buttons).addContentDiv(divToolbar);
         }
     }
 

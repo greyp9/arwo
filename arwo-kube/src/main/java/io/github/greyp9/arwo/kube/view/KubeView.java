@@ -8,17 +8,16 @@ import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
-import io.github.greyp9.arwo.core.menu.MenuContext;
-import io.github.greyp9.arwo.core.menu.MenuItem;
-import io.github.greyp9.arwo.core.menu.MenuSystem;
+import io.github.greyp9.arwo.core.menu2.model.MenuItem;
+import io.github.greyp9.arwo.core.menu2.view.MenuHtml;
 import io.github.greyp9.arwo.core.text.TextU;
 import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
-import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.model.XedFactory;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import io.github.greyp9.arwo.kube.connection.KubeConnectionResource;
+import io.github.greyp9.arwo.kube.menu.MenuKube;
 import io.github.greyp9.arwo.kube.xed.widget.XedWidgetKubeLog;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -34,8 +33,6 @@ public abstract class KubeView {
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
     private final KubeConnectionResource resource;
-//    private final AppTitle title;
-    private final MenuContext menuContext;
 
     public final ServletHttpRequest getHttpRequest() {
         return httpRequest;
@@ -55,10 +52,6 @@ public abstract class KubeView {
         this.httpRequest = httpRequest;
         this.userState = userState;
         this.resource = resource;
-        final MenuSystem menuSystem = new MenuSystem(userState.getSubmitID(), new KubeAppMenuFactory());
-        final MenuItem menuItem = menuSystem.get(httpRequest.getServletPath(), KubeAppMenuFactory.KUBE); // init
-        menuSystem.applyState(userState.getMenuSystemState());  // apply state
-        this.menuContext = new MenuContext(menuSystem, Collections.singletonList(menuItem));
     }
 
     public final HttpResponse doGetResponse() throws IOException {
@@ -77,14 +70,32 @@ public abstract class KubeView {
                 new NameTypeValue("timestamps", widget.getValue("/action:kubeLog/action:timestamps")).toStringNV());
 
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
-        final Element body = new XPather(html, null).getElement(Html.XPath.CONTENT);
-        if (PropertiesU.isBoolean(userState.getProperties(), KubeAppMenuFactory.KUBE_LOG_OPTIONS)) {
-            widget.addPropertyStripTo(body, userState.getSubmitID());
+        final Element header = new XPather(html, null).getElement(Html.XPath.HEADER);
+        final Element content = new XPather(html, null).getElement(Html.XPath.CONTENT);
+        final Element footer = new XPather(html, null).getElement(Html.XPath.FOOTER);
+        addMenu(header);
+        if (PropertiesU.isBoolean(userState.getMenuSystemState(), MenuKube.MENU_LOG_OPTIONS)) {
+            widget.addPropertyStripTo(content, userState.getSubmitID());
         }
-        final HttpResponse httpResponse = addContentTo(body);
-        return Optional.ofNullable(httpResponse)
-                .orElse(new AppHtmlView(httpRequest, userState, appTitle, menuContext, AUGMENTS).fixup(html));
+
+        final HttpResponse httpResponse = addContentTo(content);
+        return Optional.ofNullable(httpResponse).orElse(
+                new AppHtmlView(httpRequest, userState, appTitle, null, null)
+                        .title(header)
+                        .actionTextExpression(header)
+                        .alerts(header)
+                        .statusBar(footer)
+                        .appHtml(html)
+                        .toHttpResponse(html));
     }
+
+    protected final void addMenu(final Element header) {
+        final MenuItem menu = new MenuKube().toMenuItem().applyFrom(userState.getMenuSystemState());
+        final MenuHtml menuHtml = new MenuHtml(httpRequest, userState.getBundle(), userState.getSubmitID(), STYLE_HOME);
+        menuHtml.addTo(header, true, "m", Collections.singletonList(menu));
+    }
+
+    private static final String STYLE_HOME = "background-color: brown; color: white;";
 
     /**
      * Insert content into HTML page appropriate to the context of the subclass.
@@ -116,6 +127,4 @@ public abstract class KubeView {
     static final String CONTEXT_KFS = "kfs";
     static final String CONTEXT_NODES = "nodes";
     static final String CONTEXT_PODS = "pods";
-
-    private static final String AUGMENTS = Value.join(",", AppHtmlView.EXPRESSION);
 }
