@@ -1,9 +1,16 @@
 package io.github.greyp9.arwo.core.menu2.core;
 
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.menu2.model.MenuItem;
+import io.github.greyp9.arwo.core.resource.PathU;
 
 public final class MenuSession {
+
+    public MenuItem toMenu(final String key) {
+        return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU2, key, null,
+                new MenuSession().toMenuItem(PathU.toPath(key, App.Target.SESSION)));
+    }
 
     public MenuItem toMenuItem(final String key) {
         return new MenuItem(App.Target.SESSION, App.Target.USER_STATE, App.Action.MENU2, key, null,

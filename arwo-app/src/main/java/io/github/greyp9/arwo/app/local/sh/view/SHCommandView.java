@@ -5,11 +5,9 @@ import io.github.greyp9.arwo.app.core.subsystem.local.SubsystemLocal;
 import io.github.greyp9.arwo.app.core.view.history.AppHistoryView;
 import io.github.greyp9.arwo.app.core.view.script.AppScriptView;
 import io.github.greyp9.arwo.app.local.sh.core.SHRequest;
-import io.github.greyp9.arwo.app.local.sh.favorite.FavoriteMenu;
 import io.github.greyp9.arwo.core.action.ActionButtons;
 import io.github.greyp9.arwo.core.action.ActionFactory;
 import io.github.greyp9.arwo.core.app.App;
-import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.HttpResponse;
@@ -71,13 +69,14 @@ public class SHCommandView extends SHView {
 
     private HttpResponse addContentTo(final Element html, final Script script) throws IOException {
         final Document document = html.getOwnerDocument();
-        final Element header = new XPather(document, null).getElement(Html.XPath.HEADER);
         final Element content = new XPather(document, null).getElement(Html.XPath.CONTENT);
         final SHRequest request = getRequest();
         final ServletHttpRequest httpRequest = request.getHttpRequest();
         final AppUserState userState = request.getUserState();
         final Properties properties = userState.getProperties();
+/* deprecated
         new FavoriteMenu(httpRequest, getUserState(), AppMenuFactory.Const.COMMAND_STICKY).addContentTo(header);
+*/
         // command input form (prep)
         final String command = (script == null) ? properties.getProperty(App.Settings.COMMAND, "") : script.getText();
         properties.setProperty(App.Settings.COMMAND, command);

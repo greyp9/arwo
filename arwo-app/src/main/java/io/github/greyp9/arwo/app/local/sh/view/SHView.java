@@ -4,14 +4,13 @@ import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.fixup.AppHtmlView;
 import io.github.greyp9.arwo.app.local.sh.core.SHRequest;
 import io.github.greyp9.arwo.core.app.AppTitle;
-import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
-import io.github.greyp9.arwo.core.menu.MenuContext;
-import io.github.greyp9.arwo.core.menu.MenuItem;
-import io.github.greyp9.arwo.core.menu.MenuSystem;
+import io.github.greyp9.arwo.core.menu2.core.MenuSession;
+import io.github.greyp9.arwo.core.menu2.model.MenuItem;
+import io.github.greyp9.arwo.core.menu2.view.MenuHtml;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
@@ -28,7 +27,6 @@ public abstract class SHView {
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
     private final AppTitle title;
-    private final MenuContext menuContext;
 
     public final SHRequest getRequest() {
         return request;
@@ -45,20 +43,30 @@ public abstract class SHView {
 
         final String labelContext = Value.wrap("[", "]", request.getContext());
         this.title = AppTitle.Factory.getResourceLabel(httpRequest, userState.getBundle(), labelContext);
-        final MenuSystem menuSystem = userState.getMenuSystem();
-        final MenuItem menuItem = menuSystem.get(httpRequest.getServletPath(), AppMenuFactory.Const.COMMAND);
-        this.menuContext = new MenuContext(menuSystem, Collections.singletonList(menuItem));
     }
 
     public final HttpResponse doGetResponse() throws IOException {
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
-        final Element body = new XPather(html, null).getElement(Html.XPath.CONTENT);
-        final HttpResponse httpResponse = addContentTo(body);
-        return Optional.ofNullable(httpResponse)
-                .orElse(new AppHtmlView(httpRequest, userState, title, menuContext, AUGMENTS).fixup(html));
+        final Element header = new XPather(html, null).getElement(Html.XPath.HEADER);
+        final Element content = new XPather(html, null).getElement(Html.XPath.CONTENT);
+        final Element footer = new XPather(html, null).getElement(Html.XPath.FOOTER);
+
+        final MenuItem menu = new MenuSession().toMenu(MENU_KEY).applyFrom(userState.getMenuSystemState());
+        final MenuHtml menuHtml = new MenuHtml(httpRequest, userState.getBundle(), userState.getSubmitID(), STYLE_HOME);
+        menuHtml.addTo(header, true, "m", Collections.singletonList(menu));
+
+        final HttpResponse httpResponse = addContentTo(content);
+        return Optional.ofNullable(httpResponse).orElse(
+                new AppHtmlView(httpRequest, userState, title, null, null)
+                        .title(header)
+                        .alerts(header)
+                        .statusBar(footer)
+                        .appHtml(html)
+                        .toHttpResponse(html));
     }
 
     protected abstract HttpResponse addContentTo(Element html) throws IOException;
 
-    private static final String AUGMENTS = Value.join(",", AppHtmlView.LOCALE, AppHtmlView.EXPRESSION);
+    private static final String MENU_KEY = "/menu2/sh";
+    private static final String STYLE_HOME = "background-color: brown; color: white;";
 }

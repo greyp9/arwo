@@ -3,14 +3,13 @@ package io.github.greyp9.arwo.app.core.view.filter;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
-import io.github.greyp9.arwo.core.menu.MenuSystem;
-import io.github.greyp9.arwo.core.menu.factory.MenuFactory;
-import io.github.greyp9.arwo.core.menu.view.MenuView;
+import io.github.greyp9.arwo.core.menu2.model.MenuItem;
+import io.github.greyp9.arwo.core.menu2.view.MenuHtml;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
-import java.util.Properties;
+import java.util.Collections;
 
 public class FilterMenu {
     private final ServletHttpRequest httpRequest;
@@ -34,14 +33,12 @@ public class FilterMenu {
         this.filterType = filterType;
     }
 
-    public final void addContentTo(final Element html) throws IOException {
+    public final void addContentTo(final Element header) throws IOException {
         final Xed xed = userState.getDocumentState().getSession(App.Servlet.FAVORITES).getXed();
-        final MenuFactory menuFactory = new FilterMenuFactory(xed, xpath, typeInstanceName, filterType);
-        final MenuSystem menuSystem = new MenuSystem(userState.getSubmitID(), menuFactory);
-        final Properties menuSystemState = userState.getMenuSystemState();
-        /* MenuItem menuItem = */ menuSystem.get(httpRequest.getServletPath(), type);
-        menuSystem.applyState(menuSystemState);
-        final MenuView menuView = new MenuView(null, httpRequest, menuSystem);
-        menuView.addContentTo(html, type, null, false, true, "f");
+        final FilterMenuFactory menuFactory = new FilterMenuFactory(xed, xpath, typeInstanceName, filterType);
+        final MenuItem menu = menuFactory.create(httpRequest.getServletPath(), type, null)
+                .applyFrom(userState.getMenuSystemState());
+        final MenuHtml menuHtml = new MenuHtml(httpRequest, null, userState.getSubmitID(), null);
+        menuHtml.addTo(header, false, null, Collections.singletonList(menu));
     }
 }
