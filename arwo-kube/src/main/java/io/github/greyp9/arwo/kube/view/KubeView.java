@@ -80,7 +80,7 @@ public abstract class KubeView {
 
         final HttpResponse httpResponse = addContentTo(content);
         return Optional.ofNullable(httpResponse).orElse(
-                new AppHtmlView(httpRequest, userState, appTitle, null, null)
+                new AppHtmlView(httpRequest, userState, appTitle)
                         .title(header)
                         .actionTextExpression(header)
                         .alerts(header)

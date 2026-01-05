@@ -94,7 +94,7 @@ public class SHScriptView {
         final AppTitle title = AppTitle.Factory.getResourceLabel(
                 httpRequest, userState.getBundle(), Value.wrap("[", "]", httpRequest.getContextPath()));
 
-        return new AppHtmlView(httpRequest, userState, title, null, null)
+        return new AppHtmlView(httpRequest, userState, title)
                 .title(header)
                 .alerts(header)
                 .statusBar(footer)

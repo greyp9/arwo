@@ -17,6 +17,8 @@ import io.github.greyp9.arwo.core.xml.ElementU;
 import org.w3c.dom.Element;
 
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public final class MenuHtml {
     private final ServletHttpRequest httpRequest;
@@ -39,7 +41,8 @@ public final class MenuHtml {
                          final String accessKey,
                          final List<MenuItem> menuItems) {
         final MenuItem menuItem1 = menuItems.stream().findFirst().orElse(null);
-        for (MenuItem menuItem : menuItems) {
+        final List<MenuItem> menuItemsNN = menuItems.stream().filter(Objects::nonNull).collect(Collectors.toList());
+        for (MenuItem menuItem : menuItemsNN) {
             addTo(html, home, accessKey, menuItem, menuItem.equals(menuItem1));
         }
         return html;

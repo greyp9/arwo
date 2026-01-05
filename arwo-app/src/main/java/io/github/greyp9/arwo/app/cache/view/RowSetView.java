@@ -47,7 +47,7 @@ public final class RowSetView {
         final String labelContext = TextU.wrapBracket(rowSet.getMetaData().getID());
         final AppTitle appTitle = AppTitle.Factory.getResourceLabel(httpRequest, userState.getBundle(), labelContext);
         addMenus(header);
-        return new AppHtmlView(httpRequest, userState, appTitle, null, null)
+        return new AppHtmlView(httpRequest, userState, appTitle)
                 .title(header)
                 .alerts(header)
                 .actionLocale(header)

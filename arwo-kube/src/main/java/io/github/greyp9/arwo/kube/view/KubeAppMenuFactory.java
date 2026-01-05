@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.core.menu.MenuItem;
 import io.github.greyp9.arwo.core.menu.factory.MenuFactory;
 import io.github.greyp9.arwo.core.value.Value;
 
+@Deprecated  // 2025-12T
 public final class KubeAppMenuFactory implements MenuFactory {
     public static final String KUBE_LOG_OPTIONS = "kube-log-options";
 

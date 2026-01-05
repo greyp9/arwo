@@ -57,7 +57,7 @@ public abstract class JDBCView {
 
         final HttpResponse httpResponse = addContentTo(content);
         return Optional.ofNullable(httpResponse).orElse(
-                new AppHtmlView(httpRequest, userState, title, null, null)
+                new AppHtmlView(httpRequest, userState, title)
                         .title(header)
                         .alerts(header)
                         .statusBar(footer)

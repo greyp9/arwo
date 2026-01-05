@@ -12,20 +12,21 @@ import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.lang.NumberU;
+import io.github.greyp9.arwo.core.menu2.model.MenuItem;
 import io.github.greyp9.arwo.core.metric.histogram.view.TimeHistogramDiv;
 import io.github.greyp9.arwo.core.metric.histogram.view.TimeHistogramText;
 import io.github.greyp9.arwo.core.metric.histogram2.time.TimeHistogram;
 import io.github.greyp9.arwo.core.metric.histogram2.time.TimeHistogramSerializer;
 import io.github.greyp9.arwo.core.resource.PathU;
-import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
-import io.github.greyp9.arwo.core.xml.ElementU;
 import org.w3c.dom.Element;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 
 public final class VisualizationEntryView extends VisualizationView {
@@ -61,26 +62,28 @@ public final class VisualizationEntryView extends VisualizationView {
         return httpResponse;
     }
 
-    protected void addMenuNav(final Element html) {
-        final VisualizationRequest request = getRequest();
-        final Date date = DateX.fromFilenameMM(request.getPage());
+    protected MenuItem getMenuNav() {
+        final Date date = DateX.fromFilenameMM(getRequest().getPage());
+        final List<MenuItem> menuItems = new ArrayList<>();
         if (date != null) {
-            final Element divMenu = ElementU.addElement(html, Html.DIV, null, NTV.create(Html.CLASS, App.CSS.MENU));
-            ElementU.addElement(divMenu, Html.SPAN, "[Navigate]", NTV.create(Html.CLASS, App.CSS.MENU));
-            addMenuEntryNav(divMenu, UTF16.ARROW_LEFT, date, -1);
-            addMenuEntryNav(divMenu, UTF16.ARROW_RIGHT, date, 1);
+            menuItems.add(new MenuItem(getName(UTF16.ARROW_LEFT), null, App.Action.HREF_ABS, getHref(date, -1)));
+            menuItems.add(new MenuItem(getName(UTF16.ARROW_RIGHT), null, App.Action.HREF_ABS, getHref(date, 1)));
         }
+        return new MenuItem("Navigate", App.Target.USER_STATE, App.Action.MENU2, MENU_KEY, null, menuItems);
     }
 
-    private void addMenuEntryNav(final Element divMenu, final String text, final Date date, final long offset) {
+    private String getName(final String text) {
+        return Value.wrap("[", "]", Value.wrap(Html.SPACE, text));
+    }
+
+    private String getHref(final Date date, final long offset) {
         final VisualizationRequest request = getRequest();
-        final String textPad = Value.wrap("[", "]", Value.wrap(Html.SPACE, text));
         final Date dateOffset = histogram.incrementPage(date, (int) offset);
         final String pageTo = Value.defaultOnEmpty(DateX.toFilenameMM(dateOffset), "");
-        final String hrefTo = request.getHttpRequest().getURI().replace(request.getPage(), pageTo);
-        final String cssClass = Value.join(Html.SPACE, App.CSS.MENU, App.CSS.MIN);
-        ElementU.addElement(divMenu, Html.A, textPad, NTV.create(Html.CLASS, cssClass, Html.HREF, hrefTo));
+        return request.getHttpRequest().getURI().replace(request.getPage(), pageTo);
     }
+
+    private static final String MENU_KEY = "/menu2/vis/nav/1";
 
     private void addContentToSwitch(final Element html) throws IOException {
         final VisualizationRequest request = getRequest();

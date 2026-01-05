@@ -2,11 +2,8 @@ package io.github.greyp9.arwo.core.app.menu;
 
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.glyph.UTF16;
-import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.menu.MenuItem;
 import io.github.greyp9.arwo.core.menu.factory.MenuFactory;
-import io.github.greyp9.arwo.core.table.state.ViewState;
-import io.github.greyp9.arwo.core.value.Value;
 
 // i18nf
 @SuppressWarnings("PMD.TooManyMethods")
@@ -15,7 +12,7 @@ public class AppMenuFactory implements MenuFactory {
     @Override
     public final MenuItem create(final String id, final String type, final String object2) {
         MenuItem menuItem;
-        final String key = Value.join(Http.Token.SLASH, id, type);
+        // final String key = Value.join(Http.Token.SLASH, id, type);
         if (Const.DASHBOARD.equals(type)) {
             // menuItem = createMenuBarDash(key);  // deprecated
             throw new IllegalStateException(Const.DASHBOARD);
@@ -26,9 +23,11 @@ public class AppMenuFactory implements MenuFactory {
             // menuItem = createMenuFilesystemSticky(key);  // deprecated
             throw new IllegalStateException(Const.FILESYSTEM_STICKY);
         } else if (Const.HEX.equals(type)) {
-            menuItem = createMenuBarHex(key);
+            // menuItem = createMenuBarHex(key);
+            throw new IllegalStateException(Const.HEX);
         } else if (Const.NAV.equals(type)) {
-            menuItem = createMenuBarNavPages(key, object2);
+            // menuItem = createMenuBarNavPages(key, object2);
+            throw new IllegalStateException(Const.NAV);
         } else if (Const.COMMAND.equals(type)) {
             // menuItem = createMenuBarCommand(key);  // deprecated
             throw new IllegalStateException(Const.COMMAND);
@@ -36,7 +35,8 @@ public class AppMenuFactory implements MenuFactory {
             // menuItem = createMenuCommandSticky(key);  // deprecated
             throw new IllegalStateException(Const.COMMAND_STICKY);
         } else if (Const.VISUALIZATION.equals(type)) {
-            menuItem = createMenuBarVis(key);
+            // menuItem = createMenuBarVis(key);
+            throw new IllegalStateException(Const.VISUALIZATION);
         } else {
             menuItem = new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU);
         }
@@ -57,7 +57,6 @@ public class AppMenuFactory implements MenuFactory {
                 createMenuFileSystem(key), createMenuSession(key), createMenuFavorites(key) };
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
     }
-*/
 
     private static MenuItem createMenuBarHex(final String key) {
         final String subject = App.Target.USER_STATE;
@@ -88,13 +87,11 @@ public class AppMenuFactory implements MenuFactory {
         return menu;
     }
 
-/*
     private static MenuItem createMenuBarCommand(final String key) {
         final MenuItem[] menuItems = new MenuItem[] {
                 createMenuConnection(key), createMenuCommand(key), createMenuSession(key), createMenuFavorites(key) };
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
     }
-*/
 
     private static MenuItem createMenuBarVis(final String key) {
         final MenuItem[] menuItems = new MenuItem[] {
@@ -102,7 +99,6 @@ public class AppMenuFactory implements MenuFactory {
         return new MenuItem(UTF16.MENU, App.Target.USER_STATE, App.Action.MENU, key, menuItems);
     }
 
-/*
     private static MenuItem createMenuFile(final String key) {
         final MenuItem itemFileNew = new MenuItem(App.Mode.CREATE_F, App.Target.USER_STATE, App.Mode.CREATE_F);
         final MenuItem itemFolderNew = new MenuItem(App.Mode.CREATE_D, App.Target.USER_STATE, App.Mode.CREATE_D);
@@ -168,7 +164,6 @@ public class AppMenuFactory implements MenuFactory {
         return new MenuItem("viewCharset", subject, App.Action.MENU, key + "/viewCharset",
                 itemUTF8, itemUTF16);
     }
-*/
 
     private static MenuItem createMenuViewVis(final String key) {
         final String subject = App.Target.SESSION;
@@ -187,7 +182,6 @@ public class AppMenuFactory implements MenuFactory {
                 itemViewLog15, itemViewLog2, itemViewLog3);
     }
 
-/* deprecated
     private static MenuItem createMenuConnection(final String key) {
         final String properties = App.Action.PROPERTIES;
         final MenuItem itemProps = new MenuItem(properties, App.Target.SESSION, App.Action.TOGGLE, properties);
@@ -216,7 +210,6 @@ public class AppMenuFactory implements MenuFactory {
     private static MenuItem createMenuCommandSticky(final String key) {
         return new MenuItem("favorites", App.Target.USER_STATE, App.Action.MENU, key + "/favorites");
     }
-*/
 
     private static MenuItem createMenuSession(final String key) {
         final String subject = App.Target.USER_STATE;
@@ -232,7 +225,6 @@ public class AppMenuFactory implements MenuFactory {
                 itemCache, itemClear, itemRefresh, itemCronOn, itemCronOff, itemReset, itemRestart, itemStop);
     }
 
-/*
     private static MenuItem createMenuFavorites(final String key) {
         final MenuItem itemAddFavorite = new MenuItem(App.Action.ADD_FAV, App.Target.SESSION, App.Action.ADD_FAV);
         return new MenuItem(Const.FAVORITES, App.Target.USER_STATE, App.Action.MENU, key + "/favorites",

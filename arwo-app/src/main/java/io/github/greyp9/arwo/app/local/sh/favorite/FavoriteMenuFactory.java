@@ -19,6 +19,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+@Deprecated  // 2025-12T
 public class FavoriteMenuFactory implements MenuFactory {
     private final Xed xed;
 

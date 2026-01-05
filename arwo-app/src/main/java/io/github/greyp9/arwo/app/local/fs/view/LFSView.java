@@ -83,7 +83,7 @@ public abstract class LFSView {
         final Element footer = new XPather(html, null).getElement(Html.XPath.FOOTER);
         final HttpResponse httpResponse = addContentTo(content);
         return Optional.ofNullable(httpResponse).orElse(
-                new AppHtmlView(httpRequest, userState, title, null, null)
+                new AppHtmlView(httpRequest, userState, title)
                         .appRefreshView(html)
                         .uploadFile(html, userState.getMenuSystemState().getProperty(MENU_KEY_FILE_UPLOAD))
                         .title(header)

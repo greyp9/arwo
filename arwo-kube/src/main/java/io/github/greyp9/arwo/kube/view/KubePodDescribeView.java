@@ -59,10 +59,10 @@ public final class KubePodDescribeView extends KubeView {
         if (jsonElement != null) {
             final MenuSystem menuSystemD = new MenuSystem(
                     getUserState().getSubmitID(), new KubeDocMenuFactory(base, jsonElement));
-            menuSystemD.get(getHttpRequest().getServletPath(), KubeAppMenuFactory.KUBE);  // init (since it is dynamic)
+            menuSystemD.get(getHttpRequest().getServletPath(), "kube");  // init (since it is dynamic)
             menuSystemD.applyState(getUserState().getMenuSystemState());
             final MenuView menuView = new MenuView(null, getHttpRequest(), menuSystemD);  // render
-            menuView.addContentTo(html, KubeAppMenuFactory.KUBE, false);
+            menuView.addContentTo(html, "kube", false);
         }
     }
 

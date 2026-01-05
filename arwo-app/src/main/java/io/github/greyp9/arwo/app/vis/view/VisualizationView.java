@@ -1,34 +1,26 @@
 package io.github.greyp9.arwo.app.vis.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.core.view.fixup.AppHtmlView;
 import io.github.greyp9.arwo.app.vis.core.VisualizationRequest;
-import io.github.greyp9.arwo.core.alert.view.AlertsView;
-import io.github.greyp9.arwo.core.app.App;
-import io.github.greyp9.arwo.core.app.AppHtml;
-import io.github.greyp9.arwo.core.app.AppRequest;
+import io.github.greyp9.arwo.app.vis.menu.MenuVis;
 import io.github.greyp9.arwo.core.app.AppTitle;
-import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
-import io.github.greyp9.arwo.core.config.Preferences;
 import io.github.greyp9.arwo.core.html.Html;
-import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.locus.Locus;
-import io.github.greyp9.arwo.core.menu.view.MenuView;
-import io.github.greyp9.arwo.core.value.NameTypeValue;
-import io.github.greyp9.arwo.core.value.NameTypeValues;
-import io.github.greyp9.arwo.core.value.Value;
-import io.github.greyp9.arwo.core.view.StatusBarView;
+import io.github.greyp9.arwo.core.menu2.model.MenuItem;
+import io.github.greyp9.arwo.core.menu2.view.MenuHtml;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.net.HttpURLConnection;
+import java.util.Collections;
+import java.util.Optional;
 
 public abstract class VisualizationView {
     private final ServletHttpRequest httpRequest;
@@ -67,41 +59,34 @@ public abstract class VisualizationView {
     }
 
     public final HttpResponse doGetResponse() throws IOException {
-        // template html
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
-        final Element body = new XPather(html, null).getElement(Html.XPath.BODY);
-        // context-specific content
-        final AppRequest appRequest = request.getAppRequest();
-        final AppTitle title = AppTitle.Factory.getHostLabel(httpRequest, appRequest.getBundle(), request.getContext());
-        addHeaderView(body, title);
-        HttpResponse httpResponse = addContentTo(body);
-        if (httpResponse == null) {
-            // touch ups
-            final boolean displayAlerts = (httpRequest.getHttpRequest().getHeader(App.Header.RESULT) == null);
-            new AlertsView(displayAlerts, userState.getAlerts(), userState.getLocus(), userState.getBundle(),
-                    userState.getSubmitID()).addContentTo(body);
-            new StatusBarView(httpRequest, userState.getLocus()).addContentTo(body);
-            final Preferences preferences = new Preferences(userState.getConfig());
-            final String iconColor = Value.defaultOnEmpty(preferences.getIconColor(), "black");
-            final String theme = Value.defaultOnEmpty(preferences.getTheme(), "default");
-            new AppHtml(httpRequest).fixup(html, title, iconColor, theme);
-            // package into response
-            final byte[] entity = DocumentU.toXHtml(html);
-            final NameTypeValue contentType = new NameTypeValue(Http.Header.CONTENT_TYPE, Http.Mime.TEXT_HTML_UTF8);
-            final NameTypeValue contentLength = new NameTypeValue(Http.Header.CONTENT_LENGTH, entity.length);
-            final NameTypeValues headers = new NameTypeValues(contentType, contentLength);
-            httpResponse = new HttpResponse(HttpURLConnection.HTTP_OK, headers, new ByteArrayInputStream(entity));
+        final Element header = new XPather(html, null).getElement(Html.XPath.HEADER);
+        final Element content = new XPather(html, null).getElement(Html.XPath.CONTENT);
+        final Element footer = new XPather(html, null).getElement(Html.XPath.FOOTER);
+
+        final MenuItem menu = new MenuVis().toMenuItem().applyFrom(userState.getMenuSystemState());
+        final MenuHtml menuHtml = new MenuHtml(httpRequest, userState.getBundle(), userState.getSubmitID(), STYLE_HOME);
+        menuHtml.addTo(header, true, "m", Collections.singletonList(menu));
+
+        final MenuItem menuNav = getMenuNav();
+        if (menuNav != null) {
+            menuNav.setOpen(true);
+            menuHtml.addTo(header, false, "n", Collections.singletonList(menuNav));
         }
-        return httpResponse;
+
+        final AppTitle title = AppTitle.Factory.getHostLabel(httpRequest, userState.getBundle(), request.getContext());
+        final HttpResponse httpResponse = addContentTo(content);
+        return Optional.ofNullable(httpResponse).orElse(
+                new AppHtmlView(httpRequest, userState, title)
+                        .title(header)
+                        .actionTextExpression(header)
+                        .alerts(header)
+                        .statusBar(footer)
+                        .appHtml(html)
+                        .toHttpResponse(html));
     }
 
-    private void addHeaderView(final Element html, final AppTitle title) throws IOException {
-        // context menu
-        final MenuView menuView = new MenuView(bundle, httpRequest, userState.getMenuSystem());
-        final Element divMenus = menuView.addContentTo(html, AppMenuFactory.Const.VISUALIZATION, true);
-        addMenuNav(divMenus);
-        menuView.addTitle(html, title);
-    }
+    private static final String STYLE_HOME = "background-color: brown; color: white;";
 
     /**
      * Insert content into HTML page appropriate to the context of the subclass.
@@ -112,5 +97,5 @@ public abstract class VisualizationView {
      */
     protected abstract HttpResponse addContentTo(Element html) throws IOException;
 
-    protected abstract void addMenuNav(Element html);
+    protected abstract MenuItem getMenuNav();
 }

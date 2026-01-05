@@ -13,8 +13,6 @@ import io.github.greyp9.arwo.core.html.upload.FileUpload;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
-import io.github.greyp9.arwo.core.menu.MenuContext;
-import io.github.greyp9.arwo.core.menu.view.MenuView;
 import io.github.greyp9.arwo.core.text.filter.TextFilters;
 import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
@@ -44,19 +42,13 @@ public class AppHtmlView {
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
     private final AppTitle title;
-    private final MenuContext menuContext;
-    private final String augments;
 
     public AppHtmlView(final ServletHttpRequest httpRequest,
                        final AppUserState userState,
-                       final AppTitle title,
-                       final MenuContext menuContext,
-                       final String augments) {
+                       final AppTitle title) {
         this.httpRequest = httpRequest;
         this.userState = userState;
         this.title = title;
-        this.menuContext = menuContext;
-        this.augments = augments;
     }
 
     public final AppHtmlView appRefreshView(final Document html) throws IOException {
@@ -146,6 +138,7 @@ public class AppHtmlView {
         return new HttpResponse(HttpURLConnection.HTTP_OK, headers, new ByteArrayInputStream(entity));
     }
 
+/*
     public final HttpResponse fixup(final Document html) throws IOException {
         new AppRefreshView(userState.getProperties()).addContentTo(html.getDocumentElement());  // meta refresh
         // body
@@ -195,6 +188,7 @@ public class AppHtmlView {
         final NameTypeValues headers = new NameTypeValues(contentType, contentLength);
         return new HttpResponse(HttpURLConnection.HTTP_OK, headers, new ByteArrayInputStream(entity));
     }
+*/
 
     public final AppHtmlView addTextFiltersView(final Element html) {
         final Bundle bundle = userState.getBundle();

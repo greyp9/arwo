@@ -60,7 +60,7 @@ public final class MetaFileInventoryView {
         final String labelContext = TextU.wrapBracket(httpRequest.getServletPath());
         final AppTitle appTitle = AppTitle.Factory.getResourceLabel(httpRequest, userState.getBundle(), labelContext);
         addMenus(header);
-        return new AppHtmlView(httpRequest, userState, appTitle, null, null)
+        return new AppHtmlView(httpRequest, userState, appTitle)
                 .title(header)
                 .alerts(header)
                 .actionLocale(header)

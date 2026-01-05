@@ -8,6 +8,7 @@ import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.locus.Locus;
+import io.github.greyp9.arwo.core.menu2.model.MenuItem;
 import io.github.greyp9.arwo.core.metric.histogram2.time.TimeHistogram;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
@@ -51,7 +52,8 @@ public final class VisualizationInventoryView extends VisualizationView {
         return null;
     }
 
-    protected void addMenuNav(final Element html) {
+    protected MenuItem getMenuNav() {
+        return null;
     }
 
     private RowSetMetaData createMetaData() {

@@ -64,7 +64,7 @@ public class EnvHandlerGet {
         addContentReqHdr(content);
         addContentSysProps(content);
         addContentSysEnv(content);
-        return new AppHtmlView(httpRequest, userState, title, null, null)
+        return new AppHtmlView(httpRequest, userState, title)
                 .title(header)
                 .alerts(header)
                 .actionLocale(header)

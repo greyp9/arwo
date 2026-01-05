@@ -207,7 +207,7 @@ public class S3HandlerGet {
         final Element header = new XPather(html, null).getElement(Html.XPath.HEADER);
         final Element footer = new XPather(html, null).getElement(Html.XPath.FOOTER);
         addMenus(header);
-        return new AppHtmlView(httpRequest, userState, appTitle, null, null)
+        return new AppHtmlView(httpRequest, userState, appTitle)
                 .title(header)
                 .alerts(header)
                 .actionLocale(header)

@@ -53,7 +53,7 @@ public class DashView {
         final AppTitle title = AppTitle.Factory.getHostLabel(httpRequest, request.getBundle());
         addMenus(header);
         addContentTo(content);
-        return new AppHtmlView(httpRequest, userState, title, null, null)
+        return new AppHtmlView(httpRequest, userState, title)
                 .title(header)
                 .actionRefresh(header)
                 .actionTextExpression(header)
