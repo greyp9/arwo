@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.core.vm.mutex;
 
 import io.github.greyp9.arwo.core.value.Value;
 
+import java.util.Iterator;
 import java.util.Map;
 import java.util.Objects;
 import java.util.TreeMap;
@@ -17,7 +18,14 @@ public final class Counters {
     public int getValue(final String name) {
         synchronized (entries) {
             final Counter counter = entries.get(name);
-            return (counter == null) ? 0 : counter.getValue();
+            return (counter == null) ? 0 : counter.getValues()[0];
+        }
+    }
+
+    public int[] getValues(final String name) {
+        synchronized (entries) {
+            final Counter counter = entries.get(name);
+            return (counter == null) ? null : counter.getValues();
         }
     }
 
@@ -27,7 +35,24 @@ public final class Counters {
         }
     }
 
-    public Counter add(final String name, final int amount) {
+    public Iterator<Counter> iterator() {
+        return entries.values().iterator();
+    }
+
+    public Counter add(final String name, final Insert counterInsert) {
+        synchronized (entries) {
+            Counter counter = entries.get(name);
+            if (counter == null) {
+                counter = new Counter(name, counterInsert.create());
+                entries.put(name, counter);
+            } else {
+                counterInsert.addTo(counter);
+            }
+            return counter;
+        }
+    }
+
+    public Counter add(final String name, final int... amount) {
         synchronized (entries) {
             Counter counter = entries.get(name);
             if (counter == null) {
@@ -54,23 +79,30 @@ public final class Counters {
 
     public static final class Counter implements Comparable<Counter> {
         private final String name;
-        private int value;
+        private final int[] values;
 
         public String getName() {
             return name;
         }
 
         public int getValue() {
-            return value;
+            return values[0];
         }
 
-        public Counter(final String name, final int value) {
+        public int[] getValues() {
+            return values;
+        }
+
+        public Counter(final String name, final int... values) {
             this.name = name;
-            this.value = value;
+            this.values = values;
         }
 
-        public void add(final int addValue) {
-            this.value += addValue;
+        public void add(final int... addValues) {
+            final int n = Math.min(values.length, addValues.length);
+            for (int i = 0; (i < n); ++i) {
+                values[i] += addValues[i];
+            }
         }
 
         @Override
@@ -90,7 +122,13 @@ public final class Counters {
 
         @Override
         public String toString() {
-            return String.format("[%s=%s]", name, value);
+            return String.format("[%s]", name);
         }
+    }
+
+    public interface Insert {
+        int[] create();
+
+        void addTo(Counter counter);
     }
 }
