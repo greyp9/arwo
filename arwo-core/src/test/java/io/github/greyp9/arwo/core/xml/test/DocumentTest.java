@@ -33,15 +33,21 @@ public class DocumentTest {
     void testXhtmlTemplate() throws IOException {
         // parent document
         final Document documentHtml = DocumentU.toDocument(StreamU.read(ResourceU.resolve(App.Html.UI)));
+        final String[] xpaths = { Html.XPath.HEADER, Html.XPath.CONTENT, Html.XPath.FOOTER };
+        for (String xpath : xpaths) {
+            final Element element = new XPather(documentHtml, null).getElement(xpath);
+            Assertions.assertNotNull(element);
+            Assertions.assertEquals(0, element.getChildNodes().getLength());
+        }
         final Element body = new XPather(documentHtml, null).getElement(Html.XPath.BODY);
         Assertions.assertNotNull(body);
-        Assertions.assertEquals(0, body.getChildNodes().getLength());
+        final int childNodeCount = body.getChildNodes().getLength();
         // child document
         final Document documentDiv = DocumentU.createDocument("div", null);
         final Element documentElement = documentDiv.getDocumentElement();
         ElementU.importNode(documentElement, body);
-        Assertions.assertEquals(1, body.getChildNodes().getLength());
-        Assertions.assertEquals("div", body.getChildNodes().item(0).getNodeName());
+        Assertions.assertEquals(childNodeCount + 1, body.getChildNodes().getLength());
+        Assertions.assertEquals("div", body.getChildNodes().item(childNodeCount).getNodeName());
         logger.finest(UTF8Codec.toString(DocumentU.toXml(documentHtml.getDocumentElement())));
     }
 }
