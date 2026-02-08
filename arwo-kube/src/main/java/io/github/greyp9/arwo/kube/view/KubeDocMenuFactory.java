@@ -5,8 +5,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.glyph.UTF16;
-import io.github.greyp9.arwo.core.menu.MenuItem;
-import io.github.greyp9.arwo.core.menu.factory.MenuFactory;
+import io.github.greyp9.arwo.core.menu2.model.MenuItem;
 import io.github.greyp9.arwo.core.url.URLCodec;
 
 import java.util.ArrayList;
@@ -14,7 +13,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Set;
 
-public final class KubeDocMenuFactory implements MenuFactory {
+public final class KubeDocMenuFactory {
     private final String pathRoot;
     private final JsonElement jsonRoot;
 
@@ -23,8 +22,7 @@ public final class KubeDocMenuFactory implements MenuFactory {
         this.jsonRoot = jsonRoot;
     }
 
-    @Override
-    public MenuItem create(final String id, final String type, final String object2) {
+    public MenuItem create() {
         return createMenuBar(pathRoot, "", UTF16.MENU, jsonRoot);
     }
 
@@ -54,8 +52,8 @@ public final class KubeDocMenuFactory implements MenuFactory {
             menuItems.add(createMenuBar(path, pathChild, labelChild, entry.getValue()));
         }
         final String labelUse = label.equals(UTF16.MENU) ? label : label + UTF16.CARAT_RIGHT;
-        return new MenuItem(labelUse, App.Target.USER_STATE, App.Action.MENU,
-                path + pathOffset, label + "/", menuItems);
+        return new MenuItem(labelUse, App.Target.USER_STATE, App.Action.MENU2,
+                path + pathOffset, null, menuItems);
     }
 
     private static MenuItem createMenuItem(final String path, final String pathOffset,
@@ -68,8 +66,8 @@ public final class KubeDocMenuFactory implements MenuFactory {
             menuItems.add(createMenuBar(path, pathChild, labelChild, jsonArray.get(i)));
         }
         final String labelUse = label.equals(UTF16.MENU) ? label : label + UTF16.CARAT_RIGHT;
-        return new MenuItem(labelUse, App.Target.USER_STATE, App.Action.MENU,
-                path + pathOffset, label + "/", menuItems);
+        return new MenuItem(labelUse, App.Target.USER_STATE, App.Action.MENU2,
+                path + pathOffset, null, menuItems);
     }
 
     private static MenuItem createMenuItem(final String path, final String pathOffset, final String label) {

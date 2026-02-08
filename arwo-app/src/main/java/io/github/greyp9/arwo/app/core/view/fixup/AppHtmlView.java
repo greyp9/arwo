@@ -224,4 +224,6 @@ public class AppHtmlView {
     public static final String LOCALE = "locale";
     public static final String EXPRESSION = "expression";
     public static final String UPLOAD = "upload";
+
+    public static final String STYLE_HOME = "background-color: brown; color: white;";
 }

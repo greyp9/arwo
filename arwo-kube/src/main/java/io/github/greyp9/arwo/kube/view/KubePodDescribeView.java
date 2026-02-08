@@ -2,14 +2,15 @@ package io.github.greyp9.arwo.kube.view;
 
 import com.google.gson.JsonElement;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.core.view.fixup.AppHtmlView;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
-import io.github.greyp9.arwo.core.menu.MenuSystem;
-import io.github.greyp9.arwo.core.menu.view.MenuView;
+import io.github.greyp9.arwo.core.menu2.model.MenuItem;
+import io.github.greyp9.arwo.core.menu2.view.MenuHtml;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import io.github.greyp9.arwo.kube.connection.KubeConnectionResource;
@@ -21,6 +22,7 @@ import io.kubernetes.client.openapi.models.V1Pod;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
+import java.util.Collections;
 
 public final class KubePodDescribeView extends KubeView {
     private final String namespace;
@@ -57,12 +59,20 @@ public final class KubePodDescribeView extends KubeView {
         final Object cachedValue = cache.getObject(cacheKey, this::getJsonElement);
         final JsonElement jsonElement = Value.asOptional(cachedValue, JsonElement.class).orElse(null);
         if (jsonElement != null) {
+            final KubeDocMenuFactory kubeDocMenuFactory = new KubeDocMenuFactory(base, jsonElement);
+            final MenuItem menuItem = kubeDocMenuFactory.create()
+                    .applyFrom(getUserState().getMenuSystemState());
+            final MenuHtml menuHtml = new MenuHtml(getHttpRequest(),
+                    getUserState().getBundle(), getUserState().getSubmitID(), AppHtmlView.STYLE_HOME);
+            menuHtml.addTo(html, false, "v", Collections.singletonList(menuItem));
+/*
             final MenuSystem menuSystemD = new MenuSystem(
                     getUserState().getSubmitID(), new KubeDocMenuFactory(base, jsonElement));
             menuSystemD.get(getHttpRequest().getServletPath(), "kube");  // init (since it is dynamic)
             menuSystemD.applyState(getUserState().getMenuSystemState());
             final MenuView menuView = new MenuView(null, getHttpRequest(), menuSystemD);  // render
             menuView.addContentTo(html, "kube", false);
+*/
         }
     }
 
