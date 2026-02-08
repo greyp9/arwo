@@ -57,10 +57,8 @@ public class XsdBundles {
             final ClassLoader classLoader = new URLClassLoader(urls);
             final ResourceBundle rb = ResourceBundle.getBundle(resourceNameBare, localeUpdate, classLoader);
             bundles.put(namespaceURI, rb);
-        } catch (IOException e) {
-            getClass();  // ignore, type labels won't be localized
-        } catch (MissingResourceException e) {
-            getClass();  // ignore, type labels won't be localized
+        } catch (IOException | MissingResourceException ignored) {
+            // ignore, type labels won't be localized
         }
     }
 }

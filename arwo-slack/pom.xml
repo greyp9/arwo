@@ -12,17 +12,11 @@
     <artifactId>arwo-slack</artifactId>
 
     <properties>
-        <slack.version>1.45.3</slack.version>  <!-- 2025-02-18 -->
-        <slf4j.version>2.0.17</slf4j.version>  <!-- 2025-02-25 -->
+        <slack.version>1.47.0</slack.version>  <!-- 2026-02-03 -->
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.slf4j</groupId>
-                <artifactId>slf4j-simple</artifactId>
-                <version>${slf4j.version}</version>
-            </dependency>
             <dependency>
                 <groupId>com.slack.api</groupId>
                 <artifactId>slack-api-client</artifactId>
