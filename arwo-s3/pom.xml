@@ -11,9 +11,7 @@
 
     <artifactId>arwo-s3</artifactId>
 
-    <properties>
-        <slf4j.version>2.0.17</slf4j.version>  <!-- 2025-02-25 -->
-    </properties>
+    <properties/>
 
     <dependencyManagement>
         <dependencies>
@@ -69,7 +67,6 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-dependency-plugin</artifactId>
-                <version>3.2.0</version>
                 <executions>
                     <execution>
                         <id>with-version</id>
