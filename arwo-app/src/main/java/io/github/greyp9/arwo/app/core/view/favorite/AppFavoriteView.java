@@ -1,54 +1,21 @@
 package io.github.greyp9.arwo.app.core.view.favorite;
 
-import io.github.greyp9.arwo.app.core.state.AppUserState;
-import io.github.greyp9.arwo.core.app.App;
-import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
-import io.github.greyp9.arwo.core.bundle.Bundle;
-import io.github.greyp9.arwo.core.glyph.UTF16;
-import io.github.greyp9.arwo.core.http.Http;
-import io.github.greyp9.arwo.core.http.HttpResponse;
-import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
-import io.github.greyp9.arwo.core.locus.Locus;
-import io.github.greyp9.arwo.core.submit.SubmitToken;
-import io.github.greyp9.arwo.core.table.cell.TableViewButton;
-import io.github.greyp9.arwo.core.table.core.TableU;
-import io.github.greyp9.arwo.core.table.html.TableView;
-import io.github.greyp9.arwo.core.table.insert.InsertRow;
-import io.github.greyp9.arwo.core.table.metadata.ColumnMetaData;
-import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
-import io.github.greyp9.arwo.core.table.metadata.RowSetMetaDataU;
-import io.github.greyp9.arwo.core.table.model.Table;
-import io.github.greyp9.arwo.core.table.model.TableContext;
-import io.github.greyp9.arwo.core.table.row.RowSet;
-import io.github.greyp9.arwo.core.table.state.ViewState;
-import io.github.greyp9.arwo.core.value.Value;
-import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
-import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
-import io.github.greyp9.arwo.core.xed.nav.XedNav;
-import io.github.greyp9.arwo.core.xed.table.XedMetaDataFactory;
-import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
-import org.w3c.dom.Element;
-
-import java.io.IOException;
-import java.sql.Types;
-import java.util.Collection;
-import java.util.Iterator;
-
 @SuppressWarnings("PMD.ExcessiveImports")
 public class AppFavoriteView {
-    private final ServletHttpRequest httpRequest;
-    private final AppUserState userState;
-    private final XedCursor cursorType;
-    private final Bundle bundle;
-    private final String type;
+    // private final ServletHttpRequest httpRequest;
+    // private final AppUserState userState;
+    // private final XedCursor cursorType;
+    // private final Bundle bundle;
+    // private final String type;
 
-    public AppFavoriteView(final ServletHttpRequest httpRequest, final AppUserState userState,
-                           final XedCursor cursorType, final String type) {
-        this.httpRequest = httpRequest;
-        this.userState = userState;
-        this.cursorType = cursorType;
-        this.bundle = ((cursorType == null) ? null : cursorType.getXed().getBundle());
-        this.type = type;
+/*
+    public AppFavoriteView(final ServletHttpRequest ignoredHttpRequest, final AppUserState ignoredUserState,
+                           final XedCursor ignoredCursorType, final String ignoredType) {
+        // this.httpRequest = httpRequest;
+        // this.userState = userState;
+        // this.cursorType = cursorType;
+        // this.bundle = ((cursorType == null) ? null : cursorType.getXed().getBundle());
+        // this.type = type;
     }
 
     public final HttpResponse addContentTo(final Element html) throws IOException {
@@ -113,4 +80,5 @@ public class AppFavoriteView {
         }
         rowSet.add(insertRow.getRow());
     }
+*/
 }

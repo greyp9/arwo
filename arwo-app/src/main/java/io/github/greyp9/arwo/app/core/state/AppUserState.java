@@ -21,7 +21,6 @@ import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppFolder;
 import io.github.greyp9.arwo.core.app.AppRequest;
 import io.github.greyp9.arwo.core.app.AppText;
-import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
@@ -36,7 +35,6 @@ import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.link.MetaLink;
 import io.github.greyp9.arwo.core.locus.Locus;
-import io.github.greyp9.arwo.core.menu.MenuSystem;
 import io.github.greyp9.arwo.core.naming.AppNaming;
 import io.github.greyp9.arwo.core.page.Page;
 import io.github.greyp9.arwo.core.resource.PathU;
@@ -120,7 +118,9 @@ public final class AppUserState {
     private final SubsystemInterop interop;
     private final SubsystemWebDAV webDAV;
     // menu system
+/*
     private final MenuSystem menuSystem;
+*/
     private final Properties menuSystemState;  // store for dynamic menu state
 
     // binary viewer state (hex rendering)
@@ -261,9 +261,11 @@ public final class AppUserState {
         return webDAV;
     }
 
+/*
     public MenuSystem getMenuSystem() {
         return menuSystem;
     }
+*/
 
     public Properties getMenuSystemState() {
         return menuSystemState;
@@ -341,7 +343,9 @@ public final class AppUserState {
         this.cifs = new SubsystemCIFS(alerts);
         this.interop = new SubsystemInterop(alerts);
         this.webDAV = new SubsystemWebDAV(alerts);
+/*
         this.menuSystem = new MenuSystem(submitID, new AppMenuFactory());
+*/
         this.menuSystemState = new Properties();
         this.cache = new ResourceCache(appState.getContextPath() + App.Servlet.CACHE);
         // this.cacheBlob = new ResourceCache(null); // needed?
@@ -428,7 +432,9 @@ public final class AppUserState {
             PropertiesU.setBoolean(menuSystemState, object, !stateFrom);  // store for dynamic menus
             location = Value.defaultOnEmpty(object2, location);
         } else if (App.Action.MENU.equals(action)) {
+/*
             menuSystem.toggle(object);  // store for fixed menus
+*/
             final boolean stateFrom = PropertiesU.isBoolean(menuSystemState, object);
             final String parent = object.replace(object2, "");
             PropertiesU.clearStartsWith(menuSystemState, parent);

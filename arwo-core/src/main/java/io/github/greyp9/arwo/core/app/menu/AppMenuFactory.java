@@ -5,6 +5,9 @@ import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.menu.MenuItem;
 import io.github.greyp9.arwo.core.menu.factory.MenuFactory;
 
+/**
+ * @deprecated
+ */
 // i18nf
 @SuppressWarnings("PMD.TooManyMethods")
 public class AppMenuFactory implements MenuFactory {

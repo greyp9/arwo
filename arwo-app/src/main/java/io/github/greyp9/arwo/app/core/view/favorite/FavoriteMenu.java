@@ -1,23 +1,10 @@
 package io.github.greyp9.arwo.app.core.view.favorite;
 
-import io.github.greyp9.arwo.app.core.state.AppUserState;
-import io.github.greyp9.arwo.app.local.fs.core.LFSRequest;
-import io.github.greyp9.arwo.core.app.App;
-import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
-import io.github.greyp9.arwo.core.html.Html;
-import io.github.greyp9.arwo.core.http.Http;
-import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
-import io.github.greyp9.arwo.core.value.NTV;
-import io.github.greyp9.arwo.core.value.Value;
-import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
-import io.github.greyp9.arwo.core.xml.ElementU;
-import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
-import org.w3c.dom.Element;
-
-import java.io.IOException;
-import java.util.Collection;
-
+/**
+ * @deprecated
+ */
 public class FavoriteMenu {
+/*
     private final LFSRequest request;
     private final AppUserState userState;
     private final XedCursor cursorFavorites;
@@ -59,4 +46,5 @@ public class FavoriteMenu {
             }
         }
     }
+*/
 }

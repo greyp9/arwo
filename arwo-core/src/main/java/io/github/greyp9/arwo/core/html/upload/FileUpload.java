@@ -1,13 +1,10 @@
 package io.github.greyp9.arwo.core.html.upload;
 
 import io.github.greyp9.arwo.core.app.App;
-import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
-import io.github.greyp9.arwo.core.menu.MenuItem;
-import io.github.greyp9.arwo.core.menu.view.MenuView;
 import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xpath.XPather;
@@ -16,14 +13,15 @@ import org.w3c.dom.Element;
 import java.io.IOException;
 
 public class FileUpload {
-    private final String servletPath;
+    // private final String servletPath;
     private final Bundle bundle;
 
-    public FileUpload(final String servletPath, final Bundle bundle) {
-        this.servletPath = servletPath;
+    public FileUpload(final String ignored, final Bundle bundle) {
+        // this.servletPath = servletPath;
         this.bundle = bundle;
     }
 
+/*
     public final HttpResponse addContentTo(final Element html, final MenuView menuView) throws IOException {
         final MenuItem itemRoot = menuView.getMenuSystem().get(servletPath, AppMenuFactory.Const.FILESYSTEM);
         final MenuItem itemFile = itemRoot.getMenuItem(Const.FILE);
@@ -31,6 +29,7 @@ public class FileUpload {
         final boolean isOpen = itemRoot.isOpen() && itemFile.isOpen() && itemUpload.isOpen();
         return addContentTo(html, isOpen);
     }
+*/
 
     public final HttpResponse addContentTo(final Element html, final String isOpen) throws IOException {
         return addContentTo(html, Boolean.parseBoolean(isOpen));
@@ -57,8 +56,8 @@ public class FileUpload {
     }
 
     private static class Const {
-        private static final String FILE = "file";  // i18n internal
-        private static final String UPLOAD = "upload";  // i18n internal
+        // private static final String FILE = "file";  // i18n internal
+        // private static final String UPLOAD = "upload";  // i18n internal
         private static final String SIZE = "80";  // i18n internal
         private static final String STYLE = "padding: 0 1em;";  // i18n internal
         private static final String SUBMIT = "submitUploadFile";  // i18n internal

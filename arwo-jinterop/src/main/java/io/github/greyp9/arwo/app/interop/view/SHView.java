@@ -1,20 +1,17 @@
 package io.github.greyp9.arwo.app.interop.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
-import io.github.greyp9.arwo.app.core.view.favorite.AppFavoriteView;
 import io.github.greyp9.arwo.app.interop.core.SHRequest;
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppHtml;
 import io.github.greyp9.arwo.core.app.AppTitle;
-import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
-import io.github.greyp9.arwo.core.menu.view.MenuView;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.view.StatusBarView;
@@ -81,19 +78,23 @@ public abstract class SHView {
         return httpResponse;
     }
 
-    private void addHeaderView(final Element html, final AppTitle title) throws IOException {
+    private void addHeaderView(final Element html, final AppTitle ignoredTitle) throws IOException {
+/*
         // context menu
         final MenuView menuView = new MenuView(request.getBundle(), httpRequest, userState.getMenuSystem());
         menuView.addContentTo(html, AppMenuFactory.Const.COMMAND, true);
         // context title
         menuView.addTitle(html, title);
+*/
         // favorites (if toggled)
         final Xed xed = userState.getDocumentState().getSession(App.Servlet.FAVORITES).getXed();
         final Xed xedX = userState.getXedFactory().getXedUI(xed, userState.getLocale());
         final XedNav nav = new XedNav(xedX);
         final XedCursor cursorFavorites = nav.findX("/app:favorites/app:wshFavorites");  // i18n xpath
-        final XedCursor cursorType = nav.find("wshFavorite", cursorFavorites);  // i18n xpath
+        final XedCursor ignoredCursorType = nav.find("wshFavorite", cursorFavorites);  // i18n xpath
+/*
         new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.COMMAND).addContentTo(html);
+*/
         // settings property strips
         final Locale locale = userState.getLocus().getLocale();
         final String submitID = userState.getSubmitID();

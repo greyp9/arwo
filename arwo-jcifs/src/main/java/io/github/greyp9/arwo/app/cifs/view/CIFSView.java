@@ -4,25 +4,19 @@ import io.github.greyp9.arwo.app.cifs.connection.CIFSConnectionResource;
 import io.github.greyp9.arwo.app.cifs.core.CIFSRequest;
 import io.github.greyp9.arwo.app.cifs.data.CIFSDataSource;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
-import io.github.greyp9.arwo.app.core.view.favorite.AppFavoriteView;
 import io.github.greyp9.arwo.app.core.view.props.AppPropertiesView;
 import io.github.greyp9.arwo.core.alert.view.AlertsView;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppHtml;
 import io.github.greyp9.arwo.core.app.AppTitle;
-import io.github.greyp9.arwo.core.app.menu.AppMenuFactory;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.html.Html;
-import io.github.greyp9.arwo.core.html.upload.FileUpload;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
-import io.github.greyp9.arwo.core.menu.view.MenuView;
-import io.github.greyp9.arwo.core.text.filter.TextFilters;
 import io.github.greyp9.arwo.core.util.PropertiesU;
-import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
@@ -33,7 +27,6 @@ import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.nav.XedNav;
 import io.github.greyp9.arwo.core.xml.DocumentU;
-import io.github.greyp9.arwo.core.xml.ElementU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
@@ -41,9 +34,6 @@ import org.w3c.dom.Element;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.net.HttpURLConnection;
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Locale;
 import java.util.Properties;
 
@@ -102,7 +92,8 @@ public abstract class CIFSView {
         return httpResponse;
     }
 
-    private void addHeaderView(final Element html, final AppTitle title) throws IOException {
+    private void addHeaderView(final Element html, final AppTitle ignoredTitle) throws IOException {
+/*
         // context menu
         final MenuView menuView = new MenuView(bundle, httpRequest, userState.getMenuSystem());
         final Element divMenus = menuView.addContentTo(html, AppMenuFactory.Const.FILESYSTEM, true);
@@ -110,13 +101,16 @@ public abstract class CIFSView {
         // context title (with text filters)
         final Element divTitle = menuView.addTitle(html, title);
         addTextFiltersView(divTitle);
+*/
         // favorites (if toggled)
         final Xed xed = userState.getDocumentState().getSession(App.Servlet.FAVORITES).getXed();
         final Xed xedX = userState.getXedFactory().getXedUI(xed, userState.getLocale());
         final XedNav nav = new XedNav(xedX);
         final XedCursor cursorFavorites = nav.findX("/app:favorites/app:cifsFavorites");  // i18n xpath
-        final XedCursor cursorType = nav.find("cifsFavorite", cursorFavorites);  // i18n xpath
+        final XedCursor ignoredCursorType = nav.find("cifsFavorite", cursorFavorites);  // i18n xpath
+/*
         new AppFavoriteView(httpRequest, userState, cursorType, AppMenuFactory.Const.FILESYSTEM).addContentTo(html);
+*/
         // settings property strips
         final Locale locale = userState.getLocus().getLocale();
         final String submitID = userState.getSubmitID();
@@ -126,6 +120,7 @@ public abstract class CIFSView {
         //new WebDAVConnectionView(httpRequest, userState, resource, bundle).addContent(html);
     }
 
+/*
     private void addTextFiltersView(final Element html) {
         final TextFilters textFilters = userState.getTextFilters();
         if (textFilters.isData()) {
@@ -148,6 +143,7 @@ public abstract class CIFSView {
             }
         }
     }
+*/
 
     protected final void addFileProperties(final Element html, final MetaFile metaFile) throws IOException {
         if (PropertiesU.isBoolean(userState.getProperties(), App.Action.PROPERTIES)) {
