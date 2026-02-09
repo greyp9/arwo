@@ -65,7 +65,7 @@ public final class MenuHtml {
         final Element divNav = ElementU.addElement(html, Html.DIV, null, NTV.create(
                 Html.STYLE, styleHome,
                 Html.CLASS, App.CSS.RIGHT));
-        final String title = bundle.getString("menu.home.DETAIL");
+        final String title = (bundle == null) ? null : bundle.getString("menu.home.DETAIL");
         final String label = String.format("[%s]", UTF16.HOME);
         ElementU.addElement(divNav, Html.A, label, NTV.create(Html.TITLE, title,
                 Html.CLASS, App.CSS.MENU, Html.HREF, httpRequest.getContextPath()));

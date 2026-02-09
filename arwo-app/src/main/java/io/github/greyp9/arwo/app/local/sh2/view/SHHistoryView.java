@@ -46,7 +46,7 @@ public class SHHistoryView {
         final MenuItem menuFavorites = new MenuFavSH(httpRequest.getBaseURI(), userState).toMenuItem()
                 .applyFrom(userState.getMenuSystemState());
         new MenuHtml(httpRequest, null, userState.getSubmitID(), STYLE_HOME)
-                .addTo(header, false, "v", Collections.singletonList(menuFavorites));
+                .addTo(header, true, "v", Collections.singletonList(menuFavorites));
 
         final String command = userState.getProperties().getProperty(App.Settings.COMMAND, "");
         new TextAreaLSH(httpRequest, userState).addTextArea(content, command);
