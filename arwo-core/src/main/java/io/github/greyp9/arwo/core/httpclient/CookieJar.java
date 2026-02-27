@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.HttpCookie;
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
@@ -112,6 +113,14 @@ public final class CookieJar {
                     "version", Integer.toString(cookie.getVersion())));
         }
         return DocumentU.toXml(document);
+    }
+
+    public CookieJar updateSetCookie(final List<String> setCookies) {
+        final List<String> setCookiesNN = Value.defaultOnNull(setCookies, Collections.emptyList());
+        for (String setCookie : setCookiesNN) {
+            update(HttpCookie.parse(setCookie));
+        }
+        return this;
     }
 
     public void update(final String context, final List<HttpCookie> httpCookies) {
