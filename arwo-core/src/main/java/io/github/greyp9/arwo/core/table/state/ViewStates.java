@@ -36,36 +36,40 @@ public class ViewStates {
     private final Xed config;
 
     public ViewStates(final XedActionFilter actionFilter, final Xed config) {
-        this.mapViewState = new TreeMap<String, ViewState>();
+        this.mapViewState = new TreeMap<>();
         this.actionFilter = actionFilter;
         this.config = config;
     }
 
     public final ViewState getViewState(final RowSetMetaData metaData, final Bundle bundle, final Locus locus) {
-        final ViewState viewState = getViewState(metaData.getID());
+        return getViewState(null, metaData, bundle, locus);
+    }
+
+    public final ViewState getViewState(final String context,
+                                        final RowSetMetaData metaData, final Bundle bundle, final Locus locus) {
+        final ViewState viewState = getViewState(metaData.getID(), context);
         return viewState.normalize(metaData, bundle, locus);
     }
 
-    public final ViewState getViewState(final String id) {
-        final boolean exists = mapViewState.containsKey(id);
-        return (exists) ? mapViewState.get(id) : addViewState(mapViewState, id);
+    private ViewState getViewState(final String id, final String context) {
+        final String key = String.format("[%s][%s]", id, context);
+        return mapViewState.computeIfAbsent(key, vs -> new ViewState(id, context));
     }
 
-    private static ViewState addViewState(final Map<String, ViewState> viewStates, final String id) {
-        final ViewState viewState = new ViewState(id);
-        viewStates.put(id, viewState);
-        return viewState;
+    public final void apply(final SubmitToken token, final NameTypeValues nameTypeValues,
+                            final Bundle bundle, final Alerts alerts) throws IOException {
+        apply(token, null, nameTypeValues, bundle, alerts);
     }
 
     @SuppressWarnings({ "PMD.CyclomaticComplexity", "PMD.StdCyclomaticComplexity", "PMD.ModifiedCyclomaticComplexity" })
-    public final void apply(final SubmitToken token, final NameTypeValues nameTypeValues,
+    public final void apply(final SubmitToken token, final String context,
+                            final NameTypeValues nameTypeValues,
                             final Bundle bundle, final Alerts alerts) throws IOException {
-        final ViewState viewState = getViewState(token.getObject());
+        final ViewState viewState = getViewState(token.getObject(), context);
         final String action = token.getAction();
         final String message = bundle.getString("alert.action.not.implemented");
         if (action == null) {
-            viewState.getClass();
-
+            final Class<? extends ViewState> ignored = viewState.getClass();
         } else if (ViewState.Action.RESET.equals(action)) {
             viewState.reset();
         } else if (ViewState.Action.SORT.equals(action)) {

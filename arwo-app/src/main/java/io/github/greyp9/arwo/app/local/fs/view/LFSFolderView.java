@@ -85,7 +85,8 @@ public class LFSFolderView extends LFSView {
         // folder content
         final RowSetMetaData metaData = LFSFolder.createMetaData();
         final Locus locus = userState.getLocus();
-        final ViewState viewState = userState.getViewStates().getViewState(metaData, request.getBundle(), locus);
+        final ViewState viewState = userState.getViewStates().getViewState(
+                request.getHttpRequest().getURI(), metaData, request.getBundle(), locus);
         final boolean findMode = App.Action.FIND.equals(request.getMode());
         if (findMode) {
             viewState.getHiddenColumns().remove("folder");  // i18n metadata

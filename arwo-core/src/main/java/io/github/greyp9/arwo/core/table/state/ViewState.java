@@ -18,6 +18,7 @@ import java.util.TreeSet;
 // i18nf
 public class ViewState {
     private final String name;
+    private final String context;
     private final Collection<String> hiddenColumns;
     private final Sorts sorts;
     private final Filters filters;
@@ -32,11 +33,16 @@ public class ViewState {
     private boolean autoPage;
 
     public ViewState(final String name) {
+        this(name, null);
+    }
+
+    public ViewState(final String name, final String context) {
         this.name = name;
-        this.hiddenColumns = new TreeSet<String>();
+        this.context = context;
+        this.hiddenColumns = new TreeSet<>();
         this.sorts = new Sorts();
         this.filters = new Filters();
-        this.baselines = new TreeMap<String, RowSet>();
+        this.baselines = new TreeMap<>();
 
         this.connected = true;
         this.openTH = false;
@@ -49,6 +55,10 @@ public class ViewState {
 
     public final String getName() {
         return name;
+    }
+
+    public final String getContext() {
+        return context;
     }
 
     public final Collection<String> getHiddenColumns() {
