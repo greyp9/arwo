@@ -59,7 +59,8 @@ public class KubeContainersView extends KubeView {
             final List<V1Container> initContainers = Optional.ofNullable(
                     v1PodSpec.getInitContainers()).orElse(new ArrayList<>());
             final RowSet rowSet = loadRowSet(createMetaData(), v1Pod, containers, initContainers);
-            final UserStateTable table = new UserStateTable(getUserState(), null, getHttpRequest().getDate());
+            final UserStateTable table = new UserStateTable(
+                    getHttpRequest(), getUserState(), null, getHttpRequest().getDate());
             table.toTableView(rowSet).addContentTo(html);
         } catch (final ApiException e) {
             getUserState().getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));

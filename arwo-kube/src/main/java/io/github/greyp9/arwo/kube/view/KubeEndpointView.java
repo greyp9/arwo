@@ -45,7 +45,8 @@ public class KubeEndpointView extends KubeView {
             getUserState().getAlerts().add(new Alert(Alert.Severity.INFO, "no.kubernetes.configuration"));
         } else {
             final RowSet rowSet = loadRowSet(createMetaData(), cursor);
-            final UserStateTable table = new UserStateTable(getUserState(), null, getHttpRequest().getDate());
+            final UserStateTable table = new UserStateTable(
+                    getHttpRequest(), getUserState(), null, getHttpRequest().getDate());
             table.toTableView(rowSet).addContentTo(html);
         }
         return null;

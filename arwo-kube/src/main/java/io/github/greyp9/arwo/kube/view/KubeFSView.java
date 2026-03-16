@@ -93,7 +93,8 @@ public class KubeFSView extends KubeView {
                 final MetaFolder metaFolder = new LS().toMetaFolder(baseURI, stdout);
                 final MetaFolderRowSetSource rowSetSource = new MetaFolderRowSetSource(CONTEXT_KFS, metaFolder);
                 final RowSet rowSet = rowSetSource.getRowSet();
-                final UserStateTable table = new UserStateTable(getUserState(), null, getHttpRequest().getDate());
+                final UserStateTable table = new UserStateTable(
+                        getHttpRequest(), getUserState(), null, getHttpRequest().getDate());
                 table.toTableView(rowSet).addContentTo(html);
             }
         } catch (final ApiException e) {

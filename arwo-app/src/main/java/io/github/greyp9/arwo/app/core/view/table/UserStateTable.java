@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.app.core.view.table;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.table.core.TableU;
 import io.github.greyp9.arwo.core.table.html.TableView;
 import io.github.greyp9.arwo.core.table.model.Table;
@@ -14,17 +15,20 @@ import java.io.IOException;
 import java.util.Date;
 
 public final class UserStateTable {
+    private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
     private final String title;
     private final Date date;
     private final boolean refreshControl;
 
-    public UserStateTable(final AppUserState userState, final String title, final Date date) {
-        this(userState, title, date, false);
+    public UserStateTable(final ServletHttpRequest httpRequest, final AppUserState userState,
+                          final String title, final Date date) {
+        this(httpRequest, userState, title, date, false);
     }
 
-    public UserStateTable(final AppUserState userState, final String title, final Date date,
-                          final boolean refreshControl) {
+    public UserStateTable(final ServletHttpRequest httpRequest, final AppUserState userState,
+                          final String title, final Date date, final boolean refreshControl) {
+        this.httpRequest = httpRequest;
         this.userState = userState;
         this.title = title;
         this.date = date;
@@ -33,7 +37,7 @@ public final class UserStateTable {
 
     public TableView toTableView(final RowSet rowSet) throws IOException {
         final ViewState viewState = userState.getViewStates().getViewState(
-                rowSet.getMetaData(), userState.getBundle(), userState.getLocus());
+                httpRequest.getURI(), rowSet.getMetaData(), userState.getBundle(), userState.getLocus());
         final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), title, title);
         TableU.addFooterStandard(table, userState.getBundle());
         final XedActionFilter filter = new XedActionFilter(userState.getXedFactory(), userState.getLocale());

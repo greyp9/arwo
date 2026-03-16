@@ -42,7 +42,7 @@ public final class RowSetView {
         final Element header = new XPather(html, null).getElement(Html.XPath.HEADER);
         final Element content = new XPather(html, null).getElement(Html.XPath.CONTENT);
         final Element footer = new XPather(html, null).getElement(Html.XPath.FOOTER);
-        final UserStateTable table = new UserStateTable(userState, null, httpRequest.getDate());
+        final UserStateTable table = new UserStateTable(httpRequest, userState, null, httpRequest.getDate());
         table.toTableView(rowSet).addContentTo(content);
         final String labelContext = TextU.wrapBracket(rowSet.getMetaData().getID());
         final AppTitle appTitle = AppTitle.Factory.getResourceLabel(httpRequest, userState.getBundle(), labelContext);

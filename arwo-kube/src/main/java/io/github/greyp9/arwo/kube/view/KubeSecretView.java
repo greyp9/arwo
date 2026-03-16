@@ -55,7 +55,8 @@ public class KubeSecretView extends KubeView {
                 new SecretDataRowSetSource(getHttpRequest().getBaseURI(), endpoint, v1Secret);
         try {
             final RowSet rowSet = rowSetSource.getRowSet();
-            final UserStateTable table = new UserStateTable(getUserState(), null, getHttpRequest().getDate(), true);
+            final UserStateTable table = new UserStateTable(
+                    getHttpRequest(), getUserState(), null, getHttpRequest().getDate(), true);
             table.toTableView(rowSet).addContentTo(html);
         } catch (final ApiException e) {
             // final String id = "kube.ok-" + XsdDateU.toXSDZMillis(getHttpRequest().getDate());

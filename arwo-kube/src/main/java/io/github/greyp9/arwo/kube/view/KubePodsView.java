@@ -49,7 +49,8 @@ public class KubePodsView extends KubeView {
                 new PodRowSetSource(connection, nodeId, namespace, baseURI, endpoint), rowSetId);
         try {
             final RowSet rowSet = rowSetSource.getRowSet();
-            final UserStateTable table = new UserStateTable(getUserState(), null, getHttpRequest().getDate(), true);
+            final UserStateTable table = new UserStateTable(
+                    getHttpRequest(), getUserState(), null, getHttpRequest().getDate(), true);
             table.toTableView(rowSet).addContentTo(html);
         } catch (final ApiException e) {
             // final String id = "kube.ok-" + XsdDateU.toXSDZMillis(getHttpRequest().getDate());

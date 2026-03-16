@@ -55,7 +55,7 @@ public final class MetaFileInventoryView {
         // unify 'CacheInventoryView:getRowSetF' and 'MetaFileInventoryView:render'?
         final RowSet rowSet = new MetaFileRowSet(
                 Cache.TABLE_ID_METAFILES, userState.getSubmitID(), baseURI, files).getRowSet();
-        final UserStateTable table = new UserStateTable(userState, null, httpRequest.getDate());
+        final UserStateTable table = new UserStateTable(httpRequest, userState, null, httpRequest.getDate());
         table.toTableView(rowSet).addContentTo(content);
         final String labelContext = TextU.wrapBracket(httpRequest.getServletPath());
         final AppTitle appTitle = AppTitle.Factory.getResourceLabel(httpRequest, userState.getBundle(), labelContext);

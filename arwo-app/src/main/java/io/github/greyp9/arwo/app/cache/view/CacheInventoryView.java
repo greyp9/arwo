@@ -54,7 +54,7 @@ public final class CacheInventoryView {
         final Element header = new XPather(html, null).getElement(Html.XPath.HEADER);
         final Element content = new XPather(html, null).getElement(Html.XPath.CONTENT);
         final Element footer = new XPather(html, null).getElement(Html.XPath.FOOTER);
-        final UserStateTable table = new UserStateTable(userState, null, httpRequest.getDate());
+        final UserStateTable table = new UserStateTable(httpRequest, userState, null, httpRequest.getDate());
         table.toTableView(getRowSetR(resourceCache.getRowSets())).addContentTo(content);
         table.toTableView(getRowSetF(resourceCache.getFiles())).addContentTo(content);
         table.toTableView(getRowSetO(resourceCache.getObjects())).addContentTo(content);

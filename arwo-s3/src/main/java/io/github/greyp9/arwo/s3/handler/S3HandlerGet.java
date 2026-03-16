@@ -97,7 +97,8 @@ public class S3HandlerGet {
     private HttpResponse doGetInventory() throws IOException {
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
         final Element content = new XPather(html, null).getElement(Html.XPath.CONTENT);
-        final UserStateTable table = new UserStateTable(userState, httpRequest.getPathInfo(), httpRequest.getDate());
+        final UserStateTable table = new UserStateTable(
+                httpRequest, userState, httpRequest.getPathInfo(), httpRequest.getDate());
         table.toTableView(new EndpointRowSet(httpRequest, userState).getRowSet()).addContentTo(content);
         final String labelContext = TextU.wrapBracket(httpRequest.getPathInfo());
         final NameTypeValue facetCacheEnabled = new NameTypeValue(
@@ -185,7 +186,8 @@ public class S3HandlerGet {
         // render resource
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
         final Element body = new XPather(html, null).getElement(Html.XPath.CONTENT);
-        final UserStateTable table = new UserStateTable(userState, httpRequest.getPathInfo(), httpRequest.getDate());
+        final UserStateTable table = new UserStateTable(
+                httpRequest, userState, httpRequest.getPathInfo(), httpRequest.getDate());
         table.toTableView(rowSet).addContentTo(body);
         final String labelContext = TextU.wrapBracket(httpRequest.getPathInfo());
         final NameTypeValue facetCacheEnabled = new NameTypeValue(

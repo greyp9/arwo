@@ -105,7 +105,7 @@ public class KafkaMessagesView {
     public final void addContentTo(final Element html,
                                    final Collection<ConsumerRecord<byte[], byte[]>> records) throws IOException {
         final RowSet rowSet = loadRowSet(createMetaData(), records);
-        final UserStateTable table = new UserStateTable(userState, null, httpRequest.getDate());
+        final UserStateTable table = new UserStateTable(httpRequest, userState, null, httpRequest.getDate());
         table.toTableView(rowSet).addContentTo(html);
     }
 

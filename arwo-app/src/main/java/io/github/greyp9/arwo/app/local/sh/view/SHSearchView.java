@@ -43,7 +43,7 @@ public class SHSearchView extends SHView {
             final RowSetSource rowSetSource = new CacheRowSetSource(getUserState().getCacheBlob(),
                     new LSHHistoryRowSetSource(files), httpRequest.getURI());
             final RowSet rowSet = rowSetSource.getRowSet();
-            final UserStateTable table = new UserStateTable(getUserState(), null, httpRequest.getDate(), true);
+            final UserStateTable table = new UserStateTable(httpRequest, userState, null, httpRequest.getDate(), true);
             table.toTableView(rowSet).addContentTo(html);
         } catch (Exception e) {
             getUserState().getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));

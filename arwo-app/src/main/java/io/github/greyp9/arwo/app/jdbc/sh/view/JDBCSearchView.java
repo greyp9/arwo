@@ -44,7 +44,7 @@ public class JDBCSearchView extends JDBCView {
             final RowSetSource rowSetSource = new CacheRowSetSource(getUserState().getCacheBlob(),
                     new JDBCHistoryRowSetSource(files), httpRequest.getURI());
             final RowSet rowSet = rowSetSource.getRowSet();
-            final UserStateTable table = new UserStateTable(getUserState(), null, httpRequest.getDate(), true);
+            final UserStateTable table = new UserStateTable(httpRequest, userState, null, httpRequest.getDate(), true);
             table.toTableView(rowSet).addContentTo(html);
         } catch (Exception e) {
             getUserState().getAlerts().add(new Alert(Alert.Severity.ERR, e.getMessage()));

@@ -69,7 +69,8 @@ public abstract class AppHandlerPost {
         if (App.Target.USER_STATE.equals(subject)) {
             location = userState.applyPost(token, httpArguments, httpRequest);
         } else if (App.Target.VIEW_STATE.equals(subject)) {
-            userState.getViewStates().apply(token, httpArguments, request.getBundle(), userState.getAlerts());
+            userState.getViewStates().apply(token, locationIn, httpArguments,
+                    request.getBundle(), userState.getAlerts());
         } else if (App.Target.SESSION.equals(subject)) {
             location = applySession(token, httpArguments, locationIn);
         }
