@@ -24,14 +24,13 @@ public class TableView {
     }
 
     public final void addContentTo(final Element html) throws IOException {
-        final String baselineID = ((table.getTitle() == null) ? table.getID() : table.getTitle());
         // update baseline (if needed)
-        viewState.addBaseline(baselineID, table);
+        viewState.addBaseline(table);
         // display normal table, or baseline table (if baseline and table identity column exist)
-        final boolean baselineSet = viewState.getBaselines().containsKey(baselineID);
+        final boolean baselineSet = (viewState.getBaseline() != null);
         final String identity = table.getMetaData().getIdentity();
         if (baselineSet && (identity != null)) {
-            final RowSet rowSetBaseline = viewState.getBaselines().get(baselineID);
+            final RowSet rowSetBaseline = viewState.getBaseline();
             final BaselineTable baselineTable = new BaselineTable(table, rowSetBaseline);
             final RowSet rowSetMerge = baselineTable.merge(identity);
             final Table tableMerge = new Table(rowSetMerge, table.getSorts(), table.getFilters(),

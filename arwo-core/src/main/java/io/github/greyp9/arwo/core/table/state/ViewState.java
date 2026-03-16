@@ -11,9 +11,8 @@ import io.github.greyp9.arwo.core.table.row.RowSet;
 import io.github.greyp9.arwo.core.table.sort.Sorts;
 
 import java.util.Collection;
-import java.util.Map;
-import java.util.TreeMap;
 import java.util.TreeSet;
+import java.util.concurrent.atomic.AtomicReference;
 
 // i18nf
 public class ViewState {
@@ -22,7 +21,7 @@ public class ViewState {
     private final Collection<String> hiddenColumns;
     private final Sorts sorts;
     private final Filters filters;
-    private final Map<String, RowSet> baselines;
+    private final AtomicReference<RowSet> baseline;
 
     private boolean connected;
     private boolean openTH;
@@ -42,7 +41,7 @@ public class ViewState {
         this.hiddenColumns = new TreeSet<>();
         this.sorts = new Sorts();
         this.filters = new Filters();
-        this.baselines = new TreeMap<>();
+        this.baseline = new AtomicReference<>();
 
         this.connected = true;
         this.openTH = false;
@@ -73,9 +72,8 @@ public class ViewState {
         return filters;
     }
 
-    @SuppressWarnings("unused")
-    public final Map<String, RowSet> getBaselines() {
-        return baselines;
+    public final RowSet getBaseline() {
+        return baseline.get();
     }
 
     public final boolean isConnected() {
@@ -146,7 +144,7 @@ public class ViewState {
         hiddenColumns.clear();
         sorts.clear();
         filters.clear();
-        baselines.clear();
+        baseline.set(null);
 
         connected = true;
         openTH = false;
@@ -157,14 +155,10 @@ public class ViewState {
     }
 
 
-    public final void addBaseline(final String path, final Table table) {
+    public final void addBaseline(final Table table) {
         if (activeBaseline) {
             activeBaseline = false;
-            if (getBaselines().containsKey(path)) {
-                getBaselines().remove(path);
-            } else {
-                getBaselines().put(path, table);
-            }
+            baseline.set((baseline.get() == null) ? table : null);
         }
     }
 
