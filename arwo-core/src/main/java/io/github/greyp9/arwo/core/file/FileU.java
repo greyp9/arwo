@@ -71,6 +71,11 @@ public final class FileU {
         return ((file == null) ? null : file.getAbsolutePath());
     }
 
+    public static boolean copy(final File fileSource, final File fileTarget) throws IOException {
+        final Path path = Files.copy(fileSource.toPath(), fileTarget.toPath(), StandardCopyOption.COPY_ATTRIBUTES);
+        return (path.equals(fileTarget.toPath()));
+    }
+
     public static boolean move(final File fileSource, final File fileTarget) throws IOException {
         final Path path = Files.move(fileSource.toPath(), fileTarget.toPath(), StandardCopyOption.ATOMIC_MOVE);
         return (path.equals(fileTarget.toPath()));
