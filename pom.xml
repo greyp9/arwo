@@ -305,6 +305,11 @@
                     <configLocation>arwo-build/checkstyle/checkstyle-9.3.xml</configLocation>
                     <consoleOutput>true</consoleOutput>
                     <failsOnError>true</failsOnError>
+<!-- keep this example for future use
+                    <excludes>io/github/greyp9/arwo/app/task/**,
+                        io/github/greyp9/arwo/core/task/**,
+                        io/github/greyp9/arwo/core/vm/**</excludes>
+-->
                     <linkXRef>false</linkXRef>
                 </configuration>
                 <executions>
@@ -326,6 +331,11 @@
                     <rulesets>
                         <ruleset>arwo-build/pmd/pmd-7.17.0.xml</ruleset>
                     </rulesets>
+<!-- keep this example for future use
+                    <excludes>io/github/greyp9/arwo/app/task/**,
+                        io/github/greyp9/arwo/core/task/**,
+                        io/github/greyp9/arwo/core/vm/**</excludes>
+-->
                     <printFailingErrors>true</printFailingErrors>
                     <linkXRef>false</linkXRef>
                 </configuration>
