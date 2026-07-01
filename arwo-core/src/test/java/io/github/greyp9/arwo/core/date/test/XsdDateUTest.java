@@ -37,7 +37,7 @@ public class XsdDateUTest {
 
     @ParameterizedTest
     @MethodSource("supplyArgsISONanos")
-    void testConversionISONanos(final String dateString, final long millisEpoch) {
+    final void testConversionISONanos(final String dateString, final long millisEpoch) {
         final Date date = XsdDateU.fromISO(dateString);
         logger.info(String.format("[%s]", XsdDateU.toXSDZMillis(date)));
         Assertions.assertEquals(millisEpoch, date.getTime());
