@@ -37,4 +37,10 @@ public final class EnvironmentU {
         }
         return DocumentU.toXml(document);
     }
+
+    public static String[] toEnvP(final Map<String, String> env) {
+        return env.entrySet().stream()
+                .map(e -> String.format("%s=%s", e.getKey(), e.getValue()))
+                .toArray(String[]::new);
+    }
 }

@@ -1,6 +1,7 @@
 package io.github.greyp9.arwo.core.vm.mutex;
 
 import java.util.Map;
+import java.util.Optional;
 
 @SuppressWarnings("SynchronizationOnLocalVariableOrMethodParameter")
 public final class MapU {
@@ -24,5 +25,13 @@ public final class MapU {
             }
         }
         return valueOut;
+    }
+
+    @SafeVarargs
+    public static <K, V> Map<K, V> join(final Map<K, V> target, final Map<K, V>... sources) {
+        for (Map<K, V> source : sources) {
+            Optional.ofNullable(source).ifPresent(target::putAll);
+        }
+        return target;
     }
 }
