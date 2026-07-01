@@ -2,6 +2,10 @@ package io.github.greyp9.arwo.core.date;
 
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.time.OffsetDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeFormatterBuilder;
+import java.time.temporal.ChronoField;
 import java.util.Date;
 import java.util.TimeZone;
 
@@ -32,14 +36,13 @@ public final class XsdDateU {
     }
 
     private static Date fromISONotNull(final String dateString) {
-        final DateFormat dateFormat = DateU.getDateFormat(Const.ISO, DateU.Const.TZ_GMT, true);
-        Date date = null;
-        try {
-            date = dateFormat.parse(dateString);
-        } catch (ParseException e) {
-            e.getClass();
-        }
-        return date;
+        final DateTimeFormatter formatter = new DateTimeFormatterBuilder()
+                .appendPattern(Const.ISO_BASE)
+                .appendFraction(ChronoField.NANO_OF_SECOND, 0, Const.DIGITS_NANOS, true)
+                .appendPattern(" Z")
+                .toFormatter();
+        final OffsetDateTime dateTime = OffsetDateTime.parse(dateString, formatter);
+        return new Date(dateTime.toInstant().toEpochMilli());
     }
 
     public static String toXSDwDOW(final Date date, final TimeZone timeZone) {
@@ -73,7 +76,8 @@ public final class XsdDateU {
         private static final String XSD_MILLI_Z = "yyyy-MM-dd'T'HH:mm:ss.SSS'Z'";  // i18n internal
         private static final int LENGTH_XSD_Z = 20;
 
-        private static final String ISO = "yyyy-MM-dd HH:mm:ss Z";
+        private static final String ISO_BASE = "yyyy-MM-dd HH:mm:ss";
+        private static final int DIGITS_NANOS = 9;
 
         public static final String DATE = "yyyy-MM-dd";  // i18n internal
         public static final String TIME = "HH:mm:ss'Z'";  // i18n internal

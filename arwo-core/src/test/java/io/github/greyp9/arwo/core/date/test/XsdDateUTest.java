@@ -5,33 +5,58 @@ import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.date.XsdDateU;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 
+import java.util.Arrays;
 import java.util.Date;
 import java.util.TimeZone;
 import java.util.logging.Logger;
+import java.util.stream.Stream;
 
 public class XsdDateUTest {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
-    private static final String MILLENIUM_SECONDS_Z = "2000-01-01T00:00:00Z";
-    private static final String MILLENIUM_MILLIS_Z = "2000-01-01T00:00:00.000Z";
+    private static final String MILLENNIUM_SECONDS_Z = "2000-01-01T00:00:00Z";
+    private static final String MILLENNIUM_MILLIS_Z = "2000-01-01T00:00:00.000Z";
     private static final String TZ_NY = "America/New_York";
     private static final int OFFSET_TZ_NY = -5;
 
+    static Stream<Arguments> supplyArgsISONanos() {
+        final Arguments[] argumentsArray = {
+                Arguments.arguments("1970-01-01 00:00:01 +0000", 1000L),
+                Arguments.arguments("1970-01-01 00:00:01.100 +0000", 1100L),
+                Arguments.arguments("1970-01-01 00:00:01.10000 +0000", 1100L),
+                Arguments.arguments("1970-01-01 00:00:01.100000 +0000", 1100L),
+                Arguments.arguments("1970-01-01 00:00:01.1000000 +0000", 1100L),
+                Arguments.arguments("1970-01-01 00:00:01.100000000 +0000", 1100L),
+        };
+        return Arrays.stream(argumentsArray);
+    }
+
+    @ParameterizedTest
+    @MethodSource("supplyArgsISONanos")
+    void testConversionISONanos(final String dateString, final long millisEpoch) {
+        final Date date = XsdDateU.fromISO(dateString);
+        logger.info(String.format("[%s]", XsdDateU.toXSDZMillis(date)));
+        Assertions.assertEquals(millisEpoch, date.getTime());
+    }
+
     @Test
     public void testConversionToMillis() {
-        final Date date = XsdDateU.fromXSDZ(MILLENIUM_SECONDS_Z);
+        final Date date = XsdDateU.fromXSDZ(MILLENNIUM_SECONDS_Z);
         final String dateString = XsdDateU.toXSDZMillis(date);
         logger.finest(dateString);
-        Assertions.assertEquals(MILLENIUM_MILLIS_Z, dateString);
+        Assertions.assertEquals(MILLENNIUM_MILLIS_Z, dateString);
     }
 
     @Test
     public void testConversionFromMillis() {
-        final Date date = XsdDateU.fromXSDZ(MILLENIUM_MILLIS_Z);
+        final Date date = XsdDateU.fromXSDZ(MILLENNIUM_MILLIS_Z);
         final String dateString = XsdDateU.toXSDZ(date);
         logger.finest(dateString);
-        Assertions.assertEquals(MILLENIUM_SECONDS_Z, dateString);
+        Assertions.assertEquals(MILLENNIUM_SECONDS_Z, dateString);
     }
 
     @Test
@@ -44,7 +69,7 @@ public class XsdDateUTest {
 
     @Test
     public void testConversionTZNoDST() {
-        final Date date = XsdDateU.fromXSDZ(MILLENIUM_SECONDS_Z);
+        final Date date = XsdDateU.fromXSDZ(MILLENNIUM_SECONDS_Z);
         final TimeZone tz = TimeZone.getTimeZone(TZ_NY);
 
         Assertions.assertEquals(OFFSET_TZ_NY, tz.getRawOffset() / (DurationU.Const.ONE_HOUR_MILLIS));
@@ -57,7 +82,7 @@ public class XsdDateUTest {
 
     @Test
     public void testConversionTZWithDST() {
-        final Date date = DurationU.add(XsdDateU.fromXSDZ(MILLENIUM_SECONDS_Z), DateU.Const.TZ_GMT, "P6M");
+        final Date date = DurationU.add(XsdDateU.fromXSDZ(MILLENNIUM_SECONDS_Z), DateU.Const.TZ_GMT, "P6M");
         final TimeZone tz = TimeZone.getTimeZone(TZ_NY);
 
         final String dateString = XsdDateU.toXSD(date, tz);

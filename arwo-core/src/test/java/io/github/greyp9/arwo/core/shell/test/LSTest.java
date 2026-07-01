@@ -26,6 +26,7 @@ class LSTest {
         final Arguments[] argumentsArray = {
                 Arguments.arguments("io/github/greyp9/arwo/core/shell/ls1.txt"),
                 Arguments.arguments("io/github/greyp9/arwo/core/shell/ls2.txt"),
+                Arguments.arguments("io/github/greyp9/arwo/core/shell/ls3.txt"),
         };
         return Arrays.stream(argumentsArray);
     }
