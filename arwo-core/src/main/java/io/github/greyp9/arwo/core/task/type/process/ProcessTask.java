@@ -56,8 +56,8 @@ public class ProcessTask extends Task {
         this.exitValue = exitValue;
     }
 
-    public ProcessTask(final String cmd1, final Map<String, String> env, final File dir) {
-        super(new Date());
+    public ProcessTask(final String name, final String cmd1, final Map<String, String> env, final File dir) {
+        super(name, new Date());
         this.cmd1 = cmd1;
         this.cmd = null;
         this.env = env;
@@ -67,8 +67,8 @@ public class ProcessTask extends Task {
         this.stderr = new ByteBuffer(charset);
     }
 
-    public ProcessTask(final List<String> cmd, final Map<String, String> env, final File dir) {
-        super(new Date());
+    public ProcessTask(final String name, final List<String> cmd, final Map<String, String> env, final File dir) {
+        super(name, new Date());
         this.cmd1 = null;
         this.cmd = cmd;
         this.env = env;

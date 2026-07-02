@@ -10,8 +10,8 @@ public class EnvTask extends Task {
     private final String value;
     private final Map<String, String> env;
 
-    public EnvTask(final String key, final String value, final Map<String, String> env) {
-        super(new Date());
+    public EnvTask(final String name, final String key, final String value, final Map<String, String> env) {
+        super(name, new Date());
         this.key = key;
         this.value = value;
         this.env = env;

@@ -4,14 +4,21 @@ import java.util.Date;
 import java.util.concurrent.Future;
 
 public abstract class Task {
+    private final String name;
     private final Date dateInvoke;
+
     private Date dateStart;
     private Date dateFinish;
 
     private Future<?> future;
 
-    public Task(final Date dateInvoke) {
+    public Task(final String name, final Date dateInvoke) {
+        this.name = name;
         this.dateInvoke = dateInvoke;
+    }
+
+    public final String getName() {
+        return name;
     }
 
     public final Date getDateInvoke() {

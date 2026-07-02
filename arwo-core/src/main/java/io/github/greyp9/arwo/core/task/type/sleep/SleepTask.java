@@ -10,8 +10,8 @@ public class SleepTask extends Task {
 
     private boolean interrupted;
 
-    public SleepTask(final Date dateInvoke, final String label, final String duration) {
-        super(dateInvoke);
+    public SleepTask(final String name, final Date dateInvoke, final String label, final String duration) {
+        super(name, dateInvoke);
         this.label = label;
         this.duration = duration;
     }
