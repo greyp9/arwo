@@ -73,6 +73,7 @@ public class TaskServiceView {
                 new ColumnMetaData("dateFinish", Types.TIMESTAMP),
                 new ColumnMetaData("stdout", Types.INTEGER),
                 new ColumnMetaData("stderr", Types.INTEGER),
+                new ColumnMetaData("exitValue", Types.INTEGER),
         };
         return new RowSetMetaData(id, columns);
     }
@@ -95,5 +96,6 @@ public class TaskServiceView {
         final int lengthStderr = task.getStderr().getLength();
         insertRow.setNextColumn(new TableViewLink(NumberScale.toString(lengthStdout), null, PathU.toDir(hrefStdout)));
         insertRow.setNextColumn(new TableViewLink(NumberScale.toString(lengthStderr), null, PathU.toDir(hrefStderr)));
+        insertRow.setNextColumn(task.getExitValue());
     }
 }

@@ -14,6 +14,7 @@ public final class TaskServiceRunnable implements Runnable {
 
     private final TaskService taskService;
     private final AtomicReference<String> reference;
+    private final boolean isInitialContext;
     private final long interval;
 
     public TaskService getTaskService() {
@@ -22,37 +23,52 @@ public final class TaskServiceRunnable implements Runnable {
 
     public TaskServiceRunnable(final TaskServiceConfig config,
                                final AtomicReference<String> reference,
+                               final boolean isInitialContext,
                                final long interval) {
         this.taskService = new TaskService(config);
         this.reference = reference;
+        this.isInitialContext = isInitialContext;
         this.interval = interval;
         logger.info("READY");
     }
 
     public static TaskServiceRunnable create(final TaskServiceConfig config,
                                              final AtomicReference<String> reference,
+                                             final boolean isInitialContext,
                                              final long interval) {
-        return new TaskServiceRunnable(config, reference, interval);
+        return new TaskServiceRunnable(config, reference, isInitialContext, interval);
     }
 
     @Override
     public void run() {
-        // register TaskService in the InitialContext
-        final Context context = AppNaming.createSubcontext(TaskService.class.getName());
-        AppNaming.bind(context, taskService.getName(), taskService);
-
-        // await shutdown signal from application
         final String methodName = String.format("run(%d)", 0);
         logger.info("ENTER:" + methodName);
         logger.entering(getClass().getSimpleName(), methodName);
+
+        if (isInitialContext) {
+            runInitialContext();
+        } else {
+            runInner();
+        }
+
+        logger.info("EXIT:" + methodName);
+        logger.exiting(getClass().getSimpleName(), methodName);
+    }
+
+    private void runInitialContext() {
+        final Context context = AppNaming.createSubcontext(TaskService.class.getName());
+        AppNaming.bind(context, taskService.getName(), taskService);
+
+        runInner();
+
+        AppNaming.unbind(context, taskService.getName());
+    }
+
+    private void runInner() {
+        // await shutdown signal from application
         while (reference.get() == null) {
             ThreadU.sleepMillis(interval);
         }
         MutexU.notifyAll(reference);
-
-        // unregister TaskService
-        AppNaming.unbind(context, taskService.getName());
-        logger.info("EXIT:" + methodName);
-        logger.exiting(getClass().getSimpleName(), methodName);
     }
 }

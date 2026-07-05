@@ -8,6 +8,7 @@ import io.github.greyp9.arwo.core.vm.mutex.MapU;
 import io.github.greyp9.arwo.core.vm.thread.ThreadU;
 
 import java.io.BufferedInputStream;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Date;
@@ -18,9 +19,11 @@ public class ProcessRunnable implements Runnable {
     private final Logger logger = Logger.getLogger(getClass().getName());
 
     private final ProcessTask task;
+    private final File folderPersist;
 
-    public ProcessRunnable(final ProcessTask task) {
+    public ProcessRunnable(final ProcessTask task, final File folderPersist) {
         this.task = task;
+        this.folderPersist = folderPersist;
     }
 
     @Override
@@ -29,9 +32,7 @@ public class ProcessRunnable implements Runnable {
         final String[] envp = EnvironmentU.toEnvP(MapU.join(new HashMap<>(), System.getenv(), task.getEnv()));
         try {
             task.setDateStart(new Date());
-            final Process process = (task.getCmd1() != null)
-                    ? runtime.exec(task.getCmd1(), envp, task.getDir())
-                    : runtime.exec(task.getCmd(), envp, task.getDir());
+            final Process process = runtime.exec(task.getCmd(), envp, task.getDir());
             final InputStream stdout = new BufferedInputStream(process.getInputStream());
             final InputStream stderr = new BufferedInputStream(process.getErrorStream());
             final ByteBuffer byteBufferStdout = task.getStdout();
@@ -51,6 +52,8 @@ public class ProcessRunnable implements Runnable {
         } catch (IOException e) {
             logger.throwing(getClass().getName(), "run()", e);
             throw new RuntimeException(e);
+        } finally {
+            new ProcessPersister(task).persist(folderPersist);
         }
     }
 

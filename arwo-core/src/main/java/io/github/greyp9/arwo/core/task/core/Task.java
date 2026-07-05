@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.core.task.core;
 
+import java.io.File;
 import java.util.Date;
 import java.util.concurrent.Future;
 
@@ -49,5 +50,11 @@ public abstract class Task {
         this.future = future;
     }
 
-    public abstract Runnable createRunnable();
+    public abstract Runnable createRunnable(File folderPersist);
+
+    public static class Const {
+        public static final String FIELD_EXIT_VALUE = "exitValue";
+        public static final String FIELD_DATE_FINISH = "dateFinish";
+        public static final String FIELD_DATE_START = "dateStart";
+    }
 }

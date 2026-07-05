@@ -11,7 +11,7 @@ import java.util.stream.Stream;
 
 public class SystemUTest {
 
-    public static Stream<Arguments> supplyArgs() {
+    static Stream<Arguments> supplyArgs() {
         final Arguments[] argumentsArray = {
                 Arguments.arguments("${user.language}/${user.country}", "en/US"),
                 Arguments.arguments("${user.dir}", System.getenv("PWD")),
@@ -21,7 +21,7 @@ public class SystemUTest {
 
     @ParameterizedTest
     @MethodSource("supplyArgs")
-    public void testResolveSystemProperties(final String input, final String output) {
+    final void testResolveSystemProperties(final String input, final String output) {
         // environment differences need not fail the build, so use `assume`
         Assumptions.assumeTrue(output.equals(SystemU.resolveSystemProperties(input)));
     }

@@ -23,7 +23,7 @@ public class TaskServiceTest {
 
     @Test
     void testVanilla() throws IOException, ExecutionException, InterruptedException {
-        final TaskServiceConfig config = new TaskServiceConfig("task-service-1", 1);
+        final TaskServiceConfig config = new TaskServiceConfig("task-service-1", 1, null, null);
         logger.info(config.getName());
         final TaskService taskService = new TaskService(config);
 

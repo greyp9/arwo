@@ -10,11 +10,14 @@ import io.github.greyp9.arwo.core.exec.script.ScriptContext;
 import io.github.greyp9.arwo.core.exec.script.ScriptRunnable;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.buffer.ByteBuffer;
+import io.github.greyp9.arwo.core.lang.ShellU;
 import io.github.greyp9.arwo.core.lang.StringU;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.resource.Pather;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
+import io.github.greyp9.arwo.core.task.service.TaskService;
+import io.github.greyp9.arwo.core.task.type.process.ProcessTask;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.vm.mutex.CollectionU;
@@ -23,16 +26,20 @@ import io.github.greyp9.arwo.core.xed.action.XedActionStdin;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.Optional;
 
 public final class SHHandlerPost extends AppHandlerPost {
     private final AppExecutorService appExecutorService;
+    private final TaskService taskService;
 
     public SHHandlerPost(final ServletHttpRequest httpRequest,
                          final AppUserState userState,
-                         final AppExecutorService appExecutorService) {
+                         final AppExecutorService appExecutorService,
+                         final TaskService taskService) {
         super(httpRequest, userState);
         this.appExecutorService = appExecutorService;
+        this.taskService = taskService;
     }
 
     protected String applySession(final SubmitToken token,
@@ -61,14 +68,21 @@ public final class SHHandlerPost extends AppHandlerPost {
         final ExecutorService executorService = userState.getUserExecutor().getExecutorCommand();
         executorService.submit(new RunnableLSH(commandSH));
 */
-
-            final File folderPersist = userState.getLSH().getFolderPersist();
-            final ScriptContext script = new ScriptContext(context, command, getHttpRequest().getDate(), folderPersist);
-            CollectionU.add(userState.getLSH().getScripts(), script);
-            final ScriptRunnable scriptRunnable = new ScriptRunnable(script, appExecutorService.getExecutorService());
-            appExecutorService.submit(scriptRunnable);
-            final String scriptID = DateX.Factory.createFilenameMilli().toString(script.getDateSubmit());
-            location = PathU.toDir(getHttpRequest().getBaseURI(), context, scriptID);
+            if (System.getProperties().isEmpty()) {
+                final File folderPersist = userState.getLSH().getFolderPersist();
+                final ScriptContext script = new ScriptContext(
+                        context, command, getHttpRequest().getDate(), folderPersist);
+                CollectionU.add(userState.getLSH().getScripts(), script);
+                final ScriptRunnable scriptRunnable = new ScriptRunnable(
+                        script, appExecutorService.getExecutorService());
+                appExecutorService.submit(scriptRunnable);
+                final String scriptID = DateX.Factory.createFilenameMilli().toString(script.getDateSubmit());
+                location = PathU.toDir(getHttpRequest().getBaseURI(), context, scriptID);
+            } else {
+                taskService.submit(new ProcessTask(
+                        context, Arrays.asList(ShellU.toCommandArray(command)), null, null));
+                location = taskService.getResource();
+            }
         }
         return location;
     }

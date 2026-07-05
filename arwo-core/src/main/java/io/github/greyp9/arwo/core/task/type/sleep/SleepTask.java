@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.core.task.type.sleep;
 
 import io.github.greyp9.arwo.core.task.core.Task;
 
+import java.io.File;
 import java.util.Date;
 
 public class SleepTask extends Task {
@@ -33,7 +34,7 @@ public class SleepTask extends Task {
     }
 
     @Override
-    public final Runnable createRunnable() {
+    public final Runnable createRunnable(final File ignored) {
         return new SleepRunnable(this);
     }
 }
