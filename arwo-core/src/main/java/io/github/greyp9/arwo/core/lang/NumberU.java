@@ -17,14 +17,25 @@ public final class NumberU {
     }
 
     public static Integer toInteger(final String s) {
+        Integer i;
         try {
-            return ((s == null) ? null : Integer.valueOf(s));
+            i = ((s == null) ? null : Integer.valueOf(s));
         } catch (NumberFormatException e) {
-            return null;
+            i = null;
         }
+        return i;
     }
 
-    @SuppressWarnings("PMD.OnlyOneReturn")
+    public static Long toLong(final String s) {
+        Long l;
+        try {
+            l = ((s == null) ? null : Long.valueOf(s));
+        } catch (NumberFormatException e) {
+            l = null;
+        }
+        return l;
+    }
+
     public static int toInt(final String s, final int defaultInt) {
         try {
             final Number number = ((s == null) ? defaultInt : NumberFormat.getInstance().parse(s));
@@ -34,22 +45,21 @@ public final class NumberU {
         }
     }
 
-    public static float toFloat(final String s, final float defaultFloat) {
-        try {
-            final Number number = ((s == null) ? defaultFloat : NumberFormat.getInstance().parse(s));
-            return number.floatValue();
-        } catch (ParseException e) {
-            return defaultFloat;
-        }
-    }
-
-    @SuppressWarnings("PMD.OnlyOneReturn")
     public static Long toLong(final String s, final long defaultLong) {
         try {
             final Number number = ((s == null) ? defaultLong : NumberFormat.getInstance().parse(s));
             return number.longValue();
         } catch (ParseException e) {
             return defaultLong;
+        }
+    }
+
+    public static float toFloat(final String s, final float defaultFloat) {
+        try {
+            final Number number = ((s == null) ? defaultFloat : NumberFormat.getInstance().parse(s));
+            return number.floatValue();
+        } catch (ParseException e) {
+            return defaultFloat;
         }
     }
 

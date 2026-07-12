@@ -61,8 +61,8 @@ public class TaskServiceTest {
 
         final List<Task> tasks = taskService.getTasks();
         for (Task task : tasks) {
-            logger.info(String.format("INVOKE/START/FINISH::%s:%s:%s",
-                    XsdDateU.toXSDZMillis(task.getDateInvoke()),
+            logger.info(String.format("SUBMIT/START/FINISH::%s:%s:%s",
+                    XsdDateU.toXSDZMillis(task.getDateSubmit()),
                     XsdDateU.toXSDZMillis(task.getDateStart()),
                     XsdDateU.toXSDZMillis(task.getDateFinish())));
         }

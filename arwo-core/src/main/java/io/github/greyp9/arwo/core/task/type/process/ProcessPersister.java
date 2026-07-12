@@ -1,10 +1,11 @@
 package io.github.greyp9.arwo.core.task.type.process;
 
-import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.date.XsdDateU;
+import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.io.buffer.ByteBuffer;
 import io.github.greyp9.arwo.core.task.core.Task;
+import io.github.greyp9.arwo.core.task.service.TaskServiceStore;
 import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xml.DocumentU;
@@ -39,32 +40,30 @@ public class ProcessPersister {
             final Document document = DocumentU.createDocument(PROCESS, PROCESS_NS);
             final Element documentElement = document.getDocumentElement();
             ElementU.setAttributes(documentElement, NTV.create(
+                    Task.Const.FIELD_NAME, task.getName(),
+                    Task.Const.FIELD_DATE_SUBMIT, XsdDateU.toXSDZMillis(task.getDateSubmit()),
                     Task.Const.FIELD_DATE_START, XsdDateU.toXSDZMillis(task.getDateStart()),
                     Task.Const.FIELD_DATE_FINISH, XsdDateU.toXSDZMillis(task.getDateFinish()),
-                    Task.Const.FIELD_EXIT_VALUE, Integer.toString(task.getExitValue())));
-            ElementU.addElement(documentElement, ProcessTask.Const.STREAM_STDIN,
-                    Value.join(" ", Arrays.asList(task.getCmd())));
-            final String filename = String.format(FILENAME_XML,
-                    task.getName(), DateX.toFilename(task.getDateInvoke()));
-            StreamU.writeMkdirs(new File(folder, filename), DocumentU.toXml(document));
+                    ProcessTask.Const.FIELD_PID, Long.toString(task.getPid()),
+                    ProcessTask.Const.FIELD_EXIT_VALUE, Integer.toString(task.getExitValue())));
+            ElementU.addElement(documentElement, ProcessTask.Const.FIELD_COMMAND,
+                    Value.join(Html.SPACE, Arrays.asList(task.getCmd())));
+            final File file = TaskServiceStore.toFile(folder, task.getDateSubmit());
+            StreamU.writeMkdirs(file, DocumentU.toXml(document));
         } catch (IOException e) {
-            logger.info(e.getMessage());
+            logger.warning(e.getMessage());
         }
     }
 
     private void persistStream(final File folder, final ByteBuffer byteBuffer, final String stream) {
         try {
-            final String filename = String.format(FILENAME_STREAM,
-                    task.getName(), DateX.toFilename(task.getDateInvoke()), stream);
-            StreamU.writeMkdirs(new File(folder, filename), byteBuffer.getBytes());
+            final File file = TaskServiceStore.toStreamFile(folder, task.getDateSubmit(), stream);
+            StreamU.writeMkdirs(file, byteBuffer.getBytes());
         } catch (IOException e) {
-            logger.info(e.getMessage());
+            logger.warning(e.getMessage());
         }
     }
 
     public static final String PROCESS = "process";
     public static final String PROCESS_NS = "urn:arwo:process";
-
-    public static final String FILENAME_XML = "%s.%s.xml";
-    public static final String FILENAME_STREAM = "%s.%s.%s.txt";
 }

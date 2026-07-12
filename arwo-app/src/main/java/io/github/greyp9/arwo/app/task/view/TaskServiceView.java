@@ -4,10 +4,14 @@ import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.date.DateX;
+import io.github.greyp9.arwo.core.date.DurationU;
+import io.github.greyp9.arwo.core.glyph.UTF16;
+import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.number.NumberScale;
 import io.github.greyp9.arwo.core.resource.PathU;
+import io.github.greyp9.arwo.core.table.cell.Duration;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
 import io.github.greyp9.arwo.core.table.core.TableU;
 import io.github.greyp9.arwo.core.table.html.TableView;
@@ -27,6 +31,7 @@ import org.w3c.dom.Element;
 
 import java.io.IOException;
 import java.sql.Types;
+import java.util.Arrays;
 
 public class TaskServiceView {
     private final TaskService taskService;
@@ -67,10 +72,15 @@ public class TaskServiceView {
 
     private RowSetMetaData createMetaData(final String id) {
         final ColumnMetaData[] columns = {
+                new ColumnMetaData(App.Attr.SELECT, Types.DATALINK),
                 new ColumnMetaData("name", Types.VARCHAR, true),
-                new ColumnMetaData("dateInvoke", Types.TIMESTAMP, true),
+                new ColumnMetaData("dateSubmit", Types.TIMESTAMP, true),
                 new ColumnMetaData("dateStart", Types.TIMESTAMP),
                 new ColumnMetaData("dateFinish", Types.TIMESTAMP),
+                new ColumnMetaData("wait", Types.INTEGER),
+                new ColumnMetaData("run", Types.INTEGER),
+                new ColumnMetaData("crc", Types.VARCHAR),
+                new ColumnMetaData("pid", Types.VARCHAR),
                 new ColumnMetaData("stdout", Types.INTEGER),
                 new ColumnMetaData("stderr", Types.INTEGER),
                 new ColumnMetaData("exitValue", Types.INTEGER),
@@ -79,21 +89,36 @@ public class TaskServiceView {
     }
 
     private void addRow(final RowSet rowSet, final Task task) {
+        final String dateSubmit = DateX.toFilename(task.getDateSubmit());
+        final String hrefTask = PathU.toDir(httpRequest.getBaseURI(), task.getName(), dateSubmit);
+
         final InsertRow insertRow = new InsertRow(rowSet);
+        insertRow.setNextColumn(new TableViewLink(UTF16.SELECT, App.Action.SELECT, hrefTask));
         insertRow.setNextColumn(task.getName());
-        insertRow.setNextColumn(task.getDateInvoke());
+        insertRow.setNextColumn(task.getDateSubmit());
         insertRow.setNextColumn(task.getDateStart());
         insertRow.setNextColumn(task.getDateFinish());
+
+        insertRow.setNextColumn(Duration.toDuration(DurationU.toDuration(
+                task.getDateSubmit(), task.getDateStart(), httpRequest.getDate())));
+        insertRow.setNextColumn(Duration.toDuration(DurationU.toDuration(
+                task.getDateStart(), task.getDateFinish(), httpRequest.getDate())));
+
         Value.asOptional(task, ProcessTask.class).ifPresent(pt -> addColumnsProcessTask(insertRow, pt));
         rowSet.add(insertRow.getRow());
     }
 
     private void addColumnsProcessTask(final InsertRow insertRow, final ProcessTask task) {
-        final String dateInvoke = DateX.toFilename(task.getDateInvoke());
-        final String hrefStdout = PathU.toDir(httpRequest.getBaseURI(), task.getName(), dateInvoke, "stdout");
-        final String hrefStderr = PathU.toDir(httpRequest.getBaseURI(), task.getName(), dateInvoke, "stderr");
+        final String dateSubmit = DateX.toFilename(task.getDateSubmit());
+        final String hrefStdout = PathU.toDir(httpRequest.getBaseURI(),
+                task.getName(), dateSubmit, ProcessTask.Const.STREAM_STDOUT);
+        final String hrefStderr = PathU.toDir(httpRequest.getBaseURI(),
+                task.getName(), dateSubmit, ProcessTask.Const.STREAM_STDERR);
         final int lengthStdout = task.getStdout().getLength();
         final int lengthStderr = task.getStderr().getLength();
+
+        insertRow.setNextColumn(CRCU.crc32String(Arrays.asList(task.getCmd()).toString()));
+        insertRow.setNextColumn((task.getPid() == null) ? null : Long.toString(task.getPid()));
         insertRow.setNextColumn(new TableViewLink(NumberScale.toString(lengthStdout), null, PathU.toDir(hrefStdout)));
         insertRow.setNextColumn(new TableViewLink(NumberScale.toString(lengthStderr), null, PathU.toDir(hrefStderr)));
         insertRow.setNextColumn(task.getExitValue());

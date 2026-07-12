@@ -18,6 +18,8 @@ public class ProcessTask extends Task {
     private final Charset charset;
     private final ByteBuffer stdout;
     private final ByteBuffer stderr;
+
+    private Long pid;
     private Integer exitValue;
 
     public final String[] getCmd() {
@@ -44,6 +46,14 @@ public class ProcessTask extends Task {
         return stderr;
     }
 
+    public final Long getPid() {
+        return pid;
+    }
+
+    public final void setPid(final Long pid) {
+        this.pid = pid;
+    }
+
     public final Integer getExitValue() {
         return exitValue;
     }
@@ -66,12 +76,27 @@ public class ProcessTask extends Task {
         this.stderr = new ByteBuffer(charset);
     }
 
+    public ProcessTask(final String name, final List<String> cmd, final Map<String, String> env, final File dir,
+                       final ByteBuffer stdout, final ByteBuffer stderr) {
+        super(name, new Date());
+        this.cmd = cmd;
+        this.env = env;
+        this.dir = dir;
+        this.charset = null;
+        this.stdout = stdout;
+        this.stderr = stderr;
+    }
+
     @Override
     public final Runnable createRunnable(final File folderPersist) {
         return new ProcessRunnable(this, folderPersist);
     }
 
     public static class Const {
+        public static final String FIELD_COMMAND = "command";
+        public static final String FIELD_EXIT_VALUE = "exitValue";
+        public static final String FIELD_PID = "pid";
+
         public static final String STREAM_STDIN = "stdin";
         public static final String STREAM_STDERR = "stderr";
         public static final String STREAM_STDOUT = "stdout";

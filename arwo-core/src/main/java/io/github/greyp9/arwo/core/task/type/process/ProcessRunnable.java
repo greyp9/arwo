@@ -3,8 +3,10 @@ package io.github.greyp9.arwo.core.task.type.process;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.io.buffer.ByteBuffer;
+import io.github.greyp9.arwo.core.lang.ShellU;
 import io.github.greyp9.arwo.core.vm.env.EnvironmentU;
 import io.github.greyp9.arwo.core.vm.mutex.MapU;
+import io.github.greyp9.arwo.core.vm.process.ProcessU;
 import io.github.greyp9.arwo.core.vm.thread.ThreadU;
 
 import java.io.BufferedInputStream;
@@ -32,7 +34,8 @@ public class ProcessRunnable implements Runnable {
         final String[] envp = EnvironmentU.toEnvP(MapU.join(new HashMap<>(), System.getenv(), task.getEnv()));
         try {
             task.setDateStart(new Date());
-            final Process process = runtime.exec(task.getCmd(), envp, task.getDir());
+            final Process process = runtime.exec(ShellU.toCommandArray(task.getCmd()), envp, task.getDir());
+            task.setPid(ProcessU.getProcessId(process));
             final InputStream stdout = new BufferedInputStream(process.getInputStream());
             final InputStream stderr = new BufferedInputStream(process.getErrorStream());
             final ByteBuffer byteBufferStdout = task.getStdout();

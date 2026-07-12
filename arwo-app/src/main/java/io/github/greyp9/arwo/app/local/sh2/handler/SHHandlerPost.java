@@ -10,7 +10,6 @@ import io.github.greyp9.arwo.core.exec.script.ScriptContext;
 import io.github.greyp9.arwo.core.exec.script.ScriptRunnable;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.buffer.ByteBuffer;
-import io.github.greyp9.arwo.core.lang.ShellU;
 import io.github.greyp9.arwo.core.lang.StringU;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.resource.PathU;
@@ -26,7 +25,7 @@ import io.github.greyp9.arwo.core.xed.action.XedActionStdin;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.Optional;
 
 public final class SHHandlerPost extends AppHandlerPost {
@@ -79,8 +78,7 @@ public final class SHHandlerPost extends AppHandlerPost {
                 final String scriptID = DateX.Factory.createFilenameMilli().toString(script.getDateSubmit());
                 location = PathU.toDir(getHttpRequest().getBaseURI(), context, scriptID);
             } else {
-                taskService.submit(new ProcessTask(
-                        context, Arrays.asList(ShellU.toCommandArray(command)), null, null));
+                taskService.submit(new ProcessTask(context, Collections.singletonList(command), null, null));
                 location = taskService.getResource();
             }
         }

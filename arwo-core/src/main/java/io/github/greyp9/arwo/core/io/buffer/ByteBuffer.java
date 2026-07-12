@@ -20,7 +20,10 @@ public class ByteBuffer {
         return charset;
     }
 
-    public final synchronized int getLength() {
+    /**
+     * @return the length of the ByteBuffer contents
+     */
+    public synchronized int getLength() {
         int length = 0;
         for (final byte[] byteBuffer : byteBuffers) {
             length += byteBuffer.length;
@@ -32,7 +35,10 @@ public class ByteBuffer {
         return new String(getBytes(), charset);
     }
 
-    public final synchronized byte[] getBytes() throws IOException {
+    /**
+     * @return the ByteBuffer contents
+     */
+    public synchronized byte[] getBytes() throws IOException {
         return getBytes(false);
     }
 

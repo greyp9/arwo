@@ -6,24 +6,28 @@ import java.util.concurrent.Future;
 
 public abstract class Task {
     private final String name;
-    private final Date dateInvoke;
+    private Date dateSubmit;
 
     private Date dateStart;
     private Date dateFinish;
 
     private Future<?> future;
 
-    public Task(final String name, final Date dateInvoke) {
+    public Task(final String name, final Date dateSubmit) {
         this.name = name;
-        this.dateInvoke = dateInvoke;
+        this.dateSubmit = dateSubmit;
     }
 
     public final String getName() {
         return name;
     }
 
-    public final Date getDateInvoke() {
-        return dateInvoke;
+    public final Date getDateSubmit() {
+        return dateSubmit;
+    }
+
+    public final void setDateSubmit(final Date dateSubmit) {
+        this.dateSubmit = dateSubmit;
     }
 
     public final Date getDateStart() {
@@ -53,8 +57,9 @@ public abstract class Task {
     public abstract Runnable createRunnable(File folderPersist);
 
     public static class Const {
-        public static final String FIELD_EXIT_VALUE = "exitValue";
-        public static final String FIELD_DATE_FINISH = "dateFinish";
-        public static final String FIELD_DATE_START = "dateStart";
+        public static final String FIELD_NAME = "name";
+        public static final String FIELD_DATE_FINISH = "finish";
+        public static final String FIELD_DATE_START = "start";
+        public static final String FIELD_DATE_SUBMIT = "submit";
     }
 }

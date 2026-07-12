@@ -1,7 +1,6 @@
 package io.github.greyp9.arwo.core.lang;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.stream.Stream;
 
 public final class ShellU {
 
@@ -9,18 +8,24 @@ public final class ShellU {
     }
 
     public static String[] toCommandArray(final String stdin) {
-        final List<String> commandArray = new ArrayList<String>();
+        return Stream.concat(getStreamShell(), Stream.of(stdin)).toArray(String[]::new);
+    }
+
+    public static String[] toCommandArray(final String[] stdin) {
+        return Stream.concat(getStreamShell(), Stream.of(stdin)).toArray(String[]::new);
+    }
+
+    private static Stream<String> getStreamShell() {
+        final Stream<String> streamShell;
         if (SystemU.isLinux()) {
-            commandArray.add("/bin/sh");
-            commandArray.add("-c");
+            streamShell = Stream.of("/bin/sh", "-c");
         } else if (SystemU.isWindows()) {
-            commandArray.add("cmd");
-            commandArray.add("/C");
+            streamShell = Stream.of("cmd", "/C");
         } else if (SystemU.isMac()) {
-            commandArray.add("/bin/zsh");
-            commandArray.add("-c");
+            streamShell = Stream.of("/bin/zsh", "-c");
+        } else {
+            streamShell = Stream.of();
         }
-        commandArray.add(stdin);
-        return commandArray.toArray(new String[commandArray.size()]);
+        return streamShell;
     }
 }

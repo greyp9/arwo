@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.app.task.handler;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.fixup.AppHtmlView;
 import io.github.greyp9.arwo.app.task.view.TaskServiceView;
+import io.github.greyp9.arwo.app.task.view.TaskView;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppTitle;
 import io.github.greyp9.arwo.core.date.DateX;
@@ -58,15 +59,17 @@ public class TaskHandlerGet {
         final String stream = patherStream.getLeftToken();
         if (pathInfo == null) {
             httpResponse = HttpResponseU.to302(PathU.toDir(baseURI));
-        } else if (!Value.isData(name, date, stream)) {
-            httpResponse = doGetList();
-        } else {
+        } else if (Value.isData(name, date, stream)) {
             httpResponse = doGetStream(name, date, stream);
+        } else if (Value.isData(name, date)) {
+            httpResponse = doGetTask(name, date);
+        } else {
+            httpResponse = doGetList();
         }
         return httpResponse;
     }
 
-    public final HttpResponse doGetList() throws IOException {
+    private HttpResponse doGetList() throws IOException {
         // template html
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
         final Element header = new XPather(html, null).getElement(Html.XPath.HEADER);
@@ -77,6 +80,34 @@ public class TaskHandlerGet {
         final AppTitle appTitle = AppTitle.Factory.getResourceLabel(httpRequest, userState.getBundle(), labelContext);
         addMenus(header);
         new TaskServiceView(httpRequest, userState, taskService).addContent(content);
+        return new AppHtmlView(httpRequest, userState, appTitle)
+                .title(header)
+                .actionRefresh(header)
+                .actionTextExpression(header)
+                .alerts(header)
+                .statusBar(footer)
+                .appHtml(html)
+                .toHttpResponse(html);
+    }
+
+    private HttpResponse doGetTask(final String name, final String date) throws IOException {
+        final ProcessTask task = taskService.getTasks().stream()
+                .filter(t -> t.getName().equals(name))
+                .filter(t -> t.getDateSubmit().equals(DateX.fromFilename(date)))
+                .filter(t -> t instanceof ProcessTask)
+                .map(t -> (ProcessTask) t)
+                .findFirst().orElse(null);
+        // template html
+        final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
+        final Element header = new XPather(html, null).getElement(Html.XPath.HEADER);
+        final Element content = new XPather(html, null).getElement(Html.XPath.CONTENT);
+        final Element footer = new XPather(html, null).getElement(Html.XPath.FOOTER);
+        // context-specific content
+        final String labelContext = Value.wrap("[", "]", taskService.getName());
+        final AppTitle appTitle = AppTitle.Factory.getResourceLabel(httpRequest, userState.getBundle(), labelContext);
+        addMenus(header);
+        new TaskView(httpRequest, userState, task).addContent(content);
+
         return new AppHtmlView(httpRequest, userState, appTitle)
                 .title(header)
                 .actionRefresh(header)
@@ -102,7 +133,7 @@ public class TaskHandlerGet {
         final HttpResponse httpResponse;
         final ProcessTask task = taskService.getTasks().stream()
                 .filter(t -> t.getName().equals(name))
-                .filter(t -> t.getDateInvoke().equals(DateX.fromFilename(date)))
+                .filter(t -> t.getDateSubmit().equals(DateX.fromFilename(date)))
                 .filter(t -> t instanceof ProcessTask)
                 .map(t -> (ProcessTask) t)
                 .findFirst().orElse(null);

@@ -53,6 +53,10 @@ public final class TaskService {
         return resource;
     }
 
+    public File getFolderPersist() {
+        return folderPersist;
+    }
+
     public TaskService(final TaskServiceConfig config) {
         this.name = config.getName();
         this.executorService = ExecutorServiceFactory.create(config.getThreads(), getClass().getSimpleName());
@@ -65,6 +69,7 @@ public final class TaskService {
                 : FileU.ensureFolder(new File(SystemU.resolveSystemProperties(config.getPersist())));
         config.getEnvironments().forEach(
                 (k, v) -> environments.put(k, v.getEnvironment()));
+        new TaskServiceStore(this).load();
         Logger.getLogger(getClass().getName()).info("READY");
     }
 
