@@ -1,8 +1,10 @@
 package io.github.greyp9.arwo.core.value;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 import java.util.StringTokenizer;
 import java.util.function.Supplier;
@@ -22,6 +24,10 @@ public final class Value {
 
     public static boolean isNotNull(final String value) {
         return (value != null);
+    }
+
+    public static boolean isNotNull(final Object... values) {
+        return Arrays.stream(values).noneMatch(Objects::isNull);
     }
 
     public static boolean isData(final String value) {

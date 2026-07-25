@@ -3,7 +3,7 @@ package io.github.greyp9.arwo.core.security.realm;
 import io.github.greyp9.arwo.core.codec.b64.Base64Codec;
 import io.github.greyp9.arwo.core.hash.secure.HashU;
 
-import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.security.SecureRandom;
 import java.security.cert.X509Certificate;
@@ -107,7 +107,7 @@ public class AppRealm {
     }
 
     public static String hashCredential(final String salt, final String credential) {
-        return Base64Codec.encode(HashU.sha256((credential + salt).getBytes(Charset.forName("UTF-8"))));  // i18n in
+        return Base64Codec.encode(HashU.sha256((credential + salt).getBytes(StandardCharsets.UTF_8)));
     }
 
     private AppPrincipal copy(final AppPrincipal principal) {

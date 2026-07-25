@@ -4,6 +4,7 @@ import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
 
 import java.io.ByteArrayInputStream;
+import java.net.HttpURLConnection;
 
 public class HttpResponse {
     private final int statusCode;
@@ -39,4 +40,10 @@ public class HttpResponse {
     public final String toString() {
         return String.format("[%d][%s][%d]", statusCode, headers, (isEntity() ? entity.available() : null));
     }
+
+    public final boolean isSuccess() {
+        return ((statusCode / RESPONSE_CATEGORY_SIZE) == (HttpURLConnection.HTTP_OK / RESPONSE_CATEGORY_SIZE));
+    }
+
+    private static final int RESPONSE_CATEGORY_SIZE = 100;
 }

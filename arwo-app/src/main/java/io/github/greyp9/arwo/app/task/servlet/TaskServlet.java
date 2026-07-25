@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.task.handler.TaskHandlerGet;
 import io.github.greyp9.arwo.app.task.handler.TaskHandlerPost;
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.gz.HttpResponseGZipU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
@@ -33,9 +34,11 @@ public class TaskServlet extends javax.servlet.http.HttpServlet {
         final Context context = AppNaming.lookupSubcontext(getServletContext().getContextPath());
         this.appState = (AppState) AppNaming.lookup(context, App.Naming.APP_STATE);
         final String taskServiceName = getInitParameter(TaskService.class.getSimpleName());
-        this.taskService = Value.as(AppNaming.lookup(
-                TaskService.class.getName(), taskServiceName), TaskService.class);
-        logger.info(String.format("init():%s:%s", taskServiceName, taskService));
+        final int retries = 12;
+        this.taskService = Value.as(AppNaming.lookup(TaskService.class.getName(), taskServiceName,
+                retries, DurationU.Const.QUARTER_SECOND), TaskService.class);
+        Value.require((taskService != null), () -> new ServletException(getClass().getName()));
+        logger.info(String.format("init():%s", taskServiceName));
     }
 
     @Override

@@ -1,5 +1,8 @@
 package io.github.greyp9.arwo.core.naming;
 
+import io.github.greyp9.arwo.core.value.Value;
+import io.github.greyp9.arwo.core.vm.thread.ThreadU;
+
 import javax.naming.Binding;
 import javax.naming.Context;
 import javax.naming.InitialContext;
@@ -59,7 +62,7 @@ public final class AppNaming {
     }
 
     public static Collection<Binding> listBindings(final Context context, final String name) {
-        final Collection<Binding> bindings = new ArrayList<Binding>();
+        final Collection<Binding> bindings = new ArrayList<>();
         try {
             final NamingEnumeration<Binding> enumeration = context.listBindings(name);
             while (enumeration.hasMore()) {
@@ -97,8 +100,6 @@ public final class AppNaming {
     public static Object lookupQ(final Context context, final String name) {
         try {
             return context.lookup(name);
-        } catch (NameNotFoundException e) {
-            throw new IllegalStateException(e);
         } catch (NamingException e) {
             throw new IllegalStateException(e);
         }
@@ -110,5 +111,17 @@ public final class AppNaming {
 
     public static Object lookupQ(final String contextName, final String name) {
         return lookupQ(lookupSubcontext(contextName), name);
+    }
+
+    public static Object lookup(final String contextName, final String name,
+                                final int retries, final long backoff) {
+        Object value = null;
+        int i = 0;
+        while ((++i <= retries) && (value == null)) {
+            LOGGER.finest(String.format("lookup()/%s/%s/%d", contextName, name, i));
+            value = lookup(lookupSubcontext(contextName), name);
+            Value.doIf(value == null, () -> ThreadU.sleepMillis(backoff));
+        }
+        return value;
     }
 }

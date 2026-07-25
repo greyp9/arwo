@@ -38,6 +38,7 @@ public class SH2Servlet extends javax.servlet.http.HttpServlet {
             final String taskServiceName = getInitParameter(TaskService.class.getSimpleName());
             this.taskService = Value.as(AppNaming.lookup(
                     TaskService.class.getName(), taskServiceName), TaskService.class);
+            Value.require(Value.isNotNull(appState, executor, taskService), ServletException::new);
         }
     }
 

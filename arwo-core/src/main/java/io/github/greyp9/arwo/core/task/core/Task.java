@@ -10,6 +10,7 @@ public abstract class Task {
 
     private Date dateStart;
     private Date dateFinish;
+    private Integer exitValue;
 
     private Future<?> future;
 
@@ -44,6 +45,14 @@ public abstract class Task {
 
     public final void setDateFinish(final Date dateFinish) {
         this.dateFinish = dateFinish;
+    }
+
+    public final Integer getExitValue() {
+        return exitValue;
+    }
+
+    public final void setExitValue(final Integer exitValue) {
+        this.exitValue = exitValue;
     }
 
     public final Future<?> getFuture() {

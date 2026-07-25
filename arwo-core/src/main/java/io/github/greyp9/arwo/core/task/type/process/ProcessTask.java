@@ -20,7 +20,6 @@ public class ProcessTask extends Task {
     private final ByteBuffer stderr;
 
     private Long pid;
-    private Integer exitValue;
 
     public final String[] getCmd() {
         return cmd.toArray(new String[0]);
@@ -52,14 +51,6 @@ public class ProcessTask extends Task {
 
     public final void setPid(final Long pid) {
         this.pid = pid;
-    }
-
-    public final Integer getExitValue() {
-        return exitValue;
-    }
-
-    public final void setExitValue(final Integer exitValue) {
-        this.exitValue = exitValue;
     }
 
     public ProcessTask(final String name, final String cmd1, final Map<String, String> env, final File dir) {
