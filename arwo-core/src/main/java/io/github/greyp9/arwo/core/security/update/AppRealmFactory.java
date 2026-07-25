@@ -7,6 +7,8 @@ import io.github.greyp9.arwo.core.res.ResourceU;
 import io.github.greyp9.arwo.core.security.realm.AppPrincipal;
 import io.github.greyp9.arwo.core.security.realm.AppRealm;
 import io.github.greyp9.arwo.core.security.realm.AuthPrincipal;
+import io.github.greyp9.arwo.core.security.realm.MachinePrincipal;
+import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPathContext;
 import io.github.greyp9.arwo.core.xpath.XPather;
@@ -22,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -64,17 +67,27 @@ public final class AppRealmFactory {
         final List<Element> elements = xpather.getElements(
                 "/realm:realm/realm:principals/realm:principal"); // i18n xpath
         for (final Element element : elements) {
-            principals.add(toAuthPrincipal(element, context));
+            principals.add(toAuthPrincipal(element, context, salt));
         }
         return new AppRealm(name, salt, principals);
     }
 
-    private static AuthPrincipal toAuthPrincipal(final Element element, final XPathContext context) throws IOException {
+    private static AuthPrincipal toAuthPrincipal(final Element element,
+                                                 final XPathContext context,
+                                                 final String salt) throws IOException {
         final XPather xpather = new XPather(element, context);
         final String name = xpather.getText("realm:user");  // i18n xpath
         final String roles = xpather.getText("realm:roles");  // i18n xpath
         final String credential = xpather.getText("realm:credential");  // i18n xpath
         final AppPrincipal principal = new AppPrincipal(name, Collections.singleton(roles));
-        return new AuthPrincipal(principal, credential);
+        final AuthPrincipal authPrincipal;
+        if (Value.isEmpty(credential)) {
+            final String credentialGenerate = UUID.randomUUID().toString();
+            final String credentialOut = AppRealm.hashCredential(salt, credentialGenerate);
+            authPrincipal = new MachinePrincipal(principal, credentialOut, credentialGenerate);
+        } else {
+            authPrincipal = new AuthPrincipal(principal, credential);
+        }
+        return authPrincipal;
     }
 }

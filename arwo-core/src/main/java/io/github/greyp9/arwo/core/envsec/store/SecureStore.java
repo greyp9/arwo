@@ -34,12 +34,38 @@ public final class SecureStore {
 
     private static KeyX toKeyX(final File file) throws IOException {
         try {
-            final byte[] secret = new EnvironmentSecret(file.getPath(), null).recover();
-            final SecretKey secretKey = new SecretKeySpec(secret, AES.Const.ALGORITHM);
-            return new KeyX(secretKey, KeyX.Const.TRANSFORM_GCM, KeyX.Const.PARAM_SPEC_GCM);
+            return toKeyX(new EnvironmentSecret(file.getPath(), null).recover());
         } catch (GeneralSecurityException e) {
             throw new IOException(e);
         }
+    }
+
+    public SecureStore() {
+        KeyX keyXCtor;
+        IOException exceptionCtor;
+        try {
+            keyXCtor = toKeyX();
+            exceptionCtor = null;
+        } catch (IOException e) {
+            keyXCtor = null;
+            exceptionCtor = e;
+        }
+        this.keyX = keyXCtor;
+        this.exception = exceptionCtor;
+        this.properties = new Properties();
+    }
+
+    private static KeyX toKeyX() throws IOException {
+        try {
+            return toKeyX(AES.generate().getEncoded());
+        } catch (GeneralSecurityException e) {
+            throw new IOException(e);
+        }
+    }
+
+    private static KeyX toKeyX(final byte[] secret) {
+        final SecretKey secretKey = new SecretKeySpec(secret, AES.Const.ALGORITHM);
+        return new KeyX(secretKey, KeyX.Const.TRANSFORM_GCM, KeyX.Const.PARAM_SPEC_GCM);
     }
 
     public IOException getException() {
@@ -56,6 +82,13 @@ public final class SecureStore {
 
     public void setPropertyProtect(final String key, final String value) throws IOException {
         PropertiesU.setProperty(properties, key, keyX.protect(value));
+    }
+
+    public void setPropertyProtectSafe(final String key, final String value) {
+        try {
+            PropertiesU.setProperty(properties, key, keyX.protect(value));
+        } catch (IOException ignored) {
+        }
     }
 
     public String getProperty(final String key) throws IOException {

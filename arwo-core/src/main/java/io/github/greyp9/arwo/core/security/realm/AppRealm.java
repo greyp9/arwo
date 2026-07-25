@@ -1,8 +1,11 @@
 package io.github.greyp9.arwo.core.security.realm;
 
 import io.github.greyp9.arwo.core.codec.b64.Base64Codec;
+import io.github.greyp9.arwo.core.envsec.store.SecureStore;
 import io.github.greyp9.arwo.core.hash.secure.HashU;
+import io.github.greyp9.arwo.core.value.Value;
 
+import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.security.Principal;
 import java.security.SecureRandom;
@@ -20,15 +23,24 @@ public class AppRealm {
     private final String realmName;
     private final String salt;
     private final Map<String, AuthPrincipal> principals;
+    private final SecureStore secureStore;
     private final String defaultPassword;
     private final Date timestamp;
 
     public AppRealm(final String realmName, final String salt, final Collection<AuthPrincipal> principals) {
         this.realmName = realmName;
         this.salt = salt;
-        this.principals = new TreeMap<String, AuthPrincipal>();
+        this.principals = new TreeMap<>();
+        this.secureStore = new SecureStore();
         for (final AuthPrincipal principal : principals) {
-            this.principals.put(principal.getPrincipal().getName(), principal);
+            final String name = principal.getPrincipal().getName();
+            if (principal instanceof MachinePrincipal) {
+                final MachinePrincipal machine = Value.as(principal, MachinePrincipal.class);
+                secureStore.setPropertyProtectSafe(name, machine.getCredentialGenerate().toString());
+                this.principals.put(name, machine.getAuthPrincipal());
+            } else {
+                this.principals.put(name, principal);
+            }
         }
         defaultPassword = generatePassword(new SecureRandom());
         Logger.getLogger(getClass().getName()).log(Level.OFF, String.format("[%s][%s]", realmName, defaultPassword));
@@ -38,6 +50,10 @@ public class AppRealm {
 
     public final String getName() {
         return realmName;
+    }
+
+    public final String getCredential(final String name) throws IOException {
+        return secureStore.getProperty(name);
     }
 
     public final String getSalt() {

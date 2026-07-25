@@ -6,7 +6,6 @@ import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpRequest;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.httpclient.HttpClient;
-import io.github.greyp9.arwo.core.httpclient.HttpClientU;
 import io.github.greyp9.arwo.core.httpclient.HttpsClient;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.value.NTV;
@@ -47,8 +46,7 @@ public class HttpRunnable implements Runnable {
         final X509Certificate x509 = CertificateU.toX509(StreamU.read(new File(task.getResourceCert())));
         final HttpClient httpClient = new HttpsClient(x509, false);
         final URL url = URI.create(task.getUrl()).toURL();
-        final NameTypeValues headersRequest = NTV.create(Http.Header.AUTHORIZATION, HttpClientU.toBasicAuth(
-                task.getAuthorization(), System.getProperty(task.getAuthorization()).toCharArray()));
+        final NameTypeValues headersRequest = NTV.create(Http.Header.AUTHORIZATION, task.getAuthorization());
         final HttpRequest httpRequest = new HttpRequest(
                 task.getMethod(), url.getFile(), url.getQuery(), headersRequest, null);
         final HttpResponse httpResponse = httpClient.doRequest(url, httpRequest);

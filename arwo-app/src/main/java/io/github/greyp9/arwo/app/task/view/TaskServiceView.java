@@ -104,8 +104,21 @@ public class TaskServiceView {
         insertRow.setNextColumn(Duration.toDuration(DurationU.toDuration(
                 task.getDateStart(), task.getDateFinish(), httpRequest.getDate())));
 
-        Value.asOptional(task, ProcessTask.class).ifPresent(pt -> addColumnsProcessTask(insertRow, pt));
+        final ProcessTask processTask = Value.as(task, ProcessTask.class);
+        if (processTask == null) {
+            addColumnsTask(insertRow);
+        } else {
+            addColumnsProcessTask(insertRow, processTask);
+        }
+        insertRow.setNextColumn(task.getExitValue());
         rowSet.add(insertRow.getRow());
+    }
+
+    private void addColumnsTask(final InsertRow insertRow) {
+        final int emptyColumns = 4;
+        for (int i = 0; (i < emptyColumns); ++i) {
+            insertRow.setNextColumn(null);
+        }
     }
 
     private void addColumnsProcessTask(final InsertRow insertRow, final ProcessTask task) {
@@ -121,6 +134,5 @@ public class TaskServiceView {
         insertRow.setNextColumn((task.getPid() == null) ? null : Long.toString(task.getPid()));
         insertRow.setNextColumn(new TableViewLink(NumberScale.toString(lengthStdout), null, PathU.toDir(hrefStdout)));
         insertRow.setNextColumn(new TableViewLink(NumberScale.toString(lengthStderr), null, PathU.toDir(hrefStderr)));
-        insertRow.setNextColumn(task.getExitValue());
     }
 }
