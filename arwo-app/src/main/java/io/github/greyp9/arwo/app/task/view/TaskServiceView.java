@@ -1,32 +1,25 @@
 package io.github.greyp9.arwo.app.task.view;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
+import io.github.greyp9.arwo.app.core.view.table.UserStateTable;
 import io.github.greyp9.arwo.core.app.App;
-import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.hash.CRCU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
-import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.number.NumberScale;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.table.cell.Duration;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
-import io.github.greyp9.arwo.core.table.core.TableU;
-import io.github.greyp9.arwo.core.table.html.TableView;
 import io.github.greyp9.arwo.core.table.insert.InsertRow;
 import io.github.greyp9.arwo.core.table.metadata.ColumnMetaData;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
-import io.github.greyp9.arwo.core.table.model.Table;
-import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.RowSet;
-import io.github.greyp9.arwo.core.table.state.ViewState;
 import io.github.greyp9.arwo.core.task.core.Task;
 import io.github.greyp9.arwo.core.task.service.TaskService;
 import io.github.greyp9.arwo.core.task.type.process.ProcessTask;
 import io.github.greyp9.arwo.core.value.Value;
-import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
@@ -48,17 +41,9 @@ public class TaskServiceView {
 
     public final void addContent(final Element html) throws IOException {
         final RowSet rowSet = createRowSet();
-        final Bundle bundle = userState.getBundle();
-        final Locus locus = userState.getLocus();
-        final ViewState viewState = userState.getViewStates().getViewState(
-                httpRequest.getBaseURI(), rowSet.getMetaData(), bundle, locus);
-        final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), null, null);
-        TableU.addFooterStandard(table, bundle);
-        final XedActionFilter filter = new XedActionFilter(userState.getXedFactory(), userState.getLocale());
-        final TableContext tableContext = new TableContext(
-                viewState, filter, userState.getSubmitID(), App.CSS.TABLE, bundle, locus);
-        final TableView tableView = new TableView(table, tableContext);
-        tableView.addContentTo(html);
+        final UserStateTable table = new UserStateTable(
+                httpRequest, userState, null, httpRequest.getDate());
+        table.toTableView(rowSet).addContentTo(html);
     }
 
     private RowSet createRowSet() {
