@@ -13,6 +13,7 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
@@ -27,7 +28,7 @@ public class TaskServiceTest {
         logger.info(config.getName());
         final TaskService taskService = new TaskService(config);
 
-        final Task task1 = taskService.submit(new ProcessTask("name", "ls", null, null));
+        final Task task1 = taskService.submit(new ProcessTask("name", new Date(), "ls", null, null));
         int expectedTasks = 1;
         Assertions.assertEquals(expectedTasks, taskService.getTasks().size());
         Assertions.assertEquals(expectedTasks, taskService.getFutures().size());
@@ -44,7 +45,7 @@ public class TaskServiceTest {
         Assertions.assertFalse(stdout1.isEmpty());
 
         final File dir = new File(SystemU.userDir());
-        final Task task2 = taskService.submit(new ProcessTask("name", "ls", null, dir));
+        final Task task2 = taskService.submit(new ProcessTask("name", new Date(), "ls", null, dir));
         ++expectedTasks;
         Assertions.assertEquals(expectedTasks, taskService.getTasks().size());
         Assertions.assertEquals(expectedTasks, taskService.getFutures().size());

@@ -62,7 +62,7 @@ public final class TaskServiceStore {
         final File folderPersist = taskService.getFolderPersist();
 
         final ProcessTask processTask = new ProcessTask(
-                name, Collections.singletonList(commandText), null, null,
+                name, dateSubmit, Collections.singletonList(commandText), null, null,
                 new ByteBufferFile(toStreamFile(folderPersist, dateSubmit, ProcessTask.Const.STREAM_STDOUT)),
                 new ByteBufferFile(toStreamFile(folderPersist, dateSubmit, ProcessTask.Const.STREAM_STDERR)));
         processTask.setPid(NumberU.toLong(ElementU.getAttribute(element, ProcessTask.Const.FIELD_PID)));

@@ -9,9 +9,11 @@ import io.github.greyp9.arwo.core.vm.exec.ExecutorServiceFactory;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
@@ -51,6 +53,15 @@ public final class TaskService {
 
     public String getResource() {
         return resource;
+    }
+
+    public Date toUnique(final Date date) {
+        final Set<Long> millisSet = tasks.stream().map(t -> t.getDateSubmit().getTime()).collect(Collectors.toSet());
+        long millis = date.getTime();
+        while (millisSet.contains(millis)) {
+            ++millis;
+        }
+        return new Date(millis);
     }
 
     public File getFolderPersist() {

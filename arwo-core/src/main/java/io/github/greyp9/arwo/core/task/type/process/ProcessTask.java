@@ -53,12 +53,14 @@ public class ProcessTask extends Task {
         this.pid = pid;
     }
 
-    public ProcessTask(final String name, final String cmd1, final Map<String, String> env, final File dir) {
-        this(name, Collections.singletonList(cmd1), env, dir);
+    public ProcessTask(final String name, final Date dateSubmit, final String cmd1,
+                       final Map<String, String> env, final File dir) {
+        this(name, dateSubmit, Collections.singletonList(cmd1), env, dir);
     }
 
-    public ProcessTask(final String name, final List<String> cmd, final Map<String, String> env, final File dir) {
-        super(name, new Date());
+    public ProcessTask(final String name, final Date dateSubmit, final List<String> cmd,
+                       final Map<String, String> env, final File dir) {
+        super(name, dateSubmit);
         this.cmd = cmd;
         this.env = env;
         this.dir = dir;
@@ -67,9 +69,10 @@ public class ProcessTask extends Task {
         this.stderr = new ByteBuffer(charset);
     }
 
-    public ProcessTask(final String name, final List<String> cmd, final Map<String, String> env, final File dir,
+    public ProcessTask(final String name, final Date dateSubmit, final List<String> cmd,
+                       final Map<String, String> env, final File dir,
                        final ByteBuffer stdout, final ByteBuffer stderr) {
-        super(name, new Date());
+        super(name, dateSubmit);
         this.cmd = cmd;
         this.env = env;
         this.dir = dir;

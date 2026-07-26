@@ -78,7 +78,8 @@ public final class SHHandlerPost extends AppHandlerPost {
                 final String scriptID = DateX.Factory.createFilenameMilli().toString(script.getDateSubmit());
                 location = PathU.toDir(getHttpRequest().getBaseURI(), context, scriptID);
             } else {
-                taskService.submit(new ProcessTask(context, Collections.singletonList(command), null, null));
+                taskService.submit(new ProcessTask(context, taskService.toUnique(getHttpRequest().getDate()),
+                        Collections.singletonList(command), null, null));
                 location = taskService.getResource();
             }
         }
