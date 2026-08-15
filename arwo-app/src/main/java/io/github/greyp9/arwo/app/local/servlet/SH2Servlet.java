@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.local.sh2.handler.SHHandlerGet;
 import io.github.greyp9.arwo.app.local.sh2.handler.SHHandlerPost;
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.date.DurationU;
 import io.github.greyp9.arwo.core.exec.AppExecutorService;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.gz.HttpResponseGZipU;
@@ -36,8 +37,9 @@ public class SH2Servlet extends javax.servlet.http.HttpServlet {
             this.appState = (AppState) AppNaming.lookup(context, App.Naming.APP_STATE);
             this.executor = (AppExecutorService) AppNaming.lookup(context, App.Naming.EXECUTOR);
             final String taskServiceName = getInitParameter(TaskService.class.getSimpleName());
-            this.taskService = Value.as(AppNaming.lookup(
-                    TaskService.class.getName(), taskServiceName), TaskService.class);
+            final int retries = 12;
+            this.taskService = Value.as(AppNaming.lookup(TaskService.class.getName(), taskServiceName,
+                    retries, DurationU.Const.QUARTER_SECOND), TaskService.class);
             Value.require(Value.isNotNull(appState, executor, taskService), ServletException::new);
         }
     }
