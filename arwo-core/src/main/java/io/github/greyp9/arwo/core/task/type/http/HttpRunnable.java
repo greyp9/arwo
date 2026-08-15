@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.core.task.type.http;
 
 import io.github.greyp9.arwo.core.cer.CertificateU;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
+import io.github.greyp9.arwo.core.file.meta.MetaFileFactory;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpRequest;
 import io.github.greyp9.arwo.core.http.HttpResponse;
@@ -52,6 +53,7 @@ public class HttpRunnable implements Runnable {
         final HttpResponse httpResponse = httpClient.doRequest(url, httpRequest);
         final byte[] responseEntity = StreamU.read(httpResponse.getEntity());
         logger.info(UTF8Codec.toString(responseEntity));
+        task.getMetaFiles().add(MetaFileFactory.create(null, 0L, responseEntity));
         return httpResponse.isSuccess() ? 0 : 1;
     }
 }

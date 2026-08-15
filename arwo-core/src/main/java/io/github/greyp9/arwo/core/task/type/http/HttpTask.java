@@ -1,26 +1,30 @@
 package io.github.greyp9.arwo.core.task.type.http;
 
+import io.github.greyp9.arwo.core.file.meta.MetaFile;
 import io.github.greyp9.arwo.core.task.core.Task;
 
 import java.io.File;
 import java.util.Date;
+import java.util.List;
 
 public class HttpTask extends Task {
     private final String resourceCert;
     private final String method;
     private final String url;
     private final String authorization;
-    private final String transform;
+    //private final String transform;
+    private final List<MetaFile> metaFiles;
 
     public HttpTask(final String name, final Date dateSubmit, final String resourceCert,
                     final String method, final String url, final String authorization,
-                    final String transform) {
+                    final List<MetaFile> metaFiles) {
         super(name, dateSubmit);
         this.resourceCert = resourceCert;
         this.method = method;
         this.url = url;
         this.authorization = authorization;
-        this.transform = transform;
+        //this.transform = transform;
+        this.metaFiles = metaFiles;
     }
 
     public final String getResourceCert() {
@@ -39,8 +43,14 @@ public class HttpTask extends Task {
         return authorization;
     }
 
+/*
     public final String getTransform() {
         return transform;
+    }
+*/
+
+    public final List<MetaFile> getMetaFiles() {
+        return metaFiles;
     }
 
     @Override

@@ -99,6 +99,14 @@ public final class StreamU {
         }
     }
 
+    public static byte[] readSafe(final InputStream is) {
+        try {
+            return read(is);
+        } catch (IOException e) {
+            return null;
+        }
+    }
+
     public static void writeMkdirs(final File file, final byte[] bytes) throws IOException {
         FileU.ensureFolders(file.getParentFile());
         write(file, bytes);

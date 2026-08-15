@@ -95,4 +95,13 @@ public final class SecureStore {
         final String valueSecure = properties.getProperty(key);
         return (valueSecure == null) ? null : keyX.unprotect(valueSecure);
     }
+
+    public String getPropertySafe(final String key) {
+        final String valueSecure = properties.getProperty(key);
+        try {
+            return (valueSecure == null) ? null : keyX.unprotect(valueSecure);
+        } catch (IOException e) {
+            return null;
+        }
+    }
 }
