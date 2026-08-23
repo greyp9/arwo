@@ -1,7 +1,6 @@
 package io.github.greyp9.arwo.core.task.service;
 
 import io.github.greyp9.arwo.core.file.FileU;
-import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.task.config.TaskServiceConfig;
 import io.github.greyp9.arwo.core.task.core.Task;
@@ -14,7 +13,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Future;
@@ -47,15 +45,6 @@ public final class TaskService {
 
     public List<Runnable> getRunnables() {
         return runnables;
-    }
-
-    public Map<String, String> toEnv(final String key) {
-        final Map<String, String> env = new HashMap<>();
-        final List<String> keys = Value.split(Http.Token.COMMA, key);
-        for (String keyIt : keys) {
-            Optional.ofNullable(environments.get(keyIt)).ifPresent(env::putAll);
-        }
-        return env;
     }
 
     public Map<String, String> getEnv(final String key) {
