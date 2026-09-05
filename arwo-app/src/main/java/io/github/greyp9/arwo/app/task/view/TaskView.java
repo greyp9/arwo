@@ -23,6 +23,7 @@ import io.github.greyp9.arwo.core.task.type.process.ProcessTask;
 import io.github.greyp9.arwo.core.value.NameTypeValuesU;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
+import io.github.greyp9.arwo.core.xed.action.XedActionStdin;
 import io.github.greyp9.arwo.core.xml.ElementU;
 import org.w3c.dom.Element;
 
@@ -45,6 +46,11 @@ public class TaskView {
 
     public final void addContent(final Element html) throws IOException {
         ElementU.addElement(html, Html.DIV, Value.join(Html.SPACE, Arrays.asList(task.getCmd())));
+        // means to write to stdin
+        if (task.isRunning()) {
+            new XedActionStdin(userState.getXedFactory(), userState.getLocale()).addPropertyStripTo(
+                    html, userState.getSubmitID(), Arrays.asList(App.Action.STDIN, App.Action.SIGNAL));
+        }
         final String dateSubmit = DateX.toFilename(task.getDateSubmit());
         final String hrefStdout = PathU.toDir(httpRequest.getBaseURI(),
                 task.getName(), dateSubmit, ProcessTask.Const.STREAM_STDOUT);
@@ -78,7 +84,7 @@ public class TaskView {
         addRow(rowSet, Task.Const.FIELD_DATE_SUBMIT, XsdDateU.toXSDZMillis(task.getDateSubmit()));
         addRow(rowSet, Task.Const.FIELD_DATE_START, XsdDateU.toXSDZMillis(task.getDateStart()));
         addRow(rowSet, Task.Const.FIELD_DATE_FINISH, XsdDateU.toXSDZMillis(task.getDateFinish()));
-        addRow(rowSet, ProcessTask.Const.FIELD_EXIT_VALUE, Integer.toString(task.getExitValue()));
+        addRow(rowSet, ProcessTask.Const.FIELD_EXIT_VALUE, String.valueOf(task.getExitValue()));
         return rowSet;
     }
 

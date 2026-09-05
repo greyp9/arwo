@@ -152,7 +152,7 @@ public class ScriptRunnable implements Runnable {
         Integer exitValue = null;
         while (exitValue == null) {
             ThreadU.sleepMillis(pollInterval);
-            exitValue = isProcessFinished(process);
+            exitValue = ProcessU.isProcessFinished(process);
         }
         // allow process complete
         runnableStdin.stop();
@@ -162,15 +162,6 @@ public class ScriptRunnable implements Runnable {
         // notify caller thread
         MutexU.notifyAll(this);
         return exitValue;
-    }
-
-    @SuppressWarnings("PMD.OnlyOneReturn")
-    private static Integer isProcessFinished(final Process process) {
-        try {
-            return process.exitValue();
-        } catch (IllegalThreadStateException e) {
-            return null;
-        }
     }
 
     private static class Const {

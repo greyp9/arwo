@@ -75,7 +75,7 @@ public abstract class KubeView {
         final Element footer = new XPather(html, null).getElement(Html.XPath.FOOTER);
         addMenu(header);
         if (PropertiesU.isBoolean(userState.getMenuSystemState(), MenuKube.MENU_LOG_OPTIONS)) {
-            widget.addPropertyStripTo(content, userState.getSubmitID());
+            widget.addPropertyStripTo(content, userState.getSubmitID(), Collections.singletonList(App.Action.UPDATE));
         }
 
         final HttpResponse httpResponse = addContentTo(content);

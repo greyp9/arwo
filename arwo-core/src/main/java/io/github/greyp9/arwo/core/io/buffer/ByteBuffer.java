@@ -1,5 +1,7 @@
 package io.github.greyp9.arwo.core.io.buffer;
 
+import io.github.greyp9.arwo.core.value.Value;
+
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.nio.charset.Charset;
@@ -58,7 +60,7 @@ public class ByteBuffer {
     }
 
     public final synchronized boolean addBytes(final byte[] bytes) {
-        return byteBuffers.add(bytes);
+        return !Value.isEmpty(bytes) && byteBuffers.add(bytes);
     }
 
     public final synchronized boolean addString(final String string) {

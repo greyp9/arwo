@@ -6,11 +6,16 @@ import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.model.XedFactory;
 
 import java.io.IOException;
+import java.util.Locale;
 
 public class XedActionStdin extends XedAction {
 
     public XedActionStdin(final XedFactory xedFactory) throws IOException {
         super(App.Actions.QNAME_STDIN, xedFactory, null);
+    }
+
+    public XedActionStdin(final XedFactory factory, final Locale locale) throws IOException {
+        super(App.Actions.QNAME_STDIN, factory, locale);
     }
 
     public final String getStdin(final NameTypeValues httpArguments) throws IOException {

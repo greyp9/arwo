@@ -66,7 +66,7 @@ public class TaskServlet extends javax.servlet.http.HttpServlet {
         // process request
         final ServletHttpRequest httpRequest = ServletU.read(request);
         final AppUserState userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
-        final HttpResponse httpResponse = new TaskHandlerPost(httpRequest, userState).doPostSafe();
+        final HttpResponse httpResponse = new TaskHandlerPost(httpRequest, userState, taskService).doPostSafe();
         // send response
         ServletU.write(httpResponse, response);
     }

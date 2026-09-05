@@ -34,7 +34,7 @@ import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Collections;
 
-public class TaskHandlerGet {
+public class TaskHandlerGet implements TaskHandler {
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
     private final TaskService taskService;
@@ -91,12 +91,7 @@ public class TaskHandlerGet {
     }
 
     private HttpResponse doGetTask(final String name, final String date) throws IOException {
-        final ProcessTask task = taskService.getTasks().stream()
-                .filter(t -> t.getName().equals(name))
-                .filter(t -> t.getDateSubmit().equals(DateX.fromFilename(date)))
-                .filter(t -> t instanceof ProcessTask)
-                .map(t -> (ProcessTask) t)
-                .findFirst().orElse(null);
+        final ProcessTask processTask = getProcessTask(taskService, name, DateX.fromFilename(date));
         // template html
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
         final Element header = new XPather(html, null).getElement(Html.XPath.HEADER);
@@ -106,7 +101,7 @@ public class TaskHandlerGet {
         final String labelContext = Value.wrap("[", "]", taskService.getName());
         final AppTitle appTitle = AppTitle.Factory.getResourceLabel(httpRequest, userState.getBundle(), labelContext);
         addMenus(header);
-        new TaskView(httpRequest, userState, task).addContent(content);
+        new TaskView(httpRequest, userState, processTask).addContent(content);
 
         return new AppHtmlView(httpRequest, userState, appTitle)
                 .title(header)
@@ -131,12 +126,7 @@ public class TaskHandlerGet {
 
     private HttpResponse doGetStream(final String name, final String date, final String stream) throws IOException {
         final HttpResponse httpResponse;
-        final ProcessTask task = taskService.getTasks().stream()
-                .filter(t -> t.getName().equals(name))
-                .filter(t -> t.getDateSubmit().equals(DateX.fromFilename(date)))
-                .filter(t -> t instanceof ProcessTask)
-                .map(t -> (ProcessTask) t)
-                .findFirst().orElse(null);
+        final ProcessTask task = getProcessTask(taskService, name, DateX.fromFilename(date));
         if (task == null) {
             httpResponse = HttpResponseU.to302(httpRequest.getBaseURI());
         } else if ("stderr".equals(stream)) {

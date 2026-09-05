@@ -7,6 +7,7 @@ import org.w3c.dom.Element;
 
 import javax.xml.namespace.QName;
 import java.io.IOException;
+import java.util.Collection;
 import java.util.Locale;
 
 public class XedWidget {
@@ -38,7 +39,7 @@ public class XedWidget {
     }
 
     public final void addPropertyStripTo(
-            final Element html, final String submitID) throws IOException {
-        xedAction.addPropertyStripTo(html, submitID);
+            final Element html, final String submitID, final Collection<String> actions) throws IOException {
+        xedAction.addPropertyStripTo(html, submitID, actions);
     }
 }

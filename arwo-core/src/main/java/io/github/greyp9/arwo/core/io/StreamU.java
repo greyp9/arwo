@@ -144,6 +144,14 @@ public final class StreamU {
         }
     }
 
+    public static void writeFlush(final OutputStream outputStream, final byte[] bytes) throws IOException {
+        try {
+            outputStream.write(bytes);
+        } finally {
+            outputStream.flush();
+        }
+    }
+
     public static void writeFully(final InputStream is, final OutputStream os) throws IOException {
         final BufferedInputStream bis = new BufferedInputStream(is);
         final BufferedOutputStream bos = new BufferedOutputStream(os);

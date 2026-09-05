@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.core.exec.script;
 
 import io.github.greyp9.arwo.core.io.runnable.InputStreamRunnable;
 import io.github.greyp9.arwo.core.io.runnable.OutputStreamRunnable;
+import io.github.greyp9.arwo.core.vm.process.ProcessU;
 import io.github.greyp9.arwo.core.vm.thread.ThreadU;
 
 import java.io.IOException;
@@ -46,7 +47,7 @@ public final class ProcessMonitor {
         Integer exitValue = null;
         while (exitValue == null) {
             ThreadU.sleepMillis(pollInterval);
-            exitValue = isProcessFinished(process);
+            exitValue = ProcessU.isProcessFinished(process);
             if (signal.get() != null) {
                 process.destroy();
             }
@@ -58,13 +59,5 @@ public final class ProcessMonitor {
             stream.waitForComplete();
         }
         return exitValue;
-    }
-
-    private static Integer isProcessFinished(final Process process) {
-        try {
-            return process.exitValue();
-        } catch (IllegalThreadStateException e) {
-            return null;
-        }
     }
 }

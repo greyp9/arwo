@@ -10,9 +10,11 @@ import io.github.greyp9.arwo.core.vm.process.ProcessU;
 import io.github.greyp9.arwo.core.vm.thread.ThreadU;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.logging.Logger;
@@ -34,19 +36,23 @@ public class ProcessRunnable implements Runnable {
         final String[] envp = EnvironmentU.toEnvP(MapU.join(new HashMap<>(), System.getenv(), task.getEnv()));
         try {
             task.setDateStart(new Date());
-            final Process process = runtime.exec(ShellU.toCommandArray(task.getCmd()), envp, task.getDir());
+            final String[] commandArray = task.getShell() ? ShellU.toCommandArray(task.getCmd()) : task.getCmd();
+            final Process process = runtime.exec(commandArray, envp, task.getDir());
             task.setPid(ProcessU.getProcessId(process));
             final InputStream stdout = new BufferedInputStream(process.getInputStream());
             final InputStream stderr = new BufferedInputStream(process.getErrorStream());
+            final OutputStream stdin = new BufferedOutputStream(process.getOutputStream());
             final ByteBuffer byteBufferStdout = task.getStdout();
             final ByteBuffer byteBufferStderr = task.getStderr();
+            final ByteBuffer byteBufferStdin = task.getStdin();
 
             Integer exitValue = null;
             while (exitValue == null) {
                 ThreadU.sleepMillis(DurationU.Const.TEN_MILLIS);
-                exitValue = isProcessFinished(process);
+                exitValue = ProcessU.isProcessFinished(process);
                 byteBufferStdout.addBytes(StreamU.read(stdout, stdout.available()));
                 byteBufferStderr.addBytes(StreamU.read(stderr, stderr.available()));
+                StreamU.writeFlush(stdin, byteBufferStdin.getBytes(true));
             }
             task.setDateFinish(new Date());
             task.setExitValue(exitValue);
@@ -57,14 +63,6 @@ public class ProcessRunnable implements Runnable {
             throw new RuntimeException(e);
         } finally {
             new ProcessPersister(task).persist(folderPersist);
-        }
-    }
-
-    private static Integer isProcessFinished(final Process process) {
-        try {
-            return process.exitValue();
-        } catch (IllegalThreadStateException e) {
-            return null;
         }
     }
 }

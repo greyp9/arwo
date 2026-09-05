@@ -25,6 +25,7 @@ import org.w3c.dom.Element;
 import java.io.IOException;
 import java.sql.Types;
 import java.util.Arrays;
+import java.util.concurrent.Future;
 
 public class TaskServiceView {
     private final TaskService taskService;
@@ -62,6 +63,7 @@ public class TaskServiceView {
                 new ColumnMetaData("dateSubmit", Types.TIMESTAMP, true),
                 new ColumnMetaData("dateStart", Types.TIMESTAMP),
                 new ColumnMetaData("dateFinish", Types.TIMESTAMP),
+                new ColumnMetaData("future", Types.VARCHAR),
                 new ColumnMetaData("wait", Types.INTEGER),
                 new ColumnMetaData("run", Types.INTEGER),
                 new ColumnMetaData("crc", Types.VARCHAR),
@@ -76,13 +78,16 @@ public class TaskServiceView {
     private void addRow(final RowSet rowSet, final Task task) {
         final String dateSubmit = DateX.toFilename(task.getDateSubmit());
         final String hrefTask = PathU.toDir(httpRequest.getBaseURI(), task.getName(), dateSubmit);
-
+        final Future<?> future = task.getFuture();
+        final String futureText = (future == null) ? null
+                : future.isCancelled() ? "CANCELLED" : future.isDone() ? "DONE" : null;
         final InsertRow insertRow = new InsertRow(rowSet);
         insertRow.setNextColumn(new TableViewLink(UTF16.SELECT, App.Action.SELECT, hrefTask));
         insertRow.setNextColumn(task.getName());
         insertRow.setNextColumn(task.getDateSubmit());
         insertRow.setNextColumn(task.getDateStart());
         insertRow.setNextColumn(task.getDateFinish());
+        insertRow.setNextColumn(futureText);
 
         insertRow.setNextColumn(Duration.toDuration(DurationU.toDuration(
                 task.getDateSubmit(), task.getDateStart(), httpRequest.getDate())));

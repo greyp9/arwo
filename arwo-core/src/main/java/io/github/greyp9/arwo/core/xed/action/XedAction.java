@@ -24,7 +24,6 @@ import javax.xml.namespace.QName;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Collection;
-import java.util.Collections;
 import java.util.Locale;
 
 public class XedAction {
@@ -72,12 +71,13 @@ public class XedAction {
         new PropertyPageHtmlView(new XedPropertyPageView(null, cursor, buttons), xedRequest).addContentTo(html);
     }
 
-    public final void addPropertyStripTo(final Element html, final String submitID) throws IOException {
+    public final void addPropertyStripTo(final Element html,
+                                         final String submitID,
+                                         final Collection<String> actions) throws IOException {
         final Xed xedUI = getXedUI(xed.getLocale());
         final XedPropertyPageView pageView = new XedPropertyPageView(null, new XedNav(xedUI).getRoot());
         final ActionFactory actionFactory = new ActionFactory(
                 submitID, xedUI.getBundle(), App.Target.SESSION, App.Action.UPDATE, null);
-        final Collection<String> actions = Collections.singletonList(App.Action.UPDATE);
         final ActionButtons buttons = actionFactory.create(App.Action.REFRESH, false, actions);
         new PropertyStripHtmlView(pageView, buttons).addContentDiv(html);
     }

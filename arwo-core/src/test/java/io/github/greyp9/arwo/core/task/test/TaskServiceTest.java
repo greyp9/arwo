@@ -3,6 +3,7 @@ package io.github.greyp9.arwo.core.task.test;
 import io.github.greyp9.arwo.core.charset.UTF8Codec;
 import io.github.greyp9.arwo.core.date.XsdDateU;
 import io.github.greyp9.arwo.core.lang.SystemU;
+import io.github.greyp9.arwo.core.task.config.EnvironmentConfig;
 import io.github.greyp9.arwo.core.task.config.TaskServiceConfig;
 import io.github.greyp9.arwo.core.task.core.Task;
 import io.github.greyp9.arwo.core.task.service.TaskService;
@@ -13,8 +14,11 @@ import org.junit.jupiter.api.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Logger;
@@ -24,11 +28,11 @@ public class TaskServiceTest {
 
     @Test
     void testVanilla() throws IOException, ExecutionException, InterruptedException {
-        final TaskServiceConfig config = new TaskServiceConfig("task-service-1", 1, null, null);
+        final TaskServiceConfig config = new TaskServiceConfig("service", 1, null, null);
         logger.info(config.getName());
         final TaskService taskService = new TaskService(config);
 
-        final Task task1 = taskService.submit(new ProcessTask("name", new Date(), "ls", null, null));
+        final Task task1 = taskService.submit(new ProcessTask("name", new Date(), "ls", false, null, null));
         int expectedTasks = 1;
         Assertions.assertEquals(expectedTasks, taskService.getTasks().size());
         Assertions.assertEquals(expectedTasks, taskService.getFutures().size());
@@ -45,7 +49,7 @@ public class TaskServiceTest {
         Assertions.assertFalse(stdout1.isEmpty());
 
         final File dir = new File(SystemU.userDir());
-        final Task task2 = taskService.submit(new ProcessTask("name", new Date(), "ls", null, dir));
+        final Task task2 = taskService.submit(new ProcessTask("name", new Date(), "ls", false, null, dir));
         ++expectedTasks;
         Assertions.assertEquals(expectedTasks, taskService.getTasks().size());
         Assertions.assertEquals(expectedTasks, taskService.getFutures().size());
@@ -67,5 +71,67 @@ public class TaskServiceTest {
                     XsdDateU.toXSDZMillis(task.getDateStart()),
                     XsdDateU.toXSDZMillis(task.getDateFinish())));
         }
+    }
+
+    @Test
+    void testEnvironment() throws ExecutionException, InterruptedException, IOException {
+        final Date date = new Date();
+        final String envKey = "A";
+        final String key = "FOO";
+        final String value = XsdDateU.toXSDZMillis(date);
+        final TaskServiceConfig config = new TaskServiceConfig("service", 1, null, null);
+        config.addEnvironment(new EnvironmentConfig(envKey, Collections.singletonMap(key, value)));
+        final TaskService taskService = new TaskService(config);
+        final Map<String, String> env = taskService.getEnv(envKey);
+        final Task task = taskService.submit(
+                new ProcessTask("task", date, Collections.singletonList("echo $FOO"), true, env, null));
+        task.getFuture().get();
+        final ProcessTask processTask = Assertions.assertInstanceOf(ProcessTask.class, task);
+        final String stdout = processTask.getStdout().getString();
+        Assertions.assertTrue(stdout.contains(value));
+    }
+
+    @Test
+    void testShell() throws ExecutionException, InterruptedException, IOException {
+        final String[] commandArray = { "ls" };
+        final TaskServiceConfig config = new TaskServiceConfig("service", 1, null, null);
+        final TaskService taskService = new TaskService(config);
+        final Task task = taskService.submit(
+                new ProcessTask("task", new Date(), Arrays.asList(commandArray), true, null, null));
+        final ProcessTask processTask = Assertions.assertInstanceOf(ProcessTask.class, task);
+        task.getFuture().get();
+        final String stdout = processTask.getStdout().getString();
+        logger.info(stdout);
+        Assertions.assertTrue(stdout.contains("pom.xml"));
+    }
+
+
+    @Test
+    void testPWD() throws ExecutionException, InterruptedException, IOException {
+        final TaskServiceConfig config = new TaskServiceConfig("service", 1, null, null);
+        final TaskService taskService = new TaskService(config);
+        final Task task = taskService.submit(
+                new ProcessTask("task", new Date(), Collections.singletonList("pwd"), true, null, null));
+        final ProcessTask processTask = Assertions.assertInstanceOf(ProcessTask.class, task);
+        task.getFuture().get();
+        final String stdout = processTask.getStdout().getString();
+        logger.info(stdout);
+        Assertions.assertTrue(stdout.contains(SystemU.userDir()));
+    }
+
+    @Test
+    void testAdditionalStdin() throws ExecutionException, InterruptedException, IOException {
+        final Date date = new Date();
+        final String value = XsdDateU.toXSDZMillis(date);
+        final TaskServiceConfig config = new TaskServiceConfig("service", 1, null, null);
+        final TaskService taskService = new TaskService(config);
+        final Task task = taskService.submit(
+                new ProcessTask("task", date, "read MY_STRING && echo $MY_STRING", true, null, null));
+        final ProcessTask processTask = Assertions.assertInstanceOf(ProcessTask.class, task);
+        processTask.getStdin().addString(value + "\n");
+        task.getFuture().get();
+        final String stdout = processTask.getStdout().getString();
+        logger.info(stdout);
+        Assertions.assertTrue(stdout.contains(value));
     }
 }

@@ -79,7 +79,7 @@ public final class ScriptRunnable implements Runnable {
         Integer exitValue = null;
         while (exitValue == null) {
             ThreadU.sleepMillis(POLL_INTERVAL);
-            exitValue = isProcessFinished(process);
+            exitValue = ProcessU.isProcessFinished(process);
             if (signal.get() != null) {
                 process.destroy();
             }
@@ -91,14 +91,6 @@ public final class ScriptRunnable implements Runnable {
             stream.waitForComplete();
         }
         return exitValue;
-    }
-
-    private static Integer isProcessFinished(final Process process) {
-        try {
-            return process.exitValue();
-        } catch (IllegalThreadStateException e) {
-            return null;
-        }
     }
 */
 

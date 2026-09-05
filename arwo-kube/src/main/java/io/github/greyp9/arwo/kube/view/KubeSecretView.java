@@ -24,6 +24,7 @@ import org.w3c.dom.Element;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class KubeSecretView extends KubeView {
     private final String endpoint;
@@ -70,7 +71,7 @@ public class KubeSecretView extends KubeView {
     }
 
     private HttpResponse addDatumTo(final V1Secret v1Secret) {
-        final Map<String, byte[]> data = v1Secret.getData();
+        final Map<String, byte[]> data = (v1Secret == null) ? new TreeMap<>() : v1Secret.getData();
         final byte[] payload = (data == null) ? null : data.get(datum);
         if (payload == null) {
             return HttpResponseU.to404();
