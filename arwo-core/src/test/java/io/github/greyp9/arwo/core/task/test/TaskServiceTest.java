@@ -6,6 +6,7 @@ import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.task.config.EnvironmentConfig;
 import io.github.greyp9.arwo.core.task.config.TaskServiceConfig;
 import io.github.greyp9.arwo.core.task.core.Task;
+import io.github.greyp9.arwo.core.task.service.Environment;
 import io.github.greyp9.arwo.core.task.service.TaskService;
 import io.github.greyp9.arwo.core.task.type.process.ProcessTask;
 import io.github.greyp9.arwo.core.value.Value;
@@ -18,7 +19,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Future;
 import java.util.logging.Logger;
@@ -82,9 +82,9 @@ public class TaskServiceTest {
         final TaskServiceConfig config = new TaskServiceConfig("service", 1, null, null);
         config.addEnvironment(new EnvironmentConfig(envKey, Collections.singletonMap(key, value)));
         final TaskService taskService = new TaskService(config);
-        final Map<String, String> env = taskService.getEnv(envKey);
+        final Environment environment = new Environment(taskService.getEnv(envKey));
         final Task task = taskService.submit(
-                new ProcessTask("task", date, Collections.singletonList("echo $FOO"), true, env, null));
+                new ProcessTask("task", date, Collections.singletonList("echo $FOO"), true, environment, null));
         task.getFuture().get();
         final ProcessTask processTask = Assertions.assertInstanceOf(ProcessTask.class, task);
         final String stdout = processTask.getStdout().getString();

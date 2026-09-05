@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.core.task.type.process;
 
 import io.github.greyp9.arwo.core.io.buffer.ByteBuffer;
 import io.github.greyp9.arwo.core.task.core.Task;
+import io.github.greyp9.arwo.core.task.service.Environment;
 
 import java.io.File;
 import java.nio.charset.Charset;
@@ -14,7 +15,7 @@ import java.util.Map;
 public class ProcessTask extends Task {
     private final List<String> cmd;
     private final boolean shell;
-    private final Map<String, String> env;
+    private final Environment env;
     private final File dir;
     private final Charset charset;
     private final ByteBuffer stdin;
@@ -32,11 +33,7 @@ public class ProcessTask extends Task {
     }
 
     public final Map<String, String> getEnv() {
-        return env;
-    }
-
-    public final void setEnv(final String key, final String value) {
-        env.put(key, value);
+        return (env == null) ? null : env.getEnv();
     }
 
     public final File getDir() {
@@ -68,12 +65,12 @@ public class ProcessTask extends Task {
     }
 
     public ProcessTask(final String name, final Date dateSubmit, final String cmd1,
-                       final boolean shell, final Map<String, String> env, final File dir) {
+                       final boolean shell, final Environment env, final File dir) {
         this(name, dateSubmit, Collections.singletonList(cmd1), shell, env, dir);
     }
 
     public ProcessTask(final String name, final Date dateSubmit, final List<String> cmd,
-                       final boolean shell, final Map<String, String> env, final File dir) {
+                       final boolean shell, final Environment env, final File dir) {
         super(name, dateSubmit);
         this.cmd = cmd;
         this.shell = shell;
@@ -87,7 +84,7 @@ public class ProcessTask extends Task {
 
     @SuppressWarnings("checkstyle:parameternumber")
     public ProcessTask(final String name, final Date dateSubmit, final List<String> cmd,
-                       final boolean shell, final Map<String, String> env, final File dir,
+                       final boolean shell, final Environment env, final File dir,
                        final ByteBuffer stdout, final ByteBuffer stderr) {
         super(name, dateSubmit);
         this.cmd = cmd;
