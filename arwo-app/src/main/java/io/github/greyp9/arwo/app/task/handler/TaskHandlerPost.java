@@ -10,10 +10,12 @@ import io.github.greyp9.arwo.core.date.DateX;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.resource.Pather;
 import io.github.greyp9.arwo.core.submit.SubmitToken;
+import io.github.greyp9.arwo.core.task.core.Task;
 import io.github.greyp9.arwo.core.task.service.TaskService;
 import io.github.greyp9.arwo.core.task.type.process.ProcessSignal;
 import io.github.greyp9.arwo.core.task.type.process.ProcessTask;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.xed.action.XedActionStdin;
 
 import java.io.IOException;
@@ -42,9 +44,19 @@ public class TaskHandlerPost extends AppHandlerPost implements TaskHandler {
         final Alerts alerts = getUserState().getAlerts();
         final Bundle bundle = getUserState().getBundle();
 
-        final ProcessTask processTask = getProcessTask(taskService, name, date);
-        if (processTask == null) {
-            alerts.add(new Alert(Alert.Severity.INFO, bundle.getString("TaskService.process.notFound")));
+        final Task task = getTask(taskService, name, date);
+        final ProcessTask processTask = Value.as(task, ProcessTask.class);
+        if (task == null) {
+            alerts.add(new Alert(Alert.Severity.INFO, bundle.getString("TaskService.task.notFound")));
+        } else if ((App.Action.CANCEL.equals(action)) && (task.getDateStart() == null)) {
+            final boolean cancel = task.getFuture().cancel(false);
+            if (cancel) {
+                task.setDateStart(getHttpRequest().getDate());
+                task.setDateFinish(getHttpRequest().getDate());
+                task.setExitValue(-1);
+            }
+        } else if (processTask == null) {
+            alerts.add(new Alert(Alert.Severity.INFO, bundle.getString("TaskService.task.notFound")));
         } else if (!processTask.isRunning()) {
             alerts.add(new Alert(Alert.Severity.INFO, bundle.getString("TaskService.process.notRunning")));
         } else if (App.Action.STDIN.equals(action)) {
@@ -52,6 +64,8 @@ public class TaskHandlerPost extends AppHandlerPost implements TaskHandler {
             processTask.getStdin().addString(stdin + "\n");
         } else if (App.Action.SIGNAL.equals(action)) {
             new ProcessSignal(processTask.getPid()).sigint();
+        } else {
+            alerts.add(new Alert(Alert.Severity.WARN, token.toString()));
         }
         return locationIn;
     }

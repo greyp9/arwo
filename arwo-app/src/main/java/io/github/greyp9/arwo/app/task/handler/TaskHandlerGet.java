@@ -22,6 +22,7 @@ import io.github.greyp9.arwo.core.menu2.model.MenuItem;
 import io.github.greyp9.arwo.core.menu2.view.MenuHtml;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.resource.Pather;
+import io.github.greyp9.arwo.core.task.core.Task;
 import io.github.greyp9.arwo.core.task.service.TaskService;
 import io.github.greyp9.arwo.core.task.type.process.ProcessTask;
 import io.github.greyp9.arwo.core.value.Value;
@@ -91,7 +92,7 @@ public class TaskHandlerGet implements TaskHandler {
     }
 
     private HttpResponse doGetTask(final String name, final String date) throws IOException {
-        final ProcessTask processTask = getProcessTask(taskService, name, DateX.fromFilename(date));
+        final Task task = getTask(taskService, name, DateX.fromFilename(date));
         // template html
         final Document html = DocumentU.toDocument(StreamU.read(userState.getXHTML()));
         final Element header = new XPather(html, null).getElement(Html.XPath.HEADER);
@@ -101,7 +102,7 @@ public class TaskHandlerGet implements TaskHandler {
         final String labelContext = Value.wrap("[", "]", taskService.getName());
         final AppTitle appTitle = AppTitle.Factory.getResourceLabel(httpRequest, userState.getBundle(), labelContext);
         addMenus(header);
-        new TaskView(httpRequest, userState, processTask).addContent(content);
+        new TaskView(httpRequest, userState, task).addContent(content);
 
         return new AppHtmlView(httpRequest, userState, appTitle)
                 .title(header)

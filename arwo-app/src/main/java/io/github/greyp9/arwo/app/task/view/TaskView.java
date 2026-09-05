@@ -29,39 +29,52 @@ import org.w3c.dom.Element;
 
 import java.io.IOException;
 import java.sql.Types;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collection;
 
 public class TaskView {
-    private final ProcessTask task;
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
+    private final Task task;
 
     public TaskView(final ServletHttpRequest httpRequest,
                     final AppUserState userState,
-                    final ProcessTask task) {
+                    final Task task) {
         this.httpRequest = httpRequest;
         this.userState = userState;
         this.task = task;
     }
 
     public final void addContent(final Element html) throws IOException {
-        ElementU.addElement(html, Html.DIV, Value.join(Html.SPACE, Arrays.asList(task.getCmd())));
-        // means to write to stdin
-        if (task.isRunning()) {
-            new XedActionStdin(userState.getXedFactory(), userState.getLocale()).addPropertyStripTo(
-                    html, userState.getSubmitID(), Arrays.asList(App.Action.STDIN, App.Action.SIGNAL));
-        }
+        final ProcessTask processTask = Value.as(task, ProcessTask.class);
         final String dateSubmit = DateX.toFilename(task.getDateSubmit());
-        final String hrefStdout = PathU.toDir(httpRequest.getBaseURI(),
-                task.getName(), dateSubmit, ProcessTask.Const.STREAM_STDOUT);
-        final String hrefStderr = PathU.toDir(httpRequest.getBaseURI(),
-                task.getName(), dateSubmit, ProcessTask.Const.STREAM_STDERR);
-        final Element divStdout = ElementU.addElement(html, Html.DIV);
-        ElementU.addElement(divStdout, Html.A, String.format("stdout(%d)", task.getStdout().getLength()),
-                NameTypeValuesU.create(Html.HREF, hrefStdout));
-        final Element divStderr = ElementU.addElement(html, Html.DIV);
-        ElementU.addElement(divStderr, Html.A, String.format("stderr(%d)", task.getStderr().getLength()),
-                NameTypeValuesU.create(Html.HREF, hrefStderr));
+
+        final Collection<String> actions = new ArrayList<>();
+        if (task.getDateStart() == null) {
+            actions.add(App.Action.CANCEL);
+        } else if ((processTask != null) && (processTask.isRunning())) {
+            actions.add(App.Action.STDIN);
+            actions.add(App.Action.SIGNAL);
+        }
+        if (!actions.isEmpty()) {
+            new XedActionStdin(userState.getXedFactory(), userState.getLocale())
+                    .addPropertyStripTo(html, userState.getSubmitID(), actions);
+        }
+
+        if (processTask != null) {
+            final String hrefStdout = PathU.toDir(httpRequest.getBaseURI(),
+                    task.getName(), dateSubmit, ProcessTask.Const.STREAM_STDOUT);
+            final String hrefStderr = PathU.toDir(httpRequest.getBaseURI(),
+                    task.getName(), dateSubmit, ProcessTask.Const.STREAM_STDERR);
+            final Element divStdout = ElementU.addElement(html, Html.DIV);
+            ElementU.addElement(html, Html.DIV, Value.join(Html.SPACE, Arrays.asList(processTask.getCmd())));
+            ElementU.addElement(divStdout, Html.A, String.format("stdout(%d)", processTask.getStdout().getLength()),
+                    NameTypeValuesU.create(Html.HREF, hrefStdout));
+            final Element divStderr = ElementU.addElement(html, Html.DIV);
+            ElementU.addElement(divStderr, Html.A, String.format("stderr(%d)", processTask.getStderr().getLength()),
+                    NameTypeValuesU.create(Html.HREF, hrefStderr));
+        }
 
         final RowSet rowSet = createRowSet();
         final Bundle bundle = userState.getBundle();
