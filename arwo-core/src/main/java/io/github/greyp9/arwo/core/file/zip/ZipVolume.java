@@ -35,7 +35,9 @@ public class ZipVolume {
     public final Collection<ZipMetaData> getEntries() throws IOException {
         final boolean isFile = (file != null);
         final boolean isBytes = (bis != null);
-        final Collection<ZipMetaData> entries = new ArrayList<ZipMetaData>();
+        final Collection<ZipMetaData> entries = new ArrayList<>();
+        // alternative natural sort
+        //final Collection<ZipMetaData> entries = new TreeSet<>(Comparator.comparing(ZipMetaData::getPath));
         if (isFile) {
             getEntries(entries, file);
         } else if (isBytes) {
