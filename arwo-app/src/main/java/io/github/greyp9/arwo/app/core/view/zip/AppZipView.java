@@ -1,7 +1,7 @@
 package io.github.greyp9.arwo.app.core.view.zip;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
-import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.app.core.view.table.UserStateTable;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.file.FileX;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
@@ -15,21 +15,14 @@ import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.lang.NumberU;
-import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
-import io.github.greyp9.arwo.core.table.core.TableU;
-import io.github.greyp9.arwo.core.table.html.TableView;
 import io.github.greyp9.arwo.core.table.insert.InsertRow;
 import io.github.greyp9.arwo.core.table.metadata.ColumnMetaData;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
-import io.github.greyp9.arwo.core.table.model.Table;
-import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.RowSet;
-import io.github.greyp9.arwo.core.table.state.ViewState;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
-import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
 import org.w3c.dom.Element;
 
 import java.io.ByteArrayInputStream;
@@ -77,7 +70,7 @@ public class AppZipView {
     }
 
     private HttpResponse addContentListing(
-            final Element html, final MetaFile metaFile, final Bundle bundle) throws IOException {
+            final Element html, final MetaFile metaFile, final Bundle ignored) throws IOException {
         final String id = metaFile.getMetaData().getPath();
         final RowSet rowSet;
         if (userState.getCacheBlob().containsRowSet(id)) {
@@ -88,17 +81,9 @@ public class AppZipView {
             rowSet = createRowSet(metaData, bytes);
             userState.getCacheBlob().putRowSet(id, rowSet);
         }
-        final RowSetMetaData metaData = rowSet.getMetaData();
-        final Locus locus = userState.getLocus();
-        final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
-        final String title = httpRequest.getURI();
-        final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), title, title);
-        TableU.addFooterStandard(table, bundle);
-        final XedActionFilter filter = new XedActionFilter(userState.getXedFactory(), userState.getLocale());
-        final TableContext tableContext = new TableContext(
-                viewState, filter, userState.getSubmitID(), App.CSS.TABLE, bundle, locus);
-        final TableView tableView = new TableView(table, tableContext);
-        tableView.addContentTo(html);
+        final UserStateTable table = new UserStateTable(
+                httpRequest, userState, httpRequest.getURI(), httpRequest.getDate());
+        table.toTableView(rowSet).addContentTo(html);
         return (HttpResponse) rowSet.getProperties().get(Const.QUERY_ZIP_ENTRY);
     }
 

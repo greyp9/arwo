@@ -157,6 +157,8 @@ public class TarVolume {
             metaData = getNextEntry(type, null, header);
         } else if (Const.TYPE_LONG_LINK == type) {
             metaData = getNextEntryLongLink(type, header, is);
+        } else if (Const.TYPE_EXTENDED_HEADER == type) {
+            metaData = getNextEntryExtendedHeader(type, header, is);
         } else {
             throw new IOException(String.format("TAR.GZ/ERROR/TYPE==%d)", type));
         }
@@ -175,6 +177,18 @@ public class TarVolume {
         final byte[] header2 = StreamU.read(is, Const.TAR_BLOCK_SIZE);
         verifyExpectedActual(Const.TAR_BLOCK_SIZE, header2.length);
         return getNextEntry(type, fileName, header2);
+    }
+
+    private static TarMetaData getNextEntryExtendedHeader(
+            final byte type, final byte[] header, final InputStream is) throws IOException {
+        verifyExpectedActual(Const.TAR_BLOCK_SIZE, header.length);
+        // two blocks of extended data (ignored in this impl) before "POSIX.1-1988 tar" header
+        final byte[] header2 = StreamU.read(is, Const.TAR_BLOCK_SIZE);
+        verifyExpectedActual(Const.TAR_BLOCK_SIZE, header2.length);
+        final byte[] header3 = StreamU.read(is, Const.TAR_BLOCK_SIZE);
+        verifyExpectedActual(Const.TAR_BLOCK_SIZE, header3.length);
+        // hand off third block
+        return getNextEntry(type, null, header3);
     }
 
     private static TarMetaData getNextEntry(final byte type, final String fileNameIn, final byte[] header) {
@@ -232,6 +246,7 @@ public class TarVolume {
         private static final byte TYPE_SYMLINK = (byte) '2';
         private static final byte TYPE_DIRECTORY = (byte) '5';
         private static final byte TYPE_LONG_LINK = (byte) 'L';
+        private static final byte TYPE_EXTENDED_HEADER = (byte) 'x';
     }
 
 

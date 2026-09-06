@@ -1,7 +1,7 @@
 package io.github.greyp9.arwo.app.core.view.gz;
 
 import io.github.greyp9.arwo.app.core.state.AppUserState;
-import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.app.core.view.table.UserStateTable;
 import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.file.FileX;
 import io.github.greyp9.arwo.core.file.meta.MetaFile;
@@ -13,23 +13,17 @@ import io.github.greyp9.arwo.core.http.HttpArguments;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
-import io.github.greyp9.arwo.core.locus.Locus;
 import io.github.greyp9.arwo.core.table.cell.TableViewLink;
-import io.github.greyp9.arwo.core.table.core.TableU;
-import io.github.greyp9.arwo.core.table.html.TableView;
 import io.github.greyp9.arwo.core.table.insert.InsertRow;
 import io.github.greyp9.arwo.core.table.metadata.ColumnMetaData;
 import io.github.greyp9.arwo.core.table.metadata.RowSetMetaData;
-import io.github.greyp9.arwo.core.table.model.Table;
-import io.github.greyp9.arwo.core.table.model.TableContext;
 import io.github.greyp9.arwo.core.table.row.RowSet;
-import io.github.greyp9.arwo.core.table.state.ViewState;
 import io.github.greyp9.arwo.core.text.filter.TextFilters;
 import io.github.greyp9.arwo.core.text.filter.TextLineFilter;
 import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
-import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
+import io.github.greyp9.arwo.core.value.Value;
 import org.w3c.dom.Element;
 
 import java.io.ByteArrayInputStream;
@@ -56,16 +50,9 @@ public class AppTGZView {
         final RowSetMetaData metaData = createMetaData();
         final byte[] bytes = StreamU.read(metaFile.getBytes());
         final RowSet rowSet = createRowSet(metaData, bytes);
-        final Locus locus = userState.getLocus();
-        final ViewState viewState = userState.getViewStates().getViewState(metaData, bundle, locus);
-        final String title = httpRequest.getURI();
-        final Table table = new Table(rowSet, viewState.getSorts(), viewState.getFilters(), title, title);
-        TableU.addFooterStandard(table, bundle);
-        final XedActionFilter filter = new XedActionFilter(userState.getXedFactory(), userState.getLocale());
-        final TableContext tableContext = new TableContext(
-                viewState, filter, userState.getSubmitID(), App.CSS.TABLE, bundle, locus);
-        final TableView tableView = new TableView(table, tableContext);
-        tableView.addContentTo(html);
+        final UserStateTable table = new UserStateTable(
+                httpRequest, userState, httpRequest.getURI(), httpRequest.getDate());
+        table.toTableView(rowSet).addContentTo(html);
         return (HttpResponse) rowSet.getProperties().get(Const.QUERY_ZIP_ENTRY);
     }
 
@@ -84,10 +71,10 @@ public class AppTGZView {
     private RowSet createRowSet(final RowSetMetaData metaData, final byte[] bytes) throws IOException {
         final RowSet rowSet = new RowSet(metaData, null, null);
         final TarVolume tarVolume = new TarVolume(new ByteArrayInputStream(bytes));
-        final MetaFile metaFile = tarVolume.getEntry(zipEntry);
-        if (metaFile == null) {
+        if (Value.isEmpty(zipEntry)) {
             createRows(rowSet, tarVolume);
         } else {
+            final MetaFile metaFile = tarVolume.getEntry(zipEntry);
             createResponse(rowSet, metaFile);
         }
         return rowSet;
