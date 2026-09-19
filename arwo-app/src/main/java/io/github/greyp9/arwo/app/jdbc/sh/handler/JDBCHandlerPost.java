@@ -29,8 +29,10 @@ public class JDBCHandlerPost {
     private final Bundle bundle;
     private final Alerts alerts;
 
-    public JDBCHandlerPost(final ServletHttpRequest httpRequest, final AppUserState userState) {
-        this.request = new JDBCRequest(httpRequest, userState);
+    public JDBCHandlerPost(final ClassLoader classLoader,
+                           final ServletHttpRequest httpRequest,
+                           final AppUserState userState) {
+        this.request = new JDBCRequest(classLoader, httpRequest, userState);
         this.httpRequest = httpRequest;
         this.userState = userState;
         this.bundle = request.getBundle();

@@ -12,10 +12,15 @@ import io.github.greyp9.arwo.core.value.Value;
 import java.util.Locale;
 
 public class JDBCRequest {
+    private final ClassLoader classLoader;
     private final AppRequest request;
     private final AppUserState userState;
     private final Pather patherServer;
     private final Pather patherQueryID;
+
+    public final ClassLoader getClassLoader() {
+        return classLoader;
+    }
 
     public final AppRequest getAppRequest() {
         return request;
@@ -41,7 +46,10 @@ public class JDBCRequest {
         return request.getAlerts();
     }
 
-    public JDBCRequest(final ServletHttpRequest httpRequest, final AppUserState userState) {
+    public JDBCRequest(final ClassLoader classLoader,
+                       final ServletHttpRequest httpRequest,
+                       final AppUserState userState) {
+        this.classLoader = classLoader;
         this.request = userState.getAppRequest(httpRequest);
         this.userState = userState;
         this.patherServer = new Pather(httpRequest.getPathInfo());

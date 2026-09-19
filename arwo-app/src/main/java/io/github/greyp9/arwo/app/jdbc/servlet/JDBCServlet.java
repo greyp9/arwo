@@ -22,6 +22,7 @@ public class JDBCServlet extends javax.servlet.http.HttpServlet {
     private static final long serialVersionUID = -842762757001100799L;
 
     private transient AppState appState;
+    private transient ClassLoader classLoader;
 
     @Override
     public final void init(final ServletConfig config) throws ServletException {
@@ -29,12 +30,17 @@ public class JDBCServlet extends javax.servlet.http.HttpServlet {
         final Context context = AppNaming.lookupSubcontext(getServletContext().getContextPath());
         synchronized (this) {
             this.appState = (AppState) AppNaming.lookup(context, App.Naming.APP_STATE);
+            // workaround for standard parent delegation model
+            final String classloaderRef = config.getInitParameter("classloader");
+            this.classLoader = (classloaderRef == null) ? getClass().getClassLoader()
+                    : (ClassLoader) AppNaming.lookup(ClassLoader.class.getName(), classloaderRef);
         }
     }
 
     @Override
     public final void destroy() {
         synchronized (this) {
+            this.classLoader = null;
             this.appState = null;
         }
     }
@@ -49,7 +55,7 @@ public class JDBCServlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
         }
-        final HttpResponse httpResponse = new JDBCHandlerGet(httpRequest, userState).doGetSafe();
+        final HttpResponse httpResponse = new JDBCHandlerGet(classLoader, httpRequest, userState).doGetSafe();
         // send response
         final HttpResponse httpResponseGZ = HttpResponseGZipU.toHttpResponseGZip(httpRequest, httpResponse);
         ServletU.write(httpResponseGZ, response);
@@ -65,7 +71,7 @@ public class JDBCServlet extends javax.servlet.http.HttpServlet {
         synchronized (this) {
             userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
         }
-        final HttpResponse httpResponse = new JDBCHandlerPost(httpRequest, userState).doPostSafe();
+        final HttpResponse httpResponse = new JDBCHandlerPost(classLoader, httpRequest, userState).doPostSafe();
         // send response
         ServletU.write(httpResponse, response);
     }

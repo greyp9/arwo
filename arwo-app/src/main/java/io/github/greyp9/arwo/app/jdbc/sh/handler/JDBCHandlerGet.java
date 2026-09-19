@@ -20,8 +20,10 @@ public class JDBCHandlerGet {
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
 
-    public JDBCHandlerGet(final ServletHttpRequest httpRequest, final AppUserState userState) {
-        this.request = new JDBCRequest(httpRequest, userState);
+    public JDBCHandlerGet(final ClassLoader classLoader,
+                          final ServletHttpRequest httpRequest,
+                          final AppUserState userState) {
+        this.request = new JDBCRequest(classLoader, httpRequest, userState);
         this.httpRequest = httpRequest;
         this.userState = userState;
     }

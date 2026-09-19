@@ -56,9 +56,10 @@ public class JDBCRunnable extends CronRunnable {
             final AppState appState = (AppState) AppNaming.lookupQ(context, App.Naming.APP_STATE);
             final AppUserState userState = appState.getUserState(getParams().getPrincipal(), getParams().getDate());
             final Principal principal = userState.getPrincipal();
+            final ClassLoader classLoader = getClass().getClassLoader();
             final HttpRequest httpRequest = getHttpRequest(userState.getSubmitID(), pathInfo, sql);
             final ServletHttpRequest httpRequest1 = getServletHttpRequest(httpRequest, pathInfo, principal);
-            final JDBCHandlerPost handlerPost = new JDBCHandlerPost(httpRequest1, userState);
+            final JDBCHandlerPost handlerPost = new JDBCHandlerPost(classLoader, httpRequest1, userState);
             putHttpResponse(handlerPost.doPostSafe(), userState);
         } catch (IOException e) {
             logger.log(Level.SEVERE, e.getMessage(), e);

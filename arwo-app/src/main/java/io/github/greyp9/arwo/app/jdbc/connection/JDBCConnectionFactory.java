@@ -30,13 +30,18 @@ import java.util.Properties;
 import java.util.logging.Logger;
 
 public class JDBCConnectionFactory implements ConnectionFactory {
+    private final ClassLoader classLoader;
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
     private final Bundle bundle;
     private final Alerts alerts;
 
-    public JDBCConnectionFactory(final ServletHttpRequest httpRequest, final AppUserState userState,
-                                 final Bundle bundle, final Alerts alerts) {
+    public JDBCConnectionFactory(final ClassLoader classLoader,
+                                 final ServletHttpRequest httpRequest,
+                                 final AppUserState userState,
+                                 final Bundle bundle,
+                                 final Alerts alerts) {
+        this.classLoader = classLoader;
         this.httpRequest = httpRequest;
         this.userState = userState;
         this.bundle = bundle;
@@ -82,16 +87,10 @@ public class JDBCConnectionFactory implements ConnectionFactory {
             final String driverClassName, final String url, final Properties properties) throws IOException {
         Connection connection = null;
         try {
-            final Class<?> driverClass = Class.forName(driverClassName);
+            final Class<?> driverClass = Class.forName(driverClassName, true, classLoader);
             final Driver driver = (Driver) driverClass.newInstance();
             connection = driver.connect(url, properties);
-        } catch (IllegalAccessException e) {
-            new ExceptionModel(alerts).service(new IOException(e), Alert.Severity.ERR);
-        } catch (InstantiationException e) {
-            new ExceptionModel(alerts).service(new IOException(e), Alert.Severity.ERR);
-        } catch (SQLException e) {
-            new ExceptionModel(alerts).service(new IOException(e), Alert.Severity.ERR);
-        } catch (ClassNotFoundException e) {
+        } catch (IllegalAccessException | InstantiationException | SQLException | ClassNotFoundException e) {
             new ExceptionModel(alerts).service(new IOException(e), Alert.Severity.ERR);
         }
         return connection;

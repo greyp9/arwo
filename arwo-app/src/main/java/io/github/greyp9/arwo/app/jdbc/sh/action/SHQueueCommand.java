@@ -35,6 +35,7 @@ public class SHQueueCommand {
 
     public final String doAction(final String locationIn, final NameTypeValues httpArguments) throws IOException {
         String location = locationIn;
+        final ClassLoader classLoader = request.getClassLoader();
         final ServletHttpRequest httpRequest = request.getHttpRequest();
         final AppUserState userState = request.getUserState();
         final Bundle bundle = request.getBundle();
@@ -48,7 +49,8 @@ public class SHQueueCommand {
         history.add(query);
         userState.getJDBC().getProperties().setProperty(App.Settings.SQL, sql);
         // acquire connection
-        final JDBCConnectionFactory factory = new JDBCConnectionFactory(httpRequest, userState, bundle, alerts);
+        final JDBCConnectionFactory factory = new JDBCConnectionFactory(
+                classLoader, httpRequest, userState, bundle, alerts);
         final ConnectionCache cache = userState.getJDBC().getCache();
         final JDBCConnectionResource resource = (JDBCConnectionResource) cache.getResource(server, factory);
         // perform query
