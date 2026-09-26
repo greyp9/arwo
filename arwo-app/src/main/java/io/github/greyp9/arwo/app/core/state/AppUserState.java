@@ -333,9 +333,11 @@ public final class AppUserState {
         this.userExecutor = new UserExecutor(principal, date, new File(SystemU.userHome()));
         this.deferredActions = new DeferredActions();
         this.cron = new SubsystemCron(documentState.getFactory());
+
+        this.cache = new ResourceCache(appState.getContextPath() + App.Servlet.CACHE);
         this.local = new SubsystemLocal(alerts, this.userRoot);
         this.lsh = new SubsystemLSH(alerts, this.userRoot);
-        this.kube = new SubsystemKube(alerts);
+        this.kube = new SubsystemKube(cache, alerts);
         this.s3 = new SubsystemS3(alerts);
         this.ssh = new SubsystemSSH(alerts);
         this.jdbc = new SubsystemJDBC(alerts, this.userRoot);
@@ -347,8 +349,6 @@ public final class AppUserState {
         this.menuSystem = new MenuSystem(submitID, new AppMenuFactory());
 */
         this.menuSystemState = new Properties();
-        this.cache = new ResourceCache(appState.getContextPath() + App.Servlet.CACHE);
-        // this.cacheBlob = new ResourceCache(null); // needed?
         this.pageViewHex = Page.Factory.initPage(Const.PAGE_HEX_VIEW, new Properties());
         this.pageVisualization = Page.Factory.initPage(Const.PAGE_VISUALIZATION, new Properties());
     }

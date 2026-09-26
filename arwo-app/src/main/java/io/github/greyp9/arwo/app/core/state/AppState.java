@@ -102,6 +102,7 @@ public class AppState {
                 userState = new AppUserState(this, principal, date, userHome, submitID, locus);
                 userStates.add(userState);
             }
+            userState.getInterval().setDateTouch(date);
             return userState;
         }
     }

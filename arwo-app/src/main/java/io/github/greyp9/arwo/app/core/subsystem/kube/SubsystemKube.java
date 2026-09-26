@@ -2,6 +2,7 @@ package io.github.greyp9.arwo.app.core.subsystem.kube;
 
 import io.github.greyp9.arwo.core.alert.Alerts;
 import io.github.greyp9.arwo.core.app.App;
+import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.connect.ConnectionCache;
 import io.github.greyp9.arwo.core.io.script.History;
 
@@ -27,8 +28,8 @@ public class SubsystemKube {
         return properties;
     }
 
-    public SubsystemKube(final Alerts alerts) {
-        this.cache = new ConnectionCache(App.Cache.KUBE, alerts);
+    public SubsystemKube(final ResourceCache resourceCache, final Alerts alerts) {
+        this.cache = new ConnectionCache(App.Cache.KUBE, resourceCache, alerts);
         this.history = new History();
         this.properties = new Properties();
     }

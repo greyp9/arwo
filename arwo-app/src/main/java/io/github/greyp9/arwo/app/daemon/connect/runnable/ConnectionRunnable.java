@@ -88,6 +88,11 @@ public class ConnectionRunnable implements Runnable {
         for (final ConnectionCache connectionCache : connectionCaches) {
             runMonitorCache(date, connectionCache);
         }
+        final Date dateTouch = userState.getInterval().getDateTouch();
+        final Date dateTimeout = DurationU.add(dateTouch, DateU.Const.TZ_GMT, Const.DURATION_TIMEOUT_SESSION);
+        if (date.compareTo(dateTimeout) >= 0) {
+            close(userState, date);
+        }
         // logger.finest(String.format("runMonitorUserState:END:[%s]", userState.getPrincipal().getName()));
     }
 
@@ -117,8 +122,18 @@ public class ConnectionRunnable implements Runnable {
         }
     }
 
+    private void close(final AppUserState userState, final Date date) {
+        try {
+            logger.info(String.format("%s [%s]", userState.getPrincipal().getName(), XsdDateU.toXSDZMillis(date)));
+            appState.removeUserState(userState.getPrincipal(), date);
+        } catch (IOException e) {
+            logger.severe(e.getMessage());
+        }
+    }
+
     private static class Const {
         private static final String DURATION_LOOP = "PT5M";  // i18n
         private static final String DURATION_TIMEOUT = "PT15M";  // i18n
+        private static final String DURATION_TIMEOUT_SESSION = "P7D";  // i18n
     }
 }

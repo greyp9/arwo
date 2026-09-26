@@ -97,6 +97,8 @@ public class DashView {
         final String durationA = DurationU.duration(userState.getDateAppStart(), httpRequest.getDate());
         final String startU = dateX.toString(userState.getDateSessionStart());
         final String durationU = DurationU.duration(userState.getDateSessionStart(), httpRequest.getDate());
+        final String touchU = dateX.toString(userState.getInterval().getDateTouch());
+        final String idleU = DurationU.duration(userState.getInterval().getDateTouch(), httpRequest.getDate());
         final Bundle bundle = request.getBundle();
         final NameTypeValues properties = new NameTypeValues();
         properties.add(bundle.getString("DashView.runtime.name"), RuntimeU.getName());
@@ -104,6 +106,8 @@ public class DashView {
         properties.add(bundle.getString("DashView.webapp.uptime"), durationA);
         properties.add(bundle.getString("DashView.session.start"), startU);
         properties.add(bundle.getString("DashView.session.uptime"), durationU);
+        properties.add(bundle.getString("DashView.session.touch"), touchU);
+        properties.add(bundle.getString("DashView.session.idle"), idleU);
         final AppPropertiesView view = new AppPropertiesView("dashPropertiesType", userState);  // i18n metadata
         view.addContentTo(html, null, bundle, properties);
     }

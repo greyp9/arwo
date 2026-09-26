@@ -27,6 +27,11 @@ public final class ResourceCache {
         this.objects = new TreeMap<>();
     }
 
+    public void flush(final String tag) {
+        rowSets.entrySet().removeIf(entry -> entry.getKey().contains(tag));
+        objects.entrySet().removeIf(entry -> entry.getKey().contains(tag));
+    }
+
     public Iterator<Map.Entry<String, RowSet>> getRowSets() {
         return rowSets.entrySet().iterator();
     }

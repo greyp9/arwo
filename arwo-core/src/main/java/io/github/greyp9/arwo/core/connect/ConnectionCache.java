@@ -2,17 +2,20 @@ package io.github.greyp9.arwo.core.connect;
 
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
+import io.github.greyp9.arwo.core.cache.ResourceCache;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.vm.mutex.CollectionU;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
-import java.util.TreeSet;
+import java.util.Optional;
 
 @SuppressWarnings("PMD.AvoidSynchronizedAtMethodLevel")
 public class ConnectionCache {
     private final String cacheName;
-    private final Collection<ConnectionResource> resources;
+    private final Collection<ConnectionResource> connectionResources;
+    private final ResourceCache resourceCache;
     private final Alerts alerts;
 
     public final String getName() {
@@ -20,13 +23,18 @@ public class ConnectionCache {
     }
 
     public ConnectionCache(final String cacheName, final Alerts alerts) {
+        this(cacheName, null, alerts);
+    }
+
+    public ConnectionCache(final String cacheName, final ResourceCache resourceCache, final Alerts alerts) {
         this.cacheName = cacheName;
-        this.resources = new TreeSet<ConnectionResource>();
+        this.connectionResources = new ArrayList<>();
+        this.resourceCache = resourceCache;
         this.alerts = alerts;
     }
 
     public final synchronized Collection<ConnectionResource> getResources() {
-        return CollectionU.copy(new TreeSet<ConnectionResource>(), resources);
+        return CollectionU.copy(new ArrayList<>(), connectionResources);
     }
 
     public final synchronized ConnectionResource getResource(
@@ -38,7 +46,7 @@ public class ConnectionCache {
                 //final AlertActions actions = new AlertActions(XsdDateU.toXSDZMillis(new Date()), "Dismiss");
                 //alerts.add(new Alert(Alert.Severity.INFO, String.format("[+%s] %s", cacheName, name), actions));
                 alerts.add(new Alert(Alert.Severity.INFO, String.format("[+%s] %s", cacheName, name)));
-                resources.add(resource);
+                connectionResources.add(resource);
             }
         }
         return resource;
@@ -50,7 +58,8 @@ public class ConnectionCache {
             //final AlertActions actions = new AlertActions(XsdDateU.toXSDZMillis(new Date()), "Dismiss"); // persistent
             //alerts.add(new Alert(Alert.Severity.INFO, String.format("[-%s] %s", cacheName, name), actions));
             alerts.add(new Alert(Alert.Severity.INFO, String.format("[-%s] %s", cacheName, name)));  // transient
-            resources.remove(resource);
+            connectionResources.remove(resource);
+            Optional.ofNullable(resourceCache).ifPresent(rc -> rc.flush(name));
             resource.close();
         }
         return resource;
@@ -58,7 +67,7 @@ public class ConnectionCache {
 
     private ConnectionResource findResource(final String name) {
         ConnectionResource resource = null;
-        for (final ConnectionResource resourceIt : resources) {
+        for (final ConnectionResource resourceIt : connectionResources) {
             final String nameIt = resourceIt.getName();
             if (Value.equal(nameIt, name)) {
                 resource = resourceIt;
