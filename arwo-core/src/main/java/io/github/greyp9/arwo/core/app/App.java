@@ -27,6 +27,7 @@ public final class App {
         public static final QName QNAME_KUBE_LOG = new QName(URI_ACTION, "kubeLog", PREFIX_ACTION);
         public static final QName QNAME_LOCALE = new QName(URI_ACTION, "locale", PREFIX_ACTION);
         public static final QName QNAME_MAIL = new QName(URI_ACTION, "mail", PREFIX_ACTION);
+        public static final QName QNAME_PROTECT = new QName(URI_ACTION, "protect", PREFIX_ACTION);
         public static final QName QNAME_REFRESH = new QName(URI_ACTION, "refresh", PREFIX_ACTION);
         public static final QName QNAME_EMPTY = new QName(URI_ACTION, "empty", PREFIX_ACTION);
         public static final QName QNAME_STDIN = new QName(URI_ACTION, "stdin", PREFIX_ACTION);
@@ -286,6 +287,7 @@ public final class App {
         public static final String FOLDER_CREATE = "folderCreate";
         public static final String HREF = "href";
         public static final String HREF_ABS = "href-abs";
+        public static final String PROTECT = "protect";
         public static final String REFRESH = "refresh";
         public static final String COMMAND = "command";
         public static final String STDIN = "stdin";

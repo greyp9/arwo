@@ -32,6 +32,7 @@ import io.github.greyp9.arwo.core.date.Interval;
 import io.github.greyp9.arwo.core.file.FileX;
 import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
+import io.github.greyp9.arwo.core.jce.KeyX;
 import io.github.greyp9.arwo.core.lang.SystemU;
 import io.github.greyp9.arwo.core.link.MetaLink;
 import io.github.greyp9.arwo.core.locus.Locus;
@@ -51,9 +52,11 @@ import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.vm.exec.UserExecutor;
 import io.github.greyp9.arwo.core.xed.action.XedActionFilter;
+import io.github.greyp9.arwo.core.xed.action.XedActionProtect;
 import io.github.greyp9.arwo.core.xed.action.XedActionRefresh;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextExpression;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
+import io.github.greyp9.arwo.core.xed.core.XedU;
 import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
 import io.github.greyp9.arwo.core.xed.model.Xed;
 import io.github.greyp9.arwo.core.xed.model.XedFactory;
@@ -420,6 +423,11 @@ public final class AppUserState {
             new XedActionTextFilter(getXedFactory(), getLocale()).updateTextFilters(textFiltersOp, httpArguments);
         } else if (App.Action.CLEAR.equals(action)) {
             doClearCache();
+        } else if (App.Action.PROTECT.equals(action)) {
+            final String protect = new XedActionProtect(getXedFactory(), getLocale()).getProtect(httpArguments);
+            final Key key = getKey(XedU.NS_URI_XED, SystemU.userDir().toCharArray());
+            final KeyX keyX = new KeyX(key, KeyX.Const.TRANSFORM_GCM, KeyX.Const.PARAM_SPEC_GCM);
+            alerts.add(new Alert(Alert.Severity.INFO, keyX.protect(protect)));
         } else if (App.Action.REFRESH.equals(action) && (App.Object.TABLE.equals(object))) {
             cache.putRowSet(httpRequest.getURI(), null);
         } else if (App.Action.REFRESH.equals(action)) {

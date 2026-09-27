@@ -89,6 +89,7 @@ public abstract class LFSView {
                         .title(header)
                         .addTextFiltersView(header)
                         .propertyStrips(header)
+                        .actionProtect(header)
                         .actionRefresh(header)
                         .actionTextExpression(header)
                         .alerts(header)

@@ -16,6 +16,7 @@ public final class MenuSession {
         return new MenuItem(App.Target.SESSION, App.Target.USER_STATE, App.Action.MENU2, key, null,
                 new MenuItem(App.Action.CACHE, App.Target.USER_STATE, App.Action.TOGGLE, App.Action.CACHE),
                 new MenuItem(App.Action.CLEAR, App.Target.USER_STATE, App.Action.CLEAR),
+                new MenuItem(App.Action.PROTECT, App.Target.USER_STATE, App.Action.TOGGLE, App.Action.PROTECT),
                 new MenuItem(App.Action.REFRESH, App.Target.USER_STATE, App.Action.REFRESH),
                 new MenuItem(App.Action.CRON_ON, App.Target.USER_STATE, App.Action.CRON_ON),
                 new MenuItem(App.Action.CRON_OFF, App.Target.USER_STATE, App.Action.CRON_OFF),

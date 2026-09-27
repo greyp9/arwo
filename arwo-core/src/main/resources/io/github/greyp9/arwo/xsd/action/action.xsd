@@ -106,6 +106,14 @@
         </xsd:sequence>
     </xsd:complexType>
 
+    <xsd:element name='protect' type='action:protectType'/>
+
+    <xsd:complexType name='protectType'>
+        <xsd:sequence>
+            <xsd:element name='input' type='xsd:string'/>
+        </xsd:sequence>
+    </xsd:complexType>
+
     <xsd:element name='refresh' type='action:refreshType'/>
 
     <xsd:complexType name='refreshType'>

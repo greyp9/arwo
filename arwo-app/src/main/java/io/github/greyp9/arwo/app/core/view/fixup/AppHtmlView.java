@@ -14,12 +14,14 @@ import io.github.greyp9.arwo.core.http.Http;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.text.filter.TextFilters;
+import io.github.greyp9.arwo.core.util.PropertiesU;
 import io.github.greyp9.arwo.core.value.NTV;
 import io.github.greyp9.arwo.core.value.NameTypeValue;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
 import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.view.StatusBarView;
 import io.github.greyp9.arwo.core.xed.action.XedActionLocale;
+import io.github.greyp9.arwo.core.xed.action.XedActionProtect;
 import io.github.greyp9.arwo.core.xed.action.XedActionRefresh;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextExpression;
 import io.github.greyp9.arwo.core.xed.action.XedActionTextFilter;
@@ -80,6 +82,15 @@ public class AppHtmlView {
         final String submitID = userState.getSubmitID();
         final Properties properties = userState.getProperties();
         new XedActionLocale(userState.getXedFactory(), locale).addContentTo(header, submitID, properties);
+        return this;
+    }
+
+    public final AppHtmlView actionProtect(final Element header) throws IOException {
+        final Locale locale = userState.getLocus().getLocale();
+        final String submitID = userState.getSubmitID();
+        if (PropertiesU.isBoolean(userState.getProperties(), App.Action.PROTECT)) {
+            new XedActionProtect(userState.getXedFactory(), locale).addContentTo(header, submitID);
+        }
         return this;
     }
 
