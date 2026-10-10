@@ -1,11 +1,13 @@
 package io.github.greyp9.arwo.app.diag.handler;
 
+import io.github.greyp9.arwo.app.core.lookup.AppLookup;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.fixup.AppHtmlView;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppRequest;
 import io.github.greyp9.arwo.core.app.AppTitle;
 import io.github.greyp9.arwo.core.bundle.Bundle;
+import io.github.greyp9.arwo.core.envsec.store.SecureStore;
 import io.github.greyp9.arwo.core.glyph.UTF16;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.HttpResponse;
@@ -64,6 +66,7 @@ public class EnvHandlerGet {
         addContentReqHdr(content);
         addContentSysProps(content);
         addContentSysEnv(content);
+        addContentStore(content);
         return new AppHtmlView(httpRequest, userState, title)
                 .title(header)
                 .alerts(header)
@@ -126,6 +129,19 @@ public class EnvHandlerGet {
             final InsertRow insertRow = new InsertRow(rowSet);
             insertRow.setNextColumn(entry.getKey());
             insertRow.setNextColumn(entry.getValue());
+            rowSet.add(insertRow.getRow());
+        }
+        addContent(html, rowSet);
+    }
+
+    private void addContentStore(final Element html) throws IOException {
+        final RowSetMetaData metaData = createMetaData("env.storeType");
+        final RowSet rowSet = new RowSet(metaData, null, null);
+        final SecureStore secureStore = AppLookup.secureStore();
+        for (Map.Entry<Object, Object> property : secureStore.entrySet()) {
+            final InsertRow insertRow = new InsertRow(rowSet);
+            insertRow.setNextColumn(property.getKey());
+            insertRow.setNextColumn(property.getValue());
             rowSet.add(insertRow.getRow());
         }
         addContent(html, rowSet);

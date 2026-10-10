@@ -7,7 +7,6 @@ import io.github.greyp9.arwo.core.io.StreamU;
 
 import java.io.IOException;
 import java.util.Date;
-import java.util.Properties;
 import java.util.logging.Logger;
 
 public class StoreRunnable implements Runnable {
@@ -36,17 +35,16 @@ public class StoreRunnable implements Runnable {
     private boolean storeBody(final MetaFile metaFile) {
         boolean success = true;
         final SecureStore secureStore = task.getSecureStore();
-        final Properties properties = secureStore.getProperties();
-        logger.info(String.format("COUNT:%d", properties.size()));
+        logger.info(String.format("COUNT:%d", secureStore.size()));
         final String key = task.getKey();
         try {
             final String value = UTF8Codec.toString(StreamU.read(metaFile.getBytes()));
-            secureStore.setPropertyProtect(key, value);
+            secureStore.setProperty(key, value);
         } catch (IOException e) {
             logger.warning(String.format("WRITE:%s%s", key, e.getMessage()));
             success = false;
         }
-        logger.info(String.format("WRITE:%s, COUNT:%d", key, properties.size()));
+        logger.info(String.format("WRITE:%s, COUNT:%d", key, secureStore.size()));
         return success;
     }
 }

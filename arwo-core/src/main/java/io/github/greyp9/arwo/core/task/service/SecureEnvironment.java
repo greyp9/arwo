@@ -16,7 +16,7 @@ public class SecureEnvironment extends Environment {
         for (Map.Entry<String, String> entry : super.getEnv().entrySet()) {
             final Matcher matcher = PATTERN_SECURE.matcher(entry.getValue());
             if (matcher.matches()) {
-                env.put(entry.getKey(), secureStore.getPropertySafe(matcher.group(1)));
+                env.put(entry.getKey(), secureStore.getProperty(matcher.group(1)));
             } else {
                 env.put(entry.getKey(), entry.getValue());
             }

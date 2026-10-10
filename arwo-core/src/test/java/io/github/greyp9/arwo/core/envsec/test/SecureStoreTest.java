@@ -17,6 +17,7 @@ import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
+import java.util.Properties;
 import java.util.Random;
 import java.util.UUID;
 
@@ -49,9 +50,9 @@ public class SecureStoreTest {
         Assertions.assertNull(secureStore.getException());
 
         final String string = UUID.randomUUID().toString();
-        secureStore.setPropertyProtect(string, string);
-        Assertions.assertEquals(string, secureStore.getProperty(string));
-        Assertions.assertEquals(1, secureStore.getProperties().size());
+        secureStore.setProperty(string, string);
+        Assertions.assertEquals(string, secureStore.getPropertyUnsafe(string));
+        Assertions.assertEquals(1, secureStore.size());
     }
 
     @Test
@@ -60,30 +61,32 @@ public class SecureStoreTest {
         Assertions.assertNull(secureStore.getException());
 
         final String string = UUID.randomUUID().toString();
-        Assertions.assertNull(secureStore.getProperty(string));
+        Assertions.assertNull(secureStore.getPropertyUnsafe(string));
     }
 
     @Test
     void testSecureStore_DecodeFailure() {
-        final SecureStore secureStore = new SecureStore(FILE_EXPRESSION);
+        final Properties defaults = new Properties();
+        final SecureStore secureStore = new SecureStore(FILE_EXPRESSION, defaults);
         Assertions.assertNull(secureStore.getException());
 
         final String string = UUID.randomUUID().toString();
-        secureStore.setProperty(string, string);
+        defaults.setProperty(string, string);
         final IllegalArgumentException exception = Assertions.assertThrows(
-                IllegalArgumentException.class, () -> secureStore.getProperty(string));
+                IllegalArgumentException.class, () -> secureStore.getPropertyUnsafe(string));
         Assertions.assertTrue(exception.getMessage().contains("Illegal base64 character"));
     }
 
     @Test
     void testSecureStore_DecryptFailure() {
-        final SecureStore secureStore = new SecureStore(FILE_EXPRESSION);
+        final Properties defaults = new Properties();
+        final SecureStore secureStore = new SecureStore(FILE_EXPRESSION, defaults);
         Assertions.assertNull(secureStore.getException());
 
         final String string = UUID.randomUUID().toString();
-        secureStore.setProperty(string, Base64Codec.encode(UTF8Codec.toBytes(string)));
+        defaults.setProperty(string, Base64Codec.encode(UTF8Codec.toBytes(string)));
         final IOException exception = Assertions.assertThrows(
-                IOException.class, () -> secureStore.getProperty(string));
+                IOException.class, () -> secureStore.getPropertyUnsafe(string));
         Assertions.assertInstanceOf(AEADBadTagException.class, exception.getCause());
     }
 }

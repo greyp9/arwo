@@ -1,5 +1,6 @@
 package io.github.greyp9.arwo.app.jdbc.connection;
 
+import io.github.greyp9.arwo.app.core.lookup.AppLookup;
 import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.core.alert.Alert;
 import io.github.greyp9.arwo.core.alert.Alerts;
@@ -9,6 +10,7 @@ import io.github.greyp9.arwo.core.bundle.Bundle;
 import io.github.greyp9.arwo.core.config.CursorJDBC;
 import io.github.greyp9.arwo.core.connect.ConnectionFactory;
 import io.github.greyp9.arwo.core.connect.ConnectionResource;
+import io.github.greyp9.arwo.core.envsec.store.SecureStore;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.jce.KeyX;
 import io.github.greyp9.arwo.core.jdbc.connection.JDBCConnection;
@@ -66,32 +68,37 @@ public class JDBCConnectionFactory implements ConnectionFactory {
     @SuppressWarnings("PMD.CloseResource")
     private ConnectionResource getConnection(final String name, final CursorJDBC cursorJDBC) throws IOException {
         final String driverClass = cursorJDBC.getDriverClass();
-        final String url = cursorJDBC.getURL();
+        final String urlConfig = cursorJDBC.getURL();
         final String user = cursorJDBC.getUser();
-        final String password = cursorJDBC.getPassword();
+        final String passwordConfig = cursorJDBC.getPassword();
         //final char[] secret = Value.toCharArray(httpRequest.getHeader(Http.Header.AUTHORIZATION));
         Logger.getLogger(getClass().getName()).finest(httpRequest.getURI());
         final XedCursor cursor = cursorJDBC.getCursor();
         final TypeInstance instancePassword = cursor.getChildInstance(App.Settings.PASSWORD);
         final Key key = userState.getKey(XedU.NS_URI_XED, SystemU.userDir().toCharArray());
         final KeyX keyPassword = XedKey.getKeyAES(key, instancePassword);
-        final String passwordClear = ((password == null) ? null : keyPassword.unprotect(password));
+        final String passwordClear = ((passwordConfig == null) ? null : keyPassword.unprotect(passwordConfig));
+
+        final SecureStore secureStore = AppLookup.secureStore();  // dynamic jdbc settings
+        final String url = PropertiesU.resolve(secureStore, urlConfig);
+        final String password = PropertiesU.resolve(secureStore, passwordClear);
+
         final Properties properties = new Properties();
         PropertiesU.setProperty(properties, App.Settings.USER, user);
-        PropertiesU.setProperty(properties, App.Settings.PASSWORD, passwordClear);
+        PropertiesU.setProperty(properties, App.Settings.PASSWORD, password);
         final Connection connection = getConnection(driverClass, url, properties);
         return ((connection == null) ? null : new JDBCConnectionResource(name, new JDBCConnection(connection)));
     }
 
     private Connection getConnection(
-            final String driverClassName, final String url, final Properties properties) throws IOException {
+            final String driverClassName, final String url, final Properties properties) {
         Connection connection = null;
         try {
             final Class<?> driverClass = Class.forName(driverClassName, true, classLoader);
             final Driver driver = (Driver) driverClass.newInstance();
             connection = driver.connect(url, properties);
         } catch (IllegalAccessException | InstantiationException | SQLException | ClassNotFoundException e) {
-            new ExceptionModel(alerts).service(new IOException(e), Alert.Severity.ERR);
+            new ExceptionModel(alerts).service(new IOException(e.getMessage(), e), Alert.Severity.ERR);
         }
         return connection;
     }

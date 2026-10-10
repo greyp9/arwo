@@ -36,7 +36,7 @@ public class AppRealm {
             final String name = principal.getPrincipal().getName();
             if (principal instanceof MachinePrincipal) {
                 final MachinePrincipal machine = Value.as(principal, MachinePrincipal.class);
-                secureStore.setPropertyProtectSafe(name, machine.getCredentialGenerate().toString());
+                secureStore.setProperty(name, machine.getCredentialGenerate().toString());
                 this.principals.put(name, machine.getAuthPrincipal());
             } else {
                 this.principals.put(name, principal);

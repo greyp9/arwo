@@ -9,6 +9,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Properties;
+import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public final class PropertiesU {
@@ -75,4 +76,16 @@ public final class PropertiesU {
         }
         return values;
     }
+
+    public static String resolve(final Properties properties, final String input) {
+        String output = input;
+        Matcher matcher = PATTERN_PROPERTY_INTERPOLATE.matcher(output);
+        while (matcher.find()) {
+            output = output.replace(matcher.group(), properties.getProperty(matcher.group(1)));
+            matcher = PATTERN_PROPERTY_INTERPOLATE.matcher(output);
+        }
+        return output;
+    }
+
+    private static final Pattern PATTERN_PROPERTY_INTERPOLATE = Pattern.compile("\\$\\{(.+?)}");
 }

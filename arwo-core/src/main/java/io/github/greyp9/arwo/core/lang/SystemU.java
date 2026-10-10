@@ -1,7 +1,6 @@
 package io.github.greyp9.arwo.core.lang;
 
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import io.github.greyp9.arwo.core.util.PropertiesU;
 
 public final class SystemU {
 
@@ -49,13 +48,7 @@ public final class SystemU {
     }
 
     public static String resolveSystemProperties(final String input) {
-        String output = input;
-        Matcher matcher = Const.SYSTEM_PROPERTY.matcher(output);
-        while (matcher.find()) {
-            output = output.replace(matcher.group(), System.getProperty(matcher.group(1)));
-            matcher = Const.SYSTEM_PROPERTY.matcher(output);
-        }
-        return output;
+        return PropertiesU.resolve(System.getProperties(), input);
     }
 
     public static String resolve(final String path) {
@@ -87,7 +80,5 @@ public final class SystemU {
         private static final String LINUX = "Linux";
         private static final String WINDOWS = "Windows";
         private static final String MAC = "Mac";
-
-        private static final Pattern SYSTEM_PROPERTY = Pattern.compile("\\$\\{(.+?)}");
     }
 }

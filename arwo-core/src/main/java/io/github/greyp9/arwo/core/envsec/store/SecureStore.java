@@ -3,7 +3,6 @@ package io.github.greyp9.arwo.core.envsec.store;
 import io.github.greyp9.arwo.core.envsec.EnvironmentSecret;
 import io.github.greyp9.arwo.core.jce.AES;
 import io.github.greyp9.arwo.core.jce.KeyX;
-import io.github.greyp9.arwo.core.util.PropertiesU;
 
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
@@ -11,17 +10,20 @@ import java.io.File;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.Properties;
+import java.util.logging.Logger;
 
-public final class SecureStore {
+public final class SecureStore extends Properties {
+    private final Logger logger = Logger.getLogger(getClass().getName());
+
     private final KeyX keyX;
     private final IOException exception;
-    private final Properties properties;
 
-    public SecureStore(final File file) {
+    public SecureStore(final File file, final Properties defaults) {
+        super(defaults);
         KeyX keyXCtor;
         IOException exceptionCtor;
         try {
-            keyXCtor = toKeyX(file);
+            keyXCtor = (file == null) ? toKeyX((File) null) : toKeyX(file);
             exceptionCtor = null;
         } catch (IOException e) {
             keyXCtor = null;
@@ -29,35 +31,22 @@ public final class SecureStore {
         }
         this.keyX = keyXCtor;
         this.exception = exceptionCtor;
-        this.properties = new Properties();
+    }
+
+    public SecureStore(final File file) {
+        this(file, null);
+    }
+
+    public SecureStore() {
+        this(null);
     }
 
     private static KeyX toKeyX(final File file) throws IOException {
         try {
-            return toKeyX(new EnvironmentSecret(file.getPath(), null).recover());
-        } catch (GeneralSecurityException e) {
-            throw new IOException(e);
-        }
-    }
-
-    public SecureStore() {
-        KeyX keyXCtor;
-        IOException exceptionCtor;
-        try {
-            keyXCtor = toKeyX();
-            exceptionCtor = null;
-        } catch (IOException e) {
-            keyXCtor = null;
-            exceptionCtor = e;
-        }
-        this.keyX = keyXCtor;
-        this.exception = exceptionCtor;
-        this.properties = new Properties();
-    }
-
-    private static KeyX toKeyX() throws IOException {
-        try {
-            return toKeyX(AES.generate().getEncoded());
+            final byte[] recover = (file == null)
+                    ? AES.generate().getEncoded()
+                    : new EnvironmentSecret(file.getPath(), null).recover();
+            return toKeyX(recover);
         } catch (GeneralSecurityException e) {
             throw new IOException(e);
         }
@@ -72,36 +61,29 @@ public final class SecureStore {
         return exception;
     }
 
-    public Properties getProperties() {
-        return properties;
-    }
-
-    public void setProperty(final String key, final String value) {
-        PropertiesU.setProperty(properties, key, value);
-    }
-
-    public void setPropertyProtect(final String key, final String value) throws IOException {
-        PropertiesU.setProperty(properties, key, keyX.protect(value));
-    }
-
-    public void setPropertyProtectSafe(final String key, final String value) {
+    @Override
+    public synchronized Object setProperty(final String key, final String value) {
         try {
-            PropertiesU.setProperty(properties, key, keyX.protect(value));
-        } catch (IOException ignored) {
-        }
-    }
-
-    public String getProperty(final String key) throws IOException {
-        final String valueSecure = properties.getProperty(key);
-        return (valueSecure == null) ? null : keyX.unprotect(valueSecure);
-    }
-
-    public String getPropertySafe(final String key) {
-        final String valueSecure = properties.getProperty(key);
-        try {
-            return (valueSecure == null) ? null : keyX.unprotect(valueSecure);
+            return super.setProperty(key, keyX.protect(value));
         } catch (IOException e) {
+            logger.warning(e.getMessage());
             return null;
         }
+    }
+
+    @Override
+    public String getProperty(final String key) {
+        try {
+            final String value = super.getProperty(key);
+            return (value == null) ? null : keyX.unprotect(value);
+        } catch (IOException e) {
+            logger.warning(e.getMessage());
+            return null;
+        }
+    }
+
+    public String getPropertyUnsafe(final String key) throws IOException {
+        final String value = super.getProperty(key);
+        return (value == null) ? null : keyX.unprotect(value);
     }
 }
