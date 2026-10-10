@@ -21,22 +21,29 @@ public final class TaskServiceRunnable implements Runnable {
         return taskService;
     }
 
-    public TaskServiceRunnable(final TaskServiceConfig config,
-                               final AtomicReference<String> reference,
-                               final boolean isInitialContext,
-                               final long interval) {
-        this.taskService = new TaskService(config);
+    private TaskServiceRunnable(final TaskService taskService,
+                                final AtomicReference<String> reference,
+                                final boolean isInitialContext,
+                                final long interval) {
+        this.taskService = taskService;
         this.reference = reference;
         this.isInitialContext = isInitialContext;
         this.interval = interval;
         logger.info("READY");
     }
 
+    public static TaskServiceRunnable create(final TaskService taskService,
+                                             final AtomicReference<String> reference,
+                                             final boolean isInitialContext,
+                                             final long interval) {
+        return new TaskServiceRunnable(taskService, reference, isInitialContext, interval);
+    }
+
     public static TaskServiceRunnable create(final TaskServiceConfig config,
                                              final AtomicReference<String> reference,
                                              final boolean isInitialContext,
                                              final long interval) {
-        return new TaskServiceRunnable(config, reference, isInitialContext, interval);
+        return new TaskServiceRunnable(new TaskService(config), reference, isInitialContext, interval);
     }
 
     @Override
