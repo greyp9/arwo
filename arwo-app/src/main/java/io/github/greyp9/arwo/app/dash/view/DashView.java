@@ -20,15 +20,21 @@ import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.menu2.core.MenuSession;
 import io.github.greyp9.arwo.core.menu2.model.MenuItem;
 import io.github.greyp9.arwo.core.menu2.view.MenuHtml;
+import io.github.greyp9.arwo.core.naming.AppNaming;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.value.NameTypeValues;
+import io.github.greyp9.arwo.core.value.Value;
 import io.github.greyp9.arwo.core.vm.process.RuntimeU;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
+import javax.naming.Binding;
+import javax.naming.Context;
 import java.io.IOException;
+import java.net.URLClassLoader;
+import java.util.Collection;
 import java.util.Collections;
 
 @SuppressWarnings("PMD.ExcessiveImports")
@@ -77,7 +83,14 @@ public class DashView {
     private void addContentTo(final Element html) throws IOException {
         addPropertiesView(html);
         new XedUnsavedView(httpRequest, userState).addContent(html, false);
-        new ClasspathView(httpRequest, userState, getClass()).addContent(html);
+        new ClasspathView(httpRequest, userState, "app", getClass()).addContent(html);
+        final Context context = AppNaming.lookupSubcontext(ClassLoader.class.getName());
+        final Collection<Binding> bindings = AppNaming.listBindings(context, ".*");
+        for (Binding binding : bindings) {
+            try (URLClassLoader classLoader = Value.as(binding.getObject(), URLClassLoader.class)) {
+                new ClasspathView(httpRequest, userState, binding.getName(), classLoader).addContent(html);
+            }
+        }
         new CronActiveView(userState.getCronService(), request, userState).addContent(html, false);
         new AppConnectionView(httpRequest, userState, userState.getKube().getCache()).addContentTo(html, false);
         new AppConnectionView(httpRequest, userState, userState.getS3().getCache()).addContentTo(html, false);

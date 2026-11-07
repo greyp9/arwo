@@ -34,19 +34,27 @@ import java.util.stream.Collectors;
 public class ClasspathView {
     private final AppRequest request;
     private final AppUserState userState;
+    private final String name;
     private final URLClassLoader urlClassLoader;
 
-    public ClasspathView(final ServletHttpRequest httpRequest, final AppUserState userState, final Class<?> c) {
+    public ClasspathView(final ServletHttpRequest httpRequest, final AppUserState userState,
+                         final String name, final Class<?> c) {
+        this(httpRequest, userState, name, Value.as(c.getClassLoader(), URLClassLoader.class));
+    }
+
+    public ClasspathView(final ServletHttpRequest httpRequest, final AppUserState userState,
+                         final String name, final URLClassLoader cl) {
         this.request = userState.getAppRequest(httpRequest);
         this.userState = userState;
-        this.urlClassLoader = Value.as(c.getClassLoader(), URLClassLoader.class);
+        this.name = name;
+        this.urlClassLoader = cl;
     }
 
     public final void addContent(final Element html) throws IOException {
         // in Java 11+, get classpath entries from system properties
         final Collection<File> files = (urlClassLoader == null) ? ClasspathU.getClassPath()
                 : Arrays.stream(urlClassLoader.getURLs()).map(URLCodec::toFileUnchecked).collect(Collectors.toList());
-        final RowSetMetaData metaData = createMetaData();
+        final RowSetMetaData metaData = createMetaData(name);
         final RowSet rowSet = createRowSet(metaData, files);
         final Bundle bundle = request.getBundle();
         final Locus locus = request.getLocus();
@@ -61,13 +69,13 @@ public class ClasspathView {
         tableView.addContentTo(html);
     }
 
-    private RowSetMetaData createMetaData() {
+    private static RowSetMetaData createMetaData(final String name) {
         final ColumnMetaData[] columns = new ColumnMetaData[]{
                 new ColumnMetaData("path", Types.VARCHAR, true),  // i18n metadata
                 new ColumnMetaData("mtime", Types.TIMESTAMP),  // i18n metadata
                 new ColumnMetaData("size", Types.BIGINT),  // i18n metadata
         };
-        return new RowSetMetaData("classloaderType", columns);
+        return new RowSetMetaData("classloaderType-" + name, columns);
     }
 
     private RowSet createRowSet(final RowSetMetaData metaData,
