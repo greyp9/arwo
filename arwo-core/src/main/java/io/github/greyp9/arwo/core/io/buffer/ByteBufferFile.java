@@ -18,7 +18,7 @@ public class ByteBufferFile extends ByteBuffer {
      */
     @Override
     public final synchronized int getLength() {
-        return (int) file.length();
+        return (file.exists() ? (int) file.length() : 0);
     }
 
     /**
@@ -26,6 +26,6 @@ public class ByteBufferFile extends ByteBuffer {
      */
     @Override
     public final synchronized byte[] getBytes() throws IOException {
-        return StreamU.read(file);
+        return (file.exists() ? StreamU.read(file) : new byte[0]);
     }
 }
