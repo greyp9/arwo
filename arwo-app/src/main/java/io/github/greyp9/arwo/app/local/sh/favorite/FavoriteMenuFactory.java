@@ -1,7 +1,5 @@
 package io.github.greyp9.arwo.app.local.sh.favorite;
 
-import io.github.greyp9.arwo.core.menu.factory.MenuFactory;
-
 @Deprecated  // 2025-12T
 public class FavoriteMenuFactory /* implements MenuFactory */ {
 /*

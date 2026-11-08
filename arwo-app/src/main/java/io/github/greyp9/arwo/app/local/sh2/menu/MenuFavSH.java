@@ -37,8 +37,35 @@ public final class MenuFavSH {
         final XedCursor cursorFavorite = nav.find("lshFavorite", cursorFavorites);  // i18n xpath
         final TypeInstance typeInstance = cursorFavorite.getTypeInstance();
         final XedCursor parentConcrete = cursorFavorite.getParentConcrete();
-        final Collection<NameTypeValue> favorites = new ArrayList<>();
         final Collection<Element> children = parentConcrete.getChildren(typeInstance);
+
+/*
+        // because of the two tiers, converting to use of href is non-trivial; save this for menu refactor
+        final Map<String, List<String>> contextToCommands = new LinkedHashMap<>();
+        for (Element child : children) {
+            if (Boolean.parseBoolean(ElementU.getAttribute(child, App.Settings.ENABLED))) {
+                final String context = ElementU.getAttribute(child, App.Settings.CONTEXT);
+                final String name = ElementU.getAttribute(child, App.Settings.NAME);
+                contextToCommands.computeIfAbsent(context, c -> new ArrayList<>()).add(name);
+            }
+        }
+        final List<MenuItem> menuItemsL1 = new ArrayList<>();
+        for (Map.Entry<String, List<String>> entry : contextToCommands.entrySet()) {
+            final String context = entry.getKey();
+            final String subjectL1 = PathU.toPath(MENU_STATE_BASE, context);
+            final List<MenuItem> menuItemsL2 = new ArrayList<>();
+            for (String command : entry.getValue()) {
+                final String subjectL2 = PathU.toPath(MENU_STATE_BASE, context, command);
+                final String href = String.format("%s/%s/%s", baseURI, context, command);
+                menuItemsL2.add(new MenuItem(command, subjectL2, App.Action.HREF_ABS, href, null));
+            }
+            final String href = String.format("%s/%s", baseURI, context);
+            menuItemsL1.add(new MenuItem(context, subjectL1, App.Action.HREF_ABS, href, null, menuItemsL2));
+        }
+        return new MenuItem("Favorites", App.Target.USER_STATE, App.Action.MENU2, MENU_STATE_BASE, null, menuItemsL1);
+*/
+
+        final Collection<NameTypeValue> favorites = new ArrayList<>();
         for (final Element child : children) {
             if (Boolean.parseBoolean(ElementU.getAttribute(child, App.Settings.ENABLED))) {
                 final String context = ElementU.getAttribute(child, App.Settings.CONTEXT);

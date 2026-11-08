@@ -43,6 +43,16 @@ public class SHHistoryView {
         final Element content = new XPather(html, null).getElement(Html.XPath.CONTENT);
         final Element footer = new XPather(html, null).getElement(Html.XPath.FOOTER);
 
+/*
+        final String object = String.format("/menu2/sh/favorites/%s", context);
+        if (!Value.isEmpty(context)) {
+            PropertiesU.clearStartsWith(userState.getMenuSystemState(), Pather.getParent(object));
+            userState.getMenuSystemState().setProperty(object, Boolean.TRUE.toString());
+        } else {
+            PropertiesU.clearStartsWith(userState.getMenuSystemState(), object);
+        }
+*/
+
         final MenuItem menuFavorites = new MenuFavSH(httpRequest.getBaseURI(), userState).toMenuItem()
                 .applyFrom(userState.getMenuSystemState());
         new MenuHtml(httpRequest, null, userState.getSubmitID(), STYLE_HOME)
