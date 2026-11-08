@@ -1,26 +1,10 @@
 package io.github.greyp9.arwo.app.local.sh.favorite;
 
-import io.github.greyp9.arwo.core.app.App;
-import io.github.greyp9.arwo.core.menu.MenuItem;
 import io.github.greyp9.arwo.core.menu.factory.MenuFactory;
-import io.github.greyp9.arwo.core.value.NameTypeValue;
-import io.github.greyp9.arwo.core.value.Value;
-import io.github.greyp9.arwo.core.xed.cursor.XedCursor;
-import io.github.greyp9.arwo.core.xed.model.Xed;
-import io.github.greyp9.arwo.core.xed.nav.XedNav;
-import io.github.greyp9.arwo.core.xml.ElementU;
-import io.github.greyp9.arwo.core.xsd.instance.TypeInstance;
-import org.w3c.dom.Element;
-
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 @Deprecated  // 2025-12T
-public class FavoriteMenuFactory implements MenuFactory {
+public class FavoriteMenuFactory /* implements MenuFactory */ {
+/*
     private final Xed xed;
 
     public FavoriteMenuFactory(final Xed xed) {
@@ -72,4 +56,5 @@ public class FavoriteMenuFactory implements MenuFactory {
         }
         return nameTypeValues;
     }
+*/
 }
