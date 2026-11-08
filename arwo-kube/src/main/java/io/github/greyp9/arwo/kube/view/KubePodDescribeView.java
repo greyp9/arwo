@@ -43,7 +43,7 @@ public final class KubePodDescribeView extends KubeView {
         final Element header = new XPather(html.getOwnerDocument(), null).getElement(Html.XPath.HEADER);
         final Element content = new XPather(html.getOwnerDocument(), null).getElement(Html.XPath.CONTENT);
         addMenuContext(header);  // navigation within json representation of describe data
-        final ResourceCache cache = getUserState().getCache();
+        final ResourceCache cache = getUserState().getCacheBlob();
         final String cacheKey = String.join(Http.Token.SLASH, namespace, podName);
         final Object cachedValue = cache.getObject(cacheKey, this::getJsonElement);
         final JsonElement jsonElement = Value.asOptional(cachedValue, JsonElement.class).orElse(null);
@@ -52,7 +52,7 @@ public final class KubePodDescribeView extends KubeView {
     }
 
     private void addMenuContext(final Element html) throws IOException {
-        final ResourceCache cache = getUserState().getCache();
+        final ResourceCache cache = getUserState().getCacheBlob();
         final String cacheKey = String.join(Http.Token.SLASH, namespace, podName);
         final String base = String.format("%s/%s/pods/%s/%s/describe/",
                 getHttpRequest().getBaseURI(), getResource().getName(), namespace, podName);

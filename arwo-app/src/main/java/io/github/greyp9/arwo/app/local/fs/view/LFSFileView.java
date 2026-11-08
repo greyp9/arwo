@@ -148,7 +148,7 @@ public class LFSFileView extends LFSView {
         byte[] bytes = getBytes(file, isGZ);
         final boolean cacheItem = PropertiesU.isBoolean(getUserState().getProperties(), App.Action.CACHE);
         if (cacheItem) {
-            final ResourceCache resourceCache = getUserState().getCache();
+            final ResourceCache resourceCache = getUserState().getCacheBlob();
             final String baseURI = getRequest().getHttpRequest().getHttpRequest().getResource();
             final String id = Http.Token.SLASH + UUID.nameUUIDFromBytes(UTF8Codec.toBytes(baseURI));
             file.getMetaData().getProperties().setProperty(Html.HREF, baseURI + Http.Token.QUERY + App.Action.CACHE);

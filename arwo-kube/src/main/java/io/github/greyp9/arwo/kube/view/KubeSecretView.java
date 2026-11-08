@@ -45,7 +45,7 @@ public class KubeSecretView extends KubeView {
     @Override
     protected final HttpResponse addContentTo(final Element html) throws IOException {
         final String key = KubeU.toCacheKey(endpoint, namespace, name);
-        final ResourceCache cache = getUserState().getCache();
+        final ResourceCache cache = getUserState().getCacheBlob();
         final Object object = cache.getObject(key, this::getSecret);
         final V1Secret v1Secret = Value.as(object, V1Secret.class);
         return (datum == null) ? addSecretTo(v1Secret, html) : addDatumTo(v1Secret);

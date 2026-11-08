@@ -39,9 +39,9 @@ public class KubeSecretsView extends KubeView {
         final String endpoint = getResource().getName();
         final String rowSetId = getHttpRequest().getURI();
 
-        final V1SecretCacher cacher = new V1SecretCacher(getUserState().getCache(), endpoint);
+        final V1SecretCacher cacher = new V1SecretCacher(getUserState().getCacheBlob(), endpoint);
         // getUserState().getCache().clear();  // if table isn't cached, then client will refetch it (keep-alive)
-        final RowSetSource rowSetSource = new CacheRowSetSource(getUserState().getCache(),
+        final RowSetSource rowSetSource = new CacheRowSetSource(getUserState().getCacheBlob(),
                 new SecretRowSetSource(cacher, connection, namespace, baseURI, endpoint), rowSetId);
         try {
             final RowSet rowSet = rowSetSource.getRowSet();

@@ -25,7 +25,7 @@ public class CacheHandlerGet {
         this.httpRequest = httpRequest;
         this.userState = userState;
         //final String servletPath = httpRequest.getServletPath();  // possible means to resolve relevant cache
-        this.cache = userState.getCache();
+        this.cache = userState.getCacheBlob();
     }
 
     public final HttpResponse doGet() throws IOException {
@@ -48,7 +48,7 @@ public class CacheHandlerGet {
         } else if (Cache.CONTEXT_ROWSETS.equals(view)) {
             httpResponse = doGetRowSet(pather.getRight());
         } else {
-            httpResponse = new CacheInventoryView(httpRequest, userState, userState.getCache()).render();
+            httpResponse = new CacheInventoryView(httpRequest, userState, userState.getCacheBlob()).render();
         }
         return httpResponse;
     }

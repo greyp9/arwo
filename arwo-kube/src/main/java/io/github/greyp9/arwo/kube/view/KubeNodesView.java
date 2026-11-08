@@ -31,7 +31,7 @@ public class KubeNodesView extends KubeView {
         final String baseURI = getHttpRequest().getBaseURI();
         final String endpoint = getResource().getName();
         final String rowSetId = getHttpRequest().getURI();
-        final RowSetSource rowSetSource = new CacheRowSetSource(getUserState().getCache(),
+        final RowSetSource rowSetSource = new CacheRowSetSource(getUserState().getCacheBlob(),
                 new NodeRowSetSource(connection, baseURI, endpoint), rowSetId);
         try {
             final RowSet rowSet = rowSetSource.getRowSet();

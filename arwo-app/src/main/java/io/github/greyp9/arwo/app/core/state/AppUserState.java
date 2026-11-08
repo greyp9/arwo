@@ -184,13 +184,6 @@ public final class AppUserState {
         return viewStates;
     }
 
-    public ResourceCache getCache() {
-        return cache;
-    }
-
-    /**
-     * @deprecated convert usages to {@link #getCache()}; consolidation of two caches
-     */
     public ResourceCache getCacheBlob() {
         return cache;
     }

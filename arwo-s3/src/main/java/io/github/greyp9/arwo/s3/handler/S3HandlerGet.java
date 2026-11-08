@@ -134,7 +134,7 @@ public class S3HandlerGet {
         final HttpResponse httpResponse;
         final boolean cacheItem = PropertiesU.isBoolean(userState.getProperties(), App.Action.CACHE);
         if (cacheItem) {
-            final ResourceCache resourceCache = userState.getCache();
+            final ResourceCache resourceCache = userState.getCacheBlob();
             final String id = Http.Token.SLASH + UUID.nameUUIDFromBytes(UTF8Codec.toBytes(baseURI));
             metaData.getProperties().setProperty(Html.HREF, baseURI + Http.Token.QUERY + App.Action.CACHE);
             resourceCache.putFile(id, metaFile);
@@ -171,7 +171,7 @@ public class S3HandlerGet {
         final S3ConnectionResource resource =
                 (S3ConnectionResource) connectionCache.getResource(connectionName, connectionFactory);
         // get remote resource (or cached copy, if present)
-        final ResourceCache resourceCache = userState.getCache();
+        final ResourceCache resourceCache = userState.getCacheBlob();
         final RowSetSource rowSetSourceS3 = new S3RowSetSource(
                 resource.getConnection(), httpRequest.getBaseURI(), bucketName, path);
         final RowSetSource rowSetSource = new CacheRowSetSource(
