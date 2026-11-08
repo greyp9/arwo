@@ -25,19 +25,25 @@ import org.w3c.dom.Element;
 import java.io.IOException;
 import java.sql.Types;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.Future;
+import java.util.function.Predicate;
+import java.util.stream.Collectors;
 
 public class TaskServiceView {
     private final TaskService taskService;
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
+    private final Predicate<Task> taskPredicate;
 
     public TaskServiceView(final ServletHttpRequest httpRequest,
                            final AppUserState userState,
-                           final TaskService taskService) {
+                           final TaskService taskService,
+                           final Predicate<Task> taskPredicate) {
         this.httpRequest = httpRequest;
         this.userState = userState;
         this.taskService = taskService;
+        this.taskPredicate = taskPredicate;
     }
 
     public final void addContent(final Element html) throws IOException {
@@ -50,7 +56,8 @@ public class TaskServiceView {
     private RowSet createRowSet() {
         final RowSetMetaData metaData = createMetaData(taskService.getName());
         final RowSet rowSet = new RowSet(metaData, null, null);
-        for (Task task : taskService.getTasks()) {
+        final List<Task> tasks = taskService.getTasks().stream().filter(taskPredicate).collect(Collectors.toList());
+        for (Task task : tasks) {
             addRow(rowSet, task);
         }
         return rowSet;

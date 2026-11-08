@@ -4,36 +4,40 @@ import io.github.greyp9.arwo.app.core.state.AppUserState;
 import io.github.greyp9.arwo.app.core.view.fixup.AppHtmlView;
 import io.github.greyp9.arwo.app.local.sh2.menu.MenuFavSH;
 import io.github.greyp9.arwo.app.local.sh2.view.demo.TextAreaLSH;
+import io.github.greyp9.arwo.app.task.view.TaskServiceView;
 import io.github.greyp9.arwo.core.app.App;
 import io.github.greyp9.arwo.core.app.AppTitle;
-import io.github.greyp9.arwo.core.exec.script.ScriptContext;
 import io.github.greyp9.arwo.core.html.Html;
 import io.github.greyp9.arwo.core.http.HttpResponse;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.io.StreamU;
 import io.github.greyp9.arwo.core.menu2.model.MenuItem;
 import io.github.greyp9.arwo.core.menu2.view.MenuHtml;
+import io.github.greyp9.arwo.core.task.core.Task;
+import io.github.greyp9.arwo.core.task.service.TaskService;
 import io.github.greyp9.arwo.core.value.Value;
-import io.github.greyp9.arwo.core.vm.mutex.CollectionU;
 import io.github.greyp9.arwo.core.xml.DocumentU;
 import io.github.greyp9.arwo.core.xpath.XPather;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
-import java.util.stream.Collectors;
+import java.util.function.Predicate;
 
 public class SHHistoryView {
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
+    private final TaskService taskService;
     private final String context;
 
-    public SHHistoryView(final ServletHttpRequest httpRequest, final AppUserState userState, final String context) {
+    public SHHistoryView(final ServletHttpRequest httpRequest,
+                         final AppUserState userState,
+                         final TaskService taskService,
+                         final String context) {
         this.httpRequest = httpRequest;
         this.userState = userState;
+        this.taskService = taskService;
         this.context = context;
     }
 
@@ -61,12 +65,19 @@ public class SHHistoryView {
         final String command = userState.getProperties().getProperty(App.Settings.COMMAND, "");
         new TextAreaLSH(httpRequest, userState).addTextArea(content, command);
 
+        final Predicate<Task> taskPredicate = (Value.isEmpty(context))
+                ? (t -> true)
+                : (t -> t.getName().equals(context));
+        new TaskServiceView(httpRequest, userState, taskService, taskPredicate).addContent(content);
+
+/* ScriptContext
         final Collection<ScriptContext> scripts = CollectionU.copy(new ArrayList<>(), userState.getLSH().getScripts());
         final boolean filterByContext = !Value.isEmpty(context);
         final Collection<ScriptContext> scriptsDisplay = filterByContext
                 ? scripts.stream().filter(s -> Value.equal(context, s.getContext())).collect(Collectors.toList())
                 : scripts;
         new TableScript(httpRequest.getDate(), httpRequest.getBaseURI(), scriptsDisplay, userState).addTable(content);
+*/
 
         final AppTitle title = AppTitle.Factory.getResourceLabel(
                 httpRequest, userState.getBundle(), Value.wrap("[", "]", httpRequest.getContextPath()));

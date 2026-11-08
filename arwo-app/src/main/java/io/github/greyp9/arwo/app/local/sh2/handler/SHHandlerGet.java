@@ -9,6 +9,7 @@ import io.github.greyp9.arwo.core.http.HttpResponseU;
 import io.github.greyp9.arwo.core.http.servlet.ServletHttpRequest;
 import io.github.greyp9.arwo.core.resource.PathU;
 import io.github.greyp9.arwo.core.resource.Pather;
+import io.github.greyp9.arwo.core.task.service.TaskService;
 import io.github.greyp9.arwo.core.value.Value;
 
 import java.io.IOException;
@@ -16,10 +17,14 @@ import java.io.IOException;
 public class SHHandlerGet {
     private final ServletHttpRequest httpRequest;
     private final AppUserState userState;
+    private final TaskService taskService;
 
-    public SHHandlerGet(final ServletHttpRequest httpRequest, final AppUserState userState) {
+    public SHHandlerGet(final ServletHttpRequest httpRequest,
+                        final AppUserState userState,
+                        final TaskService taskService) {
         this.httpRequest = httpRequest;
         this.userState = userState;
+        this.taskService = taskService;
     }
 
     public final HttpResponse doGet() throws IOException {
@@ -41,7 +46,7 @@ public class SHHandlerGet {
         } else if (!Value.isEmpty(scriptID)) {
             httpResponse = new SHScriptView(httpRequest, userState, scriptID).doGetResponse();
         } else {
-            httpResponse = new SHHistoryView(httpRequest, userState, context).doGetResponse();
+            httpResponse = new SHHistoryView(httpRequest, userState, taskService, context).doGetResponse();
         }
         return httpResponse;
     }

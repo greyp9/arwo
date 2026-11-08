@@ -34,6 +34,7 @@ import org.w3c.dom.Element;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.util.Collections;
+import java.util.function.Predicate;
 
 public class TaskHandlerGet implements TaskHandler {
     private final ServletHttpRequest httpRequest;
@@ -80,7 +81,8 @@ public class TaskHandlerGet implements TaskHandler {
         final String labelContext = Value.wrap("[", "]", taskService.getName());
         final AppTitle appTitle = AppTitle.Factory.getResourceLabel(httpRequest, userState.getBundle(), labelContext);
         addMenus(header);
-        new TaskServiceView(httpRequest, userState, taskService).addContent(content);
+        final Predicate<Task> taskPredicate = (t -> true);
+        new TaskServiceView(httpRequest, userState, taskService, taskPredicate).addContent(content);
         return new AppHtmlView(httpRequest, userState, appTitle)
                 .title(header)
                 .actionRefresh(header)

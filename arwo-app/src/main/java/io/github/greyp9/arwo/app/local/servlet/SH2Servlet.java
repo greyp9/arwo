@@ -60,7 +60,7 @@ public class SH2Servlet extends javax.servlet.http.HttpServlet {
         final ServletHttpRequest httpRequest = ServletU.read(request);
         // process request
         AppUserState userState = appState.getUserState(httpRequest.getPrincipal(), httpRequest.getDate());
-        final HttpResponse httpResponse = new SHHandlerGet(httpRequest, userState).doGet();
+        final HttpResponse httpResponse = new SHHandlerGet(httpRequest, userState, taskService).doGet();
         // send response
         final HttpResponse httpResponseGZ = HttpResponseGZipU.toHttpResponseGZip(httpRequest, httpResponse);
         ServletU.write(httpResponseGZ, response);
